@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>FFBardMusicPlayer</RootNamespace>
     <AssemblyName>FFBardMusicPlayer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -286,11 +286,11 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj">
+    <ProjectReference Include="..\Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj">
       <Project>{4269c72a-8d3a-4737-8f89-72eaa33ea9e1}</Project>
       <Name>Sanford.Multimedia.Midi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Sharlayan\Sharlayan\Sharlayan.csproj">
+    <ProjectReference Include="..\Sharlayan\Sharlayan\Sharlayan.csproj">
       <Project>{9510d5ef-208a-4897-a582-8eae5c6e9406}</Project>
       <Name>Sharlayan</Name>
     </ProjectReference>

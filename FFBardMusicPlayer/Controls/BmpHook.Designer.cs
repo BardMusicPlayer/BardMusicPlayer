@@ -64,6 +64,7 @@
 			// 
 			this.CharIdSelector.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.CharIdSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.CharIdSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.CharIdSelector.IntegralHeight = false;
 			this.CharIdSelector.Location = new System.Drawing.Point(398, 0);
 			this.CharIdSelector.Margin = new System.Windows.Forms.Padding(2, 0, 20, 0);

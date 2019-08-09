@@ -151,7 +151,7 @@ namespace FFBardMusicPlayer.Forms {
 
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad(e);
-
+			this.Location = Properties.Settings.Default.Location;
 
 			if(Playlist.HasMidi()) {
 				Playlist.PlaySelectedMidi();
@@ -164,7 +164,6 @@ namespace FFBardMusicPlayer.Forms {
 
 		protected override void OnShown(EventArgs e) {
 			base.OnShown(e);
-			this.Location = Properties.Settings.Default.Location;
 
 			FFXIV.FindProcess();
 
