@@ -1,0 +1,9 @@
+[submodule "Sharlayan"]
+	path = Sharlayan
+	url = https://github.com/FFXIVAPP/sharlayan
+[submodule "ffxivapp-props"]
+	path = ffxivapp-props
+	url = https://github.com/FFXIVAPP/ffxivapp-props
+[submodule "Sanford.Multimedia.Midi"]
+	path = Sanford.Multimedia.Midi
+	url = https://github.com/tebjan/Sanford.Multimedia.Midi
