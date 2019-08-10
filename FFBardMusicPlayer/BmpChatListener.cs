@@ -61,7 +61,7 @@ namespace FFBardMusicPlayer {
 			return match.Success;
 		}
 
-		public bool ProcessChat(ChatLogItem item) {
+		public Func<bool> FindChatCommand(ChatLogItem item) {
 
 			if(GetCommand(item.Line, out Command command)) {
 				command.code = item.Code;
@@ -70,12 +70,11 @@ namespace FFBardMusicPlayer {
 					if(Reader.CanGetPlayerInfo()) {
 						CurrentPlayerResult res = Reader.GetCurrentPlayer();
 						if(!command.target.Equals(res.CurrentPlayer.Name)) {
-							return false;
+							return null;
 						}
 					}
 				}
 
-				Func<Command, bool> cmdFunc = null;
 				foreach(string cmdString in commandList.Keys) {
 					string cmd1 = cmdString;
 					string cmd2 = cmdString;
@@ -87,16 +86,11 @@ namespace FFBardMusicPlayer {
 						}
 					}
 					if(cmd1 == command.command || cmd2 == command.command) {
-						cmdFunc = commandList[cmdString];
-						break;
+						return new Func<bool>(() => commandList[cmdString].Invoke(command));
 					}
-
-				}
-				if(cmdFunc != null) {
-					return cmdFunc(command);
 				}
 			}
-			return false;
+			return null;
 		}
 	}
 }

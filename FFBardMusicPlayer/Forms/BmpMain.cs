@@ -60,7 +60,9 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnProcessLost += delegate (object o, EventArgs arg) {
 				this.Log("Attached process exited.");
 			};
-			FFXIV.memory.OnChatReceived += Memory_OnChatReceived;
+			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
+				this.Invoke(t => t.Memory_OnChatReceived(item));
+			};
 			FFXIV.memory.OnPerformanceReadyChanged += delegate (object o, bool performance) {
 				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(performance));
 			};
@@ -202,14 +204,18 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
-		private void Memory_OnChatReceived(object o, ChatLogItem arg) {
+		private void Memory_OnChatReceived(ChatLogItem item) {
 
-			string rtf = BmpChatParser.FormatChat(arg);
+			string rtf = BmpChatParser.FormatChat(item);
 
 			ChatLogAll.AppendRtf(rtf);
 
-			if(chatListener.ProcessChat(arg)) {
+			Func<bool> cmdFunc = chatListener.FindChatCommand(item);
+			if(cmdFunc != null) {
 				ChatLogCmd.AppendRtf(rtf);
+				if(cmdFunc()) {
+					// successful command?
+				}
 			}
 		}
 

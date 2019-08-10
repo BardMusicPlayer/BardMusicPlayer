@@ -61,17 +61,17 @@ namespace FFBardMusicPlayer.Forms {
 			}
 			if(Orchestra.IsConductorName(cmd.sender)) {
 				if(cmd.param == "off") {
-					this.Invoke(t => t.ConfirmSetConductor(string.Empty));
+					this.ConfirmSetConductor(string.Empty);
 				} else {
 					// Same conductor, idk what i wanna do with this
 				}
 			} else {
 				if(Properties.Settings.Default.ForceListen) {
-					this.Invoke(t => t.ConfirmSetConductor(cmd.sender));
+					this.ConfirmSetConductor(cmd.sender);
 				} else {
-					this.Invoke(t => t.BringFront());
-					confirmConductor.Invoke(t => t.ConductorName = cmd.sender);
-					this.Invoke(new System.Action(() => confirmConductor.ShowDialog(this)));
+					this.BringFront();
+					confirmConductor.ConductorName = cmd.sender;
+					confirmConductor.ShowDialog(this);
 				}
 			}
 			return true;
