@@ -120,7 +120,6 @@ namespace FFBardMusicPlayer {
 			MemoryHandler.Instance.ExceptionEvent -= MemoryHandler_ExceptionEvent;
 			MemoryHandler.Instance.SignaturesFoundEvent -= MemoryHandler_SignaturesFoundEvent;
 			MemoryHandler.Instance.UnsetProcess();
-			OnProcessLost?.Invoke(this, EventArgs.Empty);
 			ffxivProcess = null;
 		}
 
