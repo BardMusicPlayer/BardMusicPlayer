@@ -30,6 +30,7 @@
 			this.BackColor = System.Drawing.Color.Gray;
 			this.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.Margin = new System.Windows.Forms.Padding(0);
+			this.ReadOnly = true;
 			this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
 			this.ResumeLayout(false);
 
