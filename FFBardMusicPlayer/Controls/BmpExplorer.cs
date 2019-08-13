@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FFBardMusicCommon;
 using FFBardMusicPlayer.Components;
+using System.Diagnostics;
+using System.IO;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpExplorer : UserControl {
@@ -33,6 +35,16 @@ namespace FFBardMusicPlayer.Controls {
 			MusicReload.Click += delegate (object sender, EventArgs e) {
 				SongBrowser.RefreshList();
 				this.EnterFile();
+			};
+
+			MusicReload.MouseDown += delegate (object sender, MouseEventArgs e) {
+				if(e.Button == MouseButtons.Middle) {
+					string dir = Path.GetDirectoryName(Application.ExecutablePath);
+					string path = Path.Combine(dir, Properties.Settings.Default.SongDirectory);
+					if(Directory.Exists(path)) {
+						Process.Start(path);
+					}
+				}
 			};
 
 			SelectorSong.GotFocus += delegate (object sender, EventArgs e) {
