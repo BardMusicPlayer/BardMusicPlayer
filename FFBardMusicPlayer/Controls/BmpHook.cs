@@ -67,7 +67,7 @@ namespace FFBardMusicPlayer.Controls {
 			memory.UnsetProcess();
 			this.ShutdownMemory();
 			hook.Unhook();
-			this.SetHookStatus();
+			this.Invoke(t => t.SetHookStatus());
 		}
 
 		private void Log(string text) {
