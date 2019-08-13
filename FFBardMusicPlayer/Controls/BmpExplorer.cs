@@ -146,8 +146,13 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void SetTrackNums(int track, int maxtrack) {
 			// Set max before value so max isn't 0 and the program whines
+			if(maxtrack == 0) {
+				return;
+			}
 			SelectorTrack.Maximum = maxtrack;
-			SelectorTrack.Value = track;
+			if(track <= maxtrack) {
+				SelectorTrack.Value = track;
+			}
 		}
 
 		private void SongBrowser_EnterFile(object sender, BmpMidiEntry file) {
