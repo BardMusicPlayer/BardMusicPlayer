@@ -251,6 +251,7 @@ namespace FFBardMusicPlayer.Forms {
 			Playlist.Visible = (Player.Status == PlayerStatus.PerformerSolo);
 			Orchestra.Visible = (Player.Status == PlayerStatus.Conducting);
 			Player.Interactable = FFXIV.IsPerformanceReady();
+			Player.Keyboard.OverrideText = FFXIV.IsPerformanceReady() ? string.Empty : "Open Bard Performance mode to play.";
 		}
 
 		private void BringFront() {

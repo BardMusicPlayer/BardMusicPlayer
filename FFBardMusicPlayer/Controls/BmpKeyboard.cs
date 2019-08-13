@@ -34,8 +34,20 @@ namespace FFBardMusicPlayer.Controls {
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 		[Bindable(true)]
 		public override string Text {
-			get;
-			set;
+			get { return base.Text; }
+			set {
+				base.Text = value;
+				this.Refresh();
+			}
+		}
+
+		private string overrideText;
+		public string OverrideText {
+			get { return overrideText; }
+			set {
+				overrideText = value;
+				this.Refresh();
+			}
 		}
 
 		public BmpKeyboard() {
@@ -234,8 +246,16 @@ namespace FFBardMusicPlayer.Controls {
 					SolidBrush disabledBrush = new SolidBrush(Color.FromArgb(120, Color.White));
 					e.Graphics.FillRectangle(disabledBrush, rect);
 				}
+				if(!string.IsNullOrEmpty(overrideText)) {
+					PointF center = new PointF(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+					SizeF textSize = e.Graphics.MeasureString(this.overrideText, textLargeFont);
+					PointF textPos = new PointF(center.X - textSize.Width / 2, center.Y - textSize.Height / 2);
+
+					e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(80, 30, 30)), new RectangleF(textPos, textSize));
+					e.Graphics.DrawString(this.overrideText, textLargeFont, new SolidBrush(Color.White), this.Width / 2, this.Height / 2, centerTextFormat);
+				}
 				// Show custom message
-				if(!string.IsNullOrEmpty(this.Text)) {
+				else if(!string.IsNullOrEmpty(this.Text)) {
 					PointF center = new PointF(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
 					SizeF textSize = e.Graphics.MeasureString(this.Text, textLargeFont);
 					PointF textPos = new PointF(center.X - textSize.Width / 2, center.Y - textSize.Height / 2);
