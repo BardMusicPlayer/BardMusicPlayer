@@ -41,6 +41,7 @@ namespace FFBardMusicPlayer.Components {
 		private const int EM_GETSCROLLPOS = WM_USER + 221;
 		private const int WM_NCLBUTTONDOWN = 0xA1;
 		private const int HT_CAPTION = 0x2;
+		private const int WM_SETREDRAW = 11;
 
 		public static readonly int WM_SHOWME = RegisterWindowMessage("WM_SHOWME");
 
@@ -79,25 +80,24 @@ namespace FFBardMusicPlayer.Components {
 			int start = box.SelectionStart;
 			int len = box.SelectionLength;
 
+			SendMessage(box.Handle, WM_SETREDRAW, 0, 0);
+
 			box.SelectionStart = box.TextLength;
 			box.SelectionLength = 0;
 			box.SelectedRtf = format;
 			box.AppendText(System.Environment.NewLine);
-			if(bottom) {
-				this.SelectionStart = this.TextLength;
-				this.ScrollToCaret();
-			}
-
 			box.Select(start, len);
-			/*
+
 			if(bottom) {
-                GetScrollRange((IntPtr) box.Handle, SB_VERT, out vmin, out vmax);
-                rtfPoint.Y = vmax - box.ClientSize.Height;
-                SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
-            } else {
+				GetScrollRange((IntPtr) box.Handle, SB_VERT, out vmin, out vmax);
+				rtfPoint.Y = vmax - box.ClientSize.Height;
+				SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
+			} else {
 				SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
 			}
-            */
+			SendMessage(box.Handle, WM_SETREDRAW, 1, 0);
+			box.Refresh();
+
 		}
 	}
 }
