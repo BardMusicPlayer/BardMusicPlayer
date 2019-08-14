@@ -276,7 +276,7 @@ namespace FFBardMusicPlayer.Forms {
 				error = true;
 			}
 			if(!error) {
-				if(diff) {
+				if(diff && Properties.Settings.Default.Verbose) {
 					this.LogMidi(string.Format("[{0}] loaded.", entry.FilePath.FilePath));
 				}
 				Properties.Settings.Default.LastLoaded = entry.FilePath.FilePath;
