@@ -258,6 +258,8 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			playlistBinding = new BindingList<BmpMidiEntry>(playlistEntries);
 			PlaylistView.DataSource = playlistBinding;
+
+			this.SaveSettings();
 		}
 	}
 }
