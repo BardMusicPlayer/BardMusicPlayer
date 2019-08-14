@@ -15,6 +15,7 @@ using System.IO;
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpExplorer : UserControl {
 
+		private bool ignoreTrackChange = false;
 		public EventHandler<bool> OnBrowserVisibleChange;
 		public EventHandler<BmpMidiEntry> OnBrowserSelect;
 
@@ -30,7 +31,11 @@ namespace FFBardMusicPlayer.Controls {
 			InitializeComponent();
 
 			SongBrowser.OnMidiFileSelect += SongBrowser_EnterFile;
-			SelectorTrack.ValueChanged += SelectorTrack_ValueChanged;
+			SelectorTrack.ValueChanged += delegate (object o, EventArgs e) {
+				if(!ignoreTrackChange) {
+					this.EnterFile();
+				}
+			};
 
 			MusicReload.Click += delegate (object sender, EventArgs e) {
 				SongBrowser.RefreshList();
@@ -137,7 +142,9 @@ namespace FFBardMusicPlayer.Controls {
 		public void SelectTrack(int track) {
 			if(track >= 0) {
 				SelectorTrack.Maximum = track + 1;
+				ignoreTrackChange = true;
 				SelectorTrack.Value = track;
+				ignoreTrackChange = false;
 			}
 		}
 
@@ -163,10 +170,6 @@ namespace FFBardMusicPlayer.Controls {
 		private void SongBrowser_EnterFile(object sender, BmpMidiEntry file) {
 			BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
 			OnBrowserSelect?.Invoke(this, entry);
-		}
-
-		private void SelectorTrack_ValueChanged(object o, EventArgs e) {
-			SongBrowser.EnterFile();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {

@@ -289,6 +289,7 @@ namespace FFBardMusicPlayer.Forms {
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
 			if(Explorer.SelectFile(entry.FilePath.FilePath)) {
 				Explorer.Invoke(t => t.SelectTrack(entry.Track.Track));
+				Explorer.EnterFile();
 			}
 			if(proceedPlaylistMidi) {
 				Player.Player.Play();
