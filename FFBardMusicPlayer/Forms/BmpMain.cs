@@ -152,10 +152,6 @@ namespace FFBardMusicPlayer.Forms {
 			base.OnLoad(e);
 			this.Location = Properties.Settings.Default.Location;
 
-			if(Playlist.HasMidi()) {
-				Playlist.PlaySelectedMidi();
-			}
-
 			if(Properties.Settings.Default.SigIgnore) {
 				this.Log("Using local signature cache.");
 			}
@@ -165,6 +161,17 @@ namespace FFBardMusicPlayer.Forms {
 			base.OnShown(e);
 
 			FFXIV.FindProcess();
+
+			string ll = Properties.Settings.Default.LastLoaded;
+			if(!string.IsNullOrEmpty(ll)) {
+				Playlist.Select(ll);
+				Explorer.SelectFile(ll);
+				Explorer.EnterFile();
+			} else {
+				if(Playlist.HasMidi()) {
+					Playlist.PlaySelectedMidi();
+				}
+			}
 
 			if(this.updateResult == DialogResult.Yes) {
 				this.Invoke(new Action(() => {

@@ -70,7 +70,17 @@ namespace FFBardMusicPlayer.Controls {
 		public void Deselect() {
 			PlaylistView.ClearSelection();
 		}
-
+		public void Select(string filePath) {
+			for(int i = 0; i < PlaylistView.Rows.Count; i++) {
+				BmpMidiEntry entry = PlaylistView.Rows[i].DataBoundItem as BmpMidiEntry;
+				if(entry != null) {
+					if(entry.FilePath.FilePath == filePath) {
+						this.Select(i);
+						return;
+					}
+				}
+			}
+		}
 		public void Select(int index) {
 			if(PlaylistView.Rows.Count > 0 && index < PlaylistView.Rows.Count) {
 				PlaylistView.Rows[index].Selected = true;
