@@ -150,6 +150,9 @@ namespace FFBardMusicPlayer.Forms {
 
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad(e);
+
+			Properties.Settings.Default.Upgrade();
+
 			this.Location = Properties.Settings.Default.Location;
 
 			if(Properties.Settings.Default.SigIgnore) {
