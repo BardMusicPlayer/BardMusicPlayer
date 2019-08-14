@@ -312,10 +312,6 @@ namespace FFBardMusicPlayer.Components {
 		// Own
 
 		public void EnterFile() {
-			if(this.InvokeRequired) {
-				this.Invoke(t => t.EnterFile());
-				return;
-			}
 			if(this.SelectedItem != null) {
 				if(this.SelectedItem is MidiFile file) {
 					OnMidiFileSelect?.Invoke(this, new BmpMidiEntry(file.FileName.RelativeFileName));

@@ -131,7 +131,8 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void SelectTrack(int track) {
-			if(track >= 0 && track < SelectorTrack.Maximum) {
+			if(track >= 0) {
+				SelectorTrack.Maximum = track + 1;
 				SelectorTrack.Value = track;
 			}
 		}
@@ -158,7 +159,6 @@ namespace FFBardMusicPlayer.Controls {
 		private void SongBrowser_EnterFile(object sender, BmpMidiEntry file) {
 			BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
 			OnBrowserSelect?.Invoke(this, entry);
-			SelectorTrack.Focus();
 		}
 
 		private void SelectorTrack_ValueChanged(object o, EventArgs e) {

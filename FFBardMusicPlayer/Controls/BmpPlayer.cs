@@ -292,9 +292,10 @@ namespace FFBardMusicPlayer.Controls {
 
 
 		private void OnPlayEnded(Object o, EventArgs e) {
-			if(Loop) {
+			if(Loop)
 				Player.Play();
-			}
+			else
+				Player.Stop();
 			OnMidiStatusEnded?.Invoke(this, EventArgs.Empty);
 		}
 

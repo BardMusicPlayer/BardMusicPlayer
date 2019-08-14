@@ -117,10 +117,9 @@ namespace FFBardMusicPlayer {
 					foreach(IEnumerator<int> enumerator in enumerators) {
 						enumerator.MoveNext();
 					}
-
-					if(tracksPlayingCount == 0) {
-						PlayEnded?.Invoke(this, EventArgs.Empty);
-					}
+				}
+				if(tracksPlayingCount == 0) {
+					PlayEnded?.Invoke(this, EventArgs.Empty);
 				}
 			};
 		}

@@ -116,12 +116,7 @@ namespace FFBardMusicPlayer.Forms {
 				MainTable.RowStyles[MainTable.GetRow(Explorer)].Height = visible ? 100 : 30;
 				MainTable.RowStyles[MainTable.GetRow(Explorer)].SizeType = visible ? SizeType.Percent : SizeType.Absolute;
 			};
-			Explorer.OnBrowserSelect += delegate (object o, BmpMidiEntry entry) {
-				Player.LoadFile(entry.FilePath.FilePath, entry.Track.Track);
-
-				Explorer.SetTrackName(Player.Player.LoadedFilename);
-				Explorer.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack);
-			};
+			Explorer.OnBrowserSelect += Browser_OnMidiSelect;
 
 			Playlist.OnMidiSelect += Playlist_OnMidiSelect;
 			Playlist.OnPlaylistRequestAdd += Playlist_OnPlaylistRequestAdd;
@@ -260,14 +255,16 @@ namespace FFBardMusicPlayer.Forms {
 			this.TopMost = false;
 		}
 
-
-		// TODO when splitting browser and player fix this
+		// Use invoke on gui changing properties
 		private void Browser_OnMidiSelect(object o, BmpMidiEntry entry) {
-			Playlist.Deselect();
+			Player.LoadFile(entry.FilePath.FilePath, entry.Track.Track);
+
+			Explorer.Invoke(t => t.SetTrackName(Player.Player.LoadedFilename));
+			Explorer.Invoke(t => t.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack));
 		}
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
 			if(Explorer.SelectFile(entry.FilePath.FilePath)) {
-				Explorer.EnterFile();
+				Explorer.Invoke(t => t.SelectTrack(entry.Track.Track));
 			}
 			if(proceedPlaylistMidi) {
 				Player.Player.Play();
@@ -323,7 +320,7 @@ namespace FFBardMusicPlayer.Forms {
 		private void OnPlayStatusEnded(object o, EventArgs e) {
 			if(!Player.Loop) {
 				proceedPlaylistMidi = true;
-				NextSong();
+				this.NextSong();
 			}
 		}
 
