@@ -93,7 +93,11 @@ namespace FFBardMusicPlayer.Controls {
 						break;
 					}
 					case Keys.Enter: {
-						SongBrowser.EnterFile();
+						if(!SongBrowserVisible) {
+							SongBrowserVisible = true;
+						} else {
+							SongBrowser.EnterFile();
+						}
 						break;
 					}
 					case Keys.Tab:

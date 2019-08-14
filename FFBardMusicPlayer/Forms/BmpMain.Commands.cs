@@ -107,7 +107,7 @@ namespace FFBardMusicPlayer.Forms {
 		}
 		private bool ChatCommandStop(BmpChatListener.Command cmd) {
 			if(IsCommandPermitted(cmd)) {
-				Player.Player.Reload();
+				Explorer.EnterFile();
 			}
 			return true;
 		}

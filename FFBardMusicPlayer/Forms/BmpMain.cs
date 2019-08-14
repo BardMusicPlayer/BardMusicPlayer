@@ -141,7 +141,9 @@ namespace FFBardMusicPlayer.Forms {
 
 			Log("Bard Music Player initialized.");
 		}
-
+		public void LogMidi(string format) {
+			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[MIDI] " + format, "\\red255\\green180\\blue255"));
+		}
 		public void Log(string format) {
 			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[SYSTEM] " + format));
 		}
@@ -257,10 +259,25 @@ namespace FFBardMusicPlayer.Forms {
 
 		// Use invoke on gui changing properties
 		private void Browser_OnMidiSelect(object o, BmpMidiEntry entry) {
-			Player.LoadFile(entry.FilePath.FilePath, entry.Track.Track);
-
-			Explorer.Invoke(t => t.SetTrackName(Player.Player.LoadedFilename));
+			bool error = false;
+			bool diff = (entry.FilePath.FilePath != Player.Player.LoadedFilename);
+			try {
+				Player.LoadFile(entry.FilePath.FilePath, entry.Track.Track);
+			} catch (Exception e) {
+				this.LogMidi(string.Format("[{0}] cannot be loaded:", entry.FilePath.FilePath));
+				this.LogMidi(e.Message);
+				error = true;
+			}
+			if(!error) {
+				if(diff) {
+					this.LogMidi(string.Format("[{0}] loaded.", entry.FilePath.FilePath));
+				}
+				Properties.Settings.Default.LastLoaded = entry.FilePath.FilePath;
+				Properties.Settings.Default.Save();
+			}
+			Explorer.Invoke(t => t.SetTrackName(entry.FilePath.FilePath));
 			Explorer.Invoke(t => t.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack));
+			Explorer.SongBrowserVisible = false;
 		}
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
 			if(Explorer.SelectFile(entry.FilePath.FilePath)) {

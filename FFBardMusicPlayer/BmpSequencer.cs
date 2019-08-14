@@ -31,7 +31,12 @@ namespace FFBardMusicPlayer {
 
 		private Dictionary<Track, int> notesPlayedCount = new Dictionary<Track, int>();
 
-		//public EventHandler<bool> PlayingChange;
+
+		private string loadedError = string.Empty;
+		public string LoadedError {
+			get { return loadedError; }
+		}
+
 		string loadedFilename = string.Empty;
 		public string LoadedFilename {
 			get {
@@ -290,15 +295,6 @@ namespace FFBardMusicPlayer {
 				}
 			}
 		}
-
-		public void Reload(int trackNum = -1) {
-			if(!string.IsNullOrEmpty(loadedFilename)) {
-				if(trackNum == -1) {
-					trackNum = intendedTrack;
-				}
-				Load(loadedFilename, trackNum);
-			}
-		}
 		public void Load(string file, int trackNum = 0) {
 
 			Sequence = new Sequence();
@@ -306,10 +302,15 @@ namespace FFBardMusicPlayer {
 			OnTempoChange?.Invoke(this, 0);
 
 			if(!File.Exists(file)) {
-				return;
+				throw new FileNotFoundException("Midi file does not exist.");
 			}
 
-			Sequence = new Sequence(file);
+			loadedError = string.Empty;
+			try {
+				Sequence = new Sequence(file);
+			} catch(Exception e) {
+				throw e;
+			}
 			if(trackNum >= Sequence.Count) {
 				trackNum = Sequence.Count - 1;
 			}

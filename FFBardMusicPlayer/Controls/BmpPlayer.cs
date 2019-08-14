@@ -221,12 +221,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		// Events
-		private void OnTrackSelect(Object o, int track) {
-			if(track != player.CurrentTrack) {
-				player.Reload(track);
-			}
-		}
-
 		private void OnPlayerMidiLoad(Object o, EventArgs e) {
 			OnMidiTrackLoad?.Invoke(o, player.LoadedTrack);
 
@@ -360,12 +354,6 @@ namespace FFBardMusicPlayer.Controls {
 				((HandledMouseEventArgs) e).Handled = true;
 			}
 		}
-
-		private void MusicReload_Click(object sender, EventArgs e) {
-			player.Stop();
-			player.Reload();
-		}
-
 
 		private void TrackProgress_MouseDown(object sender, MouseEventArgs e) {
 			if(!player.Loaded) {
