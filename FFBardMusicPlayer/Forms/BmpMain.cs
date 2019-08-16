@@ -273,6 +273,7 @@ namespace FFBardMusicPlayer.Forms {
 			bool diff = (entry.FilePath.FilePath != Player.Player.LoadedFilename);
 			try {
 				Player.LoadFile(entry.FilePath.FilePath, entry.Track.Track);
+				Player.Player.Stop();
 			} catch (Exception e) {
 				this.LogMidi(string.Format("[{0}] cannot be loaded:", entry.FilePath.FilePath));
 				this.LogMidi(e.Message);
