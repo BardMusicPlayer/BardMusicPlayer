@@ -81,14 +81,15 @@
 			this.SelectorSong.Name = "SelectorSong";
 			this.SelectorSong.Size = new System.Drawing.Size(733, 22);
 			this.SelectorSong.TabIndex = 1;
+			this.SelectorSong.Text = "Click here to load Midi file...";
 			this.SelectorSong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// SelectorTrack
 			// 
-			this.SelectorTrack.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (200)))), ((int) (((byte) (200)))), ((int) (((byte) (200)))));
+			this.SelectorTrack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
 			this.SelectorTrack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.SelectorTrack.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.SelectorTrack.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (20)))), ((int) (((byte) (20)))), ((int) (((byte) (20)))));
+			this.SelectorTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
 			this.SelectorTrack.Location = new System.Drawing.Point(763, 0);
 			this.SelectorTrack.Margin = new System.Windows.Forms.Padding(0);
 			this.SelectorTrack.Name = "SelectorTrack";

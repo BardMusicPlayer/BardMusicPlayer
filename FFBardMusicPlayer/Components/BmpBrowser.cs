@@ -246,10 +246,12 @@ namespace FFBardMusicPlayer.Components {
 				} else {
 					if(filenameFilter.EndsWith(".mid")) {
 						foreach(MidiFile file in this.Items) {
-							if(file.FileName.RelativeFileName == filenameFilter) {
-								Console.WriteLine("FOUND" + FilenameFilter);
-								singleEntry = file;
-								break;
+							if(file.Enabled) {
+								if(file.FileName.RelativeFileName == filenameFilter) {
+									Console.WriteLine("FOUND" + FilenameFilter);
+									singleEntry = file;
+									break;
+								}
 							}
 						}
 					}
@@ -293,7 +295,9 @@ namespace FFBardMusicPlayer.Components {
 
 			int c = this.Items.Count;
 			if(c == 0) {
-				this.Items.Add(new MidiFile("No songs found. Make sure your MIDI files are in the songs/ sub-folder.", false));
+				this.Items.Add(new MidiFile("No Midi files found. Make sure your song files are", false));
+				this.Items.Add(new MidiFile("in a \"songs\" sub-folder next to the executable.", false));
+				
 			}
 
 			if(focusEntry != null) {
@@ -314,7 +318,9 @@ namespace FFBardMusicPlayer.Components {
 		public void EnterFile() {
 			if(this.SelectedItem != null) {
 				if(this.SelectedItem is MidiFile file) {
-					OnMidiFileSelect?.Invoke(this, new BmpMidiEntry(file.FileName.RelativeFileName));
+					if(file.Enabled) {
+						OnMidiFileSelect?.Invoke(this, new BmpMidiEntry(file.FileName.RelativeFileName));
+					}
 				}
 			}
 		}
@@ -326,13 +332,15 @@ namespace FFBardMusicPlayer.Components {
 
 			string f1 = filename.ToUpper();
 			foreach(MidiFile file in this.Items) {
-				string f2 = file.FileName.ShortFileName.ToUpper();
-				if(f2.StartsWith(f1) && halfMatch == null) {
-					halfMatch = file;
-				}
-				string f3 = file.FileName.RelativeFileName.ToUpper();
-				if(f3.Equals(f1) && fullMatch == null) {
-					fullMatch = file;
+				if(file.Enabled) {
+					string f2 = file.FileName.ShortFileName.ToUpper();
+					if(f2.StartsWith(f1) && halfMatch == null) {
+						halfMatch = file;
+					}
+					string f3 = file.FileName.RelativeFileName.ToUpper();
+					if(f3.Equals(f1) && fullMatch == null) {
+						fullMatch = file;
+					}
 				}
 			}
 			if(fullMatch != null) {

@@ -16,8 +16,11 @@ namespace FFBardMusicPlayer.Controls {
 	public partial class BmpExplorer : UserControl {
 
 		private bool ignoreTrackChange = false;
+		private bool initState = true;
 		public EventHandler<bool> OnBrowserVisibleChange;
 		public EventHandler<BmpMidiEntry> OnBrowserSelect;
+
+		private Timer selectFlashingTimer = new Timer();
 
 		public bool SongBrowserVisible {
 			get { return SongBrowser.Visible; }
@@ -29,6 +32,14 @@ namespace FFBardMusicPlayer.Controls {
 
 		public BmpExplorer() {
 			InitializeComponent();
+			
+			selectFlashingTimer.Tick += delegate (object o, EventArgs a) {
+				Random random = new Random();
+				int min = 180, max = 240;
+				SelectorSong.BackColor = Color.FromArgb(random.Next(min, max), random.Next(min, max), random.Next(min, max));
+			};
+			selectFlashingTimer.Interval = 100;
+			selectFlashingTimer.Start();
 
 			SongBrowser.OnMidiFileSelect += SongBrowser_EnterFile;
 			SelectorTrack.ValueChanged += delegate (object o, EventArgs e) {
@@ -168,6 +179,13 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void SongBrowser_EnterFile(object sender, BmpMidiEntry file) {
+
+			if(initState) {
+				selectFlashingTimer.Stop();
+				SelectorSong.BackColor = Color.White;
+				SelectorSong.Text = string.Empty;
+			}
+
 			BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
 			OnBrowserSelect?.Invoke(this, entry);
 		}
