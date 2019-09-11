@@ -113,6 +113,7 @@ namespace FFBardMusicPlayer.Controls {
 							SongBrowserVisible = true;
 						} else {
 							SongBrowser.EnterFile();
+							SelectorTrack.Focus();
 						}
 						break;
 					}
@@ -160,7 +161,7 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void EnterFile() {
-			SongBrowser.EnterFile();
+			SongBrowser.Invoke(t => t.EnterFile());
 		}
 
 		public void SetTrackName(string name) {

@@ -287,6 +287,8 @@ namespace FFBardMusicPlayer.Forms {
 				Properties.Settings.Default.LastLoaded = entry.FilePath.FilePath;
 				Properties.Settings.Default.Save();
 			}
+			Playlist.Deselect();
+
 			Explorer.Invoke(t => t.SetTrackName(entry.FilePath.FilePath));
 			Explorer.Invoke(t => t.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack));
 			Explorer.SongBrowserVisible = false;
@@ -296,6 +298,7 @@ namespace FFBardMusicPlayer.Forms {
 				Explorer.Invoke(t => t.SelectTrack(entry.Track.Track));
 				Explorer.EnterFile();
 			}
+			Playlist.Select(entry.FilePath.FilePath);
 			if(proceedPlaylistMidi) {
 				Player.Player.Play();
 				proceedPlaylistMidi = false;
