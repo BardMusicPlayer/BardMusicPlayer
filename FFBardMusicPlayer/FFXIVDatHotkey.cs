@@ -155,6 +155,7 @@ namespace FFBardMusicPlayer {
 			{ "C+2", "PERFORMANCE_MODE_EX_C6" },
 		};
 
+
 		public List<Keybind> GetPerformanceKeybinds() {
 			List<Keybind> keybinds = new List<Keybind>();
 			foreach(string noteKey in pianoKeyMap.Keys) {
@@ -171,6 +172,20 @@ namespace FFBardMusicPlayer {
 			}
 			return string.Empty;
 		}
+
+		public static string RawNoteByteToPianoKey(int note) {
+			List<string> realPianoKeyMap = new List<string> {
+				"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"
+			};
+			int fn = note + (12 * 4);
+			int key = fn % 12;
+			int oc = ((int) (fn / 12)) - 1;
+			if(key > 0) {
+				return string.Format("{0}{1}", realPianoKeyMap[key], oc);
+			}
+			return string.Empty;
+		}
+
 		public static string NoteKeyToPerformanceKey(string nk) {
 			if(pianoKeyMap.ContainsKey(nk)) {
 				return pianoKeyMap[nk];

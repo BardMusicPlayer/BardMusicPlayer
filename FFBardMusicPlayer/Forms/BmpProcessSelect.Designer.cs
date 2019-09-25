@@ -31,23 +31,26 @@
 			this.QuitButton = new System.Windows.Forms.Button();
 			this.ProcessScroll = new System.Windows.Forms.Panel();
 			this.AllProcessCheck = new System.Windows.Forms.CheckBox();
+			this.LocalOrchestraButton = new System.Windows.Forms.Button();
 			this.ProcessScroll.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ProcessList
 			// 
+			this.ProcessList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.ProcessList.AutoSize = true;
 			this.ProcessList.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ProcessList.Location = new System.Drawing.Point(0, 0);
 			this.ProcessList.Margin = new System.Windows.Forms.Padding(0);
 			this.ProcessList.Name = "ProcessList";
-			this.ProcessList.Size = new System.Drawing.Size(131, 190);
+			this.ProcessList.Size = new System.Drawing.Size(131, 199);
 			this.ProcessList.TabIndex = 0;
 			// 
 			// HeaderText
 			// 
-			this.HeaderText.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.HeaderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.HeaderText.Location = new System.Drawing.Point(1, 6);
 			this.HeaderText.Name = "HeaderText";
 			this.HeaderText.Size = new System.Drawing.Size(178, 18);
@@ -61,9 +64,9 @@
 			// 
 			// RefreshButton
 			// 
-			this.RefreshButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.RefreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.RefreshButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.RefreshButton.Location = new System.Drawing.Point(3, 236);
+			this.RefreshButton.Location = new System.Drawing.Point(3, 262);
 			this.RefreshButton.Margin = new System.Windows.Forms.Padding(0);
 			this.RefreshButton.Name = "RefreshButton";
 			this.RefreshButton.Size = new System.Drawing.Size(107, 20);
@@ -74,9 +77,9 @@
 			// 
 			// QuitButton
 			// 
-			this.QuitButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.QuitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.QuitButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.QuitButton.Location = new System.Drawing.Point(110, 236);
+			this.QuitButton.Location = new System.Drawing.Point(110, 262);
 			this.QuitButton.Margin = new System.Windows.Forms.Padding(0);
 			this.QuitButton.Name = "QuitButton";
 			this.QuitButton.Size = new System.Drawing.Size(65, 20);
@@ -87,22 +90,22 @@
 			// 
 			// ProcessScroll
 			// 
-			this.ProcessScroll.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.ProcessScroll.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.ProcessScroll.AutoScroll = true;
 			this.ProcessScroll.Controls.Add(this.ProcessList);
 			this.ProcessScroll.Location = new System.Drawing.Point(19, 24);
 			this.ProcessScroll.Margin = new System.Windows.Forms.Padding(0);
 			this.ProcessScroll.Name = "ProcessScroll";
-			this.ProcessScroll.Size = new System.Drawing.Size(148, 190);
+			this.ProcessScroll.Size = new System.Drawing.Size(148, 199);
 			this.ProcessScroll.TabIndex = 4;
 			// 
 			// AllProcessCheck
 			// 
-			this.AllProcessCheck.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.AllProcessCheck.Location = new System.Drawing.Point(19, 215);
+			this.AllProcessCheck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.AllProcessCheck.Location = new System.Drawing.Point(19, 224);
 			this.AllProcessCheck.Name = "AllProcessCheck";
 			this.AllProcessCheck.Size = new System.Drawing.Size(148, 21);
 			this.AllProcessCheck.TabIndex = 5;
@@ -111,11 +114,25 @@
 			this.AllProcessCheck.UseVisualStyleBackColor = true;
 			this.AllProcessCheck.CheckedChanged += new System.EventHandler(this.AllProcessCheck_CheckedChanged);
 			// 
+			// LocalOrchestraButton
+			// 
+			this.LocalOrchestraButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.LocalOrchestraButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.LocalOrchestraButton.Location = new System.Drawing.Point(4, 242);
+			this.LocalOrchestraButton.Margin = new System.Windows.Forms.Padding(0);
+			this.LocalOrchestraButton.Name = "LocalOrchestraButton";
+			this.LocalOrchestraButton.Size = new System.Drawing.Size(170, 20);
+			this.LocalOrchestraButton.TabIndex = 6;
+			this.LocalOrchestraButton.Text = "Start local orchestra";
+			this.LocalOrchestraButton.UseVisualStyleBackColor = true;
+			this.LocalOrchestraButton.Click += new System.EventHandler(this.LocalOrchestraButton_Click);
+			// 
 			// BmpProcessSelect
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(180, 260);
+			this.ClientSize = new System.Drawing.Size(180, 286);
+			this.Controls.Add(this.LocalOrchestraButton);
 			this.Controls.Add(this.AllProcessCheck);
 			this.Controls.Add(this.QuitButton);
 			this.Controls.Add(this.HeaderText);
@@ -144,5 +161,6 @@
 		private System.Windows.Forms.Button QuitButton;
 		private System.Windows.Forms.Panel ProcessScroll;
 		private System.Windows.Forms.CheckBox AllProcessCheck;
+		private System.Windows.Forms.Button LocalOrchestraButton;
 	}
 }

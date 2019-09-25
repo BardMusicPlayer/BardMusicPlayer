@@ -31,6 +31,8 @@ namespace FFBardMusicPlayer.Forms {
 		private bool proceedPlaylistMidi = false;
 		NoteChordSimulation<BmpPlayer.NoteEvent> chordNotes;
 
+		bool tempPlaying = false;
+
 		// TODO remove forced mode checkbox?
 
 		public BmpMain() {
@@ -292,6 +294,12 @@ namespace FFBardMusicPlayer.Forms {
 			Explorer.Invoke(t => t.SetTrackName(entry.FilePath.FilePath));
 			Explorer.Invoke(t => t.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack));
 			Explorer.SongBrowserVisible = false;
+
+			Statistics.SetBpmCount(Player.Tempo);
+			Statistics.SetTotalTrackCount(Player.Player.MaxTrack);
+			Statistics.SetTotalNoteCount(Player.TotalNoteCount);
+			Statistics.SetTrackNoteCount(Player.CurrentNoteCount);
+			Statistics.SetLyricsBool((Player.Player.LyricNum > 0));
 		}
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
 			if(Explorer.SelectFile(entry.FilePath.FilePath)) {
@@ -338,12 +346,20 @@ namespace FFBardMusicPlayer.Forms {
 				FFXIV.SendChatString(lyric);
 			}
 		}
-
 		private void OnPlayStatusChange(Object o, bool playing) {
 			if(!playing) {
+				if(tempPlaying) {
+					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback paused."));
+					tempPlaying = false;
+				}
 				FFXIV.hook.ClearLastPerformanceKeybinds();
 				chordNotes.Clear();
 			} else {
+				if(!tempPlaying) {
+					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
+					tempPlaying = true;
+				}
+				Statistics.Restart();
 				if(Properties.Settings.Default.OpenFFXIV) {
 					FFXIV.hook.FocusWindow();
 				}
@@ -419,12 +435,25 @@ namespace FFBardMusicPlayer.Forms {
 		// OnMidiVoice + OffMidiVoice is called with correct octave shift
 		private void OnMidiVoice(Object o, NoteEvent onNote) {
 
+			Statistics.AddNoteCount();
+
 			if(Player.Status == PlayerStatus.Conducting) {
 				return;
 			}
 
 			if(!FFXIV.IsPerformanceReady()) {
 				return;
+			}
+
+			if(Properties.Settings.Default.Verbose) {
+				FFXIVKeybindDat.Keybind keybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
+				if(keybind == null) {
+					string ns = FFXIVKeybindDat.RawNoteByteToPianoKey(onNote.note);
+					if(!string.IsNullOrEmpty(ns)) {
+						string str = string.Format("Note {0} is out of range, it will not be played.", ns);
+						ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(str, "\\red255\\green200\\blue200"));
+					}
+				}
 			}
 
 			if(!FFXIV.memory.ChatInputOpen) {

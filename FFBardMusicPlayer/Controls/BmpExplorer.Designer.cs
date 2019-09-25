@@ -31,7 +31,7 @@
 			this.BrowserTable = new System.Windows.Forms.TableLayoutPanel();
 			this.SongBrowser = new FFBardMusicPlayer.Components.BmpBrowser(this.components);
 			this.SeekerTable.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize) (this.SelectorTrack)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorTrack)).BeginInit();
 			this.BrowserTable.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -137,7 +137,7 @@
 			this.Size = new System.Drawing.Size(813, 149);
 			this.SeekerTable.ResumeLayout(false);
 			this.SeekerTable.PerformLayout();
-			((System.ComponentModel.ISupportInitialize) (this.SelectorTrack)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorTrack)).EndInit();
 			this.BrowserTable.ResumeLayout(false);
 			this.ResumeLayout(false);
 

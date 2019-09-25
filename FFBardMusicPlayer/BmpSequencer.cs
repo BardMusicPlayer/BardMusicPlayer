@@ -29,7 +29,7 @@ namespace FFBardMusicPlayer {
 		private Timer secondTimer = new Timer(1000);
 		public EventHandler<int> OnTick;
 
-		private Dictionary<Track, int> notesPlayedCount = new Dictionary<Track, int>();
+		public Dictionary<Track, int> notesPlayedCount = new Dictionary<Track, int>();
 
 
 		private string loadedError = string.Empty;
@@ -269,9 +269,6 @@ namespace FFBardMusicPlayer {
 			if(e.MidiTrack == LoadedTrack) {
 				OnSimpleChannelMessagePlayed(sender, e);
 			}
-			if(e.Message.Command == ChannelCommand.NoteOn && (e.Message.Data2 > 0)) {
-				notesPlayedCount[e.MidiTrack]++;
-			}
 		}
 		private void OnMetaMessagePlayed(object sender, MetaMessageEventArgs e) {
 			if(e.Message.MetaType == MetaType.Tempo) {
@@ -317,6 +314,21 @@ namespace FFBardMusicPlayer {
 
 			loadedFilename = file;
 			intendedTrack = trackNum;
+
+			// Collect statistics
+			notesPlayedCount.Clear();
+			foreach(Track track in Sequence) {
+				notesPlayedCount[track] = 0;
+				foreach(MidiEvent ev in track.Iterator()) {
+					if(ev.MidiMessage is ChannelMessage chanMsg) {
+						if(chanMsg.Command == ChannelCommand.NoteOn) {
+							if(chanMsg.Data2 > 0) {
+								notesPlayedCount[track]++;
+							}
+						}
+					}
+				}
+			}
 
 			// Count notes and select fìrst that actually has stuff
 			if(trackNum == 0) {
@@ -377,11 +389,6 @@ namespace FFBardMusicPlayer {
 						OnSimpleChannelMessagePlayed(this, new ChannelMessageEventArgs(Sequence[0], chanMsg));
 					}
 				}
-			}
-
-			notesPlayedCount.Clear();
-			foreach(Track track in Sequence) {
-				notesPlayedCount[track] = 0;
 			}
 
 			OnLoad?.Invoke(this, EventArgs.Empty);

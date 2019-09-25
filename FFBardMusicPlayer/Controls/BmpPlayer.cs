@@ -28,6 +28,7 @@ namespace FFBardMusicPlayer.Controls {
 		public class NoteEvent {
 			public Track track;
 			public int note;
+			public int origNote;
 		};
 		public EventHandler<NoteEvent> OnMidiNote;
 		public EventHandler<NoteEvent> OffMidiNote;
@@ -166,6 +167,21 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		public int TotalNoteCount {
+			get {
+				int sum = 0;
+				foreach(int s in player.notesPlayedCount.Values) {
+					sum += s;
+				}
+				return sum;
+			}
+		}
+		public int CurrentNoteCount {
+			get {
+				return player.notesPlayedCount[player.LoadedTrack];
+			}
+		}
+
 		private bool trackHoldPlaying;
 
 		public BmpPlayer() {
@@ -238,12 +254,14 @@ namespace FFBardMusicPlayer.Controls {
 			OnMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
 				note = ApplyOctaveShift(e.Message.Data1),
+				origNote = e.Message.Data1,
 			});
 		}
 		private void OffPlayerMidiNote(Object o, ChannelMessageEventArgs e) {
 			OffMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
 				note = ApplyOctaveShift(e.Message.Data1),
+				origNote = e.Message.Data1,
 			});
 		}
 

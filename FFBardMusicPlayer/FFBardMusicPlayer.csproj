@@ -103,6 +103,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BmpLocalOrchestra.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BmpLocalOrchestra.Designer.cs">
+      <DependentUpon>BmpLocalOrchestra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BmpStatistics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BmpStatistics.Designer.cs">
+      <DependentUpon>BmpStatistics.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BmpAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,6 +321,12 @@
     <None Include="Resources\kb_1.png" />
     <None Include="Resources\dx11_2.PNG" />
     <None Include="Resources\dx11_1.PNG" />
+    <EmbeddedResource Include="Controls\BmpLocalOrchestra.resx">
+      <DependentUpon>BmpLocalOrchestra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BmpStatistics.resx">
+      <DependentUpon>BmpStatistics.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BmpConfirmConductor.resx">
       <DependentUpon>BmpConfirmConductor.cs</DependentUpon>
     </EmbeddedResource>
