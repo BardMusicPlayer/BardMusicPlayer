@@ -27,26 +27,29 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BmpMain));
 			this.MainTable = new System.Windows.Forms.TableLayoutPanel();
 			this.ChatPlaylistTable = new System.Windows.Forms.TableLayoutPanel();
-			this.Playlist = new FFBardMusicPlayer.Controls.BmpPlaylist();
 			this.InfoTabs = new System.Windows.Forms.TabControl();
 			this.ChatAllTab = new System.Windows.Forms.TabPage();
-			this.ChatLogAll = new FFBardMusicPlayer.Components.BmpChatLog(this.components);
 			this.CommandTab = new System.Windows.Forms.TabPage();
-			this.ChatLogCmd = new FFBardMusicPlayer.Components.BmpChatLog(this.components);
+			this.localOrchestraTab = new System.Windows.Forms.TabPage();
 			this.SettingsTab = new System.Windows.Forms.TabPage();
-			this.Settings = new FFBardMusicPlayer.Controls.BmpSettings();
 			this.StatisticTab = new System.Windows.Forms.TabPage();
-			this.Orchestra = new FFBardMusicPlayer.Controls.BmpOrchestra();
+			this.AboutLabel = new System.Windows.Forms.Label();
+			this.Conductor = new FFBardMusicPlayer.Controls.BmpConductor();
+			this.Playlist = new FFBardMusicPlayer.Controls.BmpPlaylist();
+			this.ChatLogAll = new FFBardMusicPlayer.Components.BmpChatLog(this.components);
+			this.ChatLogCmd = new FFBardMusicPlayer.Components.BmpChatLog(this.components);
+			this.LocalOrchestra = new FFBardMusicPlayer.Controls.BmpLocalOrchestra();
+			this.Settings = new FFBardMusicPlayer.Controls.BmpSettings();
+			this.Statistics = new FFBardMusicPlayer.Controls.BmpStatistics();
 			this.Explorer = new FFBardMusicPlayer.Controls.BmpExplorer();
 			this.Player = new FFBardMusicPlayer.Controls.BmpPlayer();
 			this.FFXIV = new FFBardMusicPlayer.Controls.BmpHook();
-			this.AboutLabel = new System.Windows.Forms.Label();
-			this.Statistics = new FFBardMusicPlayer.Controls.BmpStatistics();
 			this.MainTable.SuspendLayout();
 			this.ChatPlaylistTable.SuspendLayout();
 			this.InfoTabs.SuspendLayout();
 			this.ChatAllTab.SuspendLayout();
 			this.CommandTab.SuspendLayout();
+			this.localOrchestraTab.SuspendLayout();
 			this.SettingsTab.SuspendLayout();
 			this.StatisticTab.SuspendLayout();
 			this.SuspendLayout();
@@ -55,15 +58,17 @@
 			// 
 			this.MainTable.ColumnCount = 1;
 			this.MainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.MainTable.Controls.Add(this.ChatPlaylistTable, 0, 0);
-			this.MainTable.Controls.Add(this.Explorer, 0, 1);
-			this.MainTable.Controls.Add(this.Player, 0, 2);
-			this.MainTable.Controls.Add(this.FFXIV, 0, 3);
+			this.MainTable.Controls.Add(this.Conductor, 0, 0);
+			this.MainTable.Controls.Add(this.ChatPlaylistTable, 0, 1);
+			this.MainTable.Controls.Add(this.Explorer, 0, 2);
+			this.MainTable.Controls.Add(this.Player, 0, 3);
+			this.MainTable.Controls.Add(this.FFXIV, 0, 4);
 			this.MainTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.MainTable.Location = new System.Drawing.Point(0, 0);
 			this.MainTable.Margin = new System.Windows.Forms.Padding(0);
 			this.MainTable.Name = "MainTable";
-			this.MainTable.RowCount = 4;
+			this.MainTable.RowCount = 5;
+			this.MainTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.MainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.MainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.MainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
@@ -79,16 +84,107 @@
 			this.ChatPlaylistTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.ChatPlaylistTable.Controls.Add(this.Playlist, 0, 0);
 			this.ChatPlaylistTable.Controls.Add(this.InfoTabs, 1, 0);
-			this.ChatPlaylistTable.Controls.Add(this.Orchestra, 2, 0);
 			this.ChatPlaylistTable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ChatPlaylistTable.Location = new System.Drawing.Point(0, 0);
+			this.ChatPlaylistTable.Location = new System.Drawing.Point(0, 30);
 			this.ChatPlaylistTable.Margin = new System.Windows.Forms.Padding(0);
 			this.ChatPlaylistTable.Name = "ChatPlaylistTable";
 			this.ChatPlaylistTable.RowCount = 1;
 			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 227F));
-			this.ChatPlaylistTable.Size = new System.Drawing.Size(584, 227);
+			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 197F));
+			this.ChatPlaylistTable.Size = new System.Drawing.Size(584, 197);
 			this.ChatPlaylistTable.TabIndex = 1;
+			// 
+			// InfoTabs
+			// 
+			this.InfoTabs.Controls.Add(this.ChatAllTab);
+			this.InfoTabs.Controls.Add(this.CommandTab);
+			this.InfoTabs.Controls.Add(this.localOrchestraTab);
+			this.InfoTabs.Controls.Add(this.SettingsTab);
+			this.InfoTabs.Controls.Add(this.StatisticTab);
+			this.InfoTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.InfoTabs.Location = new System.Drawing.Point(200, 0);
+			this.InfoTabs.Margin = new System.Windows.Forms.Padding(0);
+			this.InfoTabs.Name = "InfoTabs";
+			this.InfoTabs.SelectedIndex = 0;
+			this.InfoTabs.Size = new System.Drawing.Size(384, 197);
+			this.InfoTabs.TabIndex = 1;
+			// 
+			// ChatAllTab
+			// 
+			this.ChatAllTab.Controls.Add(this.ChatLogAll);
+			this.ChatAllTab.Location = new System.Drawing.Point(4, 22);
+			this.ChatAllTab.Name = "ChatAllTab";
+			this.ChatAllTab.Size = new System.Drawing.Size(376, 171);
+			this.ChatAllTab.TabIndex = 0;
+			this.ChatAllTab.Text = "[Chat] All";
+			this.ChatAllTab.UseVisualStyleBackColor = true;
+			// 
+			// CommandTab
+			// 
+			this.CommandTab.Controls.Add(this.ChatLogCmd);
+			this.CommandTab.Location = new System.Drawing.Point(4, 22);
+			this.CommandTab.Name = "CommandTab";
+			this.CommandTab.Size = new System.Drawing.Size(376, 171);
+			this.CommandTab.TabIndex = 1;
+			this.CommandTab.Text = "[Chat] Commands";
+			this.CommandTab.UseVisualStyleBackColor = true;
+			// 
+			// localOrchestraTab
+			// 
+			this.localOrchestraTab.Controls.Add(this.LocalOrchestra);
+			this.localOrchestraTab.Location = new System.Drawing.Point(4, 22);
+			this.localOrchestraTab.Name = "localOrchestraTab";
+			this.localOrchestraTab.Padding = new System.Windows.Forms.Padding(3);
+			this.localOrchestraTab.Size = new System.Drawing.Size(376, 171);
+			this.localOrchestraTab.TabIndex = 4;
+			this.localOrchestraTab.Text = "Local orchestra";
+			this.localOrchestraTab.UseVisualStyleBackColor = true;
+			// 
+			// SettingsTab
+			// 
+			this.SettingsTab.Controls.Add(this.Settings);
+			this.SettingsTab.Location = new System.Drawing.Point(4, 22);
+			this.SettingsTab.Name = "SettingsTab";
+			this.SettingsTab.Size = new System.Drawing.Size(376, 171);
+			this.SettingsTab.TabIndex = 2;
+			this.SettingsTab.Text = "Settings";
+			this.SettingsTab.UseVisualStyleBackColor = true;
+			// 
+			// StatisticTab
+			// 
+			this.StatisticTab.Controls.Add(this.Statistics);
+			this.StatisticTab.Location = new System.Drawing.Point(4, 22);
+			this.StatisticTab.Name = "StatisticTab";
+			this.StatisticTab.Padding = new System.Windows.Forms.Padding(3);
+			this.StatisticTab.Size = new System.Drawing.Size(376, 171);
+			this.StatisticTab.TabIndex = 3;
+			this.StatisticTab.Text = "Statistics";
+			this.StatisticTab.UseVisualStyleBackColor = true;
+			// 
+			// AboutLabel
+			// 
+			this.AboutLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.AboutLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.AboutLabel.ForeColor = System.Drawing.SystemColors.Highlight;
+			this.AboutLabel.Location = new System.Drawing.Point(566, 437);
+			this.AboutLabel.Name = "AboutLabel";
+			this.AboutLabel.Size = new System.Drawing.Size(18, 24);
+			this.AboutLabel.TabIndex = 2;
+			this.AboutLabel.Text = "?";
+			this.AboutLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.AboutLabel.Click += new System.EventHandler(this.AboutLabel_Click);
+			// 
+			// Conductor
+			// 
+			this.Conductor.BackColor = System.Drawing.Color.Black;
+			this.Conductor.ConductorName = "";
+			this.Conductor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Conductor.Location = new System.Drawing.Point(3, 3);
+			this.Conductor.Name = "Conductor";
+			this.Conductor.Padding = new System.Windows.Forms.Padding(3);
+			this.Conductor.Size = new System.Drawing.Size(578, 24);
+			this.Conductor.TabIndex = 2;
+			this.Conductor.Visible = false;
 			// 
 			// Playlist
 			// 
@@ -99,33 +195,9 @@
 			this.Playlist.Margin = new System.Windows.Forms.Padding(0);
 			this.Playlist.Name = "Playlist";
 			this.Playlist.RandomMode = false;
-			this.Playlist.Size = new System.Drawing.Size(200, 227);
+			this.Playlist.Size = new System.Drawing.Size(200, 197);
 			this.Playlist.TabIndex = 0;
 			this.Playlist.Visible = false;
-			// 
-			// InfoTabs
-			// 
-			this.InfoTabs.Controls.Add(this.ChatAllTab);
-			this.InfoTabs.Controls.Add(this.CommandTab);
-			this.InfoTabs.Controls.Add(this.SettingsTab);
-			this.InfoTabs.Controls.Add(this.StatisticTab);
-			this.InfoTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.InfoTabs.Location = new System.Drawing.Point(200, 0);
-			this.InfoTabs.Margin = new System.Windows.Forms.Padding(0);
-			this.InfoTabs.Name = "InfoTabs";
-			this.InfoTabs.SelectedIndex = 0;
-			this.InfoTabs.Size = new System.Drawing.Size(178, 227);
-			this.InfoTabs.TabIndex = 1;
-			// 
-			// ChatAllTab
-			// 
-			this.ChatAllTab.Controls.Add(this.ChatLogAll);
-			this.ChatAllTab.Location = new System.Drawing.Point(4, 22);
-			this.ChatAllTab.Name = "ChatAllTab";
-			this.ChatAllTab.Size = new System.Drawing.Size(170, 201);
-			this.ChatAllTab.TabIndex = 0;
-			this.ChatAllTab.Text = "[Chat] All";
-			this.ChatAllTab.UseVisualStyleBackColor = true;
 			// 
 			// ChatLogAll
 			// 
@@ -137,19 +209,9 @@
 			this.ChatLogAll.Name = "ChatLogAll";
 			this.ChatLogAll.ReadOnly = true;
 			this.ChatLogAll.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-			this.ChatLogAll.Size = new System.Drawing.Size(170, 201);
+			this.ChatLogAll.Size = new System.Drawing.Size(376, 171);
 			this.ChatLogAll.TabIndex = 0;
 			this.ChatLogAll.Text = "";
-			// 
-			// CommandTab
-			// 
-			this.CommandTab.Controls.Add(this.ChatLogCmd);
-			this.CommandTab.Location = new System.Drawing.Point(4, 22);
-			this.CommandTab.Name = "CommandTab";
-			this.CommandTab.Size = new System.Drawing.Size(170, 201);
-			this.CommandTab.TabIndex = 1;
-			this.CommandTab.Text = "[Chat] Commands";
-			this.CommandTab.UseVisualStyleBackColor = true;
 			// 
 			// ChatLogCmd
 			// 
@@ -161,19 +223,20 @@
 			this.ChatLogCmd.Name = "ChatLogCmd";
 			this.ChatLogCmd.ReadOnly = true;
 			this.ChatLogCmd.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-			this.ChatLogCmd.Size = new System.Drawing.Size(170, 201);
+			this.ChatLogCmd.Size = new System.Drawing.Size(376, 171);
 			this.ChatLogCmd.TabIndex = 0;
 			this.ChatLogCmd.Text = "";
 			// 
-			// SettingsTab
+			// LocalOrchestra
 			// 
-			this.SettingsTab.Controls.Add(this.Settings);
-			this.SettingsTab.Location = new System.Drawing.Point(4, 22);
-			this.SettingsTab.Name = "SettingsTab";
-			this.SettingsTab.Size = new System.Drawing.Size(170, 201);
-			this.SettingsTab.TabIndex = 2;
-			this.SettingsTab.Text = "Settings";
-			this.SettingsTab.UseVisualStyleBackColor = true;
+			this.LocalOrchestra.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.LocalOrchestra.InstrumentToggle = false;
+			this.LocalOrchestra.Location = new System.Drawing.Point(3, 3);
+			this.LocalOrchestra.Name = "LocalOrchestra";
+			this.LocalOrchestra.OrchestraEnabled = false;
+			this.LocalOrchestra.SequencerReference = null;
+			this.LocalOrchestra.Size = new System.Drawing.Size(370, 165);
+			this.LocalOrchestra.TabIndex = 0;
 			// 
 			// Settings
 			// 
@@ -182,30 +245,16 @@
 			this.Settings.Location = new System.Drawing.Point(0, 0);
 			this.Settings.Margin = new System.Windows.Forms.Padding(0);
 			this.Settings.Name = "Settings";
-			this.Settings.Size = new System.Drawing.Size(170, 201);
+			this.Settings.Size = new System.Drawing.Size(376, 171);
 			this.Settings.TabIndex = 0;
 			// 
-			// StatisticTab
+			// Statistics
 			// 
-			this.StatisticTab.Controls.Add(this.Statistics);
-			this.StatisticTab.Location = new System.Drawing.Point(4, 22);
-			this.StatisticTab.Name = "StatisticTab";
-			this.StatisticTab.Padding = new System.Windows.Forms.Padding(3);
-			this.StatisticTab.Size = new System.Drawing.Size(170, 201);
-			this.StatisticTab.TabIndex = 3;
-			this.StatisticTab.Text = "Statistics";
-			this.StatisticTab.UseVisualStyleBackColor = true;
-			// 
-			// Orchestra
-			// 
-			this.Orchestra.BackColor = System.Drawing.Color.Black;
-			this.Orchestra.ConductorName = "";
-			this.Orchestra.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.Orchestra.Location = new System.Drawing.Point(381, 3);
-			this.Orchestra.Name = "Orchestra";
-			this.Orchestra.Size = new System.Drawing.Size(200, 221);
-			this.Orchestra.TabIndex = 2;
-			this.Orchestra.Visible = false;
+			this.Statistics.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Statistics.Location = new System.Drawing.Point(3, 3);
+			this.Statistics.Name = "Statistics";
+			this.Statistics.Size = new System.Drawing.Size(370, 165);
+			this.Statistics.TabIndex = 0;
 			// 
 			// Explorer
 			// 
@@ -225,10 +274,9 @@
 			this.Player.Loop = false;
 			this.Player.Name = "Player";
 			this.Player.OctaveShift = 0;
-			this.Player.PreferredInstrument = Sharlayan.Core.Enums.Performance.Instrument.Piano;
 			this.Player.Size = new System.Drawing.Size(578, 174);
 			this.Player.SpeedShift = 1F;
-			this.Player.Status = FFBardMusicPlayer.Controls.BmpPlayer.PlayerStatus.PerformerSolo;
+			this.Player.Status = FFBardMusicPlayer.Controls.BmpPlayer.PlayerStatus.Performing;
 			this.Player.TabIndex = 4;
 			this.Player.Tempo = 0;
 			this.Player.TrackName = null;
@@ -242,27 +290,6 @@
 			this.FFXIV.Name = "FFXIV";
 			this.FFXIV.Size = new System.Drawing.Size(584, 24);
 			this.FFXIV.TabIndex = 5;
-			// 
-			// AboutLabel
-			// 
-			this.AboutLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.AboutLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.AboutLabel.ForeColor = System.Drawing.SystemColors.Highlight;
-			this.AboutLabel.Location = new System.Drawing.Point(566, 437);
-			this.AboutLabel.Name = "AboutLabel";
-			this.AboutLabel.Size = new System.Drawing.Size(18, 24);
-			this.AboutLabel.TabIndex = 2;
-			this.AboutLabel.Text = "?";
-			this.AboutLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.AboutLabel.Click += new System.EventHandler(this.AboutLabel_Click);
-			// 
-			// Statistics
-			// 
-			this.Statistics.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.Statistics.Location = new System.Drawing.Point(3, 3);
-			this.Statistics.Name = "Statistics";
-			this.Statistics.Size = new System.Drawing.Size(164, 195);
-			this.Statistics.TabIndex = 0;
 			// 
 			// BmpMain
 			// 
@@ -281,6 +308,7 @@
 			this.InfoTabs.ResumeLayout(false);
 			this.ChatAllTab.ResumeLayout(false);
 			this.CommandTab.ResumeLayout(false);
+			this.localOrchestraTab.ResumeLayout(false);
 			this.SettingsTab.ResumeLayout(false);
 			this.StatisticTab.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -288,8 +316,6 @@
 		}
 
 		#endregion
-
-		private Controls.BmpHook FFXIV;
 		private System.Windows.Forms.TableLayoutPanel MainTable;
 		private System.Windows.Forms.TableLayoutPanel ChatPlaylistTable;
 		private Controls.BmpPlaylist Playlist;
@@ -301,10 +327,13 @@
 		private Controls.BmpSettings Settings;
 		private Components.BmpChatLog ChatLogAll;
 		private Controls.BmpPlayer Player;
-		private Controls.BmpOrchestra Orchestra;
+		private Controls.BmpConductor Conductor;
 		private Controls.BmpExplorer Explorer;
 		private System.Windows.Forms.Label AboutLabel;
 		private System.Windows.Forms.TabPage StatisticTab;
 		private Controls.BmpStatistics Statistics;
+		private System.Windows.Forms.TabPage localOrchestraTab;
+		private Controls.BmpLocalOrchestra LocalOrchestra;
+		private Controls.BmpHook FFXIV;
 	}
 }

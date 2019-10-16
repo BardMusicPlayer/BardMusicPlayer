@@ -38,7 +38,7 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private bool IsCommandPermitted(BmpChatListener.Command cmd) {
-			if(Orchestra.IsConductorName(cmd.sender)) {
+			if(Conductor.IsConductorName(cmd.sender)) {
 				if(cmd.sender == FFXIV.memory.currentPlayer.CurrentPlayer.Name) {
 					// Disable making the same fucking command to yourself as conductor
 					return false;
@@ -59,7 +59,7 @@ namespace FFBardMusicPlayer.Forms {
 			if(!cmd.IsCommandListenChannel()) {
 				return false;
 			}
-			if(Orchestra.IsConductorName(cmd.sender)) {
+			if(Conductor.IsConductorName(cmd.sender)) {
 				if(cmd.param == "off") {
 					this.ConfirmSetConductor(string.Empty);
 				} else {
@@ -80,15 +80,7 @@ namespace FFBardMusicPlayer.Forms {
 		private void ConfirmSetConductor(string conductorName) {
 			Console.WriteLine(string.Format("ConfirmSetConductor: {0}", conductorName));
 			if(conductorName is string) {
-				Orchestra.ConductorName = conductorName;
-
-				bool isme = Orchestra.IsConductorName(FFXIV.memory.currentPlayer.CurrentPlayer.Name);
-				if(Orchestra.IsConducting) {
-					Player.Status = (isme ? PlayerStatus.Conducting : PlayerStatus.PerformerMulti);
-				} else {
-					Player.Status = PlayerStatus.PerformerSolo;
-				}
-
+				Conductor.ConductorName = conductorName;
 				this.UpdatePerformance();
 			}
 		}

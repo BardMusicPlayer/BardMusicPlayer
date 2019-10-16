@@ -108,6 +108,13 @@ namespace FFBardMusicPlayer {
 
 		public EventHandler<Keys> OnKeyPressed;
 
+		private Process referenceProcess;
+		public Process Process {
+			get {
+				return referenceProcess;
+			}
+		}
+
 		public FFXIVHook() {
 			keyTimers.NoteEvent += delegate (Object o, FFXIVKeybindDat.Keybind keybind) {
 				SendSyncKey(keybind.GetKey(), true, true, false);
@@ -115,27 +122,33 @@ namespace FFBardMusicPlayer {
 			};
 		}
 
-		public bool Hook(Process process) {
+		public bool Hook(Process process, bool useCallback = true) {
 			if(process == null) {
 				return false;
 			}
 			if(_hookID != IntPtr.Zero) {
 				Unhook();
 			}
-
-			proc = new MessageProc(HookCallback);
-
+			referenceProcess = process;
 			mainWindowHandle = process.MainWindowHandle;
-			_hookID = SetWindowsHookEx(WH_KEYBOARD_LL, proc, IntPtr.Zero, 0);
-			if(_hookID != IntPtr.Zero) {
-				return true;
-			} else {
-				return false;
+
+			if(useCallback) {
+				proc = new MessageProc(HookCallback);
+				_hookID = SetWindowsHookEx(WH_KEYBOARD_LL, proc, IntPtr.Zero, 0);
+				if(_hookID != IntPtr.Zero) {
+					return true;
+				} else {
+					return false;
+				}
 			}
+			return true;
 		}
 		public void Unhook() {
-			UnhookWindowsHookEx(_hookID);
-			_hookID = IntPtr.Zero;
+			if(_hookID != IntPtr.Zero) {
+				UnhookWindowsHookEx(_hookID);
+				referenceProcess = null;
+				_hookID = IntPtr.Zero;
+			}
 		}
 
 		public void FocusWindow() {

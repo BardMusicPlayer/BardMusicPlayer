@@ -28,6 +28,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public event EventHandler<bool> forceModeChanged;
 		public event EventHandler perfSettingsChanged;
+		public event EventHandler findProcessRequest;
 
 		private string CurrentCharId {
 			get {
@@ -142,13 +143,11 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public bool GetHotkeyForInstrument(Performance.Instrument ins, out FFXIVKeybindDat.Keybind keybind) {
-
-			List<FFXIVHotbarDat.HotbarSlot> slots = hotbar.GetSlotsFromType(0x1D);
-			foreach(FFXIVHotbarDat.HotbarSlot slot in slots) {
-				if(slot.action == (int) ins) {
-					keybind = hotkeys[slot.ToString()];
-					return true;
-				}
+			
+			string keyMap = hotbar.GetInstrumentKeyMap(ins);
+			if(!string.IsNullOrEmpty(keyMap)) {
+				keybind = hotkeys[keyMap];
+				return true;
 			}
 			keybind = new FFXIVKeybindDat.Keybind();
 			return false;
@@ -228,17 +227,6 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void FindProcess() {
-			BmpProcessSelect processSelector = new BmpProcessSelect();
-			processSelector.ShowDialog(this);
-			if(processSelector.DialogResult == DialogResult.Yes) {
-				Process proc = processSelector.selectedProcess;
-				if(proc != null) {
-					SetProcess(proc);
-				}
-			}
-		}
-
 		public void SetHookStatus(string status = null) {
 			if(string.IsNullOrEmpty(status)) {
 				status = "Hook process";
@@ -303,7 +291,7 @@ namespace FFBardMusicPlayer.Controls {
 				hook.Unhook();
 				this.SetHookStatus();
 			} else {
-				FindProcess();
+				findProcessRequest?.Invoke(this, EventArgs.Empty);
 			}
 		}
 

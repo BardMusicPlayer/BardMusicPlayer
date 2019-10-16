@@ -7,6 +7,8 @@ using Timer = System.Timers.Timer;
 
 using Sanford.Multimedia.Midi;
 using System.Windows.Forms;
+using static Sharlayan.Core.Enums.Performance;
+using System.Text.RegularExpressions;
 /*
 public class TickList : Dictionary<int, List<MetaMidiEvent>> {
 
@@ -17,6 +19,9 @@ namespace FFBardMusicPlayer {
 	public class BmpSequencer : BmpCustomSequencer {
 
 		InputDevice midiInput = null;
+
+		private Dictionary<Track, Instrument> preferredInstruments = new Dictionary<Track, Instrument>();
+		private Dictionary<Track, int> preferredOctaveShift = new Dictionary<Track, int>();
 
 		public EventHandler OnLoad;
 		public EventHandler<ChannelMessageEventArgs> OnNote;
@@ -265,10 +270,7 @@ namespace FFBardMusicPlayer {
 		}
 
 		private void OnChannelMessagePlayed(object sender, ChannelMessageEventArgs e) {
-			Console.WriteLine(e.Message.Command + " " + e.Message.Data1);
-			if(e.MidiTrack == LoadedTrack) {
-				OnSimpleChannelMessagePlayed(sender, e);
-			}
+			OnSimpleChannelMessagePlayed(sender, e);
 		}
 		private void OnMetaMessagePlayed(object sender, MetaMessageEventArgs e) {
 			if(e.Message.MetaType == MetaType.Tempo) {
@@ -276,22 +278,69 @@ namespace FFBardMusicPlayer {
 				midiTempo = (60000000 / builder.Tempo);
 				OnTempoChange?.Invoke(this, midiTempo);
 			}
-			if(e.MidiTrack == LoadedTrack) {
-				if(e.Message.MetaType == MetaType.Lyric) {
-					MetaTextBuilder builder = new MetaTextBuilder(e.Message);
+			if(e.Message.MetaType == MetaType.Lyric) {
+				MetaTextBuilder builder = new MetaTextBuilder(e.Message);
+				if(e.MidiTrack == LoadedTrack)
 					OnLyric?.Invoke(this, builder.Text);
-				}
-				if(e.Message.MetaType == MetaType.TrackName) {
-					MetaTextBuilder builder = new MetaTextBuilder(e.Message);
+			}
+			if(e.Message.MetaType == MetaType.TrackName) {
+				MetaTextBuilder builder = new MetaTextBuilder(e.Message);
+				ParseTrackName(e.MidiTrack, builder.Text);
+				if(e.MidiTrack == LoadedTrack)
 					OnTrackNameChange?.Invoke(this, builder.Text);
-				}
-				if(e.Message.MetaType == MetaType.InstrumentName) {
-					MetaTextBuilder builder = new MetaTextBuilder(e.Message);
-					OnTrackNameChange?.Invoke(this, builder.Text);
-					Console.WriteLine("Instrument name: " + builder.Text);
+			}
+			if(e.Message.MetaType == MetaType.InstrumentName) {
+				MetaTextBuilder builder = new MetaTextBuilder(e.Message);
+				OnTrackNameChange?.Invoke(this, builder.Text);
+				Console.WriteLine("Instrument name: " + builder.Text);
+			}
+		}
+
+		public void ParseTrackName(Track track, string trackName) {
+
+			if(string.IsNullOrEmpty(trackName)) {
+				preferredInstruments[track] = Instrument.Piano;
+				preferredOctaveShift[track] = 0;
+			} else {
+				Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
+				if(rex.Match(trackName) is Match match) {
+					string instrument = match.Groups[1].Value;
+					string octaveshift = match.Groups[2].Value;
+
+					bool foundInstrument = false;
+
+					if(!string.IsNullOrEmpty(instrument)) {
+						if(Enum.TryParse<Instrument>(instrument, out Instrument tempInst)) {
+							preferredInstruments[track] = tempInst;
+							foundInstrument = true;
+						}
+					}
+					if(foundInstrument) {
+						if(!string.IsNullOrEmpty(octaveshift)) {
+							if(int.TryParse(octaveshift, out int os)) {
+								if(Math.Abs(os) <= 4) {
+									preferredOctaveShift[track] = os;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
+
+		public Instrument GetTrackPreferredInstrument(Track track) {
+			if(preferredInstruments.ContainsKey(track)) {
+				return preferredInstruments[track];
+			}
+			return Instrument.Piano;
+		}
+		public int GetTrackPreferredOctaveShift(Track track) {
+			if(preferredOctaveShift.ContainsKey(track)) {
+				return preferredOctaveShift[track];
+			}
+			return 0;
+		}
+
 		public void Load(string file, int trackNum = 0) {
 
 			Sequence = new Sequence();
@@ -314,6 +363,9 @@ namespace FFBardMusicPlayer {
 
 			loadedFilename = file;
 			intendedTrack = trackNum;
+
+			preferredInstruments.Clear();
+			preferredOctaveShift.Clear();
 
 			// Collect statistics
 			notesPlayedCount.Clear();
@@ -372,6 +424,19 @@ namespace FFBardMusicPlayer {
 					}
 				}
 			}
+
+			// Parse track names and octave shifts
+			foreach(Track track in Sequence) {
+				foreach(MidiEvent ev in track.Iterator()) {
+					if(ev.MidiMessage is MetaMessage metaMsg) {
+						if(metaMsg.MetaType == MetaType.TrackName) {
+							MetaTextBuilder builder = new MetaTextBuilder(metaMsg);
+							this.ParseTrackName(track, builder.Text);
+						}
+					}
+				}
+			}
+
 			loadedTrack = trackNum;
 			lyricCount = 0;
 			// Search beginning for text stuff

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Location" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">0, 0</Value>
+      <Value Profile="(Default)">0, 437</Value>
     </Setting>
     <Setting Name="SaveLog" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -78,6 +78,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Verbose" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LocalOrchestra" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

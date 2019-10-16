@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using static Sharlayan.Core.Enums.Performance;
 
 // Key/Keybind - the actual key to simulate
 // PerfKey/pk - PERFORMANCE_MODE_ key to get the keybind
@@ -119,6 +120,18 @@ namespace FFBardMusicPlayer {
 				}
 			}
 			return slots;
+		}
+
+		public string GetInstrumentKeyMap(Instrument ins) {
+
+			List<FFXIVHotbarDat.HotbarSlot> slots = this.GetSlotsFromType(0x1D);
+			foreach(FFXIVHotbarDat.HotbarSlot slot in slots) {
+				if(slot.action == (int) ins) {
+					return slot.ToString();
+				}
+			}
+
+			return string.Empty;
 		}
 
 		protected override bool ParseDat(BinaryReader stream) {

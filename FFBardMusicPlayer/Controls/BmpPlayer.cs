@@ -27,6 +27,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public class NoteEvent {
 			public Track track;
+			public int trackNum;
 			public int note;
 			public int origNote;
 		};
@@ -38,8 +39,7 @@ namespace FFBardMusicPlayer.Controls {
 		public EventHandler<PlayerStatus> OnStatusChange;
 		private PlayerStatus bmpStatus;
 		public enum PlayerStatus {
-			PerformerSolo,
-			PerformerMulti,
+			Performing,
 			Conducting,
 		}
 
@@ -47,31 +47,17 @@ namespace FFBardMusicPlayer.Controls {
 			set {
 				bmpStatus = value;
 
-				bool soloInteract = !(bmpStatus == PlayerStatus.PerformerMulti);
-				bool solo = (bmpStatus == PlayerStatus.PerformerSolo);
+				bool solo = (bmpStatus == PlayerStatus.Performing);
 
-				//SelectorSong.Enabled = soloInteract;
-				TrackTable.Enabled = soloInteract;
-				Keyboard.Enabled = soloInteract;
-
-				TrackPlay.Enabled = soloInteract;
-				TrackLoop.Enabled = soloInteract;
-				TrackSkip.Enabled = soloInteract;
-
-				SelectorSpeed.Visible = solo;
 				SelectorOctave.Visible = solo;
 
 				switch(bmpStatus) {
+					case PlayerStatus.Performing: {
+						PlayerGroup.Text = "Performing";
+						break;
+					}
 					case PlayerStatus.Conducting: {
 						PlayerGroup.Text = "Conducting";
-						break;
-					}
-					case PlayerStatus.PerformerMulti: {
-						PlayerGroup.Text = "Performer";
-						break;
-					}
-					case PlayerStatus.PerformerSolo: {
-						PlayerGroup.Text = "Performer (Solo)";
 						break;
 					}
 				}
@@ -134,7 +120,6 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		private int trackNameOctaveShift;
 		private int octaveShift;
 		public int OctaveShift {
 			get { return octaveShift; }
@@ -157,13 +142,12 @@ namespace FFBardMusicPlayer.Controls {
 				Player.Speed = speedShift;
 			}
 		}
-		private Instrument preferredInstrument;
 		public Instrument PreferredInstrument {
 			get {
-				return preferredInstrument;
-			}
-			set {
-				preferredInstrument = value;
+				if(player.LoadedTrack == null) {
+					return 0;
+				}
+				return player.GetTrackPreferredInstrument(player.LoadedTrack);
 			}
 		}
 
@@ -178,11 +162,15 @@ namespace FFBardMusicPlayer.Controls {
 		}
 		public int CurrentNoteCount {
 			get {
+				if(player.LoadedTrack == null) {
+					return 0;
+				}
 				return player.notesPlayedCount[player.LoadedTrack];
 			}
 		}
 
 		private bool trackHoldPlaying;
+		private Dictionary<Track, int> trackNumLut = new Dictionary<Track, int>();
 
 		public BmpPlayer() {
 			InitializeComponent();
@@ -220,10 +208,8 @@ namespace FFBardMusicPlayer.Controls {
 				bool shiftKey = (Control.ModifierKeys & Keys.Shift) != 0;
 				if(shiftKey) {
 					if(Status == PlayerStatus.Conducting) {
-						Status = PlayerStatus.PerformerMulti;
-					} else if(Status == PlayerStatus.PerformerMulti) {
-						Status = PlayerStatus.PerformerSolo;
-					} else if(Status == PlayerStatus.PerformerSolo) {
+						Status = PlayerStatus.Performing;
+					} else if(Status == PlayerStatus.Performing) {
 						Status = PlayerStatus.Conducting;
 					}
 				}
@@ -231,9 +217,8 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private int ApplyOctaveShift(int note) {
-			bool osPermitted = (bmpStatus == PlayerStatus.PerformerSolo || bmpStatus == PlayerStatus.PerformerMulti);
-			int os = octaveShift + trackNameOctaveShift;
-			return NoteHelper.ApplyOctaveShift(note, osPermitted ? os : 0);
+			int os = octaveShift + player.GetTrackPreferredOctaveShift(player.LoadedTrack);
+			return NoteHelper.ApplyOctaveShift(note, os);
 		}
 
 		// Events
@@ -247,12 +232,18 @@ namespace FFBardMusicPlayer.Controls {
 			string lyric = (player.LyricNum > 0) ? string.Format("{0} lyric(s)", player.LyricNum) : string.Empty;
 			InfoHasLyrics.Invoke(t => t.Text = lyric);
 
+			trackNumLut.Clear();
+			for(int i = 0; i < player.Sequence.Count; i++) {
+				trackNumLut[player.Sequence[i]] = i;
+			}
+
 			UpdatePlayer();
 		}
 
 		private void OnPlayerMidiNote(Object o, ChannelMessageEventArgs e) {
 			OnMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
+				trackNum = trackNumLut.ContainsKey(e.MidiTrack) ? trackNumLut[e.MidiTrack] : 0,
 				note = ApplyOctaveShift(e.Message.Data1),
 				origNote = e.Message.Data1,
 			});
@@ -260,6 +251,7 @@ namespace FFBardMusicPlayer.Controls {
 		private void OffPlayerMidiNote(Object o, ChannelMessageEventArgs e) {
 			OffMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
+				trackNum = trackNumLut.ContainsKey(e.MidiTrack) ? trackNumLut[e.MidiTrack] : 0,
 				note = ApplyOctaveShift(e.Message.Data1),
 				origNote = e.Message.Data1,
 			});
@@ -270,36 +262,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 		private void OnMidiTrackNameChange(Object o, string name) {
 			TrackName = name;
-
-
-			if(string.IsNullOrEmpty(name)) {
-				PreferredInstrument = Instrument.Piano;
-				trackNameOctaveShift = 0;
-			} else {
-				Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
-				if(rex.Match(name) is Match match) {
-					string instrument = match.Groups[1].Value;
-					string octaveshift = match.Groups[2].Value;
-
-					bool foundInstrument = false;
-
-					if(!string.IsNullOrEmpty(instrument)) {
-						if(Enum.TryParse<Instrument>(instrument, out Instrument tempInst)) {
-							PreferredInstrument = tempInst;
-							foundInstrument = true;
-						}
-					}
-					if(foundInstrument) {
-						if(!string.IsNullOrEmpty(octaveshift)) {
-							if(int.TryParse(octaveshift, out int os)) {
-								if(Math.Abs(os) <= 4) {
-									trackNameOctaveShift = os;
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 
 
@@ -442,10 +404,8 @@ namespace FFBardMusicPlayer.Controls {
 		private void PlayerControl_MouseClick(object sender, MouseEventArgs e) {
 			if(Control.ModifierKeys == Keys.Shift && e.Button == MouseButtons.Left) {
 				if(Status == PlayerStatus.Conducting) {
-					Status = PlayerStatus.PerformerMulti;
-				} else if(Status == PlayerStatus.PerformerMulti) {
-					Status = PlayerStatus.PerformerSolo;
-				} else if(Status == PlayerStatus.PerformerSolo) {
+					Status = PlayerStatus.Performing;
+				} else if(Status == PlayerStatus.Performing) {
 					Status = PlayerStatus.Conducting;
 				}
 			}

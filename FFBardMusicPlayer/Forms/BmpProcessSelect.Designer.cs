@@ -29,23 +29,22 @@
 			this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.RefreshButton = new System.Windows.Forms.Button();
 			this.QuitButton = new System.Windows.Forms.Button();
-			this.ProcessScroll = new System.Windows.Forms.Panel();
 			this.AllProcessCheck = new System.Windows.Forms.CheckBox();
-			this.LocalOrchestraButton = new System.Windows.Forms.Button();
-			this.ProcessScroll.SuspendLayout();
+			this.LocalOrchestraCheck = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// ProcessList
 			// 
 			this.ProcessList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.ProcessList.AutoSize = true;
+			this.ProcessList.AutoScroll = true;
 			this.ProcessList.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.ProcessList.Location = new System.Drawing.Point(0, 0);
+			this.ProcessList.Location = new System.Drawing.Point(9, 24);
 			this.ProcessList.Margin = new System.Windows.Forms.Padding(0);
 			this.ProcessList.Name = "ProcessList";
-			this.ProcessList.Size = new System.Drawing.Size(131, 199);
+			this.ProcessList.Size = new System.Drawing.Size(158, 199);
 			this.ProcessList.TabIndex = 0;
+			this.ProcessList.WrapContents = false;
 			// 
 			// HeaderText
 			// 
@@ -88,56 +87,44 @@
 			this.QuitButton.UseVisualStyleBackColor = true;
 			this.QuitButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
-			// ProcessScroll
-			// 
-			this.ProcessScroll.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.ProcessScroll.AutoScroll = true;
-			this.ProcessScroll.Controls.Add(this.ProcessList);
-			this.ProcessScroll.Location = new System.Drawing.Point(19, 24);
-			this.ProcessScroll.Margin = new System.Windows.Forms.Padding(0);
-			this.ProcessScroll.Name = "ProcessScroll";
-			this.ProcessScroll.Size = new System.Drawing.Size(148, 199);
-			this.ProcessScroll.TabIndex = 4;
-			// 
 			// AllProcessCheck
 			// 
 			this.AllProcessCheck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.AllProcessCheck.Location = new System.Drawing.Point(19, 224);
+			this.AllProcessCheck.Location = new System.Drawing.Point(19, 241);
 			this.AllProcessCheck.Name = "AllProcessCheck";
-			this.AllProcessCheck.Size = new System.Drawing.Size(148, 21);
+			this.AllProcessCheck.Size = new System.Drawing.Size(148, 18);
 			this.AllProcessCheck.TabIndex = 5;
 			this.AllProcessCheck.Text = "Show all processes";
 			this.AllProcessCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.AllProcessCheck.UseVisualStyleBackColor = true;
 			this.AllProcessCheck.CheckedChanged += new System.EventHandler(this.AllProcessCheck_CheckedChanged);
 			// 
-			// LocalOrchestraButton
+			// LocalOrchestraCheck
 			// 
-			this.LocalOrchestraButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.LocalOrchestraButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.LocalOrchestraButton.Location = new System.Drawing.Point(4, 242);
-			this.LocalOrchestraButton.Margin = new System.Windows.Forms.Padding(0);
-			this.LocalOrchestraButton.Name = "LocalOrchestraButton";
-			this.LocalOrchestraButton.Size = new System.Drawing.Size(170, 20);
-			this.LocalOrchestraButton.TabIndex = 6;
-			this.LocalOrchestraButton.Text = "Start local orchestra";
-			this.LocalOrchestraButton.UseVisualStyleBackColor = true;
-			this.LocalOrchestraButton.Click += new System.EventHandler(this.LocalOrchestraButton_Click);
+			this.LocalOrchestraCheck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.LocalOrchestraCheck.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.LocalOrchestra;
+			this.LocalOrchestraCheck.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "LocalOrchestra", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.LocalOrchestraCheck.Location = new System.Drawing.Point(19, 224);
+			this.LocalOrchestraCheck.Name = "LocalOrchestraCheck";
+			this.LocalOrchestraCheck.Size = new System.Drawing.Size(148, 18);
+			this.LocalOrchestraCheck.TabIndex = 6;
+			this.LocalOrchestraCheck.Text = "Start local orchestra";
+			this.LocalOrchestraCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.LocalOrchestraCheck.UseVisualStyleBackColor = true;
 			// 
 			// BmpProcessSelect
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(180, 286);
-			this.Controls.Add(this.LocalOrchestraButton);
+			this.Controls.Add(this.LocalOrchestraCheck);
 			this.Controls.Add(this.AllProcessCheck);
 			this.Controls.Add(this.QuitButton);
 			this.Controls.Add(this.HeaderText);
 			this.Controls.Add(this.RefreshButton);
-			this.Controls.Add(this.ProcessScroll);
+			this.Controls.Add(this.ProcessList);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "BmpProcessSelect";
@@ -146,8 +133,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Shown += new System.EventHandler(this.RefreshList);
 			this.Enter += new System.EventHandler(this.RefreshList);
-			this.ProcessScroll.ResumeLayout(false);
-			this.ProcessScroll.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -159,8 +144,7 @@
 		private System.Windows.Forms.ToolTip ToolTip;
 		private System.Windows.Forms.Button RefreshButton;
 		private System.Windows.Forms.Button QuitButton;
-		private System.Windows.Forms.Panel ProcessScroll;
 		private System.Windows.Forms.CheckBox AllProcessCheck;
-		private System.Windows.Forms.Button LocalOrchestraButton;
+		private System.Windows.Forms.CheckBox LocalOrchestraCheck;
 	}
 }

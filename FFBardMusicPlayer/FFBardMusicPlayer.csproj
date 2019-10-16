@@ -103,11 +103,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BmpAudioSessions.cs" />
     <Compile Include="Controls\BmpLocalOrchestra.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\BmpLocalOrchestra.Designer.cs">
       <DependentUpon>BmpLocalOrchestra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BmpLocalPerformer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BmpLocalPerformer.Designer.cs">
+      <DependentUpon>BmpLocalPerformer.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\BmpStatistics.cs">
       <SubType>UserControl</SubType>
@@ -183,7 +190,6 @@
     <Compile Include="BmpChatListener.cs" />
     <Compile Include="BmpNoteProcessing.cs" />
     <Compile Include="BmpSocketClient.cs" />
-    <Compile Include="BmpSocketClientHelper.cs" />
     <Compile Include="Components\BmpCheckButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -208,17 +214,11 @@
     <Compile Include="Components\BmpTrackShift.Designer.cs">
       <DependentUpon>BmpTrackShift.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BmpOrchestraPerformer.cs">
+    <Compile Include="Controls\BmpConductor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\BmpOrchestraPerformer.Designer.cs">
-      <DependentUpon>BmpOrchestraPerformer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BmpOrchestra.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\BmpOrchestra.Designer.cs">
-      <DependentUpon>BmpOrchestra.cs</DependentUpon>
+    <Compile Include="Controls\BmpConductor.Designer.cs">
+      <DependentUpon>BmpConductor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\BmpPlayer.cs">
       <SubType>UserControl</SubType>
@@ -269,12 +269,6 @@
     <Compile Include="FFXIVDatFile.cs" />
     <Compile Include="FFXIVDatHotkey.cs" />
     <Compile Include="FFXIVMemory.cs" />
-    <Compile Include="Controls\BmpOrchestraOldPerformer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\BmpOrchestraOldPerformer.Designer.cs">
-      <DependentUpon>BmpOrchestraOldPerformer.cs</DependentUpon>
-    </Compile>
     <Compile Include="BmpSequencer.Internal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -323,6 +317,9 @@
     <None Include="Resources\dx11_1.PNG" />
     <EmbeddedResource Include="Controls\BmpLocalOrchestra.resx">
       <DependentUpon>BmpLocalOrchestra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BmpLocalPerformer.resx">
+      <DependentUpon>BmpLocalPerformer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpStatistics.resx">
       <DependentUpon>BmpStatistics.cs</DependentUpon>
@@ -390,20 +387,14 @@
     <EmbeddedResource Include="Forms\BmpProcessSelect.resx">
       <DependentUpon>BmpProcessSelect.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\BmpOrchestraPerformer.resx">
-      <DependentUpon>BmpOrchestraPerformer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\BmpOrchestra.resx">
-      <DependentUpon>BmpOrchestra.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\BmpConductor.resx">
+      <DependentUpon>BmpConductor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpPlayer.resx">
       <DependentUpon>BmpPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpKeyboard.resx">
       <DependentUpon>BmpKeyboard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\BmpOrchestraOldPerformer.resx">
-      <DependentUpon>BmpOrchestraOldPerformer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\BmpSpeedShift.resx">
       <DependentUpon>BmpSpeedShift.cs</DependentUpon>

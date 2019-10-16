@@ -20,6 +20,14 @@ namespace FFBardMusicPlayer {
 		public Process selectedProcess;
 		public EventHandler<Process> OnSelectProcess;
 
+		public class MultiboxProcess {
+			public Process process;
+			public string characterName;
+			public string characterId;
+		}
+		public List<MultiboxProcess> multiboxProcesses = new List<MultiboxProcess>();
+		public bool useLocalOrchestra;
+
 		private BackgroundWorker processWorker = new BackgroundWorker();
 		private AutoResetEvent processCancelled = new AutoResetEvent(false);
 
@@ -45,6 +53,8 @@ namespace FFBardMusicPlayer {
 					}
 				}
 			}
+			LocalOrchestraCheck.Invoke(t => t.Visible = false);
+			multiboxProcesses.Clear();
 			// Loop through all buttons and set the name
 			while(buttons.Count > 0) {
 				KeyValuePair<Process, Button> proc = buttons.First();
@@ -67,6 +77,7 @@ namespace FFBardMusicPlayer {
 						break;
 					}
 					string name = "(Unknown)";
+					string id = string.Empty;
 					if(Reader.CanGetPlayerInfo()) {
 						string name2 = Reader.GetCurrentPlayer().CurrentPlayer.Name;
 						if(string.IsNullOrEmpty(name2)) {
@@ -75,13 +86,24 @@ namespace FFBardMusicPlayer {
 							name = string.Format("{0} ({1})", name2, process.Id);
 						}
 					}
+					if(Reader.CanGetCharacterId()) {
+						id = Reader.GetCharacterId();
+					}
 					button.Invoke(t => t.Text = name);
+					multiboxProcesses.Add(new MultiboxProcess {
+						process = process,
+						characterName = name,
+						characterId = id,
+					});
 					MemoryHandler.Instance.UnsetProcess();
 				}
 			}
 
 			MemoryHandler.Instance.UnsetProcess();
 			processCancelled.Set();
+
+			// FIXME enable this after testing
+			LocalOrchestraCheck.Invoke(t => t.Visible = (multiboxProcesses.Count > 1));
 		}
 
 		public void RefreshList() {
@@ -175,6 +197,16 @@ namespace FFBardMusicPlayer {
 			DialogResult = DialogResult.Yes;
 
 			Process process = (sender as Button).Tag as Process;
+
+			if(LocalOrchestraCheck.Visible) {
+				useLocalOrchestra = LocalOrchestraCheck.Checked;
+				for(int i = multiboxProcesses.Count - 1; i >= 0; i--) {
+					if(multiboxProcesses[i].process == process) {
+						multiboxProcesses.RemoveAt(i);
+					}
+				}
+			}
+
 			selectedProcess = process;
 			OnSelectProcess?.Invoke(this, process);
 		}
@@ -190,7 +222,7 @@ namespace FFBardMusicPlayer {
 
 		private void CancelButton_Click(object sender, EventArgs e) {
 			CancelProcessWorkerSync();
-			DialogResult = DialogResult.OK;
+			DialogResult = DialogResult.No;
 		}
 	}
 }

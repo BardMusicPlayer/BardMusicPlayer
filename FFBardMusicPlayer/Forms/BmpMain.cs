@@ -52,6 +52,10 @@ namespace FFBardMusicPlayer.Forms {
 
 			this.Text = update.version.ToString();
 
+			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
+				this.Invoke(t => t.FindProcess());
+			};
+
 			FFXIV.hotkeys.OnFileLoad += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.Hotkeys_OnFileLoad(FFXIV.hotkeys));
 			};
@@ -82,7 +86,6 @@ namespace FFBardMusicPlayer.Forms {
 				this.Log(format);
 			};
 
-			Player.Status = Player.Status;
 			Player.OnStatusChange += delegate (object o, PlayerStatus status) {
 				this.Invoke(t => t.UpdatePerformance());
 			};
@@ -150,6 +153,32 @@ namespace FFBardMusicPlayer.Forms {
 			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[SYSTEM] " + format));
 		}
 
+		public void FindProcess() {
+			BmpProcessSelect processSelector = new BmpProcessSelect();
+			processSelector.ShowDialog(this);
+			if(processSelector.DialogResult == DialogResult.Yes) {
+				Process proc = processSelector.selectedProcess;
+				if(proc != null) {
+					FFXIV.SetProcess(proc);
+
+					if(processSelector.useLocalOrchestra) {
+						InfoTabs.TabPages.Remove(localOrchestraTab);
+						InfoTabs.TabPages.Insert(2, localOrchestraTab);
+						Player.Status = PlayerStatus.Conducting;
+					} else {
+						Player.Status = PlayerStatus.Performing;
+						InfoTabs.TabPages.Remove(localOrchestraTab);
+					}
+					LocalOrchestra.OrchestraEnabled = processSelector.useLocalOrchestra;
+					if(processSelector.useLocalOrchestra) {
+						LocalOrchestra.PopulateLocalProcesses(processSelector.multiboxProcesses);
+						InfoTabs.SelectTab(2);
+					}
+
+				}
+			}
+		}
+
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad(e);
 
@@ -165,7 +194,8 @@ namespace FFBardMusicPlayer.Forms {
 		protected override void OnShown(EventArgs e) {
 			base.OnShown(e);
 
-			FFXIV.FindProcess();
+			this.FindProcess();
+
 
 			string ll = Properties.Settings.Default.LastLoaded;
 			if(!string.IsNullOrEmpty(ll)) {
@@ -238,14 +268,11 @@ namespace FFBardMusicPlayer.Forms {
 				if(!Properties.Settings.Default.ForcedOpen) {
 					// If playing alone, stop playing
 					if(Properties.Settings.Default.UnequipPause) {
-						if(Player.Status == PlayerStatus.PerformerSolo) {
+						if(Player.Status == PlayerStatus.Performing) {
 							if(Player.Player.IsPlaying) {
 								Player.Player.Pause();
 								FFXIV.hook.ClearLastPerformanceKeybinds();
 							}
-						}
-						if(Player.Status == PlayerStatus.PerformerMulti) {
-							// Don't do anything, keep playing
 						}
 					}
 				}
@@ -258,10 +285,23 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private void UpdatePerformance() {
-			Playlist.Visible = (Player.Status == PlayerStatus.PerformerSolo);
-			Orchestra.Visible = (Player.Status == PlayerStatus.Conducting);
-			Player.Interactable = FFXIV.IsPerformanceReady();
-			Player.Keyboard.OverrideText = FFXIV.IsPerformanceReady() ? string.Empty : "Open Bard Performance mode to play.";
+			if(Conductor.IsConducting) {
+				// Someone is controlling you, disable stuff
+				Playlist.Visible = false;
+				Conductor.Visible = true;
+			} else {
+				Playlist.Visible = true;
+				Conductor.Visible = false;
+			}
+			if(Player.Status == PlayerStatus.Conducting) {
+				Player.Interactable = true;
+				Player.Keyboard.OverrideText = "Conducting in progress.";
+				Player.Keyboard.Enabled = false;
+			} else {
+				Player.Interactable = FFXIV.IsPerformanceReady();
+				Player.Keyboard.OverrideText = FFXIV.IsPerformanceReady() ? string.Empty : "Open Bard Performance mode to play.";
+				Player.Keyboard.Enabled = true;
+			}
 		}
 
 		private void BringFront() {
@@ -300,6 +340,10 @@ namespace FFBardMusicPlayer.Forms {
 			Statistics.SetTotalNoteCount(Player.TotalNoteCount);
 			Statistics.SetTrackNoteCount(Player.CurrentNoteCount);
 			Statistics.SetLyricsBool((Player.Player.LyricNum > 0));
+
+			if(LocalOrchestra.OrchestraEnabled) {
+				LocalOrchestra.SequencerReference = Player.Player;
+			}
 		}
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
 			if(Explorer.SelectFile(entry.FilePath.FilePath)) {
@@ -415,13 +459,6 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
-
-		private bool SoloPlay {
-			get {
-				return (Player.Status == PlayerStatus.PerformerSolo);
-			}
-		}
-
 		private bool WantsSlow {
 			get {
 				return Properties.Settings.Default.SlowPlay;
@@ -437,14 +474,6 @@ namespace FFBardMusicPlayer.Forms {
 
 			Statistics.AddNoteCount();
 
-			if(Player.Status == PlayerStatus.Conducting) {
-				return;
-			}
-
-			if(!FFXIV.IsPerformanceReady()) {
-				return;
-			}
-
 			if(Properties.Settings.Default.Verbose) {
 				FFXIVKeybindDat.Keybind keybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
 				if(keybind == null) {
@@ -454,6 +483,21 @@ namespace FFBardMusicPlayer.Forms {
 						ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(str, "\\red255\\green200\\blue200"));
 					}
 				}
+			}
+			
+			if(LocalOrchestra.OrchestraEnabled) {
+				LocalOrchestra.ProcessOnNote(onNote);
+				return;
+			}
+
+			if(Player.Status == PlayerStatus.Conducting) {
+				return;
+			}
+			if(!FFXIV.IsPerformanceReady()) {
+				return;
+			}
+			if(onNote.track != Player.Player.LoadedTrack) {
+				return;
 			}
 
 			if(!FFXIV.memory.ChatInputOpen) {
@@ -494,11 +538,21 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void OffMidiVoice(Object o, NoteEvent offNote) {
 
+
+			if(LocalOrchestra.OrchestraEnabled) {
+				LocalOrchestra.ProcessOffNote(offNote);
+				return;
+			}
+			
 			if(Player.Status == PlayerStatus.Conducting) {
 				return;
 			}
 
 			if(!FFXIV.IsPerformanceReady()) {
+				return;
+			}
+
+			if(offNote.track != Player.Player.LoadedTrack) {
 				return;
 			}
 

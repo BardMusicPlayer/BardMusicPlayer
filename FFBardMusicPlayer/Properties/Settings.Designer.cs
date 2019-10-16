@@ -25,7 +25,7 @@ namespace FFBardMusicPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 437")]
         public global::System.Drawing.Point Location {
             get {
                 return ((global::System.Drawing.Point)(this["Location"]));
@@ -331,6 +331,18 @@ namespace FFBardMusicPlayer.Properties {
             }
             set {
                 this["Verbose"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LocalOrchestra {
+            get {
+                return ((bool)(this["LocalOrchestra"]));
+            }
+            set {
+                this["LocalOrchestra"] = value;
             }
         }
     }
