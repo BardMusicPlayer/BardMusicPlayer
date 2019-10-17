@@ -14,7 +14,7 @@ namespace FFBardMusicPlayer {
 		public static string urlBase = "http://bmp.sqnya.se/";
 		public static string appBase = Application.CommonAppDataPath;
 
-        public static string overrideWindowTitle="FINAL FANTASY XIV";
+        public static string overrideWindowTitle="BMPdefaultWindowCheck";
 
 		[DllImport("kernel32.dll")]
 		static extern IntPtr GetConsoleWindow();
