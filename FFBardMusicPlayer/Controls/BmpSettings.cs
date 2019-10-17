@@ -102,6 +102,9 @@ namespace FFBardMusicPlayer.Controls {
 			SettingMidiInput.SelectedValueChanged += SettingMidiInput_SelectedValueChanged;
 
 			int input = Properties.Settings.Default.MidiInput;
+			if(Program.programOptions.MidiInput != -1) {
+				input = Program.programOptions.MidiInput;
+			}
 			SettingMidiInput.SelectedIndex = input == -1 ? 0 : input;
 			Console.WriteLine("Selected input: " + input);
 

@@ -42,14 +42,14 @@ namespace FFBardMusicPlayer.Forms {
 			this.UpdatePerformance();
 
 			BmpUpdate update = new BmpUpdate();
-
-			updateResult = update.ShowDialog();
-			if(updateResult == DialogResult.Yes) {
-				updateTitle = update.version.updateTitle;
-				updateText = update.version.updateText;
-				updateResult = DialogResult.Yes;
+			if(!Program.programOptions.DisableUpdate) {
+				updateResult = update.ShowDialog();
+				if(updateResult == DialogResult.Yes) {
+					updateTitle = update.version.updateTitle;
+					updateText = update.version.updateText;
+					updateResult = DialogResult.Yes;
+				}
 			}
-
 			this.Text = update.version.ToString();
 
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
@@ -208,6 +208,11 @@ namespace FFBardMusicPlayer.Forms {
 					Playlist.PlaySelectedMidi();
 				}
 			}
+			if(!string.IsNullOrEmpty(Program.programOptions.LoadMidiFile)) {
+				Explorer.SelectFile(Program.programOptions.LoadMidiFile);
+				Explorer.EnterFile();
+				Playlist.Deselect();
+			}
 
 			if(this.updateResult == DialogResult.Yes) {
 				this.Invoke(new Action(() => {
@@ -297,7 +302,7 @@ namespace FFBardMusicPlayer.Forms {
 				Player.Interactable = true;
 				Player.Keyboard.OverrideText = "Conducting in progress.";
 				Player.Keyboard.Enabled = false;
-			} else {
+			} else if(!Program.programOptions.DisableMemory) {
 				Player.Interactable = FFXIV.IsPerformanceReady();
 				Player.Keyboard.OverrideText = FFXIV.IsPerformanceReady() ? string.Empty : "Open Bard Performance mode to play.";
 				Player.Keyboard.Enabled = true;

@@ -254,6 +254,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void SetupMemory(Process proc) {
 
+
 			if(memory.IsAttached()) {
 				memory.UnsetProcess();
 			}
@@ -262,7 +263,11 @@ namespace FFBardMusicPlayer.Controls {
 
 				// memory setprocess
 				memory.SetProcess(proc);
-				memory.StartThread();
+				if(Program.programOptions.DisableMemory) {
+					memory.Refresh();
+				} else {
+					memory.StartThread();
+				}
 			}
 		}
 
