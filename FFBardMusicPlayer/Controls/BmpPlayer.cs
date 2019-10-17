@@ -240,10 +240,19 @@ namespace FFBardMusicPlayer.Controls {
 			UpdatePlayer();
 		}
 
+		private int GetTrackLutNum(Track track) {
+			if(track != null) {
+				if(trackNumLut.ContainsKey(track)) {
+					return trackNumLut[track];
+				}
+			}
+			return 0;
+		}
+
 		private void OnPlayerMidiNote(Object o, ChannelMessageEventArgs e) {
 			OnMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
-				trackNum = trackNumLut.ContainsKey(e.MidiTrack) ? trackNumLut[e.MidiTrack] : 0,
+				trackNum = GetTrackLutNum(e.MidiTrack),
 				note = ApplyOctaveShift(e.Message.Data1),
 				origNote = e.Message.Data1,
 			});
@@ -251,7 +260,7 @@ namespace FFBardMusicPlayer.Controls {
 		private void OffPlayerMidiNote(Object o, ChannelMessageEventArgs e) {
 			OffMidiNote?.Invoke(o, new NoteEvent {
 				track = e.MidiTrack,
-				trackNum = trackNumLut.ContainsKey(e.MidiTrack) ? trackNumLut[e.MidiTrack] : 0,
+				trackNum = GetTrackLutNum(e.MidiTrack),
 				note = ApplyOctaveShift(e.Message.Data1),
 				origNote = e.Message.Data1,
 			});
