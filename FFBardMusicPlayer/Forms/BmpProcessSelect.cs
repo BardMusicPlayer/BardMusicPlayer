@@ -149,6 +149,10 @@ namespace FFBardMusicPlayer {
                 		{
                     			processes.Add(process);
                 		}
+				else if (Program.overrideWindowTitle == "BMPdefaultWindowCheck" && process.ProcessName == "ffxiv_dx11")
+				{
+					processes.Add(process);
+				}
             		}
 			foreach(Process process in processes.ToList()) {
 				Mutex mutex = new Mutex(true, string.Format("bard-music-player-{0}", process.Id));
