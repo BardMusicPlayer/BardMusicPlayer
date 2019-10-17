@@ -30,20 +30,20 @@ namespace FFBardMusicPlayer {
         [STAThread]
         static void Main(string[] args)
         {
-            /*
+            		/*
 			if(!mutex.WaitOne(TimeSpan.Zero, true)) {
 				PostMessage((IntPtr) HWND_BROADCAST, App.WM_SHOWME, IntPtr.Zero, IntPtr.Zero);
 				return;
 			}
 			*/
             
-            Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(options =>
-                   {
-                       if (!string.IsNullOrEmpty(options.OverrideWindowTitle)) overrideWindowTitle = options.OverrideWindowTitle;
-                   });
+            		Parser.Default.ParseArguments<Options>(args)
+           		        .WithParsed<Options>(options =>
+            		       {
+            		           if (!string.IsNullOrEmpty(options.OverrideWindowTitle)) overrideWindowTitle = options.OverrideWindowTitle;
+             		      });
 
-            Application.EnableVisualStyles();
+          		  Application.EnableVisualStyles();
 
 			CultureInfo nonInvariantCulture = new CultureInfo("en-US");
 			Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
