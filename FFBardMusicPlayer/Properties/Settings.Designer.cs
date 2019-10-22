@@ -240,13 +240,13 @@ namespace FFBardMusicPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MidiInput {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MidiInputDev {
             get {
-                return ((int)(this["MidiInput"]));
+                return ((string)(this["MidiInputDev"]));
             }
             set {
-                this["MidiInput"] = value;
+                this["MidiInputDev"] = value;
             }
         }
         

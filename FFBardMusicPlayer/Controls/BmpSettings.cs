@@ -99,22 +99,21 @@ namespace FFBardMusicPlayer.Controls {
 			};
 
 			RefreshMidiInput();
-			SettingMidiInput.SelectedValueChanged += SettingMidiInput_SelectedValueChanged;
 
-			int input = Properties.Settings.Default.MidiInput;
-			if(Program.programOptions.MidiInput != -1) {
-				input = Program.programOptions.MidiInput;
+			string midiInput = Properties.Settings.Default.MidiInputDev;
+			if(!string.IsNullOrEmpty(Program.programOptions.MidiInput)) {
+				midiInput = Program.programOptions.MidiInput;
 			}
-			SettingMidiInput.SelectedIndex = input == -1 ? 0 : input;
-			Console.WriteLine("Selected input: " + input);
+			SetMidiInput(midiInput);
+			SettingMidiInput.SelectedValueChanged += SettingMidiInput_SelectedValueChanged;
 
 			UpdateSlowPlayToggle();
 		}
 
 		private void SettingMidiInput_SelectedValueChanged(object sender, EventArgs e) {
 			if(GetMidiInput() is MidiInput input) {
-				Properties.Settings.Default.MidiInput = input.id;
-				OnMidiInputChange?.Invoke(this, input);
+				Properties.Settings.Default.MidiInputDev = input.name;
+				SetMidiInput(input.name);
 			}
 		}
 
@@ -128,6 +127,24 @@ namespace FFBardMusicPlayer.Controls {
 			ArpeggiateToggle.Enabled = !c;
 		}
 
+		public MidiInput SetMidiInput(string device) {
+			MidiInput input = midiInputs[0];
+			foreach(MidiInput inp in midiInputs) {
+				if(inp.name == device) {
+					Console.WriteLine("Found input: " + inp.name);
+					input = inp;
+					break;
+				}
+			}
+			if(input != null) {
+				Properties.Settings.Default.MidiInputDev = input.name;
+				SettingMidiInput.SelectedItem = input;
+				OnMidiInputChange?.Invoke(this, input);
+				return input;
+			}
+			return null;
+		}
+
 		public MidiInput GetMidiInput() {
 			if(SettingMidiInput.SelectedValue is MidiInput input) {
 				return input;
@@ -135,6 +152,8 @@ namespace FFBardMusicPlayer.Controls {
 			return null;
 		}
 		public void RefreshMidiInput() {
+
+			// Refresh list of Midi input devices
 			midiInputs.Clear();
 			midiInputs.Add(new MidiInput("None", -1));
 			for(int i = 0; i < InputDevice.DeviceCount; i++) {

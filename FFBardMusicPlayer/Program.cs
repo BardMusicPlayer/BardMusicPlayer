@@ -28,8 +28,8 @@ namespace FFBardMusicPlayer {
 			[Option('m', "midi-file", HelpText = "Load the specified midi file at startup.")]
 			public string LoadMidiFile { get; set; }
 
-			[Option('i', "midi-input", Default = -1, HelpText = "Use the specified midi input device as input.")]
-			public int MidiInput { get; set; }
+			[Option('i', "midi-input", HelpText = "Use the specified midi input device name as input.")]
+			public string MidiInput { get; set; }
 
 			[Option('m', "disable-memory", Default = false, HelpText = "Disable Sharlayan memory polling.")]
 			public bool DisableMemory { get; set; }

@@ -56,8 +56,8 @@
     <Setting Name="MidiList" Type="FFBardMusicCommon.BmpMidiList" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MidiInput" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="MidiInputDev" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SigVersion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

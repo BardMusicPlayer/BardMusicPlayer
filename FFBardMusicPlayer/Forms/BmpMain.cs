@@ -99,11 +99,17 @@ namespace FFBardMusicPlayer.Forms {
 			Player.OnMidiNote += OnMidiVoice;
 			Player.OffMidiNote += OffMidiVoice;
 
+			Player.Player.OpenInputDevice(Settings.GetMidiInput().name);
+
 			Settings.OnMidiInputChange += delegate (object o, MidiInput input) {
-				Player.Player.OpenInputDevice(input.id);
-				Console.WriteLine("Switched to {0} (input {1})", input.name, input.id);
+				Player.Player.CloseInputDevice();
+				if(input.id != -1) {
+					Player.Player.OpenInputDevice(input.name);
+					Log(string.Format("Switched to {0} ({1})", input.name, input.id));
+				}
 			};
 			Settings.OnKeyboardTest += delegate (object o, EventArgs arg) {
+				
 				foreach(FFXIVKeybindDat.Keybind keybind in FFXIV.hotkeys.GetPerformanceKeybinds()) {
 					FFXIV.hook.SendSyncKeybind(keybind);
 					Thread.Sleep(100);
@@ -142,7 +148,9 @@ namespace FFBardMusicPlayer.Forms {
 			}
 
 			string upath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoaming).FilePath;
-			Console.WriteLine(string.Format(".config: [{0}]", upath));
+			//Console.WriteLine(string.Format(".config: [{0}]", upath));
+
+			Settings.RefreshMidiInput();
 
 			Log("Bard Music Player initialized.");
 		}

@@ -206,19 +206,20 @@ namespace FFBardMusicPlayer {
 		private void Chaser_Chased(object sender, ChasedEventArgs e) {
 			throw new NotImplementedException();
 		}
-
-		public void OpenInputDevice(int device) {
-			CloseInputDevice();
-			if(device >= 0 && device < InputDevice.DeviceCount) {
-				try {
-					midiInput = new InputDevice(device);
-					midiInput.StartRecording();
-					midiInput.ChannelMessageReceived += OnSimpleChannelMessagePlayed;
-
-					MidiInCaps caps = InputDevice.GetDeviceCapabilities(device);
-					Console.WriteLine(string.Format("{0} opened.", caps.name));
-				} catch(InputDeviceException e) {
-					Console.WriteLine(string.Format("Couldn't open input {0}.", device));
+		
+		public void OpenInputDevice(string device) {
+			for(int i = 0; i < InputDevice.DeviceCount; i++) {
+				MidiInCaps cap = InputDevice.GetDeviceCapabilities(i);
+				if(cap.name == device) {
+					try {
+						midiInput = new InputDevice(i);
+						midiInput.StartRecording();
+						midiInput.ChannelMessageReceived += OnSimpleChannelMessagePlayed;
+						
+						Console.WriteLine(string.Format("{0} opened.", cap.name));
+					} catch(InputDeviceException e) {
+						Console.WriteLine(string.Format("Couldn't open input {0}.", device));
+					}
 				}
 			}
 		}
