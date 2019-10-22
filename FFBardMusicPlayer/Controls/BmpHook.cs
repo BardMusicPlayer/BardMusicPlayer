@@ -152,6 +152,16 @@ namespace FFBardMusicPlayer.Controls {
 			keybind = new FFXIVKeybindDat.Keybind();
 			return false;
 		}
+		public bool GetHotkeyForHotbarSlot(int hnum, int snum, int jnum, out FFXIVKeybindDat.Keybind keybind) {
+
+			string keyMap = hotbar.GetHotbarSlotKeyMap(hnum, snum, jnum);
+			if(!string.IsNullOrEmpty(keyMap)) {
+				keybind = hotkeys[keyMap];
+				return true;
+			}
+			keybind = new FFXIVKeybindDat.Keybind();
+			return false;
+		}
 
 		public void UnequipPerformance() {
 			if(IsPerformanceReady() && !memory.ChatInputOpen) {

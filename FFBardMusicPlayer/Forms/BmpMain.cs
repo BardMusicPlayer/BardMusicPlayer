@@ -399,6 +399,16 @@ namespace FFBardMusicPlayer.Forms {
 
 
 		private void OnMidiLyric(Object o, string lyric) {
+			if(chatListener.FindChatCommand(lyric) is Func<bool> cmdChatFunc) {
+				if(cmdChatFunc()) {
+					return;
+				}
+			}
+			if(lyricListener.FindChatCommand(lyric) is Func<bool> cmdLyricFunc) {
+				if(cmdLyricFunc()) {
+					return;
+				}
+			}
 			if(Properties.Settings.Default.PlayLyrics) {
 				FFXIV.SendChatString(lyric);
 			}

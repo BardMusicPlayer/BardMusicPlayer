@@ -121,6 +121,17 @@ namespace FFBardMusicPlayer {
 			}
 			return slots;
 		}
+		
+		public string GetHotbarSlotKeyMap(int hnum, int snum, int jnum) {
+			if(hotbarData.rows.ContainsKey(hnum)) {
+				HotbarRow row = hotbarData[hnum];
+				if(row.slots.ContainsKey(snum)) {
+					HotbarSlot slot = row[snum][jnum];
+					return slot.ToString();
+				}
+			}
+			return null;
+		}
 
 		public string GetInstrumentKeyMap(Instrument ins) {
 
