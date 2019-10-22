@@ -48,7 +48,7 @@ namespace FFBardMusicPlayer {
 			//                                                     (check for <b.xxx> message)
 			//                                                                            (get optional "<t>")
 			//                                                                                              (get optional parameters)
-			Regex regex = new Regex(@"^(?:[^a-zA-Z0-9]*)([^:\n]+?):(?:<b\.([a-zA-Z0-9]+)>)(?: ""([^""]+)"")?(?: (.+))?$");
+			Regex regex = new Regex(@"(?:^(?:[^a-zA-Z0-9]*)([^:\n]+?):)?(?:<b\.([a-zA-Z0-9]+)>)(?: ""([^""]+)"")?(?: (.+))?$");
 			Match match = regex.Match(text);
 			if(match.Success) {
 				if(match.Groups.Count == 5) {
@@ -75,6 +75,14 @@ namespace FFBardMusicPlayer {
 					}
 				}
 
+				return FindChatCommand(item.Line);
+			}
+			return null;
+		}
+		public Func<bool> FindChatCommand(string line) {
+
+			if(GetCommand(line, out Command command)) {
+				
 				foreach(string cmdString in commandList.Keys) {
 					string cmd1 = cmdString;
 					string cmd2 = cmdString;

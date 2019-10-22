@@ -11,6 +11,8 @@ namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain {
 
 		private BmpChatListener chatListener = new BmpChatListener();
+		private BmpChatListener lyricListener = new BmpChatListener();
+
 		BmpConfirmConductor confirmConductor = new BmpConfirmConductor();
 
 		private void SetupCommands() {
@@ -29,6 +31,9 @@ namespace FFBardMusicPlayer.Forms {
 			chatListener["loop|lp"] = ChatCommandLoop;
 			chatListener["octaveshift|os"] = ChatCommandOctaveShift;
 			chatListener["speedshift|ss"] = ChatCommandSpeedShift;
+
+			lyricListener["key|k"] = LyricCommandKey;
+			lyricListener["hotbar|hb"] = LyricCommandHotbar;
 
 			confirmConductor.OnConfirmConductor += delegate (object o, string name) {
 				if((o as BmpConfirmConductor).DialogResult == DialogResult.Yes) {
@@ -52,6 +57,29 @@ namespace FFBardMusicPlayer.Forms {
 				}
 			}
 			return false;
+		}
+
+		private bool LyricCommandKey(BmpChatListener.Command cmd) {
+			if(!string.IsNullOrEmpty(cmd.param)) {
+				KeysConverter kc = new KeysConverter();
+				Keys key = (Keys) kc.ConvertFrom(cmd.param);
+				FFXIV.hook.SendSyncKey(key);
+
+			}
+			return true;
+		}
+		private bool LyricCommandHotbar(BmpChatListener.Command cmd) {
+			if(!string.IsNullOrEmpty(cmd.param)) {
+				if(int.TryParse(cmd.param, out int hotbarNum)) {
+					int hotbar = (int) Math.Floor(hotbarNum / 12.0);
+					int slot = hotbarNum % 12 - 1;
+					int job = FFXIV.memory.currentPlayer.CurrentPlayer.JobID;
+					if(FFXIV.GetHotkeyForHotbarSlot(hotbar, slot, job, out FFXIVKeybindDat.Keybind keybind)) {
+						FFXIV.hook.SendSyncKeybind(keybind);
+					}
+				}
+			}
+			return true;
 		}
 
 
