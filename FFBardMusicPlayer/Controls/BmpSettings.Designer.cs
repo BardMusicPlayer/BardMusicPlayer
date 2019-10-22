@@ -27,6 +27,7 @@
 			this.GeneralSettings = new System.Windows.Forms.GroupBox();
 			this.KeyboardTest = new System.Windows.Forms.Button();
 			this.SettingsScrollPanel = new System.Windows.Forms.Panel();
+			this.verboseToggle = new System.Windows.Forms.CheckBox();
 			this.UnequipPause = new System.Windows.Forms.CheckBox();
 			this.ForceOpenToggle = new System.Windows.Forms.CheckBox();
 			this.SignatureFolder = new System.Windows.Forms.Button();
@@ -48,7 +49,6 @@
 			this.SettingHoldNotes = new System.Windows.Forms.CheckBox();
 			this.ChatSimToggle = new System.Windows.Forms.CheckBox();
 			this.HelpTip = new System.Windows.Forms.ToolTip(this.components);
-			this.verboseToggle = new System.Windows.Forms.CheckBox();
 			this.GeneralSettings.SuspendLayout();
 			this.SettingsScrollPanel.SuspendLayout();
 			this.SettingsTable.SuspendLayout();
@@ -105,6 +105,19 @@
 			this.SettingsScrollPanel.Padding = new System.Windows.Forms.Padding(8);
 			this.SettingsScrollPanel.Size = new System.Drawing.Size(323, 297);
 			this.SettingsScrollPanel.TabIndex = 12;
+			// 
+			// verboseToggle
+			// 
+			this.verboseToggle.AutoSize = true;
+			this.verboseToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.Verbose;
+			this.verboseToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "Verbose", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.verboseToggle.Location = new System.Drawing.Point(13, 265);
+			this.verboseToggle.Name = "verboseToggle";
+			this.verboseToggle.Size = new System.Drawing.Size(136, 17);
+			this.verboseToggle.TabIndex = 20;
+			this.verboseToggle.Text = "Enable verbose mode";
+			this.HelpTip.SetToolTip(this.verboseToggle, "Print various kinds of information to the log window.");
+			this.verboseToggle.UseVisualStyleBackColor = true;
 			// 
 			// UnequipPause
 			// 
@@ -417,20 +430,6 @@
 			this.HelpTip.ReshowDelay = 100;
 			this.HelpTip.UseAnimation = false;
 			this.HelpTip.UseFading = false;
-			// 
-			// verboseToggle
-			// 
-			this.verboseToggle.AutoSize = true;
-			this.verboseToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.Verbose;
-			this.verboseToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "Verbose", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.verboseToggle.Location = new System.Drawing.Point(13, 265);
-			this.verboseToggle.Name = "verboseToggle";
-			this.verboseToggle.Size = new System.Drawing.Size(136, 17);
-			this.verboseToggle.TabIndex = 20;
-			this.verboseToggle.Text = "Enable verbose mode";
-			this.HelpTip.SetToolTip(this.verboseToggle, "Pause the playing song when unequipping the instrument.\r\nUseful for resynchroniza" +
-        "tion or switching instrument mid-performance.");
-			this.verboseToggle.UseVisualStyleBackColor = true;
 			// 
 			// BmpSettings
 			// 
