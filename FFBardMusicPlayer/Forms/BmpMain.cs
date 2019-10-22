@@ -501,8 +501,11 @@ namespace FFBardMusicPlayer.Forms {
 			if(!FFXIV.IsPerformanceReady()) {
 				return;
 			}
-			if(onNote.track != Player.Player.LoadedTrack) {
-				return;
+			if(onNote.track != null) {
+				// If from midi file
+				if(onNote.track != Player.Player.LoadedTrack) {
+					return;
+				}
 			}
 
 			if(!FFXIV.memory.ChatInputOpen) {
@@ -557,8 +560,10 @@ namespace FFBardMusicPlayer.Forms {
 				return;
 			}
 
-			if(offNote.track != Player.Player.LoadedTrack) {
-				return;
+			if(offNote.track != null) {
+				if(offNote.track != Player.Player.LoadedTrack) {
+					return;
+				}
 			}
 
 			if(WantsSlow) {

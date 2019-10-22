@@ -95,7 +95,7 @@ namespace FFBardMusicPlayer {
 
 		public Track LoadedTrack {
 			get {
-				if(loadedTrack >= Sequence.Count) {
+				if(loadedTrack >= Sequence.Count || loadedTrack < 0) {
 					return null;
 				}
 				return Sequence[loadedTrack];
@@ -297,7 +297,9 @@ namespace FFBardMusicPlayer {
 		}
 
 		public void ParseTrackName(Track track, string trackName) {
-
+			if(track == null) {
+				return;
+			}
 			if(string.IsNullOrEmpty(trackName)) {
 				preferredInstruments[track] = Instrument.Piano;
 				preferredOctaveShift[track] = 0;
@@ -329,14 +331,18 @@ namespace FFBardMusicPlayer {
 		}
 
 		public Instrument GetTrackPreferredInstrument(Track track) {
-			if(preferredInstruments.ContainsKey(track)) {
-				return preferredInstruments[track];
+			if(track != null) {
+				if(preferredInstruments.ContainsKey(track)) {
+					return preferredInstruments[track];
+				}
 			}
 			return Instrument.Piano;
 		}
 		public int GetTrackPreferredOctaveShift(Track track) {
-			if(preferredOctaveShift.ContainsKey(track)) {
-				return preferredOctaveShift[track];
+			if(track != null) {
+				if(preferredOctaveShift.ContainsKey(track)) {
+					return preferredOctaveShift[track];
+				}
 			}
 			return 0;
 		}

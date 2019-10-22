@@ -136,12 +136,11 @@ namespace FFBardMusicPlayer.Controls {
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
-					Track track = sequencerRef.Sequence[performer.TrackNum];
-					if(track == null) {
-						continue;
+					if(performer.TrackNum >= 0 && performer.TrackNum < sequencerRef.MaxTrack) {
+						Track track = sequencerRef.Sequence[performer.TrackNum];
+						Instrument ins = sequencerRef.GetTrackPreferredInstrument(track);
+						performer.OpenInstrument(ins);
 					}
-					Instrument ins = sequencerRef.GetTrackPreferredInstrument(track);
-					performer.OpenInstrument(ins);
 				}
 			}
 		}
