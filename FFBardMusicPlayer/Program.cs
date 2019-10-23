@@ -36,6 +36,9 @@ namespace FFBardMusicPlayer {
 
 			[Option('u', "disable-update", Default = false, HelpText = "Disable version update check.")]
 			public bool DisableUpdate { get; set; }
+
+            [Option('d', "dat-prefix", HelpText = "Set a custom prefix, such as \"isboxer-\" (example matches isboxer-HOTBAR.DAT) for any parsed player .dat files")]
+            public string DatPrefix { get; set; }
 		}
 
 		public static Options programOptions = new Options();

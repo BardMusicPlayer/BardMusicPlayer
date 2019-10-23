@@ -104,7 +104,8 @@ namespace FFBardMusicPlayer {
 		HotbarData hotbarData = new HotbarData();
 
 		public void LoadHotbarDat(string charId) {
-			LoadDatId(charId, "HOTBAR.DAT");
+            String fileToLoad = Program.programOptions.DatPrefix + "HOTBAR.DAT";
+			LoadDatId(charId, fileToLoad);
 		}
 
 		public List<HotbarSlot> GetSlotsFromType(int type) {
