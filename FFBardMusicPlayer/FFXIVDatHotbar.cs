@@ -16,6 +16,7 @@ using static Sharlayan.Core.Enums.Performance;
 namespace FFBardMusicPlayer {
 	public class FFXIVHotbarDat : FFXIVDatFile {
 
+		#region Hotbar classes
 		public class HotbarSection {
 			public byte action = 0; // Higher level? 0D for 60-70 spells
 			public byte flag = 0;
@@ -101,6 +102,8 @@ namespace FFBardMusicPlayer {
 			}
 		}
 
+		#endregion
+
 		HotbarData hotbarData = new HotbarData();
 
 		public void LoadHotbarDat(string charId) {
@@ -156,7 +159,7 @@ namespace FFBardMusicPlayer {
 					HotbarSlot ac = ParseSection(stream);
 					if(ac.job <= 0x23) {
 						if(ac.type == 0x1D) {
-							Console.WriteLine(string.Format("{0} ({1}): {2} {3}", ac.ToString(), ac.job, ac.action, ac.type));
+							//Console.WriteLine(string.Format("{0} ({1}): {2} {3}", ac.ToString(), ac.job, ac.action, ac.type));
 						}
 						hotbarData[ac.hotbar][ac.slot][ac.job] = ac;
 					}

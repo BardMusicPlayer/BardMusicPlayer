@@ -24,15 +24,17 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.OrchestraGroup = new System.Windows.Forms.GroupBox();
+			this.ensembleCheck = new System.Windows.Forms.Button();
+			this.muteAll = new System.Windows.Forms.Button();
 			this.closeInstruments = new System.Windows.Forms.Button();
 			this.openInstruments = new System.Windows.Forms.Button();
 			this.PerformerLayout = new System.Windows.Forms.FlowLayoutPanel();
-			this.muteAll = new System.Windows.Forms.Button();
 			this.OrchestraGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// OrchestraGroup
 			// 
+			this.OrchestraGroup.Controls.Add(this.ensembleCheck);
 			this.OrchestraGroup.Controls.Add(this.muteAll);
 			this.OrchestraGroup.Controls.Add(this.closeInstruments);
 			this.OrchestraGroup.Controls.Add(this.openInstruments);
@@ -44,6 +46,28 @@
 			this.OrchestraGroup.TabIndex = 0;
 			this.OrchestraGroup.TabStop = false;
 			this.OrchestraGroup.Text = "Local orchestra";
+			// 
+			// ensembleCheck
+			// 
+			this.ensembleCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ensembleCheck.Location = new System.Drawing.Point(174, 0);
+			this.ensembleCheck.Name = "ensembleCheck";
+			this.ensembleCheck.Size = new System.Drawing.Size(65, 21);
+			this.ensembleCheck.TabIndex = 4;
+			this.ensembleCheck.Text = "Ensemble";
+			this.ensembleCheck.UseVisualStyleBackColor = true;
+			this.ensembleCheck.Click += new System.EventHandler(this.ensembleCheck_Click);
+			// 
+			// muteAll
+			// 
+			this.muteAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.muteAll.Location = new System.Drawing.Point(245, 0);
+			this.muteAll.Name = "muteAll";
+			this.muteAll.Size = new System.Drawing.Size(60, 21);
+			this.muteAll.TabIndex = 3;
+			this.muteAll.Text = "Un/mute";
+			this.muteAll.UseVisualStyleBackColor = true;
+			this.muteAll.Click += new System.EventHandler(this.muteAll_Click);
 			// 
 			// closeInstruments
 			// 
@@ -79,17 +103,6 @@
 			this.PerformerLayout.TabIndex = 0;
 			this.PerformerLayout.WrapContents = false;
 			// 
-			// muteAll
-			// 
-			this.muteAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.muteAll.Location = new System.Drawing.Point(220, 0);
-			this.muteAll.Name = "muteAll";
-			this.muteAll.Size = new System.Drawing.Size(85, 21);
-			this.muteAll.TabIndex = 3;
-			this.muteAll.Text = "Toggle Mute";
-			this.muteAll.UseVisualStyleBackColor = true;
-			this.muteAll.Click += new System.EventHandler(this.muteAll_Click);
-			// 
 			// BmpLocalOrchestra
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -109,5 +122,6 @@
 		private System.Windows.Forms.Button closeInstruments;
 		private System.Windows.Forms.Button openInstruments;
 		private System.Windows.Forms.Button muteAll;
+		private System.Windows.Forms.Button ensembleCheck;
 	}
 }

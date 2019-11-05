@@ -25,6 +25,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public FFXIVKeybindDat hotkeys = new FFXIVKeybindDat();
 		public FFXIVHotbarDat hotbar = new FFXIVHotbarDat();
+		public FFXIVAddonDat addon = new FFXIVAddonDat();
 
 		public event EventHandler<bool> forceModeChanged;
 		public event EventHandler perfSettingsChanged;
@@ -86,6 +87,7 @@ namespace FFBardMusicPlayer.Controls {
 			hook.ClearLastPerformanceKeybinds();
 			hotkeys.LoadKeybindDat(id);
 			hotbar.LoadHotbarDat(id);
+			addon.LoadAddonDat(id);
 
 			Properties.Settings.Default.LastCharId = id;
 			Properties.Settings.Default.Save();

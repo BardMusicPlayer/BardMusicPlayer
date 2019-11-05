@@ -16,6 +16,8 @@ namespace FFBardMusicPlayer {
 		private const int WM_KEYDOWN = 0x0100;
 		private const int WM_KEYUP = 0x0101;
 		private const int WM_CHAR = 0x0102;
+		private const int WM_LBUTTONDOWN = 0x0201;
+		private const int WM_LBUTTONUP = 0x0202;
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern IntPtr SetWindowsHookEx(int idHook, MessageProc lpfn, IntPtr hMod, uint dwThreadId);
@@ -93,6 +95,32 @@ namespace FFBardMusicPlayer {
 			public uint uMsg;
 			public ushort wParamL;
 			public ushort wParamH;
+		}
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool GetClientRect(HandleRef hWnd, out RECT lpRect);
+
+		[DllImport("user32.dll")]
+		static extern bool ClientToScreen(HandleRef hWnd, ref POINT lpPoint);
+
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct RECT {
+			public int Left;
+			public int Top;
+			public int Right;
+			public int Bottom;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct POINT {
+			public int X;
+			public int Y;
+			public POINT(int x, int y) {
+				X = x;
+				Y = y;
+			}
 		}
 
 		public delegate IntPtr MessageProc(int nCode, IntPtr wParam, IntPtr lParam);
@@ -320,6 +348,28 @@ namespace FFBardMusicPlayer {
 				SendSyncKey(keybind.GetKey(), true, false, true);
 			}
 			lastPerformanceKeys.Clear();
+		}
+
+		public void SendMouseClick(int x, int y) {
+			this.FocusWindow();
+			SendMessage(mainWindowHandle, 0x0203, (IntPtr) 0, (IntPtr) ((y << 16) | (x & 0xFFFF)));
+			//SendMessage(mainWindowHandle, WM_LBUTTONUP, (IntPtr) 0, (IntPtr) (((y + 1) << 16) | ((x + 1) & 0xFFFF)));
+		}
+
+		public RECT GetClientRect() {
+			if(mainWindowHandle != null) {
+				if(GetClientRect(new HandleRef(this, mainWindowHandle), out RECT rect)) {
+					return rect;
+				}
+			}
+			return new RECT();
+		}
+
+		public bool GetScreenFromClientPoint(ref POINT point) {
+			if(mainWindowHandle != null) {
+				return ClientToScreen(new HandleRef(this, mainWindowHandle), ref point);
+			}
+			return false;
 		}
 
 		public IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {

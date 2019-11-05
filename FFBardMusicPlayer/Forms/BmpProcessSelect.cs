@@ -24,6 +24,7 @@ namespace FFBardMusicPlayer {
 			public Process process;
 			public string characterName;
 			public string characterId;
+			public bool hostProcess = false;
 		}
 		public List<MultiboxProcess> multiboxProcesses = new List<MultiboxProcess>();
 		public bool useLocalOrchestra;
@@ -221,7 +222,7 @@ namespace FFBardMusicPlayer {
 				useLocalOrchestra = LocalOrchestraCheck.Checked;
 				for(int i = multiboxProcesses.Count - 1; i >= 0; i--) {
 					if(multiboxProcesses[i].process == process) {
-						multiboxProcesses.RemoveAt(i);
+						multiboxProcesses[i].hostProcess = true;
 					}
 				}
 			}

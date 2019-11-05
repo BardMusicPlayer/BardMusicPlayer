@@ -58,16 +58,26 @@ namespace FFBardMusicPlayer.Controls {
 		public void PopulateLocalProcesses(List<MultiboxProcess> processes) {
 			PerformerLayout.Controls.Clear();
 
+			List<BmpLocalPerformer> performers = new List<BmpLocalPerformer>();
 			int track = 0;
 			foreach(MultiboxProcess mp in processes) {
-				BmpLocalPerformer performer = new BmpLocalPerformer();
-				performer.SetMultiboxProcess(mp);
-				performer.TrackNum = track;
-				performer.onUpdate += delegate (object o, EventArgs e) {
-					this.Invoke(t => t.UpdatePerformer(performer));
+				BmpLocalPerformer perf = new BmpLocalPerformer(mp);
+				perf.onUpdate += delegate (object o, EventArgs e) {
+					this.Invoke(t => t.UpdatePerformer(perf));
 				};
-				PerformerLayout.Controls.Add(performer);
+
+				if(mp.hostProcess == true) {
+					perf.hostProcess = true;
+					performers.Insert(0, perf);
+				} else {
+					performers.Add(perf);
+				}
 				track++;
+			}
+			for(int i = 0; i < performers.Count; i++) {
+				BmpLocalPerformer perf = performers[i];
+				perf.TrackNum = i;
+				PerformerLayout.Controls.Add(perf);
 			}
 
 			BmpLocalOrchestra_Resize(this, EventArgs.Empty);
@@ -103,7 +113,6 @@ namespace FFBardMusicPlayer.Controls {
 						int po = SequencerReference.GetTrackPreferredOctaveShift(note.track);
 						note.note = NoteHelper.ApplyOctaveShift(note.origNote, performer.OctaveNum + po);
 						performer.ProcessOffNote(note);
-						break;
 					}
 				}
 			}
@@ -136,7 +145,7 @@ namespace FFBardMusicPlayer.Controls {
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
-					if(performer.TrackNum >= 0 && performer.TrackNum < sequencerRef.MaxTrack) {
+					if(performer.TrackNum >= 0 && performer.TrackNum <= sequencerRef.MaxTrack) {
 						Track track = sequencerRef.Sequence[performer.TrackNum];
 						Instrument ins = sequencerRef.GetTrackPreferredInstrument(track);
 						performer.OpenInstrument(ins);
@@ -160,8 +169,17 @@ namespace FFBardMusicPlayer.Controls {
 			
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
+				if(performer != null && performer.PerformerEnabled) {
 					performer.ToggleMute();
+				}
+			}
+		}
+
+		private void ensembleCheck_Click(object sender, EventArgs e) {
+			foreach(Control ctl in PerformerLayout.Controls) {
+				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
+				if(performer != null && performer.PerformerEnabled) {
+					performer.EnsembleCheck();
 				}
 			}
 		}

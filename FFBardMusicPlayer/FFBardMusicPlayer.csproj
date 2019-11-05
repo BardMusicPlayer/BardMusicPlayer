@@ -125,6 +125,7 @@
     <Compile Include="Controls\BmpStatistics.Designer.cs">
       <DependentUpon>BmpStatistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="FFXIVDatAddon.cs" />
     <Compile Include="Forms\BmpAbout.cs">
       <SubType>Form</SubType>
     </Compile>
