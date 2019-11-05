@@ -189,6 +189,8 @@ namespace FFBardMusicPlayer.Controls {
 
 			BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
 			OnBrowserSelect?.Invoke(this, entry);
+			
+			SelectorTrack.Focus();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {

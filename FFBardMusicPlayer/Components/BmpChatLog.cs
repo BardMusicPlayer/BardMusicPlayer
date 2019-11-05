@@ -86,15 +86,19 @@ namespace FFBardMusicPlayer.Components {
 			box.SelectionLength = 0;
 			box.SelectedRtf = format;
 			box.AppendText(System.Environment.NewLine);
-			box.Select(start, len);
 
 			if(bottom) {
-				GetScrollRange((IntPtr) box.Handle, SB_VERT, out vmin, out vmax);
-				rtfPoint.Y = vmax - box.ClientSize.Height;
-				SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
+				//GetScrollRange((IntPtr) box.Handle, SB_VERT, out vmin, out vmax);
+				//rtfPoint.Y = vmax - box.ClientSize.Height;
+				//SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
+				box.ScrollToCaret();
+
 			} else {
 				SendMessage(box.Handle, EM_SETSCROLLPOS, 0, ref rtfPoint);
 			}
+
+			box.Select(start, len);
+
 			SendMessage(box.Handle, WM_SETREDRAW, 1, 0);
 			box.Refresh();
 
