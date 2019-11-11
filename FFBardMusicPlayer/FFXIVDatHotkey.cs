@@ -115,6 +115,10 @@ namespace FFBardMusicPlayer {
 			}
 		}
 
+		public List<string> GetKeybindList() {
+			return keybindList.Keys.ToList();
+		}
+
 		public bool ExtendedKeyboardBound {
 			get {
 				bool all = true;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -111,6 +112,13 @@ namespace FFBardMusicPlayer {
 			public int Top;
 			public int Right;
 			public int Bottom;
+
+			public int Width() {
+				return Right - Left;
+			}
+			public int Height() {
+				return Bottom - Top;
+			}
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -350,10 +358,50 @@ namespace FFBardMusicPlayer {
 			lastPerformanceKeys.Clear();
 		}
 
+		public bool SendUiMouseClick(FFXIVAddonDat addon, uint uiWidget, int x, int y) {
+			if(addon[uiWidget].id == uiWidget) {
+				FFXIVHook.RECT clientRect = this.GetClientRect();
+				Point point = addon[uiWidget].GetXYPoint(clientRect.Width(), clientRect.Height());
+				this.SendMouseClick(point.X + x, point.Y + y);
+				return true;
+			}
+			return false;
+		}
+
 		public void SendMouseClick(int x, int y) {
-			this.FocusWindow();
-			SendMessage(mainWindowHandle, 0x0203, (IntPtr) 0, (IntPtr) ((y << 16) | (x & 0xFFFF)));
-			//SendMessage(mainWindowHandle, WM_LBUTTONUP, (IntPtr) 0, (IntPtr) (((y + 1) << 16) | ((x + 1) & 0xFFFF)));
+			FFXIVHook.POINT point = new FFXIVHook.POINT(x, y);
+			if(this.GetScreenFromClientPoint(ref point)) {
+				Cursor.Position = new Point(point.X, point.Y);
+				List<INPUT> mouseDown = new List<INPUT> {
+					new INPUT {
+						type = 0,
+						un = new InputUnion {
+							mi = new MOUSEINPUT {
+								dx = point.X,
+								dy = point.Y,
+								dwFlags = 0x8000 | 0x0002
+							}
+						}
+					}
+				};
+				SendInput((uint) mouseDown.Count, mouseDown.ToArray(), Marshal.SizeOf(typeof(INPUT)));
+				
+				List<INPUT> mouseUp = new List<INPUT> {
+					new INPUT {
+						type = 0,
+						un = new InputUnion {
+							mi = new MOUSEINPUT {
+								dx = point.X+1,
+								dy = point.Y+1,
+								dwFlags = 0x8000 | 0x0004
+							}
+						}
+					}
+				};
+				SendInput((uint) mouseUp.Count, mouseUp.ToArray(), Marshal.SizeOf(typeof(INPUT)));
+			}
+		//	SendMessage(mainWindowHandle, WM_LBUTTONDOWN, (IntPtr) 0, (IntPtr) ((y << 16) | (x & 0xFFFF)));
+		//	SendMessage(mainWindowHandle, WM_LBUTTONUP, (IntPtr) 0, (IntPtr) (((y + 1) << 16) | ((x + 1) & 0xFFFF)));
 		}
 
 		public RECT GetClientRect() {

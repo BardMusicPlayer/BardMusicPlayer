@@ -14,6 +14,7 @@ using Sanford.Multimedia.Midi;
 
 using Timer = System.Timers.Timer;
 using System.Timers;
+using System.Threading;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalPerformer : UserControl {
@@ -22,6 +23,14 @@ namespace FFBardMusicPlayer.Controls {
 		private FFXIVHotbarDat hotbar = new FFXIVHotbarDat();
 		private FFXIVAddonDat addon = new FFXIVAddonDat();
 		private FFXIVHook hook = new FFXIVHook();
+
+		private Instrument chosenInstrument = Instrument.Piano;
+		public Instrument ChosenInstrument {
+			set {
+				chosenInstrument = value;
+				InstrumentName.Text = string.Format("[{0}]", value.ToString());
+			}
+		}
 
 		public EventHandler onUpdate;
 		private bool openDelay;
@@ -58,6 +67,8 @@ namespace FFBardMusicPlayer.Controls {
 
 		public BmpLocalPerformer(MultiboxProcess mp = null) {
 			InitializeComponent();
+
+			this.ChosenInstrument = this.chosenInstrument;
 
 			if(mp != null) {
 				SetMultiboxProcess(mp);
@@ -132,6 +143,7 @@ namespace FFBardMusicPlayer.Controls {
 					}
 				}
 				Keyboard.UpdateFrequency(notes);
+				this.chosenInstrument = sequencer.GetTrackPreferredInstrument(track);
 			}
 
 			if(hostProcess) {
@@ -141,17 +153,24 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void OpenInstrument(Instrument ins = Instrument.Piano) {
-			// TODO ignore if host is bard
+		public void OpenInstrument() {
+			// Exert the effort to check memory i guess
 			if(hostProcess) {
-				//return;
+				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
+					if(Sharlayan.Reader.CanGetPerformance()) {
+						if(Sharlayan.Reader.GetPerformance().IsUp()) {
+							return;
+						}
+					}
+				}
 			}
 
-			string keyMap = hotbar.GetInstrumentKeyMap(ins);
+			string keyMap = hotbar.GetInstrumentKeyMap(chosenInstrument);
 			if(!string.IsNullOrEmpty(keyMap)) {
 				FFXIVKeybindDat.Keybind keybind = hotkeys[keyMap];
 				if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
-					hook.SendAsyncKeybind(keybind);
+					hook.SendSyncKeybind(keybind);
+					Console.WriteLine("Press " + keybind.ToString());
 					openDelay = true;
 
 					Timer openTimer = new Timer {
@@ -168,6 +187,15 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 		public void CloseInstrument() {
+			if(hostProcess) {
+				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
+					if(Sharlayan.Reader.CanGetPerformance()) {
+						if(!Sharlayan.Reader.GetPerformance().IsUp()) {
+							return;
+						}
+					}
+				}
+			}
 
 			hook.ClearLastPerformanceKeybinds();
 
@@ -187,36 +215,21 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void EnsembleCheck() {
-			if(hostProcess) {
-				return;
-			}
-			// 0x9B843645 // Metronome
+			// 0x24CB8DCA // Extended piano
+			// 0x4536849B // Metronome
 			// 0xB5D3F991 // Ready check begin
-			FFXIVAddonDat.AddonStateData statedata = addon[0xCA8DCB24];
-			if(statedata.id != 0) {
-				FFXIVHook.RECT clientRect = hook.GetClientRect();
-				// w: 1260 h: 270
-				Console.WriteLine(string.Format("Performance pos: {0} {1} {2}", statedata.xpos, statedata.ypos, statedata.sticky));
-				Console.WriteLine(string.Format("Client: {0} {1}", clientRect.Right - clientRect.Left, clientRect.Bottom - clientRect.Top));
+			hook.FocusWindow();
+			Thread.Sleep(100);
+			if(hook.SendUiMouseClick(addon, 0x4536849B, 130, 140)) {
+				//this.EnsembleAccept();
+			}
+		}
 
-				// Performance pos: 51.20175 16.94313 1
-				// Performance pos: 51.27458 33.41232 4
-
-				// Performance pos: 51.93008 66.58768 4
-				// Performance pos: 52.22141 83.64929 7
-
-				// Client: 1373 844
-				float w = clientRect.Right - clientRect.Left, h = clientRect.Bottom - clientRect.Top;
-				statedata.GetXYPos(w, h, out float x, out float y);
-
-				FFXIVHook.POINT point = new FFXIVHook.POINT((int)x, (int)y);
-				hook.SendMouseClick(point.X + 1000, point.Y + 100);
-				
-				if(hook.GetScreenFromClientPoint(ref point)) {
-					int mw = point.X + 1000, mh = point.Y + 100;
-					Cursor.Position = new Point(mw, mh);
-				}
-				
+		public void EnsembleAccept() {
+			FFXIVKeybindDat.Keybind keybind = hotkeys["OK"];
+			if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
+				hook.SendSyncKeybind(keybind);
+				hook.SendSyncKeybind(keybind);
 			}
 		}
 

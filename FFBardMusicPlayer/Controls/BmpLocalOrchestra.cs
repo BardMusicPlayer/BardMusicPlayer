@@ -12,6 +12,9 @@ using static FFBardMusicPlayer.Controls.BmpPlayer;
 using static Sharlayan.Core.Enums.Performance;
 using Sanford.Multimedia.Midi;
 
+using Timer = System.Timers.Timer;
+using System.Timers;
+
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalOrchestra : UserControl {
 
@@ -145,11 +148,7 @@ namespace FFBardMusicPlayer.Controls {
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
-					if(performer.TrackNum >= 0 && performer.TrackNum <= sequencerRef.MaxTrack) {
-						Track track = sequencerRef.Sequence[performer.TrackNum];
-						Instrument ins = sequencerRef.GetTrackPreferredInstrument(track);
-						performer.OpenInstrument(ins);
-					}
+					performer.OpenInstrument();
 				}
 			}
 		}
@@ -178,10 +177,26 @@ namespace FFBardMusicPlayer.Controls {
 		private void ensembleCheck_Click(object sender, EventArgs e) {
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
+				if(performer != null && performer.PerformerEnabled && performer.hostProcess) {
 					performer.EnsembleCheck();
 				}
 			}
+
+			Timer openTimer = new Timer {
+				Interval = 500
+			};
+			openTimer.Elapsed += delegate (object o, ElapsedEventArgs ev) {
+				openTimer.Stop();
+				openTimer = null;
+				
+				foreach(Control ctl in PerformerLayout.Controls) {
+					BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
+					if(performer != null && performer.PerformerEnabled && !performer.hostProcess) {
+						performer.EnsembleAccept();
+					}
+				}
+			};
+			openTimer.Start();
 		}
 	}
 }

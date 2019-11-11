@@ -21,6 +21,7 @@ using static FFBardMusicPlayer.Controls.BmpPlayer;
 namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
 
+		BmpProcessSelect processSelector = new BmpProcessSelect();
 		private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 		private bool keyboardWarning = false;
 
@@ -162,7 +163,6 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		public void FindProcess() {
-			BmpProcessSelect processSelector = new BmpProcessSelect();
 			processSelector.ShowDialog(this);
 			if(processSelector.DialogResult == DialogResult.Yes) {
 				Process proc = processSelector.selectedProcess;

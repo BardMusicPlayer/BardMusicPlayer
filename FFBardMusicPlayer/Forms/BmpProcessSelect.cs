@@ -218,8 +218,11 @@ namespace FFBardMusicPlayer {
 
 			Process process = (sender as Button).Tag as Process;
 
-			if(LocalOrchestraCheck.Visible) {
-				useLocalOrchestra = LocalOrchestraCheck.Checked;
+			useLocalOrchestra = LocalOrchestraCheck.Checked;
+			if(Control.ModifierKeys == Keys.Shift) {
+				useLocalOrchestra = true;
+			}
+			if(useLocalOrchestra) {
 				for(int i = multiboxProcesses.Count - 1; i >= 0; i--) {
 					if(multiboxProcesses[i].process == process) {
 						multiboxProcesses[i].hostProcess = true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,14 @@ namespace FFBardMusicPlayer {
 			public byte state8;
 			public int unknown10;
 
-			public void GetXYPos(float w, float h, out float ox, out float oy) {
+			// Performance pos: 51.20175 16.94313 1
+			// Performance pos: 51.27458 33.41232 4
+
+			// Performance pos: 51.93008 66.58768 4
+			// Performance pos: 52.22141 83.64929 7
+
+			// Client: 1373 844
+			public Point GetXYPoint(float w, float h) {
 				float x = xpos / 100.0f, y = ypos / 100.0f;
 				float s = sticky;
 				// X
@@ -43,8 +51,7 @@ namespace FFBardMusicPlayer {
 				} else if(s >= 6 && s <= 8) {
 					y = (h * y) - height;
 				}
-				ox = x;
-				oy = y;
+				return new Point((int) x, (int) y);
 			}
 		};
 
@@ -71,40 +78,24 @@ namespace FFBardMusicPlayer {
 			addonData.Clear();
 			if(base.ParseDat(stream)) {
 
-				stream.BaseStream.Seek(0x70, SeekOrigin.Begin);
-				while(stream.BaseStream.Position < header.dataSize) {
-					AddonStateData ac = ParseSection(stream);
-					if(ac.id == 0) {
-						continue;
-					}
-					//if(ac.unknown1 == 0x24){
-					if(ac.id == 0xCB) {
-						// Performance dialog...
-						//Console.WriteLine(string.Format("{0} {1} x: {2} y: {3}, state3: {4}", ac.unknown1, ac.unknown2, ac.xpos, ac.ypos, ac.state3));
-					}
-					/*
-					foreach(AddonStateData d in data.Values) {
-						if(d.id == ac.id) {
-							if((int)d.xpos != (int)ac.xpos || (int)d.ypos != (int)ac.ypos) {
-								Console.WriteLine(string.Format("{0} : x: {1} y: {2}", ac.id.ToString("X"), ac.xpos, ac.ypos));
-							}
-							if((d.state1 != ac.state1) || (d.state2 != ac.state2) || (d.state3 != ac.state3) || (d.state4 != ac.state4)) {
-								Console.WriteLine(string.Format("State1-4 {0} {1} {2} {3}", ac.state1, ac.state2, ac.state3, ac.state4));
-							}
-							if((d.sticky != ac.sticky) || (d.state6 != ac.state6) || (d.state7 != ac.state7) || (d.state8 != ac.state8)) {
-								Console.WriteLine(string.Format("State5-8 {0} {1} {2} {3}", ac.sticky, ac.state6, ac.state7, ac.state8));
-							}
-						}
-					}
-					*/
-					addonData[ac.id] = ac;
-					if(stream.BaseStream.Position >= 0x25f0) {
-						break;
-					}
-				}
+				stream.BaseStream.Seek(0x60, SeekOrigin.Begin);
+				addonData = this.ParseBlock(stream);
 			}
 			return true;
 		}
+
+		private Dictionary<uint, AddonStateData> ParseBlock(BinaryReader stream) {
+			Dictionary<uint, AddonStateData> stateDataList = new Dictionary<uint, AddonStateData>();
+			long pos = stream.BaseStream.Position;
+			uint numsections = stream.ReadUInt32();
+			stream.BaseStream.Position = pos + 0x10;
+			for(uint i = 0; i <= numsections; i++) {
+				AddonStateData ac = this.ParseSection(stream);
+				stateDataList[ac.id] = ac;
+			}
+			return stateDataList;
+		}
+
 		private AddonStateData ParseSection(BinaryReader stream) {
 			AddonStateData ac = new AddonStateData {
 				// First row
