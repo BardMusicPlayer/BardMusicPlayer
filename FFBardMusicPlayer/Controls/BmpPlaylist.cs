@@ -34,6 +34,12 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		public bool AutoPlay {
+			get {
+				return AutoPlayToggle.Checked;
+			}
+		}
+
 		public EventHandler<BmpMidiEntry> OnMidiSelect;
 		public EventHandler OnPlaylistRequestAdd;
 

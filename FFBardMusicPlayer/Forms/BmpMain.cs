@@ -364,7 +364,7 @@ namespace FFBardMusicPlayer.Forms {
 				Explorer.EnterFile();
 			}
 			Playlist.Select(entry.FilePath.FilePath);
-			if(proceedPlaylistMidi) {
+			if(proceedPlaylistMidi && Playlist.AutoPlay) {
 				Player.Player.Play();
 				proceedPlaylistMidi = false;
 			}
@@ -383,7 +383,9 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void NextSong() {
 			if(Playlist.AdvanceNext(out string filename, out int track)) {
-				Playlist.PlaySelectedMidi();
+				if(Playlist.AutoPlay) {
+					Playlist.PlaySelectedMidi();
+				}
 			} else {
 				// If failed playlist when you wanted to, just stop
 				if(proceedPlaylistMidi) {
