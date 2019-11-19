@@ -53,6 +53,9 @@ namespace FFBardMusicPlayer.Forms {
 			}
 			this.Text = update.version.ToString();
 
+			// Clear local orchestra
+			InfoTabs.TabPages.Remove(localOrchestraTab);
+
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.FindProcess());
 			};
@@ -70,6 +73,9 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
 				this.Invoke(t => t.Memory_OnChatReceived(item));
 			};
+			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids) {
+				this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
+			};
 			FFXIV.memory.OnPerformanceReadyChanged += delegate (object o, bool performance) {
 				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(performance));
 			};
@@ -85,6 +91,9 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnCurrentPlayerLogout += delegate (object o, CurrentPlayerResult res) {
 				string format = string.Format("Character [{0}] logged out.", res.CurrentPlayer.Name);
 				this.Log(format);
+			};
+			FFXIV.memory.OnPartyChanged += delegate (object o, PartyResult res) {
+				this.Invoke(t => t.LocalOrchestraUpdate());
 			};
 
 			Player.OnStatusChange += delegate (object o, PlayerStatus status) {
@@ -295,6 +304,36 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void Memory_OnCurrentPlayerJobChange(CurrentPlayerResult res) {
 			this.Invoke(t => t.UpdatePerformance());
+		}
+
+		private void LocalOrchestraUpdate() {
+			List<ActorItem> actorIds = new List<ActorItem>();
+			List<string> performerNames = LocalOrchestra.GetPerformerNames();
+			if(Sharlayan.Reader.CanGetActors()) {
+				foreach(ActorItem actor in Sharlayan.Reader.GetActors().CurrentPCs.Values) {
+					if(performerNames.Contains(actor.Name)) {
+						actorIds.Add(actor);
+					}
+				}
+			}
+			this.LocalOrchestraUpdate(actorIds);
+		}
+
+		private void LocalOrchestraUpdate(List<ActorItem> actors) {
+			if(Sharlayan.Reader.CanGetPerformance()) {
+				PerformanceResult performance = Sharlayan.Reader.GetPerformance();
+				foreach(ActorItem actor in actors) {
+					uint perfId = actor.PerformanceID / 2;
+					if(perfId < 99) {
+						PerformanceItem item = performance.Performances[perfId];
+						BmpLocalPerformer perf = LocalOrchestra.FindPerformer(actor.Name);
+						if(perf != null) {
+							perf.UiEnabled = item.IsReady();
+						}
+						//Console.WriteLine(string.Format("{1} ({0}) => {2}", actor.ID, actor.Name, item.IsReady()));
+					}
+				}
+			}
 		}
 
 		private void UpdatePerformance() {

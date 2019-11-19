@@ -29,11 +29,13 @@
 			this.closeInstruments = new System.Windows.Forms.Button();
 			this.openInstruments = new System.Windows.Forms.Button();
 			this.PerformerLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.testC = new System.Windows.Forms.Button();
 			this.OrchestraGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// OrchestraGroup
 			// 
+			this.OrchestraGroup.Controls.Add(this.testC);
 			this.OrchestraGroup.Controls.Add(this.ensembleCheck);
 			this.OrchestraGroup.Controls.Add(this.muteAll);
 			this.OrchestraGroup.Controls.Add(this.closeInstruments);
@@ -103,6 +105,17 @@
 			this.PerformerLayout.TabIndex = 0;
 			this.PerformerLayout.WrapContents = false;
 			// 
+			// testC
+			// 
+			this.testC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.testC.Location = new System.Drawing.Point(117, 0);
+			this.testC.Name = "testC";
+			this.testC.Size = new System.Drawing.Size(51, 21);
+			this.testC.TabIndex = 5;
+			this.testC.Text = "Test C";
+			this.testC.UseVisualStyleBackColor = true;
+			this.testC.Click += new System.EventHandler(this.testC_Click);
+			// 
 			// BmpLocalOrchestra
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -123,5 +136,6 @@
 		private System.Windows.Forms.Button openInstruments;
 		private System.Windows.Forms.Button muteAll;
 		private System.Windows.Forms.Button ensembleCheck;
+		private System.Windows.Forms.Button testC;
 	}
 }

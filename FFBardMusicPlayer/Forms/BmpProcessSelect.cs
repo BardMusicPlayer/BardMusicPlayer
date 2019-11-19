@@ -35,6 +35,9 @@ namespace FFBardMusicPlayer {
 
 		public BmpProcessSelect() {
 			InitializeComponent();
+
+			LocalOrchestraCheck.Visible = false;
+
 			processWorker.DoWork += ButtonLabelTask;
 			processWorker.WorkerSupportsCancellation = true;
 		}
@@ -78,13 +81,14 @@ namespace FFBardMusicPlayer {
 						break;
 					}
 					string name = "(Unknown)";
+					string origName = string.Empty;
 					string id = string.Empty;
 					if(Reader.CanGetPlayerInfo()) {
-						string name2 = Reader.GetCurrentPlayer().CurrentPlayer.Name;
-						if(string.IsNullOrEmpty(name2)) {
+						origName = Reader.GetCurrentPlayer().CurrentPlayer.Name;
+						if(string.IsNullOrEmpty(origName)) {
 							name = string.Format("{0} (?)", button.Text);
 						} else {
-							name = string.Format("{0} ({1})", name2, process.Id);
+							name = string.Format("{0} ({1})", origName, process.Id);
 						}
 					}
 					if(Reader.CanGetCharacterId()) {
@@ -93,7 +97,7 @@ namespace FFBardMusicPlayer {
 					button.Invoke(t => t.Text = name);
 					multiboxProcesses.Add(new MultiboxProcess {
 						process = process,
-						characterName = name,
+						characterName = origName,
 						characterId = id,
 					});
 					MemoryHandler.Instance.UnsetProcess();
@@ -126,7 +130,7 @@ namespace FFBardMusicPlayer {
 						continue;
 					}
 					string debug = string.Format("{0} - {1}", process.ProcessName, process.MainWindowTitle);
-					int width = ProcessList.Size.Width;
+					int width = ProcessList.Size.Width - 20;
 					int height = 20;
 					Button button = new Button() {
 						Text = debug,

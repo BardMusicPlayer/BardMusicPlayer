@@ -66,7 +66,7 @@ namespace FFBardMusicPlayer {
 		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerJobChange;
 		public event EventHandler<PartyResult> OnPartyChanged;
 		public event EventHandler<Dictionary<uint, ActorItemBase>> OnPcChanged;
-		public event EventHandler<PerformanceItem> OnPerformanceChanged;
+		public event EventHandler<List<uint>> OnPerformanceChanged;
 		public event EventHandler<bool> OnPerformanceReadyChanged;
 		public event EventHandler<string> OnCharacterIdChanged;
 
@@ -239,25 +239,33 @@ namespace FFBardMusicPlayer {
 			}
 			if(Reader.CanGetPerformance()) {
 
-				int sum0 = 0;
-				int sum1 = 0;
-				if(!performance.Performances.IsEmpty) {
-					PerformanceItem pp = performance.Performances[0];
-					sum0 = (int) pp.Instrument + (int) pp.Status;
-				}
 
-				// I have to put this here.. Not sure why
+				List<uint> changedIds = new List<uint>();
 				PerformanceResult perf = Reader.GetPerformance();
-				if(!perf.Performances.IsEmpty) {
-					PerformanceItem pp2 = perf.Performances[0];
-					sum1 = (int) pp2.Instrument + (int) pp2.Status;
+				if(!perf.Performances.IsEmpty && !performance.Performances.IsEmpty) {
+					foreach(KeyValuePair<uint, PerformanceItem> pp in perf.Performances) {
+						if(pp.Value.Status != performance.Performances[pp.Key].Status) {
+							changedIds.Add(pp.Key);
+						}
+					}
 				}
 
+				if(changedIds.Count > 0) {
+					List<uint> actorIds = new List<uint>();
+					if(Reader.CanGetActors()) {
+						foreach(ActorItem actor in Reader.GetActors().CurrentPCs.Values) {
+							if(changedIds.Contains(actor.PerformanceID / 2)) {
+								actorIds.Add(actor.ID);
+							}
+						}
+					}
+					if(actorIds.Count > 0) {
+						OnPerformanceChanged?.Invoke(this, actorIds);
+					}
+				}
+				
+				//Update
 				performance = perf;
-
-				if(sum0 != sum1) {
-					OnPerformanceChanged?.Invoke(this, perf.Performances[0]);
-				}
 
 				bool r = perf.Performances[0].IsReady();
 				if(r != performanceReady) {
@@ -301,6 +309,17 @@ namespace FFBardMusicPlayer {
 				}
 			}
 			return true;
+		}
+
+		public List<ActorItem> GetActorItems(List<uint> keys) {
+			if(Reader.CanGetActors()) {
+				ActorResult res = Reader.GetActors();
+				if(res != null && res.CurrentPCs.Count > 0) {
+					List<ActorItem> actors = res.CurrentPCs.Where(t => keys.Contains(t.Key)).Select(t => t.Value).ToList();
+					return actors;
+				}
+			}
+			return new List<ActorItem>();
 		}
 
 		public bool IsScanning() {

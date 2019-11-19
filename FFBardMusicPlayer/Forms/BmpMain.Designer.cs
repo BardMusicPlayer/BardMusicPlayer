@@ -230,7 +230,6 @@
 			// LocalOrchestra
 			// 
 			this.LocalOrchestra.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.LocalOrchestra.InstrumentToggle = false;
 			this.LocalOrchestra.Location = new System.Drawing.Point(3, 3);
 			this.LocalOrchestra.Name = "LocalOrchestra";
 			this.LocalOrchestra.OrchestraEnabled = false;

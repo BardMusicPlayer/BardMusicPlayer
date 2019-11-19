@@ -18,15 +18,6 @@ using System.Timers;
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalOrchestra : UserControl {
 
-		private bool instrumentToggle;
-		public bool InstrumentToggle {
-			get { return instrumentToggle; }
-			set {
-				instrumentToggle = value;
-				this.OrchestraGroup.Text = string.Format("Local orchestra ({0})", value ? "on" : "off");
-			}
-		}
-
 		private BmpSequencer sequencerRef;
 		public BmpSequencer SequencerReference {
 			get { return sequencerRef; }
@@ -48,8 +39,6 @@ namespace FFBardMusicPlayer.Controls {
 			InitializeComponent();
 
 			this.Resize += BmpLocalOrchestra_Resize;
-
-			InstrumentToggle = InstrumentToggle;
 		}
 
 		private void BmpLocalOrchestra_Resize(object sender, EventArgs e) {
@@ -87,30 +76,23 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void ProcessOnNote(NoteEvent note) {
-			if(!InstrumentToggle) {
-				return;
-			}
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
+				if(performer != null && performer.UiEnabled && performer.PerformerEnabled) {
 					if(note.trackNum == performer.TrackNum) {
 
 						int po = SequencerReference.GetTrackPreferredOctaveShift(note.track);
 						note.note = NoteHelper.ApplyOctaveShift(note.origNote, performer.OctaveNum + po);
 						performer.ProcessOnNote(note);
-						break;
 					}
 				}
 			}
 		}
 
 		public void ProcessOffNote(NoteEvent note) {
-			if(!InstrumentToggle) {
-				return;
-			}
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
+				if(performer != null && performer.UiEnabled && performer.PerformerEnabled) {
 					if(note.trackNum == performer.TrackNum) {
 
 						int po = SequencerReference.GetTrackPreferredOctaveShift(note.track);
@@ -142,9 +124,26 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		private void openInstruments_Click(object sender, EventArgs e) {
+		public List<string> GetPerformerNames() {
+			List<string> performerNames = new List<string>();
+			foreach(BmpLocalPerformer performer in PerformerLayout.Controls) {
+				performerNames.Add(performer.PerformerName);
+			}
+			return performerNames;
+		}
 
-			InstrumentToggle = true;
+		public BmpLocalPerformer FindPerformer(string name) {
+			foreach(Control ctl in PerformerLayout.Controls) {
+				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
+				if(performer != null && performer.PerformerName == name) {
+					return performer;
+				}
+			}
+			return null;
+		}
+
+		private void openInstruments_Click(object sender, EventArgs e) {
+			
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
@@ -154,8 +153,7 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void closeInstruments_Click(object sender, EventArgs e) {
-
-			InstrumentToggle = false;
+			
 			foreach(Control ctl in PerformerLayout.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
@@ -175,12 +173,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void ensembleCheck_Click(object sender, EventArgs e) {
-			foreach(Control ctl in PerformerLayout.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled && performer.hostProcess) {
-					performer.EnsembleCheck();
-				}
-			}
 
 			Timer openTimer = new Timer {
 				Interval = 500
@@ -197,6 +189,15 @@ namespace FFBardMusicPlayer.Controls {
 				}
 			};
 			openTimer.Start();
+		}
+
+		private void testC_Click(object sender, EventArgs e) {
+			foreach(Control ctl in PerformerLayout.Controls) {
+				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
+				if(performer != null && performer.PerformerEnabled) {
+					performer.NoteKey("C");
+				}
+			}
 		}
 	}
 }

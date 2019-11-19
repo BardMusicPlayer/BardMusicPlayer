@@ -21,7 +21,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		private FFXIVKeybindDat hotkeys = new FFXIVKeybindDat();
 		private FFXIVHotbarDat hotbar = new FFXIVHotbarDat();
-		private FFXIVAddonDat addon = new FFXIVAddonDat();
+		//private FFXIVAddonDat addon = new FFXIVAddonDat();
 		private FFXIVHook hook = new FFXIVHook();
 
 		private Instrument chosenInstrument = Instrument.Piano;
@@ -53,6 +53,12 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		public string PerformerName {
+			get {
+				return CharacterName.Text;
+			}
+		}
+
 		public bool PerformerEnabled {
 			get {
 				return EnableCheck.Checked;
@@ -61,6 +67,23 @@ namespace FFBardMusicPlayer.Controls {
 		private bool WantsHold {
 			get {
 				return Properties.Settings.Default.HoldNotes;
+			}
+		}
+
+		private bool uiEnabled = true;
+		public bool UiEnabled {
+			get { return uiEnabled; }
+			set {
+				uiEnabled = value;
+				this.InstrumentName.Enabled = uiEnabled;
+				this.CharacterName.Enabled = uiEnabled;
+				this.Keyboard.Enabled = uiEnabled;
+				if(!hostProcess) {
+					this.CharacterName.BackColor = uiEnabled ? Color.Transparent : Color.FromArgb(235, 120, 120);
+				}
+				if(!uiEnabled) {
+					hook.ClearLastPerformanceKeybinds();
+				}
 			}
 		}
 
@@ -83,9 +106,10 @@ namespace FFBardMusicPlayer.Controls {
 			hook.Hook(mp.process, false);
 			hotkeys.LoadKeybindDat(mp.characterId);
 			hotbar.LoadHotbarDat(mp.characterId);
-			addon.LoadAddonDat(mp.characterId);
+			//addon.LoadAddonDat(mp.characterId);
 			CharacterName.Text = mp.characterName;
 		}
+		
 
 		public void ProcessOnNote(NoteEvent onNote) {
 			if(openDelay) {
@@ -143,13 +167,13 @@ namespace FFBardMusicPlayer.Controls {
 					}
 				}
 				Keyboard.UpdateFrequency(notes);
-				this.chosenInstrument = sequencer.GetTrackPreferredInstrument(track);
+				ChosenInstrument = sequencer.GetTrackPreferredInstrument(track);
 			}
 
 			if(hostProcess) {
-				this.BackColor = Color.LightYellow;
+				this.BackColor = Color.FromArgb(235, 235, 120);
 			} else {
-				this.BackColor = Control.DefaultBackColor;
+				this.BackColor = Color.Transparent;
 			}
 		}
 
@@ -219,10 +243,12 @@ namespace FFBardMusicPlayer.Controls {
 			// 0x4536849B // Metronome
 			// 0xB5D3F991 // Ready check begin
 			hook.FocusWindow();
+			/* // Dummied out, dunno if i should click it for the user
 			Thread.Sleep(100);
 			if(hook.SendUiMouseClick(addon, 0x4536849B, 130, 140)) {
 				//this.EnsembleAccept();
 			}
+			*/
 		}
 
 		public void EnsembleAccept() {
@@ -230,6 +256,11 @@ namespace FFBardMusicPlayer.Controls {
 			if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
 				hook.SendSyncKeybind(keybind);
 				hook.SendSyncKeybind(keybind);
+			}
+		}
+		public void NoteKey(string noteKey) {
+			if(hotkeys.GetKeybindFromNoteKey(noteKey) is FFXIVKeybindDat.Keybind keybind) {
+				hook.SendAsyncKeybind(keybind);
 			}
 		}
 

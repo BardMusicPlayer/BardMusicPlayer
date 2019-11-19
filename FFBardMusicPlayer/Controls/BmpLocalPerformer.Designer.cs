@@ -26,11 +26,11 @@
 			this.CharacterName = new System.Windows.Forms.Label();
 			this.PerformerTable = new System.Windows.Forms.TableLayoutPanel();
 			this.EnableCheck = new System.Windows.Forms.CheckBox();
+			this.InstrumentName = new System.Windows.Forms.Label();
 			this.Keyboard = new FFBardMusicPlayer.Controls.BmpKeyboard();
 			this.ControlTable = new System.Windows.Forms.TableLayoutPanel();
 			this.TrackShift = new FFBardMusicPlayer.Components.BmpTrackShift();
 			this.OctaveShift = new FFBardMusicPlayer.Components.BmpOctaveShift();
-			this.InstrumentName = new System.Windows.Forms.Label();
 			this.PerformerTable.SuspendLayout();
 			this.ControlTable.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TrackShift)).BeginInit();
@@ -80,6 +80,17 @@
 			this.EnableCheck.Size = new System.Drawing.Size(14, 19);
 			this.EnableCheck.TabIndex = 3;
 			this.EnableCheck.UseVisualStyleBackColor = true;
+			// 
+			// InstrumentName
+			// 
+			this.InstrumentName.AutoEllipsis = true;
+			this.InstrumentName.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.InstrumentName.Location = new System.Drawing.Point(23, 0);
+			this.InstrumentName.Name = "InstrumentName";
+			this.InstrumentName.Size = new System.Drawing.Size(54, 25);
+			this.InstrumentName.TabIndex = 6;
+			this.InstrumentName.Text = "[Piano]";
+			this.InstrumentName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Keyboard
 			// 
@@ -138,17 +149,6 @@
 			this.OctaveShift.TabIndex = 1;
 			this.OctaveShift.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.OctaveShift.ValueChanged += new System.EventHandler(this.OctaveShift_ValueChanged);
-			// 
-			// InstrumentName
-			// 
-			this.InstrumentName.AutoEllipsis = true;
-			this.InstrumentName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.InstrumentName.Location = new System.Drawing.Point(23, 0);
-			this.InstrumentName.Name = "InstrumentName";
-			this.InstrumentName.Size = new System.Drawing.Size(54, 25);
-			this.InstrumentName.TabIndex = 6;
-			this.InstrumentName.Text = "[Piano]";
-			this.InstrumentName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// BmpLocalPerformer
 			// 
