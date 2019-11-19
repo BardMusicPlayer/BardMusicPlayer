@@ -49,8 +49,9 @@ namespace FFBardMusicPlayer.Controls {
 
 		#endregion
 
+		public EventHandler<bool> OnForcedOpen;
 		public EventHandler OnKeyboardTest;
-
+		
 		public EventHandler<MidiInput> OnMidiInputChange;
 		List<MidiInput> midiInputs = new List<MidiInput>();
 
@@ -119,6 +120,13 @@ namespace FFBardMusicPlayer.Controls {
 
 		private void SlowPlayToggle_CheckedChanged(object sender, EventArgs e) {
 			UpdateSlowPlayToggle();
+		}
+
+		private void ForceOpenToggle_CheckedChanged(object sender, EventArgs e) {
+			bool check = (sender as CheckBox).Checked;
+			Properties.Settings.Default.ForcedOpen = check;
+			Properties.Settings.Default.Save();
+			OnForcedOpen?.Invoke(this, check);
 		}
 
 		private void UpdateSlowPlayToggle() {

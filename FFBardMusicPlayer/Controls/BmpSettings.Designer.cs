@@ -148,6 +148,7 @@
         "be used when patches break playback.\r\n* Ignored when hooked to non-FFXIV applica" +
         "tions.");
 			this.ForceOpenToggle.UseVisualStyleBackColor = true;
+			this.ForceOpenToggle.CheckedChanged += new System.EventHandler(this.ForceOpenToggle_CheckedChanged);
 			// 
 			// SignatureFolder
 			// 

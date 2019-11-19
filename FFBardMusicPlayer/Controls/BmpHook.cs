@@ -31,6 +31,13 @@ namespace FFBardMusicPlayer.Controls {
 		public event EventHandler perfSettingsChanged;
 		public event EventHandler findProcessRequest;
 
+
+		public enum ProcessError {
+			ProcessFailed,
+			ProcessNonAccessible,
+		}
+		public event EventHandler<ProcessError> findProcessError;
+
 		private string CurrentCharId {
 			get {
 				if(CharIdSelector.SelectedValue != null)
@@ -247,6 +254,13 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void SetProcess(Process proc) {
+			try {
+				var a = proc.HasExited;
+			} catch (Win32Exception ex) {
+				Log(string.Format(ex.Message));
+				findProcessError.Invoke(this, ProcessError.ProcessNonAccessible);
+				return;
+			}
 			if(hook.Hook(proc)) {
 				Log(string.Format("Process hooking succeeded."));
 
@@ -261,6 +275,7 @@ namespace FFBardMusicPlayer.Controls {
 			} else {
 				Log(string.Format("Process hooking failed."));
 				SetHookStatus("F: Hook process...");
+				findProcessError.Invoke(this, ProcessError.ProcessFailed);
 			}
 		}
 

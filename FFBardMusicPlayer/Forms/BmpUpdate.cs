@@ -113,6 +113,8 @@ namespace FFBardMusicPlayer {
 						}
 
 						Properties.Settings.Default.SigVersion = version.sigVersion;
+						Console.WriteLine(string.Format("ver1: {0} ver2: {1}", version.sigVersion, Properties.Settings.Default.SigVersion));
+						Properties.Settings.Default.Save();
 
 						// New signature update
 						// Reset forced stuff so people don't get stuck on that junk

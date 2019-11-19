@@ -60,6 +60,10 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.FindProcess());
 			};
 
+			FFXIV.findProcessError += delegate (Object o, BmpHook.ProcessError error) {
+				this.Invoke(t => t.ErrorProcess(error));
+			};
+
 			FFXIV.hotkeys.OnFileLoad += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.Hotkeys_OnFileLoad(FFXIV.hotkeys));
 			};
@@ -124,6 +128,10 @@ namespace FFBardMusicPlayer.Forms {
 					FFXIV.hook.SendSyncKeybind(keybind);
 					Thread.Sleep(100);
 				}
+			};
+
+			Settings.OnForcedOpen += delegate (object o, bool open) {
+				this.Invoke(t => t.UpdatePerformance());
 			};
 
 			chordNotes = new NoteChordSimulation<BmpPlayer.NoteEvent>();
@@ -191,17 +199,26 @@ namespace FFBardMusicPlayer.Forms {
 						LocalOrchestra.PopulateLocalProcesses(processSelector.multiboxProcesses);
 						InfoTabs.SelectTab(2);
 					}
-
 				}
+			}
+		}
+
+		public void ErrorProcess(BmpHook.ProcessError error) {
+			if(error == BmpHook.ProcessError.ProcessFailed) {
+				Log("Process hooking failed.");
+			}
+			else if(error == BmpHook.ProcessError.ProcessNonAccessible) {
+				Log("Process hooking failed due to lack of privilege. Please make sure the game is not running in administrator mode. Alternatively, run BMP in administrator mode.");
 			}
 		}
 
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad(e);
 
-			Properties.Settings.Default.Upgrade();
+			//Properties.Settings.Default.Upgrade();
 
 			this.Location = Properties.Settings.Default.Location;
+			this.Size = Properties.Settings.Default.Size;
 
 			if(Properties.Settings.Default.SigIgnore) {
 				this.Log("Using local signature cache.");
@@ -249,6 +266,7 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.hook.ClearLastPerformanceKeybinds();
 
 			Properties.Settings.Default.Location = this.Location;
+			Properties.Settings.Default.Size = this.Size;
 			Properties.Settings.Default.Save();
 
 		}
@@ -422,9 +440,7 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void NextSong() {
 			if(Playlist.AdvanceNext(out string filename, out int track)) {
-				if(Playlist.AutoPlay) {
-					Playlist.PlaySelectedMidi();
-				}
+				Playlist.PlaySelectedMidi();
 			} else {
 				// If failed playlist when you wanted to, just stop
 				if(proceedPlaylistMidi) {

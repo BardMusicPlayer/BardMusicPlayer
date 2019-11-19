@@ -31,7 +31,7 @@ namespace FFBardMusicPlayer {
 		public EventHandler<int> OnTempoChange;
 		public EventHandler<string> OnTrackNameChange;
 
-		private Timer secondTimer = new Timer(1000);
+		private Timer secondTimer = new Timer(200);
 		public EventHandler<int> OnTick;
 
 		public Dictionary<Track, int> notesPlayedCount = new Dictionary<Track, int>();
@@ -68,13 +68,15 @@ namespace FFBardMusicPlayer {
 				float ms = GetTimeFromTick(CurrentTick);
 				TimeSpan t = TimeSpan.FromMilliseconds(ms);
 				return string.Format("{0:D2}:{1:D2}", (int) t.TotalMinutes, t.Seconds);
+				//return string.Format("{0}", CurrentTick);
 			}
 		}
 		public string MaxTime {
 			get {
-				float ms = GetTimeFromTick(MaxTick);
+				float ms = GetTimeFromTick(MaxTick - 1);
 				TimeSpan t = TimeSpan.FromMilliseconds(ms);
 				return string.Format("{0:D2}:{1:D2}", (int) t.TotalMinutes, t.Seconds);
+				//return string.Format("{0}", MaxTick);
 			}
 		}
 		int loadedTrack = 0;
