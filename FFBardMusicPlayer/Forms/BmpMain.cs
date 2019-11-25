@@ -16,6 +16,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
+using Timer = System.Timers.Timer;
+
+using static FFBardMusicPlayer.BmpChatListener;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 
 namespace FFBardMusicPlayer.Forms {
@@ -440,7 +444,13 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void NextSong() {
 			if(Playlist.AdvanceNext(out string filename, out int track)) {
-				Playlist.PlaySelectedMidi();
+				Timer playlistTimer = new Timer();
+				playlistTimer.Interval = 100;
+				playlistTimer.Elapsed += delegate (object o, ElapsedEventArgs e) {
+					this.Invoke(t => t.Playlist.PlaySelectedMidi());
+					playlistTimer.Dispose();
+				};
+				playlistTimer.Start();
 			} else {
 				// If failed playlist when you wanted to, just stop
 				if(proceedPlaylistMidi) {
@@ -574,6 +584,9 @@ namespace FFBardMusicPlayer.Forms {
 			if(Player.Status == PlayerStatus.Conducting) {
 				return;
 			}
+			if(!Player.Player.IsPlaying) {
+				return;
+			}
 			if(!FFXIV.IsPerformanceReady()) {
 				return;
 			}
@@ -583,7 +596,6 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-
 			if(!FFXIV.memory.ChatInputOpen) {
 				if(WantsSlow) {
 					if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
