@@ -56,7 +56,7 @@
 			this.ConductorLabel.Size = new System.Drawing.Size(144, 22);
 			this.ConductorLabel.TabIndex = 7;
 			this.ConductorLabel.Text = "CONDUCTOR";
-			this.ConductorLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.ConductorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ConductorTable
 			// 

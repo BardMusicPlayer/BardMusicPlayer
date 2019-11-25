@@ -290,7 +290,7 @@ namespace FFBardMusicPlayer.Forms {
 
 			ChatLogAll.AppendRtf(rtf);
 
-			Func<bool> cmdFunc = chatListener.FindChatCommand(item);
+			Func<bool> cmdFunc = chatListener.GetChatCommand(item);
 			if(cmdFunc != null) {
 				ChatLogCmd.AppendRtf(rtf);
 				if(cmdFunc()) {
@@ -456,12 +456,13 @@ namespace FFBardMusicPlayer.Forms {
 
 
 		private void OnMidiLyric(Object o, string lyric) {
-			if(chatListener.FindChatCommand(lyric) is Func<bool> cmdChatFunc) {
+			string chan = Properties.Settings.Default.ListenChannel;
+			if(chatListener.GetChatCommand(lyric, chan) is Func<bool> cmdChatFunc) {
 				if(cmdChatFunc()) {
 					return;
 				}
 			}
-			if(lyricListener.FindChatCommand(lyric) is Func<bool> cmdLyricFunc) {
+			if(lyricListener.GetChatCommand(lyric, chan) is Func<bool> cmdLyricFunc) {
 				if(cmdLyricFunc()) {
 					return;
 				}

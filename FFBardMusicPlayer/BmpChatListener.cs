@@ -61,7 +61,7 @@ namespace FFBardMusicPlayer {
 			return match.Success;
 		}
 
-		public Func<bool> FindChatCommand(ChatLogItem item) {
+		public Func<bool> GetChatCommand(ChatLogItem item) {
 
 			if(GetCommand(item.Line, out Command command)) {
 				command.code = item.Code;
@@ -75,27 +75,33 @@ namespace FFBardMusicPlayer {
 					}
 				}
 
-				return FindChatCommand(item.Line);
+				return new Func<bool>(() => FindChatCommand(command.command).Invoke(command));
 			}
 			return null;
 		}
-		public Func<bool> FindChatCommand(string line) {
+		public Func<bool> GetChatCommand(string cmdString, string cmdCode = "") {
 
-			if(GetCommand(line, out Command command)) {
-				
-				foreach(string cmdString in commandList.Keys) {
-					string cmd1 = cmdString;
-					string cmd2 = cmdString;
-					if(cmdString.Contains('|')) {
-						string[] str = cmdString.Split(new char[] { '|' });
-						if(str.Length == 2) {
-							cmd1 = str[0];
-							cmd2 = str[1];
-						}
+			if(GetCommand(cmdString, out Command command)) {
+				command.code = cmdCode;
+
+				return new Func<bool>(() => FindChatCommand(command.command).Invoke(command));
+			}
+			return null;
+		}
+		private Func<Command, bool> FindChatCommand(string cmd) {
+
+			foreach(string cmdString in commandList.Keys) {
+				string cmd1 = cmdString;
+				string cmd2 = cmdString;
+				if(cmdString.Contains('|')) {
+					string[] str = cmdString.Split(new char[] { '|' });
+					if(str.Length == 2) {
+						cmd1 = str[0];
+						cmd2 = str[1];
 					}
-					if(cmd1 == command.command || cmd2 == command.command) {
-						return new Func<bool>(() => commandList[cmdString].Invoke(command));
-					}
+				}
+				if(cmd1 == cmd || cmd2 == cmd) {
+					return commandList[cmdString];
 				}
 			}
 			return null;
