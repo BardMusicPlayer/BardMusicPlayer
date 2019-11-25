@@ -260,6 +260,10 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		protected override void OnClosing(CancelEventArgs e) {
+			Properties.Settings.Default.Location = this.Location;
+			Properties.Settings.Default.Size = this.Size;
+			Properties.Settings.Default.Save();
+
 			base.OnClosing(e);
 
 			FFXIV.ShutdownMemory();
@@ -268,10 +272,6 @@ namespace FFBardMusicPlayer.Forms {
 			Player.Player.Pause();
 
 			FFXIV.hook.ClearLastPerformanceKeybinds();
-
-			Properties.Settings.Default.Location = this.Location;
-			Properties.Settings.Default.Size = this.Size;
-			Properties.Settings.Default.Save();
 
 		}
 
