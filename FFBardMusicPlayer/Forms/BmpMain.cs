@@ -584,9 +584,6 @@ namespace FFBardMusicPlayer.Forms {
 			if(Player.Status == PlayerStatus.Conducting) {
 				return;
 			}
-			if(!Player.Player.IsPlaying) {
-				return;
-			}
 			if(!FFXIV.IsPerformanceReady()) {
 				return;
 			}
