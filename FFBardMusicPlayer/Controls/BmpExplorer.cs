@@ -30,6 +30,14 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		private bool PlayAllTracksEffect {
+			set {
+				if(SelectorTrack != null) {
+					SelectorTrack.Enabled = !value;
+				}
+			}
+		}
+
 		public BmpExplorer() {
 			InitializeComponent();
 			
@@ -145,6 +153,7 @@ namespace FFBardMusicPlayer.Controls {
 				SongBrowser.RefreshList();
 			};
 
+			PlayAllTracksEffect = Properties.Settings.Default.PlayAllTracks;
 		}
 
 		public bool SelectFile(string file) {
@@ -211,6 +220,10 @@ namespace FFBardMusicPlayer.Controls {
 					SongBrowser.NextFile();
 				}
 			}
+		}
+
+		private void PlayAllTracks_CheckedChanged(object sender, EventArgs e) {
+			PlayAllTracksEffect = PlayAllTracks.Checked;
 		}
 	}
 }

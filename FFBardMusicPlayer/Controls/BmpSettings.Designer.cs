@@ -68,7 +68,7 @@
 			this.GeneralSettings.Location = new System.Drawing.Point(0, 0);
 			this.GeneralSettings.Margin = new System.Windows.Forms.Padding(0);
 			this.GeneralSettings.Name = "GeneralSettings";
-			this.GeneralSettings.Size = new System.Drawing.Size(329, 318);
+			this.GeneralSettings.Size = new System.Drawing.Size(355, 318);
 			this.GeneralSettings.TabIndex = 9;
 			this.GeneralSettings.TabStop = false;
 			this.GeneralSettings.Text = "Settings";
@@ -76,7 +76,7 @@
 			// KeyboardTest
 			// 
 			this.KeyboardTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.KeyboardTest.Location = new System.Drawing.Point(227, 0);
+			this.KeyboardTest.Location = new System.Drawing.Point(253, 0);
 			this.KeyboardTest.Name = "KeyboardTest";
 			this.KeyboardTest.Size = new System.Drawing.Size(99, 23);
 			this.KeyboardTest.TabIndex = 0;
@@ -103,7 +103,7 @@
 			this.SettingsScrollPanel.Margin = new System.Windows.Forms.Padding(0);
 			this.SettingsScrollPanel.Name = "SettingsScrollPanel";
 			this.SettingsScrollPanel.Padding = new System.Windows.Forms.Padding(8);
-			this.SettingsScrollPanel.Size = new System.Drawing.Size(323, 297);
+			this.SettingsScrollPanel.Size = new System.Drawing.Size(349, 297);
 			this.SettingsScrollPanel.TabIndex = 12;
 			// 
 			// verboseToggle
@@ -153,7 +153,7 @@
 			// SignatureFolder
 			// 
 			this.SignatureFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.SignatureFolder.Location = new System.Drawing.Point(210, 203);
+			this.SignatureFolder.Location = new System.Drawing.Point(236, 203);
 			this.SignatureFolder.Name = "SignatureFolder";
 			this.SignatureFolder.Size = new System.Drawing.Size(102, 23);
 			this.SignatureFolder.TabIndex = 13;
@@ -191,7 +191,7 @@
             "None"});
 			this.SettingMidiInput.Location = new System.Drawing.Point(121, 92);
 			this.SettingMidiInput.Name = "SettingMidiInput";
-			this.SettingMidiInput.Size = new System.Drawing.Size(191, 21);
+			this.SettingMidiInput.Size = new System.Drawing.Size(217, 21);
 			this.SettingMidiInput.TabIndex = 13;
 			// 
 			// SettingChatSave
@@ -246,7 +246,7 @@
 			this.SettingsTable.Name = "SettingsTable";
 			this.SettingsTable.RowCount = 1;
 			this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.SettingsTable.Size = new System.Drawing.Size(301, 82);
+			this.SettingsTable.Size = new System.Drawing.Size(327, 82);
 			this.SettingsTable.TabIndex = 18;
 			// 
 			// ChatSettings
@@ -258,7 +258,7 @@
 			this.ChatSettings.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
 			this.ChatSettings.Name = "ChatSettings";
 			this.ChatSettings.Padding = new System.Windows.Forms.Padding(0);
-			this.ChatSettings.Size = new System.Drawing.Size(149, 82);
+			this.ChatSettings.Size = new System.Drawing.Size(162, 82);
 			this.ChatSettings.TabIndex = 11;
 			this.ChatSettings.TabStop = false;
 			this.ChatSettings.Text = "Chat listen channel";
@@ -271,7 +271,7 @@
 			this.ListenChatList.FormattingEnabled = true;
 			this.ListenChatList.Location = new System.Drawing.Point(8, 18);
 			this.ListenChatList.Name = "ListenChatList";
-			this.ListenChatList.Size = new System.Drawing.Size(129, 21);
+			this.ListenChatList.Size = new System.Drawing.Size(142, 21);
 			this.ListenChatList.TabIndex = 7;
 			this.HelpTip.SetToolTip(this.ListenChatList, "Use the selected channel as the main channel. (b.conduct)");
 			// 
@@ -296,11 +296,11 @@
 			this.PlaybackSettings.Controls.Add(this.ArpeggiateToggle);
 			this.PlaybackSettings.Controls.Add(this.SettingHoldNotes);
 			this.PlaybackSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PlaybackSettings.Location = new System.Drawing.Point(151, 0);
+			this.PlaybackSettings.Location = new System.Drawing.Point(164, 0);
 			this.PlaybackSettings.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.PlaybackSettings.Name = "PlaybackSettings";
 			this.PlaybackSettings.Padding = new System.Windows.Forms.Padding(0);
-			this.PlaybackSettings.Size = new System.Drawing.Size(150, 82);
+			this.PlaybackSettings.Size = new System.Drawing.Size(163, 82);
 			this.PlaybackSettings.TabIndex = 12;
 			this.PlaybackSettings.TabStop = false;
 			this.PlaybackSettings.Text = "Playback";
@@ -309,14 +309,13 @@
 			// 
 			this.TooFastChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.TooFastChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "TooFastDelay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.TooFastChange.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::FFBardMusicPlayer.Properties.Settings.Default, "SlowPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.TooFastChange.Font = new System.Drawing.Font("Segoe UI", 7F);
 			this.TooFastChange.Increment = new decimal(new int[] {
             5,
             0,
             0,
             0});
-			this.TooFastChange.Location = new System.Drawing.Point(108, 0);
+			this.TooFastChange.Location = new System.Drawing.Point(122, 12);
 			this.TooFastChange.Margin = new System.Windows.Forms.Padding(0);
 			this.TooFastChange.Maximum = new decimal(new int[] {
             200,
@@ -324,7 +323,7 @@
             0,
             0});
 			this.TooFastChange.Minimum = new decimal(new int[] {
-            20,
+            1,
             0,
             0,
             0});
@@ -333,19 +332,19 @@
 			this.TooFastChange.TabIndex = 5;
 			this.TooFastChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.TooFastChange.Value = global::FFBardMusicPlayer.Properties.Settings.Default.TooFastDelay;
-			this.TooFastChange.Visible = global::FFBardMusicPlayer.Properties.Settings.Default.SlowPlay;
 			// 
 			// PlayHoldChange
 			// 
 			this.PlayHoldChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.PlayHoldChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "PlayHold", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.PlayHoldChange.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::FFBardMusicPlayer.Properties.Settings.Default, "SlowPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.PlayHoldChange.Font = new System.Drawing.Font("Segoe UI", 7F);
 			this.PlayHoldChange.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-			this.PlayHoldChange.Location = new System.Drawing.Point(106, 51);
+			this.PlayHoldChange.Location = new System.Drawing.Point(122, 52);
 			this.PlayHoldChange.Margin = new System.Windows.Forms.Padding(0);
 			this.PlayHoldChange.Maximum = new decimal(new int[] {
             200,
@@ -358,7 +357,7 @@
             0,
             0});
 			this.PlayHoldChange.Name = "PlayHoldChange";
-			this.PlayHoldChange.Size = new System.Drawing.Size(41, 22);
+			this.PlayHoldChange.Size = new System.Drawing.Size(41, 20);
 			this.PlayHoldChange.TabIndex = 4;
 			this.PlayHoldChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.HelpTip.SetToolTip(this.PlayHoldChange, "For how long should the notes be held?");
@@ -439,7 +438,7 @@
 			this.Controls.Add(this.GeneralSettings);
 			this.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.Name = "BmpSettings";
-			this.Size = new System.Drawing.Size(329, 318);
+			this.Size = new System.Drawing.Size(355, 318);
 			this.GeneralSettings.ResumeLayout(false);
 			this.SettingsScrollPanel.ResumeLayout(false);
 			this.SettingsScrollPanel.PerformLayout();

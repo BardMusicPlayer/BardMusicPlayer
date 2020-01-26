@@ -112,9 +112,9 @@ namespace FFBardMusicPlayer {
 				if(noteTimers.TryRemoveTimer(t, out Timer delayedTimer)) {
 					delayedTimer.Dispose();
 				}
-
+				Console.WriteLine(string.Format("Delay notechord = {0}", tickNoteCount * 50));
 				delayedTimer = new Timer {
-					Interval = (tickNoteCount * 100),
+					Interval = (tickNoteCount * chordDetection),
 					Enabled = true,
 				};
 				delayedTimer.Elapsed += delegate {

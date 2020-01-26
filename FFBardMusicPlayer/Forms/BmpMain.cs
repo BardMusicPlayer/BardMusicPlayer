@@ -589,41 +589,46 @@ namespace FFBardMusicPlayer.Forms {
 			}
 			if(onNote.track != null) {
 				// If from midi file
-				if(onNote.track != Player.Player.LoadedTrack) {
-					return;
-				}
-			}
-			if(!FFXIV.memory.ChatInputOpen) {
-				if(WantsSlow) {
-					if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
-						int delay = Decimal.ToInt32(Properties.Settings.Default.PlayHold);
-						// Slow play
-
-						Player.Player.InternalClock.Stop();
-						FFXIV.hook.SendSyncKey(keybind.GetKey(), true, true, false);
-
-						//Bmp.Player.InternalClock.Sleep(delay);
-						Thread.Sleep(delay);
-
-						FFXIV.hook.SendSyncKey(keybind.GetKey(), true, false, true);
-						Player.Player.InternalClock.Continue();
-
+				if(!Properties.Settings.Default.PlayAllTracks) {
+					if(onNote.track != Player.Player.LoadedTrack) {
 						return;
 					}
 				}
-				if(Properties.Settings.Default.AutoArpeggiate) {
-					if(chordNotes.OnKey(onNote)) {
-						// Chord detected and queued
-						Console.WriteLine("Delay " + onNote + " by 100ms");
-					}
+			}
+			if(Sharlayan.Reader.CanGetChatInput()) {
+				if(FFXIV.memory.ChatInputOpen) {
+					return;
 				}
-				if(!chordNotes.HasTimer(onNote)) {
-					if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
-						if(WantsHold) {
-							FFXIV.hook.SendKeybindDown(keybind);
-						} else {
-							FFXIV.hook.SendAsyncKeybind(keybind);
-						}
+			}
+			if(WantsSlow) {
+				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
+					int delay = Decimal.ToInt32(Properties.Settings.Default.PlayHold);
+					// Slow play
+
+					Player.Player.InternalClock.Stop();
+					FFXIV.hook.SendSyncKey(keybind.GetKey(), true, true, false);
+
+					//Bmp.Player.InternalClock.Sleep(delay);
+					Thread.Sleep(delay);
+
+					FFXIV.hook.SendSyncKey(keybind.GetKey(), true, false, true);
+					Player.Player.InternalClock.Continue();
+
+					return;
+				}
+			}
+			if(Properties.Settings.Default.AutoArpeggiate) {
+				if(chordNotes.OnKey(onNote)) {
+					// Chord detected and queued
+					// Console.WriteLine(String.Format("Delay note {0} by 50ms", onNote.ToString()));
+				}
+			}
+			if(!chordNotes.HasTimer(onNote)) {
+				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
+					if(WantsHold) {
+						FFXIV.hook.SendKeybindDown(keybind);
+					} else {
+						FFXIV.hook.SendAsyncKeybind(keybind);
 					}
 				}
 			}

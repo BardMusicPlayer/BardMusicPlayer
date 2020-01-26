@@ -28,6 +28,7 @@
 			this.MusicReload = new System.Windows.Forms.Button();
 			this.SelectorSong = new FFBardMusicPlayer.Controls.SongSearcher();
 			this.SelectorTrack = new FFBardMusicPlayer.Components.BmpTrackShift();
+			this.PlayAllTracks = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
 			this.BrowserTable = new System.Windows.Forms.TableLayoutPanel();
 			this.SongBrowser = new FFBardMusicPlayer.Components.BmpBrowser(this.components);
 			this.SeekerTable.SuspendLayout();
@@ -37,15 +38,16 @@
 			// 
 			// SeekerTable
 			// 
-			this.SeekerTable.ColumnCount = 3;
+			this.SeekerTable.ColumnCount = 4;
 			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.SeekerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.SeekerTable.Controls.Add(this.MusicReload, 0, 0);
 			this.SeekerTable.Controls.Add(this.SelectorSong, 1, 0);
 			this.SeekerTable.Controls.Add(this.SelectorTrack, 2, 0);
+			this.SeekerTable.Controls.Add(this.PlayAllTracks, 3, 0);
 			this.SeekerTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.SeekerTable.Location = new System.Drawing.Point(0, 0);
 			this.SeekerTable.Margin = new System.Windows.Forms.Padding(0);
@@ -79,7 +81,7 @@
 			this.SelectorSong.Location = new System.Drawing.Point(28, 0);
 			this.SelectorSong.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.SelectorSong.Name = "SelectorSong";
-			this.SelectorSong.Size = new System.Drawing.Size(733, 22);
+			this.SelectorSong.Size = new System.Drawing.Size(673, 22);
 			this.SelectorSong.TabIndex = 1;
 			this.SelectorSong.Text = "Click here to load Midi file...";
 			this.SelectorSong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -88,14 +90,31 @@
 			// 
 			this.SelectorTrack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
 			this.SelectorTrack.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SelectorTrack.Enabled = false;
 			this.SelectorTrack.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.SelectorTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-			this.SelectorTrack.Location = new System.Drawing.Point(763, 0);
+			this.SelectorTrack.Location = new System.Drawing.Point(703, 0);
 			this.SelectorTrack.Margin = new System.Windows.Forms.Padding(0);
 			this.SelectorTrack.Name = "SelectorTrack";
 			this.SelectorTrack.Size = new System.Drawing.Size(50, 25);
 			this.SelectorTrack.TabIndex = 2;
 			this.SelectorTrack.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// PlayAllTracks
+			// 
+			this.PlayAllTracks.Appearance = System.Windows.Forms.Appearance.Button;
+			this.PlayAllTracks.AutoSize = true;
+			this.PlayAllTracks.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.PlayAllTracks;
+			this.PlayAllTracks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "PlayAllTracks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.PlayAllTracks.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PlayAllTracks.Location = new System.Drawing.Point(753, 0);
+			this.PlayAllTracks.Margin = new System.Windows.Forms.Padding(0);
+			this.PlayAllTracks.Name = "PlayAllTracks";
+			this.PlayAllTracks.Size = new System.Drawing.Size(60, 24);
+			this.PlayAllTracks.TabIndex = 3;
+			this.PlayAllTracks.Text = "All tracks";
+			this.PlayAllTracks.UseVisualStyleBackColor = true;
+			this.PlayAllTracks.CheckedChanged += new System.EventHandler(this.PlayAllTracks_CheckedChanged);
 			// 
 			// BrowserTable
 			// 
@@ -151,5 +170,6 @@
 		private Components.BmpTrackShift SelectorTrack;
 		private System.Windows.Forms.TableLayoutPanel BrowserTable;
 		private Components.BmpBrowser SongBrowser;
+		private Components.BmpCheckButton PlayAllTracks;
 	}
 }
