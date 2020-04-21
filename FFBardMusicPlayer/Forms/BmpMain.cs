@@ -54,6 +54,14 @@ namespace FFBardMusicPlayer.Forms {
 					updateText = update.version.updateText;
 					updateResult = DialogResult.Yes;
 				}
+				if(updateResult == DialogResult.Ignore) {
+					string log = " This is a preview of a future version of BMP! Please be kind and report any bugs or unexpected behaviors to discord channel.";
+					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(log, Color.LightYellow, true));
+				}
+				if(!string.IsNullOrEmpty(update.version.updateLog)) {
+					string log = string.Format("= BMP Update =\n {0} \n", update.version.updateLog);
+					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(log, Color.LightGreen, true));
+				}
 			}
 			this.Text = update.version.ToString();
 

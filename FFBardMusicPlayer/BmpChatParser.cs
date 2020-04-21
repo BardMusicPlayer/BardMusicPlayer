@@ -1,6 +1,7 @@
 ﻿using Sharlayan.Core;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,9 +11,8 @@ namespace FFBardMusicPlayer {
 	class BmpChatParser {
 
 		public static string Fixup(ChatLogItem item) {
-			string format = item.Line;
 			Regex rgx = new Regex("^([^ ]+ [^:]+):(.+)");
-			format = rgx.Replace(format, "$1: $2");
+			string format = rgx.Replace(item.Line, "$1: $2");
 
 			switch(item.Code) {
 				case "000E": { // Party
@@ -72,8 +72,12 @@ namespace FFBardMusicPlayer {
 		}
 
 		// Format for RTF
-		public static string FormatRtf(string format, string col = @"\red255\green255\blue255", bool bold = false) {
+		public static string FormatRtf(string format, Color color = new Color(), bool bold = false) {
 			string ftext = GetRtfUnicodeEscapedString(format);
+			if(color.IsEmpty) {
+				color = Color.White;
+			}
+			string col = string.Format(@"\red{0}\green{1}\blue{2}", color.R, color.G, color.B);
 			if(bold) {
 				ftext = string.Format("\\b" + ftext + "\\b0");
 			}
@@ -86,38 +90,38 @@ namespace FFBardMusicPlayer {
 			string timestamp = item.TimeStamp.ToShortTimeString();
 
 			bool bold = false;
-			string col = string.Empty;
+			Color col = Color.White;
 			switch(item.Code) {
 				case "000E": { // Party
-					col = @"\red150\green150\blue250";
+					col = Color.FromArgb(255, 150, 150, 250);
 					break;
 				}
 				case "000D": { // PM receive
-					col = @"\red150\green150\blue250";
+					col = Color.FromArgb(255, 150, 150, 250);
 					break;
 				}
 				case "000C": { // PM Send
-					col = @"\red150\green150\blue250";
+					col = Color.FromArgb(255, 150, 150, 250);
 					break;
 				}
 				case "001D": { // Emote
-					col = @"\red250\green150\blue150";
+					col = Color.FromArgb(255, 250, 150, 150);
 					break;
 				}
 				case "001C": { // Custom emote
-					col = @"\red250\green150\blue150";
+					col = Color.FromArgb(255, 250, 150, 150);
 					break;
 				}
 				case "000A": { // Say
-					col = @"\red240\green240\blue240";
+					col = Color.FromArgb(255, 240, 240, 240);
 					break;
 				}
 				case "0839": { // System
-					col = @"\red20\green20\blue20";
+					col = Color.FromArgb(255, 20, 20, 20);
 					break;
 				}
 				case "0018": { // FC
-					col = @"\red150\green200\blue150";
+					col = Color.FromArgb(255, 150, 200, 150);
 					break;
 				}
 				case "0010":
@@ -128,11 +132,11 @@ namespace FFBardMusicPlayer {
 				case "0015":
 				case "0016":
 				case "0017": {
-					col = @"\red200\green200\blue150";
+					col = Color.FromArgb(255, 200, 200, 150);
 					break;
 				}
 				default: {
-					col = @"\red200\green200\blue200";
+					col = Color.FromArgb(255, 200, 200, 200);
 					break;
 				}
 			}
@@ -145,6 +149,8 @@ namespace FFBardMusicPlayer {
 			foreach(var c in s) {
 				if(c == '\\' || c == '{' || c == '}')
 					sb.Append(@"\" + c);
+				else if(c == '\n')
+					sb.Append(@"\par");
 				else if(c <= 0x7f)
 					sb.Append(c);
 				else
