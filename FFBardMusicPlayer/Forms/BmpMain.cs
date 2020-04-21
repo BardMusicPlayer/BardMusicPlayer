@@ -21,6 +21,7 @@ using Timer = System.Timers.Timer;
 
 using static FFBardMusicPlayer.BmpChatListener;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
+using System.Security.Principal;
 
 namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
@@ -38,7 +39,17 @@ namespace FFBardMusicPlayer.Forms {
 
 		bool tempPlaying = false;
 
-		// TODO remove forced mode checkbox?
+		public bool DonationStatus {
+			set {
+				if(value) {
+					this.BackColor = Color.PaleGoldenrod;
+					BottomTable.BackColor = Color.DarkKhaki;
+					Explorer.BackColor = Color.DarkKhaki;
+					DonationButton.Visible = false;
+				}
+			}
+		}
+
 
 		public BmpMain() {
 			InitializeComponent();
@@ -68,6 +79,14 @@ namespace FFBardMusicPlayer.Forms {
 			// Clear local orchestra
 			InfoTabs.TabPages.Remove(localOrchestraTab);
 
+			LocalOrchestra.onMemoryCheck += delegate (Object o, bool status) {
+				if(status) {
+					this.FFXIV.memory.StopThread();
+				} else {
+					this.FFXIV.memory.StartThread();
+				}
+			};
+
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.FindProcess());
 			};
@@ -82,6 +101,33 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.hook.OnKeyPressed += Hook_OnKeyPressed;
 			FFXIV.memory.OnProcessReady += delegate (object o, Process proc) {
 				this.Log(string.Format("[{0}] Process scanned and ready.", proc.Id));
+				if(Sharlayan.Reader.CanGetActors()) {
+					if(!Sharlayan.Reader.CanGetCharacterId()) {
+						this.Log("[MEMORY] Cannot get Character ID.\n Key bindings won't be loaded, load it manually by selecting an ID in the bottom right.");
+					}
+					if(!Sharlayan.Reader.CanGetChatInput()) {
+						this.Log("[MEMORY] Cannot get chat input status.\n Midi lyrics and automatically pausing when chatting won't work.");
+					}
+					if(!Sharlayan.Reader.CanGetPerformance()) {
+						this.Log("[MEMORY] Cannot get performance status.\n Performance detection will not work. Force it to work by ticking Settings > Force playback.");
+					}
+				} else {
+					List<Sharlayan.Models.Signature> signatures = Sharlayan.Signatures.Resolve().ToList();
+					int sigCount = signatures.Count;
+					foreach(Sharlayan.Models.Signature sig in signatures) {
+						if(Sharlayan.Scanner.Instance.Locations.ContainsKey(sig.Key)) {
+							sigCount--;
+						} else {
+							Console.WriteLine(string.Format("Could not find signature {0}", sig.Key));
+						}
+					}
+					if(sigCount == signatures.Count) {
+						this.Log(string.Format("[MEMORY] Cannot read memory ({0}/{1}). Functionality will be severely limited.", sigCount, signatures.Count));
+						this.Invoke(t => t.ErrorProcess(BmpHook.ProcessError.ProcessNonAccessible));
+					} else {
+						this.Log("[MEMORY] Cannot read actors. Local performance will be broken.");
+					}
+				}
 			};
 			FFXIV.memory.OnProcessLost += delegate (object o, EventArgs arg) {
 				this.Log("Attached process exited.");
@@ -102,6 +148,22 @@ namespace FFBardMusicPlayer.Forms {
 				string format = string.Format("Character [{0}] logged in.", res.CurrentPlayer.Name);
 				this.Log(format);
 
+				if(!Program.programOptions.DisableUpdate) {
+					string world = string.Empty;
+					if(Sharlayan.Reader.CanGetWorld()) {
+						world = Sharlayan.Reader.GetWorld();
+					}
+					BmpDonationChecker don = new BmpDonationChecker(res.CurrentPlayer.Name, world);
+					don.OnDonatorResponse += delegate (Object obj, BmpDonationChecker.DonatorResponse donres) {
+						if(donres.donator) {
+							if(!string.IsNullOrEmpty(donres.donationMessage)) {
+								this.Log(donres.donationMessage);
+							}
+						}
+						this.Invoke(t => t.DonationStatus = donres.donator);
+					};
+				}
+
 				this.Invoke(t => t.UpdatePerformance());
 			};
 			FFXIV.memory.OnCurrentPlayerLogout += delegate (object o, CurrentPlayerResult res) {
@@ -118,6 +180,8 @@ namespace FFBardMusicPlayer.Forms {
 
 			Player.OnSongSkip += OnSongSkip;
 			Player.OnMidiLyric += OnMidiLyric;
+
+			Player.OnMidiProgressChange += OnPlayProgressChange;
 
 			Player.OnMidiStatusChange += OnPlayStatusChange;
 			Player.OnMidiStatusEnded += OnPlayStatusEnded;
@@ -150,17 +214,26 @@ namespace FFBardMusicPlayer.Forms {
 			chordNotes.NoteEvent += OnMidiVoice;
 
 			Explorer.OnBrowserVisibleChange += delegate (object o, bool visible) {
+				MainTable.SuspendLayout();
 				MainTable.RowStyles[MainTable.GetRow(ChatPlaylistTable)].Height = visible ? 0 : 100;
 				MainTable.RowStyles[MainTable.GetRow(ChatPlaylistTable)].SizeType = visible ? SizeType.Absolute : SizeType.Percent;
 				//ChatPlaylistTable.Invoke(t => t.Visible = !visible);
 
 				MainTable.RowStyles[MainTable.GetRow(Explorer)].Height = visible ? 100 : 30;
 				MainTable.RowStyles[MainTable.GetRow(Explorer)].SizeType = visible ? SizeType.Percent : SizeType.Absolute;
+				MainTable.ResumeLayout(true);
 			};
 			Explorer.OnBrowserSelect += Browser_OnMidiSelect;
 
 			Playlist.OnMidiSelect += Playlist_OnMidiSelect;
 			Playlist.OnPlaylistRequestAdd += Playlist_OnPlaylistRequestAdd;
+
+			this.ResizeBegin += (s, e) => {
+				LocalOrchestra.SuspendLayout();
+			};
+			this.ResizeEnd += (s, e) => {
+				LocalOrchestra.ResumeLayout(true);
+			};
 
 			if(Properties.Settings.Default.SaveLog) {
 				FileTarget target = new NLog.Targets.FileTarget("chatlog") {
@@ -185,7 +258,7 @@ namespace FFBardMusicPlayer.Forms {
 			Log("Bard Music Player initialized.");
 		}
 		public void LogMidi(string format) {
-			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[MIDI] " + format, "\\red255\\green180\\blue255"));
+			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[MIDI] " + format, Color.LightPink));
 		}
 		public void Log(string format) {
 			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[SYSTEM] " + format));
@@ -207,8 +280,9 @@ namespace FFBardMusicPlayer.Forms {
 						InfoTabs.TabPages.Remove(localOrchestraTab);
 					}
 					LocalOrchestra.OrchestraEnabled = processSelector.useLocalOrchestra;
-					if(processSelector.useLocalOrchestra) {
+					if(LocalOrchestra.OrchestraEnabled) {
 						LocalOrchestra.PopulateLocalProcesses(processSelector.multiboxProcesses);
+						LocalOrchestra.Sequencer = Player.Player;
 						InfoTabs.SelectTab(2);
 					}
 				}
@@ -220,7 +294,12 @@ namespace FFBardMusicPlayer.Forms {
 				Log("Process hooking failed.");
 			}
 			else if(error == BmpHook.ProcessError.ProcessNonAccessible) {
-				Log("Process hooking failed due to lack of privilege. Please make sure the game is not running in administrator mode. Alternatively, run BMP in administrator mode.");
+				bool admin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+				if(!admin) {
+					MessageBox.Show(this, "Process memory cannot be read.\nPlease start BMP in administrator mode.", "Process not accessible");
+				} else {
+					Log("Process hooking failed due to lack of privilege. Please make sure the game is not running in administrator mode.");
+				}
 			}
 		}
 
@@ -231,6 +310,9 @@ namespace FFBardMusicPlayer.Forms {
 
 			this.Location = Properties.Settings.Default.Location;
 			this.Size = Properties.Settings.Default.Size;
+			if(this.WindowState == FormWindowState.Minimized) {
+				this.WindowState = FormWindowState.Maximized;
+			}
 
 			if(Properties.Settings.Default.SigIgnore) {
 				this.Log("Using local signature cache.");
@@ -268,11 +350,12 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		protected override void OnClosing(CancelEventArgs e) {
-			Properties.Settings.Default.Location = this.Location;
-			Properties.Settings.Default.Size = this.Size;
-			Properties.Settings.Default.Save();
 
-			base.OnClosing(e);
+			if(!this.IsDisposed) {
+				Properties.Settings.Default.Location = this.Location;
+				Properties.Settings.Default.Size = this.Size;
+				Properties.Settings.Default.Save();
+			}
 
 			FFXIV.ShutdownMemory();
 
@@ -281,6 +364,7 @@ namespace FFBardMusicPlayer.Forms {
 
 			FFXIV.hook.ClearLastPerformanceKeybinds();
 
+			base.OnClosing(e);
 		}
 
 		private void Hotkeys_OnFileLoad(FFXIVKeybindDat hotkeys) {
@@ -350,20 +434,7 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private void LocalOrchestraUpdate(List<ActorItem> actors) {
-			if(Sharlayan.Reader.CanGetPerformance()) {
-				PerformanceResult performance = Sharlayan.Reader.GetPerformance();
-				foreach(ActorItem actor in actors) {
-					uint perfId = actor.PerformanceID / 2;
-					if(perfId < 99) {
-						PerformanceItem item = performance.Performances[perfId];
-						BmpLocalPerformer perf = LocalOrchestra.FindPerformer(actor.Name);
-						if(perf != null) {
-							perf.UiEnabled = item.IsReady();
-						}
-						//Console.WriteLine(string.Format("{1} ({0}) => {2}", actor.ID, actor.Name, item.IsReady()));
-					}
-				}
-			}
+			LocalOrchestra.UpdateMemory();
 		}
 
 		private void UpdatePerformance() {
@@ -402,6 +473,7 @@ namespace FFBardMusicPlayer.Forms {
 			} catch (Exception e) {
 				this.LogMidi(string.Format("[{0}] cannot be loaded:", entry.FilePath.FilePath));
 				this.LogMidi(e.Message);
+				Console.WriteLine(e.StackTrace);
 				error = true;
 			}
 			if(!error) {
@@ -413,8 +485,11 @@ namespace FFBardMusicPlayer.Forms {
 			}
 			Playlist.Deselect();
 
-			Explorer.Invoke(t => t.SetTrackName(entry.FilePath.FilePath));
-			Explorer.Invoke(t => t.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack));
+			this.SuspendLayout();
+			Explorer.SetTrackName(entry.FilePath.FilePath);
+			Explorer.SetTrackNums(Player.Player.CurrentTrack, Player.Player.MaxTrack);
+			this.ResumeLayout(true);
+
 			Explorer.SongBrowserVisible = false;
 
 			Statistics.SetBpmCount(Player.Tempo);
@@ -424,7 +499,7 @@ namespace FFBardMusicPlayer.Forms {
 			Statistics.SetLyricsBool((Player.Player.LyricNum > 0));
 
 			if(LocalOrchestra.OrchestraEnabled) {
-				LocalOrchestra.SequencerReference = Player.Player;
+				LocalOrchestra.Sequencer = Player.Player;
 			}
 		}
 		private void Playlist_OnMidiSelect(object o, BmpMidiEntry entry) {
@@ -489,11 +564,19 @@ namespace FFBardMusicPlayer.Forms {
 				FFXIV.SendChatString(lyric);
 			}
 		}
+		private void OnPlayProgressChange(Object o, int progress) {
+			if(LocalOrchestra.OrchestraEnabled) {
+				LocalOrchestra.PerformerProgress(progress);
+			}
+		}
 		private void OnPlayStatusChange(Object o, bool playing) {
 			if(!playing) {
 				if(tempPlaying) {
 					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback paused."));
 					tempPlaying = false;
+				}
+				if(LocalOrchestra.OrchestraEnabled) {
+					LocalOrchestra.PerformerPlay(false);
 				}
 				FFXIV.hook.ClearLastPerformanceKeybinds();
 				chordNotes.Clear();
@@ -501,6 +584,9 @@ namespace FFBardMusicPlayer.Forms {
 				if(!tempPlaying) {
 					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
 					tempPlaying = true;
+				}
+				if(LocalOrchestra.OrchestraEnabled) {
+					LocalOrchestra.PerformerPlay(true);
 				}
 				Statistics.Restart();
 				if(Properties.Settings.Default.OpenFFXIV) {
@@ -579,13 +665,12 @@ namespace FFBardMusicPlayer.Forms {
 					string ns = FFXIVKeybindDat.RawNoteByteToPianoKey(onNote.note);
 					if(!string.IsNullOrEmpty(ns)) {
 						string str = string.Format("Note {0} is out of range, it will not be played.", ns);
-						ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(str, "\\red255\\green200\\blue200"));
+						this.LogMidi(str);
 					}
 				}
 			}
 			
 			if(LocalOrchestra.OrchestraEnabled) {
-				LocalOrchestra.ProcessOnNote(onNote);
 				return;
 			}
 
@@ -646,7 +731,6 @@ namespace FFBardMusicPlayer.Forms {
 
 
 			if(LocalOrchestra.OrchestraEnabled) {
-				LocalOrchestra.ProcessOffNote(offNote);
 				return;
 			}
 			
@@ -681,6 +765,10 @@ namespace FFBardMusicPlayer.Forms {
 		private void AboutLabel_Click(object sender, EventArgs e) {
 			BmpAbout about = new BmpAbout();
 			about.ShowDialog(this);
+		}
+
+		private void DonationButton_Click(object sender, EventArgs e) {
+			System.Diagnostics.Process.Start(Program.urlBase + "#donate");
 		}
 	}
 }

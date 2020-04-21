@@ -309,7 +309,7 @@
 			// 
 			this.TooFastChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.TooFastChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "TooFastDelay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.TooFastChange.Font = new System.Drawing.Font("Segoe UI", 7F);
+			this.TooFastChange.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.TooFastChange.Increment = new decimal(new int[] {
             5,
             0,
@@ -328,9 +328,10 @@
             0,
             0});
 			this.TooFastChange.Name = "TooFastChange";
-			this.TooFastChange.Size = new System.Drawing.Size(41, 20);
+			this.TooFastChange.Size = new System.Drawing.Size(41, 22);
 			this.TooFastChange.TabIndex = 5;
 			this.TooFastChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.HelpTip.SetToolTip(this.TooFastChange, "How many milliseconds for detecting chords?");
 			this.TooFastChange.Value = global::FFBardMusicPlayer.Properties.Settings.Default.TooFastDelay;
 			// 
 			// PlayHoldChange
@@ -338,7 +339,7 @@
 			this.PlayHoldChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.PlayHoldChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "PlayHold", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.PlayHoldChange.DataBindings.Add(new System.Windows.Forms.Binding("Visible", global::FFBardMusicPlayer.Properties.Settings.Default, "SlowPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.PlayHoldChange.Font = new System.Drawing.Font("Segoe UI", 7F);
+			this.PlayHoldChange.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.PlayHoldChange.Increment = new decimal(new int[] {
             10,
             0,
@@ -357,7 +358,7 @@
             0,
             0});
 			this.PlayHoldChange.Name = "PlayHoldChange";
-			this.PlayHoldChange.Size = new System.Drawing.Size(41, 20);
+			this.PlayHoldChange.Size = new System.Drawing.Size(41, 22);
 			this.PlayHoldChange.TabIndex = 4;
 			this.PlayHoldChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.HelpTip.SetToolTip(this.PlayHoldChange, "For how long should the notes be held?");

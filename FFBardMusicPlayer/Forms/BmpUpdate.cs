@@ -90,6 +90,9 @@ namespace FFBardMusicPlayer {
 				}
 
 				this.DialogResult = (version.updateVersion > UpdateVersion.Version) ? DialogResult.Yes : DialogResult.No;
+				if(UpdateVersion.Version > version.updateVersion) {
+					this.DialogResult = DialogResult.Ignore;
+				}
 
 
 				// If not ignoring updates
@@ -137,6 +140,7 @@ namespace FFBardMusicPlayer {
 		public float updateVersion = 0f;
 		public string updateText = "";
 		public string updateTitle = "";
+		public string updateLog = "";
 
 		public string appName = "Bard Music Player";
 #if DEBUG

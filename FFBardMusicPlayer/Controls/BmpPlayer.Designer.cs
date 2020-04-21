@@ -47,23 +47,22 @@
 			this.PlayerGroup.SuspendLayout();
 			this.PlayTable.SuspendLayout();
 			this.TrackTable.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize) (this.TrackProgress)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.TrackProgress)).BeginInit();
 			this.KeyboardTable.SuspendLayout();
 			this.TrackControls.SuspendLayout();
 			this.InfoTable.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize) (this.SelectorOctave)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.SelectorSpeed)).BeginInit();
-			((System.ComponentModel.ISupportInitialize) (this.BrowserList)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorOctave)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorSpeed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.BrowserList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// PlayerGroup
 			// 
-			this.PlayerGroup.BackColor = System.Drawing.Color.Gainsboro;
 			this.PlayerGroup.Controls.Add(this.PlayTable);
 			this.PlayerGroup.Controls.Add(this.SelectorOctave);
 			this.PlayerGroup.Controls.Add(this.SelectorSpeed);
 			this.PlayerGroup.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PlayerGroup.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+			this.PlayerGroup.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.PlayerGroup.Location = new System.Drawing.Point(0, 0);
 			this.PlayerGroup.Margin = new System.Windows.Forms.Padding(0);
 			this.PlayerGroup.Name = "PlayerGroup";
@@ -136,11 +135,10 @@
 			// 
 			// TrackProgress
 			// 
-			this.TrackProgress.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.TrackProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.TrackProgress.AutoSize = false;
-			this.TrackProgress.BackColor = System.Drawing.Color.Gainsboro;
 			this.TrackProgress.LargeChange = 1;
 			this.TrackProgress.Location = new System.Drawing.Point(50, 0);
 			this.TrackProgress.Margin = new System.Windows.Forms.Padding(0);
@@ -172,13 +170,13 @@
 			// 
 			this.KeyboardCtl.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.KeyboardCtl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.KeyboardCtl.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+			this.KeyboardCtl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.KeyboardCtl.Location = new System.Drawing.Point(1, 1);
 			this.KeyboardCtl.Margin = new System.Windows.Forms.Padding(1);
 			this.KeyboardCtl.Name = "KeyboardCtl";
+			this.KeyboardCtl.OverrideText = null;
 			this.KeyboardCtl.Size = new System.Drawing.Size(376, 112);
 			this.KeyboardCtl.TabIndex = 6;
-			this.KeyboardCtl.Text = null;
 			// 
 			// TrackControls
 			// 
@@ -294,22 +292,22 @@
 			// 
 			// SelectorOctave
 			// 
-			this.SelectorOctave.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.SelectorOctave.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (50)))), ((int) (((byte) (50)))), ((int) (((byte) (50)))));
+			this.SelectorOctave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.SelectorOctave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
 			this.SelectorOctave.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.SelectorOctave.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (250)))), ((int) (((byte) (250)))), ((int) (((byte) (250)))));
+			this.SelectorOctave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
 			this.SelectorOctave.Location = new System.Drawing.Point(391, -1);
 			this.SelectorOctave.Margin = new System.Windows.Forms.Padding(0);
 			this.SelectorOctave.Maximum = new decimal(new int[] {
-			4,
-			0,
-			0,
-			0});
+            4,
+            0,
+            0,
+            0});
 			this.SelectorOctave.Minimum = new decimal(new int[] {
-			4,
-			0,
-			0,
-			-2147483648});
+            4,
+            0,
+            0,
+            -2147483648});
 			this.SelectorOctave.Name = "SelectorOctave";
 			this.SelectorOctave.Size = new System.Drawing.Size(50, 23);
 			this.SelectorOctave.TabIndex = 4;
@@ -319,37 +317,37 @@
 			// 
 			// SelectorSpeed
 			// 
-			this.SelectorSpeed.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.SelectorSpeed.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (120)))), ((int) (((byte) (120)))), ((int) (((byte) (120)))));
+			this.SelectorSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.SelectorSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
 			this.SelectorSpeed.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.SelectorSpeed.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (250)))), ((int) (((byte) (250)))), ((int) (((byte) (250)))));
+			this.SelectorSpeed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
 			this.SelectorSpeed.Increment = new decimal(new int[] {
-			5,
-			0,
-			0,
-			0});
+            5,
+            0,
+            0,
+            0});
 			this.SelectorSpeed.Location = new System.Drawing.Point(340, -1);
 			this.SelectorSpeed.Margin = new System.Windows.Forms.Padding(0);
 			this.SelectorSpeed.Maximum = new decimal(new int[] {
-			200,
-			0,
-			0,
-			0});
+            200,
+            0,
+            0,
+            0});
 			this.SelectorSpeed.Minimum = new decimal(new int[] {
-			10,
-			0,
-			0,
-			0});
+            10,
+            0,
+            0,
+            0});
 			this.SelectorSpeed.Name = "SelectorSpeed";
 			this.SelectorSpeed.Size = new System.Drawing.Size(54, 23);
 			this.SelectorSpeed.TabIndex = 3;
 			this.SelectorSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.HelpTip.SetToolTip(this.SelectorSpeed, "Speed shift");
 			this.SelectorSpeed.Value = new decimal(new int[] {
-			100,
-			0,
-			0,
-			0});
+            100,
+            0,
+            0,
+            0});
 			this.SelectorSpeed.ValueChanged += new System.EventHandler(this.SelectorSpeed_ValueChanged);
 			// 
 			// HelpTip
@@ -378,13 +376,13 @@
 			this.PlayerGroup.ResumeLayout(false);
 			this.PlayTable.ResumeLayout(false);
 			this.TrackTable.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize) (this.TrackProgress)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.TrackProgress)).EndInit();
 			this.KeyboardTable.ResumeLayout(false);
 			this.TrackControls.ResumeLayout(false);
 			this.InfoTable.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize) (this.SelectorOctave)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.SelectorSpeed)).EndInit();
-			((System.ComponentModel.ISupportInitialize) (this.BrowserList)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorOctave)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.SelectorSpeed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.BrowserList)).EndInit();
 			this.ResumeLayout(false);
 
 		}

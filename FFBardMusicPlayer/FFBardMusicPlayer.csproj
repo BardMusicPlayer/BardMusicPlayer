@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BmpAudioSessions.cs" />
+    <Compile Include="BmpDonationChecker.cs" />
     <Compile Include="Controls\BmpLocalOrchestra.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -118,6 +119,12 @@
     </Compile>
     <Compile Include="Controls\BmpLocalPerformer.Designer.cs">
       <DependentUpon>BmpLocalPerformer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BmpMiniScroller.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BmpMiniScroller.Designer.cs">
+      <DependentUpon>BmpMiniScroller.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\BmpStatistics.cs">
       <SubType>UserControl</SubType>
@@ -324,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpLocalPerformer.resx">
       <DependentUpon>BmpLocalPerformer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BmpMiniScroller.resx">
+      <DependentUpon>BmpMiniScroller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpStatistics.resx">
       <DependentUpon>BmpStatistics.cs</DependentUpon>

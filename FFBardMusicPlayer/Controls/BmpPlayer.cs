@@ -23,6 +23,7 @@ namespace FFBardMusicPlayer.Controls {
 		public EventHandler<Track> OnMidiTrackLoad;
 		public EventHandler<string> OnMidiLyric;
 		public EventHandler<bool> OnMidiStatusChange;
+		public EventHandler<int> OnMidiProgressChange;
 		public EventHandler OnMidiStatusEnded;
 
 		public class NoteEvent {
@@ -50,6 +51,7 @@ namespace FFBardMusicPlayer.Controls {
 				bool solo = (bmpStatus == PlayerStatus.Performing);
 
 				SelectorOctave.Visible = solo;
+				SelectorSpeed.Visible = solo;
 
 				switch(bmpStatus) {
 					case PlayerStatus.Performing: {
@@ -361,9 +363,10 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			if(e.Button == MouseButtons.Left && !player.IsPlaying) {
 				float v = ((float) (e.X - 6) / (float) (TrackProgress.Width - 12));
-				if(v > 0f) {
+				if(v >= 0f && v <= 1f) {
 					v = v * (TrackProgress.Maximum - TrackProgress.Minimum);
 					player.Position = ((int) v);
+					OnMidiProgressChange?.Invoke(this, (int) v);
 					UpdatePlayer();
 				}
 			}

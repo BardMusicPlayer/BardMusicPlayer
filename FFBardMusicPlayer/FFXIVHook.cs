@@ -326,6 +326,7 @@ namespace FFBardMusicPlayer {
 				// This is a Synced key so as to somewhat have control
 				// over the delay 
 				SendSyncKey(key, true, false, true);
+				Console.WriteLine("Wait for Synckey up");
 			}
 			if(!keyTimers.HasTimer(keybind)) {
 				SendAsyncKey(key, true, true, false);

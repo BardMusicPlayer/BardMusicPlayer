@@ -15,13 +15,13 @@ using Sanford.Multimedia.Midi;
 using Timer = System.Timers.Timer;
 using System.Timers;
 using System.Threading;
+using Sharlayan.Models.ReadResults;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalPerformer : UserControl {
 
 		private FFXIVKeybindDat hotkeys = new FFXIVKeybindDat();
 		private FFXIVHotbarDat hotbar = new FFXIVHotbarDat();
-		//private FFXIVAddonDat addon = new FFXIVAddonDat();
 		private FFXIVHook hook = new FFXIVHook();
 
 		private Instrument chosenInstrument = Instrument.Piano;
@@ -29,6 +29,21 @@ namespace FFBardMusicPlayer.Controls {
 			set {
 				chosenInstrument = value;
 				InstrumentName.Text = string.Format("[{0}]", value.ToString());
+			}
+		}
+
+		private BmpSequencer sequencer;
+		public BmpSequencer Sequencer {
+			set {
+				if(value != null) {
+					Console.WriteLine(string.Format("Performer [{0}] MIDI: [{1}]", this.PerformerName, value.LoadedFilename));
+					if(!string.IsNullOrEmpty(value.LoadedFilename)) {
+						sequencer = new BmpSequencer(value.LoadedFilename, this.TrackNum);
+						sequencer.OnNote += InternalNote;
+						sequencer.OffNote += InternalNote;
+					}
+					this.Update(value);
+				}
 			}
 		}
 
@@ -70,60 +85,104 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		private bool uiEnabled = true;
-		public bool UiEnabled {
-			get { return uiEnabled; }
+		public uint performanceId = 0;
+		public uint actorId = 0;
+
+		private bool performanceUp = false;
+		public bool PerformanceUp {
+			get { return performanceUp; }
 			set {
-				uiEnabled = value;
-				this.InstrumentName.Enabled = uiEnabled;
-				this.CharacterName.Enabled = uiEnabled;
-				this.Keyboard.Enabled = uiEnabled;
+				performanceUp = value;
+
+				UiEnabled = performanceUp;
+			}
+		}
+		
+		public bool UiEnabled {
+			set {
+				this.InstrumentName.Enabled = value;
+				this.CharacterName.Enabled = value;
+				this.Keyboard.Enabled = value;
 				if(!hostProcess) {
-					this.CharacterName.BackColor = uiEnabled ? Color.Transparent : Color.FromArgb(235, 120, 120);
+					this.CharacterName.BackColor = value ? Color.Transparent : Color.FromArgb(235, 120, 120);
 				}
-				if(!uiEnabled) {
+				if(!value) {
 					hook.ClearLastPerformanceKeybinds();
 				}
 			}
 		}
 
 
-		public BmpLocalPerformer(MultiboxProcess mp = null) {
+		public BmpLocalPerformer() {
+			InitializeComponent();
+		}
+
+		public BmpLocalPerformer(MultiboxProcess mp) {
 			InitializeComponent();
 
 			this.ChosenInstrument = this.chosenInstrument;
 
 			if(mp != null) {
-				SetMultiboxProcess(mp);
+				hook.Hook(mp.process, false);
+				hotkeys.LoadKeybindDat(mp.characterId);
+				hotbar.LoadHotbarDat(mp.characterId);
+				CharacterName.Text = mp.characterName;
 			}
 
 			chordNotes.NoteEvent += delegate (object o, NoteEvent e) {
 				this.Invoke(t => t.ProcessOnNote(e));
 			};
+
+			Scroller.OnScroll += delegate (object o, int scroll) {
+				this.sequencer.Seek(scroll);
+			};
+			Scroller.OnStatusClick += delegate (object o, EventArgs a) {
+				Scroller.Text = this.sequencer.Position.ToString();
+			};
 		}
 
-		public void SetMultiboxProcess(MultiboxProcess mp) {
-			hook.Hook(mp.process, false);
-			hotkeys.LoadKeybindDat(mp.characterId);
-			hotbar.LoadHotbarDat(mp.characterId);
-			//addon.LoadAddonDat(mp.characterId);
-			CharacterName.Text = mp.characterName;
-		}
-		
+		private void InternalNote(Object o, ChannelMessageEventArgs args) {
+			ChannelMessageBuilder builder = new ChannelMessageBuilder(args.Message);
 
-		public void ProcessOnNote(NoteEvent onNote) {
+			NoteEvent noteEvent = new NoteEvent {
+				note = builder.Data1,
+				origNote = builder.Data1,
+				trackNum = sequencer.GetTrackNum(args.MidiTrack),
+				track = args.MidiTrack,
+			};
+
+			if(sequencer.GetTrackNum(noteEvent.track) == this.TrackNum) {
+				int po = sequencer.GetTrackPreferredOctaveShift(noteEvent.track);
+				noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, this.OctaveNum + po);
+
+				ChannelCommand cmd = args.Message.Command;
+				int vel = builder.Data2;
+				if((cmd == ChannelCommand.NoteOff) || (cmd == ChannelCommand.NoteOn && vel == 0)) {
+					this.ProcessOffNote(noteEvent);
+				}
+				if((cmd == ChannelCommand.NoteOn) && vel > 0) {
+					this.ProcessOnNote(noteEvent);
+				}
+			}
+		}
+
+		public void ProcessOnNote(NoteEvent note) {
+			if(!this.PerformanceUp || !this.PerformerEnabled) {
+				return;
+			}
+
 			if(openDelay) {
 				return;
 			}
 			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(onNote)) {
+				if(chordNotes.OnKey(note)) {
 					// Chord detected and queued
 					// Console.WriteLine("Delay " + onNote + " by 100ms");
 				}
 			}
 
-			if(!chordNotes.HasTimer(onNote)) {
-				if(hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
+			if(!chordNotes.HasTimer(note)) {
+				if(hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind) {
 					if(WantsHold) {
 						hook.SendKeybindDown(keybind);
 					} else {
@@ -133,25 +192,58 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void ProcessOffNote(NoteEvent offNote) {
-			if(hotkeys.GetKeybindFromNoteByte(offNote.note) is FFXIVKeybindDat.Keybind keybind) {
+		public void ProcessOffNote(NoteEvent note) {
+			if(!this.PerformanceUp || !this.PerformerEnabled) {
+				return;
+			}
+
+			if(hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind) {
 				if(WantsHold) {
 					hook.SendKeybindUp(keybind);
 				}
-				chordNotes.OffKey(offNote);
+				chordNotes.OffKey(note);
+			}
+		}
+		public void SetProgress(int progress) {
+			if(sequencer is BmpSequencer) {
+				sequencer.Position = progress;
+				Scroller.Text = sequencer.Position.ToString();
 			}
 		}
 
-		public void Update(BmpSequencer sequencer) {
+		public void Play(bool play) {
+			if(sequencer is BmpSequencer) {
+				Scroller.Text = sequencer.Position.ToString();
+				if(play) {
+					sequencer.Play();
+				} else {
+					sequencer.Pause();
+				}
+			}
+		}
+
+		public void Stop() {
+			if(sequencer is BmpSequencer) {
+				sequencer.Stop();
+			}
+		}
+
+		public void Update(BmpSequencer bmpSeq) {
 			int tn = this.TrackNum;
 
-			Sequence seq = sequencer.Sequence;
+			if(!(bmpSeq is BmpSequencer)) {
+				return;
+			}
+
+			Sequence seq = bmpSeq.Sequence;
 			if(!(seq is Sequence)) {
 				return;
 			}
 
 			Keyboard.UpdateFrequency(new List<int>());
 			if((tn >= 0 && tn < seq.Count) && seq[tn] is Track track) {
+				int po = bmpSeq.GetTrackPreferredOctaveShift(track);
+				Console.WriteLine(String.Format("Track {0} {1} po {2}", tn, bmpSeq.MaxTrack, po));
 				List<int> notes = new List<int>();
 				foreach(MidiEvent ev in track.Iterator()) {
 					if(ev.MidiMessage.MessageType == MessageType.Channel) {
@@ -160,14 +252,13 @@ namespace FFBardMusicPlayer.Controls {
 							int note = msg.Data1;
 							int vel = msg.Data2;
 							if(vel > 0) {
-								int po = sequencer.GetTrackPreferredOctaveShift(track);
 								notes.Add(NoteHelper.ApplyOctaveShift(note, this.OctaveNum + po));
 							}
 						}
 					}
 				}
 				Keyboard.UpdateFrequency(notes);
-				ChosenInstrument = sequencer.GetTrackPreferredInstrument(track);
+				ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
 			}
 
 			if(hostProcess) {
@@ -189,12 +280,15 @@ namespace FFBardMusicPlayer.Controls {
 				}
 			}
 
+			if(performanceUp) {
+				return;
+			}
+
 			string keyMap = hotbar.GetInstrumentKeyMap(chosenInstrument);
 			if(!string.IsNullOrEmpty(keyMap)) {
 				FFXIVKeybindDat.Keybind keybind = hotkeys[keyMap];
 				if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
 					hook.SendSyncKeybind(keybind);
-					Console.WriteLine("Press " + keybind.ToString());
 					openDelay = true;
 
 					Timer openTimer = new Timer {
@@ -207,9 +301,12 @@ namespace FFBardMusicPlayer.Controls {
 						openDelay = false;
 					};
 					openTimer.Start();
+
+					performanceUp = true;
 				}
 			}
 		}
+
 		public void CloseInstrument() {
 			if(hostProcess) {
 				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
@@ -221,11 +318,17 @@ namespace FFBardMusicPlayer.Controls {
 				}
 			}
 
+			if(!performanceUp) {
+				return;
+			}
+
 			hook.ClearLastPerformanceKeybinds();
 
 			FFXIVKeybindDat.Keybind keybind = hotkeys["ESC"];
+			Console.WriteLine(keybind.ToString());
 			if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
 				hook.SendSyncKeybind(keybind);
+				performanceUp = false;
 			}
 		}
 
@@ -265,11 +368,11 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
-			onUpdate?.Invoke(this, EventArgs.Empty);
+			this.Invoke(t => t.Update(sequencer));
 		}
 
 		private void OctaveShift_ValueChanged(object sender, EventArgs e) {
-			onUpdate?.Invoke(this, EventArgs.Empty);
+			this.Invoke(t => t.Update(sequencer));
 		}
 	}
 }

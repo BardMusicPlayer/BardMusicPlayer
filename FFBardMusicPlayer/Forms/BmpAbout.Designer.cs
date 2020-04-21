@@ -29,7 +29,6 @@
 			System.Windows.Forms.TextBox MultiMidiLicense;
 			this.LicenseTabs = new System.Windows.Forms.TabControl();
 			this.AboutTab = new System.Windows.Forms.TabPage();
-			this.DonateLink = new System.Windows.Forms.LinkLabel();
 			this.AboutMe = new System.Windows.Forms.RichTextBox();
 			this.Selfie = new System.Windows.Forms.PictureBox();
 			this.AboutPage2 = new System.Windows.Forms.TabPage();
@@ -47,7 +46,7 @@
 			MultiMidiLicense = new System.Windows.Forms.TextBox();
 			this.LicenseTabs.SuspendLayout();
 			this.AboutTab.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize) (this.Selfie)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.Selfie)).BeginInit();
 			this.AboutPage2.SuspendLayout();
 			this.NameGroup.SuspendLayout();
 			this.Sharlayan.SuspendLayout();
@@ -105,7 +104,6 @@
 			// 
 			// AboutTab
 			// 
-			this.AboutTab.Controls.Add(this.DonateLink);
 			this.AboutTab.Controls.Add(this.AboutMe);
 			this.AboutTab.Controls.Add(this.Selfie);
 			this.AboutTab.Location = new System.Drawing.Point(4, 24);
@@ -115,18 +113,6 @@
 			this.AboutTab.TabIndex = 2;
 			this.AboutTab.Text = "About";
 			this.AboutTab.UseVisualStyleBackColor = true;
-			// 
-			// DonateLink
-			// 
-			this.DonateLink.AutoSize = true;
-			this.DonateLink.Location = new System.Drawing.Point(297, 154);
-			this.DonateLink.Name = "DonateLink";
-			this.DonateLink.Size = new System.Drawing.Size(50, 15);
-			this.DonateLink.TabIndex = 17;
-			this.DonateLink.TabStop = true;
-			this.DonateLink.Text = "Donate?";
-			this.HeheTooltip.SetToolTip(this.DonateLink, "Student at University of Skövde. Please feed me. >.<");
-			this.DonateLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DonateLink_LinkClicked);
 			// 
 			// AboutMe
 			// 
@@ -141,11 +127,11 @@
 			this.AboutMe.Size = new System.Drawing.Size(229, 175);
 			this.AboutMe.TabIndex = 16;
 			this.AboutMe.Text = "Bard Music Player (c) Paru\n\nWritten in C# and uses modified code from the Sharlay" +
-	"an and Sanford.Multimedia.Midi projects.\n\nThank you for using my program!";
+    "an and Sanford.Multimedia.Midi projects.\n\nThank you for using my program!";
 			// 
 			// Selfie
 			// 
-			this.Selfie.BackgroundImage = ((System.Drawing.Image) (resources.GetObject("Selfie.BackgroundImage")));
+			this.Selfie.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Selfie.BackgroundImage")));
 			this.Selfie.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.Selfie.Dock = System.Windows.Forms.DockStyle.Left;
 			this.Selfie.Location = new System.Drawing.Point(3, 3);
@@ -199,9 +185,9 @@
 			// 
 			// ThanksMacro
 			// 
-			this.ThanksMacro.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.ThanksMacro.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.ThanksMacro.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.ThanksMacro.Location = new System.Drawing.Point(53, 154);
 			this.ThanksMacro.Margin = new System.Windows.Forms.Padding(0);
@@ -213,10 +199,10 @@
 			// 
 			// ThanksHeader
 			// 
-			this.ThanksHeader.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.ThanksHeader.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+			this.ThanksHeader.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.ThanksHeader.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ThanksHeader.Location = new System.Drawing.Point(16, 7);
 			this.ThanksHeader.Margin = new System.Windows.Forms.Padding(0);
 			this.ThanksHeader.Name = "ThanksHeader";
@@ -249,7 +235,7 @@
 			// 
 			// CloseButton
 			// 
-			this.CloseButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.CloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.CloseButton.BackColor = System.Drawing.Color.Red;
 			this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.CloseButton.ForeColor = System.Drawing.Color.White;
@@ -275,7 +261,7 @@
 			this.AboutPanel.Size = new System.Drawing.Size(374, 215);
 			this.AboutPanel.TabIndex = 4;
 			// 
-			// AppAbout
+			// BmpAbout
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -283,15 +269,14 @@
 			this.Controls.Add(this.AboutPanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Name = "AppAbout";
+			this.Name = "BmpAbout";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "AppAbout";
 			this.LicenseTabs.ResumeLayout(false);
 			this.AboutTab.ResumeLayout(false);
-			this.AboutTab.PerformLayout();
-			((System.ComponentModel.ISupportInitialize) (this.Selfie)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.Selfie)).EndInit();
 			this.AboutPage2.ResumeLayout(false);
 			this.NameGroup.ResumeLayout(false);
 			this.Sharlayan.ResumeLayout(false);
@@ -310,7 +295,6 @@
 		private System.Windows.Forms.ToolTip HeheTooltip;
 		private System.Windows.Forms.TabPage AboutTab;
 		private System.Windows.Forms.RichTextBox AboutMe;
-		private System.Windows.Forms.LinkLabel DonateLink;
 		private System.Windows.Forms.Button CloseButton;
 		private System.Windows.Forms.Panel AboutPanel;
 		private System.Windows.Forms.TabPage AboutPage2;

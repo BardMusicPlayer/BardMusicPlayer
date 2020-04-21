@@ -24,12 +24,12 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.OrchestraGroup = new System.Windows.Forms.GroupBox();
+			this.testC = new System.Windows.Forms.Button();
 			this.ensembleCheck = new System.Windows.Forms.Button();
 			this.muteAll = new System.Windows.Forms.Button();
 			this.closeInstruments = new System.Windows.Forms.Button();
 			this.openInstruments = new System.Windows.Forms.Button();
-			this.PerformerLayout = new System.Windows.Forms.FlowLayoutPanel();
-			this.testC = new System.Windows.Forms.Button();
+			this.PerformerPanel = new System.Windows.Forms.Panel();
 			this.OrchestraGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -40,7 +40,7 @@
 			this.OrchestraGroup.Controls.Add(this.muteAll);
 			this.OrchestraGroup.Controls.Add(this.closeInstruments);
 			this.OrchestraGroup.Controls.Add(this.openInstruments);
-			this.OrchestraGroup.Controls.Add(this.PerformerLayout);
+			this.OrchestraGroup.Controls.Add(this.PerformerPanel);
 			this.OrchestraGroup.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.OrchestraGroup.Location = new System.Drawing.Point(0, 0);
 			this.OrchestraGroup.Name = "OrchestraGroup";
@@ -48,6 +48,18 @@
 			this.OrchestraGroup.TabIndex = 0;
 			this.OrchestraGroup.TabStop = false;
 			this.OrchestraGroup.Text = "Local orchestra";
+			// 
+			// testC
+			// 
+			this.testC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.testC.BackColor = System.Drawing.Color.PaleGreen;
+			this.testC.Location = new System.Drawing.Point(117, 0);
+			this.testC.Name = "testC";
+			this.testC.Size = new System.Drawing.Size(51, 21);
+			this.testC.TabIndex = 5;
+			this.testC.Text = "Sync C";
+			this.testC.UseVisualStyleBackColor = false;
+			this.testC.Click += new System.EventHandler(this.testC_Click);
 			// 
 			// ensembleCheck
 			// 
@@ -93,28 +105,13 @@
 			this.openInstruments.UseVisualStyleBackColor = true;
 			this.openInstruments.Click += new System.EventHandler(this.openInstruments_Click);
 			// 
-			// PerformerLayout
+			// PerformerPanel
 			// 
-			this.PerformerLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.PerformerLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PerformerLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.PerformerLayout.Location = new System.Drawing.Point(3, 16);
-			this.PerformerLayout.Name = "PerformerLayout";
-			this.PerformerLayout.Padding = new System.Windows.Forms.Padding(1);
-			this.PerformerLayout.Size = new System.Drawing.Size(408, 238);
-			this.PerformerLayout.TabIndex = 0;
-			this.PerformerLayout.WrapContents = false;
-			// 
-			// testC
-			// 
-			this.testC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.testC.Location = new System.Drawing.Point(117, 0);
-			this.testC.Name = "testC";
-			this.testC.Size = new System.Drawing.Size(51, 21);
-			this.testC.TabIndex = 5;
-			this.testC.Text = "Test C";
-			this.testC.UseVisualStyleBackColor = true;
-			this.testC.Click += new System.EventHandler(this.testC_Click);
+			this.PerformerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PerformerPanel.Location = new System.Drawing.Point(3, 16);
+			this.PerformerPanel.Name = "PerformerPanel";
+			this.PerformerPanel.Size = new System.Drawing.Size(408, 238);
+			this.PerformerPanel.TabIndex = 6;
 			// 
 			// BmpLocalOrchestra
 			// 
@@ -131,11 +128,11 @@
 		#endregion
 
 		private System.Windows.Forms.GroupBox OrchestraGroup;
-		private System.Windows.Forms.FlowLayoutPanel PerformerLayout;
 		private System.Windows.Forms.Button closeInstruments;
 		private System.Windows.Forms.Button openInstruments;
 		private System.Windows.Forms.Button muteAll;
 		private System.Windows.Forms.Button ensembleCheck;
 		private System.Windows.Forms.Button testC;
+		private System.Windows.Forms.Panel PerformerPanel;
 	}
 }

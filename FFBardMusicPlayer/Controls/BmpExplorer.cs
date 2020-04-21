@@ -79,6 +79,7 @@ namespace FFBardMusicPlayer.Controls {
 			SelectorSong.LostFocus += delegate (object sender, EventArgs e) {
 				if(!SongBrowser.Focused) {
 					SongBrowserVisible = false;
+					SelectorTrack.Focus();
 				}
 			};
 
@@ -157,7 +158,11 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public bool SelectFile(string file) {
-			return SongBrowser.SelectFile(file);
+			bool sel = SongBrowser.SelectFile(file);
+			if(!sel) {
+				SongBrowser.ClearSelected();
+			}
+			return sel;
 		}
 
 		public void SelectTrack(int track) {
@@ -184,7 +189,9 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			SelectorTrack.Maximum = maxtrack;
 			if(track <= maxtrack) {
+				ignoreTrackChange = true;
 				SelectorTrack.Value = track;
+				ignoreTrackChange = false;
 			}
 		}
 

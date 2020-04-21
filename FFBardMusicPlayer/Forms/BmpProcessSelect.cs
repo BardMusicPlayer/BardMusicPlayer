@@ -108,7 +108,8 @@ namespace FFBardMusicPlayer {
 			processCancelled.Set();
 
 			// FIXME enable this after testing
-			LocalOrchestraCheck.Invoke(t => t.Visible = (multiboxProcesses.Count > 1));
+			LocalOrchestraCheck.Invoke(t => t.Visible = true);
+			//LocalOrchestraCheck.Invoke(t => t.Visible = (multiboxProcesses.Count > 1));
 		}
 
 		public void RefreshList() {

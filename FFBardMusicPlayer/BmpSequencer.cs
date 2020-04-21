@@ -120,6 +120,17 @@ namespace FFBardMusicPlayer {
 			secondTimer.Elapsed += OnSecondTimer;
 		}
 
+		public BmpSequencer(string filename, int trackNum = 0) : base() {
+			Sequence = new Sequence();
+
+			this.ChannelMessagePlayed += OnChannelMessagePlayed;
+			this.MetaMessagePlayed += OnMetaMessagePlayed;
+
+			secondTimer.Elapsed += OnSecondTimer;
+
+			this.Load(filename);
+		}
+
 		public int GetTrackNum(Track track) {
 			for(int i = 0; i < Sequence.Count; i++) {
 				if(Sequence[i] == track) {
@@ -135,7 +146,9 @@ namespace FFBardMusicPlayer {
 
 		public void Seek(double ms) {
 			int ticks = (int) (Sequence.Division * ((midiTempo / 60000f) * ms));
-			this.Position += ticks;
+			if((this.Position + ticks) < this.MaxTick && (this.Position + ticks) >= 0) {
+				this.Position += ticks;
+			}
 		}
 
 		public new void Play() {
@@ -261,10 +274,10 @@ namespace FFBardMusicPlayer {
 			if((cmd == ChannelCommand.NoteOff) || (cmd == ChannelCommand.NoteOn && vel == 0)) {
 				OffNote?.Invoke(this, e);
 			}
-			if(e.Message.Command == ChannelCommand.NoteOn && vel > 0) {
+			if((cmd == ChannelCommand.NoteOn) && vel > 0) {
 				OnNote?.Invoke(this, e);
 			}
-			if(e.Message.Command == ChannelCommand.ProgramChange) {
+			if((cmd == ChannelCommand.ProgramChange)) {
 				string instName = ProgramToInstrumentName(e.Message.Data1);
 				if(!string.IsNullOrEmpty(instName)) {
 					Console.WriteLine("Program change to voice/instrument: " + instName + " " + e.Message.Data2);
@@ -352,7 +365,6 @@ namespace FFBardMusicPlayer {
 
 		public void Load(string file, int trackNum = 0) {
 
-			Sequence = new Sequence();
 			OnTrackNameChange?.Invoke(this, string.Empty);
 			OnTempoChange?.Invoke(this, 0);
 
@@ -364,6 +376,7 @@ namespace FFBardMusicPlayer {
 			try {
 				Sequence = new Sequence(file);
 			} catch(Exception e) {
+				Console.WriteLine(e.StackTrace);
 				throw e;
 			}
 			if(trackNum >= Sequence.Count) {
@@ -466,7 +479,7 @@ namespace FFBardMusicPlayer {
 			}
 
 			OnLoad?.Invoke(this, EventArgs.Empty);
-			Console.WriteLine("Loaded midi [" + file + "] track " + trackNum);
+			Console.WriteLine("Loaded Midi [" + file + "] t" + trackNum);
 		}
 	}
 }

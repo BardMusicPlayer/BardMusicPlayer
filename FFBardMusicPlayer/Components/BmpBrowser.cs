@@ -248,7 +248,6 @@ namespace FFBardMusicPlayer.Components {
 						foreach(MidiFile file in this.Items) {
 							if(file.Enabled) {
 								if(file.FileName.RelativeFileName == filenameFilter) {
-									Console.WriteLine("FOUND" + FilenameFilter);
 									singleEntry = file;
 									break;
 								}
@@ -326,7 +325,6 @@ namespace FFBardMusicPlayer.Components {
 		}
 
 		public bool SelectFile(string filename) {
-			Console.WriteLine("Search file: " + filename);
 			MidiFile halfMatch = null;
 			MidiFile fullMatch = null;
 
