@@ -145,14 +145,17 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.Memory_OnCurrentPlayerJobChange(res));
 			};
 			FFXIV.memory.OnCurrentPlayerLogin += delegate (object o, CurrentPlayerResult res) {
-				string format = string.Format("Character [{0}] logged in.", res.CurrentPlayer.Name);
-				this.Log(format);
+				string world = string.Empty;
+				if(Sharlayan.Reader.CanGetWorld()) {
+					world = Sharlayan.Reader.GetWorld();
+				}
+				if(string.IsNullOrEmpty(world)) {
+					this.Log(string.Format("Character [{0}] logged in.", res.CurrentPlayer.Name));
+				} else {
+					this.Log(string.Format("Character [{0}] logged in at [{1}].", res.CurrentPlayer.Name, world));
+				}
 
 				if(!Program.programOptions.DisableUpdate) {
-					string world = string.Empty;
-					if(Sharlayan.Reader.CanGetWorld()) {
-						world = Sharlayan.Reader.GetWorld();
-					}
 					BmpDonationChecker don = new BmpDonationChecker(res.CurrentPlayer.Name, world);
 					don.OnDonatorResponse += delegate (Object obj, BmpDonationChecker.DonatorResponse donres) {
 						if(donres.donator) {
