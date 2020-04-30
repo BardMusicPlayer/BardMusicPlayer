@@ -244,7 +244,7 @@ namespace FFBardMusicPlayer.Components {
 					this.Items.Clear();
 					return;
 				} else {
-					if(filenameFilter.EndsWith(".mid")) {
+					if(filenameFilter.ToLower().EndsWith(".mid")) {
 						foreach(MidiFile file in this.Items) {
 							if(file.Enabled) {
 								if(file.FileName.RelativeFileName == filenameFilter) {
