@@ -133,7 +133,8 @@ namespace FFBardMusicPlayer.Forms {
 				this.Log("Attached process exited.");
 			};
 			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
-				this.Invoke(t => t.Memory_OnChatReceived(item));
+				try { this.Invoke(t => t.Memory_OnChatReceived(item)); }
+				catch { this.Log("Invalid command: " + item.Line); }
 			};
 			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids) {
 				this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
