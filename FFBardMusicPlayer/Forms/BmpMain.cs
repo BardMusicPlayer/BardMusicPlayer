@@ -512,7 +512,7 @@ namespace FFBardMusicPlayer.Forms {
 				Explorer.Invoke(t => t.SelectTrack(entry.Track.Track));
 				Explorer.EnterFile();
 			}
-			//Playlist.Select(entry.FilePath.FilePath);
+			Playlist.Select(entry.FilePath.FilePath);
 			if(proceedPlaylistMidi && Playlist.AutoPlay) {
 				Player.Player.Play();
 				proceedPlaylistMidi = false;
