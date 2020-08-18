@@ -15,6 +15,20 @@ using FFBardMusicCommon;
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpPlaylist : UserControl {
 
+        public class BmpPlaylistRequestAddEvent : EventArgs
+        {
+            public string filePath { get; set; }
+            public int track { get; set; }
+            public int dropIndex { get; set; }
+
+            public BmpPlaylistRequestAddEvent(string filePath, int track, int dropIndex)
+            {
+                this.filePath = filePath;
+                this.track = track;
+                this.dropIndex = dropIndex;
+            }
+        }
+
 		private bool loopMode;
 		public bool LoopMode {
 			get {
@@ -42,6 +56,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public EventHandler<BmpMidiEntry> OnMidiSelect;
 		public EventHandler OnPlaylistRequestAdd;
+        public EventHandler<BmpPlaylistRequestAddEvent> OnPlaylistManualRequestAdd;
 
 		BmpMidiList playlistEntries = new BmpMidiList();
 		BindingList<BmpMidiEntry> playlistBinding = new BindingList<BmpMidiEntry>();
@@ -93,27 +108,37 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public BmpMidiEntry AddPlaylistEntry(string filename, int track = 0) {
+		public BmpMidiEntry AddPlaylistEntry(string filename, int track = 0, int dropIndex = -1)
+        {
 			BmpMidiEntry entry = new BmpMidiEntry(filename, track);
 
 			int entryIndex = 0;
-			if(PlaylistView.SelectedRows.Count == 1) {
+            if (dropIndex >= 0)
+            {
+                entryIndex = dropIndex;
+                playlistEntries.Insert(entryIndex, entry);
+            }
+			else if (PlaylistView.SelectedRows.Count == 1)
+            {
 				DataGridViewRow row = PlaylistView.SelectedRows[0];
 				row.Selected = false;
 
 				entryIndex = row.Index + 1;
 				playlistEntries.Insert(entryIndex, entry);
-			} else {
+			}
+            else
+            {
 				playlistEntries.Add(entry);
 				entryIndex = playlistEntries.Count - 1;
 			}
 
-			if(entryIndex < PlaylistView.Rows.Count) {
-				PlaylistView.Rows[entryIndex].Selected = true;
-			}
-
 			playlistBinding = new BindingList<BmpMidiEntry>(playlistEntries);
 			PlaylistView.DataSource = playlistBinding;
+
+            // select the newly added track here
+            Select(entryIndex);
+            SaveSettings();
+
 			return entry;
 		}
 
@@ -221,7 +246,6 @@ namespace FFBardMusicPlayer.Controls {
 
 		private Rectangle dragBox;
 		private int rowIndex;
-		private int dropIndex;
 
 		private void BmpMidiEntryList_MouseMove(object sender, MouseEventArgs e) {
 			if((e.Button & MouseButtons.Left) == MouseButtons.Left) {
@@ -250,6 +274,8 @@ namespace FFBardMusicPlayer.Controls {
         {
 			Point clientPoint = this.PointToClient(new Point(e.X, e.Y));
 			DataGridView.HitTestInfo hit = PlaylistView.HitTest(clientPoint.X, clientPoint.Y);
+
+            int dropIndex = 0;
             if (hit.Type == DataGridViewHitTestType.Cell)
             {
                 // user has dnd onto an existing cell, move above the hovered midi
@@ -261,37 +287,17 @@ namespace FFBardMusicPlayer.Controls {
                 dropIndex = playlistEntries.Count;
             }
 
-            int numValidMidisAdded = 0;
             if (e.Effect == DragDropEffects.Move)
             {
                 // just in case the user gets fancy with it and dnd's multiple midis
                 string[] midiList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
                 foreach (string midiFilePath in midiList)
                 {
-                    // silly sanity check - if it's not a midi, don't add it
-                    if (midiFilePath.EndsWith(".mid"))
-                    {
-                        // TODO: is it safe to assume track? can't do anything until we update the UI more
-                        var midi = new BmpMidiEntry(midiFilePath);
-                        playlistEntries.Insert(dropIndex + numValidMidisAdded, midi);
-                        numValidMidisAdded++;
-                    }
+                    string filename = Path.GetFileName(midiFilePath);
+                    BmpPlaylistRequestAddEvent addEvent = new BmpPlaylistRequestAddEvent(filename, 0, dropIndex);
+                    OnPlaylistManualRequestAdd?.Invoke(this, addEvent);
                 }
             }
-
-            if (numValidMidisAdded == 0)
-            {
-                // okay, user did something wrong and no valid midis were added here
-                return;
-            }
-
-			playlistBinding = new BindingList<BmpMidiEntry>(playlistEntries);
-			PlaylistView.DataSource = playlistBinding;
-
-			this.SaveSettings();
-
-            // make sure to mark the first midi dropped in as selected
-            Select(dropIndex);
         }
 	}
 }
