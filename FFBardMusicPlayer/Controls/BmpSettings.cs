@@ -185,9 +185,16 @@ namespace FFBardMusicPlayer.Controls {
 			BmpAbout about = new BmpAbout();
 			about.ShowDialog(this);
 		}
-	}
 
-	public class MidiInput {
+        private void WaitBetweenSongs_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WaitBetweenSongs = WaitBetweenSongsToggle.Checked;
+            Properties.Settings.Default.DelayBetweenSongs = ((int)DelaySongsChange.Value);
+            Properties.Settings.Default.Save();
+        }
+    }
+
+    public class MidiInput {
 		public string name = string.Empty;
 		public int id = 0;
 		public MidiInput(string n, int i) {

@@ -381,5 +381,29 @@ namespace FFBardMusicPlayer.Properties {
                 this["PlayAllTracks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WaitBetweenSongs {
+            get {
+                return ((bool)(this["WaitBetweenSongs"]));
+            }
+            set {
+                this["WaitBetweenSongs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public decimal DelayBetweenSongs {
+            get {
+                return ((decimal)(this["DelayBetweenSongs"]));
+            }
+            set {
+                this["DelayBetweenSongs"] = value;
+            }
+        }
     }
 }

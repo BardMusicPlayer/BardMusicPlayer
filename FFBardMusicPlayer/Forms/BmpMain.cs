@@ -539,20 +539,54 @@ namespace FFBardMusicPlayer.Forms {
             }
         }
 		///
+        private bool WantsDelay
+        {
+            get
+            {
+                return Properties.Settings.Default.WaitBetweenSongs;
+            }
+        }
 
+        private int DelayAmount
+        {
+            get
+            {
+                return ((int)Properties.Settings.Default.DelayBetweenSongs);
+            }
+        }
 
-		private void NextSong() {
-			if(Playlist.AdvanceNext(out string filename, out int track)) {
+		private void NextSong()
+        {
+			if (Playlist.AdvanceNext(out string filename, out int track))
+            {
 				Timer playlistTimer = new Timer();
-				playlistTimer.Interval = 100;
-				playlistTimer.Elapsed += delegate (object o, ElapsedEventArgs e) {
-					this.Invoke(t => t.Playlist.PlaySelectedMidi());
+
+                // if user has requested a delay in-between songs, who are we to want to stop them?
+                if (WantsDelay)
+                {
+                    // internal is in ms, delay amount is in s
+                    playlistTimer.Interval = 1000 * DelayAmount;
+                    Log(string.Format("Waiting {0}s before playing next song.", DelayAmount));
+                }
+                else
+                {
+                    // gotta go fast
+                    playlistTimer.Interval = 100;
+                }
+
+				playlistTimer.Elapsed += delegate (object o, ElapsedEventArgs e)
+                {
+                    Log("Playing the next song in the playlist!");
+                    this.Invoke(t => t.Playlist.PlaySelectedMidi());
 					playlistTimer.Dispose();
 				};
 				playlistTimer.Start();
-			} else {
+			}
+            else
+            {
 				// If failed playlist when you wanted to, just stop
-				if(proceedPlaylistMidi) {
+				if (proceedPlaylistMidi)
+                {
 					Player.Player.Stop();
 				}
 			}
