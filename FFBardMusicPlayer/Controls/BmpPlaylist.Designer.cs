@@ -37,12 +37,13 @@
             this.Playlist_Import = new System.Windows.Forms.Button();
             this.ButtonPanel = new System.Windows.Forms.Panel();
             this.AutoPlayToggle = new System.Windows.Forms.CheckBox();
-            this.Playlist_Random = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
-            this.ButtonBindSource = new System.Windows.Forms.BindingSource(this.components);
-            this.Playlist_Loop = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Playlist_ClearAll = new System.Windows.Forms.Button();
+            this.Playlist_Random = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
+            this.ButtonBindSource = new System.Windows.Forms.BindingSource(this.components);
+            this.Playlist_Loop = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
             this.Playlist.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PlaylistView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MidiEntrySource)).BeginInit();
@@ -55,6 +56,7 @@
             this.Playlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.Playlist.Controls.Add(this.Playlist_ClearAll);
             this.Playlist.Controls.Add(this.PlaylistView);
             this.Playlist.Controls.Add(this.Playlist_Remove);
             this.Playlist.Controls.Add(this.Playlist_Add);
@@ -140,11 +142,12 @@
             this.Playlist_Remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Playlist_Remove.FlatAppearance.BorderSize = 0;
             this.Playlist_Remove.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Playlist_Remove.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(1)), true);
             this.Playlist_Remove.Location = new System.Drawing.Point(207, 3);
             this.Playlist_Remove.Name = "Playlist_Remove";
             this.Playlist_Remove.Size = new System.Drawing.Size(22, 22);
             this.Playlist_Remove.TabIndex = 8;
-            this.Playlist_Remove.Text = "-";
+            this.Playlist_Remove.Text = "˗";
             this.Playlist_Remove.UseVisualStyleBackColor = true;
             this.Playlist_Remove.Click += new System.EventHandler(this.Playlist_Remove_Click);
             // 
@@ -153,6 +156,7 @@
             this.Playlist_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Playlist_Add.FlatAppearance.BorderSize = 0;
             this.Playlist_Add.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Playlist_Add.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Playlist_Add.Location = new System.Drawing.Point(228, 3);
             this.Playlist_Add.Name = "Playlist_Add";
             this.Playlist_Add.Size = new System.Drawing.Size(22, 22);
@@ -222,6 +226,45 @@
             this.AutoPlayToggle.Text = "Auto-play";
             this.AutoPlayToggle.UseVisualStyleBackColor = true;
             // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "FilePath";
+            this.dataGridViewTextBoxColumn3.HeaderText = "FilePath";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Width = 5;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "Track";
+            this.dataGridViewTextBoxColumn4.HeaderText = "Track";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.Width = 5;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "FilePath";
+            this.dataGridViewTextBoxColumn2.HeaderText = "FilePath";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // Playlist_ClearAll
+            // 
+            this.Playlist_ClearAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Playlist_ClearAll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Playlist_ClearAll.FlatAppearance.BorderSize = 0;
+            this.Playlist_ClearAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Playlist_ClearAll.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)), true);
+            this.Playlist_ClearAll.Location = new System.Drawing.Point(186, 3);
+            this.Playlist_ClearAll.Name = "Playlist_ClearAll";
+            this.Playlist_ClearAll.Size = new System.Drawing.Size(22, 22);
+            this.Playlist_ClearAll.TabIndex = 9;
+            this.Playlist_ClearAll.Text = "×";
+            this.Playlist_ClearAll.UseVisualStyleBackColor = true;
+            this.Playlist_ClearAll.Click += new System.EventHandler(this.Playlist_ClearAll_Click);
+            // 
             // Playlist_Random
             // 
             this.Playlist_Random.Appearance = System.Windows.Forms.Appearance.Button;
@@ -257,30 +300,6 @@
             this.Playlist_Loop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Playlist_Loop.UseVisualStyleBackColor = true;
             this.Playlist_Loop.CheckedChanged += new System.EventHandler(this.Playlist_Loop_CheckedChanged);
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "FilePath";
-            this.dataGridViewTextBoxColumn3.HeaderText = "FilePath";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.Width = 5;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.DataPropertyName = "Track";
-            this.dataGridViewTextBoxColumn4.HeaderText = "Track";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.Width = 5;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "FilePath";
-            this.dataGridViewTextBoxColumn2.HeaderText = "FilePath";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
             // BmpPlaylist
             // 
@@ -322,5 +341,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn filePathDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
 		private System.Windows.Forms.CheckBox AutoPlayToggle;
-	}
+        private System.Windows.Forms.Button Playlist_ClearAll;
+    }
 }

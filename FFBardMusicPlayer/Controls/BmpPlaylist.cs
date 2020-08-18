@@ -375,5 +375,13 @@ namespace FFBardMusicPlayer.Controls {
                 }
             }
         }
+
+        private void Playlist_ClearAll_Click(object sender, EventArgs e)
+        {
+            while (PlaylistView.RowCount != 0)
+            {
+                RemovePlaylistEntry(0);
+            }
+        }
     }
 }
