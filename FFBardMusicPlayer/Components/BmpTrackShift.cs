@@ -20,7 +20,9 @@ namespace FFBardMusicPlayer.Components {
 		}
 
 		protected override void UpdateEditText() {
+            this.ChangingText = true;
 			this.Text = "t" + this.Value.ToString();
+            this.ChangingText = false;
 		}
 	}
 }
