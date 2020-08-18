@@ -191,10 +191,15 @@ namespace FFBardMusicPlayer.Controls {
 			int index = PlaylistView.SelectedRows[0].Index;
 			PlaylistView.ClearSelection();
 
-			if(RandomMode) {
+			if (RandomMode) {
 				Random rand = new Random();
-				index = rand.Next(0, PlaylistView.RowCount);
-			} else {
+                int newRandomIndex = rand.Next(0, PlaylistView.RowCount);
+                while (newRandomIndex == index)
+                {
+                    newRandomIndex = rand.Next(0, PlaylistView.RowCount);
+                }
+                index = newRandomIndex;
+            } else {
 				index++;
 				if(index == PlaylistView.RowCount) {
 					if(LoopMode) {
