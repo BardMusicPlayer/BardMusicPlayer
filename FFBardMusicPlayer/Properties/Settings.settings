@@ -48,7 +48,7 @@
       <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="ChordDetectionDelay" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">50</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="LastCharId" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

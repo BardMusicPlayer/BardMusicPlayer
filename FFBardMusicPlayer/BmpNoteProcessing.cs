@@ -109,17 +109,21 @@ namespace FFBardMusicPlayer {
 			if(tooFastChord && (tickNoteCount >= 1)) {
 				//Console.WriteLine(string.Format("{0} - {1} = {2}", this.Tick, MaxTick, tooFastChord));
 
-				if(noteTimers.TryRemoveTimer(t, out Timer delayedTimer)) {
+				if(noteTimers.TryRemoveTimer(t, out Timer delayedTimer))
+                {
+                    delayedTimer.Stop();
 					delayedTimer.Dispose();
 				}
-				Console.WriteLine(string.Format("Delay notechord = {0}", tickNoteCount * 50));
+				Console.WriteLine(string.Format("Delay notechord = {0}", tickNoteCount * chordDetection));
 				delayedTimer = new Timer {
 					Interval = (tickNoteCount * chordDetection),
 					Enabled = true,
 				};
 				delayedTimer.Elapsed += delegate {
-					if(noteTimers.TryRemoveTimer(t, out Timer timer)) {
-						timer.Dispose();
+					if (noteTimers.TryRemoveTimer(t, out Timer timer))
+                    {
+						timer.Stop();
+                        timer.Dispose();
 						NoteEvent?.Invoke(this, t);
 					}
 				};
