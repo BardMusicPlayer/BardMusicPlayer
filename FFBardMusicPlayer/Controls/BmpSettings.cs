@@ -189,13 +189,6 @@ namespace FFBardMusicPlayer.Controls {
 			about.ShowDialog(this);
 		}
 
-        private void WaitBetweenSongs_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.WaitBetweenSongs = WaitBetweenSongsToggle.Checked;
-            Properties.Settings.Default.DelayBetweenSongs = ((int)DelaySongsChange.Value);
-            Properties.Settings.Default.Save();
-        }
-
         private void SettingHoldNotes_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.HoldNotes = SettingHoldNotes.Checked;
@@ -205,6 +198,60 @@ namespace FFBardMusicPlayer.Controls {
         private void ArpeggiateToggle_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoArpeggiate = ArpeggiateToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void TooFastChange_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.TooFastDelay = TooFastChange.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingBringGame_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.OpenFFXIV = SettingBringGame.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingBringBmp_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.OpenBMP = SettingBringBmp.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ChatSimToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PlayLyrics = ChatSimToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingChatSave_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveLog = SettingChatSave.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ForceListenToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ForceListen = ForceListenToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void sigCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SigIgnore = sigCheckbox.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void UnequipPause_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UnequipPause = UnequipPause.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void verboseToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Verbose = verboseToggle.Checked;
             Properties.Settings.Default.Save();
         }
     }

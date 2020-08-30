@@ -112,8 +112,6 @@
             // verboseToggle
             // 
             this.verboseToggle.AutoSize = true;
-            this.verboseToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.Verbose;
-            this.verboseToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "Verbose", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.verboseToggle.Location = new System.Drawing.Point(11, 345);
             this.verboseToggle.Name = "verboseToggle";
             this.verboseToggle.Size = new System.Drawing.Size(136, 17);
@@ -121,13 +119,13 @@
             this.verboseToggle.Text = "Enable verbose mode";
             this.HelpTip.SetToolTip(this.verboseToggle, "Print various kinds of information to the log window.");
             this.verboseToggle.UseVisualStyleBackColor = true;
+            this.verboseToggle.CheckedChanged += new System.EventHandler(this.verboseToggle_CheckedChanged);
             // 
             // UnequipPause
             // 
             this.UnequipPause.AutoSize = true;
-            this.UnequipPause.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.UnequipPause;
+            this.UnequipPause.Checked = true;
             this.UnequipPause.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.UnequipPause.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "UnequipPause", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.UnequipPause.Location = new System.Drawing.Point(11, 290);
             this.UnequipPause.Name = "UnequipPause";
             this.UnequipPause.Size = new System.Drawing.Size(196, 17);
@@ -136,12 +134,11 @@
             this.HelpTip.SetToolTip(this.UnequipPause, "Pause the playing song when unequipping the instrument.\r\nUseful for resynchroniza" +
         "tion or switching instrument mid-performance.");
             this.UnequipPause.UseVisualStyleBackColor = true;
+            this.UnequipPause.CheckedChanged += new System.EventHandler(this.UnequipPause_CheckedChanged);
             // 
             // ForceOpenToggle
             // 
             this.ForceOpenToggle.AutoSize = true;
-            this.ForceOpenToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.ForcedOpen;
-            this.ForceOpenToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "ForcedOpen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ForceOpenToggle.Location = new System.Drawing.Point(11, 265);
             this.ForceOpenToggle.Name = "ForceOpenToggle";
             this.ForceOpenToggle.Size = new System.Drawing.Size(222, 17);
@@ -166,14 +163,13 @@
             // sigCheckbox
             // 
             this.sigCheckbox.AutoSize = true;
-            this.sigCheckbox.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.SigIgnore;
-            this.sigCheckbox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "SigIgnore", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.sigCheckbox.Location = new System.Drawing.Point(11, 240);
             this.sigCheckbox.Name = "sigCheckbox";
             this.sigCheckbox.Size = new System.Drawing.Size(152, 17);
             this.sigCheckbox.TabIndex = 15;
             this.sigCheckbox.Text = "Ignore signature update";
             this.sigCheckbox.UseVisualStyleBackColor = true;
+            this.sigCheckbox.CheckedChanged += new System.EventHandler(this.sigCheckbox_CheckedChanged);
             // 
             // MidiInputLabel
             // 
@@ -200,8 +196,6 @@
             // SettingChatSave
             // 
             this.SettingChatSave.AutoSize = true;
-            this.SettingChatSave.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.SaveLog;
-            this.SettingChatSave.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "SaveLog", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SettingChatSave.Location = new System.Drawing.Point(13, 66);
             this.SettingChatSave.Name = "SettingChatSave";
             this.SettingChatSave.Size = new System.Drawing.Size(185, 17);
@@ -209,32 +203,33 @@
             this.SettingChatSave.Text = "Save chatlogs to \"logs\" folder *";
             this.HelpTip.SetToolTip(this.SettingChatSave, "* requires program restart.");
             this.SettingChatSave.UseVisualStyleBackColor = true;
+            this.SettingChatSave.CheckedChanged += new System.EventHandler(this.SettingChatSave_CheckedChanged);
             // 
             // SettingBringBmp
             // 
             this.SettingBringBmp.AutoSize = true;
-            this.SettingBringBmp.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.OpenBMP;
+            this.SettingBringBmp.Checked = true;
             this.SettingBringBmp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SettingBringBmp.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "OpenBMP", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SettingBringBmp.Location = new System.Drawing.Point(13, 23);
             this.SettingBringBmp.Name = "SettingBringBmp";
             this.SettingBringBmp.Size = new System.Drawing.Size(235, 17);
             this.SettingBringBmp.TabIndex = 4;
             this.SettingBringBmp.Text = "Bring BMP to front on Performance open";
             this.SettingBringBmp.UseVisualStyleBackColor = true;
+            this.SettingBringBmp.CheckedChanged += new System.EventHandler(this.SettingBringBmp_CheckedChanged);
             // 
             // SettingBringGame
             // 
             this.SettingBringGame.AutoSize = true;
-            this.SettingBringGame.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.OpenFFXIV;
+            this.SettingBringGame.Checked = true;
             this.SettingBringGame.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SettingBringGame.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "OpenFFXIV", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SettingBringGame.Location = new System.Drawing.Point(13, 5);
             this.SettingBringGame.Name = "SettingBringGame";
             this.SettingBringGame.Size = new System.Drawing.Size(167, 17);
             this.SettingBringGame.TabIndex = 3;
             this.SettingBringGame.Text = "Bring FFXIV to front on Play";
             this.SettingBringGame.UseVisualStyleBackColor = true;
+            this.SettingBringGame.CheckedChanged += new System.EventHandler(this.SettingBringGame_CheckedChanged);
             // 
             // SettingsTable
             // 
@@ -280,8 +275,6 @@
             // 
             // ForceListenToggle
             // 
-            this.ForceListenToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.ForceListen;
-            this.ForceListenToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "ForceListen", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ForceListenToggle.Location = new System.Drawing.Point(8, 44);
             this.ForceListenToggle.Margin = new System.Windows.Forms.Padding(0);
             this.ForceListenToggle.Name = "ForceListenToggle";
@@ -290,6 +283,7 @@
             this.ForceListenToggle.Text = "Force listen";
             this.HelpTip.SetToolTip(this.ForceListenToggle, "Forces commands to work from everyone in the selected chat channel.");
             this.ForceListenToggle.UseVisualStyleBackColor = true;
+            this.ForceListenToggle.CheckedChanged += new System.EventHandler(this.ForceListenToggle_CheckedChanged);
             // 
             // PlaybackSettings
             // 
@@ -313,7 +307,6 @@
             // TooFastChange
             // 
             this.TooFastChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.TooFastChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "TooFastDelay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TooFastChange.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.TooFastChange.Increment = new decimal(new int[] {
             5,
@@ -337,7 +330,12 @@
             this.TooFastChange.TabIndex = 5;
             this.TooFastChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.HelpTip.SetToolTip(this.TooFastChange, "How many milliseconds for detecting chords?");
-            this.TooFastChange.Value = global::FFBardMusicPlayer.Properties.Settings.Default.TooFastDelay;
+            this.TooFastChange.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.TooFastChange.ValueChanged += new System.EventHandler(this.TooFastChange_ValueChanged);
             // 
             // PlayHoldChange
             // 
@@ -410,8 +408,6 @@
             // ChatSimToggle
             // 
             this.ChatSimToggle.AutoSize = true;
-            this.ChatSimToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.PlayLyrics;
-            this.ChatSimToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "PlayLyrics", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ChatSimToggle.Location = new System.Drawing.Point(13, 48);
             this.ChatSimToggle.Name = "ChatSimToggle";
             this.ChatSimToggle.Size = new System.Drawing.Size(169, 17);
@@ -420,6 +416,7 @@
             this.HelpTip.SetToolTip(this.ChatSimToggle, "Allows program to type in the in-game chat.\r\nAffects MIDI lyrics and <b.cmd> comm" +
         "and.");
             this.ChatSimToggle.UseVisualStyleBackColor = true;
+            this.ChatSimToggle.CheckedChanged += new System.EventHandler(this.ChatSimToggle_CheckedChanged);
             // 
             // HelpTip
             // 
