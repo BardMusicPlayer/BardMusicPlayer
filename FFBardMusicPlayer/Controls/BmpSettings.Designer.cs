@@ -402,9 +402,6 @@
             // SettingHoldNotes
             // 
             this.SettingHoldNotes.AutoSize = true;
-            this.SettingHoldNotes.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.HoldNotes;
-            this.SettingHoldNotes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SettingHoldNotes.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "HoldNotes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SettingHoldNotes.Location = new System.Drawing.Point(6, 40);
             this.SettingHoldNotes.Name = "SettingHoldNotes";
             this.SettingHoldNotes.Size = new System.Drawing.Size(83, 17);
@@ -412,6 +409,7 @@
             this.SettingHoldNotes.Text = "Hold notes";
             this.HelpTip.SetToolTip(this.SettingHoldNotes, "Enables held notes.");
             this.SettingHoldNotes.UseVisualStyleBackColor = true;
+            this.SettingHoldNotes.CheckedChanged += new System.EventHandler(this.SettingHoldNotes_CheckedChanged);
             // 
             // ChatSimToggle
             // 
