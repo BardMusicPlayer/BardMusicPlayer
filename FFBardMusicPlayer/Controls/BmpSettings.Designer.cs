@@ -388,9 +388,6 @@
             // ArpeggiateToggle
             // 
             this.ArpeggiateToggle.AutoSize = true;
-            this.ArpeggiateToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.AutoArpeggiate;
-            this.ArpeggiateToggle.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ArpeggiateToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "AutoArpeggiate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ArpeggiateToggle.Location = new System.Drawing.Point(6, 15);
             this.ArpeggiateToggle.Name = "ArpeggiateToggle";
             this.ArpeggiateToggle.Size = new System.Drawing.Size(108, 17);
@@ -398,6 +395,7 @@
             this.ArpeggiateToggle.Text = "Simulate chords";
             this.HelpTip.SetToolTip(this.ArpeggiateToggle, "Detect and simulate chords.");
             this.ArpeggiateToggle.UseVisualStyleBackColor = true;
+            this.ArpeggiateToggle.CheckedChanged += new System.EventHandler(this.ArpeggiateToggle_CheckedChanged);
             // 
             // SettingHoldNotes
             // 

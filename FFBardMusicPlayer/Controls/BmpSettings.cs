@@ -198,6 +198,12 @@ namespace FFBardMusicPlayer.Controls {
             Properties.Settings.Default.HoldNotes = SettingHoldNotes.Checked;
             Properties.Settings.Default.Save();
         }
+
+        private void ArpeggiateToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoArpeggiate = ArpeggiateToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
     }
 
     public class MidiInput {
