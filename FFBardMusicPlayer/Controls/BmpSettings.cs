@@ -119,7 +119,10 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void SlowPlayToggle_CheckedChanged(object sender, EventArgs e) {
-			UpdateSlowPlayToggle();
+            Properties.Settings.Default.SlowPlay = SlowPlayToggle.Checked;
+            Properties.Settings.Default.Save();
+
+            UpdateSlowPlayToggle();
 		}
 
 		private void ForceOpenToggle_CheckedChanged(object sender, EventArgs e) {

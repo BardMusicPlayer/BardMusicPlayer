@@ -373,8 +373,6 @@
             // SlowPlayToggle
             // 
             this.SlowPlayToggle.AutoSize = true;
-            this.SlowPlayToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.SlowPlay;
-            this.SlowPlayToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "SlowPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SlowPlayToggle.Location = new System.Drawing.Point(6, 65);
             this.SlowPlayToggle.Name = "SlowPlayToggle";
             this.SlowPlayToggle.Size = new System.Drawing.Size(93, 17);
