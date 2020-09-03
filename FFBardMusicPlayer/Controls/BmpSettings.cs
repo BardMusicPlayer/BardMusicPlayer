@@ -108,8 +108,21 @@ namespace FFBardMusicPlayer.Controls {
 			SetMidiInput(midiInput);
 			SettingMidiInput.SelectedValueChanged += SettingMidiInput_SelectedValueChanged;
 
-			UpdateSlowPlayToggle();
-		}
+            // initialize UI element values here
+            SettingBringGame.Checked = Properties.Settings.Default.OpenFFXIV;
+            SettingBringBmp.Checked = Properties.Settings.Default.OpenBMP;
+            ChatSimToggle.Checked = Properties.Settings.Default.PlayLyrics;
+            SettingChatSave.Checked = Properties.Settings.Default.SaveLog;
+            ForceListenToggle.Checked = Properties.Settings.Default.ForceListen;
+            sigCheckbox.Checked = Properties.Settings.Default.SigIgnore;
+            ForceOpenToggle.Checked = Properties.Settings.Default.ForcedOpen;
+            UnequipPause.Checked = Properties.Settings.Default.UnequipPause;
+            verboseToggle.Checked = Properties.Settings.Default.Verbose;
+            ArpeggiateToggle.Checked = Properties.Settings.Default.AutoArpeggiate;
+            TooFastChange.Value = Properties.Settings.Default.TooFastDelay;
+            SettingHoldNotes.Checked = Properties.Settings.Default.HoldNotes;
+            SlowPlayToggle.Checked = Properties.Settings.Default.SlowPlay;
+        }
 
 		private void SettingMidiInput_SelectedValueChanged(object sender, EventArgs e) {
 			if(GetMidiInput() is MidiInput input) {
