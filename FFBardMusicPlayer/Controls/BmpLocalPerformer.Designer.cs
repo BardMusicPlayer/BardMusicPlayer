@@ -27,8 +27,8 @@
 			this.PerformerTable = new System.Windows.Forms.TableLayoutPanel();
 			this.EnableCheck = new System.Windows.Forms.CheckBox();
 			this.InstrumentName = new System.Windows.Forms.Label();
-			this.ControlTable = new System.Windows.Forms.TableLayoutPanel();
 			this.Keyboard = new FFBardMusicPlayer.Controls.BmpKeyboard();
+			this.ControlTable = new System.Windows.Forms.TableLayoutPanel();
 			this.Scroller = new FFBardMusicPlayer.Controls.BmpMiniScroller();
 			this.TrackShift = new FFBardMusicPlayer.Components.BmpTrackShift();
 			this.OctaveShift = new FFBardMusicPlayer.Components.BmpOctaveShift();
@@ -93,6 +93,17 @@
 			this.InstrumentName.Text = "[Piano]";
 			this.InstrumentName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// Keyboard
+			// 
+			this.Keyboard.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Keyboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+			this.Keyboard.Location = new System.Drawing.Point(468, 0);
+			this.Keyboard.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.Keyboard.Name = "Keyboard";
+			this.Keyboard.OverrideText = null;
+			this.Keyboard.Size = new System.Drawing.Size(146, 25);
+			this.Keyboard.TabIndex = 4;
+			// 
 			// ControlTable
 			// 
 			this.ControlTable.ColumnCount = 3;
@@ -110,17 +121,6 @@
 			this.ControlTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.ControlTable.Size = new System.Drawing.Size(200, 25);
 			this.ControlTable.TabIndex = 5;
-			// 
-			// Keyboard
-			// 
-			this.Keyboard.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.Keyboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-			this.Keyboard.Location = new System.Drawing.Point(468, 0);
-			this.Keyboard.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.Keyboard.Name = "Keyboard";
-			this.Keyboard.OverrideText = null;
-			this.Keyboard.Size = new System.Drawing.Size(146, 25);
-			this.Keyboard.TabIndex = 4;
 			// 
 			// Scroller
 			// 

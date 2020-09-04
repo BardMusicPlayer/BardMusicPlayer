@@ -317,7 +317,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Forms\Loop.png" />
+    <Content Include="Forms\Shuffle.png" />
     <Content Include="Icon.ico" />
+    <None Include="Resources\Shuffle.png" />
+    <None Include="Resources\Loop.png" />
     <None Include="Resources\ffxiv_18122017_232606.png" />
     <None Include="Properties\DataSources\AppMain.datasource" />
     <None Include="Properties\DataSources\FFBardMusicCommon.BmpMidiEntry.datasource" />

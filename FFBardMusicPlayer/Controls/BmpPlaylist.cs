@@ -12,6 +12,9 @@ using System.IO;
 using System.Collections.Specialized;
 using FFBardMusicCommon;
 
+using Timer = System.Timers.Timer;
+using System.Timers;
+
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpPlaylist : UserControl {
 
@@ -43,6 +46,8 @@ namespace FFBardMusicPlayer.Controls {
 		public EventHandler<BmpMidiEntry> OnMidiSelect;
 		public EventHandler OnPlaylistRequestAdd;
 
+		float playlistDelay = 0;
+
 		BmpMidiList playlistEntries = new BmpMidiList();
 		BindingList<BmpMidiEntry> playlistBinding = new BindingList<BmpMidiEntry>();
 
@@ -53,6 +58,12 @@ namespace FFBardMusicPlayer.Controls {
 
 			Font font = PlaylistView.DefaultCellStyle.Font;
 			PlaylistView.DefaultCellStyle.Font = new Font(font.FontFamily, 8);
+
+			playlistDelay = Properties.Settings.Default.PlaylistDelay;
+			float min = Decimal.ToSingle(Playlist_Delay.Minimum);
+			float max = Decimal.ToSingle(Playlist_Delay.Maximum);
+			playlistDelay = playlistDelay.Clamp<float>(min, max);
+			Playlist_Delay.Value = new Decimal(playlistDelay);
 
 			LoadSettings();
 		}
@@ -197,11 +208,26 @@ namespace FFBardMusicPlayer.Controls {
 			RandomMode = (sender as CheckBox).Checked;
 		}
 		// Funcs
-		public void PlaySelectedMidi() {
-			if(GetSelectedMidiEntry(out BmpMidiEntry entry)) {
+		public void PlaySelectedMidi(bool delay = false) {
+
+			if(delay) {
+				Timer playlistTimer = new Timer();
+				playlistTimer.Interval = (delay) ? playlistDelay * 1000 : 0;
+				playlistTimer.Elapsed += delegate(Object o, ElapsedEventArgs e) {
+					this.TimerPlayMidi();
+				};
+				playlistTimer.Start();
+			} else {
+				this.TimerPlayMidi();
+			}
+		}
+
+		private void TimerPlayMidi() {
+			if (GetSelectedMidiEntry(out BmpMidiEntry entry)) {
 				OnMidiSelect?.Invoke(this, entry);
 			}
 		}
+
 		public bool HasMidi() {
 			return (playlistBinding.Count > 0);
 		}
@@ -266,6 +292,11 @@ namespace FFBardMusicPlayer.Controls {
 			PlaylistView.DataSource = playlistBinding;
 
 			this.SaveSettings();
+		}
+
+		private void Playlist_Delay_ValueChanged(object sender, EventArgs e) {
+			playlistDelay = Decimal.ToSingle(Playlist_Delay.Value);
+			Properties.Settings.Default.PlaylistDelay = playlistDelay;
 		}
 	}
 }

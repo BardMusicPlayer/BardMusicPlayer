@@ -33,20 +33,21 @@
 			this.Playlist_Remove = new System.Windows.Forms.Button();
 			this.Playlist_Add = new System.Windows.Forms.Button();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Playlist_Export = new System.Windows.Forms.Button();
-			this.Playlist_Import = new System.Windows.Forms.Button();
 			this.ButtonPanel = new System.Windows.Forms.Panel();
-			this.Playlist_Random = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
-			this.ButtonBindSource = new System.Windows.Forms.BindingSource(this.components);
-			this.Playlist_Loop = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
+			this.Playlist_Delay = new System.Windows.Forms.NumericUpDown();
+			this.AutoPlayToggle = new System.Windows.Forms.CheckBox();
 			this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.AutoPlayToggle = new System.Windows.Forms.CheckBox();
+			this.Playlist_Random = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
+			this.ButtonBindSource = new System.Windows.Forms.BindingSource(this.components);
+			this.Playlist_Loop = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
+			this.HelpTip = new System.Windows.Forms.ToolTip(this.components);
 			this.Playlist.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.PlaylistView)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MidiEntrySource)).BeginInit();
 			this.ButtonPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.Playlist_Delay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ButtonBindSource)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -62,7 +63,7 @@
 			this.Playlist.Location = new System.Drawing.Point(0, 0);
 			this.Playlist.Name = "Playlist";
 			this.Playlist.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this.Playlist.Size = new System.Drawing.Size(253, 207);
+			this.Playlist.Size = new System.Drawing.Size(205, 207);
 			this.Playlist.TabIndex = 0;
 			this.Playlist.TabStop = false;
 			this.Playlist.Text = "PLAYLIST";
@@ -103,7 +104,7 @@
 			this.PlaylistView.RowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.PlaylistView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.PlaylistView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.PlaylistView.Size = new System.Drawing.Size(247, 182);
+			this.PlaylistView.Size = new System.Drawing.Size(199, 182);
 			this.PlaylistView.TabIndex = 0;
 			this.PlaylistView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PlaylistView_CellMouseDoubleClick);
 			this.PlaylistView.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.PlaylistControl_CellPainting);
@@ -139,7 +140,7 @@
 			this.Playlist_Remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.Playlist_Remove.FlatAppearance.BorderSize = 0;
 			this.Playlist_Remove.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.Playlist_Remove.Location = new System.Drawing.Point(207, 3);
+			this.Playlist_Remove.Location = new System.Drawing.Point(159, 3);
 			this.Playlist_Remove.Name = "Playlist_Remove";
 			this.Playlist_Remove.Size = new System.Drawing.Size(22, 22);
 			this.Playlist_Remove.TabIndex = 8;
@@ -152,7 +153,7 @@
 			this.Playlist_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.Playlist_Add.FlatAppearance.BorderSize = 0;
 			this.Playlist_Add.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.Playlist_Add.Location = new System.Drawing.Point(228, 3);
+			this.Playlist_Add.Location = new System.Drawing.Point(180, 3);
 			this.Playlist_Add.Name = "Playlist_Add";
 			this.Playlist_Add.Size = new System.Drawing.Size(22, 22);
 			this.Playlist_Add.TabIndex = 3;
@@ -166,83 +167,53 @@
 			this.dataGridViewTextBoxColumn1.HeaderText = "Tag";
 			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
 			// 
-			// Playlist_Export
-			// 
-			this.Playlist_Export.AutoSize = true;
-			this.Playlist_Export.Dock = System.Windows.Forms.DockStyle.Right;
-			this.Playlist_Export.FlatAppearance.BorderSize = 0;
-			this.Playlist_Export.Location = new System.Drawing.Point(227, 2);
-			this.Playlist_Export.Margin = new System.Windows.Forms.Padding(0);
-			this.Playlist_Export.Name = "Playlist_Export";
-			this.Playlist_Export.Size = new System.Drawing.Size(24, 22);
-			this.Playlist_Export.TabIndex = 8;
-			this.Playlist_Export.Text = "E";
-			this.Playlist_Export.UseVisualStyleBackColor = true;
-			this.Playlist_Export.Visible = false;
-			// 
-			// Playlist_Import
-			// 
-			this.Playlist_Import.AutoSize = true;
-			this.Playlist_Import.Dock = System.Windows.Forms.DockStyle.Right;
-			this.Playlist_Import.FlatAppearance.BorderSize = 0;
-			this.Playlist_Import.Location = new System.Drawing.Point(207, 2);
-			this.Playlist_Import.Margin = new System.Windows.Forms.Padding(0);
-			this.Playlist_Import.Name = "Playlist_Import";
-			this.Playlist_Import.Size = new System.Drawing.Size(20, 22);
-			this.Playlist_Import.TabIndex = 9;
-			this.Playlist_Import.Text = "I";
-			this.Playlist_Import.UseVisualStyleBackColor = true;
-			this.Playlist_Import.Visible = false;
-			// 
 			// ButtonPanel
 			// 
+			this.ButtonPanel.Controls.Add(this.Playlist_Delay);
 			this.ButtonPanel.Controls.Add(this.AutoPlayToggle);
 			this.ButtonPanel.Controls.Add(this.Playlist_Random);
 			this.ButtonPanel.Controls.Add(this.Playlist_Loop);
-			this.ButtonPanel.Controls.Add(this.Playlist_Import);
-			this.ButtonPanel.Controls.Add(this.Playlist_Export);
 			this.ButtonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.ButtonPanel.Location = new System.Drawing.Point(0, 210);
 			this.ButtonPanel.Name = "ButtonPanel";
 			this.ButtonPanel.Padding = new System.Windows.Forms.Padding(2);
-			this.ButtonPanel.Size = new System.Drawing.Size(253, 26);
+			this.ButtonPanel.Size = new System.Drawing.Size(205, 26);
 			this.ButtonPanel.TabIndex = 10;
 			// 
-			// Playlist_Random
+			// Playlist_Delay
 			// 
-			this.Playlist_Random.Appearance = System.Windows.Forms.Appearance.Button;
-			this.Playlist_Random.AutoSize = true;
-			this.Playlist_Random.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ButtonBindSource, "RandomMode", true));
-			this.Playlist_Random.Dock = System.Windows.Forms.DockStyle.Left;
-			this.Playlist_Random.Location = new System.Drawing.Point(46, 2);
-			this.Playlist_Random.Margin = new System.Windows.Forms.Padding(0);
-			this.Playlist_Random.Name = "Playlist_Random";
-			this.Playlist_Random.Size = new System.Drawing.Size(62, 22);
-			this.Playlist_Random.TabIndex = 7;
-			this.Playlist_Random.Text = "Random";
-			this.Playlist_Random.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.Playlist_Random.UseVisualStyleBackColor = true;
-			this.Playlist_Random.CheckedChanged += new System.EventHandler(this.Playlist_Random_CheckedChanged);
+			this.Playlist_Delay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.Playlist_Delay.DecimalPlaces = 1;
+			this.Playlist_Delay.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.Playlist_Delay.Location = new System.Drawing.Point(152, 1);
+			this.Playlist_Delay.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.Playlist_Delay.Name = "Playlist_Delay";
+			this.Playlist_Delay.Size = new System.Drawing.Size(48, 23);
+			this.Playlist_Delay.TabIndex = 11;
+			this.HelpTip.SetToolTip(this.Playlist_Delay, "Delay before playing the next song.");
+			this.Playlist_Delay.ValueChanged += new System.EventHandler(this.Playlist_Delay_ValueChanged);
 			// 
-			// ButtonBindSource
+			// AutoPlayToggle
 			// 
-			this.ButtonBindSource.DataSource = typeof(FFBardMusicPlayer.Controls.BmpPlaylist);
-			// 
-			// Playlist_Loop
-			// 
-			this.Playlist_Loop.Appearance = System.Windows.Forms.Appearance.Button;
-			this.Playlist_Loop.AutoSize = true;
-			this.Playlist_Loop.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ButtonBindSource, "LoopMode", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-			this.Playlist_Loop.Dock = System.Windows.Forms.DockStyle.Left;
-			this.Playlist_Loop.Location = new System.Drawing.Point(2, 2);
-			this.Playlist_Loop.Margin = new System.Windows.Forms.Padding(0);
-			this.Playlist_Loop.Name = "Playlist_Loop";
-			this.Playlist_Loop.Size = new System.Drawing.Size(44, 22);
-			this.Playlist_Loop.TabIndex = 6;
-			this.Playlist_Loop.Text = "Loop";
-			this.Playlist_Loop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.Playlist_Loop.UseVisualStyleBackColor = true;
-			this.Playlist_Loop.CheckedChanged += new System.EventHandler(this.Playlist_Loop_CheckedChanged);
+			this.AutoPlayToggle.AutoSize = true;
+			this.AutoPlayToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.PlaylistAutoPlay;
+			this.AutoPlayToggle.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.AutoPlayToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "PlaylistAutoPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.AutoPlayToggle.Location = new System.Drawing.Point(57, 4);
+			this.AutoPlayToggle.Name = "AutoPlayToggle";
+			this.AutoPlayToggle.Size = new System.Drawing.Size(79, 19);
+			this.AutoPlayToggle.TabIndex = 10;
+			this.AutoPlayToggle.Text = "Auto-play";
+			this.HelpTip.SetToolTip(this.AutoPlayToggle, "Autoplays the next entry if it hasn\'t reached the end.");
+			this.AutoPlayToggle.UseVisualStyleBackColor = true;
 			// 
 			// dataGridViewTextBoxColumn3
 			// 
@@ -268,18 +239,53 @@
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			this.dataGridViewTextBoxColumn2.ReadOnly = true;
 			// 
-			// AutoPlayToggle
+			// Playlist_Random
 			// 
-			this.AutoPlayToggle.AutoSize = true;
-			this.AutoPlayToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.PlaylistAutoPlay;
-			this.AutoPlayToggle.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.AutoPlayToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "PlaylistAutoPlay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-			this.AutoPlayToggle.Location = new System.Drawing.Point(111, 4);
-			this.AutoPlayToggle.Name = "AutoPlayToggle";
-			this.AutoPlayToggle.Size = new System.Drawing.Size(79, 19);
-			this.AutoPlayToggle.TabIndex = 10;
-			this.AutoPlayToggle.Text = "Auto-play";
-			this.AutoPlayToggle.UseVisualStyleBackColor = true;
+			this.Playlist_Random.Appearance = System.Windows.Forms.Appearance.Button;
+			this.Playlist_Random.AutoSize = true;
+			this.Playlist_Random.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ButtonBindSource, "RandomMode", true));
+			this.Playlist_Random.Dock = System.Windows.Forms.DockStyle.Left;
+			this.Playlist_Random.Image = global::FFBardMusicPlayer.Properties.Resources.Shuffle;
+			this.Playlist_Random.Location = new System.Drawing.Point(28, 2);
+			this.Playlist_Random.Margin = new System.Windows.Forms.Padding(0);
+			this.Playlist_Random.Name = "Playlist_Random";
+			this.Playlist_Random.Size = new System.Drawing.Size(26, 22);
+			this.Playlist_Random.TabIndex = 7;
+			this.Playlist_Random.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.HelpTip.SetToolTip(this.Playlist_Random, "Randomize the next song.");
+			this.Playlist_Random.UseVisualStyleBackColor = true;
+			this.Playlist_Random.CheckedChanged += new System.EventHandler(this.Playlist_Random_CheckedChanged);
+			// 
+			// ButtonBindSource
+			// 
+			this.ButtonBindSource.DataSource = typeof(FFBardMusicPlayer.Controls.BmpPlaylist);
+			// 
+			// Playlist_Loop
+			// 
+			this.Playlist_Loop.Appearance = System.Windows.Forms.Appearance.Button;
+			this.Playlist_Loop.AutoSize = true;
+			this.Playlist_Loop.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.ButtonBindSource, "LoopMode", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+			this.Playlist_Loop.Dock = System.Windows.Forms.DockStyle.Left;
+			this.Playlist_Loop.Image = global::FFBardMusicPlayer.Properties.Resources.Loop;
+			this.Playlist_Loop.Location = new System.Drawing.Point(2, 2);
+			this.Playlist_Loop.Margin = new System.Windows.Forms.Padding(0);
+			this.Playlist_Loop.Name = "Playlist_Loop";
+			this.Playlist_Loop.Size = new System.Drawing.Size(26, 22);
+			this.Playlist_Loop.TabIndex = 6;
+			this.Playlist_Loop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.HelpTip.SetToolTip(this.Playlist_Loop, "Loop the entire playlist.");
+			this.Playlist_Loop.UseVisualStyleBackColor = true;
+			this.Playlist_Loop.CheckedChanged += new System.EventHandler(this.Playlist_Loop_CheckedChanged);
+			// 
+			// HelpTip
+			// 
+			this.HelpTip.AutoPopDelay = 5000;
+			this.HelpTip.BackColor = System.Drawing.Color.White;
+			this.HelpTip.ForeColor = System.Drawing.Color.Black;
+			this.HelpTip.InitialDelay = 100;
+			this.HelpTip.ReshowDelay = 100;
+			this.HelpTip.UseAnimation = false;
+			this.HelpTip.UseFading = false;
 			// 
 			// BmpPlaylist
 			// 
@@ -289,12 +295,13 @@
 			this.Controls.Add(this.Playlist);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "BmpPlaylist";
-			this.Size = new System.Drawing.Size(253, 236);
+			this.Size = new System.Drawing.Size(205, 236);
 			this.Playlist.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.PlaylistView)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MidiEntrySource)).EndInit();
 			this.ButtonPanel.ResumeLayout(false);
 			this.ButtonPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.Playlist_Delay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ButtonBindSource)).EndInit();
 			this.ResumeLayout(false);
 
@@ -311,8 +318,6 @@
 		private Components.BmpCheckButton Playlist_Loop;
 		private Components.BmpCheckButton Playlist_Random;
 		private System.Windows.Forms.Button Playlist_Remove;
-		private System.Windows.Forms.Button Playlist_Export;
-		private System.Windows.Forms.Button Playlist_Import;
 		private System.Windows.Forms.Panel ButtonPanel;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
@@ -321,5 +326,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn filePathDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
 		private System.Windows.Forms.CheckBox AutoPlayToggle;
+		private System.Windows.Forms.NumericUpDown Playlist_Delay;
+		private System.Windows.Forms.ToolTip HelpTip;
 	}
 }
