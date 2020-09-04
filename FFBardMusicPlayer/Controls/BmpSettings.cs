@@ -185,9 +185,9 @@ namespace FFBardMusicPlayer.Controls {
 			BmpAbout about = new BmpAbout();
 			about.ShowDialog(this);
 		}
-	}
+    }
 
-	public class MidiInput {
+    public class MidiInput {
 		public string name = string.Empty;
 		public int id = 0;
 		public MidiInput(string n, int i) {

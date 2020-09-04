@@ -230,6 +230,7 @@ namespace FFBardMusicPlayer.Forms {
 
 			Playlist.OnMidiSelect += Playlist_OnMidiSelect;
 			Playlist.OnPlaylistRequestAdd += Playlist_OnPlaylistRequestAdd;
+            Playlist.OnPlaylistManualRequestAdd += Playlist_OnPlaylistManualRequestAdd;
 
 			this.ResizeBegin += (s, e) => {
 				LocalOrchestra.SuspendLayout();
@@ -543,15 +544,24 @@ namespace FFBardMusicPlayer.Forms {
 				Playlist.AddPlaylistEntry(filename, track);
 			}
 		}
-		///
-
-
+        private void Playlist_OnPlaylistManualRequestAdd(object o, BmpPlaylist.BmpPlaylistRequestAddEvent args)
+        {
+            if (!string.IsNullOrEmpty(args.filePath))
+            {
+                // ensure the midi is in our directory before we accept it and add it to the playlist
+                if (Explorer.SelectFile(args.filePath))
+                {
+                    Playlist.AddPlaylistEntry(args.filePath, args.track, args.dropIndex);
+                }
+            }
+        }
 		private void NextSong() {
 			if(Playlist.AdvanceNext(out string filename, out int track)) {
 				Playlist.PlaySelectedMidi();
 			} else {
 				// If failed playlist when you wanted to, just stop
-				if(proceedPlaylistMidi) {
+				if (proceedPlaylistMidi)
+                {
 					Player.Player.Stop();
 				}
 			}
