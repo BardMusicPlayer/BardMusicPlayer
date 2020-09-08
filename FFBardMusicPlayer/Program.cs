@@ -1,6 +1,8 @@
 ﻿using CommandLine;
 using FFBardMusicPlayer.Forms;
+using Sanford.Multimedia.Midi;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -60,6 +62,17 @@ namespace FFBardMusicPlayer {
 			}
 
 			Sharlayan.Reader.JsonPath = appBase;
+
+			BmpPluginHelper helper = BmpPluginHelper.LoadPlugins();
+			string filename = "songs/test.mml";
+			if (helper.LoadFile(filename, out Sequencer song, out string error))
+			{
+				Console.WriteLine(string.Format("Loaded MML {0} [{1}]", song, error));
+			} else
+			{
+				Console.WriteLine(string.Format("Couldn't load [{0}]", filename));
+			}
+			//Console.ReadKey();
 
 			BmpMain app = new BmpMain();
 			Application.Run(app);
