@@ -5,10 +5,12 @@ using Sanford.Multimedia.Midi;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Sharlayan.Core.Enums.Performance;
 
 namespace FFBardMusicPlayer
 {
@@ -86,7 +88,7 @@ namespace FFBardMusicPlayer
                     if (!(skipFirst && index == 0))
                     {
 
-                        var watch = System.Diagnostics.Stopwatch.StartNew();
+                        var watch = Stopwatch.StartNew();
 
                         int noteVelocity = int.Parse(index.ToString()) + (skipFirst ? 0 : 1);
 
@@ -126,8 +128,8 @@ namespace FFBardMusicPlayer
                         }
 
                         watch.Stop();
-                        //Console.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = System.Diagnostics.Stopwatch.StartNew();
+                        Debug.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = Stopwatch.StartNew();
 
                         // Merge all the dictionaries into one collection
                         TrackChunk newChunk = new TrackChunk();
@@ -148,8 +150,8 @@ namespace FFBardMusicPlayer
                         allNoteEvents = null;
 
                         watch.Stop();
-                        //Console.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = System.Diagnostics.Stopwatch.StartNew();
+                        Debug.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = Stopwatch.StartNew();
 
                         // auto arpeggiate
                         Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
@@ -177,8 +179,8 @@ namespace FFBardMusicPlayer
                         }
 
                         watch.Stop();
-                        //Console.WriteLine("step 3: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = System.Diagnostics.Stopwatch.StartNew();
+                        Debug.WriteLine("step 3: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = Stopwatch.StartNew();
 
                         notesToFix = notesToFix.Reverse().ToArray();
                         List<Note> fixedNotes = new List<Note>();
@@ -208,8 +210,8 @@ namespace FFBardMusicPlayer
                         notesToFix = null;
 
                         watch.Stop();
-                        //Console.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = System.Diagnostics.Stopwatch.StartNew();
+                        Debug.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = Stopwatch.StartNew();
 
                         // Discover the instrument name from the track title, and from program changes if that fails
                         int octaveShift = 0;
@@ -223,14 +225,21 @@ namespace FFBardMusicPlayer
                             {
                                 trackName = match.Groups[1].Value;
                                 if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
-                                (bool success, string parsedTrackName) = TrackNameToInstrumentName(trackName);
+
+                                (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
 
                                 if (success) trackName = parsedTrackName;
                                 else
                                 {
-                                    var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
-                                    if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToInstrumentName((SevenBitNumber)originalInstrument);
+                                    (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
+
                                     if (success) trackName = parsedTrackName;
+                                    else
+                                    {
+                                        var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
+                                        if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
+                                        if (success) trackName = parsedTrackName;
+                                    }
                                 }
 
                                 if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
@@ -243,13 +252,13 @@ namespace FFBardMusicPlayer
                         fixedNotes = null;
 
                         watch.Stop();
-                        //Console.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = System.Diagnostics.Stopwatch.StartNew();
+                        Debug.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = Stopwatch.StartNew();
 
                         newTrackChunks.TryAdd(noteVelocity, newChunk);
 
                         watch.Stop();
-                        //Console.WriteLine("step 6: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        Debug.WriteLine("step 6: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     }
                 });
 
@@ -291,9 +300,16 @@ namespace FFBardMusicPlayer
             return sequence;
         }
 
-        private static (bool, string) TrackNameToInstrumentName(string trackName)
+        private static (bool, string) TrackNameToEnumInstrumentName(string trackName)
         {
-            if (string.IsNullOrEmpty(trackName)) return (false, null);
+            if (string.IsNullOrEmpty(trackName)) return (false, trackName);
+            foreach (Instrument ins in (Instrument[])Enum.GetValues(typeof(Instrument))) if (trackName.Contains(ins.ToString().ToLower())) return (true, ins.ToString());
+            return (false, trackName);
+        }
+
+        private static (bool, string) TrackNameToStringInstrumentName(string trackName)
+        {
+            if (string.IsNullOrEmpty(trackName)) return (false, trackName);
             switch (trackName)
             {
                 case "harp":
@@ -362,7 +378,7 @@ namespace FFBardMusicPlayer
             }
         }
 
-        private static (bool, string) ProgramToInstrumentName(SevenBitNumber prog)
+        private static (bool, string) ProgramToStringInstrumentName(SevenBitNumber prog)
         {
             if (prog.Equals(null)) return (false, null);
             switch (prog)
