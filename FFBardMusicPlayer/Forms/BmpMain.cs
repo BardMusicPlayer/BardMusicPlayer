@@ -685,8 +685,8 @@ namespace FFBardMusicPlayer.Forms {
 			Statistics.AddNoteCount();
 
 			if(Properties.Settings.Default.Verbose) {
-				FFXIVKeybindDat.Keybind keybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
-				if(keybind == null) {
+				FFXIVKeybindDat.Keybind thiskeybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
+				if(thiskeybind == null) {
 					string ns = FFXIVKeybindDat.RawNoteByteToPianoKey(onNote.note);
 					if(!string.IsNullOrEmpty(ns)) {
 						string str = string.Format("Note {0} is out of range, it will not be played.", ns);
@@ -718,8 +718,11 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-			if(WantsSlow) {
-				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
+
+			if (FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind)
+			{
+				if (WantsSlow)
+				{
 					int delay = Decimal.ToInt32(Properties.Settings.Default.PlayHold);
 					// Slow play
 
@@ -734,22 +737,16 @@ namespace FFBardMusicPlayer.Forms {
 
 					return;
 				}
-			}
-			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(onNote)) {
-					// Chord detected and queued
-					// Console.WriteLine(String.Format("Delay note {0} by 50ms", onNote.ToString()));
+				else if (WantsHold)
+				{
+					FFXIV.hook.SendKeybindDown(keybind);
+				}
+				else
+				{
+					FFXIV.hook.SendAsyncKeybind(keybind);
 				}
 			}
-			if(!chordNotes.HasTimer(onNote)) {
-				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
-					if(WantsHold) {
-						FFXIV.hook.SendKeybindDown(keybind);
-					} else {
-						FFXIV.hook.SendAsyncKeybind(keybind);
-					}
-				}
-			}
+
 		}
 
 		private void OffMidiVoice(Object o, NoteEvent offNote) {
