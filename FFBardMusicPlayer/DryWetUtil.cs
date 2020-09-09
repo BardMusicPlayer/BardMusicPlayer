@@ -91,8 +91,8 @@ namespace FFBardMusicPlayer
 						// Fill the track dictionary and remove duplicate notes
 						foreach (Note note in originalChunk.GetNotes())
 						{
-							long noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
-							long noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+							long noteOnMS = 1000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote; 
+							long noteOffMS = 1000 + note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
 							int noteNumber = note.NoteNumber;
 
 							Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
@@ -113,6 +113,55 @@ namespace FFBardMusicPlayer
 							else allNoteEvents[noteNumber].Add(noteOnMS, newNote);
 						}
 
+						// Merge all the dictionaries into one collection
+						TrackChunk newChunk = new TrackChunk();
+						foreach (var noteCollection in allNoteEvents.Values) newChunk.AddNotes(noteCollection.Values);
+						allNoteEvents = null;
+						
+						// auto arpeggiate
+						Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
+						List<Note> fixedNotes = new List<Note>();
+						for (int i = 0; i < notesToFix.Count(); i++)
+						{
+							int noteNum = notesToFix[i].NoteNumber;
+							long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
+							long dur = notesToFix[i].Length;
+							int velocity = notesToFix[i].Velocity;
+							if (i == 0)
+							{
+								fixedNotes.Add(new Note((SevenBitNumber)noteNum, dur, time) // very last event
+								{
+									Channel = (FourBitNumber)0,
+									Velocity = (SevenBitNumber)velocity,
+									OffVelocity = (SevenBitNumber)velocity
+								});
+							}
+							else
+							{
+								long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
+								for (int k = i - 1; k >= 0; k--)
+								{
+									long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
+									if (lastOn < lowestParent) lowestParent = lastOn;
+								}
+								if (lowestParent <= time + 50)
+								{
+									time = lowestParent - 50;
+									if (time < 0) continue;
+									notesToFix[i].Time = time;
+									dur = 25;
+									notesToFix[i].Length = dur;
+								}
+								fixedNotes.Add(new Note((SevenBitNumber)noteNum, dur, time)
+								{
+									Channel = (FourBitNumber)0,
+									Velocity = (SevenBitNumber)velocity,
+									OffVelocity = (SevenBitNumber)velocity
+								});
+							}
+						}
+						notesToFix = null;
+
 						// Discover the instrument name from the track title, and from program changes if that fails
 						int octaveShift = 0;
 						string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
@@ -125,7 +174,6 @@ namespace FFBardMusicPlayer
 							{
 								trackName = match.Groups[1].Value;
 								if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
-								Console.WriteLine(octaveShift);
 								(bool success, string parsedTrackName) = TrackNameToInstrumentName(trackName);
 
 								if (success) trackName = parsedTrackName;
@@ -138,36 +186,12 @@ namespace FFBardMusicPlayer
 
 								if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
 								else if (octaveShift < 0) trackName = trackName + octaveShift;
-								Console.WriteLine(trackName);
 							}
 						}
-
-						// Fill the new track with notes
-						TrackChunk newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-						foreach (var noteCollection in allNoteEvents.Values) newChunk.AddNotes(noteCollection.Values);
-						allNoteEvents = null;
-						List<Note> fixedChords = new List<Note>();
-
-						long lastNoteOff = -26;
-						foreach (Note note in newChunk.GetNotes())
-                        {
-							long noteOn = note.Time;
-							if (noteOn - 25 > lastNoteOff)
-							{
-								fixedChords.Add(note);
-								lastNoteOff = note.Time + note.Length;
-							}
-							else
-							{
-								long delta = lastNoteOff + 25 - noteOn;
-								note.Time = noteOn + delta;
-								fixedChords.Add(note);
-								lastNoteOff = note.Time + note.Length;
-							}
-                        }
+						
 						newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-						newChunk.AddNotes(fixedChords);
-						fixedChords = null;
+						newChunk.AddNotes(fixedNotes);
+						fixedNotes = null;
 
 						newTrackChunks.TryAdd(noteVelocity, newChunk);
 					}
@@ -175,9 +199,12 @@ namespace FFBardMusicPlayer
 
 				// Fill a midi file with the new track chunks
 				newMidiFile = new MidiFile();
-				newMidiFile.Chunks.AddRange(newTrackChunks.Values);
+				newMidiFile.Chunks.Add(new TrackChunk());
 				newMidiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(600);
 				using (TempoMapManager tempoManager = newMidiFile.ManageTempoMap()) tempoManager.SetTempo(0, Tempo.FromBeatsPerMinute(100));
+				newMidiFile.Chunks.AddRange(newTrackChunks.Values);
+
+				newMidiFile.Write("debug.mid", true, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
 
 				// Write the midi file out into a memory stream and pass that to sanford to create a sanford sequence object
 				using (var stream = new MemoryStream())
@@ -234,7 +261,9 @@ namespace FFBardMusicPlayer
 				case "fife":
 				case "piccolo":
 				case "piccolos":
-				case "fifes": return (true, "Fife");
+				case "fifes":
+				case "ocarina":
+				case "ocarinas": return (true, "Fife");
 				case "panpipes":
 				case "panflute":
 				case "panflutes":
@@ -279,10 +308,12 @@ namespace FFBardMusicPlayer
 				case 46: return (true, "Harp");
 
 				case 0:
-				case 1: return (true, "Piano");
+				case 1:  return (true, "Piano");
 
 				case 24: return (true, "Lute");
 
+				case 6:
+				case 35:
 				case 45: return (true, "Fiddle");
 
 				case 73: return (true, "Flute");
@@ -291,7 +322,8 @@ namespace FFBardMusicPlayer
 
 				case 71: return (true, "Clarinet");
 
-				case 72: return (true, "Fife");
+				case 72:
+				case 79: return (true, "Fife");
 
 				case 75: return (true, "Panpipes");
 
