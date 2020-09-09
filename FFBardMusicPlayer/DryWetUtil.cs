@@ -68,6 +68,9 @@ namespace FFBardMusicPlayer
                 }
                 #endregion
 
+                Console.WriteLine("Scrubbing " + filePath);
+                var loaderWatch = System.Diagnostics.Stopwatch.StartNew();
+
                 if (explode || midiFile.Chunks.Count == 1) originalTrackChunks = midiFile.GetTrackChunks().First().Explode();
                 else originalTrackChunks = midiFile.GetTrackChunks();
 
@@ -82,6 +85,9 @@ namespace FFBardMusicPlayer
                 {
                     if (!(skipFirst && index == 0))
                     {
+
+                        var watch = System.Diagnostics.Stopwatch.StartNew();
+
                         int noteVelocity = int.Parse(index.ToString()) + (skipFirst ? 0 : 1);
 
                         Dictionary<int, Dictionary<long, Note>> allNoteEvents = new Dictionary<int, Dictionary<long, Note>>();
@@ -119,59 +125,91 @@ namespace FFBardMusicPlayer
                             else allNoteEvents[noteNumber].Add(noteOnMS, newNote);
                         }
 
+                        watch.Stop();
+                        //Console.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = System.Diagnostics.Stopwatch.StartNew();
+
                         // Merge all the dictionaries into one collection
                         TrackChunk newChunk = new TrackChunk();
                         for (int i = 0; i < 127; i++)
                         {
                             long lastNoteTimeStamp = -1;
-                            Dictionary<long, Note> noteEvents = allNoteEvents[i];
-                            foreach (var noteEvent in noteEvents)
+                            foreach (var noteEvent in allNoteEvents[i])
                             {
-                                if (lastNoteTimeStamp >= 0 && noteEvents[lastNoteTimeStamp].Length + lastNoteTimeStamp >= noteEvent.Key)
+                                if (lastNoteTimeStamp >= 0 && allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp >= noteEvent.Key)
                                 {
-                                    noteEvents[lastNoteTimeStamp].Length = noteEvents[lastNoteTimeStamp].Length - (noteEvents[lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
+                                    allNoteEvents[i][lastNoteTimeStamp].Length = allNoteEvents[i][lastNoteTimeStamp].Length - (allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
                                 }
 
                                 lastNoteTimeStamp = noteEvent.Key;
                             }
-                            newChunk.AddNotes(noteEvents.Values);
-                            noteEvents = null;
                         }
+                        newChunk.AddNotes(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
                         allNoteEvents = null;
 
+                        watch.Stop();
+                        //Console.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = System.Diagnostics.Stopwatch.StartNew();
+
                         // auto arpeggiate
-                        Note[] notesToFix = newChunk.GetNotes().ToArray();
+                        Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
+                        for (int i = 1; i < notesToFix.Count(); i++)
+                        {
+                            int noteNum = notesToFix[i].NoteNumber;
+                            long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
+                            long dur = notesToFix[i].Length;
+                            int velocity = notesToFix[i].Velocity;
+                            
+                            long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
+                            for (int k = i - 1; k >= 0; k--)
+                            {
+                                long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
+                                if (lastOn < lowestParent) lowestParent = lastOn;
+                            }
+                            if (lowestParent <= time + 50)
+                            {
+                                time = lowestParent - 50;
+                                if (time < 0) continue;
+                                notesToFix[i].Time = time;
+                                dur = 25;
+                                notesToFix[i].Length = dur;
+                            }
+                        }
+
+                        watch.Stop();
+                        //Console.WriteLine("step 3: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = System.Diagnostics.Stopwatch.StartNew();
+
+                        notesToFix = notesToFix.Reverse().ToArray();
                         List<Note> fixedNotes = new List<Note>();
                         for (int j = 0; j < notesToFix.Count(); j++)
                         {
+                            var noteNum = notesToFix[j].NoteNumber;
+                            var time = notesToFix[j].Time;
+                            var dur = notesToFix[j].Length;
+                            var channel = notesToFix[j].Channel;
+                            var velocity = notesToFix[j].Velocity;
+
                             if (j + 1 < notesToFix.Count())
                             {
                                 if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
                                 {
-                                    var dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
-                                    notesToFix[j].Length = dur < 25 ? 25 : dur;
+                                    dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
+                                    dur = dur < 25 ? 1 : dur;
                                 }
                             }
-                        }
-
-                        long lastNoteOff = -26;
-                        for (int j = 0; j < notesToFix.Count(); j++)
-                        {
-                            if (notesToFix[j].Time - 25 > lastNoteOff) lastNoteOff = notesToFix[j].Time + notesToFix[j].Length;
-							else
-							{
-								long delta = lastNoteOff + 25 - notesToFix[j].Time;
-								notesToFix[j].Time = notesToFix[j].Time + delta;
-								lastNoteOff = notesToFix[j].Time + notesToFix[j].Length;
-							}
-                            fixedNotes.Add(new Note(notesToFix[j].NoteNumber, notesToFix[j].Length, notesToFix[j].Time)
+                            fixedNotes.Add(new Note(noteNum, dur, time)
                             {
-                                Channel = notesToFix[j].Channel,
-                                Velocity = notesToFix[j].Velocity,
-                                OffVelocity = notesToFix[j].Velocity
+                                Channel = channel,
+                                Velocity = velocity,
+                                OffVelocity = velocity
                             });
                         }
                         notesToFix = null;
+
+                        watch.Stop();
+                        //Console.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = System.Diagnostics.Stopwatch.StartNew();
 
                         // Discover the instrument name from the track title, and from program changes if that fails
                         int octaveShift = 0;
@@ -204,7 +242,14 @@ namespace FFBardMusicPlayer
                         newChunk.AddNotes(fixedNotes);
                         fixedNotes = null;
 
+                        watch.Stop();
+                        //Console.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                        watch = System.Diagnostics.Stopwatch.StartNew();
+
                         newTrackChunks.TryAdd(noteVelocity, newChunk);
+
+                        watch.Stop();
+                        //Console.WriteLine("step 6: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     }
                 });
 
@@ -225,7 +270,8 @@ namespace FFBardMusicPlayer
                     stream.Position = 0;
                     sequence = new Sequence(stream);
                 }
-
+                loaderWatch.Stop();
+                Console.WriteLine("Scrubbing MS: " + loaderWatch.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
