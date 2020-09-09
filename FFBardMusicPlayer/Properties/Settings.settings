@@ -29,9 +29,6 @@
     <Setting Name="SongDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">songs/</Value>
     </Setting>
-    <Setting Name="AutoArpeggiate" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="ForceListen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -43,9 +40,6 @@
     </Setting>
     <Setting Name="PlayLyrics" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="TooFastDelay" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="ChordDetectionDelay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>

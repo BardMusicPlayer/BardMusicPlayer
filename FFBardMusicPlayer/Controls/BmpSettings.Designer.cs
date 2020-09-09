@@ -44,10 +44,8 @@
             this.PlaybackSettings = new System.Windows.Forms.GroupBox();
             this.DelaySongsChange = new System.Windows.Forms.NumericUpDown();
             this.WaitBetweenSongsToggle = new System.Windows.Forms.CheckBox();
-            this.TooFastChange = new System.Windows.Forms.NumericUpDown();
             this.PlayHoldChange = new System.Windows.Forms.NumericUpDown();
             this.SlowPlayToggle = new System.Windows.Forms.CheckBox();
-            this.ArpeggiateToggle = new System.Windows.Forms.CheckBox();
             this.SettingHoldNotes = new System.Windows.Forms.CheckBox();
             this.ChatSimToggle = new System.Windows.Forms.CheckBox();
             this.HelpTip = new System.Windows.Forms.ToolTip(this.components);
@@ -57,7 +55,6 @@
             this.ChatSettings.SuspendLayout();
             this.PlaybackSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DelaySongsChange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TooFastChange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayHoldChange)).BeginInit();
             this.SuspendLayout();
             // 
@@ -295,10 +292,8 @@
             // 
             this.PlaybackSettings.Controls.Add(this.DelaySongsChange);
             this.PlaybackSettings.Controls.Add(this.WaitBetweenSongsToggle);
-            this.PlaybackSettings.Controls.Add(this.TooFastChange);
             this.PlaybackSettings.Controls.Add(this.PlayHoldChange);
             this.PlaybackSettings.Controls.Add(this.SlowPlayToggle);
-            this.PlaybackSettings.Controls.Add(this.ArpeggiateToggle);
             this.PlaybackSettings.Controls.Add(this.SettingHoldNotes);
             this.PlaybackSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PlaybackSettings.Location = new System.Drawing.Point(271, 0);
@@ -310,34 +305,19 @@
             this.PlaybackSettings.TabStop = false;
             this.PlaybackSettings.Text = "Playback";
             // 
-            // TooFastChange
+            // DelaySongsChange
             // 
-            this.TooFastChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.TooFastChange.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::FFBardMusicPlayer.Properties.Settings.Default, "TooFastDelay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.TooFastChange.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.TooFastChange.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.TooFastChange.Location = new System.Drawing.Point(226, 10);
-            this.TooFastChange.Margin = new System.Windows.Forms.Padding(0);
-            this.TooFastChange.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.TooFastChange.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.TooFastChange.Name = "TooFastChange";
-            this.TooFastChange.Size = new System.Drawing.Size(41, 22);
-            this.TooFastChange.TabIndex = 5;
-            this.TooFastChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.HelpTip.SetToolTip(this.TooFastChange, "How many milliseconds for detecting chords?");
-            this.TooFastChange.Value = global::FFBardMusicPlayer.Properties.Settings.Default.TooFastDelay;
+            this.DelaySongsChange.Location = new System.Drawing.Point(63, 12);
+            this.DelaySongsChange.Name = "DelaySongsChange";
+            this.DelaySongsChange.Size = new System.Drawing.Size(120, 22);
+            this.DelaySongsChange.TabIndex = 0;
+            // 
+            // WaitBetweenSongsToggle
+            // 
+            this.WaitBetweenSongsToggle.Location = new System.Drawing.Point(6, 10);
+            this.WaitBetweenSongsToggle.Name = "WaitBetweenSongsToggle";
+            this.WaitBetweenSongsToggle.Size = new System.Drawing.Size(104, 24);
+            this.WaitBetweenSongsToggle.TabIndex = 1;
             // 
             // PlayHoldChange
             // 
@@ -384,20 +364,6 @@
         "tra mode!");
             this.SlowPlayToggle.UseVisualStyleBackColor = true;
             this.SlowPlayToggle.CheckedChanged += new System.EventHandler(this.SlowPlayToggle_CheckedChanged);
-            // 
-            // ArpeggiateToggle
-            // 
-            this.ArpeggiateToggle.AutoSize = true;
-            this.ArpeggiateToggle.Checked = global::FFBardMusicPlayer.Properties.Settings.Default.AutoArpeggiate;
-            this.ArpeggiateToggle.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ArpeggiateToggle.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::FFBardMusicPlayer.Properties.Settings.Default, "AutoArpeggiate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ArpeggiateToggle.Location = new System.Drawing.Point(6, 15);
-            this.ArpeggiateToggle.Name = "ArpeggiateToggle";
-            this.ArpeggiateToggle.Size = new System.Drawing.Size(108, 17);
-            this.ArpeggiateToggle.TabIndex = 2;
-            this.ArpeggiateToggle.Text = "Simulate chords";
-            this.HelpTip.SetToolTip(this.ArpeggiateToggle, "Detect and simulate chords.");
-            this.ArpeggiateToggle.UseVisualStyleBackColor = true;
             // 
             // SettingHoldNotes
             // 
@@ -453,7 +419,6 @@
             this.PlaybackSettings.ResumeLayout(false);
             this.PlaybackSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DelaySongsChange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TooFastChange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayHoldChange)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -471,7 +436,6 @@
 		private System.Windows.Forms.Button KeyboardTest;
 		private System.Windows.Forms.CheckBox ChatSimToggle;
 		private System.Windows.Forms.ToolTip HelpTip;
-		private System.Windows.Forms.CheckBox ArpeggiateToggle;
 		private System.Windows.Forms.GroupBox ChatSettings;
 		private System.Windows.Forms.Panel SettingsScrollPanel;
 		private System.Windows.Forms.GroupBox PlaybackSettings;
@@ -481,7 +445,6 @@
 		private System.Windows.Forms.NumericUpDown PlayHoldChange;
 		private System.Windows.Forms.Button SignatureFolder;
 		private System.Windows.Forms.CheckBox sigCheckbox;
-		private System.Windows.Forms.NumericUpDown TooFastChange;
 		private System.Windows.Forms.CheckBox ForceOpenToggle;
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;

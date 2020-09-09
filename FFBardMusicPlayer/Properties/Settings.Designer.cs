@@ -133,18 +133,6 @@ namespace FFBardMusicPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoArpeggiate {
-            get {
-                return ((bool)(this["AutoArpeggiate"]));
-            }
-            set {
-                this["AutoArpeggiate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ForceListen {
             get {
@@ -188,18 +176,6 @@ namespace FFBardMusicPlayer.Properties {
             }
             set {
                 this["PlayLyrics"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public decimal TooFastDelay {
-            get {
-                return ((decimal)(this["TooFastDelay"]));
-            }
-            set {
-                this["TooFastDelay"] = value;
             }
         }
         

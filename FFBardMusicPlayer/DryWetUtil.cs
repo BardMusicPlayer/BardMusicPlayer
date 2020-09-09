@@ -90,8 +90,15 @@ namespace FFBardMusicPlayer
                         // Fill the track dictionary and remove duplicate notes
                         foreach (Note note in originalChunk.GetNotes())
                         {
-                            long noteOnMS = 1000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
-                            long noteOffMS = 1000 + note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+                            long noteOnMS = 0;
+
+                            long noteOffMS = 0;
+
+                            try
+                            {
+                                noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+                                noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+                            } catch (Exception) { continue; } // malformed note, most common is a note on missing a note off.
                             int noteNumber = note.NoteNumber;
 
                             Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
@@ -133,52 +140,35 @@ namespace FFBardMusicPlayer
                         allNoteEvents = null;
 
                         // auto arpeggiate
-                        Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
-                        for (int i = 1; i < notesToFix.Count(); i++)
-                        {
-                            int noteNum = notesToFix[i].NoteNumber;
-                            long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
-                            long dur = notesToFix[i].Length;
-                            int velocity = notesToFix[i].Velocity;
-                            
-                            long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
-                            for (int k = i - 1; k >= 0; k--)
-                            {
-                                long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
-                                if (lastOn < lowestParent) lowestParent = lastOn;
-                            }
-                            if (lowestParent <= time + 50)
-                            {
-                                time = lowestParent - 50;
-                                if (time < 0) continue;
-                                notesToFix[i].Time = time;
-                                dur = 25;
-                                notesToFix[i].Length = dur;
-                            }
-                        }
-                        notesToFix = notesToFix.Reverse().ToArray();
+                        Note[] notesToFix = newChunk.GetNotes().ToArray();
                         List<Note> fixedNotes = new List<Note>();
                         for (int j = 0; j < notesToFix.Count(); j++)
                         {
-                            var noteNum = notesToFix[j].NoteNumber;
-                            var time = notesToFix[j].Time;
-                            var dur = notesToFix[j].Length;
-                            var channel = notesToFix[j].Channel;
-                            var velocity = notesToFix[j].Velocity;
-
                             if (j + 1 < notesToFix.Count())
                             {
                                 if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
                                 {
-                                    dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
-                                    dur = dur < 25 ? 1 : dur;
+                                    var dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
+                                    notesToFix[j].Length = dur < 25 ? 25 : dur;
                                 }
                             }
-                            fixedNotes.Add(new Note(noteNum, dur, time)
+                        }
+
+                        long lastNoteOff = -26;
+                        for (int j = 0; j < notesToFix.Count(); j++)
+                        {
+                            if (notesToFix[j].Time - 25 > lastNoteOff) lastNoteOff = notesToFix[j].Time + notesToFix[j].Length;
+							else
+							{
+								long delta = lastNoteOff + 25 - notesToFix[j].Time;
+								notesToFix[j].Time = notesToFix[j].Time + delta;
+								lastNoteOff = notesToFix[j].Time + notesToFix[j].Length;
+							}
+                            fixedNotes.Add(new Note(notesToFix[j].NoteNumber, notesToFix[j].Length, notesToFix[j].Time)
                             {
-                                Channel = channel,
-                                Velocity = velocity,
-                                OffVelocity = velocity
+                                Channel = notesToFix[j].Channel,
+                                Velocity = notesToFix[j].Velocity,
+                                OffVelocity = notesToFix[j].Velocity
                             });
                         }
                         notesToFix = null;
@@ -239,6 +229,7 @@ namespace FFBardMusicPlayer
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw ex;
             }
             finally
