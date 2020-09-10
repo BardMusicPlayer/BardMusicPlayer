@@ -52,7 +52,7 @@ namespace FFBardMusicPlayer {
 
 			if(timestamp > 0) {
 
-				int tooFastDelay = Decimal.ToInt32(Properties.Settings.Default.TooFastDelay);
+				int tooFastDelay = 25;
 				bool tooFastSuccession = (Math.Abs(this.Tick - timestamp) < tooFastDelay);
 				if(tooFastSuccession) {
 
@@ -74,61 +74,6 @@ namespace FFBardMusicPlayer {
 					noteTimers.SetTimer(key, newKeyTimer);
 					return true;
 				}
-			}
-			return false;
-		}
-	}
-	public class NoteChordSimulation<T> : NoteProcessingBase<T> {
-
-		int tickNoteCount = 0;
-
-		public void Clear() {
-			tickNoteCount = 0;
-			noteTimers.Clear();
-		}
-
-		public void OffKey(T t) {
-			if(noteTimers.TryRemoveTimer(t, out Timer timer)) {
-				timer.Stop();
-			}
-		}
-
-		public bool OnKey(T t) {
-
-			int chordDetection = Properties.Settings.Default.ChordDetectionDelay;
-			bool tooFastChord = (Math.Abs(this.Tick - MaxTick) < chordDetection);
-			noteTimers.SetTimestamp(t, this.Tick);
-
-			if(!tooFastChord) {
-				tickNoteCount = 0;
-			} else {
-				tickNoteCount++;
-			}
-
-			// Chord simulation
-			if(tooFastChord && (tickNoteCount >= 1)) {
-				//Console.WriteLine(string.Format("{0} - {1} = {2}", this.Tick, MaxTick, tooFastChord));
-
-				if(noteTimers.TryRemoveTimer(t, out Timer delayedTimer))
-                {
-                    delayedTimer.Stop();
-					delayedTimer.Dispose();
-				}
-				Console.WriteLine(string.Format("Delay notechord = {0}", tickNoteCount * chordDetection));
-				delayedTimer = new Timer {
-					Interval = (tickNoteCount * chordDetection),
-					Enabled = true,
-				};
-				delayedTimer.Elapsed += delegate {
-					if (noteTimers.TryRemoveTimer(t, out Timer timer))
-                    {
-						timer.Stop();
-                        timer.Dispose();
-						NoteEvent?.Invoke(this, t);
-					}
-				};
-				noteTimers.SetTimer(t, delayedTimer);
-				return true;
 			}
 			return false;
 		}

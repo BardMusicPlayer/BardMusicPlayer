@@ -26,19 +26,17 @@
 			this.midiStatsBox = new System.Windows.Forms.GroupBox();
 			this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
 			this.ncText = new System.Windows.Forms.Label();
-			this.ncCount = new System.Windows.Forms.Label();
-			this.npsText = new System.Windows.Forms.Label();
-			this.npsCount = new System.Windows.Forms.Label();
 			this.bpmText = new System.Windows.Forms.Label();
+			this.ncCount = new System.Windows.Forms.Label();
 			this.bpmCount = new System.Windows.Forms.Label();
 			this.trkText = new System.Windows.Forms.Label();
 			this.trkCount = new System.Windows.Forms.Label();
-			this.chordText = new System.Windows.Forms.Label();
-			this.chordCount = new System.Windows.Forms.Label();
-			this.lyrText = new System.Windows.Forms.Label();
-			this.lyrBool = new System.Windows.Forms.Label();
 			this.nscText = new System.Windows.Forms.Label();
 			this.nscCount = new System.Windows.Forms.Label();
+			this.npsText = new System.Windows.Forms.Label();
+			this.npsCount = new System.Windows.Forms.Label();
+			this.chordText = new System.Windows.Forms.Label();
+			this.chordCount = new System.Windows.Forms.Label();
 			this.midiStatsBox.SuspendLayout();
 			this.InfoTable.SuspendLayout();
 			this.SuspendLayout();
@@ -71,9 +69,7 @@
 			this.InfoTable.Controls.Add(this.npsText, 0, 4);
 			this.InfoTable.Controls.Add(this.npsCount, 1, 4);
 			this.InfoTable.Controls.Add(this.chordText, 0, 5);
-			this.InfoTable.Controls.Add(this.lyrText, 0, 6);
 			this.InfoTable.Controls.Add(this.chordCount, 1, 5);
-			this.InfoTable.Controls.Add(this.lyrBool, 1, 6);
 			this.InfoTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.InfoTable.Location = new System.Drawing.Point(3, 16);
 			this.InfoTable.Name = "InfoTable";
@@ -97,33 +93,6 @@
 			this.ncText.Text = "Total note count";
 			this.ncText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ncCount
-			// 
-			this.ncCount.Location = new System.Drawing.Point(146, 40);
-			this.ncCount.Name = "ncCount";
-			this.ncCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-			this.ncCount.Size = new System.Drawing.Size(71, 20);
-			this.ncCount.TabIndex = 1;
-			this.ncCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// npsText
-			// 
-			this.npsText.Location = new System.Drawing.Point(3, 80);
-			this.npsText.Name = "npsText";
-			this.npsText.Size = new System.Drawing.Size(126, 20);
-			this.npsText.TabIndex = 2;
-			this.npsText.Text = "Note per seconds";
-			this.npsText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// npsCount
-			// 
-			this.npsCount.Location = new System.Drawing.Point(146, 80);
-			this.npsCount.Name = "npsCount";
-			this.npsCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-			this.npsCount.Size = new System.Drawing.Size(71, 20);
-			this.npsCount.TabIndex = 3;
-			this.npsCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// bpmText
 			// 
 			this.bpmText.Location = new System.Drawing.Point(3, 0);
@@ -132,6 +101,15 @@
 			this.bpmText.TabIndex = 4;
 			this.bpmText.Text = "Beats per minute";
 			this.bpmText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ncCount
+			// 
+			this.ncCount.Location = new System.Drawing.Point(146, 40);
+			this.ncCount.Name = "ncCount";
+			this.ncCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+			this.ncCount.Size = new System.Drawing.Size(71, 20);
+			this.ncCount.TabIndex = 1;
+			this.ncCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// bpmCount
 			// 
@@ -160,42 +138,6 @@
 			this.trkCount.TabIndex = 7;
 			this.trkCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// chordText
-			// 
-			this.chordText.Location = new System.Drawing.Point(3, 100);
-			this.chordText.Name = "chordText";
-			this.chordText.Size = new System.Drawing.Size(126, 20);
-			this.chordText.TabIndex = 8;
-			this.chordText.Text = "Chords detected";
-			this.chordText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// chordCount
-			// 
-			this.chordCount.Location = new System.Drawing.Point(146, 100);
-			this.chordCount.Name = "chordCount";
-			this.chordCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-			this.chordCount.Size = new System.Drawing.Size(71, 20);
-			this.chordCount.TabIndex = 9;
-			this.chordCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// lyrText
-			// 
-			this.lyrText.Location = new System.Drawing.Point(3, 120);
-			this.lyrText.Name = "lyrText";
-			this.lyrText.Size = new System.Drawing.Size(126, 20);
-			this.lyrText.TabIndex = 10;
-			this.lyrText.Text = "Has lyrics";
-			this.lyrText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lyrBool
-			// 
-			this.lyrBool.Location = new System.Drawing.Point(146, 120);
-			this.lyrBool.Name = "lyrBool";
-			this.lyrBool.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-			this.lyrBool.Size = new System.Drawing.Size(71, 20);
-			this.lyrBool.TabIndex = 11;
-			this.lyrBool.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// nscText
 			// 
 			this.nscText.Location = new System.Drawing.Point(3, 60);
@@ -213,6 +155,42 @@
 			this.nscCount.Size = new System.Drawing.Size(71, 20);
 			this.nscCount.TabIndex = 13;
 			this.nscCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// npsText
+			// 
+			this.npsText.Location = new System.Drawing.Point(3, 80);
+			this.npsText.Name = "npsText";
+			this.npsText.Size = new System.Drawing.Size(126, 20);
+			this.npsText.TabIndex = 2;
+			this.npsText.Text = "Note per seconds";
+			this.npsText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// npsCount
+			// 
+			this.npsCount.Location = new System.Drawing.Point(146, 80);
+			this.npsCount.Name = "npsCount";
+			this.npsCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+			this.npsCount.Size = new System.Drawing.Size(71, 20);
+			this.npsCount.TabIndex = 3;
+			this.npsCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// chordText
+			// 
+			this.chordText.Location = new System.Drawing.Point(3, 100);
+			this.chordText.Name = "chordText";
+			this.chordText.Size = new System.Drawing.Size(126, 20);
+			this.chordText.TabIndex = 8;
+			this.chordText.Text = "Chords detected";
+			this.chordText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// chordCount
+			// 
+			this.chordCount.Location = new System.Drawing.Point(146, 100);
+			this.chordCount.Name = "chordCount";
+			this.chordCount.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+			this.chordCount.Size = new System.Drawing.Size(71, 20);
+			this.chordCount.TabIndex = 9;
+			this.chordCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// BmpStatistics
 			// 
@@ -242,8 +220,6 @@
 		private System.Windows.Forms.Label trkCount;
 		private System.Windows.Forms.Label chordText;
 		private System.Windows.Forms.Label chordCount;
-		private System.Windows.Forms.Label lyrBool;
-		private System.Windows.Forms.Label lyrText;
 		private System.Windows.Forms.Label nscText;
 		private System.Windows.Forms.Label nscCount;
 	}

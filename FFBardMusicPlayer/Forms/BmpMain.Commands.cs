@@ -180,9 +180,6 @@ namespace FFBardMusicPlayer.Forms {
 		private bool ChatCommandCommand(BmpChatListener.Command cmd) {
 			if(IsCommandPermitted(cmd)) {
 				if(!string.IsNullOrEmpty(cmd.param)) {
-					if(Properties.Settings.Default.PlayLyrics) {
-						FFXIV.SendChatString(cmd.param);
-					}
 				}
 			}
 			return true;

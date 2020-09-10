@@ -26,21 +26,21 @@
 			this.components = new System.ComponentModel.Container();
 			this.GeneralSettings = new System.Windows.Forms.GroupBox();
 			this.KeyboardTest = new System.Windows.Forms.Button();
+			this.SignatureFolder = new System.Windows.Forms.Button();
 			this.SettingsScrollPanel = new System.Windows.Forms.Panel();
 			this.verboseToggle = new System.Windows.Forms.CheckBox();
-			this.UnequipPause = new System.Windows.Forms.CheckBox();
-			this.ForceOpenToggle = new System.Windows.Forms.CheckBox();
-			this.SignatureFolder = new System.Windows.Forms.Button();
 			this.sigCheckbox = new System.Windows.Forms.CheckBox();
-			this.MidiInputLabel = new System.Windows.Forms.Label();
-			this.SettingMidiInput = new System.Windows.Forms.ComboBox();
 			this.SettingChatSave = new System.Windows.Forms.CheckBox();
-			this.SettingBringBmp = new System.Windows.Forms.CheckBox();
-			this.SettingBringGame = new System.Windows.Forms.CheckBox();
 			this.SettingsTable = new System.Windows.Forms.TableLayoutPanel();
 			this.ChatSettings = new System.Windows.Forms.GroupBox();
+			this.SettingBringGame = new System.Windows.Forms.CheckBox();
+			this.UnequipPause = new System.Windows.Forms.CheckBox();
+			this.SettingBringBmp = new System.Windows.Forms.CheckBox();
 			this.PlaybackSettings = new System.Windows.Forms.GroupBox();
 			this.SettingHoldNotes = new System.Windows.Forms.CheckBox();
+			this.ForceOpenToggle = new System.Windows.Forms.CheckBox();
+			this.MidiInputLabel = new System.Windows.Forms.Label();
+			this.SettingMidiInput = new System.Windows.Forms.ComboBox();
 			this.HelpTip = new System.Windows.Forms.ToolTip(this.components);
 			this.GeneralSettings.SuspendLayout();
 			this.SettingsScrollPanel.SuspendLayout();
@@ -75,6 +75,16 @@
 			this.KeyboardTest.Text = "Test keyboard";
 			this.KeyboardTest.UseVisualStyleBackColor = true;
 			// 
+			// SignatureFolder
+			// 
+			this.SignatureFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.SignatureFolder.Location = new System.Drawing.Point(416, 3);
+			this.SignatureFolder.Name = "SignatureFolder";
+			this.SignatureFolder.Size = new System.Drawing.Size(116, 23);
+			this.SignatureFolder.TabIndex = 13;
+			this.SignatureFolder.Text = "Open Data folder";
+			this.SignatureFolder.UseVisualStyleBackColor = true;
+			// 
 			// SettingsScrollPanel
 			// 
 			this.SettingsScrollPanel.AutoScroll = true;
@@ -102,45 +112,6 @@
 			this.verboseToggle.UseVisualStyleBackColor = true;
 			this.verboseToggle.CheckedChanged += new System.EventHandler(this.verboseToggle_CheckedChanged);
 			// 
-			// UnequipPause
-			// 
-			this.UnequipPause.AutoSize = true;
-			this.UnequipPause.Checked = true;
-			this.UnequipPause.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.UnequipPause.Location = new System.Drawing.Point(15, 63);
-			this.UnequipPause.Name = "UnequipPause";
-			this.UnequipPause.Size = new System.Drawing.Size(196, 17);
-			this.UnequipPause.TabIndex = 19;
-			this.UnequipPause.Text = "Pause song when unequipping *";
-			this.HelpTip.SetToolTip(this.UnequipPause, "Pause the playing song when unequipping the instrument.\r\nUseful for resynchroniza" +
-        "tion or switching instrument mid-performance.");
-			this.UnequipPause.UseVisualStyleBackColor = true;
-			this.UnequipPause.CheckedChanged += new System.EventHandler(this.UnequipPause_CheckedChanged);
-			// 
-			// ForceOpenToggle
-			// 
-			this.ForceOpenToggle.AutoSize = true;
-			this.ForceOpenToggle.Location = new System.Drawing.Point(13, 68);
-			this.ForceOpenToggle.Name = "ForceOpenToggle";
-			this.ForceOpenToggle.Size = new System.Drawing.Size(222, 17);
-			this.ForceOpenToggle.TabIndex = 16;
-			this.ForceOpenToggle.Text = "Force playback without performance *";
-			this.HelpTip.SetToolTip(this.ForceOpenToggle, "Ignores the current performance status and plays anyways.\r\n* Recommended to only " +
-        "be used when patches break playback.\r\n* Ignored when hooked to non-FFXIV applica" +
-        "tions.");
-			this.ForceOpenToggle.UseVisualStyleBackColor = true;
-			this.ForceOpenToggle.CheckedChanged += new System.EventHandler(this.ForceOpenToggle_CheckedChanged);
-			// 
-			// SignatureFolder
-			// 
-			this.SignatureFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.SignatureFolder.Location = new System.Drawing.Point(416, 3);
-			this.SignatureFolder.Name = "SignatureFolder";
-			this.SignatureFolder.Size = new System.Drawing.Size(116, 23);
-			this.SignatureFolder.TabIndex = 13;
-			this.SignatureFolder.Text = "Open Data folder";
-			this.SignatureFolder.UseVisualStyleBackColor = true;
-			// 
 			// sigCheckbox
 			// 
 			this.sigCheckbox.AutoSize = true;
@@ -152,65 +123,17 @@
 			this.sigCheckbox.UseVisualStyleBackColor = true;
 			this.sigCheckbox.CheckedChanged += new System.EventHandler(this.sigCheckbox_CheckedChanged);
 			// 
-			// MidiInputLabel
-			// 
-			this.MidiInputLabel.Location = new System.Drawing.Point(10, 40);
-			this.MidiInputLabel.Name = "MidiInputLabel";
-			this.MidiInputLabel.Size = new System.Drawing.Size(104, 21);
-			this.MidiInputLabel.TabIndex = 14;
-			this.MidiInputLabel.Text = "MIDI Input device:";
-			this.MidiInputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// SettingMidiInput
-			// 
-			this.SettingMidiInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.SettingMidiInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.SettingMidiInput.FormattingEnabled = true;
-			this.SettingMidiInput.Items.AddRange(new object[] {
-            "None"});
-			this.SettingMidiInput.Location = new System.Drawing.Point(120, 41);
-			this.SettingMidiInput.Name = "SettingMidiInput";
-			this.SettingMidiInput.Size = new System.Drawing.Size(124, 21);
-			this.SettingMidiInput.TabIndex = 13;
-			// 
 			// SettingChatSave
 			// 
 			this.SettingChatSave.AutoSize = true;
 			this.SettingChatSave.Location = new System.Drawing.Point(26, 146);
 			this.SettingChatSave.Name = "SettingChatSave";
-			this.SettingChatSave.Size = new System.Drawing.Size(185, 17);
+			this.SettingChatSave.Size = new System.Drawing.Size(177, 17);
 			this.SettingChatSave.TabIndex = 5;
-			this.SettingChatSave.Text = "Save chatlogs to \"logs\" folder *";
-			this.HelpTip.SetToolTip(this.SettingChatSave, "* requires program restart.");
+			this.SettingChatSave.Text = "Save chatlogs to \"logs\" folder";
+			this.HelpTip.SetToolTip(this.SettingChatSave, "Toggling this on requires a program restart.");
 			this.SettingChatSave.UseVisualStyleBackColor = true;
 			this.SettingChatSave.CheckedChanged += new System.EventHandler(this.SettingChatSave_CheckedChanged);
-			// 
-			// SettingBringBmp
-			// 
-			this.SettingBringBmp.AutoSize = true;
-			this.SettingBringBmp.Checked = true;
-			this.SettingBringBmp.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.SettingBringBmp.Location = new System.Drawing.Point(15, 40);
-			this.SettingBringBmp.Name = "SettingBringBmp";
-			this.SettingBringBmp.Size = new System.Drawing.Size(235, 17);
-			this.SettingBringBmp.TabIndex = 4;
-			this.SettingBringBmp.Text = "Bring BMP to front on Performance open";
-			this.SettingBringBmp.UseVisualStyleBackColor = true;
-			this.SettingBringBmp.CheckedChanged += new System.EventHandler(this.SettingBringBmp_CheckedChanged);
-			// 
-			// SettingBringGame
-			// 
-			this.SettingBringGame.AutoSize = true;
-			this.SettingBringGame.Checked = true;
-			this.SettingBringGame.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.SettingBringGame.Location = new System.Drawing.Point(15, 18);
-			this.SettingBringGame.Name = "SettingBringGame";
-			this.SettingBringGame.Size = new System.Drawing.Size(167, 17);
-			this.SettingBringGame.TabIndex = 3;
-			this.SettingBringGame.Text = "Bring FFXIV to front on Play";
-			this.SettingBringGame.UseVisualStyleBackColor = true;
-			this.SettingBringGame.CheckedChanged += new System.EventHandler(this.SettingBringGame_CheckedChanged);
 			// 
 			// SettingsTable
 			// 
@@ -243,6 +166,49 @@
 			this.ChatSettings.TabStop = false;
 			this.ChatSettings.Text = "Game";
 			// 
+			// SettingBringGame
+			// 
+			this.SettingBringGame.AutoSize = true;
+			this.SettingBringGame.Checked = true;
+			this.SettingBringGame.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.SettingBringGame.Location = new System.Drawing.Point(15, 18);
+			this.SettingBringGame.Name = "SettingBringGame";
+			this.SettingBringGame.Size = new System.Drawing.Size(127, 17);
+			this.SettingBringGame.TabIndex = 3;
+			this.SettingBringGame.Text = "Bring FFXIV to front";
+			this.HelpTip.SetToolTip(this.SettingBringGame, "When playing the song, bring FFXIV to front.");
+			this.SettingBringGame.UseVisualStyleBackColor = true;
+			this.SettingBringGame.CheckedChanged += new System.EventHandler(this.SettingBringGame_CheckedChanged);
+			// 
+			// UnequipPause
+			// 
+			this.UnequipPause.AutoSize = true;
+			this.UnequipPause.Checked = true;
+			this.UnequipPause.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.UnequipPause.Location = new System.Drawing.Point(15, 63);
+			this.UnequipPause.Name = "UnequipPause";
+			this.UnequipPause.Size = new System.Drawing.Size(188, 17);
+			this.UnequipPause.TabIndex = 19;
+			this.UnequipPause.Text = "Pause song when unequipping";
+			this.HelpTip.SetToolTip(this.UnequipPause, "Pause the playing song when unequipping the instrument.\r\nUseful for switching ins" +
+        "trument mid-performance.");
+			this.UnequipPause.UseVisualStyleBackColor = true;
+			this.UnequipPause.CheckedChanged += new System.EventHandler(this.UnequipPause_CheckedChanged);
+			// 
+			// SettingBringBmp
+			// 
+			this.SettingBringBmp.AutoSize = true;
+			this.SettingBringBmp.Checked = true;
+			this.SettingBringBmp.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.SettingBringBmp.Location = new System.Drawing.Point(15, 40);
+			this.SettingBringBmp.Name = "SettingBringBmp";
+			this.SettingBringBmp.Size = new System.Drawing.Size(121, 17);
+			this.SettingBringBmp.TabIndex = 4;
+			this.SettingBringBmp.Text = "Bring BMP to front";
+			this.HelpTip.SetToolTip(this.SettingBringBmp, "When Performance is opened in FFXIV, bring BMP to front.");
+			this.SettingBringBmp.UseVisualStyleBackColor = true;
+			this.SettingBringBmp.CheckedChanged += new System.EventHandler(this.SettingBringBmp_CheckedChanged);
+			// 
 			// PlaybackSettings
 			// 
 			this.PlaybackSettings.Controls.Add(this.SettingHoldNotes);
@@ -270,6 +236,42 @@
 			this.HelpTip.SetToolTip(this.SettingHoldNotes, "Enables held notes.");
 			this.SettingHoldNotes.UseVisualStyleBackColor = true;
 			this.SettingHoldNotes.CheckedChanged += new System.EventHandler(this.SettingHoldNotes_CheckedChanged);
+			// 
+			// ForceOpenToggle
+			// 
+			this.ForceOpenToggle.AutoSize = true;
+			this.ForceOpenToggle.Location = new System.Drawing.Point(13, 43);
+			this.ForceOpenToggle.Name = "ForceOpenToggle";
+			this.ForceOpenToggle.Size = new System.Drawing.Size(214, 17);
+			this.ForceOpenToggle.TabIndex = 16;
+			this.ForceOpenToggle.Text = "Force playback without performance";
+			this.HelpTip.SetToolTip(this.ForceOpenToggle, "Ignores the current performance status and plays anyways.\r\n* Recommended to only " +
+        "be used when patches break playback.\r\n* Ignored when hooked to non-FFXIV applica" +
+        "tions.");
+			this.ForceOpenToggle.UseVisualStyleBackColor = true;
+			this.ForceOpenToggle.CheckedChanged += new System.EventHandler(this.ForceOpenToggle_CheckedChanged);
+			// 
+			// MidiInputLabel
+			// 
+			this.MidiInputLabel.Location = new System.Drawing.Point(11, 65);
+			this.MidiInputLabel.Name = "MidiInputLabel";
+			this.MidiInputLabel.Size = new System.Drawing.Size(104, 21);
+			this.MidiInputLabel.TabIndex = 14;
+			this.MidiInputLabel.Text = "MIDI Input device:";
+			this.MidiInputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// SettingMidiInput
+			// 
+			this.SettingMidiInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.SettingMidiInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.SettingMidiInput.FormattingEnabled = true;
+			this.SettingMidiInput.Items.AddRange(new object[] {
+            "None"});
+			this.SettingMidiInput.Location = new System.Drawing.Point(121, 66);
+			this.SettingMidiInput.Name = "SettingMidiInput";
+			this.SettingMidiInput.Size = new System.Drawing.Size(124, 21);
+			this.SettingMidiInput.TabIndex = 13;
 			// 
 			// HelpTip
 			// 
@@ -321,5 +323,7 @@
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;
 		private System.Windows.Forms.CheckBox verboseToggle;
+        private System.Windows.Forms.NumericUpDown DelaySongsChange;
+        private System.Windows.Forms.CheckBox WaitBetweenSongsToggle;
     }
 }

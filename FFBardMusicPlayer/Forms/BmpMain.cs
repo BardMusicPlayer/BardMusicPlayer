@@ -34,8 +34,6 @@ namespace FFBardMusicPlayer.Forms {
 		private string updateText = string.Empty;
 
 		private bool proceedPlaylistMidi = false;
-		NoteChordSimulation<BmpPlayer.NoteEvent> chordNotes;
-
 		bool tempPlaying = false;
 
 		public bool DonationStatus {
@@ -105,7 +103,7 @@ namespace FFBardMusicPlayer.Forms {
 						this.Log("[MEMORY] Cannot get Character ID.\n Key bindings won't be loaded, load it manually by selecting an ID in the bottom right.");
 					}
 					if(!Sharlayan.Reader.CanGetChatInput()) {
-						this.Log("[MEMORY] Cannot get chat input status.\n Midi lyrics and automatically pausing when chatting won't work.");
+						this.Log("[MEMORY] Cannot get chat input status.\n Automatic pausing when chatting won't work.");
 					}
 					if(!Sharlayan.Reader.CanGetPerformance()) {
 						this.Log("[MEMORY] Cannot get performance status.\n Performance detection will not work. Force it to work by ticking Settings > Force playback.");
@@ -182,7 +180,6 @@ namespace FFBardMusicPlayer.Forms {
 			};
 
 			Player.OnSongSkip += OnSongSkip;
-			Player.OnMidiLyric += OnMidiLyric;
 
 			Player.OnMidiProgressChange += OnPlayProgressChange;
 
@@ -221,9 +218,6 @@ namespace FFBardMusicPlayer.Forms {
                     t.UpdatePerformance();
                });
             };
-
-            chordNotes = new NoteChordSimulation<BmpPlayer.NoteEvent>();
-			chordNotes.NoteEvent += OnMidiVoice;
 
 			Explorer.OnBrowserVisibleChange += delegate (object o, bool visible) {
 				MainTable.SuspendLayout();
@@ -541,7 +535,6 @@ namespace FFBardMusicPlayer.Forms {
 			Statistics.SetTotalTrackCount(Player.Player.MaxTrack);
 			Statistics.SetTotalNoteCount(Player.TotalNoteCount);
 			Statistics.SetTrackNoteCount(Player.CurrentNoteCount);
-			Statistics.SetLyricsBool((Player.Player.LyricNum > 0));
 
 			if(LocalOrchestra.OrchestraEnabled) {
 				LocalOrchestra.Sequencer = Player.Player;
@@ -595,23 +588,6 @@ namespace FFBardMusicPlayer.Forms {
 			NextSong();
 		}
 
-
-		private void OnMidiLyric(Object o, string lyric) {
-			string chan = Properties.Settings.Default.ListenChannel;
-			if(chatListener.GetChatCommand(lyric, chan) is Func<bool> cmdChatFunc) {
-				if(cmdChatFunc()) {
-					return;
-				}
-			}
-			if(lyricListener.GetChatCommand(lyric, chan) is Func<bool> cmdLyricFunc) {
-				if(cmdLyricFunc()) {
-					return;
-				}
-			}
-			if(Properties.Settings.Default.PlayLyrics) {
-				FFXIV.SendChatString(lyric);
-			}
-		}
 		private void OnPlayProgressChange(Object o, int progress) {
 			if(LocalOrchestra.OrchestraEnabled) {
 				LocalOrchestra.PerformerProgress(progress);
@@ -627,7 +603,6 @@ namespace FFBardMusicPlayer.Forms {
 					LocalOrchestra.PerformerPlay(false);
 				}
 				FFXIV.hook.ClearLastPerformanceKeybinds();
-				chordNotes.Clear();
 			} else {
 				if(!tempPlaying) {
 					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
@@ -692,11 +667,6 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
-		private bool WantsSlow {
-			get {
-				return Properties.Settings.Default.SlowPlay;
-			}
-		}
 		private bool WantsHold {
 			get {
 				return Properties.Settings.Default.HoldNotes;
@@ -708,8 +678,8 @@ namespace FFBardMusicPlayer.Forms {
 			Statistics.AddNoteCount();
 
 			if(Properties.Settings.Default.Verbose) {
-				FFXIVKeybindDat.Keybind keybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
-				if(keybind == null) {
+				FFXIVKeybindDat.Keybind thiskeybind = FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note);
+				if(thiskeybind == null) {
 					string ns = FFXIVKeybindDat.RawNoteByteToPianoKey(onNote.note);
 					if(!string.IsNullOrEmpty(ns)) {
 						string str = string.Format("Note {0} is out of range, it will not be played.", ns);
@@ -741,36 +711,16 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-			if(WantsSlow) {
-				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
-					int delay = Decimal.ToInt32(Properties.Settings.Default.PlayHold);
-					// Slow play
 
-					Player.Player.InternalClock.Stop();
-					FFXIV.hook.SendSyncKey(keybind.GetKey(), true, true, false);
-
-					//Bmp.Player.InternalClock.Sleep(delay);
-					Thread.Sleep(delay);
-
-					FFXIV.hook.SendSyncKey(keybind.GetKey(), true, false, true);
-					Player.Player.InternalClock.Continue();
-
-					return;
+			if (FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind)
+			{
+				if (WantsHold)
+				{
+					FFXIV.hook.SendKeybindDown(keybind);
 				}
-			}
-			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(onNote)) {
-					// Chord detected and queued
-					// Console.WriteLine(String.Format("Delay note {0} by 50ms", onNote.ToString()));
-				}
-			}
-			if(!chordNotes.HasTimer(onNote)) {
-				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
-					if(WantsHold) {
-						FFXIV.hook.SendKeybindDown(keybind);
-					} else {
-						FFXIV.hook.SendAsyncKeybind(keybind);
-					}
+				else
+				{
+					FFXIV.hook.SendAsyncKeybind(keybind);
 				}
 			}
 		}
@@ -796,16 +746,11 @@ namespace FFBardMusicPlayer.Forms {
 				}
 			}
 
-			if(WantsSlow) {
-				return;
-			}
-
 			if(!FFXIV.memory.ChatInputOpen) {
 				if(WantsHold) {
 					if(FFXIV.hotkeys.GetKeybindFromNoteByte(offNote.note) is FFXIVKeybindDat.Keybind keybind) {
 						FFXIV.hook.SendKeybindUp(keybind);
 					}
-					chordNotes.OffKey(offNote);
 				}
 			}
 		}

@@ -52,8 +52,5 @@ namespace FFBardMusicPlayer.Controls {
 		public void SetChordDetectedCount(int chordcount) {
 			chordCount.Invoke(t => t.Text = chordcount.ToString());
 		}
-		public void SetLyricsBool(bool lyrics) {
-			lyrBool.Invoke(t => t.Text = lyrics ? "Yes" : "No");
-		}
 	}
 }

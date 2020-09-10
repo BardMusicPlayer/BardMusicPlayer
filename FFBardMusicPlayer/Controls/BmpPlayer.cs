@@ -21,7 +21,6 @@ namespace FFBardMusicPlayer.Controls {
 		BmpSequencer player = new BmpSequencer();
 
 		public EventHandler<Track> OnMidiTrackLoad;
-		public EventHandler<string> OnMidiLyric;
 		public EventHandler<bool> OnMidiStatusChange;
 		public EventHandler<int> OnMidiProgressChange;
 		public EventHandler OnMidiStatusEnded;
@@ -183,9 +182,6 @@ namespace FFBardMusicPlayer.Controls {
 
 			player.OnTempoChange += OnMidiTempoChange;
 			player.OnTrackNameChange += OnMidiTrackNameChange;
-			player.OnLyric += delegate (object o, string s) {
-				OnMidiLyric?.Invoke(o, s);
-			};
 
 			player.OnNote += OnPlayerMidiNote;
 			player.OffNote += OffPlayerMidiNote;
@@ -230,9 +226,6 @@ namespace FFBardMusicPlayer.Controls {
 			UpdateKeyboard(player.LoadedTrack);
 
 			TotalProgressInfo.Invoke(t => t.Text = player.MaxTime);
-
-			string lyric = (player.LyricNum > 0) ? string.Format("{0} lyric(s)", player.LyricNum) : string.Empty;
-			InfoHasLyrics.Invoke(t => t.Text = lyric);
 
 			trackNumLut.Clear();
 			for(int i = 0; i < player.Sequence.Count; i++) {

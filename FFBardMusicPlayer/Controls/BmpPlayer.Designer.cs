@@ -38,7 +38,6 @@
 			this.TrackLoop = new FFBardMusicPlayer.Components.BmpCheckButton(this.components);
 			this.InfoTable = new System.Windows.Forms.TableLayoutPanel();
 			this.InfoTempo = new System.Windows.Forms.Label();
-			this.InfoHasLyrics = new System.Windows.Forms.Label();
 			this.InfoTrackName = new System.Windows.Forms.Label();
 			this.SelectorOctave = new FFBardMusicPlayer.Components.BmpOctaveShift();
 			this.SelectorSpeed = new FFBardMusicPlayer.Controls.SpeedShiftComponent();
@@ -238,7 +237,6 @@
 			this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.InfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.InfoTable.Controls.Add(this.InfoTempo, 0, 0);
-			this.InfoTable.Controls.Add(this.InfoHasLyrics, 2, 0);
 			this.InfoTable.Controls.Add(this.InfoTrackName, 1, 0);
 			this.InfoTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.InfoTable.Location = new System.Drawing.Point(2, 134);
@@ -263,19 +261,6 @@
 			this.InfoTempo.Text = "000 BPM";
 			this.InfoTempo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// InfoHasLyrics
-			// 
-			this.InfoHasLyrics.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.InfoHasLyrics.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.InfoHasLyrics.ForeColor = System.Drawing.Color.DarkOliveGreen;
-			this.InfoHasLyrics.Location = new System.Drawing.Point(380, 0);
-			this.InfoHasLyrics.Margin = new System.Windows.Forms.Padding(0);
-			this.InfoHasLyrics.MinimumSize = new System.Drawing.Size(60, 0);
-			this.InfoHasLyrics.Name = "InfoHasLyrics";
-			this.InfoHasLyrics.Size = new System.Drawing.Size(60, 20);
-			this.InfoHasLyrics.TabIndex = 10;
-			this.InfoHasLyrics.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// InfoTrackName
 			// 
 			this.InfoTrackName.AutoEllipsis = true;
@@ -284,7 +269,7 @@
 			this.InfoTrackName.Location = new System.Drawing.Point(60, 0);
 			this.InfoTrackName.Margin = new System.Windows.Forms.Padding(0);
 			this.InfoTrackName.Name = "InfoTrackName";
-			this.InfoTrackName.Size = new System.Drawing.Size(320, 20);
+			this.InfoTrackName.Size = new System.Drawing.Size(380, 20);
 			this.InfoTrackName.TabIndex = 20;
 			this.InfoTrackName.Text = "Track name";
 			this.InfoTrackName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -402,7 +387,6 @@
 		private System.Windows.Forms.Label InfoTrackName;
 		private BmpKeyboard KeyboardCtl;
 		private System.Windows.Forms.Panel TrackControls;
-		private System.Windows.Forms.Label InfoHasLyrics;
 		private SpeedShiftComponent SelectorSpeed;
 		private Components.BmpOctaveShift SelectorOctave;
 		private System.Windows.Forms.ToolTip HelpTip;

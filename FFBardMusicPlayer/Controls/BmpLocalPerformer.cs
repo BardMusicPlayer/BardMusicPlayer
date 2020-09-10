@@ -51,8 +51,6 @@ namespace FFBardMusicPlayer.Controls {
 		private bool openDelay;
 		public bool hostProcess = false;
 
-		NoteChordSimulation<BmpPlayer.NoteEvent> chordNotes = new NoteChordSimulation<NoteEvent>();
-
 		public int TrackNum {
 			get {
 				return decimal.ToInt32(TrackShift.Value);
@@ -129,10 +127,6 @@ namespace FFBardMusicPlayer.Controls {
 				CharacterName.Text = mp.characterName;
 			}
 
-			chordNotes.NoteEvent += delegate (object o, NoteEvent e) {
-				this.Invoke(t => t.ProcessOnNote(e));
-			};
-
 			Scroller.OnScroll += delegate (object o, int scroll) {
 				this.sequencer.Seek(scroll);
 			};
@@ -174,20 +168,16 @@ namespace FFBardMusicPlayer.Controls {
 			if(openDelay) {
 				return;
 			}
-			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(note)) {
-					// Chord detected and queued
-					// Console.WriteLine("Delay " + onNote + " by 100ms");
-				}
-			}
 
-			if(!chordNotes.HasTimer(note)) {
-				if(hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind) {
-					if(WantsHold) {
-						hook.SendKeybindDown(keybind);
-					} else {
-						hook.SendAsyncKeybind(keybind);
-					}
+			if (hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind)
+			{
+				if (WantsHold)
+				{
+					hook.SendKeybindDown(keybind);
+				}
+				else
+				{
+					hook.SendAsyncKeybind(keybind);
 				}
 			}
 		}
@@ -201,7 +191,6 @@ namespace FFBardMusicPlayer.Controls {
 				if(WantsHold) {
 					hook.SendKeybindUp(keybind);
 				}
-				chordNotes.OffKey(note);
 			}
 		}
 		public void SetProgress(int progress) {
