@@ -163,9 +163,6 @@
       <DependentUpon>BmpKeybindWarning.cs</DependentUpon>
     </Compile>
     <Compile Include="BmpChatParser.cs" />
-    <Compile Include="Forms\BmpMain.Commands.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Components\BmpChatLog.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -203,9 +200,6 @@
     <Compile Include="Forms\BmpUpdate.Designer.cs">
       <DependentUpon>BmpUpdate.cs</DependentUpon>
     </Compile>
-    <Compile Include="BmpChatListener.cs" />
-    <Compile Include="BmpNoteProcessing.cs" />
-    <Compile Include="BmpSocketClient.cs" />
     <Compile Include="Components\BmpCheckButton.cs">
       <SubType>Component</SubType>
     </Compile>

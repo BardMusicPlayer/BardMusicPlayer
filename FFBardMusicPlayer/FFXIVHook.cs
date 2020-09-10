@@ -135,7 +135,6 @@ namespace FFBardMusicPlayer {
 
 		#endregion
 
-		public NoteDoubleDetection<FFXIVKeybindDat.Keybind> keyTimers = new NoteDoubleDetection<FFXIVKeybindDat.Keybind>();
 		public List<FFXIVKeybindDat.Keybind> lastPerformanceKeys = new List<FFXIVKeybindDat.Keybind>();
 
 		private IntPtr mainWindowHandle;
@@ -151,12 +150,7 @@ namespace FFBardMusicPlayer {
 			}
 		}
 
-		public FFXIVHook() {
-			keyTimers.NoteEvent += delegate (Object o, FFXIVKeybindDat.Keybind keybind) {
-				SendSyncKey(keybind.GetKey(), true, true, false);
-				// Send synced key down
-			};
-		}
+		public FFXIVHook() { }
 
 		public bool Hook(Process process, bool useCallback = true) {
 			if(process == null) {
@@ -322,15 +316,7 @@ namespace FFBardMusicPlayer {
 				return;
 			}
 
-			if(keyTimers.OnKey(keybind)) {
-				// This is a Synced key so as to somewhat have control
-				// over the delay 
-				SendSyncKey(key, true, false, true);
-				Console.WriteLine("Wait for Synckey up");
-			}
-			if(!keyTimers.HasTimer(keybind)) {
-				SendAsyncKey(key, true, true, false);
-			}
+			SendAsyncKey(key, true, true, false);
 
 			if(!lastPerformanceKeys.Contains(keybind)) {
 				lastPerformanceKeys.Add(keybind);
@@ -344,7 +330,6 @@ namespace FFBardMusicPlayer {
 			if(key == Keys.None) {
 				return;
 			}
-			keyTimers.OffKey(keybind);
 			SendAsyncKey(key, true, false, true);
 
 			if(lastPerformanceKeys.Contains(keybind)) {

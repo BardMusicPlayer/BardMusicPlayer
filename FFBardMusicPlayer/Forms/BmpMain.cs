@@ -19,7 +19,6 @@ using System.Windows.Forms;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-using static FFBardMusicPlayer.BmpChatListener;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using System.Security.Principal;
 
@@ -50,7 +49,6 @@ namespace FFBardMusicPlayer.Forms {
 
 		public BmpMain() {
 			InitializeComponent();
-			SetupCommands();
 
 			this.UpdatePerformance();
 
@@ -420,18 +418,8 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private void Memory_OnChatReceived(ChatLogItem item) {
-
 			string rtf = BmpChatParser.FormatChat(item);
-
 			ChatLogAll.AppendRtf(rtf);
-
-			Func<bool> cmdFunc = chatListener.GetChatCommand(item);
-			if(cmdFunc != null) {
-				ChatLogCmd.AppendRtf(rtf);
-				if(cmdFunc()) {
-					// successful command?
-				}
-			}
 		}
 
 		private void Memory_OnPerformanceReadyChanged(bool performance) {
