@@ -223,7 +223,8 @@ namespace FFBardMusicPlayer.Controls {
 		private void OnPlayerMidiLoad(Object o, EventArgs e) {
 			OnMidiTrackLoad?.Invoke(o, player.LoadedTrack);
 
-			UpdateKeyboard(player.LoadedTrack);
+            // this will also update the keyboard
+            OctaveShift = player.GetTrackPreferredOctaveShift(player.LoadedTrack);
 
 			TotalProgressInfo.Invoke(t => t.Text = player.MaxTime);
 
