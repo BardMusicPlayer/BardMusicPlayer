@@ -108,8 +108,21 @@ namespace FFBardMusicPlayer.Controls {
 			SetMidiInput(midiInput);
 			SettingMidiInput.SelectedValueChanged += SettingMidiInput_SelectedValueChanged;
 
-			UpdateSlowPlayToggle();
-		}
+            // initialize UI element values here
+            SettingBringGame.Checked = Properties.Settings.Default.OpenFFXIV;
+            SettingBringBmp.Checked = Properties.Settings.Default.OpenBMP;
+            ChatSimToggle.Checked = Properties.Settings.Default.PlayLyrics;
+            SettingChatSave.Checked = Properties.Settings.Default.SaveLog;
+            ForceListenToggle.Checked = Properties.Settings.Default.ForceListen;
+            sigCheckbox.Checked = Properties.Settings.Default.SigIgnore;
+            ForceOpenToggle.Checked = Properties.Settings.Default.ForcedOpen;
+            UnequipPause.Checked = Properties.Settings.Default.UnequipPause;
+            verboseToggle.Checked = Properties.Settings.Default.Verbose;
+            ArpeggiateToggle.Checked = Properties.Settings.Default.AutoArpeggiate;
+            TooFastChange.Value = Properties.Settings.Default.TooFastDelay;
+            SettingHoldNotes.Checked = Properties.Settings.Default.HoldNotes;
+            SlowPlayToggle.Checked = Properties.Settings.Default.SlowPlay;
+        }
 
 		private void SettingMidiInput_SelectedValueChanged(object sender, EventArgs e) {
 			if(GetMidiInput() is MidiInput input) {
@@ -119,7 +132,10 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void SlowPlayToggle_CheckedChanged(object sender, EventArgs e) {
-			UpdateSlowPlayToggle();
+            Properties.Settings.Default.SlowPlay = SlowPlayToggle.Checked;
+            Properties.Settings.Default.Save();
+
+            UpdateSlowPlayToggle();
 		}
 
 		private void ForceOpenToggle_CheckedChanged(object sender, EventArgs e) {
@@ -185,6 +201,72 @@ namespace FFBardMusicPlayer.Controls {
 			BmpAbout about = new BmpAbout();
 			about.ShowDialog(this);
 		}
+
+        private void SettingHoldNotes_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.HoldNotes = SettingHoldNotes.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ArpeggiateToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoArpeggiate = ArpeggiateToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void TooFastChange_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.TooFastDelay = TooFastChange.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingBringGame_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.OpenFFXIV = SettingBringGame.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingBringBmp_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.OpenBMP = SettingBringBmp.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ChatSimToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PlayLyrics = ChatSimToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SettingChatSave_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveLog = SettingChatSave.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ForceListenToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ForceListen = ForceListenToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void sigCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SigIgnore = sigCheckbox.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void UnequipPause_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UnequipPause = UnequipPause.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void verboseToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Verbose = verboseToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
     }
 
     public class MidiInput {

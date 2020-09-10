@@ -13,6 +13,7 @@ using Sharlayan;
 using Sharlayan.Models.ReadResults;
 using Sharlayan.Core;
 using Sharlayan.Core.Enums;
+using Timer = System.Timers.Timer;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpHook : UserControl {
@@ -31,6 +32,7 @@ namespace FFBardMusicPlayer.Controls {
 		public event EventHandler perfSettingsChanged;
 		public event EventHandler findProcessRequest;
 
+        private Timer errorMessageTimer = null;
 
 		public enum ProcessError {
 			ProcessFailed,
@@ -252,6 +254,34 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			HookButton.Text = status;
 		}
+
+        public void SetErrorStatus(string status)
+        {
+            // remove it, since we'll be updating the text again
+            if (errorMessageTimer != null)
+            {
+                errorMessageTimer.Stop();
+                errorMessageTimer.Dispose();
+                errorMessageTimer = null;
+            }
+
+            // set the label text
+            HookGlobalMessageLabel.Text = status;
+
+            // dispatch hiding the system error
+            errorMessageTimer = new Timer
+            {
+                Interval = 10 * 1000, // 10 seconds
+                Enabled = true
+            };
+            errorMessageTimer.Elapsed += delegate (object o, System.Timers.ElapsedEventArgs e)
+            {
+                this.Invoke(t => { HookGlobalMessageLabel.Text = ""; });
+                errorMessageTimer.Stop();
+                errorMessageTimer.Dispose();
+                errorMessageTimer = null;
+            };
+        }
 
 		public void SetProcess(Process proc) {
 			try {

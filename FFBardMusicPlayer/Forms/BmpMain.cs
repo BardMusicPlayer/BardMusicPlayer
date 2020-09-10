@@ -209,11 +209,20 @@ namespace FFBardMusicPlayer.Forms {
 				}
 			};
 
-			Settings.OnForcedOpen += delegate (object o, bool open) {
-				this.Invoke(t => t.UpdatePerformance());
-			};
+            Settings.OnForcedOpen += delegate (object o, bool open)
+            {
+                this.Invoke(t => {
+                    if (open)
+                    {
+                        Log(string.Format("Forced playback was enabled. You will not be able to use keybinds, such as spacebar."));
+                        WarningLog("Forced playback enabled. Keybinds (i.e. spacebar) are disabled.");
+                    }
 
-			chordNotes = new NoteChordSimulation<BmpPlayer.NoteEvent>();
+                    t.UpdatePerformance();
+               });
+            };
+
+            chordNotes = new NoteChordSimulation<BmpPlayer.NoteEvent>();
 			chordNotes.NoteEvent += OnMidiVoice;
 
 			Explorer.OnBrowserVisibleChange += delegate (object o, bool visible) {
@@ -262,14 +271,28 @@ namespace FFBardMusicPlayer.Forms {
 
 			Log("Bard Music Player initialized.");
 		}
-		public void LogMidi(string format) {
-			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[MIDI] " + format, Color.LightPink));
-		}
-		public void Log(string format) {
-			ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[SYSTEM] " + format));
-		}
 
-		public void FindProcess() {
+        public void LogMidi(string format)
+        {
+            ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[MIDI] " + format, Color.LightPink));
+        }
+
+        public void Log(string format)
+        {
+            ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("[SYSTEM] " + format));
+        }
+
+        public void WarningLog(string format)
+        {
+            FFXIV.SetErrorStatus("Warning: " + format);
+        }
+
+        public void ErrorLog(string format)
+        {
+            FFXIV.SetErrorStatus("[ERROR] " + format);
+        }
+
+        public void FindProcess() {
 			processSelector.ShowDialog(this);
 			if(processSelector.DialogResult == DialogResult.Yes) {
 				Process proc = processSelector.selectedProcess;

@@ -14,8 +14,12 @@ namespace FFBardMusicPlayer {
 	class Program {
 
 		public static string urlBase = "http://bmp.sqnya.se/";
-		public static string appBase = Application.CommonAppDataPath;
 
+#if DEBUG
+        public static string appBase = Application.StartupPath;
+#else
+        public static string appBase = Application.CommonAppDataPath;
+#endif
 
 		[DllImport("kernel32.dll")]
 		static extern IntPtr GetConsoleWindow();
