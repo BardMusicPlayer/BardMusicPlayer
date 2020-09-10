@@ -148,7 +148,6 @@ namespace FFBardMusicPlayer.Controls {
 		private void UpdateSlowPlayToggle() {
 			bool c = SlowPlayToggle.Checked;
 			SettingHoldNotes.Enabled = !c;
-			ArpeggiateToggle.Enabled = !c;
 		}
 
 		public MidiInput SetMidiInput(string device) {

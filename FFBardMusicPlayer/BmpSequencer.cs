@@ -165,8 +165,9 @@ namespace FFBardMusicPlayer {
 			if(tick <= 0) {
 				return 0f;
 			}
+			return tick; // midi ppq and tempo  tick = 1ms now.
 
-			float ms = 0f;
+			/*float ms = 0f;
 			int mul = midiTempo;
 
 			List<Track> trackEnumsToRemove = new List<Track>();
@@ -215,7 +216,7 @@ namespace FFBardMusicPlayer {
 				}
 				ms += 1 * (60000f / (float) (mul * Sequence.Division));
 			}
-			return ms;
+			return ms;*/
 		}
 
 		private void Chaser_Chased(object sender, ChasedEventArgs e) {
@@ -374,7 +375,7 @@ namespace FFBardMusicPlayer {
 
 			loadedError = string.Empty;
 			try {
-				Sequence = new Sequence(file);
+				Sequence = DryWetUtil.ScrubFile(file);
 			} catch(Exception e) {
 				Console.WriteLine(e.StackTrace);
 				throw e;

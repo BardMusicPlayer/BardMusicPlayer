@@ -174,20 +174,16 @@ namespace FFBardMusicPlayer.Controls {
 			if(openDelay) {
 				return;
 			}
-			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(note)) {
-					// Chord detected and queued
-					// Console.WriteLine("Delay " + onNote + " by 100ms");
-				}
-			}
 
-			if(!chordNotes.HasTimer(note)) {
-				if(hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind) {
-					if(WantsHold) {
-						hook.SendKeybindDown(keybind);
-					} else {
-						hook.SendAsyncKeybind(keybind);
-					}
+			if (hotkeys.GetKeybindFromNoteByte(note.note) is FFXIVKeybindDat.Keybind keybind)
+			{
+				if (WantsHold)
+				{
+					hook.SendKeybindDown(keybind);
+				}
+				else
+				{
+					hook.SendAsyncKeybind(keybind);
 				}
 			}
 		}

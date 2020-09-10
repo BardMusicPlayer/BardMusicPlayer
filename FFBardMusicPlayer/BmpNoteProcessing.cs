@@ -52,7 +52,7 @@ namespace FFBardMusicPlayer {
 
 			if(timestamp > 0) {
 
-				int tooFastDelay = Decimal.ToInt32(Properties.Settings.Default.TooFastDelay);
+				int tooFastDelay = 25;
 				bool tooFastSuccession = (Math.Abs(this.Tick - timestamp) < tooFastDelay);
 				if(tooFastSuccession) {
 

@@ -78,6 +78,9 @@
     <Reference Include="CommandLine, Version=2.6.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.6.0\lib\net461\CommandLine.dll</HintPath>
     </Reference>
+    <Reference Include="Melanchall.DryWetMidi, Version=5.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Melanchall.DryWetMidi.5.1.1\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -133,6 +136,7 @@
     <Compile Include="Controls\BmpStatistics.Designer.cs">
       <DependentUpon>BmpStatistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="DryWetUtil.cs" />
     <Compile Include="FFXIVDatAddon.cs" />
     <Compile Include="Forms\BmpAbout.cs">
       <SubType>Form</SubType>
