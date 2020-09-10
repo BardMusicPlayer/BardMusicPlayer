@@ -16,6 +16,9 @@ namespace FFBardMusicPlayer
 {
     class DryWetUtil
     {
+        // cache this. it doesn't change and we shouldn't do it each and every track.
+        // basically: convert Instrument to string array then descending sort by resulting string lengths
+        private static string[] InstrumentEnumNamesAsStringsSorted = Array.ConvertAll((Instrument[])Enum.GetValues(typeof(Instrument)), s => s.ToString()).OrderByDescending(s => s.Length).ToArray();
 
         public static Sequence ScrubFile(string filePath)
         {
@@ -303,7 +306,7 @@ namespace FFBardMusicPlayer
         private static (bool, string) TrackNameToEnumInstrumentName(string trackName)
         {
             if (string.IsNullOrEmpty(trackName)) return (false, trackName);
-            foreach (Instrument ins in (Instrument[])Enum.GetValues(typeof(Instrument))) if (trackName.Contains(ins.ToString().ToLower())) return (true, ins.ToString());
+            foreach (string ins in InstrumentEnumNamesAsStringsSorted) if (trackName.Contains(ins.ToString().ToLower())) return (true, ins.ToString());
             return (false, trackName);
         }
 

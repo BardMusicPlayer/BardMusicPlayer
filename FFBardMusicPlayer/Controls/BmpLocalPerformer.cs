@@ -246,7 +246,8 @@ namespace FFBardMusicPlayer.Controls {
 						}
 					}
 				}
-				Keyboard.UpdateFrequency(notes);
+                this.OctaveShift.Value = po;
+                Keyboard.UpdateFrequency(notes);
 				ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
 			}
 
