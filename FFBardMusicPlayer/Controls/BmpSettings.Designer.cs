@@ -42,8 +42,6 @@
             this.ListenChatList = new System.Windows.Forms.ComboBox();
             this.ForceListenToggle = new System.Windows.Forms.CheckBox();
             this.PlaybackSettings = new System.Windows.Forms.GroupBox();
-            this.DelaySongsChange = new System.Windows.Forms.NumericUpDown();
-            this.WaitBetweenSongsToggle = new System.Windows.Forms.CheckBox();
             this.TooFastChange = new System.Windows.Forms.NumericUpDown();
             this.PlayHoldChange = new System.Windows.Forms.NumericUpDown();
             this.SlowPlayToggle = new System.Windows.Forms.CheckBox();
@@ -56,7 +54,6 @@
             this.SettingsTable.SuspendLayout();
             this.ChatSettings.SuspendLayout();
             this.PlaybackSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DelaySongsChange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TooFastChange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayHoldChange)).BeginInit();
             this.SuspendLayout();
@@ -244,7 +241,7 @@
             this.SettingsTable.Name = "SettingsTable";
             this.SettingsTable.RowCount = 1;
             this.SettingsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SettingsTable.Size = new System.Drawing.Size(540, 118);
+            this.SettingsTable.Size = new System.Drawing.Size(540, 90);
             this.SettingsTable.TabIndex = 18;
             // 
             // ChatSettings
@@ -256,7 +253,7 @@
             this.ChatSettings.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
             this.ChatSettings.Name = "ChatSettings";
             this.ChatSettings.Padding = new System.Windows.Forms.Padding(0);
-            this.ChatSettings.Size = new System.Drawing.Size(269, 118);
+            this.ChatSettings.Size = new System.Drawing.Size(269, 90);
             this.ChatSettings.TabIndex = 11;
             this.ChatSettings.TabStop = false;
             this.ChatSettings.Text = "Chat listen channel";
@@ -287,8 +284,6 @@
             // 
             // PlaybackSettings
             // 
-            this.PlaybackSettings.Controls.Add(this.DelaySongsChange);
-            this.PlaybackSettings.Controls.Add(this.WaitBetweenSongsToggle);
             this.PlaybackSettings.Controls.Add(this.TooFastChange);
             this.PlaybackSettings.Controls.Add(this.PlayHoldChange);
             this.PlaybackSettings.Controls.Add(this.SlowPlayToggle);
@@ -299,7 +294,7 @@
             this.PlaybackSettings.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.PlaybackSettings.Name = "PlaybackSettings";
             this.PlaybackSettings.Padding = new System.Windows.Forms.Padding(0);
-            this.PlaybackSettings.Size = new System.Drawing.Size(269, 118);
+            this.PlaybackSettings.Size = new System.Drawing.Size(269, 90);
             this.PlaybackSettings.TabIndex = 12;
             this.PlaybackSettings.TabStop = false;
             this.PlaybackSettings.Text = "Playback";
@@ -443,7 +438,6 @@
             this.ChatSettings.ResumeLayout(false);
             this.PlaybackSettings.ResumeLayout(false);
             this.PlaybackSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DelaySongsChange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TooFastChange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayHoldChange)).EndInit();
             this.ResumeLayout(false);
@@ -477,7 +471,5 @@
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;
 		private System.Windows.Forms.CheckBox verboseToggle;
-        private System.Windows.Forms.NumericUpDown DelaySongsChange;
-        private System.Windows.Forms.CheckBox WaitBetweenSongsToggle;
     }
 }
