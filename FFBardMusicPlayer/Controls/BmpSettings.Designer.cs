@@ -187,9 +187,9 @@
 			this.UnequipPause.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.UnequipPause.Location = new System.Drawing.Point(15, 63);
 			this.UnequipPause.Name = "UnequipPause";
-			this.UnequipPause.Size = new System.Drawing.Size(188, 17);
+			this.UnequipPause.Size = new System.Drawing.Size(149, 17);
 			this.UnequipPause.TabIndex = 19;
-			this.UnequipPause.Text = "Pause song when unequipping";
+			this.UnequipPause.Text = "Pause song on unequip";
 			this.HelpTip.SetToolTip(this.UnequipPause, "Pause the playing song when unequipping the instrument.\r\nUseful for switching ins" +
         "trument mid-performance.");
 			this.UnequipPause.UseVisualStyleBackColor = true;
@@ -242,9 +242,9 @@
 			this.ForceOpenToggle.AutoSize = true;
 			this.ForceOpenToggle.Location = new System.Drawing.Point(13, 43);
 			this.ForceOpenToggle.Name = "ForceOpenToggle";
-			this.ForceOpenToggle.Size = new System.Drawing.Size(214, 17);
+			this.ForceOpenToggle.Size = new System.Drawing.Size(102, 17);
 			this.ForceOpenToggle.TabIndex = 16;
-			this.ForceOpenToggle.Text = "Force playback without performance";
+			this.ForceOpenToggle.Text = "Force playback";
 			this.HelpTip.SetToolTip(this.ForceOpenToggle, "Ignores the current performance status and plays anyways.\r\n* Recommended to only " +
         "be used when patches break playback.\r\n* Ignored when hooked to non-FFXIV applica" +
         "tions.");

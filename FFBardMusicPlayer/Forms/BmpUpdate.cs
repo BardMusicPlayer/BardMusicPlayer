@@ -88,6 +88,9 @@ namespace FFBardMusicPlayer {
 				using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
 					version = JsonConvert.DeserializeObject<UpdateVersion>(reader.ReadToEnd());
 				}
+				if(version == null) {
+					return;
+				}
 
 				this.DialogResult = (version.updateVersion > UpdateVersion.Version) ? DialogResult.Yes : DialogResult.No;
 				if(UpdateVersion.Version > version.updateVersion) {

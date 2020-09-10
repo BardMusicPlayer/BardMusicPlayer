@@ -137,24 +137,12 @@
       <DependentUpon>BmpStatistics.cs</DependentUpon>
     </Compile>
     <Compile Include="DryWetUtil.cs" />
-    <Compile Include="FFXIVDatAddon.cs" />
+    <Compile Include="FFXIV\FFXIVDatAddon.cs" />
     <Compile Include="Forms\BmpAbout.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BmpAbout.Designer.cs">
       <DependentUpon>BmpAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BmpAddPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BmpAddPlayer.Designer.cs">
-      <DependentUpon>BmpAddPlayer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BmpConfirmConductor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BmpConfirmConductor.Designer.cs">
-      <DependentUpon>BmpConfirmConductor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BmpKeybindWarning.cs">
       <SubType>Form</SubType>
@@ -224,12 +212,6 @@
     <Compile Include="Components\BmpTrackShift.Designer.cs">
       <DependentUpon>BmpTrackShift.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BmpConductor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\BmpConductor.Designer.cs">
-      <DependentUpon>BmpConductor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\BmpPlayer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -273,12 +255,12 @@
     <Compile Include="Forms\BmpDx11Warning.Designer.cs">
       <DependentUpon>BmpDx11Warning.cs</DependentUpon>
     </Compile>
-    <Compile Include="FFXIVConfigFile.cs" />
-    <Compile Include="FFXIVDatHotbar.cs" />
-    <Compile Include="FFXIVHook.cs" />
-    <Compile Include="FFXIVDatFile.cs" />
-    <Compile Include="FFXIVDatHotkey.cs" />
-    <Compile Include="FFXIVMemory.cs" />
+    <Compile Include="FFXIV\FFXIVConfigFile.cs" />
+    <Compile Include="FFXIV\FFXIVDatHotbar.cs" />
+    <Compile Include="FFXIV\FFXIVHook.cs" />
+    <Compile Include="FFXIV\FFXIVDatFile.cs" />
+    <Compile Include="FFXIV\FFXIVDatHotkey.cs" />
+    <Compile Include="FFXIV\FFXIVMemory.cs" />
     <Compile Include="BmpSequencer.Internal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -317,9 +299,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Forms\Loop.png" />
-    <Content Include="Forms\Shuffle.png" />
     <Content Include="Icon.ico" />
+    <Content Include="Tools\ILMerge.exe" />
+    <Content Include="Tools\System.Compiler.dll" />
     <None Include="Resources\Shuffle.png" />
     <None Include="Resources\Loop.png" />
     <None Include="Resources\ffxiv_18122017_232606.png" />
@@ -341,9 +323,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpStatistics.resx">
       <DependentUpon>BmpStatistics.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BmpConfirmConductor.resx">
-      <DependentUpon>BmpConfirmConductor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BmpDx11Warning.resx">
       <DependentUpon>BmpDx11Warning.cs</DependentUpon>
@@ -399,14 +378,8 @@
     <EmbeddedResource Include="Forms\BmpAbout.resx">
       <DependentUpon>BmpAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BmpAddPlayer.resx">
-      <DependentUpon>BmpAddPlayer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BmpProcessSelect.resx">
       <DependentUpon>BmpProcessSelect.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\BmpConductor.resx">
-      <DependentUpon>BmpConductor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BmpPlayer.resx">
       <DependentUpon>BmpPlayer.cs</DependentUpon>
@@ -434,9 +407,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (

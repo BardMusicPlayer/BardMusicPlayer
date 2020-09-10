@@ -128,8 +128,7 @@ namespace FFBardMusicPlayer.Forms {
 				this.Log("Attached process exited.");
 			};
 			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
-				try { this.Invoke(t => t.Memory_OnChatReceived(item)); }
-				catch { this.Log("Invalid command: " + item.Line); }
+				this.Invoke(t => t.Memory_OnChatReceived(item));
 			};
 			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids) {
 				this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
@@ -210,7 +209,7 @@ namespace FFBardMusicPlayer.Forms {
                     if (open)
                     {
                         Log(string.Format("Forced playback was enabled. You will not be able to use keybinds, such as spacebar."));
-                        WarningLog("Forced playback enabled. Keybinds (i.e. spacebar) are disabled.");
+                        WarningLog("Forced playback enabled.");
                     }
 
                     t.UpdatePerformance();
@@ -465,14 +464,6 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private void UpdatePerformance() {
-			if(Conductor.IsConducting) {
-				// Someone is controlling you, disable stuff
-				Playlist.Visible = false;
-				Conductor.Visible = true;
-			} else {
-				Playlist.Visible = true;
-				Conductor.Visible = false;
-			}
 			if(Player.Status == PlayerStatus.Conducting) {
 				Player.Interactable = true;
 				Player.Keyboard.OverrideText = "Conducting in progress.";
@@ -688,10 +679,8 @@ namespace FFBardMusicPlayer.Forms {
 			}
 			if(onNote.track != null) {
 				// If from midi file
-				if(!Properties.Settings.Default.PlayAllTracks) {
-					if(onNote.track != Player.Player.LoadedTrack) {
-						return;
-					}
+				if(onNote.track != Player.Player.LoadedTrack) {
+					return;
 				}
 			}
 			if(Sharlayan.Reader.CanGetChatInput()) {
