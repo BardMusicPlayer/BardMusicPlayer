@@ -80,11 +80,11 @@
             // 
             this.HookGlobalMessageLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.HookGlobalMessageLabel.AutoSize = true;
-            this.HookGlobalMessageLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HookGlobalMessageLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HookGlobalMessageLabel.ForeColor = System.Drawing.Color.Crimson;
-            this.HookGlobalMessageLabel.Location = new System.Drawing.Point(163, 3);
+            this.HookGlobalMessageLabel.Location = new System.Drawing.Point(163, 4);
             this.HookGlobalMessageLabel.Name = "HookGlobalMessageLabel";
-            this.HookGlobalMessageLabel.Size = new System.Drawing.Size(0, 17);
+            this.HookGlobalMessageLabel.Size = new System.Drawing.Size(0, 15);
             this.HookGlobalMessageLabel.TabIndex = 3;
             this.HookGlobalMessageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
