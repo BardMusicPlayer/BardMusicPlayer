@@ -24,7 +24,9 @@ namespace FFBardMusicPlayer.Controls {
 			this.TextAlign = HorizontalAlignment.Center;
 		}
 		protected override void UpdateEditText() {
+            this.ChangingText = true;
 			this.Text = this.Value.ToString() + "%";
+            this.ChangingText = false;
 		}
 	}
 }

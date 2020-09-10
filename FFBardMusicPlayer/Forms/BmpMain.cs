@@ -27,7 +27,6 @@ namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
 
 		BmpProcessSelect processSelector = new BmpProcessSelect();
-		private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 		private bool keyboardWarning = false;
 
 		private DialogResult updateResult;
@@ -231,6 +230,7 @@ namespace FFBardMusicPlayer.Forms {
 
 			Playlist.OnMidiSelect += Playlist_OnMidiSelect;
 			Playlist.OnPlaylistRequestAdd += Playlist_OnPlaylistRequestAdd;
+            Playlist.OnPlaylistManualRequestAdd += Playlist_OnPlaylistManualRequestAdd;
 
 			this.ResizeBegin += (s, e) => {
 				LocalOrchestra.SuspendLayout();
@@ -247,6 +247,7 @@ namespace FFBardMusicPlayer.Forms {
 					ArchiveEvery = FileArchivePeriod.Day,
 					ArchiveFileName = "logs/ff14log-${shortdate}.txt",
 					Encoding = Encoding.UTF8,
+					KeepFileOpen = true,
 				};
 
 				var config = new NLog.Config.LoggingConfiguration();
@@ -307,6 +308,14 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
+		public bool IsOnScreen(Form form) {
+			// Create rectangle
+			Rectangle formRectangle = new Rectangle(form.Left, form.Top, form.Width, form.Height);
+
+			// Test
+			return Screen.AllScreens.Any(s => s.WorkingArea.IntersectsWith(formRectangle));
+		}
+
 		protected override void OnLoad(EventArgs e) {
 			base.OnLoad(e);
 
@@ -314,6 +323,11 @@ namespace FFBardMusicPlayer.Forms {
 
 			this.Location = Properties.Settings.Default.Location;
 			this.Size = Properties.Settings.Default.Size;
+
+			if(!this.IsOnScreen(this)) {
+				this.Location = new Point(100, 100);
+			}
+
 			if(this.WindowState == FormWindowState.Minimized) {
 				this.WindowState = FormWindowState.Maximized;
 			}
@@ -353,13 +367,17 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
-		protected override void OnClosing(CancelEventArgs e) {
+		protected override void OnFormClosing(FormClosingEventArgs e) {
+			base.OnFormClosing(e);
 
-			if(!this.IsDisposed) {
+			if (!this.IsDisposed) {
 				Properties.Settings.Default.Location = this.Location;
 				Properties.Settings.Default.Size = this.Size;
 				Properties.Settings.Default.Save();
 			}
+		}
+
+		protected override void OnClosing(CancelEventArgs e) {
 
 			FFXIV.ShutdownMemory();
 
@@ -526,21 +544,24 @@ namespace FFBardMusicPlayer.Forms {
 				Playlist.AddPlaylistEntry(filename, track);
 			}
 		}
-		///
-
-
+        private void Playlist_OnPlaylistManualRequestAdd(object o, BmpPlaylist.BmpPlaylistRequestAddEvent args)
+        {
+            if (!string.IsNullOrEmpty(args.filePath))
+            {
+                // ensure the midi is in our directory before we accept it and add it to the playlist
+                if (Explorer.SelectFile(args.filePath))
+                {
+                    Playlist.AddPlaylistEntry(args.filePath, args.track, args.dropIndex);
+                }
+            }
+        }
 		private void NextSong() {
 			if(Playlist.AdvanceNext(out string filename, out int track)) {
-				Timer playlistTimer = new Timer();
-				playlistTimer.Interval = 100;
-				playlistTimer.Elapsed += delegate (object o, ElapsedEventArgs e) {
-					this.Invoke(t => t.Playlist.PlaySelectedMidi());
-					playlistTimer.Dispose();
-				};
-				playlistTimer.Start();
+				Playlist.PlaySelectedMidi();
 			} else {
 				// If failed playlist when you wanted to, just stop
-				if(proceedPlaylistMidi) {
+				if (proceedPlaylistMidi)
+                {
 					Player.Player.Stop();
 				}
 			}

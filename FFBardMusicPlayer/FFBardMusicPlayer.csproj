@@ -86,6 +86,7 @@
       <HintPath>..\packages\NLog.4.5.10\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -293,6 +294,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="BmpPluginHelper.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -317,7 +324,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Forms\Loop.png" />
+    <Content Include="Forms\Shuffle.png" />
     <Content Include="Icon.ico" />
+    <None Include="Resources\Shuffle.png" />
+    <None Include="Resources\Loop.png" />
     <None Include="Resources\ffxiv_18122017_232606.png" />
     <None Include="Properties\DataSources\AppMain.datasource" />
     <None Include="Properties\DataSources\FFBardMusicCommon.BmpMidiEntry.datasource" />

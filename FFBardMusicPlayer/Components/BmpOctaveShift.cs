@@ -22,7 +22,9 @@ namespace FFBardMusicPlayer.Components {
 		}
 
 		protected override void UpdateEditText() {
+            this.ChangingText = true;
 			this.Text = string.Format("ø{0:+#;-#;0}", this.Value);
+            this.ChangingText = false;
 		}
 	}
 }
