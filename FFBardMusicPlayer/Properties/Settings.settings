@@ -41,15 +41,6 @@
     <Setting Name="ForcedReady" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="PlayLyrics" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="TooFastDelay" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="ChordDetectionDelay" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
     <Setting Name="LastCharId" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -61,9 +52,6 @@
     </Setting>
     <Setting Name="SigVersion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="SlowPlay" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="PlayHold" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">20</Value>

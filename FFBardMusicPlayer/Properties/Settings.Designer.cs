@@ -181,42 +181,6 @@ namespace FFBardMusicPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool PlayLyrics {
-            get {
-                return ((bool)(this["PlayLyrics"]));
-            }
-            set {
-                this["PlayLyrics"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public decimal TooFastDelay {
-            get {
-                return ((decimal)(this["TooFastDelay"]));
-            }
-            set {
-                this["TooFastDelay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int ChordDetectionDelay {
-            get {
-                return ((int)(this["ChordDetectionDelay"]));
-            }
-            set {
-                this["ChordDetectionDelay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string LastCharId {
             get {
@@ -259,18 +223,6 @@ namespace FFBardMusicPlayer.Properties {
             }
             set {
                 this["SigVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SlowPlay {
-            get {
-                return ((bool)(this["SlowPlay"]));
-            }
-            set {
-                this["SlowPlay"] = value;
             }
         }
         

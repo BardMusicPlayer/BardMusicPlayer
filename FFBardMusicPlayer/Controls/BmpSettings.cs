@@ -58,40 +58,6 @@ namespace FFBardMusicPlayer.Controls {
 		public BmpSettings() {
 			InitializeComponent();
 
-			List<ChatChannel> channelList = new List<ChatChannel> {
-				new ChatChannel("000D"),
-				new ChatChannel("000E"),
-				new ChatChannel("000F"),
-				new ChatChannel("0018"),
-				new ChatChannel("0010"),
-				new ChatChannel("0011"),
-				new ChatChannel("0012"),
-				new ChatChannel("0013"),
-				new ChatChannel("0014"),
-				new ChatChannel("0015"),
-				new ChatChannel("0016"),
-				new ChatChannel("0017"),
-				new ChatChannel("0025"),
-				new ChatChannel("0065"),
-				new ChatChannel("0066"),
-				new ChatChannel("0067"),
-				new ChatChannel("0068"),
-				new ChatChannel("0069"),
-				new ChatChannel("006A"),
-				new ChatChannel("006B"),
-			};
-			ChatChannel selectChannel = null;
-			foreach(ChatChannel chan in channelList) {
-				if(chan.code == Properties.Settings.Default.ListenChannel) {
-					selectChannel = chan;
-					break;
-				}
-			}
-			ListenChatList.DataSource = channelList;
-			ListenChatList.SelectedItem = selectChannel;
-			ListenChatList.SelectedValueChanged += delegate (object sender, EventArgs e) {
-				Properties.Settings.Default.ListenChannel = (ListenChatList.SelectedItem as ChatChannel).code;
-			};
 			KeyboardTest.Click += delegate (object o, EventArgs e) {
 				OnKeyboardTest?.Invoke(o, e);
 			};
@@ -111,17 +77,12 @@ namespace FFBardMusicPlayer.Controls {
             // initialize UI element values here
             SettingBringGame.Checked = Properties.Settings.Default.OpenFFXIV;
             SettingBringBmp.Checked = Properties.Settings.Default.OpenBMP;
-            ChatSimToggle.Checked = Properties.Settings.Default.PlayLyrics;
             SettingChatSave.Checked = Properties.Settings.Default.SaveLog;
-            ForceListenToggle.Checked = Properties.Settings.Default.ForceListen;
             sigCheckbox.Checked = Properties.Settings.Default.SigIgnore;
             ForceOpenToggle.Checked = Properties.Settings.Default.ForcedOpen;
             UnequipPause.Checked = Properties.Settings.Default.UnequipPause;
             verboseToggle.Checked = Properties.Settings.Default.Verbose;
-            ArpeggiateToggle.Checked = Properties.Settings.Default.AutoArpeggiate;
-            TooFastChange.Value = Properties.Settings.Default.TooFastDelay;
             SettingHoldNotes.Checked = Properties.Settings.Default.HoldNotes;
-            SlowPlayToggle.Checked = Properties.Settings.Default.SlowPlay;
         }
 
 		private void SettingMidiInput_SelectedValueChanged(object sender, EventArgs e) {
@@ -131,24 +92,11 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		private void SlowPlayToggle_CheckedChanged(object sender, EventArgs e) {
-            Properties.Settings.Default.SlowPlay = SlowPlayToggle.Checked;
-            Properties.Settings.Default.Save();
-
-            UpdateSlowPlayToggle();
-		}
-
 		private void ForceOpenToggle_CheckedChanged(object sender, EventArgs e) {
 			bool check = (sender as CheckBox).Checked;
 			Properties.Settings.Default.ForcedOpen = check;
 			Properties.Settings.Default.Save();
 			OnForcedOpen?.Invoke(this, check);
-		}
-
-		private void UpdateSlowPlayToggle() {
-			bool c = SlowPlayToggle.Checked;
-			SettingHoldNotes.Enabled = !c;
-			ArpeggiateToggle.Enabled = !c;
 		}
 
 		public MidiInput SetMidiInput(string device) {
@@ -208,18 +156,6 @@ namespace FFBardMusicPlayer.Controls {
             Properties.Settings.Default.Save();
         }
 
-        private void ArpeggiateToggle_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AutoArpeggiate = ArpeggiateToggle.Checked;
-            Properties.Settings.Default.Save();
-        }
-
-        private void TooFastChange_ValueChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TooFastDelay = TooFastChange.Value;
-            Properties.Settings.Default.Save();
-        }
-
         private void SettingBringGame_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.OpenFFXIV = SettingBringGame.Checked;
@@ -232,21 +168,9 @@ namespace FFBardMusicPlayer.Controls {
             Properties.Settings.Default.Save();
         }
 
-        private void ChatSimToggle_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayLyrics = ChatSimToggle.Checked;
-            Properties.Settings.Default.Save();
-        }
-
         private void SettingChatSave_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveLog = SettingChatSave.Checked;
-            Properties.Settings.Default.Save();
-        }
-
-        private void ForceListenToggle_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.ForceListen = ForceListenToggle.Checked;
             Properties.Settings.Default.Save();
         }
 
@@ -278,59 +202,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 		public override string ToString() {
 			return name;
-		}
-	}
-
-	public class ChatChannel {
-		public string code = string.Empty;
-		public ChatChannel(string c) {
-			code = c;
-		}
-		public override string ToString() {
-			switch(code) {
-				case "000D":
-					return "Tell";
-				case "000E":
-					return "Party";
-				case "000F":
-					return "Alliance";
-				case "0010":
-					return "Linkshell#1";
-				case "0011":
-					return "Linkshell#2";
-				case "0012":
-					return "Linkshell#3";
-				case "0013":
-					return "Linkshell#4";
-				case "0014":
-					return "Linkshell#5";
-				case "0015":
-					return "Linkshell#6";
-				case "0016":
-					return "Linkshell#7";
-				case "0017":
-					return "Linkshell#8";
-				case "0018":
-					return "Free company";
-				case "0025":
-					return "CW Linkshell#1";
-				case "0065":
-					return "CW Linkshell#2";
-				case "0066":
-					return "CW Linkshell#3";
-				case "0067":
-					return "CW Linkshell#4";
-				case "0068":
-					return "CW Linkshell#5";
-				case "0069":
-					return "CW Linkshell#6";
-				case "006A":
-					return "CW Linkshell#7";
-				case "006B":
-					return "CW Linkshell#8";
-				default:
-					return string.Empty;
-			}
 		}
 	}
 }
