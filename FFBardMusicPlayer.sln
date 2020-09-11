@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFBardMusicCommon", "FFBard
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFBmpMMLPlugin", "FFBmpMMLPlugin\FFBmpMMLPlugin.csproj", "{667706EA-392E-4A41-B2DC-E4533D265AEE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFMemoryParser", "FFMemoryParser\FFMemoryParser.csproj", "{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,24 @@ Global
 		{667706EA-392E-4A41-B2DC-E4533D265AEE}.ReleaseDeploy|x64.Build.0 = Release|Any CPU
 		{667706EA-392E-4A41-B2DC-E4533D265AEE}.ReleaseDeploy|x86.ActiveCfg = Release|Any CPU
 		{667706EA-392E-4A41-B2DC-E4533D265AEE}.ReleaseDeploy|x86.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|x64.Build.0 = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Debug|x86.Build.0 = Debug|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|x64.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|x64.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|x86.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.Release|x86.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|Any CPU.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|x64.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|x64.Build.0 = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|x86.ActiveCfg = Release|Any CPU
+		{5CC0A4B1-A043-41C9-B2CA-9B105CE977BB}.ReleaseDeploy|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

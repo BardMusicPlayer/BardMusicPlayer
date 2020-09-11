@@ -74,14 +74,6 @@ namespace FFBardMusicPlayer.Forms {
 			// Clear local orchestra
 			InfoTabs.TabPages.Remove(localOrchestraTab);
 
-			LocalOrchestra.onMemoryCheck += delegate (Object o, bool status) {
-				if(status) {
-					this.FFXIV.memory.StopThread();
-				} else {
-					this.FFXIV.memory.StartThread();
-				}
-			};
-
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.FindProcess());
 			};
@@ -94,6 +86,7 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.Hotkeys_OnFileLoad(FFXIV.hotkeys));
 			};
 			FFXIV.hook.OnKeyPressed += Hook_OnKeyPressed;
+			/*
 			FFXIV.memory.OnProcessReady += delegate (object o, Process proc) {
 				this.Log(string.Format("[{0}] Process scanned and ready.", proc.Id));
 				if(Sharlayan.Reader.CanGetActors()) {
@@ -171,6 +164,7 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnPartyChanged += delegate (object o, PartyResult res) {
 				this.Invoke(t => t.LocalOrchestraUpdate());
 			};
+			*/
 
 			Player.OnStatusChange += delegate (object o, PlayerStatus status) {
 				this.Invoke(t => t.UpdatePerformance());
@@ -608,7 +602,7 @@ namespace FFBardMusicPlayer.Forms {
 			if(Properties.Settings.Default.ForcedOpen) {
 				return;
 			}
-			if(FFXIV.IsPerformanceReady() && !FFXIV.memory.ChatInputOpen) {
+			if(FFXIV.IsPerformanceReady() && !FFXIV.GetMemory().ChatInputOpen) {
 
 				if(key == Keys.F10) {
 					foreach(FFXIVKeybindDat.Keybind keybind in FFXIV.hotkeys.GetPerformanceKeybinds()) {
