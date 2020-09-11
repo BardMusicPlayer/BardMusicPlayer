@@ -74,7 +74,7 @@ namespace FFBardMusicPlayer
                 #endregion
 
                 Console.WriteLine("Scrubbing " + filePath);
-                var loaderWatch = System.Diagnostics.Stopwatch.StartNew();
+                var loaderWatch = Stopwatch.StartNew();
 
                 if (explode || midiFile.Chunks.Count == 1) originalTrackChunks = midiFile.GetTrackChunks().First().Explode();
                 else originalTrackChunks = midiFile.GetTrackChunks();
@@ -82,187 +82,183 @@ namespace FFBardMusicPlayer
                 tempoMap = midiFile.GetTempoMap();
                 newTrackChunks = new ConcurrentDictionary<int, TrackChunk>();
 
-                bool skipFirst = originalTrackChunks.First().GetNotes().Count() > 0 ? false : true;
-
                 long firstNote = originalTrackChunks.GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
 
-                Parallel.ForEach(originalTrackChunks, (originalChunk, loopState, index) =>
+                Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Count() > 0), (originalChunk, loopState, index) =>
                 {
-                    if (!(skipFirst && index == 0))
+                    var watch = Stopwatch.StartNew();
+
+                    int noteVelocity = int.Parse(index.ToString()) + 1;
+
+                    Dictionary<int, Dictionary<long, Note>> allNoteEvents = new Dictionary<int, Dictionary<long, Note>>();
+                    for (int i = 0; i < 127; i++) allNoteEvents.Add(i, new Dictionary<long, Note>());
+
+                    // Fill the track dictionary and remove duplicate notes
+                    foreach (Note note in originalChunk.GetNotes())
                     {
+                        long noteOnMS = 0;
 
-                        var watch = Stopwatch.StartNew();
+                        long noteOffMS = 0;
 
-                        int noteVelocity = int.Parse(index.ToString()) + (skipFirst ? 0 : 1);
-
-                        Dictionary<int, Dictionary<long, Note>> allNoteEvents = new Dictionary<int, Dictionary<long, Note>>();
-                        for (int i = 0; i < 127; i++) allNoteEvents.Add(i, new Dictionary<long, Note>());
-
-                        // Fill the track dictionary and remove duplicate notes
-                        foreach (Note note in originalChunk.GetNotes())
+                        try
                         {
-                            long noteOnMS = 0;
-
-                            long noteOffMS = 0;
-
-                            try
-                            {
-                                noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
-                                noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
-                            } catch (Exception) { continue; } // malformed note, most common is a note on missing a note off.
-                            int noteNumber = note.NoteNumber;
-
-                            Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
-                                                    time: noteOnMS,
-                                                    length: noteOffMS - noteOnMS
-                                                    )
-                            {
-                                Channel = (FourBitNumber)0,
-                                Velocity = (SevenBitNumber)noteVelocity,
-                                OffVelocity = (SevenBitNumber)noteVelocity
-                            };
-
-                            if (allNoteEvents[noteNumber].ContainsKey(noteOnMS))
-                            {
-                                Note previousNote = allNoteEvents[noteNumber][noteOnMS];
-                                if (previousNote.Length < note.Length) allNoteEvents[noteNumber][noteOnMS] = newNote; // keep the longest of all duplicates
-                            }
-                            else allNoteEvents[noteNumber].Add(noteOnMS, newNote);
+                            noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+                            noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
                         }
+                        catch (Exception) { continue; } // malformed note, most common is a note on missing a note off.
+                        int noteNumber = note.NoteNumber;
 
-                        watch.Stop();
-                        Debug.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = Stopwatch.StartNew();
-
-                        // Merge all the dictionaries into one collection
-                        TrackChunk newChunk = new TrackChunk();
-                        for (int i = 0; i < 127; i++)
+                        Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
+                                                time: noteOnMS,
+                                                length: noteOffMS - noteOnMS
+                                                )
                         {
-                            long lastNoteTimeStamp = -1;
-                            foreach (var noteEvent in allNoteEvents[i])
-                            {
-                                if (lastNoteTimeStamp >= 0 && allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp >= noteEvent.Key)
-                                {
-                                    allNoteEvents[i][lastNoteTimeStamp].Length = allNoteEvents[i][lastNoteTimeStamp].Length - (allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
-                                }
+                            Channel = (FourBitNumber)0,
+                            Velocity = (SevenBitNumber)noteVelocity,
+                            OffVelocity = (SevenBitNumber)noteVelocity
+                        };
 
-                                lastNoteTimeStamp = noteEvent.Key;
+                        if (allNoteEvents[noteNumber].ContainsKey(noteOnMS))
+                        {
+                            Note previousNote = allNoteEvents[noteNumber][noteOnMS];
+                            if (previousNote.Length < note.Length) allNoteEvents[noteNumber][noteOnMS] = newNote; // keep the longest of all duplicates
+                        }
+                        else allNoteEvents[noteNumber].Add(noteOnMS, newNote);
+                    }
+
+                    watch.Stop();
+                    Debug.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                    watch = Stopwatch.StartNew();
+
+                    // Merge all the dictionaries into one collection
+                    TrackChunk newChunk = new TrackChunk();
+                    for (int i = 0; i < 127; i++)
+                    {
+                        long lastNoteTimeStamp = -1;
+                        foreach (var noteEvent in allNoteEvents[i])
+                        {
+                            if (lastNoteTimeStamp >= 0 && allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp >= noteEvent.Key)
+                            {
+                                allNoteEvents[i][lastNoteTimeStamp].Length = allNoteEvents[i][lastNoteTimeStamp].Length - (allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
+                            }
+
+                            lastNoteTimeStamp = noteEvent.Key;
+                        }
+                    }
+                    newChunk.AddNotes(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
+                    allNoteEvents = null;
+
+                    watch.Stop();
+                    Debug.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                    watch = Stopwatch.StartNew();
+
+                    // auto arpeggiate
+                    Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
+                    for (int i = 1; i < notesToFix.Count(); i++)
+                    {
+                        int noteNum = notesToFix[i].NoteNumber;
+                        long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
+                        long dur = notesToFix[i].Length;
+                        int velocity = notesToFix[i].Velocity;
+
+                        long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
+                        for (int k = i - 1; k >= 0; k--)
+                        {
+                            long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
+                            if (lastOn < lowestParent) lowestParent = lastOn;
+                        }
+                        if (lowestParent <= time + 50)
+                        {
+                            time = lowestParent - 50;
+                            if (time < 0) continue;
+                            notesToFix[i].Time = time;
+                            dur = 25;
+                            notesToFix[i].Length = dur;
+                        }
+                    }
+
+                    watch.Stop();
+                    Debug.WriteLine("step 3: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                    watch = Stopwatch.StartNew();
+
+                    notesToFix = notesToFix.Reverse().ToArray();
+                    List<Note> fixedNotes = new List<Note>();
+                    for (int j = 0; j < notesToFix.Count(); j++)
+                    {
+                        var noteNum = notesToFix[j].NoteNumber;
+                        var time = notesToFix[j].Time;
+                        var dur = notesToFix[j].Length;
+                        var channel = notesToFix[j].Channel;
+                        var velocity = notesToFix[j].Velocity;
+
+                        if (j + 1 < notesToFix.Count())
+                        {
+                            if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
+                            {
+                                dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
+                                dur = dur < 25 ? 1 : dur;
                             }
                         }
-                        newChunk.AddNotes(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
-                        allNoteEvents = null;
-
-                        watch.Stop();
-                        Debug.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = Stopwatch.StartNew();
-
-                        // auto arpeggiate
-                        Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
-                        for (int i = 1; i < notesToFix.Count(); i++)
+                        fixedNotes.Add(new Note(noteNum, dur, time)
                         {
-                            int noteNum = notesToFix[i].NoteNumber;
-                            long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
-                            long dur = notesToFix[i].Length;
-                            int velocity = notesToFix[i].Velocity;
-                            
-                            long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
-                            for (int k = i - 1; k >= 0; k--)
-                            {
-                                long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
-                                if (lastOn < lowestParent) lowestParent = lastOn;
-                            }
-                            if (lowestParent <= time + 50)
-                            {
-                                time = lowestParent - 50;
-                                if (time < 0) continue;
-                                notesToFix[i].Time = time;
-                                dur = 25;
-                                notesToFix[i].Length = dur;
-                            }
-                        }
+                            Channel = channel,
+                            Velocity = velocity,
+                            OffVelocity = velocity
+                        });
+                    }
+                    notesToFix = null;
 
-                        watch.Stop();
-                        Debug.WriteLine("step 3: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = Stopwatch.StartNew();
+                    watch.Stop();
+                    Debug.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                    watch = Stopwatch.StartNew();
 
-                        notesToFix = notesToFix.Reverse().ToArray();
-                        List<Note> fixedNotes = new List<Note>();
-                        for (int j = 0; j < notesToFix.Count(); j++)
+                    // Discover the instrument name from the track title, and from program changes if that fails
+                    int octaveShift = 0;
+                    string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
+                    if (trackName == null) trackName = "";
+                    trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
+                    Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
+                    if (rex.Match(trackName) is Match match)
+                    {
+                        if (!string.IsNullOrEmpty(match.Groups[1].Value))
                         {
-                            var noteNum = notesToFix[j].NoteNumber;
-                            var time = notesToFix[j].Time;
-                            var dur = notesToFix[j].Length;
-                            var channel = notesToFix[j].Channel;
-                            var velocity = notesToFix[j].Velocity;
+                            trackName = match.Groups[1].Value;
+                            if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
 
-                            if (j + 1 < notesToFix.Count())
+                            (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
+
+                            if (success) trackName = parsedTrackName;
+                            else
                             {
-                                if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
-                                {
-                                    dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
-                                    dur = dur < 25 ? 1 : dur;
-                                }
-                            }
-                            fixedNotes.Add(new Note(noteNum, dur, time)
-                            {
-                                Channel = channel,
-                                Velocity = velocity,
-                                OffVelocity = velocity
-                            });
-                        }
-                        notesToFix = null;
-
-                        watch.Stop();
-                        Debug.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = Stopwatch.StartNew();
-
-                        // Discover the instrument name from the track title, and from program changes if that fails
-                        int octaveShift = 0;
-                        string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
-                        if (trackName == null) trackName = "";
-                        trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
-                        Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
-                        if (rex.Match(trackName) is Match match)
-                        {
-                            if (!string.IsNullOrEmpty(match.Groups[1].Value))
-                            {
-                                trackName = match.Groups[1].Value;
-                                if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
-
-                                (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
+                                (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
 
                                 if (success) trackName = parsedTrackName;
                                 else
                                 {
-                                    (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
-
+                                    var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
+                                    if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
                                     if (success) trackName = parsedTrackName;
-                                    else
-                                    {
-                                        var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
-                                        if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
-                                        if (success) trackName = parsedTrackName;
-                                    }
                                 }
-
-                                if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
-                                else if (octaveShift < 0) trackName = trackName + octaveShift;
                             }
+
+                            if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
+                            else if (octaveShift < 0) trackName = trackName + octaveShift;
                         }
-
-                        newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-                        newChunk.AddNotes(fixedNotes);
-                        fixedNotes = null;
-
-                        watch.Stop();
-                        Debug.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
-                        watch = Stopwatch.StartNew();
-
-                        newTrackChunks.TryAdd(noteVelocity, newChunk);
-
-                        watch.Stop();
-                        Debug.WriteLine("step 6: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     }
+
+                    newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    newChunk.AddNotes(fixedNotes);
+                    fixedNotes = null;
+
+                    watch.Stop();
+                    Debug.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+                    watch = Stopwatch.StartNew();
+
+                    newTrackChunks.TryAdd(noteVelocity, newChunk);
+
+                    watch.Stop();
+                    Debug.WriteLine("step 6: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
+
                 });
 
                 // Fill a midi file with the new track chunks
