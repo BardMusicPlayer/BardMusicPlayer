@@ -67,6 +67,7 @@ namespace FFBardMusicPlayer {
 
 			Sharlayan.Reader.JsonPath = appBase;
 
+			/*
 			BmpPluginHelper helper = BmpPluginHelper.LoadPlugins();
 			string filename = "songs/test.mml";
 			if (helper.LoadFile(filename, out Sequencer song, out string error))
@@ -76,6 +77,7 @@ namespace FFBardMusicPlayer {
 			{
 				Console.WriteLine(string.Format("Couldn't load [{0}]", filename));
 			}
+			*/
 			//Console.ReadKey();
 
 			BmpMain app = new BmpMain();
