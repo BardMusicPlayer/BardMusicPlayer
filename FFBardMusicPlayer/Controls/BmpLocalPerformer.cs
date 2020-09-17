@@ -202,7 +202,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void Play(bool play) {
 			if(sequencer is BmpSequencer) {
-				Scroller.Text = sequencer.Position.ToString();
+                this.Invoke(t => Scroller.Text = sequencer.Position.ToString());
 				if(play) {
 					sequencer.Play();
 				} else {
