@@ -263,12 +263,14 @@ namespace FFBardMusicPlayer.Controls {
 			RandomMode = (sender as CheckBox).Checked;
 		}
 
-		public void PlaySelectedMidi(bool delay = false)
+		public void PlaySelectedMidi(bool delay = true)
 		{
 			Timer playlistTimer = new Timer(100);
+            playlistTimer.AutoReset = false;
 			playlistTimer.Elapsed += delegate (Object o, ElapsedEventArgs e) {
 				this.TimerPlayMidi();
-				playlistTimer.Dispose();
+                playlistTimer.Stop();
+                playlistTimer.Dispose();
 			};
 
 			if (delay) {
