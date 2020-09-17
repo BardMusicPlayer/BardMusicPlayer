@@ -64,8 +64,8 @@ namespace FFBardMusicPlayer {
 		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogin;
 		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogout;
 		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerJobChange;
-		public event EventHandler<PartyResult> OnPartyChanged;
-		public event EventHandler<Dictionary<uint, ActorItemBase>> OnPcChanged;
+		public event EventHandler<List<uint>> OnPartyChanged;
+		//public event EventHandler<Dictionary<uint, ActorItemBase>> OnPcChanged;
 		public event EventHandler<List<uint>> OnPerformanceChanged;
 		public event EventHandler<bool> OnPerformanceReadyChanged;
 		public event EventHandler<string> OnCharacterIdChanged;
@@ -219,62 +219,81 @@ namespace FFBardMusicPlayer {
 				}
 				currentPlayer = res;
 			}
-			if(!isLoggedIn) {
+
+			if (!isLoggedIn)
+            {
 				return false;
 			}
-			if(Reader.CanGetPartyMembers()) {
-				PartyResult party2 = Reader.GetPartyMembers();
-				if(party2.NewPartyMembers.Count > 0 ||
-					party2.RemovedPartyMembers.Count > 0) {
-					// Something changed
-					party = party2;
-					OnPartyChanged?.Invoke(this, party2);
-				}
-				int pcount = party.PartyMembers.Count;
-				int pcount2 = party2.PartyMembers.Count;
-				if(!(party is PartyResult) || (party is PartyResult && (pcount != pcount2))) {
-					party = party2;
-					OnPartyChanged?.Invoke(this, party2);
-				}
-			}
-			if(Reader.CanGetPerformance()) {
 
+            if (Reader.CanGetActors())
+            {
+                ActorResult actorRes = Reader.GetActors();
+                if (actors == null || actorRes.CurrentPCs.Count != actors.CurrentPCs.Count)
+                {
+                    actors = actorRes;
+                    //OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
+                }
+            }
 
-				List<uint> changedIds = new List<uint>();
-				PerformanceResult perf = Reader.GetPerformance();
-				if(!perf.Performances.IsEmpty && !performance.Performances.IsEmpty) {
-					foreach(KeyValuePair<uint, PerformanceItem> pp in perf.Performances) {
-						if(pp.Value.Status != performance.Performances[pp.Key].Status) {
-							changedIds.Add(pp.Key);
-						}
-					}
-				}
+            // check and see if performance was enabled or disabled since last update
+            if (Reader.CanGetPerformance())
+            {
+                List<uint> changedIds = new List<uint>();
+                PerformanceResult perf = Reader.GetPerformance();
+                if (!perf.Performances.IsEmpty && !performance.Performances.IsEmpty)
+                {
+                    foreach (KeyValuePair<uint, PerformanceItem> pp in perf.Performances)
+                    {
+                        if (pp.Value.Status != performance.Performances[pp.Key].Status)
+                        {
+                            changedIds.Add(pp.Key);
+                        }
+                    }
+                }
 
-				if(changedIds.Count > 0) {
-					List<uint> actorIds = new List<uint>();
-					if(Reader.CanGetActors()) {
-						foreach(ActorItem actor in Reader.GetActors().CurrentPCs.Values) {
-							if(changedIds.Contains(actor.PerformanceID / 2)) {
-								actorIds.Add(actor.ID);
-							}
-						}
-					}
-					if(actorIds.Count > 0) {
-						OnPerformanceChanged?.Invoke(this, actorIds);
-					}
-				}
-				
-				//Update
-				performance = perf;
+                if (changedIds.Count > 0)
+                {
+                    List<uint> actorIds = new List<uint>();
+                    foreach (ActorItem actor in actors.CurrentPCs.Values)
+                    {
+                        if (changedIds.Contains(actor.PerformanceID / 2))
+                        {
+                            actorIds.Add(actor.ID);
+                        }
+                    }
+                    if (actorIds.Count > 0)
+                    {
+                        OnPerformanceChanged?.Invoke(this, actorIds);
+                    }
+                }
 
-				bool r = perf.Performances[0].IsReady();
-				if(r != performanceReady) {
-					performanceReady = r;
-					OnPerformanceReadyChanged?.Invoke(this, performanceReady);
-				}
-			}
+                performance = perf;
 
-			logItems.Clear();
+                bool r = perf.Performances[0].IsReady();
+                if (r != performanceReady)
+                {
+                    performanceReady = r;
+                    OnPerformanceReadyChanged?.Invoke(this, performanceReady);
+                }
+            }
+
+            if (Reader.CanGetPartyMembers())
+            {
+                List<uint> actorIds = new List<uint>();
+                PartyResult newParty = Reader.GetPartyMembers();
+                if (newParty.PartyMembers.Count != newParty.NewPartyMembers.Count &&
+                    (newParty.NewPartyMembers.Count > 0 || newParty.RemovedPartyMembers.Count > 0))
+                {
+                    // something changed
+                    foreach (PartyMember pc in party.PartyMembers.Values)
+                    {
+                        actorIds.Add(pc.ID);
+                    }
+                    OnPartyChanged?.Invoke(this, actorIds);
+                }
+            }
+
+            logItems.Clear();
 			if(Reader.CanGetChatLog()) {
 				ChatLogResult readResult = Reader.GetChatLog(_previousArrayIndex, _previousOffset);
 				_previousArrayIndex = readResult.PreviousArrayIndex;
@@ -285,42 +304,51 @@ namespace FFBardMusicPlayer {
 					OnChatReceived?.Invoke(this, item);
 				}
 			}
-			if(Reader.CanGetActors()) {
-				int jobsum0 = 0;
-				if(actors != null) {
-					jobsum0 = actors.CurrentPCs.Sum(e => (int) e.Value.Job);
-				}
 
-				ActorResult actorRes = Reader.GetActors();
-				if(actors != null) {
-					if(actorRes.CurrentPCs.Count != actors.CurrentPCs.Count) {
-						actors = actorRes;
-						OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-					}
-					int jobsum1 = actorRes.CurrentPCs.Sum(e => (int) e.Value.Job);
-
-					if(jobsum0 != jobsum1) {
-						actors = actorRes;
-						OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-					}
-				} else {
-					actors = actorRes;
-					OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-				}
-			}
-			return true;
+            return true;
 		}
 
-		public List<ActorItem> GetActorItems(List<uint> keys) {
-			if(Reader.CanGetActors()) {
-				ActorResult res = Reader.GetActors();
-				if(res != null && res.CurrentPCs.Count > 0) {
-					List<ActorItem> actors = res.CurrentPCs.Where(t => keys.Contains(t.Key)).Select(t => t.Value).ToList();
-					return actors;
-				}
-			}
-			return new List<ActorItem>();
-		}
+        public List<uint> GetActorIds()
+        {
+            if (Reader.CanGetActors())
+            {
+                ActorResult actorRes = Reader.GetActors();
+                if (actorRes != null)
+                {
+                    return actorRes.CurrentPCs.Select(k => k.Value.ID).ToList();
+                }
+            }
+
+            return new List<uint>();
+        }
+
+        public List<ActorItem> GetActorItems(List<uint> keys)
+        {
+            if (Reader.CanGetActors())
+            {
+                ActorResult res = Reader.GetActors();
+                if (res != null && res.CurrentPCs.Count > 0)
+                {
+                    List<ActorItem> actors = res.CurrentPCs.Where(t => keys.Contains(t.Key)).Select(t => t.Value).ToList();
+                    return actors;
+                }
+            }
+            return new List<ActorItem>();
+        }
+
+        public List<PerformanceItem> GetPerformanceItems(List<uint> keys)
+        {
+            if (Reader.CanGetPerformance())
+            {
+                PerformanceResult res = Reader.GetPerformance();
+                if (res != null && res.Performances.Count > 0)
+                {
+                    return res.Performances.Select(k => k.Value).ToList();
+                }
+            }
+
+            return new List<PerformanceItem>();
+        }
 
 		public bool IsScanning() {
 			return Scanner.Instance.IsScanning;

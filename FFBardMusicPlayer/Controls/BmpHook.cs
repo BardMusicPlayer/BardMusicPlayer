@@ -113,19 +113,28 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		// Memory funcs
-		public bool IsPlayerJobReady() {
-			if(Properties.Settings.Default.ForcedOpen) {
-				return true;
-			}
-			if(Reader.CanGetPlayerInfo()) {
-				CurrentPlayerResult res = Reader.GetCurrentPlayer();
-				return (res.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.BRD);
-			}
-			return false;
-		}
+        // Memory funcs
+        public bool IsPlayerJobReady()
+        {
+            if (Properties.Settings.Default.ForcedOpen)
+            {
+                return true;
+            }
 
-		public bool IsPerformanceReady() {
+            if (Reader.CanGetPlayerInfo())
+            {
+                return IsPlayerJobReady(Reader.GetCurrentPlayer());
+            }
+
+            return false;
+        }
+
+        public bool IsPlayerJobReady(CurrentPlayerResult currentPlayer)
+        {
+            return (currentPlayer.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.BRD);
+        }
+
+        public bool IsPerformanceReady() {
 			// Force keyboard up
 			if(Properties.Settings.Default.ForcedOpen) {
 				return true;

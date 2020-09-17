@@ -106,7 +106,16 @@ namespace FFBardMusicPlayer.Forms {
 					if(!Sharlayan.Reader.CanGetPerformance()) {
 						this.Log("[MEMORY] Cannot get performance status.\n Performance detection will not work. Force it to work by ticking Settings > Force playback.");
 					}
-				} else {
+
+                    // you have to manually update at least once, best place for it is when we're all set and ready to go
+                    this.Invoke(t =>
+                    {
+                        List<uint> actorIds = FFXIV.memory.GetActorIds();
+                        List<ActorItem> actorItems = FFXIV.memory.GetActorItems(actorIds);
+                        List<PerformanceItem> perfItems = FFXIV.memory.GetPerformanceItems(actorIds);
+                        LocalOrchestraUpdate(actorItems, perfItems);
+                    });
+                } else {
 					List<Sharlayan.Models.Signature> signatures = Sharlayan.Signatures.Resolve().ToList();
 					int sigCount = signatures.Count;
 					foreach(Sharlayan.Models.Signature sig in signatures) {
@@ -130,8 +139,11 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
 				this.Invoke(t => t.Memory_OnChatReceived(item));
 			};
-			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids) {
-				this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
+			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids)
+            {
+                List<ActorItem> actors = (o as FFXIVMemory).GetActorItems(ids);
+                List<PerformanceItem> performances = (o as FFXIVMemory).GetPerformanceItems(ids);
+				this.Invoke(t => t.LocalOrchestraUpdate(actors, performances));
 			};
 			FFXIV.memory.OnPerformanceReadyChanged += delegate (object o, bool performance) {
 				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(performance));
@@ -168,9 +180,12 @@ namespace FFBardMusicPlayer.Forms {
 				string format = string.Format("Character [{0}] logged out.", res.CurrentPlayer.Name);
 				this.Log(format);
 			};
-			FFXIV.memory.OnPartyChanged += delegate (object o, PartyResult res) {
-				this.Invoke(t => t.LocalOrchestraUpdate());
-			};
+			FFXIV.memory.OnPartyChanged += delegate (object o, List<uint> ids)
+            {
+                List<ActorItem> actors = (o as FFXIVMemory).GetActorItems(ids);
+                List<PerformanceItem> performances = (o as FFXIVMemory).GetPerformanceItems(ids);
+                this.Invoke(t => t.LocalOrchestraUpdate(actors, performances));
+            };
 
 			Player.OnStatusChange += delegate (object o, PlayerStatus status) {
 				this.Invoke(t => t.UpdatePerformance());
@@ -356,7 +371,6 @@ namespace FFBardMusicPlayer.Forms {
 
 			this.FindProcess();
 
-
 			string ll = Properties.Settings.Default.LastLoaded;
 			if(!string.IsNullOrEmpty(ll)) {
 				if(Explorer.SelectFile(ll)) {
@@ -446,21 +460,14 @@ namespace FFBardMusicPlayer.Forms {
 			this.Invoke(t => t.UpdatePerformance());
 		}
 
-		private void LocalOrchestraUpdate() {
-			List<ActorItem> actorIds = new List<ActorItem>();
-			List<string> performerNames = LocalOrchestra.GetPerformerNames();
-			if(Sharlayan.Reader.CanGetActors()) {
-				foreach(ActorItem actor in Sharlayan.Reader.GetActors().CurrentPCs.Values) {
-					if(performerNames.Contains(actor.Name)) {
-						actorIds.Add(actor);
-					}
-				}
-			}
-			this.LocalOrchestraUpdate(actorIds);
-		}
+		private void LocalOrchestraUpdate(List<ActorItem> actors, List<PerformanceItem> performances)
+        {
+            if (!LocalOrchestra.OrchestraEnabled)
+            {
+                return;
+            }
 
-		private void LocalOrchestraUpdate(List<ActorItem> actors) {
-			LocalOrchestra.UpdateMemory();
+            LocalOrchestra.UpdateMemory(actors, performances);
 		}
 
 		private void UpdatePerformance() {
