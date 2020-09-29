@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sanford.Multimedia.Midi;
 using System.Text.RegularExpressions;
-using static Sharlayan.Core.Enums.Performance;
 using FFBardMusicPlayer.Components;
 using System.IO;
 using FFBardMusicCommon;
+using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpPlayer : UserControl {

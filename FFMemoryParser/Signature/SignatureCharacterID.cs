@@ -10,9 +10,6 @@
 using System;
 
 namespace FFMemoryParser {
-	public class SigCharIdData {
-		public string id;
-	}
 
 	public class SignatureCharacterID : Signature {
 

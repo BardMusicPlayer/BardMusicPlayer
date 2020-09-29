@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>FFMemoryParser</RootNamespace>
     <AssemblyName>FFMemoryParser</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitConverter.cs" />
+    <Compile Include="ChatParser.cs" />
+    <Compile Include="CompletionLookup.cs" />
     <Compile Include="PipeData.cs" />
     <Compile Include="HookProcess.cs" />
     <Compile Include="Memory.cs" />
@@ -72,12 +76,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SignatureActors.cs" />
+    <Compile Include="SignatureData\CharacterIdData.cs" />
+    <Compile Include="Signature\SignatureChatLog.cs" />
+    <Compile Include="Signature\SignatureActors.cs" />
     <Compile Include="SignatureData\ActorData.cs" />
+    <Compile Include="SignatureData\PerformanceData.cs" />
     <Compile Include="SignatureData\WorldData.cs" />
-    <Compile Include="SignaturePerformance.cs" />
-    <Compile Include="SignatureCharacterID.cs" />
-    <Compile Include="SignatureWorld.cs" />
+    <Compile Include="Signature\SignaturePerformance.cs" />
+    <Compile Include="Signature\SignatureCharacterID.cs" />
+    <Compile Include="Signature\SignatureWorld.cs" />
     <Compile Include="Signature.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

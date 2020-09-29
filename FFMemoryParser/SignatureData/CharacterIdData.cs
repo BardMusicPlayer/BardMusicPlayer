@@ -5,16 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FFMemoryParser {
-	[Serializable]
-	public class SigWorldData {
-		public string world;
-
+	public class SigCharIdData {
+		public string id;
 		public override bool Equals(object obj) {
-			SigWorldData data = (obj as SigWorldData);
-			if(data == null) {
+			SigCharIdData data = (obj as SigCharIdData);
+			if (data == null) {
 				return false;
 			}
-			return (world == data.world);
+			return (id == data.id);
 		}
-    }
+	}
 }

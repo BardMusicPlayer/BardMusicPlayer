@@ -2,8 +2,6 @@
 using FFBardMusicPlayer.Controls;
 using NLog;
 using NLog.Targets;
-using Sharlayan.Core;
-using Sharlayan.Models.ReadResults;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +19,7 @@ using Timer = System.Timers.Timer;
 
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using System.Security.Principal;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
@@ -436,27 +435,6 @@ namespace FFBardMusicPlayer.Forms {
 			this.UpdatePerformance();
 		}
 
-		private void Memory_OnCurrentPlayerJobChange(CurrentPlayerResult res) {
-			this.Invoke(t => t.UpdatePerformance());
-		}
-
-		private void LocalOrchestraUpdate() {
-			List<ActorItem> actorIds = new List<ActorItem>();
-			List<string> performerNames = LocalOrchestra.GetPerformerNames();
-			if(Sharlayan.Reader.CanGetActors()) {
-				foreach(ActorItem actor in Sharlayan.Reader.GetActors().CurrentPCs.Values) {
-					if(performerNames.Contains(actor.Name)) {
-						actorIds.Add(actor);
-					}
-				}
-			}
-			this.LocalOrchestraUpdate(actorIds);
-		}
-
-		private void LocalOrchestraUpdate(List<ActorItem> actors) {
-			LocalOrchestra.UpdateMemory();
-		}
-
 		private void UpdatePerformance() {
 			if(Player.Status == PlayerStatus.Conducting) {
 				Player.Interactable = true;
@@ -677,10 +655,8 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-			if(Sharlayan.Reader.CanGetChatInput()) {
-				if(FFXIV.memory.ChatInputOpen) {
-					return;
-				}
+			if(FFXIV.memory.ChatInputOpen) {
+				return;
 			}
 
 			if (FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind)

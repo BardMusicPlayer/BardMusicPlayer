@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -7,7 +8,16 @@ using System.Text;
 
 public static class Extensions {
 
-    public static string Repeat(this string s, int n)
+	public static string FromHex(this string source) {
+		var builder = new StringBuilder();
+		for (var i = 0; i <= source.Length - 2; i += 2) {
+			builder.Append(Convert.ToChar(int.Parse(source.Substring(i, 2), NumberStyles.HexNumber)));
+		}
+
+		return builder.ToString();
+	}
+
+	public static string Repeat(this string s, int n)
         => new StringBuilder(s.Length * n).Insert(0, s, n).ToString();
 
 	public static string ToQuery(this Dictionary<string, string> dict) {

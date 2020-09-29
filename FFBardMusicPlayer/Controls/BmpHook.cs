@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using Sharlayan;
-using Sharlayan.Models.ReadResults;
-using Sharlayan.Core;
-using Sharlayan.Core.Enums;
+
 using Timer = System.Timers.Timer;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpHook : UserControl {
@@ -120,11 +118,7 @@ namespace FFBardMusicPlayer.Controls {
 			if(Properties.Settings.Default.ForcedOpen) {
 				return true;
 			}
-			if(Reader.CanGetPlayerInfo()) {
-				CurrentPlayerResult res = Reader.GetCurrentPlayer();
-				return (res.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.BRD);
-			}
-			return false;
+			return memory.LocalPerformanceBardJob;
 		}
 
 		public bool IsPerformanceReady() {
@@ -132,11 +126,7 @@ namespace FFBardMusicPlayer.Controls {
 			if(Properties.Settings.Default.ForcedOpen) {
 				return true;
 			}
-			if(Reader.CanGetPerformance()) {
-				PerformanceResult res = Reader.GetPerformance();
-				return res.IsUp();
-			}
-			return false;
+			return memory.LocalPerformanceUp;
 		}
 
 		public bool GetPerformanceInstrument(string ins, out Performance.Instrument ins2) {

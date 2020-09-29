@@ -296,10 +296,6 @@
       <Project>{4269c72a-8d3a-4737-8f89-72eaa33ea9e1}</Project>
       <Name>Sanford.Multimedia.Midi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sharlayan\Sharlayan\Sharlayan.csproj">
-      <Project>{9510d5ef-208a-4897-a582-8eae5c6e9406}</Project>
-      <Name>Sharlayan</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FFBardMusicCommon\FFBardMusicCommon.csproj">
       <Project>{dd95f61b-49c8-411e-9f80-b62b2eec9d5d}</Project>
       <Name>FFBardMusicCommon</Name>
