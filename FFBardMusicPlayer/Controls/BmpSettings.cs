@@ -62,7 +62,7 @@ namespace FFBardMusicPlayer.Controls {
 				OnKeyboardTest?.Invoke(o, e);
 			};
 			SignatureFolder.Click += delegate (object o, EventArgs e) {
-				Process.Start(Sharlayan.Reader.JsonPath);
+				Process.Start(Program.appBase);
 			};
 
 			RefreshMidiInput();

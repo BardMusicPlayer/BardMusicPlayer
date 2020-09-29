@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
-using Timer = System.Timers.Timer;
 
 using Sanford.Multimedia.Midi;
-using System.Windows.Forms;
-using static Sharlayan.Core.Enums.Performance;
 using System.Text.RegularExpressions;
-/*
-public class TickList : Dictionary<int, List<MetaMidiEvent>> {
 
-}
-*/
+using Timer = System.Timers.Timer;
+using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer {
 	public class BmpSequencer : BmpCustomSequencer {

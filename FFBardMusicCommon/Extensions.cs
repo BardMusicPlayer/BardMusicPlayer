@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 public static class Extensions {
 
-    public static string Repeat(this string s, int n)
+	public static string FromHex(this string source) {
+		var builder = new StringBuilder();
+		for (var i = 0; i <= source.Length - 2; i += 2) {
+			builder.Append(Convert.ToChar(int.Parse(source.Substring(i, 2), NumberStyles.HexNumber)));
+		}
+
+		return builder.ToString();
+	}
+
+	public static string Repeat(this string s, int n)
         => new StringBuilder(s.Length * n).Insert(0, s, n).ToString();
 
 	public static string ToQuery(this Dictionary<string, string> dict) {
@@ -28,4 +40,28 @@ public static class Extensions {
 		//If min > max, clamp on swapped min and max
 		return val.CompareTo(max) < 0 ? max : val.CompareTo(min) > 0 ? min : val;
 	}
+	public static string FirstCharToUpper(this string input) {
+		switch (input) {
+			case null: throw new ArgumentNullException(nameof(input));
+			case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+			default: return input.First().ToString().ToUpper() + input.Substring(1);
+		}
+	}
+	public static byte[] ToByteArray(this Object obj) {
+		BinaryFormatter bf = new BinaryFormatter();
+		using (var ms = new MemoryStream()) {
+			bf.Serialize(ms, obj);
+			return ms.ToArray();
+		}
+	}
+	public static Object ToObject(this byte[] arrBytes) {
+		using (var memStream = new MemoryStream()) {
+			var binForm = new BinaryFormatter();
+			memStream.Write(arrBytes, 0, arrBytes.Length);
+			memStream.Seek(0, SeekOrigin.Begin);
+			var obj = binForm.Deserialize(memStream);
+			return obj;
+		}
+	}
+
 }

@@ -2,8 +2,6 @@
 using FFBardMusicPlayer.Controls;
 using NLog;
 using NLog.Targets;
-using Sharlayan.Core;
-using Sharlayan.Models.ReadResults;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,6 +19,7 @@ using Timer = System.Timers.Timer;
 
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using System.Security.Principal;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
@@ -74,14 +73,6 @@ namespace FFBardMusicPlayer.Forms {
 			// Clear local orchestra
 			InfoTabs.TabPages.Remove(localOrchestraTab);
 
-			LocalOrchestra.onMemoryCheck += delegate (Object o, bool status) {
-				if(status) {
-					this.FFXIV.memory.StopThread();
-				} else {
-					this.FFXIV.memory.StartThread();
-				}
-			};
-
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.FindProcess());
 			};
@@ -94,6 +85,7 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.Hotkeys_OnFileLoad(FFXIV.hotkeys));
 			};
 			FFXIV.hook.OnKeyPressed += Hook_OnKeyPressed;
+			/*
 			FFXIV.memory.OnProcessReady += delegate (object o, Process proc) {
 				this.Log(string.Format("[{0}] Process scanned and ready.", proc.Id));
 				if(Sharlayan.Reader.CanGetActors()) {
@@ -171,6 +163,7 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnPartyChanged += delegate (object o, PartyResult res) {
 				this.Invoke(t => t.LocalOrchestraUpdate());
 			};
+			*/
 
 			Player.OnStatusChange += delegate (object o, PlayerStatus status) {
 				this.Invoke(t => t.UpdatePerformance());
@@ -442,27 +435,6 @@ namespace FFBardMusicPlayer.Forms {
 			this.UpdatePerformance();
 		}
 
-		private void Memory_OnCurrentPlayerJobChange(CurrentPlayerResult res) {
-			this.Invoke(t => t.UpdatePerformance());
-		}
-
-		private void LocalOrchestraUpdate() {
-			List<ActorItem> actorIds = new List<ActorItem>();
-			List<string> performerNames = LocalOrchestra.GetPerformerNames();
-			if(Sharlayan.Reader.CanGetActors()) {
-				foreach(ActorItem actor in Sharlayan.Reader.GetActors().CurrentPCs.Values) {
-					if(performerNames.Contains(actor.Name)) {
-						actorIds.Add(actor);
-					}
-				}
-			}
-			this.LocalOrchestraUpdate(actorIds);
-		}
-
-		private void LocalOrchestraUpdate(List<ActorItem> actors) {
-			LocalOrchestra.UpdateMemory();
-		}
-
 		private void UpdatePerformance() {
 			if(Player.Status == PlayerStatus.Conducting) {
 				Player.Interactable = true;
@@ -608,7 +580,7 @@ namespace FFBardMusicPlayer.Forms {
 			if(Properties.Settings.Default.ForcedOpen) {
 				return;
 			}
-			if(FFXIV.IsPerformanceReady() && !FFXIV.memory.ChatInputOpen) {
+			if(FFXIV.IsPerformanceReady() && !FFXIV.GetMemory().ChatInputOpen) {
 
 				if(key == Keys.F10) {
 					foreach(FFXIVKeybindDat.Keybind keybind in FFXIV.hotkeys.GetPerformanceKeybinds()) {
@@ -683,10 +655,8 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-			if(Sharlayan.Reader.CanGetChatInput()) {
-				if(FFXIV.memory.ChatInputOpen) {
-					return;
-				}
+			if(FFXIV.memory.ChatInputOpen) {
+				return;
 			}
 
 			if (FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind)
