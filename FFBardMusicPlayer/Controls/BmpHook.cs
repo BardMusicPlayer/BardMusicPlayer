@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using Sharlayan;
-using Sharlayan.Models.ReadResults;
-using Sharlayan.Core;
-using Sharlayan.Core.Enums;
+
 using Timer = System.Timers.Timer;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpHook : UserControl {
@@ -58,12 +56,14 @@ namespace FFBardMusicPlayer.Controls {
 
 			UpdateCharIds();
 
+			/*
 			memory.OnProcessLost += Memory_OnProcessLost;
 
 			memory.OnProcessReady += Memory_OnProcessReady;
 			memory.OnCharacterIdChanged += Memory_OnCharacterIdChanged;
 
 			memory.OnChatReceived += Memory_OnChatReceived;
+			*/
 
 		}
 
@@ -75,7 +75,7 @@ namespace FFBardMusicPlayer.Controls {
 					Log(ex.Message);
 				}
 			}
-			memory.UnsetProcess();
+			//memory.UnsetProcess();
 			this.ShutdownMemory();
 			hook.Unhook();
 			this.Invoke(t => t.SetHookStatus());
@@ -113,37 +113,20 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-        // Memory funcs
-        public bool IsPlayerJobReady()
-        {
-            if (Properties.Settings.Default.ForcedOpen)
-            {
-                return true;
-            }
-
-            if (Reader.CanGetPlayerInfo())
-            {
-                return IsPlayerJobReady(Reader.GetCurrentPlayer());
-            }
-
-            return false;
-        }
-
-        public bool IsPlayerJobReady(CurrentPlayerResult currentPlayer)
-        {
-            return (currentPlayer.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.BRD);
-        }
+		// Memory funcs
+		public bool IsPlayerJobReady() {
+			if(Properties.Settings.Default.ForcedOpen) {
+				return true;
+			}
+			return memory.LocalPerformanceBardJob;
+		}
 
         public bool IsPerformanceReady() {
 			// Force keyboard up
 			if(Properties.Settings.Default.ForcedOpen) {
 				return true;
 			}
-			if(Reader.CanGetPerformance()) {
-				PerformanceResult res = Reader.GetPerformance();
-				return res.IsUp();
-			}
-			return false;
+			return memory.LocalPerformanceUp;
 		}
 
 		public bool GetPerformanceInstrument(string ins, out Performance.Instrument ins2) {
@@ -196,64 +179,6 @@ namespace FFBardMusicPlayer.Controls {
 				if(hotkeys.GetKeybindFromNoteKey(noteKey) is FFXIVKeybindDat.Keybind keybind) {
 					hook.SendAsyncKeybind(keybind);
 				}
-			}
-		}
-		public void SendChatString(string text) {
-			if(true) {
-				Stopwatch watch = new Stopwatch();
-				FFXIVKeybindDat.Keybind chatKeybind = hotkeys["CMD_CHAT"];
-
-				hook.FocusWindow();
-				// Now that our window is focused, we may use SendInput as much as we want
-
-				List<FFXIVHook.KEYBDINPUT> keyInputs = new List<FFXIVHook.KEYBDINPUT>();
-				if(IsPerformanceReady()) {
-					// First reset the keyboard then focus chat input
-					keyInputs.Clear();
-					foreach(FFXIVKeybindDat.Keybind keybind in hotkeys.GetPerformanceKeybinds()) {
-						keyInputs.Add(new FFXIVHook.KEYBDINPUT {
-							wVk = (ushort) keybind.GetKey(),
-							dwFlags = 0x0002,
-						});
-					}
-					hook.SendKeyInput(keyInputs);
-				}
-				if(Reader.CanGetChatInput() && !memory.ChatInputOpen) {
-					while(!memory.ChatInputOpen) {
-						if(chatKeybind is FFXIVKeybindDat.Keybind) {
-							hook.SendSyncKeybind(chatKeybind);
-							System.Threading.Thread.Sleep(100);
-						}
-					}
-				}
-				if(Reader.CanGetChatInput() && !string.IsNullOrEmpty(memory.ChatInputString)) {
-					hook.SendSyncKey(Keys.A | Keys.Control);
-					watch.Start();
-					while(!string.IsNullOrEmpty(memory.ChatInputString)) {
-						hook.SendSyncKey(Keys.Back);
-						if(watch.ElapsedMilliseconds > 500) {
-							break;
-						}
-						System.Threading.Thread.Sleep(1);
-					}
-					watch.Stop();
-				}
-				hook.SendString(text);
-
-				bool entered = false;
-				if(Reader.CanGetChatInput()) {
-					watch.Start();
-
-					while(!memory.ChatInputString.Equals(text)) {
-						// ...
-						if(watch.ElapsedMilliseconds > 100) {
-							break;
-						}
-						System.Threading.Thread.Sleep(1);
-					}
-					entered = memory.ChatInputString.Equals(text);
-				}
-				hook.SendSyncKey(Keys.Enter);
 			}
 		}
 
@@ -318,31 +243,25 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void SetupMemory(Process proc) {
+		public FFXIVMemory GetMemory() {
+			return memory;
+		}
 
+		public bool IsMemoryAttached() {
+			return memory.IsAttached();
+		}
 
-			if(memory.IsAttached()) {
-				memory.UnsetProcess();
-			}
-			if(proc.ProcessName == "ffxiv_dx11") {
-				Log(string.Format("FFXIV memory parsing..."));
-
-				// memory setprocess
-				memory.SetProcess(proc);
-				if(Program.programOptions.DisableMemory) {
-					memory.Refresh();
-				} else {
-					memory.StartThread();
-				}
-			}
+		public void SetupMemory(Process ffxivProc) {
+			Console.WriteLine("Start memory");
+			memory.Start(ffxivProc);
 		}
 
 		public void ShutdownMemory() {
-			memory.StopThread();
-			while(memory.IsThreadAlive()) {
-				// ...
-			}
+			Console.WriteLine("Shutdown memory");
+			memory.Stop();
 		}
+
+
 
 		public void UpdateCharIds() {
 			CharIdSelector.Items.Clear();
@@ -356,8 +275,7 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void HookButton_Click(object sender, EventArgs e) {
-			if(memory.IsAttached()) {
-				memory.UnsetProcess();
+			if(IsMemoryAttached()) {
 				this.ShutdownMemory();
 				hook.Unhook();
 				this.SetHookStatus();

@@ -65,7 +65,7 @@ namespace FFBardMusicPlayer {
 				Console.OutputEncoding = System.Text.Encoding.UTF8;
 			}
 
-			Sharlayan.Reader.JsonPath = appBase;
+			//Sharlayan.Reader.JsonPath = Program.appBase;
 
 			/*
 			BmpPluginHelper helper = BmpPluginHelper.LoadPlugins();

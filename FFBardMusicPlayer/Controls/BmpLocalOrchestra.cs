@@ -11,10 +11,10 @@ using static FFBardMusicPlayer.BmpProcessSelect;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using Sanford.Multimedia.Midi;
 
-using Timer = System.Timers.Timer;
 using System.Timers;
-using Sharlayan.Core;
 using System.Diagnostics;
+
+using Timer = System.Timers.Timer;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalOrchestra : UserControl {
@@ -27,7 +27,6 @@ namespace FFBardMusicPlayer.Controls {
 		public BmpSequencer Sequencer {
 			set {
 				this.UpdatePerformers(value);
-				// this.UpdateMemory();
 			}
 		}
 
@@ -67,28 +66,28 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-        public void UpdateMemory(List<ActorItem> actors, List<PerformanceItem> perfs)
-        {
-            List<string> performerNames = GetPerformerNames();
-            foreach (ActorItem actor in actors)
-            {
-                if (performerNames.Contains(actor.Name))
-                {
-                    uint perfId = actor.PerformanceID / 2;
-                    if (perfId >= 0 && perfId < 99 && perfId < perfs.Count)
-                    {
-                        BmpLocalPerformer perf = this.FindPerformer(actor.Name);
-                        if (perf != null)
-                        {
-                            PerformanceItem item = perfs[(int)perfId];
-                            perf.PerformanceUp = item.IsReady();
-                            perf.performanceId = perfId;
-                            perf.actorId = actor.ID;
-                        }
-                    }
-                }
-            }
-        }
+        //public void UpdateMemory(List<ActorItem> actors, List<PerformanceItem> perfs)
+        //{
+        //    List<string> performerNames = GetPerformerNames();
+        //    foreach (ActorItem actor in actors)
+        //    {
+        //        if (performerNames.Contains(actor.Name))
+        //        {
+        //            uint perfId = actor.PerformanceID / 2;
+        //            if (perfId >= 0 && perfId < 99 && perfId < perfs.Count)
+        //            {
+        //                BmpLocalPerformer perf = this.FindPerformer(actor.Name);
+        //                if (perf != null)
+        //                {
+        //                    PerformanceItem item = perfs[(int)perfId];
+        //                    perf.PerformanceUp = item.IsReady();
+        //                    perf.performanceId = perfId;
+        //                    perf.actorId = actor.ID;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public void UpdatePerformers(BmpSequencer seq) {
 			if(seq == null) {

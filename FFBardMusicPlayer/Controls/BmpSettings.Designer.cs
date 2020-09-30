@@ -323,7 +323,5 @@
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;
 		private System.Windows.Forms.CheckBox verboseToggle;
-        private System.Windows.Forms.NumericUpDown DelaySongsChange;
-        private System.Windows.Forms.CheckBox WaitBetweenSongsToggle;
     }
 }

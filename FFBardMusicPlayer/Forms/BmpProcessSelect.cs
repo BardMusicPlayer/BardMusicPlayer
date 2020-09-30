@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
-
-using Sharlayan;
 using System.Threading;
 
 namespace FFBardMusicPlayer {
@@ -66,6 +64,7 @@ namespace FFBardMusicPlayer {
 				Button button = proc.Value;
 				buttons.Remove(process);
 				if(process.ProcessName == "ffxiv_dx11") {
+					/*
 					MemoryHandler.Instance.SetProcess(new Sharlayan.Models.ProcessModel {
 						Process = process,
 						IsWin64 = true,
@@ -80,9 +79,11 @@ namespace FFBardMusicPlayer {
 					if(scanTask) {
 						break;
 					}
-					string name = "(Unknown)";
+					*/
+					string name = "TODO FIXME";
 					string origName = string.Empty;
 					string id = string.Empty;
+					/*
 					if(Reader.CanGetPlayerInfo()) {
 						origName = Reader.GetCurrentPlayer().CurrentPlayer.Name;
 						if(string.IsNullOrEmpty(origName)) {
@@ -94,17 +95,18 @@ namespace FFBardMusicPlayer {
 					if(Reader.CanGetCharacterId()) {
 						id = Reader.GetCharacterId();
 					}
+					*/
 					button.Invoke(t => t.Text = name);
 					multiboxProcesses.Add(new MultiboxProcess {
 						process = process,
 						characterName = origName,
 						characterId = id,
 					});
-					MemoryHandler.Instance.UnsetProcess();
+					//MemoryHandler.Instance.UnsetProcess();
 				}
 			}
 
-			MemoryHandler.Instance.UnsetProcess();
+			//MemoryHandler.Instance.UnsetProcess();
 			processCancelled.Set();
 
 			// FIXME enable this after testing

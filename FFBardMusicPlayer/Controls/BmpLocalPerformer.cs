@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FFBardMusicPlayer.BmpProcessSelect;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
-using static Sharlayan.Core.Enums.Performance;
 using Sanford.Multimedia.Midi;
 
 using Timer = System.Timers.Timer;
 using System.Timers;
-using System.Threading;
-using Sharlayan.Models.ReadResults;
+using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalPerformer : UserControl {
@@ -261,6 +254,7 @@ namespace FFBardMusicPlayer.Controls {
 		public void OpenInstrument() {
 			// Exert the effort to check memory i guess
 			if(hostProcess) {
+				/*
 				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
 					if(Sharlayan.Reader.CanGetPerformance()) {
 						if(Sharlayan.Reader.GetPerformance().IsUp()) {
@@ -268,6 +262,8 @@ namespace FFBardMusicPlayer.Controls {
 						}
 					}
 				}
+				*/
+				return;
 			}
 
 			if(performanceUp) {
@@ -299,13 +295,15 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void CloseInstrument() {
 			if(hostProcess) {
+				/*
 				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
 					if(Sharlayan.Reader.CanGetPerformance()) {
 						if(!Sharlayan.Reader.GetPerformance().IsUp()) {
 							return;
 						}
 					}
-				}
+				}*/
+				return;
 			}
 
 			if(!performanceUp) {
