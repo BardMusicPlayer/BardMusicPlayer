@@ -95,7 +95,7 @@ namespace FFBardMusicPlayer {
 
 		public bool OnKey(T t) {
 
-			int chordDetection = Properties.Settings.Default.ChordDetectionDelay;
+			int chordDetection = 1;
 			bool tooFastChord = (Math.Abs(this.Tick - MaxTick) < chordDetection);
 			noteTimers.SetTimestamp(t, this.Tick);
 

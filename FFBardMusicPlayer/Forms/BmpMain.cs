@@ -714,12 +714,12 @@ namespace FFBardMusicPlayer.Forms {
 					return;
 				}
 			}
-			if(Properties.Settings.Default.AutoArpeggiate) {
-				if(chordNotes.OnKey(onNote)) {
+			//if(Properties.Settings.Default.AutoArpeggiate) {
+			//	if(chordNotes.OnKey(onNote)) {
 					// Chord detected and queued
 					// Console.WriteLine(String.Format("Delay note {0} by 50ms", onNote.ToString()));
-				}
-			}
+			//	}
+			//}
 			if(!chordNotes.HasTimer(onNote)) {
 				if(FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind) {
 					if(WantsHold) {
