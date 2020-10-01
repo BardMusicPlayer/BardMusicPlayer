@@ -18,6 +18,8 @@ namespace FFBardMusicPlayer
             {
                 MMSong mmSong = JsonExtensions.DeserializeFromFileCompressed<MMSong>(filePath);
 
+                if (mmSong.schemaVersion != 1) throw new FileFormatException("Error: This mmsong file format is not understood.");
+
                 MMSong.Song song = mmSong.songs[index];
 
                 MidiFile sequence = new MidiFile();
@@ -68,7 +70,7 @@ namespace FFBardMusicPlayer
                     }
                     else failure = true;
 
-                    if (failure) throw new FileFormatException();
+                    if (failure) throw new FileFormatException("Error: This mmsong file is corrupted");
 
                     TrackChunk currentChunk = new TrackChunk(new SequenceTrackNameEvent(bard.instrument.ToString()));
                     currentChunk.AddNotes(notes);
@@ -113,6 +115,7 @@ namespace FFBardMusicPlayer
         private class MMSong
         {
             public List<Song> songs { get; set; } = new List<Song>();
+            public int schemaVersion { get; set; }
             public class Song
             {
                 public List<Bard> bards { get; set; } = new List<Bard>();
