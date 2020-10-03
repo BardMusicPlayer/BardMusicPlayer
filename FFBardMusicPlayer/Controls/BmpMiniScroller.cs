@@ -14,10 +14,23 @@ namespace FFBardMusicPlayer.Controls {
 		public EventHandler<int> OnScroll;
 		public EventHandler OnStatusClick;
 
+		private delegate void textDelegate(string text);
+		private void setText(string text)
+        {
+			if (InvokeRequired)
+			{
+				var d = new textDelegate(setText);
+				Invoke(d, new object[] { text });
+			}
+			else
+			{
+				Status.Text = text;
+			}
+        }
 		public override string Text {
 			get { return Status.Text; }
 			set {
-				Status.Text = value;
+				setText(value);
 			}
 		}
 
