@@ -375,7 +375,8 @@ namespace FFBardMusicPlayer {
 
 			loadedError = string.Empty;
 			try {
-				Sequence = DryWetUtil.ScrubFile(file);
+				if (Path.GetExtension(file).ToLower().Equals(".mmsong")) Sequence = new Sequence(Plugin_MMsong.Load(file));
+				else Sequence = new Sequence(DryWetUtil.ScrubFile(file));
 			} catch(Exception e) {
 				Console.WriteLine(e.StackTrace);
 				throw e;
