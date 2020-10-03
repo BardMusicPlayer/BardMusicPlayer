@@ -1,26 +1,27 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using Sanford.Multimedia.Midi;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static FFMemoryParser.Performance;
+using static Sharlayan.Core.Enums.Performance;
 
 namespace FFBardMusicPlayer
 {
     class DryWetUtil
     {
-        // cache this. it doesn't change and we shouldn't do it each and every track.
-        // basically: convert Instrument to string array then descending sort by resulting string lengths
         private static string[] InstrumentEnumNamesAsStringsSorted = Array.ConvertAll((Instrument[])Enum.GetValues(typeof(Instrument)), s => s.ToString()).OrderByDescending(s => s.Length).ToArray();
 
-        public static Sequence ScrubFile(string filePath)
+        private static string lastMD5 = "invalid";
+        private static MidiFile lastFile = null;
+
+        public static MemoryStream ScrubFile(string filePath)
         {
             MidiFile midiFile;
             IEnumerable<TrackChunk> originalTrackChunks;
@@ -29,10 +30,18 @@ namespace FFBardMusicPlayer
             MidiFile newMidiFile;
             ConcurrentDictionary<int, TrackChunk> newTrackChunks;
 
-            Sequence sequence = null;
-
             try
             {
+                string md5 = CalculateMD5(filePath);
+                if (lastMD5.Equals(md5) && lastFile != null)
+                {
+                    var oldfile = new MemoryStream();
+                    lastFile.Write(oldfile, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                    oldfile.Flush();
+                    oldfile.Position = 0;
+                    return oldfile;
+                }
+
                 midiFile = MidiFile.Read(filePath, new ReadingSettings
                 {
                     ReaderSettings = new ReaderSettings
@@ -93,7 +102,6 @@ namespace FFBardMusicPlayer
                     Dictionary<int, Dictionary<long, Note>> allNoteEvents = new Dictionary<int, Dictionary<long, Note>>();
                     for (int i = 0; i < 127; i++) allNoteEvents.Add(i, new Dictionary<long, Note>());
 
-                    // Fill the track dictionary and remove duplicate notes
                     foreach (Note note in originalChunk.GetNotes())
                     {
                         long noteOnMS = 0;
@@ -105,7 +113,7 @@ namespace FFBardMusicPlayer
                             noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
                             noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
                         }
-                        catch (Exception) { continue; } // malformed note, most common is a note on missing a note off.
+                        catch (Exception) { continue; }
                         int noteNumber = note.NoteNumber;
 
                         Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
@@ -121,7 +129,7 @@ namespace FFBardMusicPlayer
                         if (allNoteEvents[noteNumber].ContainsKey(noteOnMS))
                         {
                             Note previousNote = allNoteEvents[noteNumber][noteOnMS];
-                            if (previousNote.Length < note.Length) allNoteEvents[noteNumber][noteOnMS] = newNote; // keep the longest of all duplicates
+                            if (previousNote.Length < note.Length) allNoteEvents[noteNumber][noteOnMS] = newNote;
                         }
                         else allNoteEvents[noteNumber].Add(noteOnMS, newNote);
                     }
@@ -130,7 +138,6 @@ namespace FFBardMusicPlayer
                     Debug.WriteLine("step 1: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     watch = Stopwatch.StartNew();
 
-                    // Merge all the dictionaries into one collection
                     TrackChunk newChunk = new TrackChunk();
                     for (int i = 0; i < 127; i++)
                     {
@@ -152,7 +159,6 @@ namespace FFBardMusicPlayer
                     Debug.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     watch = Stopwatch.StartNew();
 
-                    // auto arpeggiate
                     Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
                     for (int i = 1; i < notesToFix.Count(); i++)
                     {
@@ -212,7 +218,6 @@ namespace FFBardMusicPlayer
                     Debug.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     watch = Stopwatch.StartNew();
 
-                    // Discover the instrument name from the track title, and from program changes if that fails
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
                     if (trackName == null) trackName = "";
@@ -261,25 +266,25 @@ namespace FFBardMusicPlayer
 
                 });
 
-                // Fill a midi file with the new track chunks
                 newMidiFile = new MidiFile();
                 newMidiFile.Chunks.Add(new TrackChunk());
                 newMidiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(600);
                 using (TempoMapManager tempoManager = newMidiFile.ManageTempoMap()) tempoManager.SetTempo(0, Tempo.FromBeatsPerMinute(100));
                 newMidiFile.Chunks.AddRange(newTrackChunks.Values);
-#if DEBUG
-                newMidiFile.Write("drywet-scrubber-debug.mid", true, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
-#endif
-                // Write the midi file out into a memory stream and pass that to sanford to create a sanford sequence object
-                using (var stream = new MemoryStream())
-                {
-                    newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
-                    stream.Flush();
-                    stream.Position = 0;
-                    sequence = new Sequence(stream);
-                }
+
+                var stream = new MemoryStream();
+                
+                newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                stream.Flush();
+                stream.Position = 0;
+
                 loaderWatch.Stop();
                 Console.WriteLine("Scrubbing MS: " + loaderWatch.ElapsedMilliseconds);
+
+                lastMD5 = md5;
+                lastFile = newMidiFile;
+
+                return stream;
             }
             catch (Exception ex)
             {
@@ -289,14 +294,22 @@ namespace FFBardMusicPlayer
             finally
             {
                 newTrackChunks = null;
-                newMidiFile = null;
-
                 tempoMap = null;
                 originalTrackChunks = null;
                 midiFile = null;
             }
+        }
 
-            return sequence;
+        private static string CalculateMD5(string filename)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(filename))
+                {
+                    var hash = md5.ComputeHash(stream);
+                    return BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
+                }
+            }
         }
 
         private static (bool, string) TrackNameToEnumInstrumentName(string trackName)
@@ -430,7 +443,5 @@ namespace FFBardMusicPlayer
             }
             return (true, null);
         }
-
-
     }
 }
