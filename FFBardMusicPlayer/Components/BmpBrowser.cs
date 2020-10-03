@@ -225,7 +225,7 @@ namespace FFBardMusicPlayer.Components {
 			List<string> fileNames = new List<string>();
 			string dir = Properties.Settings.Default.SongDirectory;
 			if(Directory.Exists(dir)) {
-				foreach(string file in Directory.GetFiles(dir, "*.mid", SearchOption.AllDirectories)) {
+				foreach(string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mid") || s.ToLower().EndsWith(".mmsong"))) {
 					fileNames.Add(file);
 				}
 			}
@@ -244,7 +244,7 @@ namespace FFBardMusicPlayer.Components {
 					this.Items.Clear();
 					return;
 				} else {
-					if(filenameFilter.ToLower().EndsWith(".mid")) {
+					if(filenameFilter.ToLower().EndsWith(".mid")||filenameFilter.ToLower().EndsWith(".mmsong")) {
 						foreach(MidiFile file in this.Items) {
 							if(file.Enabled) {
 								if(file.FileName.RelativeFileName == filenameFilter) {
