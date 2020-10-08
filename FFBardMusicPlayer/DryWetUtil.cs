@@ -68,10 +68,6 @@ namespace FFBardMusicPlayer
                         {
                             throw new NotSupportedException();
                         }
-                        else if (fileFormat == MidiFileFormat.SingleTrack)
-                        {
-                            throw new NotSupportedException();
-                        }
                     }
                     catch (Exception exception) when (exception is UnknownFileFormatException || exception is InvalidOperationException)
                     {
