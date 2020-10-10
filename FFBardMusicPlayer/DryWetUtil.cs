@@ -50,8 +50,6 @@ namespace FFBardMusicPlayer
                     }
                 });
 
-                bool explode = false;
-
                 #region Require
 
                 if (midiFile == null)
@@ -70,10 +68,6 @@ namespace FFBardMusicPlayer
                         {
                             throw new NotSupportedException();
                         }
-                        else if (fileFormat == MidiFileFormat.SingleTrack)
-                        {
-                            explode = true;
-                        }
                     }
                     catch (Exception exception) when (exception is UnknownFileFormatException || exception is InvalidOperationException)
                     {
@@ -85,8 +79,7 @@ namespace FFBardMusicPlayer
                 Console.WriteLine("Scrubbing " + filePath);
                 var loaderWatch = Stopwatch.StartNew();
 
-                if (explode || midiFile.Chunks.Count == 1) originalTrackChunks = midiFile.GetTrackChunks().First().Explode();
-                else originalTrackChunks = midiFile.GetTrackChunks();
+                originalTrackChunks = midiFile.GetTrackChunks();
 
                 tempoMap = midiFile.GetTempoMap();
                 newTrackChunks = new ConcurrentDictionary<int, TrackChunk>();
