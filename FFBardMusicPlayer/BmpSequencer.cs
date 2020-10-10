@@ -358,7 +358,7 @@ namespace FFBardMusicPlayer {
 			return 0;
 		}
 
-		public void Load(string file, int trackNum = 0) {
+		public void Load(string file, int trackNum = 1) {
 
 			OnTrackNameChange?.Invoke(this, string.Empty);
 			OnTempoChange?.Invoke(this, 0);
@@ -401,12 +401,12 @@ namespace FFBardMusicPlayer {
 			}
 
 			// Count notes and select fìrst that actually has stuff
-			if(trackNum == 0) {
+			if(trackNum == 1) {
 				while(trackNum < Sequence.Count) {
 					int tnotes = 0;
 
 					foreach(MidiEvent ev in Sequence[trackNum].Iterator()) {
-						if(intendedTrack == 0) {
+						if(intendedTrack == 1) {
 							if(ev.MidiMessage is ChannelMessage chanMsg) {
 								if(chanMsg.Command == ChannelCommand.NoteOn) {
 									tnotes++;
