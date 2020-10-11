@@ -268,7 +268,7 @@ namespace FFBardMusicPlayer
                 var stream = new MemoryStream();
                 
                 using (var manager = new TimedEventsManager(newMidiFile.GetTrackChunks().First().Events))
-                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 1));
+                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
                 newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
                 stream.Flush();
