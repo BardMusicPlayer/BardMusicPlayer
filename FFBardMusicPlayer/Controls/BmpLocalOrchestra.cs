@@ -163,7 +163,7 @@ namespace FFBardMusicPlayer.Controls {
 			PerformerPanel.Controls.Clear();
 
 			List<BmpLocalPerformer> performers = new List<BmpLocalPerformer>();
-			int track = 0;
+			int track = 1;
 			foreach(MultiboxProcess mp in processes) {
 				BmpLocalPerformer perf = new BmpLocalPerformer(mp);
 				perf.Dock = DockStyle.Top;
@@ -178,7 +178,7 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			for(int i = 0; i < performers.Count; i++) {
 				BmpLocalPerformer perf = performers[i];
-				perf.TrackNum = i + 1;
+				perf.TrackNum = i+1;
 				PerformerPanel.Controls.Add(perf);
 			}
 		}
