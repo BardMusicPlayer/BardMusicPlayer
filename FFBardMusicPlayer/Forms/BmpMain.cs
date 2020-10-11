@@ -558,6 +558,10 @@ namespace FFBardMusicPlayer.Forms {
 				if (proceedPlaylistMidi)
                 {
 					Player.Player.Stop();
+                    if (LocalOrchestra.OrchestraEnabled)
+                    {
+                        LocalOrchestra.PerformerStop();
+                    }
 				}
 			}
 		}
