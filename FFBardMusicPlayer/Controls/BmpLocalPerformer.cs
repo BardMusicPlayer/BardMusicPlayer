@@ -35,7 +35,6 @@ namespace FFBardMusicPlayer.Controls {
 						sequencer.OnNote += InternalNote;
 						sequencer.OffNote += InternalNote;
 					}
-                    this.OctaveShift.Value = 0;
 					this.Update(value);
 				}
 			}
@@ -241,7 +240,6 @@ namespace FFBardMusicPlayer.Controls {
 						}
 					}
 				}
-                //this.OctaveShift.Value = po;
                 Keyboard.UpdateFrequency(notes);
 				ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
 			}
@@ -358,8 +356,8 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
-            // reset the applied octave shift if switching tracks
-            OctaveShift.Value = 0;
+            int newTn = decimal.ToInt32((sender as NumericUpDown).Value);
+            this.OctaveShift.Value = sequencer.GetTrackPreferredOctaveShift(sequencer.Sequence[newTn]);
             this.Invoke(t => t.Update(sequencer));
 		}
 
