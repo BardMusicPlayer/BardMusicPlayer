@@ -358,8 +358,14 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
-            int newTn = decimal.ToInt32((sender as NumericUpDown).Value);
-            this.OctaveShift.Value = sequencer.GetTrackPreferredOctaveShift(sequencer.Sequence[newTn]);
+            if (sequencer != null)
+            {
+                var seq = sequencer.Sequence;
+                int newTn = decimal.ToInt32((sender as NumericUpDown).Value);
+                int newOs = ((newTn >= 0 && newTn < seq.Count) ? sequencer.GetTrackPreferredOctaveShift(seq[newTn]) : 0);
+                this.OctaveShift.Value = newOs;
+            }
+
             this.Invoke(t => t.Update(sequencer));
 		}
 
