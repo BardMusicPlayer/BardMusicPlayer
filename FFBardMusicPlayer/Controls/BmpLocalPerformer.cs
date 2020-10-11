@@ -42,6 +42,7 @@ namespace FFBardMusicPlayer.Controls {
 						sequencer.OnNote += InternalNote;
 						sequencer.OffNote += InternalNote;
 					}
+                    this.OctaveShift.Value = 0;
 					this.Update(value);
 				}
 			}
@@ -56,6 +57,7 @@ namespace FFBardMusicPlayer.Controls {
 				return decimal.ToInt32(TrackShift.Value);
 			}
 			set {
+                OctaveShift.Invoke(t => t.Value = 0);
 				TrackShift.Invoke(t => t.Value = value);
 			}
 		}
@@ -231,7 +233,7 @@ namespace FFBardMusicPlayer.Controls {
 
 			Keyboard.UpdateFrequency(new List<int>());
 			if((tn >= 0 && tn < seq.Count) && seq[tn] is Track track) {
-				int po = bmpSeq.GetTrackPreferredOctaveShift(track);
+				int po = OctaveNum + bmpSeq.GetTrackPreferredOctaveShift(track);
 				Console.WriteLine(String.Format("Track {0} {1} po {2}", tn, bmpSeq.MaxTrack, po));
 				List<int> notes = new List<int>();
 				foreach(MidiEvent ev in track.Iterator()) {
@@ -246,7 +248,7 @@ namespace FFBardMusicPlayer.Controls {
 						}
 					}
 				}
-                this.OctaveShift.Value = po;
+                //this.OctaveShift.Value = po;
                 Keyboard.UpdateFrequency(notes);
 				ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
 			}
@@ -358,11 +360,16 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
-			this.Invoke(t => t.Update(sequencer));
+            // reset the applied octave shift if switching tracks
+            OctaveShift.Value = 0;
+            this.Invoke(t => t.Update(sequencer));
 		}
 
 		private void OctaveShift_ValueChanged(object sender, EventArgs e) {
-			this.Invoke(t => t.Update(sequencer));
+            decimal octave = (sender as NumericUpDown).Value;
+            int po = decimal.ToInt32(octave);
+            OctaveShift.Value = po;
+            this.Invoke(t => t.Update(sequencer));
 		}
 	}
 }
