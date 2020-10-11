@@ -31,7 +31,7 @@ namespace FFBardMusicCommon {
 
 	[Serializable]
 	public class BmpMidiEntryTrack {
-		private int midiTrack = 0;
+		private int midiTrack = 1;
 		public int Track {
 			get { return midiTrack; }
 		}
@@ -72,8 +72,8 @@ namespace FFBardMusicCommon {
 		}
 
 		public BmpMidiEntry(string filename, int track = -1) {
-			if(track == -1) {
-				track = 0;
+			if(track == -1 || track == 0) {
+				track = 1;
 
 				Match m = Regex.Match(filename, @"(^[^;\n\r]+)(?:;?(\d+)?)");
 				if(m.Success && m.Groups.Count == 3) {
