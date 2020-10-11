@@ -61,7 +61,7 @@ namespace FFBardMusicPlayer.Controls {
 			}
 			for(int i = 0; i < performers.Count; i++) {
 				BmpLocalPerformer perf = performers[i];
-				perf.TrackNum = i;
+				perf.TrackNum = i + 1;
 				PerformerPanel.Controls.Add(perf);
 			}
 		}
