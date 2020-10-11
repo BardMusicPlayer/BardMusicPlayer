@@ -124,6 +124,10 @@ namespace FFBardMusicPlayer {
 		}
 
 		public void StartThread() {
+            // run the refresh through once first, so other things aren't waiting
+            // for valid information on initialization
+            // this is a hack around threading
+            Refresh();
 			if(thread == null) {
 				ThreadStart memoryThread = new ThreadStart(FFXIVMemory_Main);
 				thread = new Thread(memoryThread);

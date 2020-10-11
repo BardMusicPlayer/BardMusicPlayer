@@ -26,14 +26,24 @@ namespace FFBardMusicPlayer.Controls {
 			public Dictionary<uint, long> idTimestamp = new Dictionary<uint, long>();
 		};
 
-		public BmpSequencer Sequencer {
-			set {
-				this.UpdatePerformers(value);
-				this.UpdateMemory();
-			}
-		}
+        private BmpSequencer parentSequencer;
+        public BmpSequencer Sequencer
+        {
+            set
+            {
+                parentSequencer = value;
 
-		private bool orchestraEnabled = false;
+                this.UpdatePerformers(value);
+                this.UpdateMemory();
+            }
+
+            get
+            {
+                return parentSequencer;
+            }
+        }
+
+        private bool orchestraEnabled = false;
 		public bool OrchestraEnabled {
 			get { return orchestraEnabled; }
 			set {
@@ -271,8 +281,8 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void closeInstruments_Click(object sender, EventArgs e) {
-			
-			foreach(Control ctl in PerformerPanel.Controls) {
+            parentSequencer.Pause();
+            foreach (Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {
 					performer.CloseInstrument();

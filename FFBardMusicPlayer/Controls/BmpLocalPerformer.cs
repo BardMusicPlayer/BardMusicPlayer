@@ -56,6 +56,7 @@ namespace FFBardMusicPlayer.Controls {
 				return decimal.ToInt32(TrackShift.Value);
 			}
 			set {
+                OctaveShift.Invoke(t => t.Value = 0);
 				TrackShift.Invoke(t => t.Value = value);
 			}
 		}
@@ -231,7 +232,7 @@ namespace FFBardMusicPlayer.Controls {
 
 			Keyboard.UpdateFrequency(new List<int>());
 			if((tn >= 0 && tn < seq.Count) && seq[tn] is Track track) {
-				int po = bmpSeq.GetTrackPreferredOctaveShift(track);
+				int po = OctaveNum + bmpSeq.GetTrackPreferredOctaveShift(track);
 				Console.WriteLine(String.Format("Track {0} {1} po {2}", tn, bmpSeq.MaxTrack, po));
 				List<int> notes = new List<int>();
 				foreach(MidiEvent ev in track.Iterator()) {
@@ -246,7 +247,6 @@ namespace FFBardMusicPlayer.Controls {
 						}
 					}
 				}
-                this.OctaveShift.Value = po;
                 Keyboard.UpdateFrequency(notes);
 				ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
 			}
@@ -273,6 +273,14 @@ namespace FFBardMusicPlayer.Controls {
 			if(performanceUp) {
 				return;
 			}
+
+            // don't open instrument if we don't have anything loaded
+            if (sequencer == null || sequencer.Sequence == null)
+                return;
+
+            // don't open instrument if we're not on a valid track
+            if (TrackNum == 0 || TrackNum >= sequencer.Sequence.Count)
+                return;
 
 			string keyMap = hotbar.GetInstrumentKeyMap(chosenInstrument);
 			if(!string.IsNullOrEmpty(keyMap)) {
@@ -358,11 +366,22 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
-			this.Invoke(t => t.Update(sequencer));
+            if (sequencer != null)
+            {
+                var seq = sequencer.Sequence;
+                int newTn = decimal.ToInt32((sender as NumericUpDown).Value);
+                int newOs = ((newTn >= 0 && newTn < seq.Count) ? sequencer.GetTrackPreferredOctaveShift(seq[newTn]) : 0);
+                this.OctaveShift.Value = newOs;
+            }
+
+            this.Invoke(t => t.Update(sequencer));
 		}
 
 		private void OctaveShift_ValueChanged(object sender, EventArgs e) {
-			this.Invoke(t => t.Update(sequencer));
+            decimal octave = (sender as NumericUpDown).Value;
+            int po = decimal.ToInt32(octave);
+            OctaveShift.Value = po;
+            this.Invoke(t => t.Update(sequencer));
 		}
 	}
 }
