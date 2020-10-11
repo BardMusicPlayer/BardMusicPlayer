@@ -270,6 +270,14 @@ namespace FFBardMusicPlayer.Controls {
 				return;
 			}
 
+            // don't open instrument if we don't have anything loaded
+            if (sequencer == null || sequencer.Sequence == null)
+                return;
+
+            // don't open instrument if we're not on a valid track
+            if (TrackNum == 0 || TrackNum >= sequencer.Sequence.Count)
+                return;
+
 			string keyMap = hotbar.GetInstrumentKeyMap(chosenInstrument);
 			if(!string.IsNullOrEmpty(keyMap)) {
 				FFXIVKeybindDat.Keybind keybind = hotkeys[keyMap];
