@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using static Sharlayan.Core.Enums.Performance;
 
 namespace FFBardMusicPlayer
@@ -32,6 +33,22 @@ namespace FFBardMusicPlayer
                 {
                     List<Note> notes = new List<Note>();
                     bool failure = false;
+
+                    switch (bard.instrument)
+                    {
+                        case Instrument.Cymbal:
+                        case Instrument.Trumpet:
+                        case Instrument.Trombone:
+                        case Instrument.Horn:
+                        case Instrument.Tuba:
+                        case Instrument.Saxophone:
+                            bard.sequence = bard.sequence.ToDictionary(
+                                x => x.Key + 2,
+                                x => x.Value);
+                            break;
+                        default:
+                            break;
+                    }
 
                     if (bard.sequence.Count % 2 == 0)
                     {
@@ -79,6 +96,9 @@ namespace FFBardMusicPlayer
                     sequence.Chunks.Add(currentChunk);
                     currentChunk = null;
                 }
+
+                using (var manager = new TimedEventsManager(sequence.GetTrackChunks().First().Events))
+                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (sequence.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
                 var stream = new MemoryStream();
                 sequence.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
