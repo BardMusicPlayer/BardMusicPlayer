@@ -366,8 +366,10 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
+            // reset the applied octave shift if switching tracks
             OctaveShift.Value = 0;
-            this.Invoke(t => t.Update(sequencer));		}
+            this.Invoke(t => t.Update(sequencer));
+		}
 
 		private void OctaveShift_ValueChanged(object sender, EventArgs e) {
             decimal octave = (sender as NumericUpDown).Value;
