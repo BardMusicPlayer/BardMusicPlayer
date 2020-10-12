@@ -232,7 +232,7 @@ namespace FFBardMusicPlayer.Controls {
 
 			Keyboard.UpdateFrequency(new List<int>());
 			if((tn >= 0 && tn < seq.Count) && seq[tn] is Track track) {
-				int po = OctaveNum + bmpSeq.GetTrackPreferredOctaveShift(track);
+				int po = bmpSeq.GetTrackPreferredOctaveShift(track);
 				Console.WriteLine(String.Format("Track {0} {1} po {2}", tn, bmpSeq.MaxTrack, po));
 				List<int> notes = new List<int>();
 				foreach(MidiEvent ev in track.Iterator()) {
