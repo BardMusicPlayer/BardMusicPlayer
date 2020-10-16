@@ -215,7 +215,8 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private int ApplyOctaveShift(int note) {
-			int os = octaveShift + player.GetTrackPreferredOctaveShift(player.LoadedTrack);
+            // octaveShift now holds the track octave and the selected octave together
+            int os = octaveShift;
 			return NoteHelper.ApplyOctaveShift(note, os);
 		}
 
@@ -223,6 +224,7 @@ namespace FFBardMusicPlayer.Controls {
 		private void OnPlayerMidiLoad(Object o, EventArgs e) {
 			OnMidiTrackLoad?.Invoke(o, player.LoadedTrack);
 
+            // set the initial octave shift here
             // this will also update the keyboard
             OctaveShift = player.GetTrackPreferredOctaveShift(player.LoadedTrack);
 
