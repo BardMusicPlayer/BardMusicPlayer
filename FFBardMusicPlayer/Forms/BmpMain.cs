@@ -558,10 +558,6 @@ namespace FFBardMusicPlayer.Forms {
 				if (proceedPlaylistMidi)
                 {
 					Player.Player.Stop();
-                    if (LocalOrchestra.OrchestraEnabled)
-                    {
-                        LocalOrchestra.PerformerStop();
-                    }
 				}
 			}
 		}
@@ -602,7 +598,17 @@ namespace FFBardMusicPlayer.Forms {
 		}
 
 		private void OnPlayStatusEnded(object o, EventArgs e) {
-			if(!Player.Loop) {
+            if (LocalOrchestra.OrchestraEnabled)
+            {
+                LocalOrchestra.PerformerStop();
+            }
+            if (Player.Loop)
+            {
+                Player.Player.Play();
+                if (LocalOrchestra.OrchestraEnabled) LocalOrchestra.PerformerPlay(true);
+            }
+            else
+            {
 				proceedPlaylistMidi = true;
 				this.NextSong();
 			}
