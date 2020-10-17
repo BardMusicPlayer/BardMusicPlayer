@@ -39,8 +39,9 @@ namespace FFBardMusicPlayer.Controls {
                         sequencer.OnNote += InternalNote;
                         sequencer.OffNote += InternalNote;
 
-                        // set the initial octave shift here
-                        OctaveShift.Value = sequencer.GetTrackPreferredOctaveShift(sequencer.Sequence[this.TrackNum]);
+                        // set the initial octave shift here, if we have a track to play
+                        if (this.TrackNum < sequencer.Sequence.Count)
+                            OctaveShift.Value = sequencer.GetTrackPreferredOctaveShift(sequencer.Sequence[this.TrackNum]);
                     }
                     this.Update(value);
                 }
