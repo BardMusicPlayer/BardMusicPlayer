@@ -108,7 +108,6 @@ namespace FFBardMusicPlayer.Controls {
 			get { return tempo; }
 			set {
 				tempo = value;
-				InfoTempo.Invoke(t => t.Text = string.Format("{0} BPM", tempo));
 			}
 		}
 
