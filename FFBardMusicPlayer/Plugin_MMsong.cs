@@ -20,7 +20,8 @@ namespace FFBardMusicPlayer
                 MMSong mmSong = JsonExtensions.DeserializeFromFileCompressed<MMSong>(filePath);
 
                 if (mmSong.schemaVersion != 1) throw new FileFormatException("Error: This mmsong file format is not understood.");
-                if (mmSong.songs.Count != 1) throw new FileFormatException("Error: BMP currently only supports mmsong files with 1 song in them.");
+                // For now, just play the first available song.
+                // if (mmSong.songs.Count != 1) throw new FileFormatException("Error: BMP currently only supports mmsong files with 1 song in them.");
 
                 MMSong.Song song = mmSong.songs[0];
 
