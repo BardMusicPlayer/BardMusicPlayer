@@ -33,21 +33,29 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private BmpSequencer sequencer;
-		public BmpSequencer Sequencer {
-			set {
-				if(value != null) {
-					Console.WriteLine(string.Format("Performer [{0}] MIDI: [{1}]", this.PerformerName, value.LoadedFilename));
-					if(!string.IsNullOrEmpty(value.LoadedFilename)) {
-						sequencer = new BmpSequencer(value.LoadedFilename, this.TrackNum);
-						sequencer.OnNote += InternalNote;
-						sequencer.OffNote += InternalNote;
-					}
-					this.Update(value);
-				}
-			}
-		}
+        public BmpSequencer Sequencer
+        {
+            set
+            {
+                if (value != null)
+                {
+                    Console.WriteLine(string.Format("Performer [{0}] MIDI: [{1}]", this.PerformerName, value.LoadedFilename));
+                    if (!string.IsNullOrEmpty(value.LoadedFilename))
+                    {
+                        sequencer = new BmpSequencer(value.LoadedFilename, this.TrackNum);
+                        sequencer.OnNote += InternalNote;
+                        sequencer.OffNote += InternalNote;
 
-		public EventHandler onUpdate;
+                        // set the initial octave shift here, if we have a track to play
+                        if (this.TrackNum < sequencer.Sequence.Count)
+                            OctaveShift.Value = sequencer.GetTrackPreferredOctaveShift(sequencer.Sequence[this.TrackNum]);
+                    }
+                    this.Update(value);
+                }
+            }
+        }
+
+        public EventHandler onUpdate;
 		private bool openDelay;
 		public bool hostProcess = false;
 
@@ -56,11 +64,12 @@ namespace FFBardMusicPlayer.Controls {
 				return decimal.ToInt32(TrackShift.Value);
 			}
 			set {
-                OctaveShift.Invoke(t => t.Value = 0);
 				TrackShift.Invoke(t => t.Value = value);
 			}
 		}
 
+        // this value initially holds the track octave shift (Instrument+#)
+        // but changes when the user manually edits the value using the UI
 		public int OctaveNum {
 			get {
 				return decimal.ToInt32(OctaveShift.Value);
@@ -147,8 +156,7 @@ namespace FFBardMusicPlayer.Controls {
 			};
 
 			if(sequencer.GetTrackNum(noteEvent.track) == this.TrackNum) {
-				int po = sequencer.GetTrackPreferredOctaveShift(noteEvent.track);
-				noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, this.OctaveNum + po);
+				noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, this.OctaveNum);
 
 				ChannelCommand cmd = args.Message.Command;
 				int vel = builder.Data2;
@@ -232,8 +240,8 @@ namespace FFBardMusicPlayer.Controls {
 
 			Keyboard.UpdateFrequency(new List<int>());
 			if((tn >= 0 && tn < seq.Count) && seq[tn] is Track track) {
-				int po = OctaveNum + bmpSeq.GetTrackPreferredOctaveShift(track);
-				Console.WriteLine(String.Format("Track {0} {1} po {2}", tn, bmpSeq.MaxTrack, po));
+                // OctaveNum now holds the track octave and the selected octave together
+				Console.WriteLine(String.Format("Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveNum, bmpSeq.GetTrackPreferredOctaveShift(track)));
 				List<int> notes = new List<int>();
 				foreach(MidiEvent ev in track.Iterator()) {
 					if(ev.MidiMessage.MessageType == MessageType.Channel) {
@@ -242,7 +250,7 @@ namespace FFBardMusicPlayer.Controls {
 							int note = msg.Data1;
 							int vel = msg.Data2;
 							if(vel > 0) {
-								notes.Add(NoteHelper.ApplyOctaveShift(note, this.OctaveNum + po));
+								notes.Add(NoteHelper.ApplyOctaveShift(note, this.OctaveNum));
 							}
 						}
 					}
@@ -368,20 +376,26 @@ namespace FFBardMusicPlayer.Controls {
 		private void TrackShift_ValueChanged(object sender, EventArgs e) {
             if (sequencer != null)
             {
+                // here, since we've changed tracks, we need to reset the OctaveShift
+                // value back to the track octave (or zero, if one is not set)
                 var seq = sequencer.Sequence;
                 int newTn = decimal.ToInt32((sender as NumericUpDown).Value);
                 int newOs = ((newTn >= 0 && newTn < seq.Count) ? sequencer.GetTrackPreferredOctaveShift(seq[newTn]) : 0);
                 this.OctaveShift.Value = newOs;
-            }
 
-            this.Invoke(t => t.Update(sequencer));
+                this.Invoke(t => t.Update(sequencer));
+            }
 		}
 
 		private void OctaveShift_ValueChanged(object sender, EventArgs e) {
-            decimal octave = (sender as NumericUpDown).Value;
-            int po = decimal.ToInt32(octave);
-            OctaveShift.Value = po;
-            this.Invoke(t => t.Update(sequencer));
+            if (sequencer != null)
+            {
+                var seq = sequencer.Sequence;
+                int os  = decimal.ToInt32((sender as NumericUpDown).Value);
+                this.OctaveShift.Value = os;
+
+                this.Invoke(t => t.Update(sequencer));
+            }
 		}
 	}
 }
