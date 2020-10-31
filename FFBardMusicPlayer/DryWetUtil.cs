@@ -47,7 +47,16 @@ namespace FFBardMusicPlayer
                     ReaderSettings = new ReaderSettings
                     {
                         ReadFromMemory = true
-                    }
+                    },
+                    InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                    InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
+                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
+                    InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
+                    MissedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore,
+                    NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                    UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore,
+                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
+                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
                 });
 
                 #region Require
