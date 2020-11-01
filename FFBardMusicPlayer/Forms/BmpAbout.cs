@@ -24,5 +24,10 @@ namespace FFBardMusicPlayer {
 		private void CloseButton_Click(object sender, EventArgs e) {
 			this.Close();
 		}
+
+		private void DonationButton_Click(object sender, EventArgs e)
+		{
+				System.Diagnostics.Process.Start(Program.urlBase + "#donate");
+		}
 	}
 }

@@ -34,7 +34,6 @@
 			this.SettingsTab = new System.Windows.Forms.TabPage();
 			this.StatisticTab = new System.Windows.Forms.TabPage();
 			this.BottomTable = new System.Windows.Forms.TableLayoutPanel();
-			this.AboutLabel = new System.Windows.Forms.Label();
 			this.DonationButton = new System.Windows.Forms.Button();
 			this.Playlist = new FFBardMusicPlayer.Controls.BmpPlaylist();
 			this.ChatLogAll = new FFBardMusicPlayer.Components.BmpChatLog(this.components);
@@ -91,7 +90,7 @@
 			this.ChatPlaylistTable.Name = "ChatPlaylistTable";
 			this.ChatPlaylistTable.RowCount = 1;
 			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 227F));
+			this.ChatPlaylistTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 187F));
 			this.ChatPlaylistTable.Size = new System.Drawing.Size(584, 187);
 			this.ChatPlaylistTable.TabIndex = 1;
 			// 
@@ -125,7 +124,7 @@
 			this.CommandTab.Controls.Add(this.ChatLogCmd);
 			this.CommandTab.Location = new System.Drawing.Point(4, 22);
 			this.CommandTab.Name = "CommandTab";
-			this.CommandTab.Size = new System.Drawing.Size(376, 201);
+			this.CommandTab.Size = new System.Drawing.Size(376, 161);
 			this.CommandTab.TabIndex = 1;
 			this.CommandTab.Text = "[Chat] Commands";
 			this.CommandTab.UseVisualStyleBackColor = true;
@@ -136,7 +135,7 @@
 			this.localOrchestraTab.Location = new System.Drawing.Point(4, 22);
 			this.localOrchestraTab.Name = "localOrchestraTab";
 			this.localOrchestraTab.Padding = new System.Windows.Forms.Padding(3);
-			this.localOrchestraTab.Size = new System.Drawing.Size(376, 201);
+			this.localOrchestraTab.Size = new System.Drawing.Size(376, 161);
 			this.localOrchestraTab.TabIndex = 4;
 			this.localOrchestraTab.Text = "Local orchestra";
 			this.localOrchestraTab.UseVisualStyleBackColor = true;
@@ -146,7 +145,7 @@
 			this.SettingsTab.Controls.Add(this.Settings);
 			this.SettingsTab.Location = new System.Drawing.Point(4, 22);
 			this.SettingsTab.Name = "SettingsTab";
-			this.SettingsTab.Size = new System.Drawing.Size(376, 201);
+			this.SettingsTab.Size = new System.Drawing.Size(376, 161);
 			this.SettingsTab.TabIndex = 2;
 			this.SettingsTab.Text = "Settings";
 			this.SettingsTab.UseVisualStyleBackColor = true;
@@ -157,7 +156,7 @@
 			this.StatisticTab.Location = new System.Drawing.Point(4, 22);
 			this.StatisticTab.Name = "StatisticTab";
 			this.StatisticTab.Padding = new System.Windows.Forms.Padding(3);
-			this.StatisticTab.Size = new System.Drawing.Size(376, 201);
+			this.StatisticTab.Size = new System.Drawing.Size(376, 161);
 			this.StatisticTab.TabIndex = 3;
 			this.StatisticTab.Text = "Statistics";
 			this.StatisticTab.UseVisualStyleBackColor = true;
@@ -169,7 +168,6 @@
 			this.BottomTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.BottomTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.BottomTable.Controls.Add(this.FFXIV, 0, 0);
-			this.BottomTable.Controls.Add(this.AboutLabel, 1, 0);
 			this.BottomTable.Controls.Add(this.DonationButton, 1, 0);
 			this.BottomTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.BottomTable.Location = new System.Drawing.Point(0, 437);
@@ -180,30 +178,15 @@
 			this.BottomTable.Size = new System.Drawing.Size(584, 24);
 			this.BottomTable.TabIndex = 6;
 			// 
-			// AboutLabel
-			// 
-			this.AboutLabel.AutoSize = true;
-			this.AboutLabel.Dock = System.Windows.Forms.DockStyle.Right;
-			this.AboutLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.AboutLabel.ForeColor = System.Drawing.SystemColors.Highlight;
-			this.AboutLabel.Location = new System.Drawing.Point(561, 0);
-			this.AboutLabel.Margin = new System.Windows.Forms.Padding(0);
-			this.AboutLabel.Name = "AboutLabel";
-			this.AboutLabel.Size = new System.Drawing.Size(23, 24);
-			this.AboutLabel.TabIndex = 2;
-			this.AboutLabel.Text = "[?]";
-			this.AboutLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.AboutLabel.Click += new System.EventHandler(this.AboutLabel_Click);
-			// 
 			// DonationButton
 			// 
-			this.DonationButton.BackColor = System.Drawing.Color.Gold;
-			this.DonationButton.Location = new System.Drawing.Point(504, 0);
+			this.DonationButton.BackColor = System.Drawing.Color.Khaki;
+			this.DonationButton.Location = new System.Drawing.Point(527, 0);
 			this.DonationButton.Margin = new System.Windows.Forms.Padding(0);
 			this.DonationButton.Name = "DonationButton";
 			this.DonationButton.Size = new System.Drawing.Size(57, 23);
 			this.DonationButton.TabIndex = 6;
-			this.DonationButton.Text = "Donate";
+			this.DonationButton.Text = "About";
 			this.DonationButton.UseVisualStyleBackColor = false;
 			this.DonationButton.Click += new System.EventHandler(this.DonationButton_Click);
 			// 
@@ -243,7 +226,7 @@
 			this.ChatLogCmd.Name = "ChatLogCmd";
 			this.ChatLogCmd.ReadOnly = true;
 			this.ChatLogCmd.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-			this.ChatLogCmd.Size = new System.Drawing.Size(376, 201);
+			this.ChatLogCmd.Size = new System.Drawing.Size(376, 161);
 			this.ChatLogCmd.TabIndex = 0;
 			this.ChatLogCmd.Text = "";
 			// 
@@ -253,7 +236,8 @@
 			this.LocalOrchestra.Location = new System.Drawing.Point(3, 3);
 			this.LocalOrchestra.Name = "LocalOrchestra";
 			this.LocalOrchestra.OrchestraEnabled = false;
-			this.LocalOrchestra.Size = new System.Drawing.Size(370, 195);
+			this.LocalOrchestra.Sequencer = null;
+			this.LocalOrchestra.Size = new System.Drawing.Size(370, 155);
 			this.LocalOrchestra.TabIndex = 0;
 			// 
 			// Settings
@@ -263,7 +247,7 @@
 			this.Settings.Location = new System.Drawing.Point(0, 0);
 			this.Settings.Margin = new System.Windows.Forms.Padding(0);
 			this.Settings.Name = "Settings";
-			this.Settings.Size = new System.Drawing.Size(376, 201);
+			this.Settings.Size = new System.Drawing.Size(376, 161);
 			this.Settings.TabIndex = 0;
 			// 
 			// Statistics
@@ -271,7 +255,7 @@
 			this.Statistics.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.Statistics.Location = new System.Drawing.Point(3, 3);
 			this.Statistics.Name = "Statistics";
-			this.Statistics.Size = new System.Drawing.Size(370, 195);
+			this.Statistics.Size = new System.Drawing.Size(370, 155);
 			this.Statistics.TabIndex = 0;
 			// 
 			// Explorer
@@ -306,7 +290,7 @@
 			this.FFXIV.Location = global::FFBardMusicPlayer.Properties.Settings.Default.Location;
 			this.FFXIV.Margin = new System.Windows.Forms.Padding(0);
 			this.FFXIV.Name = "FFXIV";
-			this.FFXIV.Size = new System.Drawing.Size(504, 24);
+			this.FFXIV.Size = new System.Drawing.Size(527, 24);
 			this.FFXIV.TabIndex = 5;
 			// 
 			// BmpMain
@@ -329,7 +313,6 @@
 			this.SettingsTab.ResumeLayout(false);
 			this.StatisticTab.ResumeLayout(false);
 			this.BottomTable.ResumeLayout(false);
-			this.BottomTable.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -347,7 +330,6 @@
 		private Components.BmpChatLog ChatLogAll;
 		private Controls.BmpPlayer Player;
 		private Controls.BmpExplorer Explorer;
-		private System.Windows.Forms.Label AboutLabel;
 		private System.Windows.Forms.TabPage StatisticTab;
 		private Controls.BmpStatistics Statistics;
 		private System.Windows.Forms.TabPage localOrchestraTab;
