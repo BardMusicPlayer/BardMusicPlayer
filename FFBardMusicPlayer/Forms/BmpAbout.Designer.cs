@@ -29,26 +29,21 @@
 			System.Windows.Forms.TextBox MultiMidiLicense;
 			this.LicenseTabs = new System.Windows.Forms.TabControl();
 			this.AboutTab = new System.Windows.Forms.TabPage();
-			this.AboutMe = new System.Windows.Forms.RichTextBox();
+			this.About = new System.Windows.Forms.RichTextBox();
 			this.Selfie = new System.Windows.Forms.PictureBox();
-			this.AboutPage2 = new System.Windows.Forms.TabPage();
-			this.NameGroup = new System.Windows.Forms.GroupBox();
-			this.Names = new System.Windows.Forms.Label();
-			this.Names2 = new System.Windows.Forms.Label();
-			this.ThanksMacro = new System.Windows.Forms.Label();
-			this.ThanksHeader = new System.Windows.Forms.Label();
 			this.Sharlayan = new System.Windows.Forms.TabPage();
 			this.MultiMidi = new System.Windows.Forms.TabPage();
 			this.HeheTooltip = new System.Windows.Forms.ToolTip(this.components);
 			this.CloseButton = new System.Windows.Forms.Button();
 			this.AboutPanel = new System.Windows.Forms.Panel();
+			this.Title = new System.Windows.Forms.RichTextBox();
+			this.DonationButton = new System.Windows.Forms.Button();
+			this.Pointer = new System.Windows.Forms.RichTextBox();
 			SharlayanLicense = new System.Windows.Forms.TextBox();
 			MultiMidiLicense = new System.Windows.Forms.TextBox();
 			this.LicenseTabs.SuspendLayout();
 			this.AboutTab.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.Selfie)).BeginInit();
-			this.AboutPage2.SuspendLayout();
-			this.NameGroup.SuspendLayout();
 			this.Sharlayan.SuspendLayout();
 			this.MultiMidi.SuspendLayout();
 			this.AboutPanel.SuspendLayout();
@@ -91,7 +86,6 @@
 			// LicenseTabs
 			// 
 			this.LicenseTabs.Controls.Add(this.AboutTab);
-			this.LicenseTabs.Controls.Add(this.AboutPage2);
 			this.LicenseTabs.Controls.Add(this.Sharlayan);
 			this.LicenseTabs.Controls.Add(this.MultiMidi);
 			this.LicenseTabs.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -104,8 +98,11 @@
 			// 
 			// AboutTab
 			// 
-			this.AboutTab.Controls.Add(this.AboutMe);
+			this.AboutTab.Controls.Add(this.DonationButton);
+			this.AboutTab.Controls.Add(this.Pointer);
+			this.AboutTab.Controls.Add(this.Title);
 			this.AboutTab.Controls.Add(this.Selfie);
+			this.AboutTab.Controls.Add(this.About);
 			this.AboutTab.Location = new System.Drawing.Point(4, 24);
 			this.AboutTab.Name = "AboutTab";
 			this.AboutTab.Padding = new System.Windows.Forms.Padding(3);
@@ -114,102 +111,30 @@
 			this.AboutTab.Text = "About";
 			this.AboutTab.UseVisualStyleBackColor = true;
 			// 
-			// AboutMe
+			// About
 			// 
-			this.AboutMe.BackColor = System.Drawing.SystemColors.Control;
-			this.AboutMe.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.AboutMe.Dock = System.Windows.Forms.DockStyle.Right;
-			this.AboutMe.Location = new System.Drawing.Point(128, 3);
-			this.AboutMe.Margin = new System.Windows.Forms.Padding(0);
-			this.AboutMe.Name = "AboutMe";
-			this.AboutMe.ReadOnly = true;
-			this.AboutMe.ShortcutsEnabled = false;
-			this.AboutMe.Size = new System.Drawing.Size(229, 175);
-			this.AboutMe.TabIndex = 16;
-			this.AboutMe.Text = "Bard Music Player (c) Paru\n\nWritten in C# and uses modified code from the Sharlay" +
-    "an and Sanford.Multimedia.Midi projects.\n\nThank you for using my program!";
+			this.About.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.About.BackColor = System.Drawing.SystemColors.Control;
+			this.About.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.About.Location = new System.Drawing.Point(0, 44);
+			this.About.Margin = new System.Windows.Forms.Padding(0);
+			this.About.Name = "About";
+			this.About.ReadOnly = true;
+			this.About.ShortcutsEnabled = false;
+			this.About.Size = new System.Drawing.Size(266, 138);
+			this.About.TabIndex = 16;
+			this.About.Text = resources.GetString("About.Text");
 			// 
 			// Selfie
 			// 
 			this.Selfie.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Selfie.BackgroundImage")));
 			this.Selfie.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.Selfie.Dock = System.Windows.Forms.DockStyle.Left;
-			this.Selfie.Location = new System.Drawing.Point(3, 3);
+			this.Selfie.Location = new System.Drawing.Point(269, 44);
 			this.Selfie.Name = "Selfie";
-			this.Selfie.Size = new System.Drawing.Size(122, 175);
+			this.Selfie.Size = new System.Drawing.Size(90, 138);
 			this.Selfie.TabIndex = 0;
 			this.Selfie.TabStop = false;
-			// 
-			// AboutPage2
-			// 
-			this.AboutPage2.Controls.Add(this.NameGroup);
-			this.AboutPage2.Controls.Add(this.ThanksMacro);
-			this.AboutPage2.Controls.Add(this.ThanksHeader);
-			this.AboutPage2.Location = new System.Drawing.Point(4, 24);
-			this.AboutPage2.Name = "AboutPage2";
-			this.AboutPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.AboutPage2.Size = new System.Drawing.Size(360, 181);
-			this.AboutPage2.TabIndex = 3;
-			this.AboutPage2.Text = "Thanks";
-			// 
-			// NameGroup
-			// 
-			this.NameGroup.Controls.Add(this.Names);
-			this.NameGroup.Controls.Add(this.Names2);
-			this.NameGroup.Location = new System.Drawing.Point(3, 41);
-			this.NameGroup.Name = "NameGroup";
-			this.NameGroup.Size = new System.Drawing.Size(354, 97);
-			this.NameGroup.TabIndex = 5;
-			this.NameGroup.TabStop = false;
-			this.NameGroup.Text = "for their contribution and support";
-			// 
-			// Names
-			// 
-			this.Names.Dock = System.Windows.Forms.DockStyle.Left;
-			this.Names.Location = new System.Drawing.Point(172, 19);
-			this.Names.Margin = new System.Windows.Forms.Padding(0);
-			this.Names.Name = "Names";
-			this.Names.Size = new System.Drawing.Size(182, 75);
-			this.Names.TabIndex = 0;
-			this.Names.Text = "Kazumi\r\nCocoPomel\r\nLogue\r\nBuddycat";
-			// 
-			// Names2
-			// 
-			this.Names2.Dock = System.Windows.Forms.DockStyle.Left;
-			this.Names2.Location = new System.Drawing.Point(3, 19);
-			this.Names2.Margin = new System.Windows.Forms.Padding(0);
-			this.Names2.Name = "Names2";
-			this.Names2.Size = new System.Drawing.Size(169, 75);
-			this.Names2.TabIndex = 1;
-			this.Names2.Text = "Miriye Scarletide\r\nRaven Ambree\r\nPost Cards";
-			// 
-			// ThanksMacro
-			// 
-			this.ThanksMacro.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.ThanksMacro.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.ThanksMacro.Location = new System.Drawing.Point(53, 154);
-			this.ThanksMacro.Margin = new System.Windows.Forms.Padding(0);
-			this.ThanksMacro.Name = "ThanksMacro";
-			this.ThanksMacro.Size = new System.Drawing.Size(299, 19);
-			this.ThanksMacro.TabIndex = 4;
-			this.ThanksMacro.Text = ".. and to all of you who used Bard Macro Player! ^_^";
-			this.ThanksMacro.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// ThanksHeader
-			// 
-			this.ThanksHeader.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.ThanksHeader.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ThanksHeader.Location = new System.Drawing.Point(16, 7);
-			this.ThanksHeader.Margin = new System.Windows.Forms.Padding(0);
-			this.ThanksHeader.Name = "ThanksHeader";
-			this.ThanksHeader.Size = new System.Drawing.Size(150, 31);
-			this.ThanksHeader.TabIndex = 1;
-			this.ThanksHeader.Text = "Special thanks:";
-			this.ThanksHeader.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// Sharlayan
 			// 
@@ -261,6 +186,52 @@
 			this.AboutPanel.Size = new System.Drawing.Size(374, 215);
 			this.AboutPanel.TabIndex = 4;
 			// 
+			// Title
+			// 
+			this.Title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.Title.BackColor = System.Drawing.SystemColors.Control;
+			this.Title.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.Title.Font = new System.Drawing.Font("Segoe UI", 12F);
+			this.Title.Location = new System.Drawing.Point(0, 0);
+			this.Title.Margin = new System.Windows.Forms.Padding(0);
+			this.Title.Name = "Title";
+			this.Title.ReadOnly = true;
+			this.Title.ShortcutsEnabled = false;
+			this.Title.Size = new System.Drawing.Size(357, 44);
+			this.Title.TabIndex = 17;
+			this.Title.Text = "Bard Music Player (c) Paru, Chipotle, Moogle\nhttp://github.com/parulina/bardmusic" +
+    "player";
+			this.Title.WordWrap = false;
+			// 
+			// DonationButton
+			// 
+			this.DonationButton.BackColor = System.Drawing.Color.Gold;
+			this.DonationButton.Location = new System.Drawing.Point(204, 155);
+			this.DonationButton.Margin = new System.Windows.Forms.Padding(0);
+			this.DonationButton.Name = "DonationButton";
+			this.DonationButton.Size = new System.Drawing.Size(57, 23);
+			this.DonationButton.TabIndex = 18;
+			this.DonationButton.Text = "Donate";
+			this.DonationButton.UseVisualStyleBackColor = false;
+			this.DonationButton.Click += new System.EventHandler(this.DonationButton_Click);
+			// 
+			// Pointer
+			// 
+			this.Pointer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.Pointer.BackColor = System.Drawing.SystemColors.Control;
+			this.Pointer.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.Pointer.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Pointer.Location = new System.Drawing.Point(8, 159);
+			this.Pointer.Margin = new System.Windows.Forms.Padding(0);
+			this.Pointer.Name = "Pointer";
+			this.Pointer.ReadOnly = true;
+			this.Pointer.ShortcutsEnabled = false;
+			this.Pointer.Size = new System.Drawing.Size(258, 23);
+			this.Pointer.TabIndex = 19;
+			this.Pointer.Text = "Want to help? You\'ll get a reward! →";
+			// 
 			// BmpAbout
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -277,8 +248,6 @@
 			this.LicenseTabs.ResumeLayout(false);
 			this.AboutTab.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.Selfie)).EndInit();
-			this.AboutPage2.ResumeLayout(false);
-			this.NameGroup.ResumeLayout(false);
 			this.Sharlayan.ResumeLayout(false);
 			this.Sharlayan.PerformLayout();
 			this.MultiMidi.ResumeLayout(false);
@@ -294,15 +263,12 @@
 		private System.Windows.Forms.TabPage MultiMidi;
 		private System.Windows.Forms.ToolTip HeheTooltip;
 		private System.Windows.Forms.TabPage AboutTab;
-		private System.Windows.Forms.RichTextBox AboutMe;
+		private System.Windows.Forms.RichTextBox About;
 		private System.Windows.Forms.Button CloseButton;
 		private System.Windows.Forms.Panel AboutPanel;
-		private System.Windows.Forms.TabPage AboutPage2;
-		private System.Windows.Forms.Label ThanksHeader;
-		private System.Windows.Forms.Label Names;
-		private System.Windows.Forms.GroupBox NameGroup;
-		private System.Windows.Forms.Label ThanksMacro;
 		private System.Windows.Forms.PictureBox Selfie;
-		private System.Windows.Forms.Label Names2;
+		private System.Windows.Forms.RichTextBox Title;
+		private System.Windows.Forms.Button DonationButton;
+		private System.Windows.Forms.RichTextBox Pointer;
 	}
 }

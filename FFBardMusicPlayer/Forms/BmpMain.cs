@@ -41,7 +41,7 @@ namespace FFBardMusicPlayer.Forms {
 					this.BackColor = Color.PaleGoldenrod;
 					BottomTable.BackColor = Color.DarkKhaki;
 					Explorer.BackColor = Color.DarkKhaki;
-					DonationButton.Visible = false;
+					// Donation button is the "About" button...
 				}
 			}
 		}
@@ -742,13 +742,9 @@ namespace FFBardMusicPlayer.Forms {
 			}
 		}
 
-		private void AboutLabel_Click(object sender, EventArgs e) {
+		private void DonationButton_Click(object sender, EventArgs e) {
 			BmpAbout about = new BmpAbout();
 			about.ShowDialog(this);
-		}
-
-		private void DonationButton_Click(object sender, EventArgs e) {
-			System.Diagnostics.Process.Start(Program.urlBase + "#donate");
 		}
 	}
 }

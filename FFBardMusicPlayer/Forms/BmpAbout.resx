@@ -13307,6 +13307,13 @@ SOFTWARE.</value>
         oPZS4+0VOCLxV1T6/w8vVbcAKxR7qAAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="About.Text" xml:space="preserve">
+    <value>Written in C# and uses modified code from the Sharlayan and Sanford.Multimedia.Midi projects.
+
+Could not have been possible without the dedication and passion of the community.
+
+Thank you for using BMP!</value>
+  </data>
   <metadata name="HeheTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
