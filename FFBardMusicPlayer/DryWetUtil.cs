@@ -102,6 +102,11 @@ namespace FFBardMusicPlayer
 
                 long firstNote = originalTrackChunks.GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
 
+                TrackChunk allTracks = new TrackChunk();
+                allTracks.AddNotes(originalTrackChunks.GetNotes());
+                midiFile.Chunks.Add(allTracks);
+                originalTrackChunks = midiFile.GetTrackChunks();
+
                 Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Count() > 0), (originalChunk, loopState, index) =>
                 {
                     var watch = Stopwatch.StartNew();
@@ -276,7 +281,8 @@ namespace FFBardMusicPlayer
                 });
 
                 newMidiFile = new MidiFile();
-                newMidiFile.Chunks.Add(new TrackChunk());
+                newTrackChunks.TryRemove(newTrackChunks.Count, out TrackChunk trackZero);
+                newMidiFile.Chunks.Add(trackZero);
                 newMidiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(600);
                 using (TempoMapManager tempoManager = newMidiFile.ManageTempoMap()) tempoManager.SetTempo(0, Tempo.FromBeatsPerMinute(100));
                 newMidiFile.Chunks.AddRange(newTrackChunks.Values);
