@@ -13,7 +13,7 @@ namespace FFBardMusicPlayer
 {
     class Plugin_MMsong
     {
-        internal static MemoryStream Load(string filePath)
+        internal static MidiFile Load(string filePath)
         {
             try
             {
@@ -104,12 +104,7 @@ namespace FFBardMusicPlayer
                 using (var manager = new TimedEventsManager(sequence.GetTrackChunks().First().Events))
                     manager.Events.Add(new TimedEvent(new MarkerEvent(), (sequence.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
-                var stream = new MemoryStream();
-                sequence.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
-                stream.Flush();
-                stream.Position = 0;
-                sequence = null;
-                return stream;
+                return sequence;
             }
             catch (Exception ex)
             {

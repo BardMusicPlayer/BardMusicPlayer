@@ -42,48 +42,55 @@ namespace FFBardMusicPlayer
                     return oldfile;
                 }
 
-                midiFile = MidiFile.Read(filePath, new ReadingSettings
+                if (Path.GetExtension(filePath).ToLower().Equals(".mmsong"))
                 {
-                    ReaderSettings = new ReaderSettings
-                    {
-                        ReadFromMemory = true
-                    },
-                    InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
-                    InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
-                    InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
-                    InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
-                    MissedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore,
-                    NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
-                    UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore,
-                    UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
-                    UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
-                });
-
-                #region Require
-
-                if (midiFile == null)
-                {
-                    throw new ArgumentNullException();
+                    midiFile = Plugin_MMsong.Load(filePath).Clone();
                 }
                 else
                 {
-                    try
+                    midiFile = MidiFile.Read(filePath, new ReadingSettings
                     {
-                        if (midiFile.Chunks.Count < 1) throw new NotSupportedException();
-
-                        MidiFileFormat fileFormat = midiFile.OriginalFormat;
-
-                        if (fileFormat == MidiFileFormat.MultiSequence)
+                        ReaderSettings = new ReaderSettings
                         {
-                            throw new NotSupportedException();
+                            ReadFromMemory = true
+                        },
+                        InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                        InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
+                        InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
+                        InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
+                        MissedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore,
+                        NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                        UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore,
+                        UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
+                        UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
+                    });
+
+                    #region Require
+
+                    if (midiFile == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (midiFile.Chunks.Count < 1) throw new NotSupportedException();
+
+                            MidiFileFormat fileFormat = midiFile.OriginalFormat;
+
+                            if (fileFormat == MidiFileFormat.MultiSequence)
+                            {
+                                throw new NotSupportedException();
+                            }
+                        }
+                        catch (Exception exception) when (exception is UnknownFileFormatException || exception is InvalidOperationException)
+                        {
+                            throw exception;
                         }
                     }
-                    catch (Exception exception) when (exception is UnknownFileFormatException || exception is InvalidOperationException)
-                    {
-                        throw exception;
-                    }
+                    #endregion
                 }
-                #endregion
 
                 Console.WriteLine("Scrubbing " + filePath);
                 var loaderWatch = Stopwatch.StartNew();
