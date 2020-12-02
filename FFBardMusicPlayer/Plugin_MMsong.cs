@@ -19,7 +19,7 @@ namespace FFBardMusicPlayer
             {
                 MMSong mmSong = JsonExtensions.DeserializeFromFileCompressed<MMSong>(filePath);
 
-                if (mmSong.schemaVersion != 1) throw new FileFormatException("Error: This mmsong file format is not understood.");
+                if (mmSong.schemaVersion < 1 && mmSong.schemaVersion > 2) throw new FileFormatException("Error: This mmsong file format is not understood.");
                 // For now, just play the first available song.
                 // if (mmSong.songs.Count != 1) throw new FileFormatException("Error: BMP currently only supports mmsong files with 1 song in them.");
 
@@ -35,20 +35,23 @@ namespace FFBardMusicPlayer
                     List<Note> notes = new List<Note>();
                     bool failure = false;
 
-                    switch (bard.instrument)
+                    if (mmSong.schemaVersion == 1)
                     {
-                        case Instrument.Cymbal:
-                        case Instrument.Trumpet:
-                        case Instrument.Trombone:
-                        case Instrument.Horn:
-                        case Instrument.Tuba:
-                        case Instrument.Saxophone:
-                            bard.sequence = bard.sequence.ToDictionary(
-                                x => x.Key + 2,
-                                x => x.Value);
-                            break;
-                        default:
-                            break;
+                        switch (bard.instrument)
+                        {
+                            case Instrument.Cymbal:
+                            case Instrument.Trumpet:
+                            case Instrument.Trombone:
+                            case Instrument.Horn:
+                            case Instrument.Tuba:
+                            case Instrument.Saxophone:
+                                bard.sequence = bard.sequence.ToDictionary(
+                                    x => x.Key + 2,
+                                    x => x.Value);
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     if (bard.sequence.Count % 2 == 0)
