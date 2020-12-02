@@ -321,5 +321,17 @@ namespace FFBardMusicPlayer.Properties {
                 this["PlaylistDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlayAllTracks {
+            get {
+                return ((bool)(this["PlayAllTracks"]));
+            }
+            set {
+                this["PlayAllTracks"] = value;
+            }
+        }
     }
 }

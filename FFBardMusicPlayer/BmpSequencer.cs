@@ -100,7 +100,8 @@ namespace FFBardMusicPlayer {
 				if(loadedTrack >= Sequence.Count || loadedTrack < 0) {
 					return null;
 				}
-				return Sequence[loadedTrack];
+				if (Properties.Settings.Default.PlayAllTracks) return Sequence[0];
+				else return Sequence[loadedTrack];
 			}
 		}
 
