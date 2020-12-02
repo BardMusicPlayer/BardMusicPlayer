@@ -124,8 +124,8 @@ namespace FFBardMusicPlayer
 
                         try
                         {
-                            noteOnMS = note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
-                            noteOffMS = note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 - firstNote;
+                            noteOnMS = 5000 + (note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote;
+                            noteOffMS = 5000 + (note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote;
                         }
                         catch (Exception) { continue; }
                         int noteNumber = note.NoteNumber;
@@ -286,6 +286,20 @@ namespace FFBardMusicPlayer
                 newMidiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(600);
                 using (TempoMapManager tempoManager = newMidiFile.ManageTempoMap()) tempoManager.SetTempo(0, Tempo.FromBeatsPerMinute(100));
                 newMidiFile.Chunks.AddRange(newTrackChunks.Values);
+
+                tempoMap = newMidiFile.GetTempoMap();
+                long delta = newMidiFile.GetTrackChunks().GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
+                foreach (TrackChunk chunk in newMidiFile.GetTrackChunks())
+                {
+                    using (var notesManager = chunk.ManageNotes())
+                    {
+                        foreach (Note note in notesManager.Notes)
+                        {
+                            long newStart = note.Time - delta;
+                            note.Time = newStart;
+                        }
+                    }
+                }
 
                 var stream = new MemoryStream();
                 
