@@ -418,6 +418,16 @@ namespace FFBardMusicPlayer
                 case "altosax":
                 case "altosaxophone":
                 case "saxophones": return (true, "Saxophone");
+                case "violin":
+                case "violins": return (true, "Violin");
+                case "viola":
+                case "violas": return (true, "Viola");
+                case "cello":
+                case "cellos": return (true, "Cello");
+                case "doublebass":
+                case "double_bass":
+                case "contrabass": return (true, "DoubleBass");
+
                 default: return (false, trackName);
             }
         }
@@ -472,6 +482,14 @@ namespace FFBardMusicPlayer
                 case 65:
                 case 66:
                 case 67: return (true, "Saxophone");
+
+                case 40: return (true, "Violin");
+
+                case 41: return (true, "Viola");
+
+                case 42: return (true, "Cello");
+
+                case 43: return (true, "DoubleBass");
             }
             return (true, null);
         }
