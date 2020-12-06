@@ -294,7 +294,7 @@ namespace FFBardMusicPlayer.Controls {
 			if(!string.IsNullOrEmpty(keyMap)) {
 				FFXIVKeybindDat.Keybind keybind = hotkeys[keyMap];
 				if(keybind is FFXIVKeybindDat.Keybind && keybind.GetKey() != Keys.None) {
-					hook.SendSyncKeybind(keybind);
+					hook.SendTimedSyncKeybind(keybind);
 					openDelay = true;
 
 					Timer openTimer = new Timer {

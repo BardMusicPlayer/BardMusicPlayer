@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Timer = System.Timers.Timer;
@@ -16,6 +18,8 @@ namespace FFBardMusicPlayer {
 		private const int WH_GETMESSAGE = 3;
 		private const int WM_KEYDOWN = 0x0100;
 		private const int WM_KEYUP = 0x0101;
+		public const int WM_SYSKEYDOWN = 0x104;
+        public const int WM_SYSKEYUP = 0x105;
 		private const int WM_CHAR = 0x0102;
 		private const int WM_LBUTTONDOWN = 0x0201;
 		private const int WM_LBUTTONUP = 0x0202;
@@ -184,7 +188,58 @@ namespace FFBardMusicPlayer {
 		public void FocusWindow() {
 			SetForegroundWindow(mainWindowHandle);
 		}
-
+		public void SendTimedSyncKey(Keys key, bool modifier = true, bool sendDown = true, bool sendUp = true) {
+            Task.Run(() =>
+			{
+				Keys key2 = (key & ~Keys.Control) & (key & ~Keys.Shift) & (key & ~Keys.Alt);
+				if (sendDown)
+				{
+					if (modifier)
+					{
+						for (int i = 0; i < 5; i++)
+						{
+							if ((key & Keys.Control) == Keys.Control)
+							{
+								SendMessage(mainWindowHandle, WM_KEYDOWN, ((IntPtr)Keys.ControlKey), ((IntPtr)0));
+							}
+							if ((key & Keys.Alt) == Keys.Alt)
+							{
+								SendMessage(mainWindowHandle, WM_SYSKEYDOWN, ((IntPtr)Keys.Menu), ((IntPtr)0));
+							}
+							if ((key & Keys.Shift) == Keys.Shift)
+							{
+								SendMessage(mainWindowHandle, WM_KEYDOWN, ((IntPtr)Keys.ShiftKey), ((IntPtr)0));
+							}
+							Thread.Sleep(5);
+						}
+					}
+					SendMessage(mainWindowHandle, WM_KEYDOWN, ((IntPtr)key2), ((IntPtr)0));
+					Thread.Sleep(50);
+				}
+				if (sendUp)
+				{
+					SendMessage(mainWindowHandle, WM_KEYUP, ((IntPtr)key2), ((IntPtr)0));
+					if (modifier)
+					{
+						if ((key & Keys.Shift) == Keys.Shift)
+						{
+							Thread.Sleep(5);
+							SendMessage(mainWindowHandle, WM_KEYUP, ((IntPtr)Keys.ShiftKey), ((IntPtr)0));
+						}
+						if ((key & Keys.Alt) == Keys.Alt)
+						{
+							Thread.Sleep(5);
+							SendMessage(mainWindowHandle, WM_SYSKEYUP, ((IntPtr)Keys.Menu), ((IntPtr)0));
+						}
+						if ((key & Keys.Control) == Keys.Control)
+						{
+							Thread.Sleep(5);
+							SendMessage(mainWindowHandle, WM_KEYUP, ((IntPtr)Keys.ControlKey), ((IntPtr)0));
+						}
+					}
+				}
+			});
+		}
 		public void SendSyncKey(Keys key, bool modifier = true, bool sendDown = true, bool sendUp = true) {
 
 			Keys key2 = (key & ~Keys.Control) & (key & ~Keys.Shift);
@@ -306,6 +361,11 @@ namespace FFBardMusicPlayer {
 		public void SendSyncKeybind(FFXIVKeybindDat.Keybind keybind) {
 			SendSyncKey(keybind.GetKey(), true, true, true);
 		}
+
+		public void SendTimedSyncKeybind(FFXIVKeybindDat.Keybind keybind)
+        {
+			SendTimedSyncKey(keybind.GetKey(), true, true, true);
+        }
 
 		public void SendKeybindDown(FFXIVKeybindDat.Keybind keybind) {
 			if(keybind == null) {
