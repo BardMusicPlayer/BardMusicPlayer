@@ -35,23 +35,24 @@ namespace FFBardMusicPlayer
                     List<Note> notes = new List<Note>();
                     bool failure = false;
 
-                    if (mmSong.schemaVersion == 1)
+                    switch (bard.instrument)
                     {
-                        switch (bard.instrument)
-                        {
-                            case Instrument.Cymbal:
-                            case Instrument.Trumpet:
-                            case Instrument.Trombone:
-                            case Instrument.Horn:
-                            case Instrument.Tuba:
-                            case Instrument.Saxophone:
-                                bard.sequence = bard.sequence.ToDictionary(
-                                    x => x.Key + 2,
-                                    x => x.Value);
-                                break;
-                            default:
-                                break;
-                        }
+                        case Instrument.Cymbal:
+                        case Instrument.Trumpet:
+                        case Instrument.Trombone:
+                        case Instrument.Horn:
+                        case Instrument.Tuba:
+                        case Instrument.Saxophone:
+                        case Instrument.Violin:
+                        case Instrument.Viola:
+                        case Instrument.Cello:
+                        case Instrument.DoubleBass:
+                            bard.sequence = bard.sequence.ToDictionary(
+                                x => x.Key + 2,
+                                x => x.Value);
+                            break;
+                        default:
+                            break;
                     }
 
                     if (bard.sequence.Count % 2 == 0)
