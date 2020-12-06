@@ -38,13 +38,20 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		static private Tuple<int, int, int>[] colors = {
+			Tuple.Create( 255, 207, 135),
+			Tuple.Create( 207, 135, 255 ),
+			Tuple.Create( 135, 255, 207 ),
+		};
+
 		public BmpExplorer() {
 			InitializeComponent();
 			
 			selectFlashingTimer.Tick += delegate (object o, EventArgs a) {
 				Random random = new Random();
-				int min = 180, max = 240;
-				SelectorSong.BackColor = Color.FromArgb(random.Next(min, max), random.Next(min, max), random.Next(min, max));
+				int min = 0, max = colors.Length;
+				Tuple<int, int, int> color = colors[random.Next(min, max)];
+				SelectorSong.BackColor = Color.FromArgb(color.Item1, color.Item2, color.Item3);
 			};
 			selectFlashingTimer.Interval = 100;
 			selectFlashingTimer.Start();
