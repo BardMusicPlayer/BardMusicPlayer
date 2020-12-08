@@ -248,7 +248,7 @@ namespace FFBardMusicPlayer {
 				PerformanceResult perf = Reader.GetPerformance();
 				if(!perf.Performances.IsEmpty && !performance.Performances.IsEmpty) {
 					foreach(KeyValuePair<uint, PerformanceItem> pp in perf.Performances) {
-						if(pp.Value.Status != performance.Performances[pp.Key].Status) {
+						if(performance.Performances.ContainsKey(pp.Key) && pp.Value.Status != performance.Performances[pp.Key].Status) {
 							changedIds.Add(pp.Key);
 						}
 					}
