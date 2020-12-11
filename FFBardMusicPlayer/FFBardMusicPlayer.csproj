@@ -417,9 +417,7 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (
     "$(ProjectDir)\Tools\ILMerge.exe" /out:"$(TargetDir)$(TargetName).all.exe" "$(TargetDir)$(TargetName).exe" "$(TargetDir)*.dll" /target:winexe /wildcards
-    del *.dll
     ren "$(TargetDir)$(TargetName).all.pdb" "$(TargetName).all.pdb.temp"
-    del *.pdb
     ren "$(TargetDir)$(TargetName).all.pdb.temp" "$(TargetName).all.pdb"
     del "$(TargetDir)$(TargetName).exe"
     ren "$(TargetDir)$(TargetName).all.pdb" "$(TargetName).pdb"

@@ -28,7 +28,7 @@ namespace FFMemoryParser {
 			[Option('s', "signature-file", HelpText = "Use the specified signature file.")]
 			public string LoadSignatureFile { get; set; }
 
-			[Option('p', "polling-rate", HelpText = "Use the given polling rate (milliseconds).")]
+			[Option('p', "polling-rate", HelpText = "Use the given polling rate (milliseconds).", Default = 500)]
 			public int PollingRate { get; set; }
 
 		}
@@ -66,7 +66,7 @@ namespace FFMemoryParser {
 				mem.SearchMemory(sigList);
 
 				int MemoryDelay = programOptions.PollingRate;
-				Console.WriteLine("-- Start thread");
+				Console.WriteLine(string.Format("-- Start thread ({0})", MemoryDelay));
 				do {
 					while (true) {
 						while(!Console.KeyAvailable) {
