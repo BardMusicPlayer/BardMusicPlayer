@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static Sharlayan.Core.Enums.Performance;
+using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer
 {

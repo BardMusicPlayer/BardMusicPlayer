@@ -28,6 +28,9 @@ namespace FFMemoryParser {
 			[Option('s', "signature-file", HelpText = "Use the specified signature file.")]
 			public string LoadSignatureFile { get; set; }
 
+			[Option('p', "polling-rate", HelpText = "Use the given polling rate (milliseconds).")]
+			public int PollingRate { get; set; }
+
 		}
 
 		public static Options programOptions = new Options();
@@ -62,12 +65,13 @@ namespace FFMemoryParser {
 
 				mem.SearchMemory(sigList);
 
+				int MemoryDelay = programOptions.PollingRate;
 				Console.WriteLine("-- Start thread");
 				do {
 					while (true) {
 						while(!Console.KeyAvailable) {
 							mem.MemoryLoop();
-							Thread.Sleep(1000);
+							Thread.Sleep(MemoryDelay);
 						}
 					}
 				} while (Console.ReadKey(true).Key != ConsoleKey.NoName);

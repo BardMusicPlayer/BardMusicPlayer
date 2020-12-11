@@ -55,12 +55,12 @@ namespace FFBardMusicPlayer.Controls {
 			InitializeComponent();
 
 			UpdateCharIds();
+			memory.OnCharacterId += Memory_OnCharacterIdChanged;
 
 			/*
 			memory.OnProcessLost += Memory_OnProcessLost;
 
 			memory.OnProcessReady += Memory_OnProcessReady;
-			memory.OnCharacterIdChanged += Memory_OnCharacterIdChanged;
 
 			memory.OnChatReceived += Memory_OnChatReceived;
 			*/

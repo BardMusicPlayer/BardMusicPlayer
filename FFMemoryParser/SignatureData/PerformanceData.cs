@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 
 namespace FFMemoryParser {
+	[Serializable]
 	public class Performance {
 		public enum Status : byte {
 			Closed = 0,
@@ -31,8 +32,13 @@ namespace FFMemoryParser {
 			Tuba = 17,
 			Horn = 18,
 			Saxophone = 19,
+			Violin = 20,
+			Viola = 21,
+			Cello = 22,
+			DoubleBass = 23
 		}
 	}
+	[Serializable]
 	public class PerformanceData {
 
 		public float Animation { get; set; }
@@ -63,6 +69,7 @@ namespace FFMemoryParser {
 				);
 		}
 	}
+	[Serializable]
 	public class SigPerfData {
 		public ConcurrentDictionary<uint, PerformanceData> Performances { get; } = new ConcurrentDictionary<uint, PerformanceData>();
 
@@ -100,7 +107,7 @@ namespace FFMemoryParser {
 				perf1c += (int)Performances[i].Instrument;
 				perf2c += (int)data.Performances[i].Instrument;
 			}
-			return (perf1c != perf2c);
+			return (perf1c == perf2c);
 		}
 	}
 }

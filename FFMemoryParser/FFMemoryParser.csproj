@@ -77,6 +77,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SignatureData\CharacterIdData.cs" />
+    <Compile Include="SignatureData\ChatInputData.cs" />
+    <Compile Include="Signature\SignatureChatInput.cs" />
     <Compile Include="Signature\SignatureChatLog.cs" />
     <Compile Include="Signature\SignatureActors.cs" />
     <Compile Include="SignatureData\ActorData.cs" />

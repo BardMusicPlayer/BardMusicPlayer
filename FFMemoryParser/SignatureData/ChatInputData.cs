@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace FFMemoryParser {
 	[Serializable]
-	public class SigCharIdData {
-		public string id;
+	public class SigChatInputData {
+		public string text = string.Empty;
+		public bool open = false;
 		public override bool Equals(object obj) {
-			SigCharIdData data = (obj as SigCharIdData);
+			SigChatInputData data = (obj as SigChatInputData);
 			if (data == null) {
 				return false;
 			}
-			return (id == data.id);
+			return (this.text != data.text) || (this.open != data.open);
 		}
 	}
 }

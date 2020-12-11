@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FFMemoryParser {
+	[Serializable]
 	public class Signature {
 		public IntPtr baseAddress;
 

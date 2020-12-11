@@ -132,6 +132,11 @@ namespace FFMemoryParser {
             this.Peek(new IntPtr(address.ToInt64() + offset), value);
             return BitConverter.TryToInt32(value, 0);
         }
+        public long GetInt64(IntPtr address, long offset = 0) {
+            byte[] value = new byte[8];
+            this.Peek(new IntPtr(address.ToInt64() + offset), value);
+            return BitConverter.TryToInt64(value, 0);
+        }
 
         public byte GetByte(IntPtr address, long offset = 0) {
             byte[] data = new byte[1];

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using static Sharlayan.Core.Enums.Performance;
+using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer
 {

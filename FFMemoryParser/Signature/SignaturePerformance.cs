@@ -20,7 +20,7 @@ namespace FFMemoryParser {
             
 			var result = new SigPerfData();
 
-			int entrySize = 12;
+			int entrySize = Offsets["OffsetEntrySize"];
 			int numEntries = 99;
 			byte[] performanceData = process.GetByteArray(baseAddress, entrySize * numEntries);
 

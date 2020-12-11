@@ -85,6 +85,34 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.Hotkeys_OnFileLoad(FFXIV.hotkeys));
 			};
 			FFXIV.hook.OnKeyPressed += Hook_OnKeyPressed;
+
+			
+			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
+				this.Invoke(t => t.Memory_OnChatReceived(item));
+			};
+			FFXIV.memory.OnPerformanceChanged += delegate (object o, SigPerfData data) {
+				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(data.IsUp()));
+				//this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
+			};
+			FFXIV.memory.OnLocalPlayerLogin += delegate (object o, ActorData data) {
+				FFXIVMemory memory = (o as FFXIVMemory);
+				
+				string world = memory.World;
+				if (string.IsNullOrEmpty(world)) {
+					this.Log(string.Format("Character [{0}] logged in.", data.name));
+				} else {
+					this.Log(string.Format("Character [{0}] at [{1}] logged in.", data.name, world));
+				}
+
+				this.Invoke(t => t.CheckDonation(data.name, world));
+				this.Invoke(t => t.UpdatePerformance());
+			};
+			FFXIV.memory.OnLocalPlayerLogout += delegate (object o, ActorData data) {
+				string format = string.Format("Character [{0}] logged out.", data.name);
+				this.Log(format);
+			};
+
+
 			/*
 			FFXIV.memory.OnProcessReady += delegate (object o, Process proc) {
 				this.Log(string.Format("[{0}] Process scanned and ready.", proc.Id));
@@ -119,46 +147,8 @@ namespace FFBardMusicPlayer.Forms {
 			FFXIV.memory.OnProcessLost += delegate (object o, EventArgs arg) {
 				this.Log("Attached process exited.");
 			};
-			FFXIV.memory.OnChatReceived += delegate (object o, ChatLogItem item) {
-				this.Invoke(t => t.Memory_OnChatReceived(item));
-			};
-			FFXIV.memory.OnPerformanceChanged += delegate (object o, List<uint> ids) {
-				this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
-			};
-			FFXIV.memory.OnPerformanceReadyChanged += delegate (object o, bool performance) {
-				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(performance));
-			};
 			FFXIV.memory.OnCurrentPlayerJobChange += delegate (object o, CurrentPlayerResult res) {
 				this.Invoke(t => t.Memory_OnCurrentPlayerJobChange(res));
-			};
-			FFXIV.memory.OnCurrentPlayerLogin += delegate (object o, CurrentPlayerResult res) {
-				string world = string.Empty;
-				if(Sharlayan.Reader.CanGetWorld()) {
-					world = Sharlayan.Reader.GetWorld();
-				}
-				if(string.IsNullOrEmpty(world)) {
-					this.Log(string.Format("Character [{0}] logged in.", res.CurrentPlayer.Name));
-				} else {
-					this.Log(string.Format("Character [{0}] logged in at [{1}].", res.CurrentPlayer.Name, world));
-				}
-
-				if(!Program.programOptions.DisableUpdate) {
-					BmpDonationChecker don = new BmpDonationChecker(res.CurrentPlayer.Name, world);
-					don.OnDonatorResponse += delegate (Object obj, BmpDonationChecker.DonatorResponse donres) {
-						if(donres.donator) {
-							if(!string.IsNullOrEmpty(donres.donationMessage)) {
-								this.Log(donres.donationMessage);
-							}
-						}
-						this.Invoke(t => t.DonationStatus = donres.donator);
-					};
-				}
-
-				this.Invoke(t => t.UpdatePerformance());
-			};
-			FFXIV.memory.OnCurrentPlayerLogout += delegate (object o, CurrentPlayerResult res) {
-				string format = string.Format("Character [{0}] logged out.", res.CurrentPlayer.Name);
-				this.Log(format);
 			};
 			FFXIV.memory.OnPartyChanged += delegate (object o, PartyResult res) {
 				this.Invoke(t => t.LocalOrchestraUpdate());
@@ -435,6 +425,19 @@ namespace FFBardMusicPlayer.Forms {
 			this.UpdatePerformance();
 		}
 
+		private void CheckDonation(string name, string world) {
+			if (!Program.programOptions.DisableUpdate) {
+				BmpDonationChecker don = new BmpDonationChecker(name, world);
+				don.OnDonatorResponse += delegate (Object obj, BmpDonationChecker.DonatorResponse donres) {
+					if (donres.donator) {
+						if (!string.IsNullOrEmpty(donres.donationMessage)) {
+							this.Log(donres.donationMessage);
+						}
+					}
+					this.Invoke(t => t.DonationStatus = donres.donator);
+				};
+			}
+		}
 		private void UpdatePerformance() {
 			if(Player.Status == PlayerStatus.Conducting) {
 				Player.Interactable = true;

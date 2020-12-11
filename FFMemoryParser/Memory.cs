@@ -8,6 +8,7 @@ using System.Threading;
 using System.Diagnostics;
 using NamedPipeWrapper;
 using System.Web.UI.WebControls;
+using System.Runtime.Serialization;
 
 
 // Reads and does update events for memory stuff
@@ -17,7 +18,17 @@ namespace FFMemoryParser {
 
 		HookProcess ffxivProcess = null;
 		NamedPipeServer<PipeData> dataPipe = null;
-		Dictionary<String, Signature> Signatures = new Dictionary<string, Signature>();
+
+		[Serializable]
+		public class SignatureList : List<Signature> { }
+		SignatureList notFoundSignatures = new SignatureList();
+
+		[Serializable]
+		public class SignatureDictionary : Dictionary<string, Signature> {
+			public SignatureDictionary() { }
+			public SignatureDictionary(SerializationInfo info, StreamingContext context) : base(info, context) { }
+		}
+		SignatureDictionary Signatures = new SignatureDictionary();
 
 		public Memory(Process proc) {
 			ffxivProcess = new HookProcess(proc);
@@ -30,6 +41,14 @@ namespace FFMemoryParser {
 
 		private void ClientConnected(NamedPipeConnection<PipeData, PipeData> connection) {
 			Console.WriteLine("Client connected");
+			worldData = null;
+			perfData = null;
+			charIdData = null;
+			actorsData = null;
+			chatLogData = null;
+			chatInputData = null;
+
+			connection.PushMessage(CreatePipeData(notFoundSignatures));
 		}
 
 		public bool GetSignature(string key, out Signature sig) {
@@ -47,6 +66,9 @@ namespace FFMemoryParser {
 				Console.WriteLine(string.Format("{0}: {1}", sig.Key, sig.baseAddress));
 				Signatures[sig.Key] = sig;
 			}
+			foreach(Signature sig in notFound) {
+				notFoundSignatures.Add(sig);
+			}
 		}
 
 		public PipeData CreatePipeData(object obj) {
@@ -58,6 +80,7 @@ namespace FFMemoryParser {
 		SigCharIdData charIdData = null;
 		SigActorsData actorsData = null;
 		SigChatLogData chatLogData = null;
+		SigChatInputData chatInputData = null;
 
 		public void MemoryLoop() {
 			//Console.Clear();
@@ -65,18 +88,8 @@ namespace FFMemoryParser {
 				SigWorldData data = (SigWorldData)worldSig.GetData(ffxivProcess);
 				if (worldData == null || !data.Equals(worldData)) {
 					dataPipe.PushMessage(CreatePipeData(data));
-					Console.WriteLine("World: " + data.world);
+					//Console.WriteLine("World: " + data.world);
 					worldData = data;
-				}
-			}
-			if (GetSignature("PERFSTATUS", out var perfSig)) {
-				SigPerfData data = (SigPerfData)perfSig.GetData(ffxivProcess);
-				if (data != null) {
-					if(perfData == null || !data.Equals(perfData)) {
-						dataPipe.PushMessage(CreatePipeData(data));
-						Console.WriteLine("Performance change " + data.IsUp());
-						perfData = data;
-					}
 				}
 			}
 			if (GetSignature("CHARID", out var charidSig)) {
@@ -84,22 +97,35 @@ namespace FFMemoryParser {
 				if (data != null) {
 					if(charIdData == null || !data.Equals(charIdData)) {
 						dataPipe.PushMessage(CreatePipeData(data));
-						Console.WriteLine("New charid: " + data.id);
 						charIdData = data;
+					}
+				}
+			}
+			if (GetSignature("PERFSTATUS", out var perfSig)) {
+				SigPerfData data = (SigPerfData)perfSig.GetData(ffxivProcess);
+				if (data != null) {
+					if (perfData == null || !data.Equals(perfData)) {
+						dataPipe.PushMessage(CreatePipeData(data));
+						//Console.WriteLine("Performance change " + data.IsUp());
+						perfData = data;
 					}
 				}
 			}
 			if (GetSignature("CHARMAP", out var charSig)) {
 				SigActorsData data = (SigActorsData)charSig.GetData(ffxivProcess);
 				if (data != null) {
+					/*
 					if(data.currentActors.Values.Count > 0) {
 						ActorData me = data.currentActors.First().Value;
-						//Console.WriteLine(string.Format("YOU: {0} {1}", me.name, me.id));
+						Console.WriteLine(string.Format("YOU: {0} {1}", me.name, me.id));
 					}
-					if(data.addedActors.Count > 0 || data.removedActors.Count > 0) {
-						dataPipe.PushMessage(CreatePipeData(data));
-						string added = String.Join("+", data.addedActors.Select(t => t.Value.name).ToArray());
-						Console.WriteLine(string.Format("Players: {0} new, {1} removed: {2}", data.addedActors.Count, data.removedActors.Count, added));
+					*/
+					dataPipe.PushMessage(CreatePipeData(data));
+
+					if (data.addedActors.Count > 0 || data.removedActors.Count > 0) {
+
+						//string added = String.Join("+", data.addedActors.Select(t => t.Value.name).ToArray());
+						//Console.WriteLine(string.Format("Players: {0} new, {1} removed: {2}", data.addedActors.Count, data.removedActors.Count, added));
 					}
 					if (false) {
 						string added = String.Join(",", data.addedActors.Select(t => t.Value.name).ToArray());
@@ -112,15 +138,23 @@ namespace FFMemoryParser {
 					}
 				}
 			}
-			if(GetSignature("CHATLOG", out var chatlogSig)) {
+			if (GetSignature("CHATLOG", out var chatlogSig)) {
 				SigChatLogData data = (SigChatLogData)chatlogSig.GetData(ffxivProcess);
-				if(data != null) {
-					foreach(ChatLogItem msg in data.chatMessages) {
+				if (data != null) {
+					foreach (ChatLogItem msg in data.chatMessages) {
 						Console.WriteLine(msg.Line);
 					}
-					if(data.chatMessages.Count > 0) {
+					if (data.chatMessages.Count > 0) {
 						dataPipe.PushMessage(CreatePipeData(data));
-						Console.WriteLine(string.Format("Chatlog: {0} new", data.chatMessages.Count));
+						//Console.WriteLine(string.Format("Chatlog: {0} new", data.chatMessages.Count));
+					}
+				}
+			}
+			if (GetSignature("CHATINPUT", out var chatinputSig)) {
+				SigChatInputData data = (SigChatInputData)chatinputSig.GetData(ffxivProcess);
+				if (data != null) {
+					if(chatInputData == null || data != chatInputData) {
+						dataPipe.PushMessage(CreatePipeData(data));
 					}
 				}
 			}
