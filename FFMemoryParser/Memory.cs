@@ -17,38 +17,36 @@ namespace FFMemoryParser {
 	public class Memory {
 
 		HookProcess ffxivProcess = null;
-		NamedPipeServer<PipeData> dataPipe = null;
+
+		public SigWorldData worldData = null;
+		public SigPerfData perfData = null;
+		public SigCharIdData charIdData = null;
+		public SigActorsData actorsData = null;
+		public SigChatLogData chatLogData = null;
+		public SigChatInputData chatInputData = null;
 
 		[Serializable]
 		public class SignatureList : List<Signature> { }
-		SignatureList notFoundSignatures = new SignatureList();
+		protected SignatureList notFoundSignatures = new SignatureList();
 
 		[Serializable]
 		public class SignatureDictionary : Dictionary<string, Signature> {
 			public SignatureDictionary() { }
 			public SignatureDictionary(SerializationInfo info, StreamingContext context) : base(info, context) { }
 		}
-		SignatureDictionary Signatures = new SignatureDictionary();
+		protected SignatureDictionary Signatures = new SignatureDictionary();
 
 		public Memory(Process proc) {
 			ffxivProcess = new HookProcess(proc);
-			string pipename = string.Format("BmpPipe{0}", proc.Id);
-			dataPipe = new NamedPipeServer<PipeData>(pipename);
-			dataPipe.ClientConnected += ClientConnected;
-			dataPipe.Start();
-			Console.WriteLine(string.Format("Pipe name: {0}", pipename));
 		}
 
-		private void ClientConnected(NamedPipeConnection<PipeData, PipeData> connection) {
-			Console.WriteLine("Client connected");
+		public void ResetCache() {
 			worldData = null;
 			perfData = null;
 			charIdData = null;
 			actorsData = null;
 			chatLogData = null;
 			chatInputData = null;
-
-			connection.PushMessage(CreatePipeData(notFoundSignatures));
 		}
 
 		public bool GetSignature(string key, out Signature sig) {
@@ -71,23 +69,13 @@ namespace FFMemoryParser {
 			}
 		}
 
-		public PipeData CreatePipeData(object obj) {
-			return new PipeData(obj.GetType().ToString(), obj.ToByteArray());
-		}
-
-		SigWorldData worldData = null;
-		SigPerfData perfData = null;
-		SigCharIdData charIdData = null;
-		SigActorsData actorsData = null;
-		SigChatLogData chatLogData = null;
-		SigChatInputData chatInputData = null;
+		public virtual void OnDataUpdate(Object data) { }
 
 		public void MemoryLoop() {
-			//Console.Clear();
 			if (GetSignature("WORLD", out var worldSig)) {
 				SigWorldData data = (SigWorldData)worldSig.GetData(ffxivProcess);
 				if (worldData == null || !data.Equals(worldData)) {
-					dataPipe.PushMessage(CreatePipeData(data));
+					this.OnDataUpdate(data);
 					//Console.WriteLine("World: " + data.world);
 					worldData = data;
 				}
@@ -96,7 +84,7 @@ namespace FFMemoryParser {
 				SigCharIdData data = (SigCharIdData)charidSig.GetData(ffxivProcess);
 				if (data != null) {
 					if(charIdData == null || !data.Equals(charIdData)) {
-						dataPipe.PushMessage(CreatePipeData(data));
+						this.OnDataUpdate(data);
 						charIdData = data;
 					}
 				}
@@ -105,8 +93,7 @@ namespace FFMemoryParser {
 				SigPerfData data = (SigPerfData)perfSig.GetData(ffxivProcess);
 				if (data != null) {
 					if (perfData == null || !data.Equals(perfData)) {
-						dataPipe.PushMessage(CreatePipeData(data));
-						//Console.WriteLine("Performance change " + data.IsUp());
+						this.OnDataUpdate(data);
 						perfData = data;
 					}
 				}
@@ -120,7 +107,8 @@ namespace FFMemoryParser {
 						Console.WriteLine(string.Format("YOU: {0} {1}", me.name, me.id));
 					}
 					*/
-					dataPipe.PushMessage(CreatePipeData(data));
+					this.OnDataUpdate(data);
+					actorsData = data;
 
 					if (data.addedActors.Count > 0 || data.removedActors.Count > 0) {
 
@@ -145,7 +133,7 @@ namespace FFMemoryParser {
 						Console.WriteLine(msg.Line);
 					}
 					if (data.chatMessages.Count > 0) {
-						dataPipe.PushMessage(CreatePipeData(data));
+						this.OnDataUpdate(data);
 						//Console.WriteLine(string.Format("Chatlog: {0} new", data.chatMessages.Count));
 					}
 				}
@@ -154,7 +142,7 @@ namespace FFMemoryParser {
 				SigChatInputData data = (SigChatInputData)chatinputSig.GetData(ffxivProcess);
 				if (data != null) {
 					if(chatInputData == null || data != chatInputData) {
-						dataPipe.PushMessage(CreatePipeData(data));
+						this.OnDataUpdate(data);
 					}
 				}
 			}

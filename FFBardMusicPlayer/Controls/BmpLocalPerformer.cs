@@ -87,7 +87,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public uint performanceId = 0;
-		public uint actorId = 0;
 
 		private bool performanceUp = false;
 		public bool PerformanceUp {
@@ -262,15 +261,6 @@ namespace FFBardMusicPlayer.Controls {
 		public void OpenInstrument() {
 			// Exert the effort to check memory i guess
 			if(hostProcess) {
-				/*
-				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
-					if(Sharlayan.Reader.CanGetPerformance()) {
-						if(Sharlayan.Reader.GetPerformance().IsUp()) {
-							return;
-						}
-					}
-				}
-				*/
 				return;
 			}
 
@@ -311,14 +301,6 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void CloseInstrument() {
 			if(hostProcess) {
-				/*
-				if(Sharlayan.MemoryHandler.Instance.IsAttached) {
-					if(Sharlayan.Reader.CanGetPerformance()) {
-						if(!Sharlayan.Reader.GetPerformance().IsUp()) {
-							return;
-						}
-					}
-				}*/
 				return;
 			}
 

@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 using System.Threading;
+using System.IO;
+using Newtonsoft.Json;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer {
 	public partial class BmpProcessSelect : Form {
@@ -44,6 +47,31 @@ namespace FFBardMusicPlayer {
 			ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
 		}
 
+		private MultiboxProcess FetchProcessMultiboxInfo(Process process) {
+			List<Signature> sigList = new List<Signature>();
+			string file = "C:\\ProgramData\\FFBardMusicPlayer\\signatures.json";
+			using (var streamReader = new StreamReader(file)) {
+				var json = streamReader.ReadToEnd();
+				sigList = JsonConvert.DeserializeObject<List<Signature>>(json);
+			}
+
+			// Initialize process scanner
+			FFMemoryParser.Memory memory = new FFMemoryParser.Memory(process);
+			// Get memory addresses
+			memory.SearchMemory(sigList);
+			// Fetch memory data
+			memory.MemoryLoop();
+
+			if(memory.actorsData.currentActors.Count > 0) {
+				ActorData localPlayer = memory.actorsData.currentActors.First().Value;
+				return new MultiboxProcess {
+					characterId = memory.charIdData.id,
+					characterName = localPlayer.name
+				};
+			}
+			return new MultiboxProcess();
+		}
+
 		private void ButtonLabelTask(object o, DoWorkEventArgs e) {
 			// Update the button label with the character name for FFXIV processes
 			Dictionary<Process, Button> buttons = new Dictionary<Process, Button>();
@@ -64,54 +92,34 @@ namespace FFBardMusicPlayer {
 				Button button = proc.Value;
 				buttons.Remove(process);
 				if(process.ProcessName == "ffxiv_dx11") {
-					/*
-					MemoryHandler.Instance.SetProcess(new Sharlayan.Models.ProcessModel {
-						Process = process,
-						IsWin64 = true,
-					});
-					var scanTask = false;
-					while(Scanner.Instance.IsScanning) {
-						if(processWorker.CancellationPending) {
-							scanTask = true;
-							break;
-						}
-					}
-					if(scanTask) {
+					if (processWorker.CancellationPending) {
 						break;
 					}
-					*/
-					string name = "TODO FIXME";
-					string origName = string.Empty;
-					string id = string.Empty;
-					/*
-					if(Reader.CanGetPlayerInfo()) {
-						origName = Reader.GetCurrentPlayer().CurrentPlayer.Name;
-						if(string.IsNullOrEmpty(origName)) {
-							name = string.Format("{0} (?)", button.Text);
-						} else {
-							name = string.Format("{0} ({1})", origName, process.Id);
-						}
+
+					MultiboxProcess multiboxData = this.FetchProcessMultiboxInfo(process);
+					multiboxData.process = process;
+
+					// Set button label
+					string name = multiboxData.characterName;
+					if (string.IsNullOrEmpty(name)) {
+						name = string.Format("{0} (?)", process.Id);
+					} else {
+						name = string.Format("{0} ({1})", name, process.Id);
 					}
-					if(Reader.CanGetCharacterId()) {
-						id = Reader.GetCharacterId();
-					}
-					*/
 					button.Invoke(t => t.Text = name);
-					multiboxProcesses.Add(new MultiboxProcess {
-						process = process,
-						characterName = origName,
-						characterId = id,
-					});
-					//MemoryHandler.Instance.UnsetProcess();
+
+					multiboxProcesses.Add(multiboxData);
 				}
 			}
 
-			//MemoryHandler.Instance.UnsetProcess();
 			processCancelled.Set();
 
 			// FIXME enable this after testing
+#if DEBUG
 			LocalOrchestraCheck.Invoke(t => t.Visible = true);
-			//LocalOrchestraCheck.Invoke(t => t.Visible = (multiboxProcesses.Count > 1));
+#else
+			LocalOrchestraCheck.Invoke(t => t.Visible = (multiboxProcesses.Count > 1));
+#endif
 		}
 
 		public void RefreshList() {

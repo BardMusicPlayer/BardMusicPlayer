@@ -28,7 +28,7 @@ namespace FFMemoryParser {
 			[Option('s', "signature-file", HelpText = "Use the specified signature file.")]
 			public string LoadSignatureFile { get; set; }
 
-			[Option('p', "polling-rate", HelpText = "Use the given polling rate (milliseconds).", Default = 500)]
+			[Option('r', "polling-rate", HelpText = "Use the given polling rate (milliseconds).", Default = 500)]
 			public int PollingRate { get; set; }
 
 		}
@@ -51,7 +51,7 @@ namespace FFMemoryParser {
 				ffxivProcess = processes[0];
 			}
 			if(ffxivProcess != null) {
-				Memory mem = new Memory(ffxivProcess);
+				PipeMemory mem = new PipeMemory(ffxivProcess);
 				List<Signature> sigList = new List<Signature>();
 
 				string file = programOptions.LoadSignatureFile;

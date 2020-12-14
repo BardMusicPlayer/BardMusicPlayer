@@ -71,6 +71,7 @@
     <Compile Include="PipeData.cs" />
     <Compile Include="HookProcess.cs" />
     <Compile Include="Memory.cs" />
+    <Compile Include="PipeMemory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -55,7 +55,7 @@ namespace FFBardMusicPlayer {
 			}
 		}
 
-		private SigActorsData actorData;
+		public SigActorsData actorData;
 		public ActorData localPlayer;
 
 		public FFXIVMemory() {

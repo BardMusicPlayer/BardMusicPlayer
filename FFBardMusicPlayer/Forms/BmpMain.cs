@@ -92,7 +92,7 @@ namespace FFBardMusicPlayer.Forms {
 			};
 			FFXIV.memory.OnPerformanceChanged += delegate (object o, SigPerfData data) {
 				this.Invoke(t => t.Memory_OnPerformanceReadyChanged(data.IsUp()));
-				//this.Invoke(t => t.LocalOrchestraUpdate((o as FFXIVMemory).GetActorItems(ids)));
+				LocalOrchestra.Invoke(t => t.PerformerUpdate(FFXIV.memory.actorData, data));
 			};
 			FFXIV.memory.OnLocalPlayerLogin += delegate (object o, ActorData data) {
 				FFXIVMemory memory = (o as FFXIVMemory);
@@ -544,7 +544,7 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void OnPlayProgressChange(Object o, int progress) {
 			if(LocalOrchestra.OrchestraEnabled) {
-				LocalOrchestra.PerformerProgress(progress);
+				LocalOrchestra.PerformersInvoke(t => t.SetProgress(progress));
 			}
 		}
 		private void OnPlayStatusChange(Object o, bool playing) {

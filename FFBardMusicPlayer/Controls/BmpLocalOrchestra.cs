@@ -15,6 +15,7 @@ using System.Timers;
 using System.Diagnostics;
 
 using Timer = System.Timers.Timer;
+using FFMemoryParser;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalOrchestra : UserControl {
@@ -26,7 +27,7 @@ namespace FFBardMusicPlayer.Controls {
 
 		public BmpSequencer Sequencer {
 			set {
-				this.UpdatePerformers(value);
+				this.PerformersInvoke(t => t.Sequencer = value);
 			}
 		}
 
@@ -66,52 +67,52 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void UpdatePerformers(BmpSequencer seq) {
-			if(seq == null) {
-				return;
-			}
-			foreach(Control ctl in PerformerPanel.Controls) {
+		public void PerformersInvoke(Action<BmpLocalPerformer> action) {
+			foreach (Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Sequencer = seq;
+				if (performer != null) {
+					action.Invoke(performer);
 				}
 			}
 		}
 
 		public void PerformerProgress(int prog) {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.SetProgress(prog);
-				}
-			}
+			this.PerformersInvoke(t => t.SetProgress(prog));
 		}
 
 		public void PerformerPlay(bool play) {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Play(play);
-				}
-			}
+			this.PerformersInvoke(t => t.Play(play));
 		}
 		public void PerformerStop() {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Stop();
-				}
+			this.PerformersInvoke(t => t.Stop());
+		}
+
+		public void PerformerUpdate(SigActorsData actors, SigPerfData data) {
+			if (actors == null) return;
+			Dictionary<string, BmpLocalPerformer> performerNames = this.GetPerformerNames();
+			foreach(ActorData ad in actors.currentActors.Values.ToList()) {
+				this.PerformersInvoke(t => {
+					if(performerNames.ContainsKey(ad.name)) {
+						// Needs name cache because they might zone in or out
+						uint perfId = ad.perfid / 2;
+						if (perfId >= 0 && perfId < 99) {
+							if (!data.Performances.ContainsKey(perfId)) return;
+							PerformanceData pdata = data.Performances[perfId];
+							Console.WriteLine(string.Format("{0}: {1}", ad.name, pdata.IsReady()));
+							performerNames[ad.name].PerformanceUp = pdata.IsReady();
+						}
+					}
+				});
 			}
 		}
 
-		public List<string> GetPerformerNames() {
-			List<string> performerNames = new List<string>();
-			foreach(BmpLocalPerformer performer in PerformerPanel.Controls) {
-				performerNames.Add(performer.PerformerName);
+		public Dictionary<string, BmpLocalPerformer> GetPerformerNames() {
+			Dictionary<string, BmpLocalPerformer> performerNames = new Dictionary<string, BmpLocalPerformer>();
+			foreach (BmpLocalPerformer performer in PerformerPanel.Controls) {
+				performerNames.Add(performer.PerformerName, performer);
 			}
 			return performerNames;
 		}
-
 		public BmpLocalPerformer FindPerformer(string name) {
 			foreach(Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
@@ -123,33 +124,15 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void openInstruments_Click(object sender, EventArgs e) {
-			
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.OpenInstrument();
-				}
-			}
+			this.PerformersInvoke(t => { if (t.PerformerEnabled) { t.OpenInstrument(); } });
 		}
 
 		private void closeInstruments_Click(object sender, EventArgs e) {
-			
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.CloseInstrument();
-				}
-			}
+			this.PerformersInvoke(t => { if (t.PerformerEnabled) { t.CloseInstrument(); } });
 		}
 
 		private void muteAll_Click(object sender, EventArgs e) {
-			
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.ToggleMute();
-				}
-			}
+			this.PerformersInvoke(t => { if (t.PerformerEnabled) { t.ToggleMute(); } });
 		}
 
 		private void ensembleCheck_Click(object sender, EventArgs e) {
@@ -161,12 +144,7 @@ namespace FFBardMusicPlayer.Controls {
 				openTimer.Stop();
 				openTimer = null;
 				
-				foreach(Control ctl in PerformerPanel.Controls) {
-					BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-					if(performer != null && performer.PerformerEnabled && !performer.hostProcess) {
-						performer.EnsembleAccept();
-					}
-				}
+				this.PerformersInvoke(t => { if (t.PerformerEnabled && !t.hostProcess) { t.EnsembleAccept(); } });
 			};
 			openTimer.Start();
 		}
@@ -174,13 +152,7 @@ namespace FFBardMusicPlayer.Controls {
 		private void testC_Click(object sender, EventArgs e) {
 
 			//StartSyncWorker();
-
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.NoteKey("C");
-				}
-			}
+			this.PerformersInvoke(t => { if (t.PerformerEnabled) { t.NoteKey("C"); } });
 		}
 	}
 }
