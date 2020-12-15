@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace FFMemoryParser {
-	class Program {
+	static class Program {
 
 		[DllImport("kernel32.dll")]
 		static extern IntPtr GetConsoleWindow();
@@ -35,6 +35,7 @@ namespace FFMemoryParser {
 
 		public static Options programOptions = new Options();
 
+		[STAThread]
 		static void Main(string[] args) {
 
 			// Parse args
@@ -49,6 +50,12 @@ namespace FFMemoryParser {
 			Process ffxivProcess = null;
 			if(processes.Count > 0) {
 				ffxivProcess = processes[0];
+				foreach (Process proc in processes) {
+					if(proc.Id == programOptions.HookPid) {
+						ffxivProcess = proc;
+						break;
+					}
+				}
 			}
 			if(ffxivProcess != null) {
 				PipeMemory mem = new PipeMemory(ffxivProcess);
@@ -56,7 +63,7 @@ namespace FFMemoryParser {
 
 				string file = programOptions.LoadSignatureFile;
 				if(string.IsNullOrEmpty(file)) {
-					file = "C:\\ProgramData\\FFBardMusicPlayer\\signatures.json";
+					file = "signatures.json";
 				}
 				using (var streamReader = new StreamReader(file)) {
 					var json = streamReader.ReadToEnd();

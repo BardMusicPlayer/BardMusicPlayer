@@ -20,6 +20,7 @@ using Timer = System.Timers.Timer;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using System.Security.Principal;
 using FFMemoryParser;
+using System.IO;
 
 namespace FFBardMusicPlayer.Forms {
 	public partial class BmpMain : Form {
@@ -49,9 +50,13 @@ namespace FFBardMusicPlayer.Forms {
 		public BmpMain() {
 			InitializeComponent();
 
+			// Clear local orchestra
+			InfoTabs.TabPages.Remove(localOrchestraTab);
+
 			this.UpdatePerformance();
 
 			BmpUpdate update = new BmpUpdate();
+			// True on debugging through VS
 			if(!Program.programOptions.DisableUpdate) {
 				updateResult = update.ShowDialog();
 				if(updateResult == DialogResult.Yes) {
@@ -67,11 +72,22 @@ namespace FFBardMusicPlayer.Forms {
 					string log = string.Format("= BMP Update =\n {0} \n", update.version.updateLog);
 					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(log, Color.LightGreen, true));
 				}
+				string sigVersion = "";
+				List<Process> processes = new List<Process>(Process.GetProcessesByName("ffxiv_dx11"));
+				if (processes.Count > 0) {
+					Process proc = processes[0];
+					string filename = proc.MainModule.FileName;
+					string ver = filename.Replace("ffxiv_dx11.exe", "../boot/ffxivboot.ver");
+					if (File.Exists(ver)) {
+						sigVersion = File.ReadAllText(ver);
+						this.Log(string.Format("FFXIV ver: {0}", sigVersion));
+					}
+				}
+				update.UpdateSignature(sigVersion);
 			}
+
 			this.Text = update.version.ToString();
 
-			// Clear local orchestra
-			InfoTabs.TabPages.Remove(localOrchestraTab);
 
 			FFXIV.findProcessRequest += delegate (Object o, EventArgs empty) {
 				this.Invoke(t => t.FindProcess());

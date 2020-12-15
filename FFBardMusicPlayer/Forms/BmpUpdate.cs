@@ -72,7 +72,7 @@ namespace FFBardMusicPlayer {
 
 			currentVersion = UpdateVersion.Version;
 
-			Uri updateJson = new Uri(Program.urlBase + string.Format("update?v={0}", UpdateVersion.Version.ToString()));
+			Uri updateJson = new Uri(Program.urlBase + string.Format("update?v2={0}", UpdateVersion.Version.ToString()));
 			Console.WriteLine("Updatejson: " + updateJson.ToString());
 			HttpWebRequest request = (HttpWebRequest) WebRequest.Create(updateJson);
 
@@ -96,37 +96,30 @@ namespace FFBardMusicPlayer {
 				if(UpdateVersion.Version > version.updateVersion) {
 					this.DialogResult = DialogResult.Ignore;
 				}
+			}
+		}
+		public void UpdateSignature(string gameVersion) {
+			// If not ignoring updates
+			if (!Properties.Settings.Default.SigIgnore) {
+				// If new version is above current sig version
+				// Or if they don't exist
 
+				bool sigExist = File.Exists(Path.Combine(Program.appBase, "signatures.json"));
+				if ((version.sigVersion > Properties.Settings.Default.SigVersion) || version.sigVersion == -1 || !(sigExist)) {
 
-				// If not ignoring updates
-				if(!Properties.Settings.Default.SigIgnore) {
-					// If new version is above current sig version
-					// Or if they don't exist
+					Console.WriteLine("Downloading signatures");
+					string sigUrl = string.Format("signatures?v2={0}", gameVersion);
+					if (DownloadToProgramFile(sigUrl, "signatures.json")) {
+						Console.WriteLine("Downloaded signatures");
+					}
+					Properties.Settings.Default.SigVersion = version.sigVersion;
+					Console.WriteLine(string.Format("ver1: {0} ver2: {1}", version.sigVersion, Properties.Settings.Default.SigVersion));
+					Properties.Settings.Default.Save();
 
-					bool sigExist = File.Exists(Path.Combine(Program.appBase, "signatures.json"));
-					bool strExist = File.Exists(Path.Combine(Program.appBase, "structures.json"));
-					if((version.sigVersion > Properties.Settings.Default.SigVersion) || version.sigVersion == -1 || !(sigExist && strExist)) {
-
-						Console.WriteLine("Downloading signatures");
-						string sigUrl = string.Format("update?f=signatures&v={0}", UpdateVersion.Version.ToString());
-						if(DownloadToProgramFile(sigUrl, "signatures.json")) {
-							Console.WriteLine("Downloaded signatures");
-						}
-						Console.WriteLine("Downloading structures");
-						string strUrl = string.Format("update?f=structures&v={0}", UpdateVersion.Version.ToString());
-						if(DownloadToProgramFile(strUrl, "structures.json")) {
-							Console.WriteLine("Downloaded structures");
-						}
-
-						Properties.Settings.Default.SigVersion = version.sigVersion;
-						Console.WriteLine(string.Format("ver1: {0} ver2: {1}", version.sigVersion, Properties.Settings.Default.SigVersion));
-						Properties.Settings.Default.Save();
-
-						// New signature update
-						// Reset forced stuff so people don't get stuck on that junk
-						if(version.sigVersion > 0) {
-							Properties.Settings.Default.ForcedOpen = false;
-						}
+					// New signature update
+					// Reset forced stuff so people don't get stuck on that junk
+					if (version.sigVersion > 0) {
+						Properties.Settings.Default.ForcedOpen = false;
 					}
 				}
 			}

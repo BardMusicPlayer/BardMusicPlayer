@@ -49,7 +49,7 @@ namespace FFBardMusicPlayer {
 
 		private MultiboxProcess FetchProcessMultiboxInfo(Process process) {
 			List<Signature> sigList = new List<Signature>();
-			string file = "C:\\ProgramData\\FFBardMusicPlayer\\signatures.json";
+			string file = Path.Combine(Program.appBase, "signatures.json");
 			using (var streamReader = new StreamReader(file)) {
 				var json = streamReader.ReadToEnd();
 				sigList = JsonConvert.DeserializeObject<List<Signature>>(json);

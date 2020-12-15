@@ -62,10 +62,11 @@ namespace FFBardMusicPlayer {
 		}
 
 		public void Start(Process ffxivProcess) {
+			string sigFile = Path.Combine(Program.appBase, "signatures.json");
 			Process proc = new Process();
 			proc.StartInfo.FileName = "FFMemoryParser.exe";
-			proc.StartInfo.Arguments = string.Format("-p {0}", ffxivProcess.Id);
-			proc.StartInfo.UseShellExecute = false;
+			proc.StartInfo.Arguments = string.Format("-p {0} -s \"{1}\"", ffxivProcess.Id, sigFile);
+			proc.StartInfo.UseShellExecute = true;
 			proc.StartInfo.Verb = "runas";
 			proc.Start();
 
