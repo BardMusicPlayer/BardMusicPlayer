@@ -135,10 +135,10 @@ namespace FFBardMusicPlayer.Components {
 
 		protected override void OnVisibleChanged(EventArgs e) {
 			base.OnVisibleChanged(e);
-			if(this.Visible) {
-				this.RefreshList();
-			}
-		}
+			// nothing needs to happen here, since we've already force loaded the
+			// song list in Setup, and the FileSystemWatcher will refresh when
+			// the directory of midis has been updated
+        }
 
 		protected override void OnSelectedIndexChanged(EventArgs e) {
 			base.OnSelectedIndexChanged(e);
