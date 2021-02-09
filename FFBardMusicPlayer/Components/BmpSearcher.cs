@@ -19,10 +19,29 @@ namespace FFBardMusicPlayer.Controls {
 		// Events
 		protected override void OnTextChanged(EventArgs e) {
 			base.OnTextChanged(e);
-			OnTextChange?.Invoke(this, this.Text);
+			// we can't do this here. loading a song will change the text, and call
+			// this twice. see: OnKeyPress
+			// OnTextChange?.Invoke(this, this.Text);
 		}
 
-		protected override void OnKeyDown(KeyEventArgs e) {
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            base.OnKeyPress(e);
+
+			// here, we can check if the input character in the search bar is either a
+			// letter or a number, and invoke the text change
+			if (char.IsLetterOrDigit(e.KeyChar))
+            {
+				OnTextChange?.Invoke(this, this.Text);
+			}
+			// since backspace and delete are special, we'll want to listen for those as well
+			else if (e.KeyChar == (char)Keys.Delete || e.KeyChar == (char)Keys.Back)
+            {
+				OnTextChange?.Invoke(this, this.Text);
+			}
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e) {
 			if(e.KeyCode == Keys.Down ||
 				e.KeyCode == Keys.Up ||
 				e.KeyCode == Keys.Enter ||
