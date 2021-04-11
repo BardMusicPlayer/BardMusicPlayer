@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MogLib.Common.Objects;
+using MogLib.Notate.Objects;
 using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer
@@ -94,7 +95,18 @@ namespace FFBardMusicPlayer
                     }
                 }
                 #endregion
-                
+
+                var trackZeroName = midiFile.GetTrackChunks().First().Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
+
+                if (!string.IsNullOrEmpty(trackZeroName) && (trackZeroName.ToLower().Contains("mogamp") || trackZeroName.ToLower().Contains("mognotate")))
+                {
+                    var notateConfig = NotateConfig.GenerateConfigFromMidiFile(filePath);
+                    var mmSongStream = notateConfig.Transmogrify().GetMidiFile(false, true);
+                    lastFile = MidiFile.Read(mmSongStream);
+                    lastMD5 = md5;
+                    mmSongStream.Position = 0;
+                    return mmSongStream;
+                }
 
                 Console.WriteLine("Scrubbing " + filePath);
                 var loaderWatch = Stopwatch.StartNew();
