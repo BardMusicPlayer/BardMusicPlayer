@@ -12,6 +12,7 @@ using System.Threading;
 
 using Timer = System.Timers.Timer;
 using FFMemoryParser;
+using MogLib.Common.Structs;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpHook : UserControl {
@@ -129,23 +130,23 @@ namespace FFBardMusicPlayer.Controls {
 			return memory.LocalPerformanceUp;
 		}
 
-		public bool GetPerformanceInstrument(string ins, out Performance.Instrument ins2) {
+		public bool GetPerformanceInstrument(string ins, out Instrument ins2) {
 
 			if(!string.IsNullOrEmpty(ins)) {
 				if(!Enum.TryParse(ins, out ins2)) {
 					if(int.TryParse(ins, out int intInst)) {
-						ins2 = (Performance.Instrument) intInst;
+						ins2 = (Instrument) intInst;
 						return true;
 					}
 				} else {
 					return true;
 				}
 			}
-			ins2 = Performance.Instrument.Piano;
+			ins2 = Instrument.Piano;
 			return false;
 		}
 
-		public bool GetHotkeyForInstrument(Performance.Instrument ins, out FFXIVKeybindDat.Keybind keybind) {
+		public bool GetHotkeyForInstrument(Instrument ins, out FFXIVKeybindDat.Keybind keybind) {
 			
 			string keyMap = hotbar.GetInstrumentKeyMap(ins);
 			if(!string.IsNullOrEmpty(keyMap)) {

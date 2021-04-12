@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using MogLib.Common.Structs;
 
 namespace FFMemoryParser {
 
@@ -44,7 +45,7 @@ namespace FFMemoryParser {
 					item.Variant = (byte) variant;
 					item.Type = (byte) type;
 					item.Status = (Performance.Status) status;
-					item.Instrument = (Performance.Instrument) instrument;
+					item.Instrument = (Instrument) instrument;
 
 					if(!result.Performances.ContainsKey(id)) {
 						result.Performances[id] = item;

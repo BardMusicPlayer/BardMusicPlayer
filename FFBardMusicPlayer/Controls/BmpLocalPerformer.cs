@@ -8,7 +8,7 @@ using Sanford.Multimedia.Midi;
 
 using Timer = System.Timers.Timer;
 using System.Timers;
-using static FFMemoryParser.Performance;
+using MogLib.Common.Structs;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalPerformer : UserControl {

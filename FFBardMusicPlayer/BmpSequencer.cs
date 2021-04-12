@@ -5,9 +5,8 @@ using System.IO;
 
 using Sanford.Multimedia.Midi;
 using System.Text.RegularExpressions;
-
+using MogLib.Common.Structs;
 using Timer = System.Timers.Timer;
-using static FFMemoryParser.Performance;
 
 namespace FFBardMusicPlayer {
 	public class BmpSequencer : BmpCustomSequencer {

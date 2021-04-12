@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using FFBardMusicPlayer.Components;
 using System.IO;
 using FFBardMusicCommon;
-using static FFMemoryParser.Performance;
+using MogLib.Common.Structs;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpPlayer : UserControl {
