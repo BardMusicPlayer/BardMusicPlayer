@@ -11,8 +11,8 @@ using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 using System.Threading;
 using System.IO;
-using Newtonsoft.Json;
 using FFMemoryParser;
+using ServiceStack.Text;
 
 namespace FFBardMusicPlayer {
 	public partial class BmpProcessSelect : Form {
@@ -51,8 +51,7 @@ namespace FFBardMusicPlayer {
 			List<Signature> sigList = new List<Signature>();
 			string file = Path.Combine(Program.appBase, "signatures.json");
 			using (var streamReader = new StreamReader(file)) {
-				var json = streamReader.ReadToEnd();
-				sigList = JsonConvert.DeserializeObject<List<Signature>>(json);
+				sigList = JsonSerializer.DeserializeFromReader<List<Signature>>(streamReader);
 			}
 
 			// Initialize process scanner

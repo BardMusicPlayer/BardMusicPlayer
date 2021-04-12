@@ -1,6 +1,4 @@
 ﻿using CommandLine;
-using NamedPipeWrapper;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ServiceStack.Text;
 
 namespace FFMemoryParser {
 	static class Program {
@@ -66,8 +65,7 @@ namespace FFMemoryParser {
 					file = "signatures.json";
 				}
 				using (var streamReader = new StreamReader(file)) {
-					var json = streamReader.ReadToEnd();
-					sigList = JsonConvert.DeserializeObject<List<Signature>>(json);
+					sigList = JsonSerializer.DeserializeFromReader<List<Signature>>(streamReader);
 				}
 
 				mem.SearchMemory(sigList);
