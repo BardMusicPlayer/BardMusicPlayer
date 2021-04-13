@@ -38,8 +38,11 @@
       <HintPath>..\packages\Melanchall.DryWetMidi.5.2.0\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MogLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.1.0.0\lib\net45\MogLib.dll</HintPath>
+    <Reference Include="MogLib.Common, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Common.1.5.4.1\lib\net45\MogLib.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="MogLib.Notate, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Notate.1.5.4.1\lib\net45\MogLib.Notate.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.5.10.4\lib\net45\ServiceStack.Text.dll</HintPath>
@@ -78,13 +81,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj">
       <Project>{4269c72a-8d3a-4737-8f89-72eaa33ea9e1}</Project>
       <Name>Sanford.Multimedia.Midi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

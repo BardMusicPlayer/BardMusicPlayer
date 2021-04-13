@@ -10,7 +10,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MogLib.Common.Objects;
 using MogLib.Common.Structs;
 using MogLib.Notate.Objects;
 

@@ -47,11 +47,8 @@
     <Reference Include="CommandLine, Version=2.6.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.6.0\lib\net461\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="Melanchall.DryWetMidi, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Melanchall.DryWetMidi.5.2.0\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
-    </Reference>
-    <Reference Include="MogLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.1.0.0\lib\net45\MogLib.dll</HintPath>
+    <Reference Include="MogLib.Common, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Common.1.5.4.1\lib\net45\MogLib.Common.dll</HintPath>
     </Reference>
     <Reference Include="NamedPipeWrapper, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NamedPipeWrapper.1.5.0\lib\net40\NamedPipeWrapper.dll</HintPath>
@@ -86,9 +83,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.11.1.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitConverter.cs" />
