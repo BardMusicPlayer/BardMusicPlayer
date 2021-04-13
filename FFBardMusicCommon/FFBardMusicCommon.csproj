@@ -38,11 +38,11 @@
       <HintPath>..\packages\Melanchall.DryWetMidi.5.2.0\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MogLib.Common, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.Common.1.5.4.1\lib\net45\MogLib.Common.dll</HintPath>
+    <Reference Include="MogLib.Common, Version=1.5.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Common.1.5.4.2\lib\net45\MogLib.Common.dll</HintPath>
     </Reference>
-    <Reference Include="MogLib.Notate, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.Notate.1.5.4.1\lib\net45\MogLib.Notate.dll</HintPath>
+    <Reference Include="MogLib.Notate, Version=1.5.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Notate.1.5.4.2\lib\net45\MogLib.Notate.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.5.10.4\lib\net45\ServiceStack.Text.dll</HintPath>
@@ -60,8 +60,8 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -87,6 +87,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

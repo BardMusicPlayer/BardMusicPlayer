@@ -47,8 +47,8 @@
     <Reference Include="CommandLine, Version=2.6.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.6.0\lib\net461\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="MogLib.Common, Version=1.5.4.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.Common.1.5.4.1\lib\net45\MogLib.Common.dll</HintPath>
+    <Reference Include="MogLib.Common, Version=1.5.4.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Common.1.5.4.2\lib\net45\MogLib.Common.dll</HintPath>
     </Reference>
     <Reference Include="NamedPipeWrapper, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NamedPipeWrapper.1.5.0\lib\net40\NamedPipeWrapper.dll</HintPath>
