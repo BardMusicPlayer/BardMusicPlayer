@@ -29,7 +29,7 @@ namespace FFBardMusicPlayer.Controls {
 		public Instrument ChosenInstrument {
 			set {
 				chosenInstrument = value;
-				InstrumentName.Text = string.Format("[{0}]", value.ToString());
+				InstrumentName.Text = string.Format("[{0}]", value.Name);
 			}
 		}
 
