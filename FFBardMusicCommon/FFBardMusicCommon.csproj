@@ -44,10 +44,6 @@
     <Reference Include="MogLib.Notate, Version=1.5.4.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MogLib.Notate.1.5.4.4\lib\net45\MogLib.Notate.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.5.10.4\lib\net45\ServiceStack.Text.dll</HintPath>
     </Reference>
