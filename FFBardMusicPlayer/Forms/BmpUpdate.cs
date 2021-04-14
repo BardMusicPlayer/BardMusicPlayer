@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ServiceStack;
 using ServiceStack.Text;
 
 namespace FFBardMusicPlayer {
@@ -68,71 +71,68 @@ namespace FFBardMusicPlayer {
 			return false;
 		}
 
-		public void UpdateApp(Object sender, EventArgs args) {
+        public void UpdateApp(Object sender, EventArgs args)
+        {
 
-			currentVersion = UpdateVersion.Version;
+            currentVersion = UpdateVersion.Version;
 
-			Uri updateJson = new Uri(Program.urlBase + string.Format("update?v={0}", UpdateVersion.Version.ToString()));
-			Console.WriteLine("Updatejson: " + updateJson.ToString());
-			HttpWebRequest request = (HttpWebRequest) WebRequest.Create(updateJson);
+            var updateJson = Program.urlBase + $"update?v={UpdateVersion.Version}";
+            Console.WriteLine("Updatejson: " + updateJson);
 
-			IAsyncResult res = request.BeginGetResponse(null, null);
-			while(!res.IsCompleted) {
-				if(worker.CancellationPending) {
-					return;
-				}
-			}
-			HttpWebResponse response = request.EndGetResponse(res) as HttpWebResponse;
+            version = JsonSerializer.DeserializeFromString<UpdateVersion>(updateJson.GetJsonFromUrl());
 
-			if(response.StatusCode == HttpStatusCode.OK) {
-				using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
-					version = JsonSerializer.DeserializeFromReader<UpdateVersion>(reader);
-				}
-				if(version == null) {
-					return;
-				}
+            if (version == null) return;
 
-				this.DialogResult = (version.updateVersion > UpdateVersion.Version) ? DialogResult.Yes : DialogResult.No;
-				if(UpdateVersion.Version > version.updateVersion) {
-					this.DialogResult = DialogResult.Ignore;
-				}
+            this.DialogResult = (version.updateVersion > UpdateVersion.Version) ? DialogResult.Yes : DialogResult.No;
+            
+            if (UpdateVersion.Version > version.updateVersion)
+            {
+                this.DialogResult = DialogResult.Ignore;
+            }
 
 
-				// If not ignoring updates
-				if(!Properties.Settings.Default.SigIgnore) {
-					// If new version is above current sig version
-					// Or if they don't exist
+            // If not ignoring updates
+            if (!Properties.Settings.Default.SigIgnore)
+            {
+                // If new version is above current sig version
+                // Or if they don't exist
 
-					bool sigExist = File.Exists(Path.Combine(Program.appBase, "signatures.json"));
-					bool strExist = File.Exists(Path.Combine(Program.appBase, "structures.json"));
-					if((version.sigVersion > Properties.Settings.Default.SigVersion) || version.sigVersion == -1 || !(sigExist && strExist)) {
+                bool sigExist = File.Exists(Path.Combine(Program.appBase, "signatures.json"));
+                bool strExist = File.Exists(Path.Combine(Program.appBase, "structures.json"));
+                if ((version.sigVersion > Properties.Settings.Default.SigVersion) || version.sigVersion == -1 ||
+                    !(sigExist && strExist))
+                {
 
-						Console.WriteLine("Downloading signatures");
-						string sigUrl = string.Format("update?f=signatures&v={0}", UpdateVersion.Version.ToString());
-						if(DownloadToProgramFile(sigUrl, "signatures.json")) {
-							Console.WriteLine("Downloaded signatures");
-						}
-						Console.WriteLine("Downloading structures");
-						string strUrl = string.Format("update?f=structures&v={0}", UpdateVersion.Version.ToString());
-						if(DownloadToProgramFile(strUrl, "structures.json")) {
-							Console.WriteLine("Downloaded structures");
-						}
+                    Console.WriteLine("Downloading signatures");
+                    string sigUrl = string.Format("update?f=signatures&v={0}", UpdateVersion.Version.ToString());
+                    if (DownloadToProgramFile(sigUrl, "signatures.json"))
+                    {
+                        Console.WriteLine("Downloaded signatures");
+                    }
 
-						Properties.Settings.Default.SigVersion = version.sigVersion;
-						Console.WriteLine(string.Format("ver1: {0} ver2: {1}", version.sigVersion, Properties.Settings.Default.SigVersion));
-						Properties.Settings.Default.Save();
+                    Console.WriteLine("Downloading structures");
+                    string strUrl = string.Format("update?f=structures&v={0}", UpdateVersion.Version.ToString());
+                    if (DownloadToProgramFile(strUrl, "structures.json"))
+                    {
+                        Console.WriteLine("Downloaded structures");
+                    }
 
-						// New signature update
-						// Reset forced stuff so people don't get stuck on that junk
-						if(version.sigVersion > 0) {
-							Properties.Settings.Default.ForcedOpen = false;
-						}
-					}
-				}
-			}
-		}
+                    Properties.Settings.Default.SigVersion = version.sigVersion;
+                    Console.WriteLine(string.Format("ver1: {0} ver2: {1}", version.sigVersion,
+                        Properties.Settings.Default.SigVersion));
+                    Properties.Settings.Default.Save();
 
-		private void ButtonSkip_Click(object sender, EventArgs e) {
+                    // New signature update
+                    // Reset forced stuff so people don't get stuck on that junk
+                    if (version.sigVersion > 0)
+                    {
+                        Properties.Settings.Default.ForcedOpen = false;
+                    }
+                }
+            }
+        }
+
+        private void ButtonSkip_Click(object sender, EventArgs e) {
 			worker.CancelAsync();
 		}
 	}
@@ -140,20 +140,20 @@ namespace FFBardMusicPlayer {
 
 	public class UpdateVersion {
 		// If update, fill these in
-		public float updateVersion = 0f;
-		public string updateText = "";
-		public string updateTitle = "";
-		public string updateLog = "";
+		public float updateVersion { get; set; } = 0f;
+		public string updateText { get; set; } = "";
+		public string updateTitle { get; set; } = "";
+		public string updateLog { get; set; } = "";
 
-		public string appName = "Bard Music Player";
+		public string appName { get; set; } = "Bard Music Player";
 #if DEBUG
-		public string appVersion = "Beta";
+		public string appVersion { get; set; } = "Beta";
 #else
-		public string appVersion = string.Empty;
+		public string appVersion { get; set; } = string.Empty;
 #endif
-		public string creatorName = string.Empty;
-		public string creatorWorld = string.Empty;
-		public int sigVersion = -1;
+		public string creatorName { get; set; } = string.Empty;
+		public string creatorWorld { get; set; } = string.Empty;
+		public int sigVersion { get; set; } = -1;
 
 		public static float Version {
 			get {

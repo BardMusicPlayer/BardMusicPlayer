@@ -15,8 +15,8 @@ namespace FFBardMusicPlayer {
 		public EventHandler<DonatorResponse> OnDonatorResponse;
 
 		public class DonatorResponse {
-			public bool donator;
-			public string donationMessage;
+			public bool donator { get; set; }
+			public string donationMessage { get; set; }
 		};
 
 		public BmpDonationChecker(string characterName, string characterWorld) {
