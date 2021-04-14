@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using MogLib.Common.Structs;
 using Sharlayan;
 using Sharlayan.Models.ReadResults;
 using Sharlayan.Core;
@@ -137,23 +138,23 @@ namespace FFBardMusicPlayer.Controls {
 			return false;
 		}
 
-		public bool GetPerformanceInstrument(string ins, out Performance.Instrument ins2) {
+		public bool GetPerformanceInstrument(string ins, out Instrument ins2) {
 
 			if(!string.IsNullOrEmpty(ins)) {
 				if(!Enum.TryParse(ins, out ins2)) {
 					if(int.TryParse(ins, out int intInst)) {
-						ins2 = (Performance.Instrument) intInst;
+						ins2 = (Instrument) intInst;
 						return true;
 					}
 				} else {
 					return true;
 				}
 			}
-			ins2 = Performance.Instrument.Piano;
+			ins2 = Instrument.Piano;
 			return false;
 		}
 
-		public bool GetHotkeyForInstrument(Performance.Instrument ins, out FFXIVKeybindDat.Keybind keybind) {
+		public bool GetHotkeyForInstrument(Instrument ins, out FFXIVKeybindDat.Keybind keybind) {
 			
 			string keyMap = hotbar.GetInstrumentKeyMap(ins);
 			if(!string.IsNullOrEmpty(keyMap)) {

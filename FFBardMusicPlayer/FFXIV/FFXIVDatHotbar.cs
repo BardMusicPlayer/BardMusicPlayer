@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using MogLib.Common.Structs;
 using static Sharlayan.Core.Enums.Performance;
 
 // Key/Keybind - the actual key to simulate

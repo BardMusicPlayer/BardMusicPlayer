@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack.Text;
 
 namespace FFBardMusicPlayer {
 	public class BmpDonationChecker {
@@ -46,7 +46,7 @@ namespace FFBardMusicPlayer {
 			args.Result = new DonatorResponse();
 			if(response.StatusCode == HttpStatusCode.OK) {
 				using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
-					args.Result = JsonConvert.DeserializeObject<DonatorResponse>(reader.ReadToEnd());
+					args.Result = JsonSerializer.DeserializeFromReader<DonatorResponse>(reader);
 				}
 			}
 		}

@@ -13,6 +13,7 @@ using static Sharlayan.Core.Enums.Performance;
 using FFBardMusicPlayer.Components;
 using System.IO;
 using FFBardMusicCommon;
+using MogLib.Common.Structs;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpPlayer : UserControl {

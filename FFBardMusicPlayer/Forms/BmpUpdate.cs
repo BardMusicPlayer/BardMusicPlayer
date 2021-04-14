@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ServiceStack.Text;
 
 namespace FFBardMusicPlayer {
 
@@ -86,7 +86,7 @@ namespace FFBardMusicPlayer {
 
 			if(response.StatusCode == HttpStatusCode.OK) {
 				using(StreamReader reader = new StreamReader(response.GetResponseStream())) {
-					version = JsonConvert.DeserializeObject<UpdateVersion>(reader.ReadToEnd());
+					version = JsonSerializer.DeserializeFromReader<UpdateVersion>(reader);
 				}
 				if(version == null) {
 					return;

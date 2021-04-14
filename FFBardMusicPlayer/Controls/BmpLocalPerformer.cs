@@ -15,6 +15,7 @@ using Sanford.Multimedia.Midi;
 using Timer = System.Timers.Timer;
 using System.Timers;
 using System.Threading;
+using MogLib.Common.Structs;
 using Sharlayan.Models.ReadResults;
 
 namespace FFBardMusicPlayer.Controls {
