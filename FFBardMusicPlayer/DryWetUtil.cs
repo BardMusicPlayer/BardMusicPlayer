@@ -305,8 +305,7 @@ namespace FFBardMusicPlayer
                     manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
                 newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
-
-                newMidiFile.Write("debug.mid");
+                
                 stream.Flush();
                 stream.Position = 0;
 
