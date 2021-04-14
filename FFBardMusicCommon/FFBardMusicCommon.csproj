@@ -38,11 +38,11 @@
       <HintPath>..\packages\Melanchall.DryWetMidi.5.2.0\lib\net45\Melanchall.DryWetMidi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MogLib.Common, Version=1.5.4.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.Common.1.5.4.2\lib\net45\MogLib.Common.dll</HintPath>
+    <Reference Include="MogLib.Common, Version=1.5.4.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Common.1.5.4.3\lib\net45\MogLib.Common.dll</HintPath>
     </Reference>
-    <Reference Include="MogLib.Notate, Version=1.5.4.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MogLib.Notate.1.5.4.2\lib\net45\MogLib.Notate.dll</HintPath>
+    <Reference Include="MogLib.Notate, Version=1.5.4.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MogLib.Notate.1.5.4.3\lib\net45\MogLib.Notate.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>

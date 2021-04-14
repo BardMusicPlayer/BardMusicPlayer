@@ -27,7 +27,6 @@ namespace FFBardMusicPlayer
             IEnumerable<TrackChunk> originalTrackChunks;
             TempoMap tempoMap;
 
-            MidiFile newMidiFile;
             ConcurrentDictionary<int, TrackChunk> newTrackChunks;
 
             try
@@ -46,7 +45,8 @@ namespace FFBardMusicPlayer
 
                 if (Path.GetExtension(filePath).ToLower().Equals(".mmsong"))
                 {
-                    var mmSongStream = MMSong.Open(filePath).GetMidiFile(false, false);
+                    var mmSong = MMSong.Open(filePath);
+                    var mmSongStream = mmSong.GetMidiFile(false, false, true);
                     lastFile = MidiFile.Read(mmSongStream);
                     lastMD5 = md5;
                     mmSongStream.Position = 0;
@@ -97,8 +97,7 @@ namespace FFBardMusicPlayer
 
                 if (!string.IsNullOrEmpty(trackZeroName) && (trackZeroName.ToLower().Contains("mogamp") || trackZeroName.ToLower().Contains("mognotate")))
                 {
-                    var notateConfig = NotateConfig.GenerateConfigFromMidiFile(filePath);
-                    var mmSongStream = notateConfig.Transmogrify().GetMidiFile(false, false);
+                    var mmSongStream = NotateConfig.GenerateConfigFromMidiFile(filePath).Transmogrify().GetMidiFile(false, false, true);
                     lastFile = MidiFile.Read(mmSongStream);
                     lastMD5 = md5;
                     mmSongStream.Position = 0;
@@ -279,7 +278,7 @@ namespace FFBardMusicPlayer
 
                 });
 
-                newMidiFile = new MidiFile();
+                var newMidiFile = new MidiFile();
                 newTrackChunks.TryRemove(newTrackChunks.Count, out TrackChunk trackZero);
                 newMidiFile.Chunks.Add(trackZero);
                 newMidiFile.TimeDivision = new TicksPerQuarterNoteTimeDivision(600);
