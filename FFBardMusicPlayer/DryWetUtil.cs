@@ -116,7 +116,7 @@ namespace FFBardMusicPlayer
                 foreach (var trackChunk in midiFile.GetTrackChunks())
                 {
                     allTracks.AddObjects(trackChunk.GetNotes());
-                    var thisTrack = new TrackChunk();
+                    var thisTrack = new TrackChunk(new SequenceTrackNameEvent(trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text));
                     thisTrack.AddObjects(trackChunk.GetNotes());
                     originalTrackChunks.Add(thisTrack);
                 }
