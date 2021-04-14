@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MogLib.Common.Structs;
@@ -17,8 +18,6 @@ namespace FFBardMusicPlayer
 {
     class DryWetUtil
     {
-        private static string[] InstrumentEnumNamesAsStringsSorted = Array.ConvertAll((Instrument[])Enum.GetValues(typeof(Instrument)), s => s.ToString()).OrderByDescending(s => s.Length).ToArray();
-
         private static string lastMD5 = "invalid";
         private static MidiFile lastFile = null;
 
@@ -33,11 +32,13 @@ namespace FFBardMusicPlayer
 
             try
             {
+                
                 string md5 = CalculateMD5(filePath);
                 if (lastMD5.Equals(md5) && lastFile != null)
                 {
                     var oldfile = new MemoryStream();
-                    lastFile.Write(oldfile, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                    lastFile.Write(oldfile, MidiFileFormat.MultiTrack,
+                        new WritingSettings { TextEncoding = Encoding.ASCII });
                     oldfile.Flush();
                     oldfile.Position = 0;
                     return oldfile;
@@ -45,7 +46,7 @@ namespace FFBardMusicPlayer
 
                 if (Path.GetExtension(filePath).ToLower().Equals(".mmsong"))
                 {
-                    var mmSongStream = MMSong.Open(filePath).GetMidiFile(false, true);
+                    var mmSongStream = MMSong.Open(filePath).GetMidiFile(false, false);
                     lastFile = MidiFile.Read(mmSongStream);
                     lastMD5 = md5;
                     mmSongStream.Position = 0;
@@ -54,10 +55,7 @@ namespace FFBardMusicPlayer
                 
                 midiFile = MidiFile.Read(filePath, new ReadingSettings
                 {
-                    ReaderSettings = new ReaderSettings
-                    {
-                        ReadFromMemory = true
-                    },
+                    TextEncoding = Encoding.UTF8,
                     InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
                     InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
                     InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
@@ -100,7 +98,7 @@ namespace FFBardMusicPlayer
                 if (!string.IsNullOrEmpty(trackZeroName) && (trackZeroName.ToLower().Contains("mogamp") || trackZeroName.ToLower().Contains("mognotate")))
                 {
                     var notateConfig = NotateConfig.GenerateConfigFromMidiFile(filePath);
-                    var mmSongStream = notateConfig.Transmogrify().GetMidiFile(false, true);
+                    var mmSongStream = notateConfig.Transmogrify().GetMidiFile(false, false);
                     lastFile = MidiFile.Read(mmSongStream);
                     lastMD5 = md5;
                     mmSongStream.Position = 0;
@@ -259,21 +257,7 @@ namespace FFBardMusicPlayer
                             trackName = match.Groups[1].Value;
                             if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
 
-                            (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
-
-                            if (success) trackName = parsedTrackName;
-                            else
-                            {
-                                (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
-
-                                if (success) trackName = parsedTrackName;
-                                else
-                                {
-                                    var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
-                                    if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
-                                    if (success) trackName = parsedTrackName;
-                                }
-                            }
+                            trackName = Instrument.Parse(trackName);
 
                             if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
                             else if (octaveShift < 0) trackName = trackName + octaveShift;
@@ -357,156 +341,6 @@ namespace FFBardMusicPlayer
                     return BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
                 }
             }
-        }
-
-        private static (bool, string) TrackNameToEnumInstrumentName(string trackName)
-        {
-            if (string.IsNullOrEmpty(trackName)) return (false, trackName);
-            foreach (string ins in InstrumentEnumNamesAsStringsSorted) if (trackName.Contains(ins.ToString().ToLower())) return (true, ins.ToString());
-            return (false, trackName);
-        }
-
-        private static (bool, string) TrackNameToStringInstrumentName(string trackName)
-        {
-            if (string.IsNullOrEmpty(trackName)) return (false, trackName);
-            switch (trackName)
-            {
-                case "harp":
-                case "orchestralharp":
-                case "orchestralharps":
-                case "harps": return (true, "Harp");
-                case "piano":
-                case "acousticgrandpiano":
-                case "acousticgrandpianos":
-                case "pianos": return (true, "Piano");
-                case "lute":
-                case "guitar":
-                case "guitars":
-                case "lutes": return (true, "Lute");
-                case "fiddle":
-                case "pizzicatostrings":
-                case "pizzicatostring":
-                case "fiddles": return (true, "Fiddle");
-                case "flute":
-                case "flutes": return (true, "Flute");
-                case "oboe":
-                case "oboes": return (true, "Oboe");
-                case "clarinet":
-                case "clarinets": return (true, "Clarinet");
-                case "fife":
-                case "piccolo":
-                case "piccolos":
-                case "fifes":
-                case "ocarina":
-                case "ocarinas": return (true, "Fife");
-                case "panpipes":
-                case "panflute":
-                case "panflutes":
-                case "panpipe": return (true, "Panpipes");
-                case "timpani":
-                case "timpanis": return (true, "Timpani");
-                case "bongos":
-                case "bongo": return (true, "Bongo");
-                case "bass_drum":
-                case "bass_drums":
-                case "bassdrum":
-                case "bassdrums": return (true, "BassDrum");
-                case "snaredrum":
-                case "snare_drum":
-                case "snare_drums":
-                case "snare":
-                case "snares": return (true, "SnareDrum");
-                case "cymbal":
-                case "cymbals": return (true, "Cymbal");
-                case "trumpet":
-                case "trumpets": return (true, "Trumpet");
-                case "trombone":
-                case "trombones": return (true, "Trombone");
-                case "tuba":
-                case "tubas": return (true, "Tuba");
-                case "horn":
-                case "frenchhorn":
-                case "frenchhorns":
-                case "horns": return (true, "Horn");
-                case "saxophone":
-                case "sax":
-                case "altosax":
-                case "altosaxophone":
-                case "saxophones": return (true, "Saxophone");
-                case "violin":
-                case "violins": return (true, "Violin");
-                case "viola":
-                case "violas": return (true, "Viola");
-                case "cello":
-                case "cellos": return (true, "Cello");
-                case "doublebass":
-                case "double_bass":
-                case "contrabass": return (true, "DoubleBass");
-
-                default: return (false, trackName);
-            }
-        }
-
-        private static (bool, string) ProgramToStringInstrumentName(SevenBitNumber prog)
-        {
-            if (prog.Equals(null)) return (false, null);
-            switch (prog)
-            {
-                case 46: return (true, "Harp");
-
-                case 0:
-                case 1: return (true, "Piano");
-
-                case 24: return (true, "Lute");
-
-                case 6:
-                case 35:
-                case 45: return (true, "Fiddle");
-
-                case 73: return (true, "Flute");
-
-                case 68: return (true, "Oboe");
-
-                case 71: return (true, "Clarinet");
-
-                case 72:
-                case 79: return (true, "Fife");
-
-                case 75: return (true, "Panpipes");
-
-                case 47: return (true, "Timpani");
-
-                //
-                //
-                //
-                //
-
-                case 56:
-                case 59: return (true, "Trumpet");
-
-                case 57: return (true, "Trombone");
-
-                case 58: return (true, "Tuba");
-
-                case 60:
-                case 61:
-                case 62:
-                case 63: return (true, "Horn");
-
-                case 64:
-                case 65:
-                case 66:
-                case 67: return (true, "Saxophone");
-
-                case 40: return (true, "Violin");
-
-                case 41: return (true, "Viola");
-
-                case 42: return (true, "Cello");
-
-                case 43: return (true, "DoubleBass");
-            }
-            return (true, null);
         }
     }
 }

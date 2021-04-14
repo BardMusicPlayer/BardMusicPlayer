@@ -332,7 +332,7 @@ namespace FFBardMusicPlayer {
 					bool foundInstrument = false;
 
 					if(!string.IsNullOrEmpty(instrument)) {
-						if(Enum.TryParse<Instrument>(instrument, out Instrument tempInst)) {
+						if(Instrument.TryParse(instrument, out Instrument tempInst)) {
 							preferredInstruments[track] = tempInst;
 							foundInstrument = true;
 						}
