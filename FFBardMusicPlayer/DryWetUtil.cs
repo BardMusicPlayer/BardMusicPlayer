@@ -19,7 +19,7 @@ namespace FFBardMusicPlayer
     class DryWetUtil
     {
         private static string lastMD5 = "invalid";
-        private static MidiFile lastFile = null;
+        private static MidiFile lastFile;
 
         public static MemoryStream ScrubFile(string filePath)
         {
@@ -115,11 +115,11 @@ namespace FFBardMusicPlayer
                 long firstNote = originalTrackChunks.GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
 
                 TrackChunk allTracks = new TrackChunk();
-                allTracks.AddNotes(originalTrackChunks.GetNotes());
+                allTracks.AddObjects(originalTrackChunks.GetNotes());
                 midiFile.Chunks.Add(allTracks);
                 originalTrackChunks = midiFile.GetTrackChunks();
 
-                Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Count() > 0), (originalChunk, loopState, index) =>
+                Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Any()), (originalChunk, loopState, index) =>
                 {
                     var watch = Stopwatch.StartNew();
 
@@ -130,9 +130,9 @@ namespace FFBardMusicPlayer
 
                     foreach (Note note in originalChunk.GetNotes())
                     {
-                        long noteOnMS = 0;
+                        long noteOnMS;
 
-                        long noteOffMS = 0;
+                        long noteOffMS;
 
                         try
                         {
@@ -142,7 +142,7 @@ namespace FFBardMusicPlayer
                         catch (Exception) { continue; }
                         int noteNumber = note.NoteNumber;
 
-                        Note newNote = new Note(noteNumber: (SevenBitNumber)noteNumber,
+                        Note newNote = new Note((SevenBitNumber)noteNumber,
                                                 time: noteOnMS,
                                                 length: noteOffMS - noteOnMS
                                                 )
@@ -172,14 +172,13 @@ namespace FFBardMusicPlayer
                         {
                             if (lastNoteTimeStamp >= 0 && allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp >= noteEvent.Key)
                             {
-                                allNoteEvents[i][lastNoteTimeStamp].Length = allNoteEvents[i][lastNoteTimeStamp].Length - (allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
+                                allNoteEvents[i][lastNoteTimeStamp].Length -= (allNoteEvents[i][lastNoteTimeStamp].Length + lastNoteTimeStamp + 1 - noteEvent.Key);
                             }
 
                             lastNoteTimeStamp = noteEvent.Key;
                         }
                     }
-                    newChunk.AddNotes(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
-                    allNoteEvents = null;
+                    newChunk.AddObjects(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
 
                     watch.Stop();
                     Debug.WriteLine("step 2: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
@@ -188,10 +187,7 @@ namespace FFBardMusicPlayer
                     Note[] notesToFix = newChunk.GetNotes().Reverse().ToArray();
                     for (int i = 1; i < notesToFix.Count(); i++)
                     {
-                        int noteNum = notesToFix[i].NoteNumber;
                         long time = (notesToFix[i].GetTimedNoteOnEvent().Time);
-                        long dur = notesToFix[i].Length;
-                        int velocity = notesToFix[i].Velocity;
 
                         long lowestParent = notesToFix[0].GetTimedNoteOnEvent().Time;
                         for (int k = i - 1; k >= 0; k--)
@@ -204,8 +200,7 @@ namespace FFBardMusicPlayer
                             time = lowestParent - 50;
                             if (time < 0) continue;
                             notesToFix[i].Time = time;
-                            dur = 25;
-                            notesToFix[i].Length = dur;
+                            notesToFix[i].Length = 25;
                         }
                     }
 
@@ -247,7 +242,7 @@ namespace FFBardMusicPlayer
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
                     if (trackName == null) trackName = "";
-                    trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
+                    trackName = trackName.ToLower().Trim().Replace(" ", string.Empty);
                     Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
                     if (rex.Match(trackName) is Match match)
                     {
@@ -259,13 +254,12 @@ namespace FFBardMusicPlayer
                             trackName = Instrument.Parse(trackName);
 
                             if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
-                            else if (octaveShift < 0) trackName = trackName + octaveShift;
+                            else if (octaveShift < 0) trackName += octaveShift;
                         }
                     }
 
                     newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-                    newChunk.AddNotes(fixedNotes);
-                    fixedNotes = null;
+                    newChunk.AddObjects(fixedNotes);
 
                     watch.Stop();
                     Debug.WriteLine("step 5: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
@@ -304,7 +298,8 @@ namespace FFBardMusicPlayer
                 using (var manager = new TimedEventsManager(newMidiFile.GetTrackChunks().First().Events))
                     manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
-                newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                newMidiFile.Write(stream, MidiFileFormat.MultiTrack,
+                    new WritingSettings { TextEncoding = Encoding.ASCII });
                 stream.Flush();
                 stream.Position = 0;
 
@@ -325,8 +320,6 @@ namespace FFBardMusicPlayer
             {
                 newTrackChunks = null;
                 tempoMap = null;
-                originalTrackChunks = null;
-                midiFile = null;
             }
         }
 
@@ -337,7 +330,7 @@ namespace FFBardMusicPlayer
                 using (var stream = File.OpenRead(filename))
                 {
                     var hash = md5.ComputeHash(stream);
-                    return BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
+                    return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
                 }
             }
         }
