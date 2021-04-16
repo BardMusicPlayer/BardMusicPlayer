@@ -13,7 +13,7 @@ namespace FFBardMusicPlayer {
 
 	class Program {
 
-		public static string urlBase = "http://bmp.sqnya.se/";
+		public static string urlBase = "https://bardmusicplayer.com/";
 
 #if DEBUG
         public static string appBase = Application.StartupPath;
