@@ -1,9 +1,0 @@
-[submodule "Sharlayan"]
-	path = Sharlayan
-	url = https://github.com/parulina/sharlayan
-[submodule "ffxivapp-props"]
-	path = ffxivapp-props
-	url = https://github.com/FFXIVAPP/ffxivapp-props
-[submodule "Sanford.Multimedia.Midi"]
-	path = Sanford.Multimedia.Midi
-	url = https://github.com/parulina/Sanford.Multimedia.Midi
