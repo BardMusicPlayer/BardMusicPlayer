@@ -200,8 +200,7 @@
 			this.Title.ShortcutsEnabled = false;
 			this.Title.Size = new System.Drawing.Size(357, 44);
 			this.Title.TabIndex = 17;
-			this.Title.Text = "Bard Music Player (c) Paru, Chipotle, Moogle\nhttp://github.com/parulina/bardmusic" +
-    "player";
+            this.Title.Text = "BardMusicPlayer (c) MoogleTroupe, Chipotle, Paru\nhttps://bardmusicplayer.com";
 			this.Title.WordWrap = false;
 			// 
 			// DonationButton
