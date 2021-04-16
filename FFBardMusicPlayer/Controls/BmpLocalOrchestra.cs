@@ -263,7 +263,8 @@ namespace FFBardMusicPlayer.Controls {
 		public BmpLocalPerformer FindPerformer(string name) {
 			foreach(Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerName == name) {
+				if(performer != null && performer.PerformerName == name && performer.previouslyHooked == false) {
+					performer.previouslyHooked = true;
 					return performer;
 				}
 			}

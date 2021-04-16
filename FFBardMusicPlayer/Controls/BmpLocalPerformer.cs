@@ -94,6 +94,7 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
+		public bool previouslyHooked = false;
 		public uint performanceId = 0;
 		public uint actorId = 0;
 
