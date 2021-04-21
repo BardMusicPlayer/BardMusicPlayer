@@ -200,7 +200,7 @@ namespace FFBardMusicPlayer.Controls {
 								if(perfId >= 0 && perfId < 99 && perfs.Performances.ContainsKey(perfId)) {
 									PerformanceItem item = perfs.Performances[perfId];
 
-									BmpLocalPerformer perf = this.FindPerformer(actor.Name);
+									BmpLocalPerformer perf = this.FindPerformer(actor.Name, perfId, actor.ID);
 									if(perf != null) {
 										perf.PerformanceUp = item.IsReady();
 										perf.performanceId = perfId;
@@ -260,18 +260,39 @@ namespace FFBardMusicPlayer.Controls {
 			return performerNames;
 		}
 
-		public BmpLocalPerformer FindPerformer(string name) {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerName == name && performer.previouslyHooked == false) {
-					performer.previouslyHooked = true;
-					return performer;
-				}
-			}
-			return null;
-		}
+        public BmpLocalPerformer FindPerformer(string name, uint performerId, uint actorId)
+        {
+            foreach (Control ctl in PerformerPanel.Controls)
+            {
+                BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
+                if (performer != null)
+                {
+                    // few things can happen here
+                    if (performer.PerformerName == name)
+                    {
+                        if (performer.performanceId == 0 && performer.actorId == 0)
+                        {
+                            // here, we've found the performer with the name for the first time
+                            // after returning here, the perfId and actorId should be set
+                            // so, just return them, i guess
+                            return performer;
+                        }
+                        else if (performer.performanceId == performerId && performer.actorId == actorId)
+                        {
+                            // we've seen this performer before, and can damn well make sure that
+                            // this /is/ the character we want to return
+                            return performer;
+                        }
+                    }
+                }
+            }
 
-		private void openInstruments_Click(object sender, EventArgs e) {
+            // all else fails, blame the one person in BMP that decided to give
+            // muiltiple characters the exact same name.
+            return null;
+        }
+
+        private void openInstruments_Click(object sender, EventArgs e) {
 			
 			foreach(Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
