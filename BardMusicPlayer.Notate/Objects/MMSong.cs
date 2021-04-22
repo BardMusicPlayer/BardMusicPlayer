@@ -37,6 +37,8 @@ namespace BardMusicPlayer.Notate.Objects
 {
     public sealed class MMSong
     {
+        [LiteDB.BsonId]
+        public LiteDB.ObjectId Id { get; set; } = null;
         public int schemaVersion { get; internal set; } = Constants.SchemaVersion;
         public NotateConfig notateConfig { get; internal set; } = new();
         public byte[] sourceMidiFile { get; internal set; } = new byte[0];
