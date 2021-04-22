@@ -1,0 +1,73 @@
+name: Publish Branch develop
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+
+  build:
+    runs-on: windows-2019
+
+    env:
+      Solution_Name: BardMusicPlayer
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: BardMusicPlayer
+        path: BardMusicPlayer\bin\Release\net48\*.dll
+        if-no-files-found: error
+        retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    
+    steps:
+    
+      - name: Checkout Downloads
+        uses: actions/checkout@v2
+        with:
+          repository: BardMusicPlayer/Downloads
+          ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
+      
+      - name: Delete old Beta files
+        run: rm -f beta/*
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: BardMusicPlayer
+          path: beta/
+          
+      - name: Generate Json
+        run: |
+          pushd beta
+          cat <<EOF > version.json
+            {"beta":true,"commit":"${{ github.sha }}","build":"${{ github.run_number }}","entryDll":"BardMusicPlayer.Ui.dll","entryClass":"BardMusicPlayer.Ui.Main","extra":"","items":[
+          EOF
+          ls | grep -v version.json | awk '{ system("sha256sum "$1) }' | xargs -n 2 sh -c 'echo "{\"load\":true,\"source\":\"$1\",\"destination\":\"$1\",\"sha256\":\"$0\"}," >> version.json'
+          sed -i '$ s/.$//' version.json
+          echo "]}" >> version.json
+          sed -i ':a;$!{N;s/\n//;ba;}'  version.json
+          popd
+          git config --global user.email "doot@bardmusicplayer.com"
+          git config --global user.name "Bard Build Bot"
+          git add beta/*
+          git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
+          git push origin HEAD
+
+          

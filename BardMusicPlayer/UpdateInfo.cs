@@ -31,6 +31,8 @@ namespace BardMusicPlayer
             [DataMember]
             public string commit { get; set; }
             [DataMember]
+            public long timeStamp { get; set; }
+            [DataMember]
             public string entryDll { get; set; }
             [DataMember]
             public string entryClass { get; set; }

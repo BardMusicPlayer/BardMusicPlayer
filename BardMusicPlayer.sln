@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Synth", "Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Catalog", "BardMusicPlayer.Catalog\BardMusicPlayer.Catalog.csproj", "{D4446821-EB72-4516-B558-983A4F7D655F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Config", "BardMusicPlayer.Config\BardMusicPlayer.Config.csproj", "{BDB929F9-8E84-40CE-ACC2-E4942DF233BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{D4446821-EB72-4516-B558-983A4F7D655F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4446821-EB72-4516-B558-983A4F7D655F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4446821-EB72-4516-B558-983A4F7D655F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB929F9-8E84-40CE-ACC2-E4942DF233BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB929F9-8E84-40CE-ACC2-E4942DF233BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB929F9-8E84-40CE-ACC2-E4942DF233BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB929F9-8E84-40CE-ACC2-E4942DF233BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

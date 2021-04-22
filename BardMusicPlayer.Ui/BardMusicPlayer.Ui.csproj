@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BardMusicPlayer.Catalog\BardMusicPlayer.Catalog.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Doot\BardMusicPlayer.Doot.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Notate\BardMusicPlayer.Notate.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
