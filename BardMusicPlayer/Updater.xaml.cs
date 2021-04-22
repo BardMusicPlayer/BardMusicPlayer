@@ -1,8 +1,6 @@
-﻿using System.Windows;
-
-namespace BardMusicPlayer
+﻿namespace BardMusicPlayer
 {
-    public partial class Updater : Window
+    public partial class Updater
     {
         public Updater()
         {
