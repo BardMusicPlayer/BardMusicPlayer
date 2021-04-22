@@ -1,0 +1,27 @@
+name: Test PR Against Branch develop
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+
+  test:
+    runs-on: windows-2019
+
+    env:
+      Solution_Name: BardMusicPlayer
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    # Todo: Unit Tests go here.
