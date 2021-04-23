@@ -87,7 +87,5 @@ jobs:
           git push origin HEAD
 
       - name: Deploy Downloads
-        env:
-          CI_KEY_DOWNLOADS: ${{ secrets.CI_KEY_DOWNLOADS }}
         run: |
-          curl -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${CI_KEY_DOWNLOADS}"
+          curl -s -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${{ secrets.CI_KEY_DOWNLOADS }}"
