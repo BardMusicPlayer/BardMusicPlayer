@@ -47,8 +47,9 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
       
       - name: Delete old Debug files
-        run: rm -f bmp/debug/beta/*
-        run: rm -f bmp/updater/debug/1/*
+        run: |
+          rm -f bmp/debug/beta/*
+          rm -f bmp/updater/debug/1/*
       
       - name: Download artifacts
         uses: actions/download-artifact@v2

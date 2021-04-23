@@ -47,8 +47,9 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
       
       - name: Delete old Beta files
-        run: rm -f bmp/release/beta/*
-        run: rm -f bmp/updater/release/1/*
+        run: |
+          rm -f bmp/release/beta/*
+          rm -f bmp/updater/release/1/*
       
       - name: Download artifacts
         uses: actions/download-artifact@v2
