@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 
+# Publish Packer Config
+*.obproj
+*.obproj.map
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

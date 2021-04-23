@@ -6,13 +6,18 @@
     <AssemblyTitle>BardMusicPlayer.Ui</AssemblyTitle>
     <Product>BardMusicPlayer.Ui</Product>
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>9</LangVersion>
     <Configurations>Debug;Release</Configurations>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
+    <Version>2.0.0.0</Version>
+    <Authors>MoogleTroupe</Authors>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>

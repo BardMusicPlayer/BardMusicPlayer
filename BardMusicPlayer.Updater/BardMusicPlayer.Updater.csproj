@@ -1,27 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <ProjectGuid>{4C1D8677-0FB3-409E-8643-1C48D53AF599}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{CE10813D-1110-4A36-8D74-C2C87FC0B4E7}</ProjectGuid>
     <TargetFramework>net48</TargetFramework>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AssemblyTitle>BardMusicPlayer</AssemblyTitle>
-    <Product>BardMusicPlayer</Product>
+    <AssemblyTitle>BardMusicPlayer.Updater</AssemblyTitle>
+    <Product>BardMusicPlayer.Updater</Product>
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>9</LangVersion>
     <Configurations>Debug;DebugPublish;Release;ReleasePublish</Configurations>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
     <Version>2.0.0.0</Version>
     <Authors>MoogleTroupe</Authors>
-    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
@@ -58,15 +53,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Updater\BardMusicPlayer.Updater.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Ui\BardMusicPlayer.Ui.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
+
 </Project>
