@@ -31,12 +31,7 @@ namespace BardMusicPlayer
 #if LOCAL
 
         private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
-
-#if DEBUG
         private static readonly string UpdaterPath = Directory.GetCurrentDirectory() + @"\";
-#else
-        private static readonly string UpdaterPath = Directory.GetCurrentDirectory() + @"\";
-#endif
 
 #elif PUBLISH
 
