@@ -1,4 +1,4 @@
-name: Test and Publish Debug Build
+name: Test and Publish Debug
 
 on:
   pull_request:
