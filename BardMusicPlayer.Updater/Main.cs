@@ -13,6 +13,8 @@ namespace BardMusicPlayer.Updater
     {
         internal const string ApiEndpoint = @"https://api.bardmusicplayer.com/v2/";
 
+        internal int CompatibleLauncherVersion = 2;
+
         internal UpdateInfo RemoteUpdateInfo { get; set; }
         internal List<Version> RemoteVersions  { get; set; }
         internal Version LocalVersion  { get; set; }
@@ -32,6 +34,16 @@ namespace BardMusicPlayer.Updater
             ExePath = exePath;
             DataPath = dataPath;
             Args = args;
+
+            if (LauncherVersion != CompatibleLauncherVersion)
+            {
+                MessageBox.Show("Please download the latest BardMusicPlayer.exe from https://bardmusicplayer.com",
+                    "Bard Music Player Update Available",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                Environment.Exit(0);
+            }
+
 
 #if PUBLISH
                 VersionPath = DataPath + @"Version\";
