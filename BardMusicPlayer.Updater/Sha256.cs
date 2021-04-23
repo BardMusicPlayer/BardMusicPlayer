@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace BardMusicPlayer
+namespace BardMusicPlayer.Updater
 {
     internal static class Sha256
     {

@@ -1,37 +1,44 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Configuration.Assemblies;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Text;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
+using Polly;
 
 namespace BardMusicPlayer
 {
     public partial class App : Application
     {
-        internal static Version Version = default;
-        internal static UpdateInfo UpdateInfo = default;
-        internal static List<Version> Versions = new();
+        private const int LauncherVersion = 1;
+        private const string DllName = "BardMusicPlayer.Updater.dll";
+        private const string DllType = "BardMusicPlayer.Updater.Main";
+        private const string DllSha256Name = "BardMusicPlayer.Updater.dll.sha256";
 
-        internal static int LauncherVersion = 1;
-        internal static string ExePath = Assembly.GetExecutingAssembly().Location;
-        internal static string ApiEndpoint = @"https://api.bardmusicplayer.com/v2/";
+        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/" + LauncherVersion + @"/" + DllName ;
+        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/" + LauncherVersion + @"/" + DllSha256Name;
+
+        private static readonly string ExePath = Assembly.GetExecutingAssembly().Location;
 
 #if LOCAL
-        internal static string DataPath = Directory.GetCurrentDirectory() + @"Data\";
+
+        private static readonly string DataPath = Directory.GetCurrentDirectory() + @"Data\";
+
 #if DEBUG
-        internal static string VersionPath = @"..\..\..\..\BardMusicPlayer.Ui\bin\Debug\net48\";
+        private static readonly string UpdaterPath = @"..\..\..\..\BardMusicPlayer.Updater\bin\Debug\net48\";
 #else
-        internal static string VersionPath = @"..\..\..\..\BardMusicPlayer.Ui\bin\Release\net48\";
+        private static readonly string UpdaterPath = @"..\..\..\..\BardMusicPlayer.Updater\bin\Release\net48\";
 #endif
-#else
-        internal static string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
-        internal static string VersionPath = DataPath + @"Version\";
+
+#elif PUBLISH
+
+        private static readonly string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
+        private static readonly string UpdaterPath = DataPath + @"Updater\";
+
 #endif
 
 #pragma warning disable CS1998
@@ -41,107 +48,135 @@ namespace BardMusicPlayer
             try
             {
                 Directory.CreateDirectory(DataPath);
-                Directory.CreateDirectory(VersionPath);
+                Directory.CreateDirectory(UpdaterPath);
 
 #if LOCAL
 
-                // Clean away local build artifacts.
-                foreach (var dll in Directory.EnumerateFiles(@".\","*.dll")) File.Delete(dll);
+                foreach (var dll in Directory.EnumerateFiles(@".\", "*.dll").Where(file => !file.Equals("Polly.dll"))) File.Delete(dll);
+                var DllSha256 = GetChecksum(UpdaterPath + DllName);
 
-#if DEBUG
-                var items = Directory.GetFiles(@"..\..\..\..\BardMusicPlayer.Ui\bin\Debug\net48", "*.dll");
-#else
-                var items = Directory.GetFiles(@"..\..\..\..\BardMusicPlayer.Ui\bin\Release\net48", "*.dll");
-#endif
+#elif PUBLISH
 
-                var version = new Version
-                {
-                    beta = true,
-                    build = 0,
-                    commit = "DEBUG",
-                    entryClass = "BardMusicPlayer.Ui.Main",
-                    entryDll = "BardMusicPlayer.Ui.dll",
-                    extra = "",
-                    items = new List<VersionItem>()
-                };
-
-                foreach (var item in items)
-                {
-                    version.items.Add(new VersionItem
-                    {
-                        destination = Path.GetFileName(item),
-                        sha256 = Sha256.GetChecksum(item),
-                        load = true
-                    });
-                }
-
-                Loader.Load(version, ExePath, VersionPath, DataPath, eventArgs.Args);
-
-#else
-
-                // Read Version or default values if failure.
+                string DllSha256 = null;
                 try
                 {
-                    if (File.Exists(VersionPath + @"version.json"))
-                        Version = File.ReadAllText(VersionPath + @"version.json", Encoding.UTF8)
-                            .DeserializeFromJson<Version>();
+                    if (File.Exists(UpdaterPath + DllSha256Name) && File.Exists(UpdaterPath + DllName))
+                    {
+                        DllSha256 = File.ReadAllText(UpdaterPath + DllSha256Name);
+                        if (!GetChecksum(UpdaterPath + DllName).Equals(DllSha256)) DllSha256 = null;
+                    }
                 } catch (Exception)
                 {
-                    Version = default;
-                }
-                if (Version.build != 0)
-                {
-                    var currentVersionBad = false;
-                    Parallel.ForEach(Version.items, item =>
-                    {
-                        if (!File.Exists(VersionPath + item.destination) ||
-                            File.Exists(VersionPath + item.destination) && !item.sha256.ToLower().Equals(Sha256.GetChecksum(VersionPath + item.destination).ToLower()))
-                            currentVersionBad = true;
-                    });
-                    if (currentVersionBad) Version = default;
+                    DllSha256 = null;
                 }
 
-                // Fetch UpdateInfo and Versions or default values if failure.
+                string RemoteDllSha256 = null;
                 try
                 {
-                        using TimeoutWebClient webClient = new() { Timeout = 3000 };
-                        UpdateInfo = webClient.DownloadString(ApiEndpoint + "updateInfo/1")
-                            .DeserializeFromJson<UpdateInfo>();
-                        Versions = UpdateInfo.versionPaths.Select(versionPath =>
-                                webClient.DownloadString(versionPath + "/version.json").DeserializeFromJson<Version>())
-                            .ToList();
+                    RemoteDllSha256 = await GetStringFromUrl(DllSha256Url);
+                    
                 } catch (Exception)
                 {
-                    UpdateInfo = default;
-                    UpdateInfo.versionPaths = new List<string>();
-                    Versions = new List<Version>();
-                }
-                
-                // Direct user to download new EXE if needed. 
-                if (UpdateInfo.deprecated) MessageBox.Show(UpdateInfo.deprecatedMessage, UpdateInfo.deprecatedTitle, MessageBoxButton.OK, MessageBoxImage.Information);
-                
-                // If we have valid local and remote information, and local is on the latest release build, just launch it directly without a prompt.
-                // If such a user wants to pick older/beta version they are smart enough to clear out their appdata folder.
-                if (Version.build != 0 && Versions.Contains(Version) && Versions.First(version => version.beta == false).Equals(Version))
-                {
-                    Loader.Load(Version, ExePath, VersionPath, DataPath, eventArgs.Args);
-                    return;
+                    RemoteDllSha256 = null;
                 }
 
-                // Invoke Home.xaml here and do things. Version, UpdateInfo, and Versions may or may not be default/empty and logic will need to be done by the UI to decide what to do.
-                MessageBox.Show(string.Join(",",UpdateInfo.versionPaths), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
-                Environment.Exit(0);
+                if (string.IsNullOrWhiteSpace(RemoteDllSha256) && string.IsNullOrWhiteSpace(DllSha256))
+                    throw new Exception("Unable to contact update server and no local files are available.");
+
+                if (!string.IsNullOrWhiteSpace(RemoteDllSha256))
+                {
+                    if (string.IsNullOrWhiteSpace(DllSha256) || !string.IsNullOrWhiteSpace(DllSha256) && !DllSha256.Equals(RemoteDllSha256))
+                    {
+                        byte[] RemoteDll = null;
+                        try
+                        {
+                            RemoteDll = await GetFileFromUrl(DllUrl);
+                        }
+                        catch (Exception)
+                        {
+                            RemoteDll = null;
+                        }
+                        if (RemoteDll != null && GetChecksum(RemoteDll).Equals(RemoteDllSha256))
+                        {
+                            File.WriteAllText(UpdaterPath + DllSha256Name, RemoteDllSha256);
+                            File.WriteAllBytes(UpdaterPath + DllName, RemoteDll);
+                            DllSha256 = RemoteDllSha256;
+                        }
+                    }
+                } 
 
 #endif
+
+                var updaterType = Assembly.LoadFrom(UpdaterPath + DllName, StringToBytes(DllSha256), AssemblyHashAlgorithm.SHA256).GetType(DllType);
+                dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
+                main.Init(LauncherVersion, ExePath, DataPath, eventArgs.Args);
             }
             catch (Exception exception)
             {
                 MessageBox.Show("Uh oh, something went wrong and BardMusicPlayer is shutting down.\nPlease ask for support in the Discord Server and provide a picture of this error message:\n\n" + exception.Message,
-                    "BardMusicPlayer Error",
+                    "BardMusicPlayer Launcher Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 Environment.Exit(0);
             }
+
+            base.OnStartup(eventArgs);
+        }
+
+        private static byte[] StringToBytes(string text)
+        {
+            text = text.ToUpper();
+            var textArray = new string[text.Length / 2 + (text.Length % 2 == 0 ? 0 : 1)];
+            for (var i = 0; i < textArray.Length; i++) textArray[ i ] = text.Substring(i * 2, i * 2 + 2 > text.Length ? 1 : 2);
+            return textArray.Select(b => Convert.ToByte(b, 16)).ToArray();
+        }
+
+        private static string GetChecksum(string fileName)
+        {
+            using var fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Read);
+            return GetChecksum(fileStream);
+        }
+
+        private static string GetChecksum(byte[] fileBytes)
+        {
+            using var memoryStream = new MemoryStream(fileBytes);
+            return GetChecksum(memoryStream);
+        }
+
+        private static string GetChecksum(Stream stream)
+        {
+            using var bufferedStream = new BufferedStream(stream, 1024 * 32);
+            var sha = new SHA256Managed();
+            var checksum = sha.ComputeHash(bufferedStream);
+            return BitConverter.ToString(checksum).Replace("-", string.Empty).ToLower();
+        }
+
+        public async Task<string> GetStringFromUrl(string url)
+        {
+            var httpClient = new HttpClient();
+            return await Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .ExecuteAsync(async () =>
+                {
+                    using var httpResponse = await httpClient.GetAsync(url);
+                    httpResponse.EnsureSuccessStatusCode();
+                    return await httpResponse.Content.ReadAsStringAsync();
+                });
+        }
+
+        public async Task<byte[]> GetFileFromUrl(string url)
+        {
+            var httpClient = new HttpClient();
+            return await Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .ExecuteAsync(async () =>
+                {
+                    using var httpResponse = await httpClient.GetAsync(url);
+                    httpResponse.EnsureSuccessStatusCode();
+                    return await httpResponse.Content.ReadAsByteArrayAsync();
+                });
         }
     }
 }

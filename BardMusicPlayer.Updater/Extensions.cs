@@ -2,7 +2,7 @@
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace BardMusicPlayer
+namespace BardMusicPlayer.Updater
 {
     internal static class Extensions
     {

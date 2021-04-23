@@ -4,7 +4,7 @@ using System.Configuration.Assemblies;
 using System.Linq;
 using System.Reflection;
 
-namespace BardMusicPlayer
+namespace BardMusicPlayer.Updater
 {
     internal static class Loader
     {

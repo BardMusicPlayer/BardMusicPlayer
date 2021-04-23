@@ -1,17 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace BardMusicPlayer
+namespace BardMusicPlayer.Updater
 {
     [DataContract]
     internal struct UpdateInfo
     {
-        [DataMember]
-        public bool deprecated { get; set; }
-        [DataMember]
-        public string deprecatedMessage { get; set; }
-        [DataMember]
-        public string deprecatedTitle { get; set; }
         [DataMember]
         public string newsUrl { get; set; }
         [DataMember]
