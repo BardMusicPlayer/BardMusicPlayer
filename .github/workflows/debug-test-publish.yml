@@ -1,0 +1,92 @@
+name: Test and Publish Debug Build
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+
+  build:
+    runs-on: windows-2019
+
+    env:
+      Solution_Name: BardMusicPlayer
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build with dotnet
+      run: dotnet build --configuration DebugPublish
+
+    # Unit tests go here.
+
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: BardMusicPlayer
+        path: BardMusicPlayer.Updater\bin\DebugPublish\net48\*.dll
+        if-no-files-found: error
+        retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    
+    steps:
+    
+      - name: Checkout Downloads
+        uses: actions/checkout@v2
+        with:
+          repository: BardMusicPlayer/Downloads
+          ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
+      
+      - name: Delete old Debug files
+        run: rm -f bmp/debug/beta/*
+        run: rm -f bmp/updater/debug/1/*
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: BardMusicPlayer
+          path: bmp/debug/beta/
+      
+      - name: Delete Polly.dll
+        run: rm bmp/debug/beta/Polly.dll
+        
+      - name: Move Updater.dll
+        run: |
+          mv bmp/debug/beta/BardMusicPlayer.Updater.dll bmp/updater/debug/1/
+          sha256sum bmp/updater/debug/1/BardMusicPlayer.Updater.dll | cut -d" " -f1 > bmp/updater/debug/1/BardMusicPlayer.Updater.dll.sha256sum
+          
+      - name: Generate Json
+        run: |
+          pushd bmp/debug/beta
+          cat <<EOF > version.json
+            {"beta":true,"commit":"${{ github.sha }}","build":"${{ github.run_number }}","entryDll":"BardMusicPlayer.Ui.dll","entryClass":"BardMusicPlayer.Ui.Main","extra":"","items":[
+          EOF
+          ls | grep -v version.json | awk '{ system("sha256sum "$1) }' | xargs -n 2 sh -c 'echo "{\"load\":true,\"source\":\"https://dl.bardmusicplayer.com/bmp/debug/beta/$1\",\"destination\":\"$1\",\"sha256\":\"$0\"}," >> version.json'
+          sed -i '$ s/.$//' version.json
+          echo "]}" >> version.json
+          sed -i ':a;$!{N;s/\n//;ba;}' version.json
+          popd
+          
+      - name: Commit Downloads
+        run: |
+          git config --global user.email "doot@bardmusicplayer.com"
+          git config --global user.name "Bard Build Bot"
+          git add bmp/updater/debug/1/*
+          git add bmp/debug/beta/*
+          git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
+          git push origin HEAD
+
+      - name: Deploy Downloads
+        env:
+          CI_KEY_DOWNLOADS: ${{ secrets.CI_KEY_DOWNLOADS }}
+        run: |
+          curl -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${CI_KEY_DOWNLOADS}"
