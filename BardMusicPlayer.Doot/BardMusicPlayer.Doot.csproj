@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsFirewallHelper" Version="1.6.3.40" />
+    <PackageReference Include="WindowsFirewallHelper" Version="2.0.4.70-beta2" />
   </ItemGroup>
 
   <ItemGroup>
