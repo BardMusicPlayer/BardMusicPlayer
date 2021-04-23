@@ -54,6 +54,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="PackDebugPublish.obproj.map" />
+    <None Remove="PackReleasePublish.obproj.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Polly" Version="7.2.2" />
   </ItemGroup>
 
