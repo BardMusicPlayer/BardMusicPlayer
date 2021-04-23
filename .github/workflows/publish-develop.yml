@@ -76,4 +76,5 @@ jobs:
       - name: Deploy Downloads
         env:
           CI_KEY_DOWNLOADS: ${{ secrets.CI_KEY_DOWNLOADS }}
-        run: curl -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${CI_KEY_DOWNLOADS}"
+        run: |
+          curl -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${CI_KEY_DOWNLOADS}"
