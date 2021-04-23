@@ -3,7 +3,6 @@ using System.Configuration.Assemblies;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -19,19 +18,24 @@ namespace BardMusicPlayer
         private const string DllType = "BardMusicPlayer.Updater.Main";
         private const string DllSha256Name = "BardMusicPlayer.Updater.dll.sha256";
 
-        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/" + LauncherVersion + @"/" + DllName ;
-        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/" + LauncherVersion + @"/" + DllSha256Name;
+#if DEBUG
+        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" + LauncherVersion + @"/" + DllName ;
+        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" + LauncherVersion + @"/" + DllSha256Name;
+#else
+        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllName ;
+        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllSha256Name;
+#endif
 
         private static readonly string ExePath = Assembly.GetExecutingAssembly().Location;
 
 #if LOCAL
 
-        private static readonly string DataPath = Directory.GetCurrentDirectory() + @"Data\";
+        private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
 
 #if DEBUG
-        private static readonly string UpdaterPath = @"..\..\..\..\BardMusicPlayer.Updater\bin\Debug\net48\";
+        private static readonly string UpdaterPath = Directory.GetCurrentDirectory() + @"\";
 #else
-        private static readonly string UpdaterPath = @"..\..\..\..\BardMusicPlayer.Updater\bin\Release\net48\";
+        private static readonly string UpdaterPath = Directory.GetCurrentDirectory() + @"\";
 #endif
 
 #elif PUBLISH
@@ -52,11 +56,12 @@ namespace BardMusicPlayer
 
 #if LOCAL
 
-                foreach (var dll in Directory.EnumerateFiles(@".\", "*.dll").Where(file => !file.Equals("Polly.dll"))) File.Delete(dll);
-                var DllSha256 = GetChecksum(UpdaterPath + DllName);
+                const bool localDev = true;
+                string DllSha256 = GetChecksum(UpdaterPath + DllName);
 
 #elif PUBLISH
 
+                const bool localDev = false;
                 string DllSha256 = null;
                 try
                 {
@@ -109,7 +114,7 @@ namespace BardMusicPlayer
 
                 var updaterType = Assembly.LoadFrom(UpdaterPath + DllName, StringToBytes(DllSha256), AssemblyHashAlgorithm.SHA256).GetType(DllType);
                 dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
-                main.Init(LauncherVersion, ExePath, DataPath, eventArgs.Args);
+                main.Init(localDev, LauncherVersion, ExePath, DataPath, eventArgs.Args);
             }
             catch (Exception exception)
             {

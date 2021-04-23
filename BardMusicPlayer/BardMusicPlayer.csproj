@@ -8,13 +8,21 @@
     <AssemblyTitle>BardMusicPlayer</AssemblyTitle>
     <Product>BardMusicPlayer</Product>
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>9</LangVersion>
     <Configurations>Debug;DebugPublish;Release;ReleasePublish</Configurations>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>2.0.0.0</Version>
+    <Authors>MoogleTroupe</Authors>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

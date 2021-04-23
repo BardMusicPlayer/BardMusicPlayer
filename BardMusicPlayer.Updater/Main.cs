@@ -17,6 +17,7 @@ namespace BardMusicPlayer.Updater
         internal List<Version> RemoteVersions  { get; set; }
         internal Version LocalVersion  { get; set; }
 
+        internal bool LocalDev { get; private set; }
         internal int LauncherVersion { get; private set; }
         internal string ExePath { get; private set; }
         internal string DataPath { get; private set; }
@@ -24,8 +25,9 @@ namespace BardMusicPlayer.Updater
 
         internal string VersionPath { get; private set; }
 
-        public void Init(int launcherVersion, string exePath, string dataPath, string[] args)
+        public void Init(bool localDev, int launcherVersion, string exePath, string dataPath, string[] args)
         {
+            LocalDev = localDev;
             LauncherVersion = launcherVersion;
             ExePath = exePath;
             DataPath = dataPath;
