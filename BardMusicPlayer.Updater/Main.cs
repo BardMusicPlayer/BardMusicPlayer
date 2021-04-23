@@ -81,7 +81,7 @@ namespace BardMusicPlayer.Updater
                 }
 
                 // Invoke Home.xaml here and do things. Version, UpdateInfo, and Versions may or may not be default/empty and logic will need to be done by the UI to decide what to do.
-                MessageBox.Show(string.Join(",",RemoteUpdateInfo.versionPaths), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(string.Join(",",RemoteUpdateInfo.versionPaths), "Can haz versionz!", MessageBoxButton.OK, MessageBoxImage.Information);
                 Environment.Exit(0);
 
 #else
