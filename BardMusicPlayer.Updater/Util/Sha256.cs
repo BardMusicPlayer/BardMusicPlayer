@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace BardMusicPlayer.Updater
+namespace BardMusicPlayer.Updater.Util
 {
     internal static class Sha256
     {
@@ -20,7 +20,13 @@ namespace BardMusicPlayer.Updater
             using var fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Read);
             return GetChecksum(fileStream);
         }
-        
+
+        internal static string GetChecksum(byte[] fileBytes)
+        {
+            using var memoryStream = new MemoryStream(fileBytes);
+            return GetChecksum(memoryStream);
+        }
+
         internal static string GetChecksum(Stream stream)
         {
             using var bufferedStream = new BufferedStream(stream, 1024 * 32);
