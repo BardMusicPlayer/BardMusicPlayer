@@ -93,6 +93,7 @@ jobs:
           git config --global user.name "Bard Build Bot"
           git add bmp/updater/release/1/*
           git add bmp/release/beta/*
+          git add bmp/release/versionlist.json
           git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
 

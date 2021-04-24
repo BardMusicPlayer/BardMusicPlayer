@@ -80,8 +80,11 @@ jobs:
       - name: Regenerate Version List Json
         run: |
           pushd bmp/debug
-          pwd
           echo "[" > versionlist.json
+          set -- */; printf "%s\n" "${@%/}" | xargs -n 1 sh -c 'echo "\"$0\"," >> versionlist.json'
+          sed -i '$ s/.$//' versionlist.json
+          echo "]" >> versionlist.json
+          sed -i ':a;$!{N;s/\n//;ba;}' versionlist.json
           popd
           
       - name: Commit Downloads
@@ -90,6 +93,7 @@ jobs:
           git config --global user.name "Bard Build Bot"
           git add bmp/updater/debug/1/*
           git add bmp/debug/beta/*
+          git add bmp/debug/versionlist.json
           git commit -am"Debug build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
 
