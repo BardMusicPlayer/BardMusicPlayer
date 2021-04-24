@@ -80,6 +80,7 @@ jobs:
       - name: Regenerate Version List Json
         run: |
           pushd bmp/debug
+          pwd
           echo "[" > versionlist.json
           popd
           
