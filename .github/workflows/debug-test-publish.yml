@@ -93,7 +93,7 @@ jobs:
           git config --global user.name "Bard Build Bot"
           git add bmp/updater/debug/1/*
           git add bmp/debug/beta/*
-          git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
+          git commit -am"Debug build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
 
       - name: Deploy Downloads
