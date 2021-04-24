@@ -81,10 +81,6 @@ jobs:
         run: |
           pushd bmp/debug
           echo "[" > versionlist.json
-          set -- */; printf "%s\n" "${@%/}" | xargs -n 1 sh -c 'echo "\"$0\"," >> versionlist.json'
-          sed -i '$ s/.$//' versionlist.json
-          echo "]" >> versionlist.json
-          sed -i ':a;$!{N;s/\n//;ba;}' versionlist.json
           popd
           
       - name: Commit Downloads
