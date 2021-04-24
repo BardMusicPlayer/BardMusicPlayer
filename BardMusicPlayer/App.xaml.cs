@@ -109,7 +109,7 @@ namespace BardMusicPlayer
 
                 var updaterType = Assembly.LoadFrom(UpdaterPath + DllName, StringToBytes(DllSha256), AssemblyHashAlgorithm.SHA256).GetType(DllType);
                 dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
-                main.Init(localDev, LauncherVersion, ExePath, DataPath, eventArgs.Args);
+                main.StartUp(localDev, LauncherVersion, ExePath, DataPath, eventArgs.Args);
             }
             catch (Exception exception)
             {
@@ -151,7 +151,7 @@ namespace BardMusicPlayer
             return BitConverter.ToString(checksum).Replace("-", string.Empty).ToLower();
         }
 
-        public async Task<string> GetStringFromUrl(string url)
+        private async Task<string> GetStringFromUrl(string url)
         {
             var httpClient = new HttpClient();
             return await Policy
@@ -165,7 +165,7 @@ namespace BardMusicPlayer
                 });
         }
 
-        public async Task<byte[]> GetFileFromUrl(string url)
+        private async Task<byte[]> GetFileFromUrl(string url)
         {
             var httpClient = new HttpClient();
             return await Policy

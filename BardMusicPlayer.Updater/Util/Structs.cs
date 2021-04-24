@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace BardMusicPlayer.Updater
+namespace BardMusicPlayer.Updater.Util
 {
     [DataContract]
-    internal struct UpdateInfo
-    {
-        [DataMember]
-        public string newsUrl { get; set; }
-        [DataMember]
-        public List<string> versionPaths { get; set; }
-    }
-    [DataContract]
-    internal struct Version
+    internal struct BmpVersion
     {
         [DataMember]
         public bool beta { get; set; }
@@ -25,12 +17,10 @@ namespace BardMusicPlayer.Updater
         [DataMember]
         public string entryClass { get; set; }
         [DataMember]
-        public string extra { get; set; }
-        [DataMember]
-        public List<VersionItem> items { get; set; }
+        public List<BmpVersionItem> items { get; set; }
     }
     [DataContract]
-    internal struct VersionItem
+    internal struct BmpVersionItem
     {
         [DataMember]
         public bool load { get; set; }

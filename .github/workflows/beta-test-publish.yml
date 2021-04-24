@@ -65,24 +65,35 @@ jobs:
           mv bmp/release/beta/BardMusicPlayer.Updater.dll bmp/updater/release/1/
           sha256sum bmp/updater/release/1/BardMusicPlayer.Updater.dll | cut -d" " -f1 > bmp/updater/release/1/BardMusicPlayer.Updater.dll.sha256sum
           
-      - name: Generate Json
+      - name: Generate Version Json
         run: |
           pushd bmp/release/beta
           cat <<EOF > version.json
-            {"beta":true,"commit":"${{ github.sha }}","build":"${{ github.run_number }}","entryDll":"BardMusicPlayer.Ui.dll","entryClass":"BardMusicPlayer.Ui.Main","extra":"","items":[
+            {"beta":true,"commit":"${{ github.sha }}","build":"${{ github.run_number }}","entryDll":"BardMusicPlayer.Ui.dll","entryClass":"BardMusicPlayer.Ui.Main","items":[
           EOF
-          ls | grep -v version.json | awk '{ system("sha256sum "$1) }' | xargs -n 2 sh -c 'echo "{\"load\":true,\"source\":\"https://dl.bardmusicplayer.com/bmp/release/beta/$1\",\"destination\":\"$1\",\"sha256\":\"$0\"}," >> version.json'
+          ls | grep -v version.json | awk '{ system("sha256sum "$1) }' | xargs -n 2 sh -c 'echo "{\"load\":true,\"source\":\"$1\",\"destination\":\"$1\",\"sha256\":\"$0\"}," >> version.json'
           sed -i '$ s/.$//' version.json
           echo "]}" >> version.json
           sed -i ':a;$!{N;s/\n//;ba;}' version.json
           popd
-          
+      
+      - name: Regenerate Version List Json
+        run: |
+          pushd bmp/release
+          echo "[" > versionlist.json
+          set -- */; printf "%s\n" "${@%/}" | xargs -n 1 sh -c 'echo "\"$0\"," >> versionlist.json'
+          sed -i '$ s/.$//' versionlist.json
+          echo "]" >> versionlist.json
+          sed -i ':a;$!{N;s/\n//;ba;}' versionlist.json
+          popd
+      
       - name: Commit Downloads
         run: |
           git config --global user.email "doot@bardmusicplayer.com"
           git config --global user.name "Bard Build Bot"
           git add bmp/updater/release/1/*
           git add bmp/release/beta/*
+          git add bmp/release/versionlist.json
           git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
 
