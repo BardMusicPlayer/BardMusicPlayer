@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Updater
 #endif
 
         internal int CompatibleLauncherVersion = 1;
-        internal List<BmpVersion> RemoteVersions  { get; set; }
+        internal Dictionary<string, BmpVersion> RemoteVersions  { get; set; }
         internal BmpVersion LocalVersion  { get; set; }
 
         internal bool LocalDev { get; private set; }
@@ -76,7 +76,7 @@ namespace BardMusicPlayer.Updater
             }
 
             // Fetch UpdateInfo and Versions or default values if failure.
-            RemoteVersions = new List<BmpVersion>();
+            RemoteVersions = new Dictionary<string, BmpVersion>();
             try
             {
                 var remoteVersionsListString = await new Downloader().GetStringFromUrl(BaseUrl + @"versionlist.json");
@@ -87,7 +87,7 @@ namespace BardMusicPlayer.Updater
                     try
                     {
                         var remoteVersionString = await new Downloader().GetStringFromUrl(BaseUrl + remoteVersion + "/version.json");
-                        RemoteVersions.Add(remoteVersionString.DeserializeFromJson<BmpVersion>());
+                        RemoteVersions.Add(remoteVersion, remoteVersionString.DeserializeFromJson<BmpVersion>());
                     }
                     catch (Exception)
                     {
@@ -101,7 +101,7 @@ namespace BardMusicPlayer.Updater
             }
           
             // Invoke Home.xaml here and do things. Version, UpdateInfo, and Versions may or may not be default/empty and logic will need to be done by the UI to decide what to do.
-            MessageBox.Show(string.Join(",", RemoteVersions.Select(build => build.build)), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(string.Join(Environment.NewLine, RemoteVersions.OrderBy(version => version.Value.beta).ThenByDescending(version => version.Value.build).Select(version => "website url: " + BaseUrl + version.Key + @"/" + Environment.NewLine + "beta: " + version.Value.beta + Environment.NewLine + "commit: " + version.Value.commit + Environment.NewLine + "build: " + version.Value.build + Environment.NewLine)), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
             Environment.Exit(0);
 
 #elif LOCAL
