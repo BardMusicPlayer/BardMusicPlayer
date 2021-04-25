@@ -1,7 +1,6 @@
 ﻿using BardMusicPlayer.Notate.Objects;
 using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 
 namespace BardMusicPlayer.Catalog.Tests
