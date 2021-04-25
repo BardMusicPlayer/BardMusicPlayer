@@ -5,11 +5,11 @@ using System.IO;
 
 namespace BardMusicPlayer.Catalog
 {
-    public abstract class LiteDBTestBase
+    public abstract class CatalogTestBase
     {
         private string dbpath;
 
-        protected LiteDBTestBase()
+        protected CatalogTestBase()
         {
             this.dbpath = null;
         }

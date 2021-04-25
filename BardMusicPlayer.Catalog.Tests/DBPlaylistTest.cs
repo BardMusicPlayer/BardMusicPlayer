@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Catalog.Tests
 {
 
     [TestClass]
-    public class DBPlaylistTest : LiteDBTestBase
+    public class DBPlaylistTest : CatalogTestBase
     {
         [TestMethod]
         public void TestSerialization()
