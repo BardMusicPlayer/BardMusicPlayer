@@ -1,8 +1,6 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace BardMusicPlayer.Catalog
@@ -10,6 +8,7 @@ namespace BardMusicPlayer.Catalog
     public abstract class LiteDBTestBase
     {
         private string dbpath;
+
         protected LiteDBTestBase()
         {
             this.dbpath = null;
