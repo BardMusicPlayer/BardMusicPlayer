@@ -202,7 +202,7 @@ namespace BardMusicPlayer.Catalog
             return ret;
         }
 
-        public static void MigrateDatabase(LiteDatabase dbi)
+        internal static void MigrateDatabase(LiteDatabase dbi)
         {
             // This method exists to provide a way to have different versions of key
             // API objects, such as MMSong, and a way to migrate that data (or nuke it

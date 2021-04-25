@@ -9,8 +9,6 @@ namespace BardMusicPlayer.Catalog.Tests
     [TestClass]
     public class DBPlaylistTest : LiteDBTestBase
     {
-        public DBPlaylistTest() : base() { }
-
         [TestMethod]
         public void TestSerialization()
         {
