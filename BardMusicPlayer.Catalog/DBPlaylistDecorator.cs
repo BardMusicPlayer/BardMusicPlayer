@@ -10,33 +10,43 @@ namespace BardMusicPlayer.Catalog
     {
         private readonly DBPlaylist target;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="target"></param>
         internal DBPlaylistDecorator(DBPlaylist target) => this.target = target ?? throw new NullReferenceException();
 
+        ///<inheritdoc/>
         void IPlaylist.Add(MMSong song)
         {
             this.target.Songs.Add(song);
         }
 
+        ///<inheritdoc/>
         void IPlaylist.Add(int idx, MMSong song)
         {
             this.target.Songs.Insert(idx, song);
         }
 
+        ///<inheritdoc/>
         IEnumerator<MMSong> IEnumerable<MMSong>.GetEnumerator()
         {
             return this.target.Songs.GetEnumerator();
         }
 
+        ///<inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.target.Songs.GetEnumerator();
         }
 
+        ///<inheritdoc/>
         string IPlaylist.GetName()
         {
             return this.target.Name;
         }
 
+        ///<inheritdoc/>
         void IPlaylist.Move(int sourceIdx, int targetIdx)
         {
             List<MMSong> contents = this.target.Songs;
@@ -45,16 +55,19 @@ namespace BardMusicPlayer.Catalog
             contents.Insert(targetIdx, moveMe);
         }
 
+        ///<inheritdoc/>
         void IPlaylist.Remove(int idx)
         {
             this.target.Songs.RemoveAt(idx);
         }
 
+        ///<inheritdoc/>
         void IPlaylist.SetName(string name)
         {
             this.target.Name = name ?? throw new ArgumentNullException();
         }
 
+        ///<inheritdoc/>
         internal DBPlaylist GetDBPlaylist() => this.target;
     }
 }
