@@ -1,9 +1,6 @@
 ﻿using BardMusicPlayer.Notate.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 
 namespace BardMusicPlayer.Catalog.Tests
 {
