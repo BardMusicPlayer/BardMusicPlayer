@@ -40,9 +40,5 @@ namespace BardMusicPlayer.Catalog.Tests
             Assert.IsNotNull(saved.Songs);
             Assert.AreEqual(0, saved.Songs.Count);
         }
-
-        protected override void OnInit() { }
-
-        protected override void OnTearDown() { }
     }
 }

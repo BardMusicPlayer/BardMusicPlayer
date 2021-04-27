@@ -5,7 +5,7 @@ using System.IO;
 
 namespace BardMusicPlayer.Catalog
 {
-    public abstract class CatalogTestBase
+    public class CatalogTestBase
     {
         private string dbpath;
 
@@ -47,15 +47,13 @@ namespace BardMusicPlayer.Catalog
             }
         }
 
-        protected abstract void OnInit();
-
-        protected abstract void OnTearDown();
-
         protected LiteDatabase CreateDatabase()
         {
             LiteDatabase ret = new LiteDatabase(this.dbpath);
             CatalogManager.MigrateDatabase(ret);
             return ret;
         }
+
+        protected string GetDBPath() => this.dbpath;
     }
 }

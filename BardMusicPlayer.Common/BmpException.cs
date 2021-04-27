@@ -31,5 +31,9 @@ namespace BardMusicPlayer.Common
         public BmpException(string message) : base(message)
         {
         }
+
+        public BmpException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
 }

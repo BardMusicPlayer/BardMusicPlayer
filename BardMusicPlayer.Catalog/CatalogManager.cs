@@ -28,14 +28,23 @@ namespace BardMusicPlayer.Catalog
         {
             if (tag == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var songCol = this.GetSongCollection();
 
-            var result = songCol.Find(x => TagMatches(tag, x));
+            // TODO: This is brute force and not memory efficient; there has to be a better
+            // way to do this, but my knowledge of LINQ and BsonExpressions isn't there yet.
+            var allSongs = songCol.FindAll();
+            var songList = new List<MMSong>();
 
-            var songList = new List<MMSong>(result);
+            foreach (var entry in allSongs)
+            {
+                if (TagMatches(tag, entry))
+                {
+                    songList.Add(entry);
+                }
+            }
 
             if (songList.Count == 0)
             {
@@ -56,7 +65,7 @@ namespace BardMusicPlayer.Catalog
         {
             if (name == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var dbList = new DBPlaylist()
@@ -73,7 +82,7 @@ namespace BardMusicPlayer.Catalog
         {
             if (name == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var playlists = this.GetPlaylistCollection();
@@ -98,27 +107,55 @@ namespace BardMusicPlayer.Catalog
                 .ToList();
         }
 
-        public void SaveSong(MMSong song)
+        public MMSong GetSong(string title)
         {
-            if (song == null)
+            if (title == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var songCol = this.GetSongCollection();
 
-            if (song.Id == null)
+            return songCol.FindOne(x => x.title == title);
+        }
+
+        public IList<string> GetSongTitles()
+        {
+            var songCol = this.GetSongCollection();
+
+            return songCol.Query()
+                .Select<string>(x => x.title)
+                .ToList();
+        }
+
+        public void SaveSong(MMSong song)
+        {
+            if (song == null)
             {
-                song.Id = ObjectId.NewObjectId();
-                songCol.Insert(song);
+                throw new ArgumentNullException();
             }
-            else
+
+            var songCol = this.GetSongCollection();
+
+            try
             {
-                songCol.Update(song);
+                if (song.Id == null)
+                {
+                    song.Id = ObjectId.NewObjectId();
+                    songCol.Insert(song);
+                }
+                else
+                {
+                    songCol.Update(song);
+                }
+            }
+            catch (LiteException e)
+            {
+                throw new CatalogException(e.Message, e);
             }
         }
 
-        public bool SavePlaylist(IPlaylist songList)
+        public void SavePlaylist(IPlaylist songList)
         {
             if (songList.GetType() != typeof(DBPlaylistDecorator))
             {
@@ -127,29 +164,24 @@ namespace BardMusicPlayer.Catalog
 
             var playlists = this.GetPlaylistCollection();
 
-            int count = playlists.Query()
-                .Where(x => x.Name == songList.GetName())
-                .Count();
-
-            if (count != 0)
-            {
-                // This means we have a duplicate name and cannot save this playlist.
-                return false;
-            }
-
             var dbList = ((DBPlaylistDecorator)songList).GetDBPlaylist();
 
-            if (dbList.Id == null)
+            try
             {
-                dbList.Id = ObjectId.NewObjectId();
-                playlists.Insert(dbList);
+                if (dbList.Id == null)
+                {
+                    dbList.Id = ObjectId.NewObjectId();
+                    playlists.Insert(dbList);
+                }
+                else
+                {
+                    playlists.Update(dbList);
+                }
             }
-            else
+            catch (LiteException e)
             {
-                playlists.Update(dbList);
+                throw new CatalogException(e.Message, e);
             }
-
-            return true;
         }
 
         public void Dispose()
@@ -244,7 +276,7 @@ namespace BardMusicPlayer.Catalog
 
             // Create the song collection and add indicies
             var songs = dbi.GetCollection<MMSong>(Constants.SONG_COL_NAME);
-            songs.EnsureIndex(x => x.title);
+            songs.EnsureIndex(x => x.title, unique: true);
             songs.EnsureIndex(x => x.tags);
 
             // Create the custom playlist collection and add indicies

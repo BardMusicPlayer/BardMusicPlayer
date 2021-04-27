@@ -52,7 +52,7 @@ namespace BardMusicPlayer.Catalog
 
         void IPlaylist.SetName(string name)
         {
-            this.target.Name = name ?? throw new NullReferenceException();
+            this.target.Name = name ?? throw new ArgumentNullException();
         }
 
         internal DBPlaylist GetDBPlaylist() => this.target;
