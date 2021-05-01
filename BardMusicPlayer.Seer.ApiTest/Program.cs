@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Seer.ApiTest
     {
         private static void Main()
         {
-            Seer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
+            
 
             Seer.Instance.SeerExceptionEvent += PrintExceptionInfo;
             Seer.Instance.GameExceptionEvent += PrintExceptionInfo;
@@ -29,6 +29,8 @@ namespace BardMusicPlayer.Seer.ApiTest
             Seer.Instance.KeyMapChanged += PrintBackendEventInfo;
             Seer.Instance.PartyMembersChanged += PrintBackendEventInfo;
             Seer.Instance.PlayerNameChanged += PrintBackendEventInfo;
+
+            Seer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
 
             Console.WriteLine("Hit enter to start Seer");
 
@@ -61,7 +63,7 @@ namespace BardMusicPlayer.Seer.ApiTest
 
         private static void PrintGameEventInfo(SeerEvent seerEvent)
         {
-            Console.WriteLine(seerEvent.EventType);
+            Console.WriteLine("GameEvent: " + seerEvent.EventType);
         }
 
         private static void PrintBackendEventInfo(SeerEvent seerEvent)
