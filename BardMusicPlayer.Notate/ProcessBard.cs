@@ -48,29 +48,28 @@ namespace BardMusicPlayer.Notate
             var trackChunk = ProcessModifiers(ref discardedNotes);
 
             if (!notateGroup.instruments.ContainsKey(VST.VST0) ||
-                notateGroup.instruments.Any(vst => vst.Value.instrument.Equals(Instrument.Unknown)) ||
                 notateGroup.instruments.Any(vst => vst.Value.instrument.Equals(Instrument.None)))
             {
                 discardedNotes += trackChunk.GetNotes()
-                    .Count(x => x.NoteNumber < VSTRange.LowerNote);
+                    .Count(x => x.NoteNumber < Tone.LowerNote);
                 return new ConcurrentDictionary<int, TrackChunk>();
             }
             
-            var step1Vst = trackChunk.GetNotes().Where(x => x.NoteNumber >= VSTRange.LowerNote).Where(note => notateGroup.instruments.ContainsKey((VST) (int) note.NoteNumber)).ToDictionary(note => note.GetTimedNoteOnEvent().GetNoteMs(tempoMap), note => (VST) (int) note.NoteNumber);
+            var step1Vst = trackChunk.GetNotes().Where(x => x.NoteNumber >= Tone.LowerNote).Where(note => notateGroup.instruments.ContainsKey((VST) (int) note.NoteNumber)).ToDictionary(note => note.GetTimedNoteOnEvent().GetNoteMs(tempoMap), note => (VST) (int) note.NoteNumber);
 
             step1Vst.Add(-100, VST.VST0);
             var step2Vst = new Dictionary<int, Dictionary<long, Note>>();
-            for (var i = 0; i >= VSTRange.LowerNote; i++) step2Vst.Add(i, new Dictionary<long, Note>());
+            for (var i = 0; i >= Tone.LowerNote; i++) step2Vst.Add(i, new Dictionary<long, Note>());
 
             var step1Notes = new Dictionary<int, Dictionary<long, Note>>();
             var step2Notes = new Dictionary<int, Dictionary<long, Note>>();
-            for (var i = 0; i < VSTRange.LowerNote; i++)
+            for (var i = 0; i < Tone.LowerNote; i++)
             {
                 step1Notes.Add(i, new Dictionary<long, Note>());
                 step2Notes.Add(i, new Dictionary<long, Note>());
             }
             
-            foreach (var note in trackChunk.GetNotes().Where(x => x.NoteNumber < VSTRange.LowerNote))
+            foreach (var note in trackChunk.GetNotes().Where(x => x.NoteNumber < Tone.LowerNote))
             {
                 int noteNumber = note.NoteNumber;
                 var timeStamp = note.GetTimedNoteOnEvent().Time;
@@ -82,7 +81,7 @@ namespace BardMusicPlayer.Notate
                 else step1Notes[noteNumber].Add(timeStamp, note.Clone());
             }
             
-            for (var i = 0; i < VSTRange.LowerNote; i++)
+            for (var i = 0; i < Tone.LowerNote; i++)
             {
                 long lastNoteTimeStamp = -1;
                 var noteEvents = step1Notes[i];
@@ -164,7 +163,7 @@ namespace BardMusicPlayer.Notate
             for (var i = 0; i < notateGroup.distributionBardCount; i++)
             {
                 var notesDictionary = new Dictionary<int, Dictionary<long, Note>>();
-                for (var j = 0; j < VSTRange.LowerNote; j++) notesDictionary[j] = new Dictionary<long, Note>();
+                for (var j = 0; j < Tone.LowerNote; j++) notesDictionary[j] = new Dictionary<long, Note>();
                 step3Notes.Add(i, notesDictionary);
             }
 

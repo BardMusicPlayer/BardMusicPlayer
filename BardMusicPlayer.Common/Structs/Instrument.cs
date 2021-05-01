@@ -1,24 +1,12 @@
 ﻿/*
- * MogLib/Common/Structs/Instrument.cs
- *
- * Copyright (C) 2021  MoogleTroupe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using BardMusicPlayer.Common.Enums;
 using static BardMusicPlayer.Common.Structs.OctaveRange;
 
 namespace BardMusicPlayer.Common.Structs
@@ -28,32 +16,33 @@ namespace BardMusicPlayer.Common.Structs
     /// </summary>
     public readonly struct Instrument : IComparable, IConvertible, IComparable<Instrument>, IEquatable<Instrument>
     {
-        public static readonly Instrument None = new("None", -1, 122, C3toC6, false, 50);
-        public static readonly Instrument Unknown = new("Unknown", 0, 122, C3toC6, false, 50);
+        public static readonly Instrument None = new("None", 0, 122, C3toC6, false, 50, InstrumentTone.None, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
 
-        public static readonly Instrument Harp = new("Harp", 1, 46, C3toC6, false,0);
-        public static readonly Instrument Piano = new("Piano", 2, 0, C4toC7, false, 0);
-        public static readonly Instrument Lute = new("Lute", 3, 24, C2toC5, false, 0);
-        public static readonly Instrument Fiddle = new("Fiddle", 4, 45, C2toC5, false, 0);
-        public static readonly Instrument Flute = new("Flute", 5, 73, C4toC7, true, 0);
-        public static readonly Instrument Oboe = new("Oboe", 6, 68, C4toC7, true, 0);
-        public static readonly Instrument Clarinet = new("Clarinet", 7, 71, C3toC6, true, 0);
-        public static readonly Instrument Fife = new("Fife", 8, 72, C5toC8, true, 0);
-        public static readonly Instrument Panpipes = new("Panpipes", 9, 75, C4toC7, true, 0);
-        public static readonly Instrument Timpani = new("Timpani", 10, 47, C2toC5, false, 0);
-        public static readonly Instrument Bongo = new("Bongo", 11, 116, C3toC6, false, 0);
-        public static readonly Instrument BassDrum = new("BassDrum", 12, 117, C2toC5, false, 0);
-        public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, C3toC6, false, 0);
-        public static readonly Instrument Cymbal = new("Cymbal", 14, 127, C3toC6, false, 50);
-        public static readonly Instrument Trumpet = new("Trumpet", 15, 56, C3toC6, true, 50);
-        public static readonly Instrument Trombone = new("Trombone", 16, 57, C2toC5, true, 50);
-        public static readonly Instrument Tuba = new("Tuba", 17, 58, C1toC4, true, 50);
-        public static readonly Instrument Horn = new("Horn", 18, 60, C2toC5, true, 50);
-        public static readonly Instrument Saxophone = new("Saxophone", 19, 65, C3toC6, true, 50);
-        public static readonly Instrument Violin = new("Violin", 20, 40, C3toC6, true, 50);
-        public static readonly Instrument Viola = new("Viola", 21, 41, C3toC6, true, 50);
-        public static readonly Instrument Cello = new("Cello", 22, 42, C2toC5, true, 50);
-        public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, C1toC4, true, 50);
+        public static readonly Instrument Harp = new("Harp", 1, 46, C3toC6, false,0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument Piano = new("Piano", 2, 0, C4toC7, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
+        public static readonly Instrument Lute = new("Lute", 3, 24, C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
+        public static readonly Instrument Fiddle = new("Fiddle", 4, 45, C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+        public static readonly Instrument Flute = new("Flute", 5, 73, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument Oboe = new("Oboe", 6, 68, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
+        public static readonly Instrument Clarinet = new("Clarinet", 7, 71, C3toC6, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
+        public static readonly Instrument Fife = new("Fife", 8, 72, C5toC8, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+        public static readonly Instrument Panpipes = new("Panpipes", 9, 75, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
+        public static readonly Instrument Timpani = new("Timpani", 10, 47, C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument Bongo = new("Bongo", 11, 116, C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
+        public static readonly Instrument BassDrum = new("BassDrum", 12, 117, C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
+        public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+        public static readonly Instrument Cymbal = new("Cymbal", 14, 127, C3toC6, false, 50, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
+        public static readonly Instrument Trumpet = new("Trumpet", 15, 56, C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument Trombone = new("Trombone", 16, 57, C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
+        public static readonly Instrument Tuba = new("Tuba", 17, 58, C1toC4, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
+        public static readonly Instrument Horn = new("Horn", 18, 60, C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+        public static readonly Instrument Saxophone = new("Saxophone", 19, 65, C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
+        public static readonly Instrument Violin = new("Violin", 20, 40, C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument Viola = new("Viola", 21, 41, C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
+        public static readonly Instrument Cello = new("Cello", 22, 42, C2toC5, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
+        public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, C1toC4, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+
+        public static IReadOnlyList<Instrument> All { get; } = new ReadOnlyCollection<Instrument>(new List<Instrument> { Harp, Piano, Lute, Fiddle, Flute, Oboe, Clarinet, Fife, Panpipes, Timpani, Bongo, BassDrum, SnareDrum, Cymbal, Trumpet, Trombone, Tuba, Horn, Saxophone, Violin, Viola, Cello, DoubleBass });
 
         private static readonly Instrument FirstInstrument = Harp;
         private static readonly Instrument LastInstrument = DoubleBass;
@@ -92,6 +81,10 @@ namespace BardMusicPlayer.Common.Structs
         /// </summary>
         public int SampleOffset { get; }
 
+        public InstrumentTone InstrumentTone { get; }
+
+        public InstrumentToneMenuKey InstrumentToneMenuKey { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Instrument"/> struct.
         /// </summary>
@@ -101,7 +94,8 @@ namespace BardMusicPlayer.Common.Structs
         /// <param name="defaultOctaveRange">DefaultOctaveRange</param>
         /// <param name="isSustained">IsSustained</param>
         /// <param name="sampleOffset">SampleOffset</param>
-        private Instrument(string name, int index, int midiProgramChangeCode, OctaveRange defaultOctaveRange, bool isSustained, int sampleOffset)
+        /// <param name="instrumentTone"></param>
+        private Instrument(string name, int index, int midiProgramChangeCode, OctaveRange defaultOctaveRange, bool isSustained, int sampleOffset, InstrumentTone instrumentTone, InstrumentToneMenuKey instrumentToneMenuKey)
         {
             Name = name;
             Index = index;
@@ -109,6 +103,8 @@ namespace BardMusicPlayer.Common.Structs
             DefaultOctaveRange = defaultOctaveRange;
             IsSustained = isSustained;
             SampleOffset = sampleOffset;
+            InstrumentTone = instrumentTone;
+            InstrumentToneMenuKey = instrumentToneMenuKey;
         }
 
         /// <summary>
@@ -266,7 +262,7 @@ namespace BardMusicPlayer.Common.Structs
                     result = DoubleBass;
                     return true;
                 default:
-                    result = Unknown;
+                    result = None;
                     return false;
             }
         }
@@ -373,11 +369,8 @@ namespace BardMusicPlayer.Common.Structs
                 case "contrabass":
                     result = DoubleBass;
                     return true;
-                case "none":
-                    result = None;
-                    return true;
                 default:
-                    result = Unknown;
+                    result = None;
                     return false;
             }
         }
@@ -397,7 +390,7 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns>True, if this note was in range to be moved, else false.</returns>
         public bool TryShiftNoteToDefaultOctave(OctaveRange currentOctaveRange, ref int note)
         {
-            if (Equals(Unknown) || Equals(None))
+            if (Equals(None))
                 throw new BmpException(Name + " is not a valid instrument for this function.");
 
             return DefaultOctaveRange.TryShiftNoteToOctave(currentOctaveRange, ref note);

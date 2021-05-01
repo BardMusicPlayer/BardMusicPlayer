@@ -1,3 +1,8 @@
+/*
+ * Copyright(c) 2017 Belash
+ * Licensed under the MIT license. See https://github.com/Nucs/JsonSettings/blob/master/LICENSE for full license information.
+ */
+
 using System.Security;
 
 namespace BardMusicPlayer.Config.JsonSettings.Interface
