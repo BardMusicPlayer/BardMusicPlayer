@@ -117,7 +117,7 @@ namespace BardMusicPlayer.Notate
                     foreach (var noteEvent in bardTrack.GetNotes())
                     {
                         bard.sequence.Add((noteEvent.GetTimedNoteOnEvent().Time - delta) / 25, noteEvent.NoteNumber);
-                        if (noteEvent.NoteNumber < OctaveRange.VSTRange.LowerNote) bard.sequence.Add((noteEvent.GetTimedNoteOffEvent().Time - delta) / 25, 254);
+                        if (noteEvent.NoteNumber < OctaveRange.Tone.LowerNote) bard.sequence.Add((noteEvent.GetTimedNoteOffEvent().Time - delta) / 25, 254);
                     }
                     mmSong.bards.Add(bard);
                 }

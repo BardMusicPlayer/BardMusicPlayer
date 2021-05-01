@@ -1,21 +1,6 @@
 ﻿/*
- * MogLib/Common/Structs/OctaveRange.cs
- *
- * Copyright (C) 2021  MoogleTroupe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
@@ -27,8 +12,7 @@ namespace BardMusicPlayer.Common.Structs
     /// </summary>
     public readonly struct OctaveRange : IComparable, IConvertible, IComparable<OctaveRange>, IEquatable<OctaveRange>
     {
-        public static OctaveRange VSTRange { get; } = new("VST", -3,-3, -3, 121, 127, "");
-
+        public static OctaveRange Tone { get; } = new("Tone", -3,-3, -3, 123, 127, "");
         public static OctaveRange Invalid { get; } = new("Invalid", -2, -2, -2, -1, -1, "");
         public static OctaveRange Mapper { get; } = new("Mapper", -1, -1, 2, 0, 36, "+4");
         public static OctaveRange C0toC3 { get; } = new("C0toC3", 0, 0, 3, 12, 48, "+3");
@@ -38,7 +22,7 @@ namespace BardMusicPlayer.Common.Structs
         public static OctaveRange C4toC7 { get; } = new("C4toC7", 4, 4, 7, 60, 96, "-1");
         public static OctaveRange C5toC8 { get; } = new("C5toC8", 5, 5, 8, 72, 108, "-2");
         public static OctaveRange C6toC9 { get; } = new("C6toC9", 6, 6, 9, 84, 120, "-3");
-        
+
         /// <summary>
         /// Gets the name.
         /// </summary>

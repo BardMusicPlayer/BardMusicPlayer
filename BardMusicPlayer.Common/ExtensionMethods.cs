@@ -1,36 +1,21 @@
 ﻿/*
- * MogLib/Common/ExtensionMethods.cs
- *
- * Copyright (C) 2021  MoogleTroupe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace BardMusicPlayer.Common
 {
     public static class ExtensionMethods
     {
-        public static void Append<TK, TV>(this Dictionary<TK, TV> first, Dictionary<TK, TV> second)
+        public static bool Equals<TK, TV>(this IReadOnlyDictionary<TK, TV> first, IReadOnlyDictionary<TK, TV> second) => first.All(kvp => second.ContainsKey(kvp.Key) && second[kvp.Key].Equals(kvp.Value)) && second.All(kvp => first.ContainsKey(kvp.Key) && first[kvp.Key].Equals(kvp.Value));
+        public static bool KeysEquals<TK, TV>(this IReadOnlyDictionary<TK, TV> first, IReadOnlyDictionary<TK, TV> second) => first.All(kvp => second.ContainsKey(kvp.Key)) && second.All(kvp => first.ContainsKey(kvp.Key));
+        public static void Append<TK, TV>(this IDictionary<TK, TV> first, IDictionary<TK, TV> second)
         {
             foreach (var item in second)
             {
@@ -130,16 +115,6 @@ namespace BardMusicPlayer.Common
             var toReturn = stack.Remove(element);
             stack.Push(obj);
             return toReturn;
-        }
-        public static string FromHex(this string source)
-        {
-            var builder = new StringBuilder();
-            for (var i = 0; i <= source.Length - 2; i += 2)
-            {
-                builder.Append(Convert.ToChar(int.Parse(source.Substring(i, 2), NumberStyles.HexNumber)));
-            }
-
-            return builder.ToString();
         }
         public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T> {
             if(val == null)
