@@ -316,8 +316,8 @@ namespace BardMusicPlayer.Notate.Objects
                         {
                             if (instrumentsParsed) continue;
                             var instrumentList = option.Trim().ToLower().Split(',');
-                            for (var instrumentListCounter = OctaveRange.VSTRange.UpperNote;
-                                instrumentListCounter >= OctaveRange.VSTRange.LowerNote;
+                            for (var instrumentListCounter = OctaveRange.Tone.UpperNote;
+                                instrumentListCounter >= OctaveRange.Tone.LowerNote;
                                 instrumentListCounter--)
                             {
                                 if (!Enum.IsDefined(typeof(VST), instrumentListCounter)) continue;
@@ -343,7 +343,7 @@ namespace BardMusicPlayer.Notate.Objects
 
                                 if (instrumentNameSplitRegex.Match(instrumentListItem) is not { } match) continue;
                                 
-                                var instrument = Instrument.Parse(match.Groups[1].Value); if (instrument.Equals(Instrument.Unknown)) instrument = Instrument.None;
+                                var instrument = Instrument.Parse(match.Groups[1].Value); //if (instrument.Equals(Instrument.Unknown)) instrument = Instrument.None;
                                 var octaveRange = OctaveRange.Parse(match.Groups[2].Value);
                                 bardGroup.instruments[vst] = new VSTProperties
                                     {instrument = instrument, octaveRange = octaveRange};
