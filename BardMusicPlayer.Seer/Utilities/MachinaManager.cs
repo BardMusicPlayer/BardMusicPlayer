@@ -25,7 +25,8 @@ namespace BardMusicPlayer.Seer.Utilities
 
             _monitor = new FFXIVNetworkMonitor
             {
-                MonitorType = TCPNetworkMonitor.NetworkMonitorType.RawSocket
+                MonitorType = TCPNetworkMonitor.NetworkMonitorType.RawSocket,
+                UseSocketFilter = true
             };
             _monitor.MessageReceived2 += MessageReceived2;
             _monitor.ProcessIDList = new List<uint>();
