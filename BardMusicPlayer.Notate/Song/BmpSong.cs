@@ -37,6 +37,6 @@ namespace BardMusicPlayer.Notate.Song
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<int, TrackContainer> TrackContainers { get; set; } = new();
+        public Dictionary<long, TrackContainer> TrackContainers { get; set; } = new();
     }
 }

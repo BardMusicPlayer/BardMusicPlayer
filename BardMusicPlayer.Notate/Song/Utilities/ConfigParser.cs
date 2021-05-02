@@ -27,11 +27,11 @@ namespace BardMusicPlayer.Notate.Song.Utilities
         /// <param name="trackNumber"></param>
         /// <param name="song"></param>
         /// <returns></returns>
-        internal static Dictionary<int, ConfigContainer> ReadConfigs(this TrackChunk trackChunk, int trackNumber, BmpSong song)
+        internal static Dictionary<long, ConfigContainer> ReadConfigs(this TrackChunk trackChunk, int trackNumber, BmpSong song)
         {
-            var configContainers = new Dictionary<int, ConfigContainer>();
+            var configContainers = new Dictionary<long, ConfigContainer>();
 
-            var trackName = trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
+            var trackName = trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "";
 
             var groups = trackName.Replace(" ", "").ToLower().Split('|');
 

@@ -15,7 +15,7 @@ namespace BardMusicPlayer.Notate.Song.Config
         public int Track { get; set; } = 0;
 
         ///<inheritdoc/>
-        public List<int> IncludedTracks { get; set; } = new List<int>();
+        public List<long> IncludedTracks { get; set; } = new();
 
         ///<inheritdoc/>
         public int PlayerCount { get; set; } = 1;

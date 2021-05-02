@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Notate.Song.Config.Interfaces
         /// <summary>
         /// Tracks to merge into the main track before processing
         /// </summary>
-        List<int> IncludedTracks { get; set; }
+        List<long> IncludedTracks { get; set; }
 
         /// <summary>
         /// Amount of players to distribute notes to.

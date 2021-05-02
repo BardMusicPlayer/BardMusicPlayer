@@ -5,8 +5,10 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Notate.Song.Config
 {
@@ -14,7 +16,10 @@ namespace BardMusicPlayer.Notate.Song.Config
     {
         public static async void dothings()
         {
-            using var fileStream = File.OpenRead(@"..\..\..\Resources\amusement_park.mid");
+            var timer = new Stopwatch();
+            timer.Start();
+
+            using var fileStream = File.OpenRead(@"..\..\..\Resources\the_planets.mid");
 
             var midiFile = fileStream.ReadAsMidiFile();
 
@@ -24,7 +29,7 @@ namespace BardMusicPlayer.Notate.Song.Config
             {
                 Title = "test123",
                 SourceTempoMap = midiFile.GetTempoMap().Clone(),
-                TrackContainers = new Dictionary<int, TrackContainer>()
+                TrackContainers = new Dictionary<long, TrackContainer>()
             };
 
             var trackChunkArray = midiFile.GetTrackChunks().ToArray();
@@ -34,28 +39,37 @@ namespace BardMusicPlayer.Notate.Song.Config
                 SourceTrackChunk = (TrackChunk) trackChunkArray[i].Clone()
             };
 
-            
 
-            for (int i = 0; i < song.TrackContainers.Count; i++)
+
+            Parallel.For(0, song.TrackContainers.Count, async i =>
             {
                 song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
 
-                for (int j = 0; j < song.TrackContainers[i].ConfigContainers.Count; j++)
+                Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
                 {
                     switch (song.TrackContainers[i].ConfigContainers[j].Config)
                     {
                         case ClassicConfig classicConfig:
-                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" + classicConfig.GetType() +
-                                " Instrument:" + classicConfig.Instrument + " OctaveRange:" + classicConfig.OctaveRange + " PlayerCount:" + classicConfig.PlayerCount +
-                                " IncludeTracks:" + string.Join(",", classicConfig.IncludedTracks));
-                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks = await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              classicConfig.GetType() +
+                                              " Instrument:" + classicConfig.Instrument + " OctaveRange:" +
+                                              classicConfig.OctaveRange + " PlayerCount:" + classicConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", classicConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
                         default:
                             Console.WriteLine("This should be impossible to reach.");
                             break;
                     }
-                }
-            }
+                });
+            });
+
+            timer.Stop();
+
+            TimeSpan timeTaken = timer.Elapsed;
+            Console.WriteLine("Time taken: " + timeTaken.ToString(@"m\:ss\.fff")); 
+
 
             midiFile = new MidiFile(song.TrackContainers.Values.SelectMany(track => track.ConfigContainers).SelectMany(track => track.Value.ProccesedTrackChunks));
             midiFile.ReplaceTempoMap(Tools.GetMsTempoMap());

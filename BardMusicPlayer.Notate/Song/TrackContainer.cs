@@ -18,6 +18,6 @@ namespace BardMusicPlayer.Notate.Song
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<int, ConfigContainer> ConfigContainers { get; set; } = new();
+        public Dictionary<long, ConfigContainer> ConfigContainers { get; set; } = new();
     }
 }

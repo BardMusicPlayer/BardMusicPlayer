@@ -11,7 +11,7 @@ namespace BardMusicPlayer.Notate.Song.Config
     public class ToneConfig : IConfig
     {
         public int Track { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public List<int> IncludedTracks { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public List<long> IncludedTracks { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public int PlayerCount { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
