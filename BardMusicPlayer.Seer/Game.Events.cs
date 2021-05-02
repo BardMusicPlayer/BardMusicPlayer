@@ -65,15 +65,15 @@ namespace BardMusicPlayer.Seer
                         break;
 
                     case EnsembleRejected ensembleRejected:
-                        Seer.Instance.PublishEvent(ensembleRejected); Console.WriteLine(seerEvent.EventSource + ": " + ActorId + " " + PlayerName + " EnsembleRejected");
+                        Seer.Instance.PublishEvent(ensembleRejected);
                         break;
 
                     case EnsembleRequested ensembleRequested:
-                        Seer.Instance.PublishEvent(ensembleRequested); Console.WriteLine(seerEvent.EventSource + ": " + ActorId + " " + PlayerName + " EnsembleRequested");
+                        Seer.Instance.PublishEvent(ensembleRequested);
                         break;
 
                     case EnsembleStarted ensembleStarted:
-                        Seer.Instance.PublishEvent(ensembleStarted); Console.WriteLine(seerEvent.EventSource + ": " + ActorId + " " + PlayerName + " EnsembleStarted");
+                        Seer.Instance.PublishEvent(ensembleStarted);
                         break;
 
                     // Currently unused. Currently unavailable from Machina backend.

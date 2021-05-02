@@ -38,8 +38,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 
             try
             {
-                _chatLogReader.Indexes.Clear();
-
                 _chatLogReader.ChatLogPointers = new ChatLogPointers
                 {
                     LineCount = (uint)MemoryHandler.GetPlatformUInt(chatPointerMap),

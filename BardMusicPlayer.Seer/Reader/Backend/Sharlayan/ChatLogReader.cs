@@ -27,8 +27,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 
         public void EnsureArrayIndexes() {
             Indexes.Clear();
+
+            var indexes = _memoryHandler.GetByteArray(new IntPtr(ChatLogPointers.OffsetArrayStart), 4000);
+
             for (var i = 0; i < 1000; i++) {
-                Indexes.Add((int) _memoryHandler.GetPlatformUInt(new IntPtr(ChatLogPointers.OffsetArrayStart + i * 4)));
+                Indexes.Add(BitConverter.ToInt32(indexes, i*4));
             }
         }
 

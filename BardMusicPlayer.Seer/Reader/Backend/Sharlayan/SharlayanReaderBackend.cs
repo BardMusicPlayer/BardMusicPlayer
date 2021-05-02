@@ -118,7 +118,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     GetInstrument();
                     GetPartyMembers();
                     GetChatInputOpen();
-                    //GetEnsembleEventsAndChatLog();
+                    GetEnsembleEventsAndChatLog();
 
                     _lastScan.FirstScan = false;
                 } catch (Exception ex)
