@@ -1,5 +1,6 @@
 ﻿using System;
 using BardMusicPlayer.Notate.Processor;
+using BardMusicPlayer.Notate.Song.Config;
 
 namespace BardMusicPlayer.Notate.ApiTest
 {
@@ -8,9 +9,8 @@ namespace BardMusicPlayer.Notate.ApiTest
         static void Main(string[] args)
         {
 
-
-
-         //   var processor = new ClassicProcessor();
+            TestSong.dothings();
+            
         }
     }
 }

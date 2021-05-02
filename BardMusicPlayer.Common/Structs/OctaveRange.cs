@@ -266,5 +266,11 @@ namespace BardMusicPlayer.Common.Structs
             note += LowerNote - currentOctaveRange.LowerNote;
             return true;
         }
+
+        public int ShiftNoteToOctave(OctaveRange currentOctaveRange, int note)
+        {
+            if (!currentOctaveRange.ValidateNoteRange(note)) throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " + currentOctaveRange.Name);
+            return note + LowerNote - currentOctaveRange.LowerNote;
+        }
     }
 }
