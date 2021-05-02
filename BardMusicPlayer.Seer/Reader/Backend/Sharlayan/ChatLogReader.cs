@@ -25,13 +25,15 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             _memoryHandler = memoryHandler;
         }
 
+        private const int BUFFER_SIZE = 4000;
+
         public void EnsureArrayIndexes() {
             Indexes.Clear();
 
-            var indexes = _memoryHandler.GetByteArray(new IntPtr(ChatLogPointers.OffsetArrayStart), 4000);
+            var indexes = _memoryHandler.GetByteArray(new IntPtr(ChatLogPointers.OffsetArrayStart), BUFFER_SIZE);
 
-            for (var i = 0; i < 1000; i++) {
-                Indexes.Add(BitConverter.ToInt32(indexes, i*4));
+            for (var i = 0; i < BUFFER_SIZE; i += 4) {
+                Indexes.Add(BitConverter.ToInt32(indexes, i));
             }
         }
 
