@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Notate.Song.Config;
 using Melanchall.DryWetMidi.Core;
-using BardMusicPlayer.Notate.Processor.Interfaces;
 using BardMusicPlayer.Notate.Processor.Utilities;
 using BardMusicPlayer.Common.Structs;
 using Melanchall.DryWetMidi.Interaction;

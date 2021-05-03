@@ -3,7 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BardMusicPlayer.Notate.Song;
@@ -11,21 +10,15 @@ using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Notate.Processor
 {
-    internal abstract class BaseProcessor : IDisposable
+    internal class AutoToneProcessor : BaseProcessor
     {
-        protected BaseProcessor(BmpSong song)
+        public AutoToneProcessor(BmpSong song) : base(song)
         {
-            Song = song;
         }
 
-        protected BmpSong Song { get; set; }
-
-        public abstract Task<List<TrackChunk>> Process();
-
-        ~BaseProcessor() => Dispose();
-        public virtual void Dispose()
+        public override Task<List<TrackChunk>> Process()
         {
-            GC.SuppressFinalize(this);
+            throw new System.NotImplementedException();
         }
     }
 }

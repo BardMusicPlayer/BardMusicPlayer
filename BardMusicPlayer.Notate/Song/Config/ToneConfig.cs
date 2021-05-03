@@ -24,5 +24,10 @@ namespace BardMusicPlayer.Notate.Song.Config
         /// The instrument tone for this track
         /// </summary>
         public InstrumentTone InstrumentTone { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<Instrument, OctaveRange> OctaveRanges { get; set; }
     }
 }
