@@ -109,45 +109,45 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 				}
 			}
 		}
-        private static int FindSuperSignature(IReadOnlyList<byte> buffer, IReadOnlyList<byte> pattern)
-        {
-            var result = -1;
-            if (buffer.Count == 0 || pattern.Count == 0 || buffer.Count < pattern.Count)
-            {
-                return result;
-            }
-            for (var i = 0; i <= buffer.Count - pattern.Count; i++)
-            {
-                if (buffer[i] != pattern[0])
-                {
-                    continue;
+
+        private static int FindSuperSignature(IReadOnlyList<byte> buffer, IReadOnlyList<byte> pattern) {
+            if (pattern.Count > buffer.Count)
+                return -1;
+            var badShift = BuildBadCharTable(pattern);
+            var offset = 0;
+            var last = pattern.Count - 1;
+            var maxoffset = buffer.Count - pattern.Count;
+
+            while (offset <= maxoffset) {
+                int position;
+                for (position = last; pattern[position] == buffer[position + offset] || pattern[position] == 63; position--) {
+                    if (position == 0)
+                        return offset;
                 }
-                if (buffer.Count > 1)
-                {
-                    var flag = true;
-                    for (var j = 1; j <= pattern.Count - 1; j++)
-                    {
-                        if (buffer[i + j] == pattern[j] || pattern[j] == 63) continue;
-                        flag = false;
-                        break;
-                    }
-                    if (flag)
-                    {
-                        result = i;
-                        break;
-                    }
-                    continue;
-                }
-                result = i;
-                break;
+                offset += badShift[buffer[offset + last]];
             }
-            return result;
+
+            return -1;
+        }
+
+        private static int[] BuildBadCharTable(IReadOnlyList<byte> pattern) {
+            int idx;
+            var last = pattern.Count - 1;
+            var badShift = new int[256];
+            for (idx = last; idx > 0 && pattern[idx] != 63; --idx) { }
+            var diff = last - idx;
+            if (diff == 0) diff = 1;
+            for (idx = 0; idx <= 255; ++idx)
+                badShift[idx] = diff;
+            for (idx = last - diff; idx < last; ++idx)
+                badShift[pattern[idx]] = last - idx;
+            return badShift;
         }
 
 		private static byte[] SignatureToByte(string signature, byte wildcard)
 		{
 			var array = new byte[signature.Length / 2];
-			var array2 = new int[23]
+			var array2 = new[]
 			{
 				0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				0, 0, 0, 0, 0, 0, 0, 10, 11, 12,
