@@ -1,0 +1,6 @@
+Documentation.xml
+obj/
+bin/Debug/SequencerDemo.vshost.exe.manifest
+bin/
+*.suo
+*.csproj.user

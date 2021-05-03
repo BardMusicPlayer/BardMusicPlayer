@@ -1,0 +1,186 @@
+[
+    {
+        "ASMSignature": true,
+        "Key": "WORLD",
+        "PointerPath": [
+            -13,
+            0,
+            -112,
+            0
+        ],
+        "Value": "40534883EC40488B05********488BD98B401485C00F"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "TARGET",
+        "PointerPath": [
+            0,
+            144
+        ],
+        "Value": "41bc000000e041bd01000000493bc47555488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "CHATLOG",
+		"PointerPath": [
+		  28365128,
+		  176,
+		  1144,
+		  900
+		],
+		"Value": ""
+    },
+    {
+        "ASMSignature": true,
+        "Key": "CHARMAP",
+        "PointerPath": [
+            0,
+            0
+        ],
+        "Value": "488b420848c1e8033da701000077248bc0488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "PARTYMAP",
+        "PointerPath": [
+            0,
+            384
+        ],
+        "Value": "488D7C242066660F1F840000000000488B17488D0D"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "PARTYCOUNT",
+        "PointerPath": [
+            0,
+            -26920
+        ],
+        "Value": "488D7C242066660F1F840000000000488B17488D0D"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "MAPINFO",
+        "PointerPath": [
+            0,
+            0
+        ],
+        "Value": "E8********CCCCCCCCCC48895C2408574883EC208B05"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "PLAYERINFO",
+        "PointerPath": [
+            0,
+            0
+        ],
+        "Value": "83f9ff7412448b048e8bd3488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "ENMITYMAP",
+        "PointerPath": [
+            0,
+            -4656
+        ],
+        "Value": "83f9ff7412448b048e8bd3488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "ENMITY_COUNT",
+        "PointerPath": [
+            0,
+            -2352
+        ],
+        "Value": "83f9ff7412448b048e8bd3488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "AGROMAP",
+        "PointerPath": [
+            0,
+            -2344
+        ],
+        "Value": "83f9ff7412448b048e8bd3488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "AGRO_COUNT",
+        "PointerPath": [
+            0,
+            -40
+        ],
+        "Value": "83f9ff7412448b048e8bd3488d0d"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "ZONEINFO",
+        "PointerPath": [
+            0,
+            0
+        ],
+        "Value": "4056415641578b9108be0000488bf1448b35"
+    },
+    {
+        "ASMSignature": false,
+        "Key": "HOTBAR",
+        "PointerPath": [
+            0,
+            56,
+            48,
+            40,
+            32,
+            0,
+            0
+        ],
+        "Value": "9C640000000000002C2C000000000000"
+    },
+    {
+        "ASMSignature": false,
+        "Key": "RECAST",
+        "PointerPath": [
+            0,
+            56,
+            24,
+            48,
+            32,
+            60
+        ],
+        "Value": "9C640000000000002C2C000000000000"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "INVENTORY",
+        "PointerPath": [
+            0,
+            0
+        ],
+        "Value": "48895C2408488974241048897C2418488B3D"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "PERFSTATUS",
+        "PointerPath": [
+            0, 0
+        ],
+        "Value": "8BCBE859E7F9FF84C07411488BD3488D0D"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "CHARID",
+        "PointerPath": [
+            0, 0
+        ],
+        "Value": "4C8BCF4C8D05????????BA04010000488D0D"
+    },
+    {
+        "ASMSignature": true,
+        "Key": "CHATINPUT",
+        "PointerPath": [
+            0,
+            0,
+            56
+        ],
+        "Value": "e8********85c0740e488b0d********33D2E8********488b0d"
+    }
+]
+
