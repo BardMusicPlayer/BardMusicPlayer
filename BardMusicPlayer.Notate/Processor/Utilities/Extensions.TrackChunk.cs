@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> FixClassicChords(this TrackChunk trackChunk)
+        internal static async Task<TrackChunk> FixClassicChords(this TrackChunk trackChunk)
         {
             var notes = trackChunk.GetNotes().ToArray().Where(c => c != null).Reverse().ToArray();
 
@@ -56,14 +56,14 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> FixClassicChords(this Task<TrackChunk> trackChunk) => await FixClassicChords(await trackChunk);
+        internal static async Task<TrackChunk> FixClassicChords(this Task<TrackChunk> trackChunk) => await FixClassicChords(await trackChunk);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> OffSet50Ms(this TrackChunk trackChunk)
+        internal static async Task<TrackChunk> OffSet50Ms(this TrackChunk trackChunk)
         {
             var processedChunk = new TrackChunk();
 
@@ -162,7 +162,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> OffSet50Ms(this Task<TrackChunk> trackChunk) => await OffSet50Ms(await trackChunk);
+        internal static async Task<TrackChunk> OffSet50Ms(this Task<TrackChunk> trackChunk) => await OffSet50Ms(await trackChunk);
 
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> FixEndSpacing(this TrackChunk trackChunk)
+        internal static async Task<TrackChunk> FixEndSpacing(this TrackChunk trackChunk)
         {
             var events = trackChunk.GetNotes().ToArray();
             var tempChunk = new TrackChunk();
@@ -207,7 +207,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal async static Task<TrackChunk> FixEndSpacing(this Task<TrackChunk> trackChunk) => await FixEndSpacing(await trackChunk);
+        internal static async Task<TrackChunk> FixEndSpacing(this Task<TrackChunk> trackChunk) => await FixEndSpacing(await trackChunk);
     }
 }
 #pragma warning restore 1998
