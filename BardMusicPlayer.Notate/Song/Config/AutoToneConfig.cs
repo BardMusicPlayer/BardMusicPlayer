@@ -9,7 +9,7 @@ using BardMusicPlayer.Common.Structs;
 
 namespace BardMusicPlayer.Notate.Song.Config
 {
-    public class ToneConfig : IConfig
+    public class AutoToneConfig : IConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;
@@ -23,6 +23,11 @@ namespace BardMusicPlayer.Notate.Song.Config
         /// <summary>
         /// The instrument tone for this track
         /// </summary>
-        public InstrumentTone InstrumentTone { get; set; }
+        public AutoToneInstrumentGroup AutoToneInstrumentGroup { get; set; } = AutoToneInstrumentGroup.Lute1Harp3Piano1;
+
+        /// <summary>
+        /// The octave range to use
+        /// </summary>
+        public AutoToneOctaveRange AutoToneOctaveRange { get; set; } = AutoToneOctaveRange.C2toC7;
     }
 }

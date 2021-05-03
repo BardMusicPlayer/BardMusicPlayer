@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BardMusicPlayer.Common.Structs
 {
@@ -14,7 +15,7 @@ namespace BardMusicPlayer.Common.Structs
     /// </summary>
     public readonly struct InstrumentTone : IComparable, IConvertible, IComparable<InstrumentTone>, IEquatable<InstrumentTone>
     {
-        public static readonly InstrumentTone None = new("None", 0, new List<Instrument>{});
+        public static readonly InstrumentTone None = new("None", 0, new List<Instrument>());
 
         public static readonly InstrumentTone Strummed = new("Strummed", 1, new List<Instrument>{Instrument.Harp, Instrument.Piano, Instrument.Lute, Instrument.Fiddle});
         public static readonly InstrumentTone Wind = new("Wind", 2, new List<Instrument>{Instrument.Flute, Instrument.Oboe, Instrument.Clarinet, Instrument.Fife, Instrument.Panpipes });
@@ -23,7 +24,7 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly InstrumentTone Strings = new("Strings", 5, new List<Instrument>{Instrument.Violin, Instrument.Viola, Instrument.Cello, Instrument.DoubleBass});
         public static readonly InstrumentTone SomethingNew = new("SomethingNew", 6, new List<Instrument>{});
 
-        public static IReadOnlyList<InstrumentTone> All { get; } = new ReadOnlyCollection<InstrumentTone>(new List<InstrumentTone> { Strummed, Wind, Drums, Brass, Strings, SomethingNew });
+        public static readonly IReadOnlyList<InstrumentTone> All = new ReadOnlyCollection<InstrumentTone>(new List<InstrumentTone> { Strummed, Wind, Drums, Brass, Strings, SomethingNew });
 
         /// <summary>
         /// Gets the name.
@@ -129,68 +130,48 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static bool TryParse(int instrumentTone, out InstrumentTone result)
         {
-            switch (instrumentTone)
+            if (All.Any(x => x.Index.Equals(instrumentTone)))
             {
-                case 1:
-                    result = Strummed;
-                    return true;
-                case 2:
-                    result = Wind;
-                    return true;
-                case 3:
-                    result = Drums;
-                    return true;
-                case 4:
-                    result = Brass;
-                    return true;
-                case 5:
-                    result = Strings;
-                    return true;
-                case 6:
-                    result = SomethingNew;
-                    return true;
-                default:
-                    result = None;
-                    return false;
+                result = All.First(x => x.Index.Equals(instrumentTone));
+                return true;
             }
+            result = None;
+            return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instrumentTone"></param>
+        /// <returns></returns>
         public static InstrumentTone Parse(string instrumentTone)
         {
             TryParse(instrumentTone, out var result);
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instrumentTone"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public static bool TryParse(string instrumentTone, out InstrumentTone result)
         {
-            if (int.TryParse(instrumentTone, out var number) && number >= Strummed && number <= SomethingNew) return TryParse(number, out result);
-
-            instrumentTone = instrumentTone.ToLower().Trim().Replace(" ", string.Empty).Replace("_", string.Empty);
-
-            switch (instrumentTone)
+            if (instrumentTone is null)
             {
-                case "strummed":
-                    result = Strummed;
-                    return true;
-                case "wind":
-                    result = Wind;
-                    return true;
-                case "drums":
-                    result = Drums;
-                    return true;
-                case "brass":
-                    result = Brass;
-                    return true;
-                case "strings":
-                    result = Strings;
-                    return true;
-                case "somethingnew":
-                    result = SomethingNew;
-                    return true;
-                default:
-                    result = None;
-                    return false;
+                result = None;
+                return false;
             }
+            instrumentTone = instrumentTone.Replace(" ", "").Replace("_", "");
+            if (int.TryParse(instrumentTone, out var number)) return TryParse(number, out result);
+            if (All.Any(x => x.Name.Equals(instrumentTone, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                result = All.First(x => x.Name.Equals(instrumentTone, StringComparison.CurrentCultureIgnoreCase));
+                return true;
+            }
+            result = None;
+            return false;
         }
     }
 }

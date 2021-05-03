@@ -45,14 +45,27 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                 // bmp 2.x style group name
                 if (fields[0].StartsWith("tone:") || fields[0].StartsWith("autotone:"))
                 {
-                    // TODO bmp 2.x stuff.
-                    continue;
+                    var subfields = fields[0].Split(':');
+                    if (subfields.Length != 2) continue;
+                    var instrumentTone = InstrumentTone.Parse(subfields[1]);
+                    if (instrumentTone.Equals(InstrumentTone.None)) continue;
+
+
+
+                    if (subfields[0].Equals("tone"))
+                    {
+
+                    } else if (subfields[0].Equals("autotone"))
+                    {
+
+                    }
+
                 }
 
                 // bmp 1.x style group name
                 else
                 {
-                    ClassicConfig config = (ClassicConfig)(configContainer.Config = new ClassicConfig() { Track = trackNumber });
+                    var config = (ClassicConfig)(configContainer.Config = new ClassicConfig { Track = trackNumber });
 
                     var instrumentNameSplitRegex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
 
@@ -82,12 +95,11 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                     }
 
                     configContainers.Add(groupCounter, configContainer);
-                    continue;
                 }
             }
 
             // No configuration matches default a single group to bmp 1.x piano on c3. Maybe this can be replaced with bmp 2.x autotone soon?
-            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { Config = new ClassicConfig() { Track = trackNumber } });
+            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { Config = new ClassicConfig { Track = trackNumber } });
 
             return configContainers;
         }

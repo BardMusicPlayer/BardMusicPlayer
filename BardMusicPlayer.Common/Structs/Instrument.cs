@@ -6,46 +6,55 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using BardMusicPlayer.Common.Enums;
-using static BardMusicPlayer.Common.Structs.OctaveRange;
 
 namespace BardMusicPlayer.Common.Structs
 {
     /// <summary>
-    /// Represents available instrument VST's in game.
+    /// Represents available instruments in game.
     /// </summary>
     public readonly struct Instrument : IComparable, IConvertible, IComparable<Instrument>, IEquatable<Instrument>
     {
-        public static readonly Instrument None = new("None", 0, 122, C3toC6, false, 50, InstrumentTone.None, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
+        public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 50, InstrumentTone.None, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
 
-        public static readonly Instrument Harp = new("Harp", 1, 46, C3toC6, false,0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
-        public static readonly Instrument Piano = new("Piano", 2, 0, C4toC7, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
-        public static readonly Instrument Lute = new("Lute", 3, 24, C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
-        public static readonly Instrument Fiddle = new("Fiddle", 4, 45, C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
-        public static readonly Instrument Flute = new("Flute", 5, 73, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
-        public static readonly Instrument Oboe = new("Oboe", 6, 68, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
-        public static readonly Instrument Clarinet = new("Clarinet", 7, 71, C3toC6, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
-        public static readonly Instrument Fife = new("Fife", 8, 72, C5toC8, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
-        public static readonly Instrument Panpipes = new("Panpipes", 9, 75, C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
-        public static readonly Instrument Timpani = new("Timpani", 10, 47, C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
-        public static readonly Instrument Bongo = new("Bongo", 11, 116, C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
-        public static readonly Instrument BassDrum = new("BassDrum", 12, 117, C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
-        public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
-        public static readonly Instrument Cymbal = new("Cymbal", 14, 127, C3toC6, false, 50, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
-        public static readonly Instrument Trumpet = new("Trumpet", 15, 56, C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
-        public static readonly Instrument Trombone = new("Trombone", 16, 57, C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
-        public static readonly Instrument Tuba = new("Tuba", 17, 58, C1toC4, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
-        public static readonly Instrument Horn = new("Horn", 18, 60, C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
-        public static readonly Instrument Saxophone = new("Saxophone", 19, 65, C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4);
-        public static readonly Instrument Violin = new("Violin", 20, 40, C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0);
-        public static readonly Instrument Viola = new("Viola", 21, 41, C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1);
-        public static readonly Instrument Cello = new("Cello", 22, 42, C2toC5, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2);
-        public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, C1toC4, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3);
+        public static readonly Instrument Harp = new("Harp", 1, 46, OctaveRange.C3toC6, false,0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{ "OrchestralHarp" }));
+        public static readonly Instrument Piano = new("Piano", 2, 0, OctaveRange.C4toC7, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{ "AcousticGrandPiano" }));
+        public static readonly Instrument Lute = new("Lute", 3, 24, OctaveRange.C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Fiddle = new("Fiddle", 4, 45, OctaveRange.C2toC5, false, 0, InstrumentTone.Strummed, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "PizzicatoStrings" }));
+        public static readonly IReadOnlyList<Instrument> Strummed = new ReadOnlyCollection<Instrument>(new List<Instrument> { Harp, Piano, Lute, Fiddle });
 
-        public static IReadOnlyList<Instrument> All { get; } = new ReadOnlyCollection<Instrument>(new List<Instrument> { Harp, Piano, Lute, Fiddle, Flute, Oboe, Clarinet, Fife, Panpipes, Timpani, Bongo, BassDrum, SnareDrum, Cymbal, Trumpet, Trombone, Tuba, Horn, Saxophone, Violin, Viola, Cello, DoubleBass });
+        public static readonly Instrument Flute = new("Flute", 5, 73, OctaveRange.C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Oboe = new("Oboe", 6, 68, OctaveRange.C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Clarinet = new("Clarinet", 7, 71, OctaveRange.C3toC6, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Fife = new("Fife", 8, 72, OctaveRange.C5toC8, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "Piccolo" }));
+        public static readonly Instrument Panpipes = new("Panpipes", 9, 75, OctaveRange.C4toC7, true, 0, InstrumentTone.Wind, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{ "Panflute" }));
+        public static readonly IReadOnlyList<Instrument> Wind = new ReadOnlyCollection<Instrument>(new List<Instrument> { Flute, Oboe, Clarinet, Fife, Panpipes });
 
-        private static readonly Instrument FirstInstrument = Harp;
-        private static readonly Instrument LastInstrument = DoubleBass;
+        public static readonly Instrument Timpani = new("Timpani", 10, 47, OctaveRange.C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Bongo = new("Bongo", 11, 116, OctaveRange.C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument BassDrum = new("BassDrum", 12, 117, OctaveRange.C2toC5, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, OctaveRange.C3toC6, false, 0, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "Snare" }));
+        public static readonly Instrument Cymbal = new("Cymbal", 14, 127, OctaveRange.C3toC6, false, 50, InstrumentTone.Drums, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly IReadOnlyList<Instrument> Drums = new ReadOnlyCollection<Instrument>(new List<Instrument> { Timpani, Bongo, BassDrum, SnareDrum, Cymbal });
+
+        public static readonly Instrument Trumpet = new("Trumpet", 15, 56, OctaveRange.C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Trombone = new("Trombone", 16, 57, OctaveRange.C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Tuba = new("Tuba", 17, 58, OctaveRange.C1toC4, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Horn = new("Horn", 18, 60, OctaveRange.C2toC5, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "FrenchHorn" }));
+        public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 50, InstrumentTone.Brass, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{ "Sax", "AltoSaxophone", "AltoSax" }));
+        public static readonly IReadOnlyList<Instrument> Brass = new ReadOnlyCollection<Instrument>(new List<Instrument> { Trumpet, Trombone, Tuba, Horn, Saxophone });
+
+        public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 50, InstrumentTone.Strings, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "ContraBass" }));
+        public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
+
+        public static readonly IReadOnlyList<Instrument> SomethingNew = new ReadOnlyCollection<Instrument>(new List<Instrument> { });
+
+        public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(SomethingNew).ToList());
 
         /// <summary>
         /// Gets the name.
@@ -81,9 +90,20 @@ namespace BardMusicPlayer.Common.Structs
         /// </summary>
         public int SampleOffset { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public InstrumentTone InstrumentTone { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public InstrumentToneMenuKey InstrumentToneMenuKey { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IReadOnlyList<string> AlternativeNames { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Instrument"/> struct.
@@ -95,7 +115,9 @@ namespace BardMusicPlayer.Common.Structs
         /// <param name="isSustained">IsSustained</param>
         /// <param name="sampleOffset">SampleOffset</param>
         /// <param name="instrumentTone"></param>
-        private Instrument(string name, int index, int midiProgramChangeCode, OctaveRange defaultOctaveRange, bool isSustained, int sampleOffset, InstrumentTone instrumentTone, InstrumentToneMenuKey instrumentToneMenuKey)
+        /// <param name="instrumentToneMenuKey"></param>
+        /// <param name="alternativeNames"></param>
+        private Instrument(string name, int index, int midiProgramChangeCode, OctaveRange defaultOctaveRange, bool isSustained, int sampleOffset, InstrumentTone instrumentTone, InstrumentToneMenuKey instrumentToneMenuKey, IReadOnlyList<string> alternativeNames)
         {
             Name = name;
             Index = index;
@@ -105,6 +127,7 @@ namespace BardMusicPlayer.Common.Structs
             SampleOffset = sampleOffset;
             InstrumentTone = instrumentTone;
             InstrumentToneMenuKey = instrumentToneMenuKey;
+            AlternativeNames = alternativeNames;
         }
 
         /// <summary>
@@ -190,88 +213,20 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static bool TryParse(int instrument, out Instrument result)
         {
-            switch (instrument)
+            if (All.Any(x => x.Index.Equals(instrument)))
             {
-                case 1:
-                    result = Harp;
-                    return true;
-                case 2:
-                    result = Piano;
-                    return true;
-                case 3:
-                    result = Lute;
-                    return true;
-                case 4:
-                    result = Fiddle;
-                    return true;
-                case 5:
-                    result = Flute;
-                    return true;
-                case 6:
-                    result = Oboe;
-                    return true;
-                case 7:
-                    result = Clarinet;
-                    return true;
-                case 8:
-                    result = Fife;
-                    return true;
-                case 9:
-                    result = Panpipes;
-                    return true;
-                case 10:
-                    result = Timpani;
-                    return true;
-                case 11:
-                    result = Bongo;
-                    return true;
-                case 12:
-                    result = BassDrum;
-                    return true;
-                case 13:
-                    result = SnareDrum;
-                    return true;
-                case 14:
-                    result = Cymbal;
-                    return true;
-                case 15:
-                    result = Trumpet;
-                    return true;
-                case 16:
-                    result = Trombone;
-                    return true;
-                case 17:
-                    result = Tuba;
-                    return true;
-                case 18:
-                    result = Horn;
-                    return true;
-                case 19:
-                    result = Saxophone;
-                    return true;
-                case 20:
-                    result = Violin;
-                    return true;
-                case 21:
-                    result = Viola;
-                    return true;
-                case 22:
-                    result = Cello;
-                    return true;
-                case 23:
-                    result = DoubleBass;
-                    return true;
-                default:
-                    result = None;
-                    return false;
+                result = All.First(x => x.Index.Equals(instrument));
+                return true;
             }
+            result = None;
+            return false;
         }
 
         /// <summary>
         /// Gets the instrument from a string.
         /// </summary>
         /// <param name="instrument">The string with the name of the instrument</param>
-        /// <returns>The <see cref="Instrument"/>, or <see cref="Unknown"/> if invalid.</returns>
+        /// <returns>The <see cref="Instrument"/>, or <see cref="None"/> if invalid.</returns>
         public static Instrument Parse(string instrument)
         {
             TryParse(instrument, out var result);
@@ -282,97 +237,30 @@ namespace BardMusicPlayer.Common.Structs
         /// Tries to get the instrument from a string.
         /// </summary>
         /// <param name="instrument">The string with the name of the instrument</param>
-        /// <param name="result">The <see cref="Instrument"/>, or <see cref="Unknown"/> if invalid.</param>
-        /// <returns>true if the <see cref="Instrument"/> is anything besides <see cref="Unknown"/></returns>
+        /// <param name="result">The <see cref="Instrument"/>, or <see cref="None"/> if invalid.</param>
+        /// <returns>true if the <see cref="Instrument"/> is anything besides <see cref="None"/></returns>
         public static bool TryParse(string instrument, out Instrument result)
         {
-            if (int.TryParse(instrument, out var number) && number >= FirstInstrument && number <= LastInstrument) return TryParse(number, out result);
-
-            instrument = instrument.ToLower().Trim().Replace(" ", string.Empty).Replace("_", string.Empty);
-
-            switch (instrument)
+            if (instrument is null)
             {
-                case "harp":
-                case "orchestralharp":
-                    result = Harp;
-                    return true;
-                case "piano":
-                case "acousticgrandpiano":
-                    result = Piano;
-                    return true;
-                case "lute":
-                    result = Lute;
-                    return true;
-                case "fiddle":
-                case "pizzicatostrings":
-                    result = Fiddle;
-                    return true;
-                case "flute":
-                    result = Flute;
-                    return true;
-                case "oboe":
-                    result = Oboe;
-                    return true;
-                case "clarinet":
-                    result = Clarinet;
-                    return true;
-                case "fife":
-                case "piccolo":
-                    result = Fife;
-                    return true;
-                case "panpipes":
-                case "panflute":
-                    result = Panpipes;
-                    return true;
-                case "timpani":
-                    result = Timpani;
-                    return true;
-                case "bongo":
-                    result = Bongo;
-                    return true;
-                case "bassdrum":
-                    result = BassDrum;
-                    return true;
-                case "snaredrum":
-                    result = SnareDrum;
-                    return true;
-                case "cymbal":
-                    result = Cymbal;
-                    return true;
-                case "trumpet":
-                    result = Trumpet;
-                    return true;
-                case "trombone":
-                    result = Trombone;
-                    return true;
-                case "tuba":
-                    result = Tuba;
-                    return true;
-                case "horn":
-                case "frenchhorn":
-                    result = Horn;
-                    return true;
-                case "saxophone":
-                case "altosaxophone":
-                    result = Saxophone;
-                    return true;
-                case "violin":
-                    result = Violin;
-                    return true;
-                case "viola":
-                    result = Viola;
-                    return true;
-                case "cello":
-                    result = Cello;
-                    return true;
-                case "doublebass":
-                case "contrabass":
-                    result = DoubleBass;
-                    return true;
-                default:
-                    result = None;
-                    return false;
+                result = None;
+                return false;
             }
+            instrument = instrument.Replace(" ", "").Replace("_", "");
+            if (int.TryParse(instrument, out var number)) return TryParse(number, out result);
+            if (All.Any(x => x.Name.Equals(instrument, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                result = All.First(x => x.Name.Equals(instrument, StringComparison.CurrentCultureIgnoreCase));
+                return true;
+            }
+            foreach (var instr in All)
+            {
+                if (!instr.AlternativeNames.Any(x => x.Equals(instrument, StringComparison.CurrentCultureIgnoreCase))) continue;
+                result = instr;
+                return true;
+            }
+            result = None;
+            return false;
         }
         
         /// <summary>
