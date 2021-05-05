@@ -344,7 +344,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             Logger.Debug("AlphaSynth",
                 "Position changed: (time: " + currentTime + "/" + endTime + ", tick: " + currentTick + "/" + endTime +
                 ", Active Voices: " + _synthesizer.ActiveVoiceCount);
-            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick));
+            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick, _synthesizer.ActiveVoiceCount));
         }
 
         #region Events
@@ -529,6 +529,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         /// </summary>
         public int EndTick { get; }
 
+        public int ActiveVoices { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PositionChangedEventArgs"/> class.
         /// </summary>
@@ -536,12 +538,13 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         /// <param name="endTime">The end time.</param>
         /// <param name="currentTick">The current tick.</param>
         /// <param name="endTick">The end tick.</param>
-        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick)
+        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick, int activeVoices)
         {
             CurrentTime = currentTime;
             EndTime = endTime;
             CurrentTick = currentTick;
             EndTick = endTick;
+            ActiveVoices = activeVoices;
         }
     }
 }

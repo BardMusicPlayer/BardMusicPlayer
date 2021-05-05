@@ -46,16 +46,18 @@ namespace BardMusicPlayer.Notate.ApiTest
 
             Synthesizer.Instance.Play();
 
-            
             Console.ReadLine();
+
+            Synthesizer.Instance.SynthTimePositionChanged -= PositionChanged;
+
             Synthesizer.Instance.Stop();
             Synthesizer.Instance.ShutDown();
             Environment.Exit(0);
         }
 
-        private static void PositionChanged(double currenttime, double endtime)
+        private static void PositionChanged(double currenttime, double endtime, int activeVoices)
         {
-            Console.Write("\r" + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss"));
+            Console.Write("\r" + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices);
         }
         
     }

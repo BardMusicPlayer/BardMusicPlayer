@@ -175,6 +175,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
         /// </summary>
         public void ResetSoft()
         {
+            _noteCounter = 0;
             foreach (var v in _voices)
             {
                 if (v.PlayingPreset != -1 &&
