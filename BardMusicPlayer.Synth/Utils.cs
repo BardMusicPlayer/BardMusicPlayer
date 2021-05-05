@@ -40,9 +40,12 @@ namespace BardMusicPlayer.Synth
                         var noteNum = note.NoteNumber;
                         var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
                         var time = (int) note.Time;
+
+                        
                         events.AddProgramChange(trackCounter, time, (byte) trackCounter, (byte) instrument.MidiProgramChangeCode);
                         events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, (byte) trackCounter);
                         trackCounter++;
+                        if (trackCounter == 16) trackCounter = 18;
                         if (trackCounter == byte.MaxValue) trackCounter = 0;
                         if (time + dur > veryLast) veryLast = time + dur;
                     }

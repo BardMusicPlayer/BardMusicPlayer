@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Notate.ApiTest
                 Environment.Exit(0);
             }
 
-            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha5..");
+            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha6..");
             var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
 
          //   var song = BmpSong.OpenMidiFile(@"Chrono_Trigger_Corridors_of_Time_octet.mid").GetAwaiter().GetResult();

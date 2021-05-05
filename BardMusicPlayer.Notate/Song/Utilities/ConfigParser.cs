@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using BardMusicPlayer.Notate.Song.Config.Interfaces;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Notate.Song.Utilities
 {
@@ -38,6 +39,8 @@ namespace BardMusicPlayer.Notate.Song.Utilities
             // TODO - Verbose logging of all parsing operations.
 
             var configContainers = new Dictionary<long, ConfigContainer>();
+
+            if (trackChunk.GetNotes().Count == 0) return configContainers;
 
             var trackName = (trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "").Replace(" ", "").ToLower();
 

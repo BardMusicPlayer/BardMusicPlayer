@@ -272,7 +272,11 @@ namespace BardMusicPlayer.Common.Structs
         {
             if (Equals(Clarinet) && note < 12) return 0;
                 
-            if(Equals(Lute) && note < 3) return 0;
+            if (Equals(Lute) && note < 3) return 0;
+
+            if (Equals(Bongo) && note < 12) return 0;
+
+            if (Equals(Panpipes) && note < 15) return 0;
 
             return 50;
         }
