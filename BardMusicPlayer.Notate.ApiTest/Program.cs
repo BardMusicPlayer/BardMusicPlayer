@@ -33,19 +33,30 @@ namespace BardMusicPlayer.Notate.ApiTest
             {
             }
 
+            Synthesizer.Instance.SynthTimePositionChanged += PositionChanged;
+
             Synthesizer.Instance.Load(song).GetAwaiter().GetResult();
 
             while (!Synthesizer.Instance.IsReadyForPlayback)
             {
             }
 
+            Console.WriteLine("Press Enter to quit.");
+            Console.WriteLine(" ");
+
             Synthesizer.Instance.Play();
 
-            Console.WriteLine("Press Enter to quit.");
+            
             Console.ReadLine();
             Synthesizer.Instance.Stop();
             Synthesizer.Instance.ShutDown();
             Environment.Exit(0);
         }
+
+        private static void PositionChanged(double currenttime, double endtime)
+        {
+            Console.Write("\r" + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss"));
+        }
+        
     }
 }

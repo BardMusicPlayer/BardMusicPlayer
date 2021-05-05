@@ -168,10 +168,10 @@ namespace BardMusicPlayer.Synth
         /// </summary>
         /// <param name="currentTime">The current time of this song in milliseconds</param>
         /// <param name="endTime">The total length of this song in milliseconds</param>
-        public delegate void SynthTimePositionHandler(double currentTime, double endTime);
+        public delegate void SynthTimePosition(double currentTime, double endTime);
 
-        internal event SynthTimePositionHandler SynthTimePosition;
+        public event SynthTimePosition SynthTimePositionChanged;
 
-        internal void NotifyTimePosition(PositionChangedEventArgs obj) => SynthTimePosition?.Invoke(obj.CurrentTime, obj.EndTime);
+        internal void NotifyTimePosition(PositionChangedEventArgs obj) => SynthTimePositionChanged?.Invoke(obj.CurrentTime, obj.EndTime);
     }
 }
