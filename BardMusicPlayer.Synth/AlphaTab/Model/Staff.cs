@@ -101,11 +101,11 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             dst.IsPercussion = src.IsPercussion;
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             for (int i = 0, j = Bars.Count; i < j; i++)
             {
-                Bars[i].Finish(settings);
+                Bars[i].Finish();
             }
         }
 

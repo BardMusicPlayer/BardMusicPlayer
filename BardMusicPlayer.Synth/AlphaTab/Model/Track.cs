@@ -75,7 +75,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             dst.Index = src.Index;
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             if (string.IsNullOrEmpty(ShortName))
             {
@@ -88,7 +88,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
 
             for (int i = 0, j = Staves.Count; i < j; i++)
             {
-                Staves[i].Finish(settings);
+                Staves[i].Finish();
             }
         }
 

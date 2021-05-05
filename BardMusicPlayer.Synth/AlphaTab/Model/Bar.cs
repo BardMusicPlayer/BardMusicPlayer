@@ -110,12 +110,12 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             Voices.Add(voice);
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             for (int i = 0, j = Voices.Count; i < j; i++)
             {
                 var voice = Voices[i];
-                voice.Finish(settings);
+                voice.Finish();
             }
         }
 

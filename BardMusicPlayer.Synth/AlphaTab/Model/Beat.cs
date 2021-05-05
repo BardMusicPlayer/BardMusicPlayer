@@ -630,7 +630,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             }
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
 
             var needCopyBeatForBend = false;
@@ -645,7 +645,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             for (int i = 0, j = Notes.Count; i < j; i++)
             {
                 var note = Notes[i];
-                note.Finish(settings);
+                note.Finish();
                 if (note.IsLetRing)
                 {
                     IsLetRing = true;

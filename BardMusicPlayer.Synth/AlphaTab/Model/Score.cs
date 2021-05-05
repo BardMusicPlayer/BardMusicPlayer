@@ -163,11 +163,11 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             Tracks.Add(track);
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             for (int i = 0, j = Tracks.Count; i < j; i++)
             {
-                Tracks[i].Finish(settings);
+                Tracks[i].Finish();
             }
         }
     }

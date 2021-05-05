@@ -717,7 +717,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             }
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             var nextNoteOnLine = new Util.Lazy<Note>(() => NextNoteOnSameLine(this));
 
