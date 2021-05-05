@@ -30,10 +30,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util
 {
     internal static class SynthConstants
     {
-        public const int DrumBank = 128;
-        public const int DefaultChannelCount = 16 + 1 /*metronome*/;
-        public const int MetronomeChannel = DefaultChannelCount - 1;
-
         public const int AudioChannels = 2;
 
         public const float MinVolume = 0f;

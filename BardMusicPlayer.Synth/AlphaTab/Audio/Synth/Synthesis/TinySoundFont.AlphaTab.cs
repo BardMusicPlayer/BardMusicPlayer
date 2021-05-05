@@ -106,15 +106,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                     for (var i = 0; i < _midiEventCounts[x]; i++)
                     {
                         var m = _midiEventQueue.RemoveLast();
-                        if (m.IsMetronome)
-                        {
-                            ChannelNoteOff(SynthConstants.MetronomeChannel, 33);
-                            ChannelNoteOn(SynthConstants.MetronomeChannel, 33, 95 / 127f);
-                        }
-                        else
-                        {
-                            ProcessMidiMessage(m.Event);
-                        }
+                        ProcessMidiMessage(m.Event);
                     }
                 }
 
@@ -175,19 +167,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                     ChannelSetPitchWheel(channel, (short)(data1 | (data2 << 8)));
                     break;
             }
-        }
-
-        public float MetronomeVolume
-        {
-            get => ChannelGetMixVolume(SynthConstants.MetronomeChannel);
-            set => ChannelSetMixVolume(SynthConstants.MetronomeChannel, value);
-        }
-
-        public void SetupMetronomeChannel(float volume)
-        {
-            ChannelSetVolume(SynthConstants.MetronomeChannel, 1);
-            ChannelSetMixVolume(SynthConstants.MetronomeChannel, volume);
-            ChannelSetPresetNumber(SynthConstants.MetronomeChannel, 0, true);
         }
 
         /// <summary>

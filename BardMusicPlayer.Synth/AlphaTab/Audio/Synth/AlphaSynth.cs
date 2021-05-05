@@ -21,7 +21,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         private bool _isMidiLoaded;
         private int _tickPosition;
         private double _timePosition;
-        private float _metronomeVolume;
 
         /// <summary>
         /// Gets the <see cref="ISynthOutput"/> used for playing the generated samples.
@@ -52,18 +51,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             {
                 value = SynthHelper.ClampF(value, SynthConstants.MinVolume, SynthConstants.MaxVolume);
                 _synthesizer.GlobalGainDb = value;
-            }
-        }
-
-        /// <inheritdoc />
-        public float MetronomeVolume
-        {
-            get => _metronomeVolume;
-            set
-            {
-                value = SynthHelper.ClampF(value, SynthConstants.MinVolume, SynthConstants.MaxVolume);
-                _metronomeVolume = value;
-                _synthesizer.MetronomeVolume = value;
             }
         }
 
@@ -192,7 +179,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             }
 
             Output.Activate();
-            _synthesizer.SetupMetronomeChannel(MetronomeVolume);
 
             Logger.Debug("AlphaSynth", "Starting playback");
             State = PlayerState.Playing;
@@ -275,7 +261,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         {
             if (IsReadyForPlayback)
             {
-                _synthesizer.SetupMetronomeChannel(MetronomeVolume);
                 OnReadyForPlayback();
             }
         }

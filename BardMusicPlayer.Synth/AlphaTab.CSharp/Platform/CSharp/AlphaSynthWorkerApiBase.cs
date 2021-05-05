@@ -58,12 +58,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Platform.CSharp
             set => DispatchOnWorkerThread(() => { Player.MasterVolume = value; });
         }
 
-        public float MetronomeVolume
-        {
-            get => Player.MetronomeVolume;
-            set => DispatchOnWorkerThread(() => { Player.MetronomeVolume = value; });
-        }
-
         public double PlaybackSpeed
         {
             get => Player.PlaybackSpeed;

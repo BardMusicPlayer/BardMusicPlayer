@@ -51,15 +51,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         }
 
         /// <summary>
-        /// Gets or sets the metronome volume. (range: 0.0-3.0, default 0.0)
-        /// </summary>
-        float MetronomeVolume
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets the current playback speed as percentage. (range: 0.125-8.0, default: 1.0)
         /// </summary>
         double PlaybackSpeed

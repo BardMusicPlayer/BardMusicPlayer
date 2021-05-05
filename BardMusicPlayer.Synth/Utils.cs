@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Synth
             var events = new AlphaSynthMidiFileHandler(file);
             events.AddTempo(0, 100);
 
-            var trackCounter = 0;
+            var trackCounter = byte.MinValue;
             var veryLast = 0L;
 
             var midiFile = await song.GetProcessedMidiFile();
@@ -40,13 +40,10 @@ namespace BardMusicPlayer.Synth
                         var noteNum = note.NoteNumber;
                         var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
                         var time = (int) note.Time;
-
-                        
-                        events.AddProgramChange(trackCounter, time, (byte) trackCounter, (byte) instrument.MidiProgramChangeCode);
-                        events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, (byte) trackCounter);
-                        trackCounter++;
-                        if (trackCounter == 16) trackCounter = 18;
-                        if (trackCounter == byte.MaxValue) trackCounter = 0;
+                        events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
+                        events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
+                        if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
+                        else trackCounter++;
                         if (time + dur > veryLast) veryLast = time + dur;
                     }
                     
