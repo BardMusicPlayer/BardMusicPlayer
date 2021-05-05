@@ -103,8 +103,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup Tuba3Trombone1Trumpet1 = new("Tuba3Trombone1Trumpet1", 302, 3, 1, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba2Trombone1Trumpet2 = new("Tuba2Trombone1Trumpet2", 303, 2, 1, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba1Trombone1Trumpet3 = new("Tuba1Trombone1Trumpet3", 304, 1, 1, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup Tuba1Trombone2Trumpet3 = new("Tuba1Trombone2Trumpet2", 305, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaTromboneTrumpet = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Trombone3Trumpet1, Tuba2Trombone2Trumpet1, Tuba3Trombone1Trumpet1, Tuba2Trombone1Trumpet2, Tuba1Trombone1Trumpet3, Tuba1Trombone2Trumpet3 });
+        public static readonly AutoToneInstrumentGroup Tuba1Trombone2Trumpet2 = new("Tuba1Trombone2Trumpet2", 305, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaTromboneTrumpet = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Trombone3Trumpet1, Tuba2Trombone2Trumpet1, Tuba3Trombone1Trumpet1, Tuba2Trombone1Trumpet2, Tuba1Trombone1Trumpet3, Tuba1Trombone2Trumpet2 });
 
         // Tube Horn Trumpet
         public static readonly AutoToneInstrumentGroup Tuba1Horn3Trumpet1 = new("Tuba1Horn3Trumpet1", 306, 1, 3, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
@@ -112,8 +112,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup Tuba3Horn1Trumpet1 = new("Tuba3Horn1Trumpet1", 308, 3, 1, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba2Horn1Trumpet2 = new("Tuba2Horn1Trumpet2", 309, 2, 1, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba1Horn1Trumpet3 = new("Tuba1Horn1Trumpet3", 310, 1, 1, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup Tuba1Horn2Trumpet3 = new("Tuba1Horn2Trumpet3", 311, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaHornTrumpet = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Horn3Trumpet1, Tuba2Horn2Trumpet1, Tuba3Horn1Trumpet1, Tuba2Horn1Trumpet2, Tuba1Horn1Trumpet3, Tuba1Horn2Trumpet3 });
+        public static readonly AutoToneInstrumentGroup Tuba1Horn2Trumpet2 = new("Tuba1Horn2Trumpet2", 311, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaHornTrumpet = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Horn3Trumpet1, Tuba2Horn2Trumpet1, Tuba3Horn1Trumpet1, Tuba2Horn1Trumpet2, Tuba1Horn1Trumpet3, Tuba1Horn2Trumpet2 });
 
         // Tuba Trumpet
         public static readonly AutoToneInstrumentGroup Tuba2Trumpet3 = new("Tuba2Trumpet3", 312, 2, 0, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.None, Instrument.Trumpet, AutoToneOctaveRange.C1toC6);
@@ -126,8 +126,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup Tuba3Trombone1Saxophone1 = new("Tuba3Trombone1Saxophone1", 316, 3, 1, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba2Trombone1Saxophone2 = new("Tuba2Trombone1Saxophone2", 317, 2, 1, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba1Trombone1Saxophone3 = new("Tuba1Trombone1Saxophone3", 318, 1, 1, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup Tuba1Trombone2Saxophone3 = new("Tuba1Trombone2Saxophone2", 319, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaTromboneSaxophone= new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Trombone3Saxophone1, Tuba2Trombone2Saxophone1, Tuba3Trombone1Saxophone1, Tuba2Trombone1Saxophone2, Tuba1Trombone1Saxophone3, Tuba1Trombone2Saxophone3 });
+        public static readonly AutoToneInstrumentGroup Tuba1Trombone2Saxophone2 = new("Tuba1Trombone2Saxophone2", 319, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Trombone, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaTromboneSaxophone= new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Trombone3Saxophone1, Tuba2Trombone2Saxophone1, Tuba3Trombone1Saxophone1, Tuba2Trombone1Saxophone2, Tuba1Trombone1Saxophone3, Tuba1Trombone2Saxophone2 });
 
         // Tube Horn Saxophone
         public static readonly AutoToneInstrumentGroup Tuba1Horn3Saxophone1 = new("Tuba1Horn3Saxophone1", 320, 1, 3, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
@@ -135,8 +135,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup Tuba3Horn1Saxophone1 = new("Tuba3Horn1Saxophone1", 322, 3, 1, 1, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba2Horn1Saxophone2 = new("Tuba2Horn1Saxophone2", 323, 2, 1, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup Tuba1Horn1Saxophone3 = new("Tuba1Horn1Saxophone3", 324, 1, 1, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup Tuba1Horn2Saxophone3 = new("Tuba1Horn2Saxophone2", 325, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaHornSaxophone = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Horn3Saxophone1, Tuba2Horn2Saxophone1, Tuba3Horn1Saxophone1, Tuba2Horn1Saxophone2, Tuba1Horn1Saxophone3, Tuba1Horn2Saxophone3 });
+        public static readonly AutoToneInstrumentGroup Tuba1Horn2Saxophone2 = new("Tuba1Horn2Saxophone2", 325, 1, 2, 2, InstrumentTone.Brass, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> TubaHornSaxophone = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { Tuba1Horn3Saxophone1, Tuba2Horn2Saxophone1, Tuba3Horn1Saxophone1, Tuba2Horn1Saxophone2, Tuba1Horn1Saxophone3, Tuba1Horn2Saxophone2 });
 
         // Tuba Saxophone
         public static readonly AutoToneInstrumentGroup Tuba2Saxophone3 = new("Tuba2Saxophone3", 326, 2, 0, 3, InstrumentTone.Brass, Instrument.Tuba, Instrument.None, Instrument.Saxophone, AutoToneOctaveRange.C1toC6);
@@ -155,8 +155,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup DoubleBass3Cello1Viola1 = new("DoubleBass3Cello1Viola1", 402, 3, 1, 1, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Viola, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup DoubleBass2Cello1Viola2 = new("DoubleBass2Cello1Viola2", 403, 2, 1, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Viola, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup DoubleBass1Cello1Viola3 = new("DoubleBass1Cello1Viola3", 404, 1, 1, 3, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Viola, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup DoubleBass1Cello2Viola3 = new("DoubleBass1Cello2Viola2", 405, 1, 2, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Viola, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> DoubleBassCelloViola = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { DoubleBass1Cello3Viola1, DoubleBass2Cello2Viola1, DoubleBass3Cello1Viola1, DoubleBass2Cello1Viola2, DoubleBass1Cello1Viola3, DoubleBass1Cello2Viola3 });
+        public static readonly AutoToneInstrumentGroup DoubleBass1Cello2Viola2 = new("DoubleBass1Cello2Viola2", 405, 1, 2, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Viola, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> DoubleBassCelloViola = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { DoubleBass1Cello3Viola1, DoubleBass2Cello2Viola1, DoubleBass3Cello1Viola1, DoubleBass2Cello1Viola2, DoubleBass1Cello1Viola3, DoubleBass1Cello2Viola2 });
 
         // DoubleBass Viola
         public static readonly AutoToneInstrumentGroup DoubleBass2Viola3 = new("DoubleBass2Viola3", 406, 2, 0, 3, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.None, Instrument.Viola, AutoToneOctaveRange.C1toC6);
@@ -169,8 +169,8 @@ namespace BardMusicPlayer.Common.Structs
         public static readonly AutoToneInstrumentGroup DoubleBass3Cello1Violin1 = new("DoubleBass3Cello1Violin1", 410, 3, 1, 1, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Violin, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup DoubleBass2Cello1Violin2 = new("DoubleBass2Cello1Violin2", 411, 2, 1, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Violin, AutoToneOctaveRange.C1toC6);
         public static readonly AutoToneInstrumentGroup DoubleBass1Cello1Violin3 = new("DoubleBass1Cello1Violin3", 412, 1, 1, 3, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Violin, AutoToneOctaveRange.C1toC6);
-        public static readonly AutoToneInstrumentGroup DoubleBass1Cello2Violin3 = new("DoubleBass1Cello2Violin2", 413, 1, 2, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Violin, AutoToneOctaveRange.C1toC6);
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> DoubleBassCelloViolin = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { DoubleBass1Cello3Violin1, DoubleBass2Cello2Violin1, DoubleBass3Cello1Violin1, DoubleBass2Cello1Violin2, DoubleBass1Cello1Violin3, DoubleBass1Cello2Violin3 });
+        public static readonly AutoToneInstrumentGroup DoubleBass1Cello2Violin2 = new("DoubleBass1Cello2Violin2", 413, 1, 2, 2, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.Cello, Instrument.Violin, AutoToneOctaveRange.C1toC6);
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> DoubleBassCelloViolin = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup> { DoubleBass1Cello3Violin1, DoubleBass2Cello2Violin1, DoubleBass3Cello1Violin1, DoubleBass2Cello1Violin2, DoubleBass1Cello1Violin3, DoubleBass1Cello2Violin2 });
         
         // DoubleBass Violin
         public static readonly AutoToneInstrumentGroup DoubleBass2Violin3 = new("DoubleBass2Violin3", 414, 2, 0, 3, InstrumentTone.Strings, Instrument.DoubleBass, Instrument.None, Instrument.Violin, AutoToneOctaveRange.C1toC6);
