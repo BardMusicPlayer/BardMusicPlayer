@@ -148,7 +148,7 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static AutoToneOctaveRange Parse(int autoToneOctaveRange)
         {
-            TryParse(autoToneOctaveRange, out var result);
+            TryParse(autoToneOctaveRange.ToString(), out var result);
             return result;
         }
 
@@ -160,13 +160,9 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static bool TryParse(int autoToneOctaveRange, out AutoToneOctaveRange result)
         {
-            if (All.Any(x => x.Index.Equals(autoToneOctaveRange)))
-            {
-                result = All.First(x => x.Index.Equals(autoToneOctaveRange));
-                return true;
-            }
-            result = Invalid;
-            return false;
+            var success = TryParse(autoToneOctaveRange.ToString(), out var innerResult);
+            result = innerResult;
+            return success;
         }
 
         /// <summary>
@@ -194,7 +190,6 @@ namespace BardMusicPlayer.Common.Structs
                 return false;
             }
             autoToneOctaveRange = autoToneOctaveRange.Replace(" ", "").Replace("_", "");
-            if (int.TryParse(autoToneOctaveRange, out var number)) return TryParse(number, out result);
             if (All.Any(x => x.Name.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
                 result = All.First(x => x.Name.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));

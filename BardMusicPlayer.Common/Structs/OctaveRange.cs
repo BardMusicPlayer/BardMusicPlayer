@@ -163,7 +163,7 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static OctaveRange Parse(int octaveRange)
         {
-            TryParse(octaveRange, out var result);
+            TryParse(octaveRange.ToString(), out var result);
             return result;
         }
 
@@ -175,13 +175,9 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns></returns>
         public static bool TryParse(int octaveRange, out OctaveRange result)
         {
-            if (All.Any(x => x.Index.Equals(octaveRange)))
-            {
-                result = All.First(x => x.Index.Equals(octaveRange));
-                return true;
-            }
-            result = Invalid;
-            return false;
+            var success = TryParse(octaveRange.ToString(), out var innerResult);
+            result = innerResult;
+            return success;
         }
 
         /// <summary>
@@ -209,7 +205,6 @@ namespace BardMusicPlayer.Common.Structs
                 return false;
             }
             octaveRange = octaveRange.Replace(" ", "").Replace("_", "");
-            if (int.TryParse(octaveRange, out var number)) return TryParse(number, out result);
             if (All.Any(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
                 result = All.First(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
