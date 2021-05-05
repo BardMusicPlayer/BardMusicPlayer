@@ -3,7 +3,7 @@ using BardMusicPlayer.Synth.AlphaTab.Audio.Synth;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
-namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Platform.CSharp
+namespace BardMusicPlayer.Synth.AlphaTab
 {
     internal abstract class AlphaSynthWorkerApiBase : IAlphaSynth
     {

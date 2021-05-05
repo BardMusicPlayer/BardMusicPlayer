@@ -4,13 +4,13 @@ using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
-namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Platform.CSharp
+namespace BardMusicPlayer.Synth.AlphaTab
 {
     /// <summary>
     /// A <see cref="ISynthOutput"/> implementation that uses NAudio to play the
     /// sound via WasapiOut.
     /// </summary>
-    public class NAudioSynthOutput : WaveProvider32, ISynthOutput, IDisposable
+    internal class NAudioSynthOutput : WaveProvider32, ISynthOutput, IDisposable
     {
         private const int BufferSize = 4096;
         

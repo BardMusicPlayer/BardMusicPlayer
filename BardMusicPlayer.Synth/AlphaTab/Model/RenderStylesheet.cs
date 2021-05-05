@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// This class represents the rendering stylesheet.
     /// It contains settings which control the display of the score when rendered. 
     /// </summary>
-    public class RenderStylesheet
+    internal class RenderStylesheet
     {
         /// <summary>
         /// Gets or sets whether dynamics are hidden.

@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all durations of a beat.
     /// </summary>
-    public enum Duration
+    internal enum Duration
     {
         /// <summary>
         /// A quadruple whole note duration 

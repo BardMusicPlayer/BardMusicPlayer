@@ -1,4 +1,4 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// model. It stores the basic information of 
     /// a song and stores the sub components. 
     /// </summary>
-    public class Score
+    internal class Score
     {
         private RepeatGroup _currentRepeatGroup;
 

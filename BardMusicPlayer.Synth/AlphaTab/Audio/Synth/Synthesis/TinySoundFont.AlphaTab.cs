@@ -3,7 +3,7 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
@@ -134,7 +134,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                 bufferPos += MicroBufferSize * SynthConstants.AudioChannels;
             }
 
-            CSharp.Platform.Platform.ClearIntArray(_midiEventCounts);
+            Platform.ClearIntArray(_midiEventCounts);
             return buffer;
         }
 

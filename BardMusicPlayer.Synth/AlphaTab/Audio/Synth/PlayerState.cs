@@ -3,7 +3,7 @@
     /// <summary>
     /// Lists the different states of the player
     /// </summary>
-    public enum PlayerState
+    internal enum PlayerState
     {
         /// <summary>
         /// Player is paused

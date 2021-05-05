@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab
     /// <summary>
     /// Represents the progress of any data being loaded.
     /// </summary>
-    public class ProgressEventArgs
+    internal class ProgressEventArgs
     {
         /// <summary>
         /// Gets the currently loaded bytes.

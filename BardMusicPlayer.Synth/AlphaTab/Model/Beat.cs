@@ -1,5 +1,5 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
@@ -8,7 +8,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// A beat is a single block within a bar. A beat is a combination
     /// of several notes played at the same time.
     /// </summary>
-    public class Beat
+    internal class Beat
     {
         /// <summary>
         /// This is a global counter for all beats. We use it

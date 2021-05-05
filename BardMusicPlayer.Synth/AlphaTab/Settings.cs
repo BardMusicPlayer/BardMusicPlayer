@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab
     /// Lists the different modes on how rhythm notation is shown on the tab staff.
     /// </summary>
     [JsonSerializable]
-    public enum TabRhythmMode
+    internal enum TabRhythmMode
     {
         /// <summary>
         /// Rhythm notation is hidden.
@@ -28,7 +28,7 @@ namespace BardMusicPlayer.Synth.AlphaTab
     /// The notation settings control how various music notation elements are shown and behaving
     /// </summary>
     [JsonSerializable]
-    public class NotationSettings
+    internal class NotationSettings
     {
 
 
@@ -135,7 +135,7 @@ namespace BardMusicPlayer.Synth.AlphaTab
     /// This public class contains instance specific settings for alphaTab
     /// </summary>
     [JsonSerializable]
-    public partial class Settings
+    internal partial class Settings
     {
 
 

@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// This public enum lists all different types of finger slide-ins on a string.
     /// </summary>
-    public enum SlideInType
+    internal enum SlideInType
     {
         /// <summary>
         /// No slide.
@@ -24,7 +24,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// This public enum lists all different types of finger slide-outs on a string.
     /// </summary>
-    public enum SlideOutType
+    internal enum SlideOutType
     {
         /// <summary>
         /// No slide.

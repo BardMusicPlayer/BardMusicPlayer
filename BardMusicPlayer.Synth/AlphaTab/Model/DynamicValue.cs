@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all dynamics.
     /// </summary>
-    public enum DynamicValue
+    internal enum DynamicValue
     {
         /// <summary>
         /// pianississimo (very very soft)

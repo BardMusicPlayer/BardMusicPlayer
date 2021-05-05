@@ -1,5 +1,4 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
-using BardMusicPlayer.Synth.AlphaTab.Platform;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
@@ -9,7 +8,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// It consists of a fret offset and a string on which the note is played on.
     /// It also can be modified by a lot of different effects.
     /// </summary>
-    public class Note
+    internal class Note
     {
         /// <summary>
         /// This is a global counter for all notes. We use it

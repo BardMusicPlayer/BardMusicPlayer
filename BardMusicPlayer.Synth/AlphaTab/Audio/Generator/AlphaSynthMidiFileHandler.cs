@@ -8,7 +8,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Generator
     /// This implementation of the <see cref="IMidiFileHandler"/> generates a <see cref="MidiFile"/>
     /// object which can be used in AlphaSynth for playback. 
     /// </summary>
-    public class AlphaSynthMidiFileHandler : IMidiFileHandler
+    internal class AlphaSynthMidiFileHandler : IMidiFileHandler
     {
         private readonly MidiFile _midiFile;
 

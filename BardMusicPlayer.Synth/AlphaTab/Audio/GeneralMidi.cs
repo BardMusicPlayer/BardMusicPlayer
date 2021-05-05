@@ -1,4 +1,4 @@
-﻿using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+﻿using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio
 {

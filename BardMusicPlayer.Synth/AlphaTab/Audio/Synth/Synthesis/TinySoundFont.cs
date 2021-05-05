@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 // ReSharper disable UnusedMember.Global
 

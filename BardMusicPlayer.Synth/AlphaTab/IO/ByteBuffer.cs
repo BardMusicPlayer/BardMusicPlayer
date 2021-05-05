@@ -61,7 +61,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
                     var newBuffer = new byte[value];
                     if (Length > 0)
                     {
-                        CSharp.Platform.Platform.BlockCopy(_buffer, 0, newBuffer, 0, Length);
+                        Platform.BlockCopy(_buffer, 0, newBuffer, 0, Length);
                     }
 
                     _buffer = newBuffer;
@@ -109,7 +109,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
             }
             else
             {
-                CSharp.Platform.Platform.BlockCopy(_buffer, Position, buffer, offset, n);
+                Platform.BlockCopy(_buffer, Position, buffer, offset, n);
             }
 
             Position += n;
@@ -148,7 +148,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
             }
             else
             {
-                CSharp.Platform.Platform.BlockCopy(buffer, offset, _buffer, Position, Math.Min(count, buffer.Length - offset));
+                Platform.BlockCopy(buffer, offset, _buffer, Position, Math.Min(count, buffer.Length - offset));
             }
 
             Position = i;
@@ -181,7 +181,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
         public virtual byte[] ToArray()
         {
             var copy = new byte[Length];
-            CSharp.Platform.Platform.BlockCopy(_buffer, 0, copy, 0, Length);
+            Platform.BlockCopy(_buffer, 0, copy, 0, Length);
             return copy;
         }
     }

@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Collections
+namespace BardMusicPlayer.Synth.AlphaTab.Collections
 {
     /// <summary>
     /// Represents a strongly typed list of elements. 
     /// </summary>
     /// <typeparam name="T">The type fo the elements</typeparam>
     /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
-    public class FastList<T> : IEnumerable<T>
+    internal class FastList<T> : IEnumerable<T>
     {
         private readonly List<T> _list;
 

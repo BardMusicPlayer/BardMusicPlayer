@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// This public class stores the midi specific information of a track needed
     /// for playback.
     /// </summary>
-    public class PlaybackInformation
+    internal class PlaybackInformation
     {
         /// <summary>
         /// Gets or sets the volume (0-16)

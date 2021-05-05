@@ -1,5 +1,5 @@
 ﻿using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.IO;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi
@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi
     /// <summary>
     /// Represents a midi file with a single track that can be played via <see cref="AlphaSynth"/>
     /// </summary>
-    public class MidiFile
+    internal class MidiFile
     {
         /// <summary>
         /// Gets or sets the division per quarter notes.

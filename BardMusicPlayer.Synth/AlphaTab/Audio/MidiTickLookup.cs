@@ -1,4 +1,4 @@
-﻿using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+﻿using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Model;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio
@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio
     /// <summary>
     /// Represents the time period, for which a <see cref="Beat"/> is played.
     /// </summary>
-    public class BeatTickLookup
+    internal class BeatTickLookup
     {
         private FastDictionary<int, bool> _highlightedBeats;
 
@@ -55,7 +55,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio
     /// <summary>
     /// Represents the time period, for which all bars of a <see cref="MasterBar"/> are played.
     /// </summary>
-    public class MasterBarTickLookup
+    internal class MasterBarTickLookup
     {
         /// <summary>
         /// Gets or sets the start time in midi ticks at which the MasterBar is played.
@@ -119,7 +119,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio
     /// Represents the results of searching the currently played beat.
     /// </summary>
     /// <seealso cref="MidiTickLookup.FindBeat"/>
-    public class MidiTickLookupFindBeatResult
+    internal class MidiTickLookupFindBeatResult
     {
         /// <summary>
         /// Gets or sets the beat that is currently played.
@@ -145,7 +145,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio
     /// <summary>
     /// This class holds all information about when <see cref="MasterBar"/>s and <see cref="Beat"/>s are played.
     /// </summary>
-    public class MidiTickLookup
+    internal class MidiTickLookup
     {
         private MasterBarTickLookup _currentMasterBar;
 

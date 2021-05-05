@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// This is the main synthesizer component which can be used to
     /// play a <see cref="MidiFile"/> via a <see cref="ISynthOutput"/>.
     /// </summary>
-    public class AlphaSynth : IAlphaSynth
+    internal class AlphaSynth : IAlphaSynth
     {
         private readonly MidiFileSequencer _sequencer;
         private readonly TinySoundFont _synthesizer;
@@ -480,7 +480,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// <summary>
     /// Represents the info when the player state changes.
     /// </summary>
-    public class PlayerStateChangedEventArgs
+    internal class PlayerStateChangedEventArgs
     {
         /// <summary>
         /// The new state of the player.
@@ -507,7 +507,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// <summary>
     /// Represents the info when the time in the synthesizer changes.
     /// </summary>
-    public class PositionChangedEventArgs
+    internal class PositionChangedEventArgs
     {
         /// <summary>
         /// Gets the current time in milliseconds.

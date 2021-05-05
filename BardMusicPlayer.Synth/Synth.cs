@@ -1,11 +1,16 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using System.Collections;
 using System.Globalization;
 using System.Threading.Tasks;
 using BardMusicPlayer.Common;
 using BardMusicPlayer.Notate.Song;
+using BardMusicPlayer.Synth.AlphaTab;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Platform.CSharp;
 using BardMusicPlayer.Synth.Properties;
 using NAudio.CoreAudioApi;
 
@@ -39,16 +44,17 @@ namespace BardMusicPlayer.Synth
         /// 
         /// </summary>
         /// <param name="device"></param>
+        /// <param name="defaultVolume"></param>
         /// <param name="bufferCount"></param>
         /// <param name="latency"></param>
-        public void Setup(MMDevice device, byte bufferCount = 3, byte latency = 100)
+        public void Setup(MMDevice device, float defaultVolume = 0.8f, byte bufferCount = 3, byte latency = 100)
         {
             ShutDown();
             _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), AlphaTab.Util.LogLevel.None, BeginInvoke);
             foreach (var resource in Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
                 _player.LoadSoundFont((byte[])((DictionaryEntry)resource).Value, true);
             _player.PositionChanged += NotifyTimePosition;
-            _player.MasterVolume = 1.0f;
+            _player.MasterVolume = defaultVolume;
         }
 
         /// <summary>
@@ -67,10 +73,11 @@ namespace BardMusicPlayer.Synth
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="defaultVolume"></param>
         /// <param name="bufferCount"></param>
         /// <param name="latency"></param>
-        public void Setup(byte bufferCount = 2, byte latency = 100) => Setup(
-            new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia), bufferCount, latency);
+        public void Setup(float defaultVolume = 0.8f, byte bufferCount = 2, byte latency = 100) => Setup(
+            new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia), defaultVolume, bufferCount, latency);
 
         /// <summary>
         /// 

@@ -2,7 +2,7 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
@@ -124,7 +124,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                 return;
             }
 
-            var start = CSharp.Platform.Platform.GetCurrentMilliseconds();
+            var start = Platform.GetCurrentMilliseconds();
 
             var finalTime = _currentTime + milliseconds;
 
@@ -136,7 +136,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                 }
             }
 
-            var duration = CSharp.Platform.Platform.GetCurrentMilliseconds() - start;
+            var duration = Platform.GetCurrentMilliseconds() - start;
             Logger.Debug("Sequencer", "Silent seek finished in " + duration + "ms");
         }
 

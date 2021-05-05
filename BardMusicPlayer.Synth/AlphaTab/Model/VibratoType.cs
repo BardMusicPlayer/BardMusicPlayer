@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// This public enum lists all vibrato types that can be performed.
     /// </summary>
-    public enum VibratoType
+    internal enum VibratoType
     {
         /// <summary>
         /// No vibrato.

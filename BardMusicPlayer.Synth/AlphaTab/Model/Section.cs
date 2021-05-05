@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// This public class is used to describe the beginning of a 
     /// section within a song. It acts like a marker. 
     /// </summary>
-    public class Section
+    internal class Section
     {
         /// <summary>
         /// Gets or sets the marker ID for this section. 

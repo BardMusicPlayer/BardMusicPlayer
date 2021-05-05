@@ -1,4 +1,4 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// This public class describes a single track or instrument of score.
     /// It is bascially a list of staffs containing individual music notation kinds.
     /// </summary>
-    public class Track
+    internal class Track
     {
         private const int ShortNameMaxLength = 10;
 

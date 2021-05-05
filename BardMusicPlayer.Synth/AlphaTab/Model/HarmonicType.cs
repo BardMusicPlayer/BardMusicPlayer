@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all harmonic types.
     /// </summary>
-    public enum HarmonicType
+    internal enum HarmonicType
     {
         /// <summary>
         /// No harmonics. 

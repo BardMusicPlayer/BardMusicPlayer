@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Collections
+﻿namespace BardMusicPlayer.Synth.AlphaTab.Collections
 {
     internal class StringBuilder
     {
@@ -11,7 +11,7 @@
 
         public void AppendChar(int i)
         {
-            _sb.Append(Platform.Platform.StringFromCharCode(i));
+            _sb.Append(Platform.StringFromCharCode(i));
         }
 
         public override string ToString()

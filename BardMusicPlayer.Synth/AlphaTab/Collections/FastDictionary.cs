@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Collections
+namespace BardMusicPlayer.Synth.AlphaTab.Collections
 {
     /// <summary>
     /// Represents a collection of key-value pairs. 
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class FastDictionary<TKey, TValue> : IEnumerable<TKey>
+    internal class FastDictionary<TKey, TValue> : IEnumerable<TKey>
     {
         private readonly Dictionary<TKey, TValue> _dictionary;
 

@@ -28,7 +28,7 @@
  */
 
 using System;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.IO;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont
@@ -183,7 +183,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont
                 reader.Read(sampleBuffer, 0, samplesToRead * 2);
                 for (var i = 0; i < samplesToRead; i++)
                 {
-                    testBuffer[i] = Platform.Platform.ToInt16((sampleBuffer[(i * 2) + 1] << 8) | sampleBuffer[(i * 2)]);
+                    testBuffer[i] = Platform.ToInt16((sampleBuffer[(i * 2) + 1] << 8) | sampleBuffer[(i * 2)]);
                     samples[samplesPos + i] = testBuffer[i] / 32767f;
                 }
 

@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all types of grace notes
     /// </summary>
-    public enum GraceType
+    internal enum GraceType
     {
         /// <summary>
         /// No grace, normal beat. 

@@ -5,7 +5,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds
     /// <summary>
     /// Represents a fixed size circular sample buffer that can be written to and read from.
     /// </summary>
-    public class CircularSampleBuffer
+    internal class CircularSampleBuffer
     {
         private float[] _buffer;
         private int _writePosition;
@@ -55,13 +55,13 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds
             }
 
             var writeToEnd = Math.Min(_buffer.Length - _writePosition, count);
-            CSharp.Platform.Platform.ArrayCopy(data, offset, _buffer, _writePosition, writeToEnd);
+            Platform.ArrayCopy(data, offset, _buffer, _writePosition, writeToEnd);
             _writePosition += writeToEnd;
             _writePosition %= _buffer.Length;
             samplesWritten += writeToEnd;
             if (samplesWritten < count)
             {
-                CSharp.Platform.Platform.ArrayCopy(data, offset + samplesWritten, _buffer, _writePosition, count - samplesWritten);
+                Platform.ArrayCopy(data, offset + samplesWritten, _buffer, _writePosition, count - samplesWritten);
                 _writePosition += count - samplesWritten;
                 samplesWritten = count;
             }
@@ -86,14 +86,14 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds
 
             var samplesRead = 0;
             var readToEnd = Math.Min(_buffer.Length - _readPosition, count);
-            CSharp.Platform.Platform.ArrayCopy(_buffer, _readPosition, data, offset, readToEnd);
+            Platform.ArrayCopy(_buffer, _readPosition, data, offset, readToEnd);
             samplesRead += readToEnd;
             _readPosition += readToEnd;
             _readPosition %= _buffer.Length;
 
             if (samplesRead < count)
             {
-                CSharp.Platform.Platform.ArrayCopy(_buffer, _readPosition, data, offset + samplesRead, count - samplesRead);
+                Platform.ArrayCopy(_buffer, _readPosition, data, offset + samplesRead, count - samplesRead);
                 _readPosition += count - samplesRead;
                 samplesRead = count;
             }
