@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BardMusicPlayer.Notate\BardMusicPlayer.Notate.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Synth\BardMusicPlayer.Synth.csproj" />
   </ItemGroup>
 
 </Project>

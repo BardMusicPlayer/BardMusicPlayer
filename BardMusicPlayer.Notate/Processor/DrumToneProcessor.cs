@@ -6,17 +6,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BardMusicPlayer.Notate.Song;
+using BardMusicPlayer.Notate.Song.Config;
 using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Notate.Processor
 {
-    internal class ToneProcessor : BaseProcessor
+    internal class DrumToneProcessor : BaseProcessor
     {
-        public ToneProcessor(BmpSong song) : base(song)
+        public DrumToneConfig Config { get; set; }
+
+        internal DrumToneProcessor(DrumToneConfig config, BmpSong song) : base(song)
         {
+            Config = config;
         }
 
-        public override Task<List<TrackChunk>> Process()
+        public override async Task<List<TrackChunk>> Process()
         {
             throw new System.NotImplementedException();
         }

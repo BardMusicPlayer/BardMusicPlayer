@@ -10,7 +10,6 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-#pragma warning disable 1998
 namespace BardMusicPlayer.Notate.Processor.Utilities
 {
     internal static partial class Extensions
@@ -20,14 +19,14 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> FixClassicChords(this TrackChunk trackChunk)
+        internal static Task<TrackChunk> FixClassicChords(this TrackChunk trackChunk)
         {
             var notes = trackChunk.GetNotes().ToArray().Where(c => c != null).Reverse().ToArray();
 
             for (var i = 1; i < notes.Length; i++)
             {
                 var time = notes[i].GetTimedNoteOnEvent().Time;
-                var dur = notes[i].Length;
+
                 var lowestParent = notes[0].GetTimedNoteOnEvent().Time;
 
                 for (var k = i - 1; k >= 0; k--)
@@ -48,7 +47,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             trackChunk = new TrackChunk();
 
             trackChunk.AddObjects(notes);
-            return trackChunk;
+            return Task.FromResult(trackChunk);
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> OffSet50Ms(this TrackChunk trackChunk)
+        internal static Task<TrackChunk> OffSet50Ms(this TrackChunk trackChunk)
         {
             var processedChunk = new TrackChunk();
 
@@ -79,7 +78,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             int lastVelocity = 0;
 
             List<Note> thisNotes = new();
-            for (var j = 0; j < events.Count(); j++)
+            for (var j = 0; j < events.Length; j++)
             {
                 long startTime = events[j].GetTimedNoteOnEvent().Time;
                 long stopTime;
@@ -128,11 +127,11 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                     }
 
                     if (lastDur > 0)
-                        thisNotes.Add(new Note((SevenBitNumber)lastNoteNum, lastDur, lastStartTime)
+                        thisNotes.Add(new Note((SevenBitNumber) lastNoteNum, lastDur, lastStartTime)
                         {
-                            Channel = (FourBitNumber)lastChannel,
-                            Velocity = (SevenBitNumber)lastVelocity,
-                            OffVelocity = (SevenBitNumber)lastVelocity
+                            Channel = (FourBitNumber) lastChannel,
+                            Velocity = (SevenBitNumber) lastVelocity,
+                            OffVelocity = (SevenBitNumber) lastVelocity
                         });
 
                     lastStartTime = startTime;
@@ -146,15 +145,15 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             }
 
             if (hasNotes)
-                thisNotes.Add(new Note((SevenBitNumber)lastNoteNum, lastDur, lastStartTime)
+                thisNotes.Add(new Note((SevenBitNumber) lastNoteNum, lastDur, lastStartTime)
                 {
-                    Channel = (FourBitNumber)lastChannel,
-                    Velocity = (SevenBitNumber)lastVelocity,
-                    OffVelocity = (SevenBitNumber)lastVelocity
+                    Channel = (FourBitNumber) lastChannel,
+                    Velocity = (SevenBitNumber) lastVelocity,
+                    OffVelocity = (SevenBitNumber) lastVelocity
                 });
 
             processedChunk.AddObjects(thisNotes);
-            return processedChunk;
+            return Task.FromResult(processedChunk);
         }
 
         /// <summary>
@@ -170,12 +169,12 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> FixEndSpacing(this TrackChunk trackChunk)
+        internal static Task<TrackChunk> FixEndSpacing(this TrackChunk trackChunk)
         {
             var events = trackChunk.GetNotes().ToArray();
             var tempChunk = new TrackChunk();
             var thisNotes = new List<Note>();
-            for (var j = 0; j < events.Count(); j++)
+            for (var j = 0; j < events.Length; j++)
             {
                 var noteNum = events[j].NoteNumber;
                 var time = events[j].Time;
@@ -188,7 +187,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                     if (events[j + 1].Time <= events[j].Time + events[j].Length + 25)
                     {
                         dur = events[j + 1].Time - events[j].Time - 25;
-                        dur = dur < 25 ? 1 : dur;
+                        dur = dur < 25 ? 25 : dur;
                     }
                 }
                 thisNotes.Add(new Note(noteNum, dur, time)
@@ -199,7 +198,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                 });
             }
             tempChunk.AddObjects(thisNotes);
-            return tempChunk;
+            return Task.FromResult(tempChunk);
         }
 
         /// <summary>
@@ -210,4 +209,3 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         internal static async Task<TrackChunk> FixEndSpacing(this Task<TrackChunk> trackChunk) => await FixEndSpacing(await trackChunk);
     }
 }
-#pragma warning restore 1998

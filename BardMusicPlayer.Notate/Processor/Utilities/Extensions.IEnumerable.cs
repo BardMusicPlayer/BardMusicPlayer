@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Interaction;
 
-#pragma warning disable 1998
 namespace BardMusicPlayer.Notate.Processor.Utilities
 {
     internal static partial class Extensions
@@ -18,8 +17,8 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="sourceNotesDictionary"></param>
         /// <returns></returns>
-        internal static async Task<IEnumerable<Note>> ConcatNoteDictionaryToList(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary) =>
-            sourceNotesDictionary.SelectMany(note => note.Value).Select(note => note.Value);
+        internal static Task<IEnumerable<Note>> ConcatNoteDictionaryToList(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary) =>
+            Task.FromResult(sourceNotesDictionary.SelectMany(note => note.Value).Select(note => note.Value));
 
         /// <summary>
         /// 
@@ -30,4 +29,3 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             await ConcatNoteDictionaryToList(await sourceNotesDictionary);
     }
 }
-#pragma warning restore 1998

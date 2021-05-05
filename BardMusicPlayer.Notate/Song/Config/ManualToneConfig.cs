@@ -3,13 +3,13 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Common.Structs;
 using BardMusicPlayer.Notate.Song.Config.Interfaces;
 using System.Collections.Generic;
+using BardMusicPlayer.Common.Structs;
 
 namespace BardMusicPlayer.Notate.Song.Config
 {
-    public class ClassicConfig : IConfig
+    public class ManualToneConfig : IConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;
@@ -21,13 +21,13 @@ namespace BardMusicPlayer.Notate.Song.Config
         public int PlayerCount { get; set; } = 1;
 
         /// <summary>
-        /// The instrument for this track
+        /// The instrument tone for this track
         /// </summary>
-        public Instrument Instrument { get; set; } = Instrument.Harp;
+        public InstrumentTone InstrumentTone { get; set; }
 
         /// <summary>
-        /// The octave range to use
+        /// 
         /// </summary>
-        public OctaveRange OctaveRange { get; set; } = OctaveRange.C3toC6;
+        public Dictionary<Instrument, OctaveRange> OctaveRanges { get; set; }
     }
 }

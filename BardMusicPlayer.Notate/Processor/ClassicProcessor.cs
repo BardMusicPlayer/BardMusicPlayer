@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BardMusicPlayer.Notate.Song;
@@ -27,24 +28,26 @@ namespace BardMusicPlayer.Notate.Processor
 
         public override async Task<List<TrackChunk>> Process()
         {
-            List<TrackChunk> trackChunks = new();
-
-            trackChunks.Add(Song.TrackContainers[Config.Track].SourceTrackChunk);
-
-            foreach(var track in Config.IncludedTracks) trackChunks.Add(Song.TrackContainers[track].SourceTrackChunk);
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[Config.Track].SourceTrackChunk }.Concat(Config.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
 
             var trackChunk = TimedObjectUtilities.ToTrackChunk(await 
-                trackChunks.GetNoteDictionary(Song.SourceTempoMap, Config.OctaveRange.LowerNote, Config.OctaveRange.UpperNote, false)
+                trackChunks.GetNoteDictionary(Song.SourceTempoMap, Config.Instrument.InstrumentTone,
+                        Config.OctaveRange.LowerNote, 
+                        Config.OctaveRange.UpperNote, 
+                        (int) Config.Instrument.InstrumentToneMenuKey, 
+                        false,
+                        -(Config.OctaveRange.LowerNote))
                 .MoveNoteDictionaryToDefaultOctave(Config.OctaveRange)
                 .ConcatNoteDictionaryToList());
 
-            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(Config.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote, false);
+            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(Config.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
 
             var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>();
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
                     concurrentPlayerTrackDictionary[iteration] = await TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList()).FixClassicChords().OffSet50Ms().FixEndSpacing();
+                    concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + Config.Instrument.InstrumentTone.Name))});
                 }
             );
 

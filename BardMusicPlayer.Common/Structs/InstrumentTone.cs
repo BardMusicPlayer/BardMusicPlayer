@@ -15,14 +15,14 @@ namespace BardMusicPlayer.Common.Structs
     /// </summary>
     public readonly struct InstrumentTone : IComparable, IConvertible, IComparable<InstrumentTone>, IEquatable<InstrumentTone>
     {
-        public static readonly InstrumentTone None = new("None", 0, new List<Instrument>());
+        public static readonly InstrumentTone None = new("None", 0, Instrument.None, Instrument.None,Instrument.None, Instrument.None, Instrument.None);
 
-        public static readonly InstrumentTone Strummed = new("Strummed", 1, new List<Instrument>{Instrument.Harp, Instrument.Piano, Instrument.Lute, Instrument.Fiddle});
-        public static readonly InstrumentTone Wind = new("Wind", 2, new List<Instrument>{Instrument.Flute, Instrument.Oboe, Instrument.Clarinet, Instrument.Fife, Instrument.Panpipes });
-        public static readonly InstrumentTone Drums = new("Drums", 3, new List<Instrument>{Instrument.Timpani, Instrument.Bongo, Instrument.BassDrum, Instrument.SnareDrum, Instrument.Cymbal});
-        public static readonly InstrumentTone Brass = new("Brass", 4, new List<Instrument>{Instrument.Trumpet, Instrument.Trombone, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone});
-        public static readonly InstrumentTone Strings = new("Strings", 5, new List<Instrument>{Instrument.Violin, Instrument.Viola, Instrument.Cello, Instrument.DoubleBass});
-        public static readonly InstrumentTone SomethingNew = new("SomethingNew", 6, new List<Instrument>{});
+        public static readonly InstrumentTone Strummed = new("Strummed", 1,  Instrument.Harp,Instrument.Piano,Instrument.Lute,Instrument.Fiddle, Instrument.None);
+        public static readonly InstrumentTone Wind = new("Wind", 2, Instrument.Flute, Instrument.Oboe, Instrument.Clarinet, Instrument.Fife, Instrument.Panpipes);
+        public static readonly InstrumentTone Drums = new("Drums", 3,  Instrument.Timpani, Instrument.Bongo, Instrument.BassDrum, Instrument.SnareDrum, Instrument.Cymbal);
+        public static readonly InstrumentTone Brass = new("Brass", 4,  Instrument.Trumpet, Instrument.Trombone, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone);
+        public static readonly InstrumentTone Strings = new("Strings", 5, Instrument.Violin, Instrument.Viola, Instrument.Cello, Instrument.DoubleBass,Instrument.None);
+        public static readonly InstrumentTone SomethingNew = new("SomethingNew", 6,  Instrument.None, Instrument.None, Instrument.None, Instrument.None, Instrument.None);
 
         public static readonly IReadOnlyList<InstrumentTone> All = new ReadOnlyCollection<InstrumentTone>(new List<InstrumentTone> { Strummed, Wind, Drums, Brass, Strings, SomethingNew });
 
@@ -38,19 +38,50 @@ namespace BardMusicPlayer.Common.Structs
         /// <value>The index.</value>
         public int Index { get; }
 
-        public IReadOnlyList<Instrument> Instruments { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public Instrument Tone0 { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Instrument Tone1 { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Instrument Tone2 { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Instrument Tone3 { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Instrument Tone4 { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstrumentTone"/> struct.
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="index">Index.</param>
-        /// <param name="instruments"></param>
-        private InstrumentTone(string name, int index, IReadOnlyList<Instrument> instruments)
+        /// <param name="tone0"></param>
+        /// <param name="tone1"></param>
+        /// <param name="tone2"></param>
+        /// <param name="tone3"></param>
+        /// <param name="tone4"></param>
+        private InstrumentTone(string name, int index, Instrument tone0, Instrument tone1, Instrument tone2, Instrument tone3, Instrument tone4)
         {
             Name = name;
             Index = index;
-            Instruments = instruments;
+            Tone0 = tone0;
+            Tone1 = tone1;
+            Tone2 = tone2;
+            Tone3 = tone3;
+            Tone4 = tone4;
         }
 
         /// <summary>
@@ -110,7 +141,20 @@ namespace BardMusicPlayer.Common.Structs
         public string ToString(IFormatProvider provider) => Name;
         public override string ToString() => Name;
         public object ToType(Type conversionType, IFormatProvider provider) => throw new InvalidCastException("Invalid cast from InstrumentTone to " + conversionType);
-        
+
+        public Instrument GetInstrumentFromChannel(int channel)
+        {
+            return channel switch
+            {
+                0 => Tone0,
+                1 => Tone1,
+                2 => Tone2,
+                3 => Tone3,
+                4 => Tone4,
+                _ => Instrument.None
+            };
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -37,8 +37,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.CSharp.Platform.CSharp
             DispatchOnUiThread(OnReady);
         }
 
-        public bool IsReady => Player.IsReady;
-        public bool IsReadyForPlayback => Player.IsReadyForPlayback;
+        public bool IsReady => Player != null && Player.IsReady;
+        public bool IsReadyForPlayback => Player != null && Player.IsReadyForPlayback;
 
         public PlayerState State => Player == null ? PlayerState.Paused : Player.State;
 

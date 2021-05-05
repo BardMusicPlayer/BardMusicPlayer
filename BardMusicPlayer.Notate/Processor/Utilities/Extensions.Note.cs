@@ -5,7 +5,6 @@
 
 using Melanchall.DryWetMidi.Interaction;
 
-#pragma warning disable 1998
 namespace BardMusicPlayer.Notate.Processor.Utilities
 {
     internal static partial class Extensions
@@ -19,4 +18,3 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         internal static long GetNoteMs(this TimedEvent note, TempoMap tempoMap) => note.TimeAs<MetricTimeSpan>(tempoMap.Clone()).TotalMicroseconds / 1000;
     }
 }
-#pragma warning restore 1998

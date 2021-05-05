@@ -14,7 +14,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
 {
     internal sealed class LoadBalancer : IDisposable
     {
-        private readonly Stack<BardVoice> _freeVoices;
+        private readonly SortedDictionary<int, BardVoice> _freeVoices;
         private readonly Stack<BardVoice> _activeVoices;
         private readonly BardVoice[,,] _registry;
         
@@ -22,7 +22,8 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         {
             var voicePool = new BardVoice[voiceCount];
             for (var x = 0; x < voicePool.Length; x++) voicePool[x] = new BardVoice(x);
-            _freeVoices = new Stack<BardVoice>(voicePool.Reverse());
+            _freeVoices = new SortedDictionary<int, BardVoice>();
+            foreach (var voice in voicePool.Reverse()) _freeVoices.Add(voice.BardNumber, voice);
             _activeVoices = new Stack<BardVoice>();
             _registry = new BardVoice[16, 128, 128];
         }
@@ -32,7 +33,9 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             BardVoice voice;
             if (_freeVoices.Count > 0)
             {
-                voice = _freeVoices.Pop();
+                var voiceKvp = _freeVoices.First();
+                voice = voiceKvp.Value;
+                _freeVoices.Remove(voiceKvp.Key);
                 voice.Start(time, channel, note, velocity);
                 _registry[channel, note, velocity] = voice;
                 _activeVoices.Push(voice);
@@ -57,7 +60,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             _registry[channel, note, velocity] = null;
             var (stoppedBard, stoppedNote) = voice.Stop(time);
             _activeVoices.Remove(voice);
-            _freeVoices.Push(voice);
+            _freeVoices.Add(voice.BardNumber, voice);
             return (stoppedBard, stoppedNote);
         }
 
@@ -85,7 +88,11 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                 Velocity = startVelocity;
                 Time = startTime;
             }
-            internal (int,Note) Stop(long stopTime) => (BardNumber, new Note((SevenBitNumber) Note, stopTime - Time <= 0 ? 1 : stopTime - Time, Time));
+            internal (int,Note) Stop(long stopTime) => (BardNumber, new Note((SevenBitNumber) Note, stopTime - Time <= 0 ? 1 : stopTime - Time, Time)
+            {
+                Channel = (FourBitNumber) Channel,
+                Velocity = (SevenBitNumber) 127
+            });
         }
     }
 }

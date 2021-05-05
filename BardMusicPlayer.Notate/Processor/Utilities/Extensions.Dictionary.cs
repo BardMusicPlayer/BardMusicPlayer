@@ -10,7 +10,6 @@ using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
-#pragma warning disable 1998
 namespace BardMusicPlayer.Notate.Processor.Utilities
 {
     internal static partial class Extensions
@@ -21,17 +20,18 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <param name="sourceNotesDictionary"></param>
         /// <param name="sourceOctaveRange"></param>
         /// <returns></returns>
-        internal static async Task<Dictionary<int, Dictionary<long, Note>>> MoveNoteDictionaryToDefaultOctave(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary, OctaveRange sourceOctaveRange)
+        internal static Task<Dictionary<int, Dictionary<long, Note>>> MoveNoteDictionaryToDefaultOctave(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary, OctaveRange sourceOctaveRange)
         {
             var notesDictionary = new Dictionary<int, Dictionary<long, Note>>();
             for (var i = 0; i < 5; i++) if (sourceNotesDictionary.ContainsKey(i)) notesDictionary[i] = sourceNotesDictionary[i];
             for (var i = sourceOctaveRange.LowerNote; i <= sourceOctaveRange.UpperNote; i++)
             {
+                if (!sourceNotesDictionary.ContainsKey(i)) continue;
                 var noteNumber = OctaveRange.C3toC6.ShiftNoteToOctave(sourceOctaveRange, i);
-                foreach (var note in sourceNotesDictionary[i]) note.Value.NoteNumber = (SevenBitNumber)noteNumber;
+                foreach (var note in sourceNotesDictionary[i]) note.Value.NoteNumber = (SevenBitNumber) noteNumber;
                 notesDictionary[noteNumber] = sourceNotesDictionary[i];
             }
-            return notesDictionary;
+            return Task.FromResult(notesDictionary);
         }
 
         /// <summary>
@@ -48,29 +48,57 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunks"></param>
         /// <param name="tempoMap"></param>
+        /// <param name="tone"></param>
         /// <param name="lowClamp"></param>
         /// <param name="highClamp"></param>
-        /// <param name="includeToneNotes"></param>
-        /// <param name="offset"></param>
+        /// <param name="startingChannel"></param>
+        /// <param name="readTones"></param>
+        /// <param name="noteSampleOffset"></param>
         /// <returns></returns>
-        internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this List<TrackChunk> trackChunks, TempoMap tempoMap, int lowClamp = 12, int highClamp = 120, bool includeToneNotes = true, long offset = 120000)
-
+        internal static Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this List<TrackChunk> trackChunks, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0)
         {
-            var notesDictionary = Tools.GetEmptyNotesDictionary(lowClamp, highClamp, includeToneNotes);
+            if (lowClamp >= highClamp) return Task.FromResult(new Dictionary<int, Dictionary<long, Note>>());
+
+            var notesDictionary = Tools.GetEmptyNotesDictionary(lowClamp, highClamp);
+
+            var currentChannel = startingChannel;
             foreach (var note in trackChunks.Merge().GetNotes())
             {
                 var noteNumber = note.NoteNumber;
-                if (!(includeToneNotes && noteNumber < 5) && (noteNumber < lowClamp || noteNumber > highClamp)) continue;
-                var timeOn = note.GetTimedNoteOnEvent().GetNoteMs(tempoMap) + offset;
-                var timeOff = note.GetTimedNoteOffEvent().GetNoteMs(tempoMap) + offset;
+                if (!(noteNumber < 5) && (noteNumber < lowClamp || noteNumber > highClamp)) continue;
+
+                var timeOn = note.GetTimedNoteOnEvent().GetNoteMs(tempoMap) + 120000 + 
+                             tone.GetInstrumentFromChannel(currentChannel).SampleOffset + 
+                             tone.GetInstrumentFromChannel(currentChannel)
+                                 .NoteSampleOffset(noteNumber + noteSampleOffset);
+
+                var dur = note.GetTimedNoteOffEvent().GetNoteMs(tempoMap) + 120000 +
+                          tone.GetInstrumentFromChannel(currentChannel).SampleOffset + tone
+                              .GetInstrumentFromChannel(currentChannel)
+                              .NoteSampleOffset(noteNumber + noteSampleOffset) -
+                          timeOn - 1;
+
+                note.Time = timeOn;
+                note.Length = dur;
+
+                if (noteNumber < 5)
+                {
+                    if (readTones) currentChannel = noteNumber;
+                    continue;
+                }
+
                 if (notesDictionary[noteNumber].ContainsKey(timeOn))
                 {
-                    var previousTimeOff = timeOn + notesDictionary[noteNumber][timeOn].Length;
-                    if (previousTimeOff < timeOff) notesDictionary[noteNumber][timeOn].Length = timeOff - timeOn;
+                    var previousNote = notesDictionary[noteNumber][timeOn];
+                    if (previousNote.Length < note.Length) notesDictionary[noteNumber][timeOn] = note;
                 }
-                else notesDictionary[noteNumber].Add(timeOn, new Note(noteNumber, timeOff - timeOn, timeOn));
+                else
+                {
+                    note.Channel = (FourBitNumber) currentChannel;
+                    notesDictionary[noteNumber].Add(timeOn, note);
+                }
             }
-            return notesDictionary;
+            return Task.FromResult(notesDictionary);
         }
 
         /// <summary>
@@ -78,13 +106,15 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <param name="tempoMap"></param>
+        /// <param name="tone"></param>
         /// <param name="lowClamp"></param>
         /// <param name="highClamp"></param>
-        /// <param name="includeToneNotes"></param>
-        /// <param name="offset"></param>
+        /// <param name="startingChannel"></param>
+        /// <param name="readTones"></param>
+        /// <param name="noteSampleOffset"></param>
         /// <returns></returns>
-        internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk, TempoMap tempoMap, int lowClamp = 12, int highClamp = 120, bool includeToneNotes = true, long offset = 120000) =>
-            await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, lowClamp, highClamp, includeToneNotes, offset);
+        internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
+            await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, tone, lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
 
         /// <summary>
         /// 
@@ -93,11 +123,24 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <param name="playerCount"></param>
         /// <param name="lowClamp"></param>
         /// <param name="highClamp"></param>
-        /// <param name="includeToneNotes"></param>
         /// <returns></returns>
-        internal static async Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this TrackChunk trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120, bool includeToneNotes = true)
+        internal static Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this TrackChunk trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120)
         {
-            var playerNotesDictionary = Tools.GetEmptyPlayerNotesDictionary(playerCount, lowClamp, highClamp, includeToneNotes);
+            var playerNotesDictionary = Tools.GetEmptyPlayerNotesDictionary(playerCount, lowClamp, highClamp);
+
+            var indexList = new List<Note>();
+            var index = 0;
+            foreach (var note in trackChunk.GetNotes())
+            {
+                note.Velocity = (SevenBitNumber) index;
+                note.OffVelocity = (SevenBitNumber)index;
+                indexList.Add(note);
+                index++;
+                if (index > 127) index = 0;
+            }
+
+            trackChunk = TimedObjectUtilities.ToTrackChunk(indexList);
+
             using var loadBalancer = new LoadBalancer(playerCount);
             using var timedEventsManager = trackChunk.ManageTimedEvents();
 
@@ -108,11 +151,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                     case MidiEventType.NoteOn:
                         {
                             var note = (NoteOnEvent)trackEvent.Event;
-                            if (includeToneNotes && note.NoteNumber < 5)
-                            {
-                                for (var player = 0; player < playerCount; player++) playerNotesDictionary[player][note.NoteNumber][trackEvent.Time] = new Note(note.NoteNumber, 25, trackEvent.Time);
-                            }
-                            else if (note.NoteNumber >= lowClamp && note.NoteNumber <= highClamp)
+                            if (note.NoteNumber >= lowClamp && note.NoteNumber <= highClamp)
                             {
                                 var (stoppedBard, stoppedNote) = loadBalancer.NotifyNoteOn(trackEvent.Time, note.Channel, note.NoteNumber, note.Velocity);
                                 if (stoppedBard > -1)
@@ -137,7 +176,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                         }
                 }
             }
-            return playerNotesDictionary;
+            return Task.FromResult(playerNotesDictionary);
         }
 
         /// <summary>
@@ -147,10 +186,8 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <param name="playerCount"></param>
         /// <param name="lowClamp"></param>
         /// <param name="highClamp"></param>
-        /// <param name="includeToneNotes"></param>
         /// <returns></returns>
-        internal static async Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this Task<TrackChunk> trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120, bool includeToneNotes = true) =>
-            await GetPlayerNoteDictionary(await trackChunk, playerCount, lowClamp, highClamp, includeToneNotes);
+        internal static async Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this Task<TrackChunk> trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120) =>
+            await GetPlayerNoteDictionary(await trackChunk, playerCount, lowClamp, highClamp);
     }
 }
-#pragma warning restore 1998

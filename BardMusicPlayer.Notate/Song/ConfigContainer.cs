@@ -29,8 +29,11 @@ namespace BardMusicPlayer.Notate.Song
             if (Config is null) throw new BmpNotateException("No configuration in this container.");
             return Config switch
             {
-                ClassicConfig classicConfig => ProccesedTrackChunks = await new ClassicProcessor(classicConfig, song).Process(),
-               // ToneConfig toneConfig => ProccesedTrackChunks = await new ToneProcessor(toneConfig, song).Process(),
+                AutoToneConfig autoToneConfig => await new AutoToneProcessor(autoToneConfig, song).Process(),
+                ClassicConfig classicConfig => await new ClassicProcessor(classicConfig, song).Process(),
+                DrumToneConfig drumToneConfig => await new DrumToneProcessor(drumToneConfig, song).Process(),
+                LyricConfig lyricConfig => await new LyricProcessor(lyricConfig, song).Process(),
+                ManualToneConfig manualToneConfig => await new ManualToneProcessor(manualToneConfig, song).Process(),
                 _ => throw new BmpNotateException(Config.GetType() + " is not a supported configuration type."),
             };
         }
