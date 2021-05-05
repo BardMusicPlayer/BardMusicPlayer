@@ -55,9 +55,9 @@ namespace BardMusicPlayer.Notate.ApiTest
             Environment.Exit(0);
         }
 
-        private static void PositionChanged(double currenttime, double endtime, int activeVoices)
+        private static void PositionChanged(string songTitle, double currenttime, double endtime, int activeVoices)
         {
-            Console.Write("\r" + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices);
+            Console.Write("\r" + songTitle + ": " + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices);
         }
         
     }

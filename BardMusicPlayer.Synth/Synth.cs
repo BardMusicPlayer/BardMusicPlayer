@@ -18,7 +18,7 @@ namespace BardMusicPlayer.Synth
 {
     public class Synthesizer
     {
-        private BmpSong _song;
+        public string CurrentSongTitle { get; private set; } = "";
         private IAlphaSynth _player;
 
         private static readonly Lazy<Synthesizer> LazyInstance = new(() => new Synthesizer());
@@ -26,13 +26,11 @@ namespace BardMusicPlayer.Synth
 
         internal Synthesizer()
         {
-            // TODO: seperate vsts into a global store and load them here so they aren't reloaded every time setup is called.
         }
 
         ~Synthesizer()
         {
             ShutDown();
-            // TODO: unload global vsts
         }
 
         /// <summary>
@@ -60,12 +58,12 @@ namespace BardMusicPlayer.Synth
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReady => _player.IsReady;
+        public bool IsReady => _player != null && _player.IsReady;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReadyForPlayback => _player.IsReadyForPlayback;
+        public bool IsReadyForPlayback => IsReady && _player.IsReadyForPlayback;
 
         private readonly TaskQueue _taskQueue = new();
         internal void BeginInvoke(Action action) => _taskQueue.Enqueue(() => Task.Run(action));
@@ -97,11 +95,10 @@ namespace BardMusicPlayer.Synth
         /// <returns>This Synthesizer</returns>
         public async Task<Synthesizer> Load(BmpSong song)
         {
-            if (_player == null) throw new BmpException("Synthesizer not initialized.");
+            if (!IsReady) throw new BmpException("Synthesizer not initialized.");
             if (_player.State == PlayerState.Playing) _player.Stop();
-
             _player.LoadMidiFile(await song.GetSynthMidi());
-            _song = song;
+            CurrentSongTitle = song.Title;
             return this;
         }
 
@@ -111,10 +108,7 @@ namespace BardMusicPlayer.Synth
         /// <returns>This Synthesizer</returns>
         public Synthesizer Play()
         {
-            if (_player == null) throw new BmpException("Synthesizer not initialized.");
-            if (_song == null || !_player.IsReadyForPlayback)
-                throw new BmpException(
-                    "No BmpSong file loaded.");
+            if (!IsReadyForPlayback) throw new BmpException("Synthesizer not loaded with a song.");
             _player.Play();
             return this;
         }
@@ -125,10 +119,7 @@ namespace BardMusicPlayer.Synth
         /// <returns>This Synthesizer</returns>
         public Synthesizer Pause()
         {
-            if (_player == null) throw new BmpException("Synthesizer not initialized.");
-            if (_song == null || !_player.IsReadyForPlayback)
-                throw new BmpException(
-                    "No BmpSong file loaded.");
+            if (!IsReadyForPlayback) throw new BmpException("Synthesizer not loaded with a song.");
             _player.Pause();
             return this;
         }
@@ -139,10 +130,7 @@ namespace BardMusicPlayer.Synth
         /// <returns>This Synthesizer</returns>
         public Synthesizer Stop()
         {
-            if (_player == null) throw new BmpException("Synthesizer not initialized.");
-            if (_song == null || !_player.IsReadyForPlayback)
-                throw new BmpException(
-                    "No BmpSong file loaded.");
+            if (!IsReadyForPlayback) throw new BmpException("Synthesizer not loaded with a song.");
             _player.Stop();
             return this;
         }
@@ -153,10 +141,7 @@ namespace BardMusicPlayer.Synth
         /// <returns>This Synthesizer</returns>
         public Synthesizer SetPosition(int time)
         {
-            if (_player == null) throw new BmpException("Synthesizer not initialized.");
-            if (_song == null || !_player.IsReadyForPlayback)
-                throw new BmpException(
-                    "No BmpSong file loaded.");
+            if (!IsReadyForPlayback) throw new BmpException("Synthesizer not loaded with a song.");
             if (time < 0) time = 0;
             if (time > _player.PlaybackRange.EndTick) return Stop();
             _player.TickPosition = time;
@@ -166,12 +151,14 @@ namespace BardMusicPlayer.Synth
         /// <summary>
         /// Event fired when the position of a synthesized song changes.
         /// </summary>
+        /// <param name="songTitle">The title of the current song.</param>
         /// <param name="currentTime">The current time of this song in milliseconds</param>
         /// <param name="endTime">The total length of this song in milliseconds</param>
-        public delegate void SynthTimePosition(double currentTime, double endTime, int activeVoices);
+        /// <param name="activeVoices">Active voice count.</param>
+        public delegate void SynthTimePosition(string songTitle, double currentTime, double endTime, int activeVoices);
 
         public event SynthTimePosition SynthTimePositionChanged;
 
-        internal void NotifyTimePosition(PositionChangedEventArgs obj) => SynthTimePositionChanged?.Invoke(obj.CurrentTime, obj.EndTime, obj.ActiveVoices);
+        internal void NotifyTimePosition(PositionChangedEventArgs obj) => SynthTimePositionChanged?.Invoke(CurrentSongTitle,obj.CurrentTime, obj.EndTime, obj.ActiveVoices);
     }
 }
