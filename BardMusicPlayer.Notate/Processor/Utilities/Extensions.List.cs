@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Notate.Processor.Utilities
@@ -17,21 +16,21 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static Task<TrackChunk> FixClassicChords(this TrackChunk trackChunk)
+        internal static Task<List<Note>> FixClassicChords(this List<Note> notes)
         {
-            var notes = trackChunk.GetNotes().ToArray().Where(c => c != null).Reverse().ToArray();
-
-            for (var i = 1; i < notes.Length; i++)
+            notes = notes.OrderByDescending(x=>x.Time).ToList();
+            
+            for (var i = 1; i < notes.Count; i++)
             {
-                var time = notes[i].GetTimedNoteOnEvent().Time;
+                var time = notes[i].Time;
 
-                var lowestParent = notes[0].GetTimedNoteOnEvent().Time;
+                var lowestParent = notes[0].Time;
 
                 for (var k = i - 1; k >= 0; k--)
                 {
-                    var lastOn = notes[k].GetTimedNoteOnEvent().Time;
+                    var lastOn = notes[k].Time;
                     if (lastOn < lowestParent) lowestParent = lastOn;
                 }
 
@@ -43,30 +42,26 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                 notes[i].Time = time;
                 notes[i].Length = 25;
             }
-
-            trackChunk = new TrackChunk();
-
-            trackChunk.AddObjects(notes);
-            return Task.FromResult(trackChunk);
+            return Task.FromResult(notes.OrderBy(x => x.Time).ToList());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> FixClassicChords(this Task<TrackChunk> trackChunk) => await FixClassicChords(await trackChunk);
+        internal static async Task<List<Note>> FixClassicChords(this Task<List<Note>> notes) => await FixClassicChords(await notes);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static Task<TrackChunk> OffSet50Ms(this TrackChunk trackChunk)
+        internal static Task<List<Note>> OffSet50Ms(this List<Note> notes)
         {
-            var processedChunk = new TrackChunk();
-
-            var events = trackChunk.GetNotes().ToArray();
+            notes = notes.OrderBy(x=>x.Time).ToList();
+            
+            var thisNotes = new List<Note>();
 
             long lastStartTime = 0;
             long lastStopTime = 0;
@@ -76,16 +71,15 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             bool hasNotes = false;
             int lastChannel = 0;
             int lastVelocity = 0;
-
-            List<Note> thisNotes = new();
-            for (var j = 0; j < events.Length; j++)
+            
+            for (var j = 0; j < notes.Count; j++)
             {
-                long startTime = events[j].GetTimedNoteOnEvent().Time;
+                long startTime = notes[j].GetTimedNoteOnEvent().Time;
                 long stopTime;
-                long dur = events[j].Length;
-                int noteNum = events[j].NoteNumber;
-                int channel = events[j].Channel;
-                int velocity = events[j].Velocity;
+                long dur = notes[j].Length;
+                int noteNum = notes[j].NoteNumber;
+                int channel = notes[j].Channel;
+                int velocity = notes[j].Velocity;
                 hasNotes = true;
                 if (j == 0)
                 {
@@ -152,41 +146,39 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                     OffVelocity = (SevenBitNumber) lastVelocity
                 });
 
-            processedChunk.AddObjects(thisNotes);
-            return Task.FromResult(processedChunk);
+            return Task.FromResult(thisNotes.OrderBy(x => x.Time).ToList());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> OffSet50Ms(this Task<TrackChunk> trackChunk) => await OffSet50Ms(await trackChunk);
-
+        internal static async Task<List<Note>> OffSet50Ms(this Task<List<Note>> notes) => await OffSet50Ms(await notes);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static Task<TrackChunk> FixEndSpacing(this TrackChunk trackChunk)
+        internal static Task<List<Note>> FixEndSpacing(this List<Note> notes)
         {
-            var events = trackChunk.GetNotes().ToArray();
-            var tempChunk = new TrackChunk();
+            notes = notes.OrderBy(x=>x.Time).ToList();
+            
             var thisNotes = new List<Note>();
-            for (var j = 0; j < events.Length; j++)
+            for (var j = 0; j < notes.Count; j++)
             {
-                var noteNum = events[j].NoteNumber;
-                var time = events[j].Time;
-                var dur = events[j].Length;
-                var channel = events[j].Channel;
-                var velocity = events[j].Velocity;
+                var noteNum = notes[j].NoteNumber;
+                var time = notes[j].Time;
+                var dur = notes[j].Length;
+                var channel = notes[j].Channel;
+                var velocity = notes[j].Velocity;
 
-                if (j + 1 < events.Length)
+                if (j + 1 < notes.Count)
                 {
-                    if (events[j + 1].Time <= events[j].Time + events[j].Length + 25)
+                    if (notes[j + 1].Time <= notes[j].Time + notes[j].Length + 25)
                     {
-                        dur = events[j + 1].Time - events[j].Time - 25;
+                        dur = notes[j + 1].Time - notes[j].Time - 25;
                         dur = dur < 25 ? 25 : dur;
                     }
                 }
@@ -197,15 +189,15 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                     OffVelocity = velocity
                 });
             }
-            tempChunk.AddObjects(thisNotes);
-            return Task.FromResult(tempChunk);
+
+            return Task.FromResult(thisNotes.OrderBy(x => x.Time).ToList());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="notes"></param>
         /// <returns></returns>
-        internal static async Task<TrackChunk> FixEndSpacing(this Task<TrackChunk> trackChunk) => await FixEndSpacing(await trackChunk);
+        internal static async Task<List<Note>> FixEndSpacing(this Task<List<Note>> notes) => await FixEndSpacing(await notes);
     }
 }

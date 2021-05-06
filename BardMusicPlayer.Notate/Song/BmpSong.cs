@@ -56,8 +56,9 @@ namespace BardMusicPlayer.Notate.Song
         {
             var sourceMidiData = new MidiFile(TrackContainers.Values.SelectMany(track => track.ConfigContainers).SelectMany(track => track.Value.ProccesedTrackChunks));
             sourceMidiData.ReplaceTempoMap(Tools.GetMsTempoMap());
-            var delta = sourceMidiData.GetNotes().First().Time;
             var midiFile = new MidiFile();
+            if (sourceMidiData.GetNotes().Count < 1) return Task.FromResult(midiFile);
+            var delta = sourceMidiData.GetNotes().First().Time;
             foreach (var trackChunk in sourceMidiData.GetTrackChunks())
             {
                 var notes = trackChunk.GetNotes();

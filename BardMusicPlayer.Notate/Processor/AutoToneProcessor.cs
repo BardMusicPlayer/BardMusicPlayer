@@ -72,7 +72,7 @@ namespace BardMusicPlayer.Notate.Processor
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = await TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList()).FixClassicChords().OffSet50Ms().FixEndSpacing();
+                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixClassicChords().OffSet50Ms().FixEndSpacing());
                     concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + Config.AutoToneInstrumentGroup.InstrumentTone.Name))});
                 }
             );

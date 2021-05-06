@@ -4,6 +4,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Common.Structs;
 using Melanchall.DryWetMidi.Common;
@@ -62,6 +63,8 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
             var notesDictionary = Tools.GetEmptyNotesDictionary(lowClamp, highClamp);
 
             var currentChannel = startingChannel;
+            tempoMap = tempoMap.Clone();
+
             foreach (var note in trackChunks.Merge().GetNotes())
             {
                 var noteNumber = note.NoteNumber;
@@ -190,5 +193,21 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <returns></returns>
         internal static async Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this Task<TrackChunk> trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120) =>
             await GetPlayerNoteDictionary(await trackChunk, playerCount, lowClamp, highClamp);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceNotesDictionary"></param>
+        /// <returns></returns>
+        internal static Task<List<Note>> ConcatNoteDictionaryToList(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary) =>
+            Task.FromResult(sourceNotesDictionary.SelectMany(note => note.Value).Select(note => note.Value).ToList());
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceNotesDictionary"></param>
+        /// <returns></returns>
+        internal static async Task<List<Note>> ConcatNoteDictionaryToList(this Task<Dictionary<int, Dictionary<long, Note>>> sourceNotesDictionary) =>
+            await ConcatNoteDictionaryToList(await sourceNotesDictionary);
     }
 }

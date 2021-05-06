@@ -11,7 +11,7 @@ namespace BardMusicPlayer.Notate.ApiTest
         {
             Synthesizer.Instance.Setup();
 
-            if (args.Length == 0)
+            /*if (args.Length == 0)
             {
                 Console.WriteLine("drag a bmp 2.0 formatted midi file onto this exe to test.");
                 Console.ReadLine();
@@ -19,9 +19,9 @@ namespace BardMusicPlayer.Notate.ApiTest
             }
 
             Console.WriteLine("Attempting to process midi file data with BmpNotate alpha8..");
-            var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
+            var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();*/
 
-            //var song = BmpSong.OpenMidiFile(@"the_planets.mid").GetAwaiter().GetResult();
+            var song = BmpSong.OpenMidiFile(@"the_planets.mid").GetAwaiter().GetResult();
 
             File.Delete(@"test.mid");
             song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid");;
