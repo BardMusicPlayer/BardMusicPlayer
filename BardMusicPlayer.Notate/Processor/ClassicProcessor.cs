@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Notate.Processor
 
             var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(Config.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
 
-            var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>();
+            var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>(Config.PlayerCount, Config.PlayerCount);
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
