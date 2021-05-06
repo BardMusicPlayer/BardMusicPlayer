@@ -14,24 +14,23 @@ namespace BardMusicPlayer.Notate.ApiTest
 
             Synthesizer.Instance.Setup();
 
-            /*if (args.Length == 0)
+            if (args.Length == 0)
             {
                 Console.WriteLine("drag a bmp 2.0 formatted midi file onto this exe to test.");
                 Console.ReadLine();
                 Environment.Exit(0);
             }
 
-            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha..");
-            var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();*/
+            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha 11..");
+            var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
 
-            var song = BmpSong.OpenMidiFile(@"the_planets.mid").GetAwaiter().GetResult();
+            //var song = BmpSong.OpenMidiFile(@"bongocheck.mid").GetAwaiter().GetResult();
 
-            File.Delete(@"test.mid");
-            song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid");;
+            song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid", true);;
 
             
 
-            Console.WriteLine("Loading song into preview synthesizer..");
+            Console.WriteLine("Loading song into preview synthesizer (lyrics currently will not display if used)..");
 
             while (!Synthesizer.Instance.IsReady)
             {

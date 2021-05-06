@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using BardMusicPlayer.Common.Structs;
 using BardMusicPlayer.Notate.Song.Config;
 using Melanchall.DryWetMidi.Core;
@@ -40,7 +41,7 @@ namespace BardMusicPlayer.Notate.Song.Utilities
 
             var configContainers = new Dictionary<long, ConfigContainer>();
 
-            if (trackChunk.GetNotes().Count == 0) return configContainers;
+            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric)) return configContainers;
 
             var trackName = (trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "").Replace(" ", "").ToLower();
 

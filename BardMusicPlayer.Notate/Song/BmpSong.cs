@@ -127,7 +127,7 @@ namespace BardMusicPlayer.Notate.Song
                 song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
             }
 
-            Parallel.For(0, song.TrackContainers.Count, async i =>
+            Parallel.For(0, song.TrackContainers.Count, i =>
             {
                 Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
                 {
@@ -148,6 +148,13 @@ namespace BardMusicPlayer.Notate.Song
                                              " AutoToneInstrumentGroup:" + autoToneConfig.AutoToneInstrumentGroup + " OctaveRange:" +
                                               autoToneConfig.AutoToneOctaveRange + " PlayerCount:" + autoToneConfig.PlayerCount +
                                              " IncludeTracks:" + string.Join(",", autoToneConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case LyricConfig lyricConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
