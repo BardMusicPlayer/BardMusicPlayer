@@ -75,8 +75,9 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                 var dur = note.GetTimedNoteOffEvent().GetNoteMs(tempoMap) + 120000 +
                           tone.GetInstrumentFromChannel(currentChannel).SampleOffset + tone
                               .GetInstrumentFromChannel(currentChannel)
-                              .NoteSampleOffset(noteNumber + noteSampleOffset) -
-                          timeOn - 1;
+                              .NoteSampleOffset(noteNumber + noteSampleOffset) - timeOn;
+
+                if (dur < 1) dur = 1;
 
                 note.Time = timeOn;
                 note.Length = dur;

@@ -1,5 +1,6 @@
-﻿using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
-using BardMusicPlayer.Synth.AlphaTab.Collections;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Synth.AlphaTab.IO;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi
@@ -17,7 +18,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi
         /// <summary>
         /// Gets a list of midi events sorted by time.
         /// </summary>
-        public FastList<MidiEvent> Events { get; }
+        public List<MidiEvent> Events { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MidiFile"/> class.
@@ -25,38 +26,19 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi
         public MidiFile()
         {
             Division = MidiUtils.QuarterTime;
-            Events = new FastList<MidiEvent>();
+            Events = new List<MidiEvent>();
         }
 
         /// <summary>
         /// Adds the given midi event a the correct time position into the file.
         /// </summary>
         /// <param name="e"></param>
-        public void AddEvent(MidiEvent e)
-        {
-            if (Events.Count == 0)
-            {
-                Events.Add(e);
-            }
-            else
-            {
-                var insertPos = Events.Count;
-                while (insertPos > 0)
-                {
-                    var prevItem = Events[insertPos - 1];
-                    if (prevItem.Tick > e.Tick)
-                    {
-                        insertPos--;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+        public void AddEvent(MidiEvent e) => Events.Add(e);
 
-                Events.InsertAt(insertPos, e);
-            }
-        }
+        /// <summary>
+        /// Sort the event list by event tick.
+        /// </summary>
+        public void Sort() => Events = Events.OrderBy(x=>x.Tick).ToList();
 
         /// <summary>
         /// Writes the midi file into a binary format.

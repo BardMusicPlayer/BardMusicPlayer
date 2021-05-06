@@ -145,6 +145,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Generator
                 (byte)MetaEventTypeEnum.EndOfTrack,
                 new byte[0]);
             _midiFile.AddEvent(message);
+            _midiFile.Sort();
         }
     }
 }

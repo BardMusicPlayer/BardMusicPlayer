@@ -9,6 +9,7 @@ namespace BardMusicPlayer.Notate.ApiTest
     {
         static void Main(string[] args)
         {
+            Synthesizer.Instance.Setup();
 
             if (args.Length == 0)
             {
@@ -17,15 +18,15 @@ namespace BardMusicPlayer.Notate.ApiTest
                 Environment.Exit(0);
             }
 
-            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha6..");
+            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha8..");
             var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
 
-         //   var song = BmpSong.OpenMidiFile(@"Chrono_Trigger_Corridors_of_Time_octet.mid").GetAwaiter().GetResult();
+            //var song = BmpSong.OpenMidiFile(@"the_planets.mid").GetAwaiter().GetResult();
 
             File.Delete(@"test.mid");
             song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid");;
 
-            Synthesizer.Instance.Setup();
+            
 
             Console.WriteLine("Loading song into preview synthesizer..");
 
@@ -57,7 +58,7 @@ namespace BardMusicPlayer.Notate.ApiTest
 
         private static void PositionChanged(string songTitle, double currenttime, double endtime, int activeVoices)
         {
-            Console.Write("\r" + songTitle + ": " + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices);
+            Console.Write("\r" + songTitle + ": " + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices + "                     ");
         }
         
     }
