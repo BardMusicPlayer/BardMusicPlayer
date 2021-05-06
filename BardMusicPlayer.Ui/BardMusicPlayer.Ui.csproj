@@ -39,6 +39,7 @@
     <ProjectReference Include="..\BardMusicPlayer.Synth\BardMusicPlayer.Synth.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

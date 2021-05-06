@@ -1,4 +1,5 @@
 ﻿using System;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer.ApiTest
@@ -7,7 +8,7 @@ namespace BardMusicPlayer.Seer.ApiTest
     {
         private static void Main()
         {
-            
+            BmpConfig.Initialize(AppContext.BaseDirectory + @"\Seer.ApiTest.json");
 
             Seer.Instance.SeerExceptionEvent += PrintExceptionInfo;
             Seer.Instance.GameExceptionEvent += PrintExceptionInfo;

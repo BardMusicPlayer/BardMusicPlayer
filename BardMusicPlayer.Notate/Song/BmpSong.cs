@@ -6,7 +6,6 @@
 using System;
 using LiteDB;
 using Melanchall.DryWetMidi.Interaction;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -25,7 +24,6 @@ namespace BardMusicPlayer.Notate.Song
         /// 
         /// </summary>
         [BsonId]
-        [JsonIgnore]
         public ObjectId Id { get; set; } = null;
 
         /// <summary>
