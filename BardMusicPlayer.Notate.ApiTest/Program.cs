@@ -18,7 +18,7 @@ namespace BardMusicPlayer.Notate.ApiTest
                 Environment.Exit(0);
             }
 
-            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha8..");
+            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha9..");
             var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
 
             //var song = BmpSong.OpenMidiFile(@"rachmaninoff-prelude-in-c-sharp-minor.mid").GetAwaiter().GetResult();

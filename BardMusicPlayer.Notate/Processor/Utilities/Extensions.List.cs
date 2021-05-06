@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <returns></returns>
         internal static Task<List<Note>> FixChords(this List<Note> notes)
         {
-            notes = notes.OrderByDescending(x=>x.Time).ToList();
+            notes = notes.OrderBy(x=>x.Time).Reverse().ToList();
             
             for (var i = 1; i < notes.Count; i++)
             {
