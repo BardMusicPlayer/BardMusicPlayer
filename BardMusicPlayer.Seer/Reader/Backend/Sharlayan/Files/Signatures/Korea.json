@@ -1,0 +1,93 @@
+[
+  // Upstream
+  {
+    "Key": "CHATLOG",
+    "Value": "48894110448841184584C07412488B4210488905********48890D",
+    "ASMSignature": true,
+    "PointerPath": [
+      0,
+      0,
+      64,
+      908
+    ]
+  },
+  {
+    "ASMSignature": true,
+    "Key": "CHARMAP",
+    "Value": "488b420848c1e8033da701000077**8bc0488d0d",
+    "PointerPath": [
+      0,
+      0
+    ]
+  },
+  {
+    "ASMSignature": true,
+    "Key": "PARTYMAP",
+    "PointerPath": [
+      0,
+      384
+    ],
+    "Value": "488D7C242066660F1F840000000000488B17488D0D"
+  },
+  {
+    "ASMSignature": true,
+    "Key": "PARTYCOUNT",
+    "PointerPath": [
+      0,
+      -26920
+    ],
+    "Value": "488D7C242066660F1F840000000000488B17488D0D"
+  },
+  {
+    "ASMSignature": true,
+    "Key": "PLAYERINFO",
+    "PointerPath": [
+      0,
+      0
+    ],
+    "Value": "83f9ff7412448b048e8bd3488d0d"
+  },
+  // End Upstream
+
+  // BMP
+  {
+    "ASMSignature": true,
+    "Key": "PERFSTATUS",
+    "PointerPath": [
+      0,
+      0
+    ],
+    "Value": "84C00F84????????488BD3488D0D"
+  },
+  {
+    "ASMSignature": true,
+    "Key": "CHARID", // Known as ConfigId in Seer. Used for DatReader.
+    "PointerPath": [
+      0,
+      0
+    ],
+    "Value": "4C8BCF4C8D05????????BA04010000488D0D"
+  },
+  {
+    "ASMSignature": true,
+    "Key": "CHATINPUT",
+    "PointerPath": [
+      0,
+      0,
+      40
+    ],
+    "Value": "e8********85c0740e488b0d********33D2E8********488b0d"
+  },
+  {
+    "ASMSignature": true,
+    "Key": "WORLD",
+    "PointerPath": [
+      -13,
+      0,
+      -112,
+      0
+    ],
+    "Value": "40534883EC40488B05********488BD98B401485C00F"
+  }
+  // END BMP
+]

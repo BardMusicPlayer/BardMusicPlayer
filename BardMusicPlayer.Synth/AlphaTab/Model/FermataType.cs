@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all types of fermatas
     /// </summary>
-    public enum FermataType
+    internal enum FermataType
     {
         /// <summary>
         /// A short fermata (triangle symbol)

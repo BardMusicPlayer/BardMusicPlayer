@@ -2,7 +2,7 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
@@ -110,10 +110,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                 //we have to restart the midi to make sure we get the right state: instruments, volume, pan, etc
                 _currentTime = 0;
                 _eventIndex = 0;
-                var metronomeVolume = _synthesizer.MetronomeVolume;
                 _synthesizer.NoteOffAll(true);
                 _synthesizer.ResetSoft();
-                _synthesizer.SetupMetronomeChannel(metronomeVolume);
 
                 SilentProcess(timePosition);
             }
@@ -126,7 +124,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                 return;
             }
 
-            var start = CSharp.Platform.Platform.GetCurrentMilliseconds();
+            var start = Platform.GetCurrentMilliseconds();
 
             var finalTime = _currentTime + milliseconds;
 
@@ -138,7 +136,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                 }
             }
 
-            var duration = CSharp.Platform.Platform.GetCurrentMilliseconds() - start;
+            var duration = Platform.GetCurrentMilliseconds() - start;
             Logger.Debug("Sequencer", "Silent seek finished in " + duration + "ms");
         }
 
@@ -159,10 +157,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             var absTick = 0;
             var absTime = 0.0;
 
-            var metronomeLength = 0;
-            var metronomeTick = 0;
-            var metronomeTime = 0.0;
-
             var previousTick = 0;
 
             foreach (var mEvent in midiFile.Events)
@@ -182,31 +176,12 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
                     bpm = MidiHelper.MicroSecondsPerMinute / (double)meta.Value;
                     _tempoChanges.Add(new MidiFileSequencerTempoChange(bpm, absTick, (int)absTime));
                 }
-                else if (mEvent.Command == MidiEventType.Meta && mEvent.Data1 == (int)MetaEventTypeEnum.TimeSignature)
-                {
-                    var meta = (MetaDataEvent)mEvent;
-                    var timeSignatureDenominator = (int)Math.Pow(2, meta.Data[1]);
-                    metronomeLength = (int)(_division * (4.0 / timeSignatureDenominator));
-                }
                 else if (mEvent.Command == MidiEventType.ProgramChange)
                 {
                     var channel = mEvent.Channel;
                     if (!_firstProgramEventPerChannel.ContainsKey(channel))
                     {
                         _firstProgramEventPerChannel[channel] = synthData;
-                    }
-                }
-
-                if (metronomeLength > 0)
-                {
-                    while (metronomeTick < absTick)
-                    {
-                        var metronome = SynthEvent.NewMetronomeEvent(_synthData.Count, metronomeLength);
-                        _synthData.Add(metronome);
-                        metronome.Time = metronomeTime;
-
-                        metronomeTick += metronomeLength;
-                        metronomeTime += metronomeLength * (60000.0 / (bpm * midiFile.Division));
                     }
                 }
             }
@@ -343,10 +318,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         {
             if (_currentTime >= InternalEndTime)
             {
-                var metronomeVolume = _synthesizer.MetronomeVolume;
                 _synthesizer.NoteOffAll(true);
                 _synthesizer.ResetSoft();
-                _synthesizer.SetupMetronomeChannel(metronomeVolume);
                 OnFinished();
             }
         }

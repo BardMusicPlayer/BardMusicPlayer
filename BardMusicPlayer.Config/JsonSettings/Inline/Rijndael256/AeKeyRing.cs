@@ -1,9 +1,6 @@
 ﻿/*
- * Rijndael256
- * Copyright (C)2013 2Toad, LLC.
- * licensing@2toad.com
- * 
- * https://github.com/2Toad/Rijndael256
+ * Copyright(c) 2013 2Toad, LLC. licensing@2toad.com
+ * Licensed under the MIT license. See https://github.com/2Toad/Rijndael256/blob/master/LICENSE for full license information.
  */
 
 using System.Text;

@@ -27,7 +27,6 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Platform;
 using BardMusicPlayer.Synth.AlphaTab.IO;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont

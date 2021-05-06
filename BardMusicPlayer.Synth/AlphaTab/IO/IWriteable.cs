@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
     /// <summary>
     /// Represents a writer where binary data can be written to. 
     /// </summary>
-    public interface IWriteable
+    internal interface IWriteable
     {
         /// <summary>
         /// Write a single byte to the stream. 

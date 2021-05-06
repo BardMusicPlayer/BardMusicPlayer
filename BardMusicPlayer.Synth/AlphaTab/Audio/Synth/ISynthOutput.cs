@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// This is the base interface for output devices which can
     /// request and playback audio samples.
     /// </summary>
-    public interface ISynthOutput
+    internal interface ISynthOutput
     {
         /// <summary>
         /// Gets the sample rate required by the output.

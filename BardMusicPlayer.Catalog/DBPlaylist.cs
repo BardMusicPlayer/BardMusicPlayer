@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog
 {
@@ -12,6 +12,6 @@ namespace BardMusicPlayer.Catalog
         public string Name { get; set; }
 
         [BsonRef(Constants.SONG_COL_NAME)]
-        public List<MMSong> Songs { get; set; }
+        public List<BmpSong> Songs { get; set; }
     }
 }

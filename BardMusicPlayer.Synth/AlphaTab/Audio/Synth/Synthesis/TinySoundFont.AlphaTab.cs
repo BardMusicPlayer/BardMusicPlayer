@@ -3,7 +3,7 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Ds;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 using BardMusicPlayer.Synth.AlphaTab.Util;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
@@ -106,15 +106,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                     for (var i = 0; i < _midiEventCounts[x]; i++)
                     {
                         var m = _midiEventQueue.RemoveLast();
-                        if (m.IsMetronome)
-                        {
-                            ChannelNoteOff(SynthConstants.MetronomeChannel, 33);
-                            ChannelNoteOn(SynthConstants.MetronomeChannel, 33, 95 / 127f);
-                        }
-                        else
-                        {
-                            ProcessMidiMessage(m.Event);
-                        }
+                        ProcessMidiMessage(m.Event);
                     }
                 }
 
@@ -142,7 +134,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                 bufferPos += MicroBufferSize * SynthConstants.AudioChannels;
             }
 
-            CSharp.Platform.Platform.ClearIntArray(_midiEventCounts);
+            Platform.ClearIntArray(_midiEventCounts);
             return buffer;
         }
 
@@ -177,25 +169,13 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
             }
         }
 
-        public float MetronomeVolume
-        {
-            get => ChannelGetMixVolume(SynthConstants.MetronomeChannel);
-            set => ChannelSetMixVolume(SynthConstants.MetronomeChannel, value);
-        }
-
-        public void SetupMetronomeChannel(float volume)
-        {
-            ChannelSetVolume(SynthConstants.MetronomeChannel, 1);
-            ChannelSetMixVolume(SynthConstants.MetronomeChannel, volume);
-            ChannelSetPresetNumber(SynthConstants.MetronomeChannel, 0, true);
-        }
-
         /// <summary>
         /// Stop all playing notes immediatly and reset all channel parameters but keeps user
         /// defined settings
         /// </summary>
         public void ResetSoft()
         {
+            _noteCounter = 0;
             foreach (var v in _voices)
             {
                 if (v.PlayingPreset != -1 &&

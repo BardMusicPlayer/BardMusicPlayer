@@ -1,8 +1,8 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog
 {
@@ -17,19 +17,19 @@ namespace BardMusicPlayer.Catalog
         internal DBPlaylistDecorator(DBPlaylist target) => this.target = target ?? throw new NullReferenceException();
 
         ///<inheritdoc/>
-        void IPlaylist.Add(MMSong song)
+        void IPlaylist.Add(BmpSong song)
         {
             this.target.Songs.Add(song);
         }
 
         ///<inheritdoc/>
-        void IPlaylist.Add(int idx, MMSong song)
+        void IPlaylist.Add(int idx, BmpSong song)
         {
             this.target.Songs.Insert(idx, song);
         }
 
         ///<inheritdoc/>
-        IEnumerator<MMSong> IEnumerable<MMSong>.GetEnumerator()
+        IEnumerator<BmpSong> IEnumerable<BmpSong>.GetEnumerator()
         {
             return this.target.Songs.GetEnumerator();
         }
@@ -49,8 +49,8 @@ namespace BardMusicPlayer.Catalog
         ///<inheritdoc/>
         void IPlaylist.Move(int sourceIdx, int targetIdx)
         {
-            List<MMSong> contents = this.target.Songs;
-            MMSong moveMe = contents[sourceIdx];
+            List<BmpSong> contents = this.target.Songs;
+            BmpSong moveMe = contents[sourceIdx];
             contents.RemoveAt(sourceIdx);
             contents.Insert(targetIdx, moveMe);
         }

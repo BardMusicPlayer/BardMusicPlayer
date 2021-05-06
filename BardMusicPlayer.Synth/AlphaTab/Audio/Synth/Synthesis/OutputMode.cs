@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
     /// <summary>
     /// Supported output modes by the render methods
     /// </summary>
-    public enum OutputMode
+    internal enum OutputMode
     {
         /// <summary>
         /// Two channels with single left/right samples one after another

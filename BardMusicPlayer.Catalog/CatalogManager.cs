@@ -1,7 +1,12 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Notate.Song;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Catalog
 {
@@ -27,10 +32,106 @@ namespace BardMusicPlayer.Catalog
         /// <returns></returns>
         public static CatalogManager CreateInstance(string dbPath)
         {
-            var dbi = new LiteDatabase(dbPath);
+            var mapper = new BsonMapper();
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => AutoToneInstrumentGroup.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => AutoToneOctaveRange.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => Instrument.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => InstrumentTone.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => OctaveRange.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                tempoMap => SerializeTempoMap(tempoMap),
+                bson => DeserializeTempoMap(bson.AsBinary)
+            );
+            mapper.RegisterType
+            (
+                trackChunk => SerializeTrackChunk(trackChunk),
+                bson => DeserializeTrackChunk(bson.AsBinary)
+            );
+
+            var dbi = new LiteDatabase(dbPath, mapper);
             MigrateDatabase(dbi);
 
             return new CatalogManager(dbi);
+        }
+
+        /// <summary>
+        /// Serializes a TempoMap from DryWetMidi.
+        /// </summary>
+        /// <param name="tempoMap"></param>
+        /// <returns></returns>
+        private static byte[] SerializeTempoMap(TempoMap tempoMap)
+        {
+            var midiFile = new MidiFile(new TrackChunk());
+            midiFile.ReplaceTempoMap(tempoMap);
+            using var memoryStream = new MemoryStream();
+            midiFile.Write(memoryStream);
+            var bson = memoryStream.ToArray();
+            memoryStream.Dispose();
+            return bson;
+        }
+
+        /// <summary>
+        /// Deserializes a TempoMap from DryWetMidi.
+        /// </summary>
+        /// <param name="bson"></param>
+        /// <returns></returns>
+        private static TempoMap DeserializeTempoMap(byte[] bson)
+        {
+            using var memoryStream = new MemoryStream(bson);
+            var midiFile = MidiFile.Read(memoryStream);
+            var tempoMap = midiFile.GetTempoMap().Clone();
+            memoryStream.Dispose();
+            return tempoMap;
+        }
+
+        /// <summary>
+        /// Serializes a TrackChunk from DryWetMidi.
+        /// </summary>
+        /// <param name="trackChunk"></param>
+        /// <returns></returns>
+        private static byte[] SerializeTrackChunk(TrackChunk trackChunk)
+        {
+            var midiFile = new MidiFile(trackChunk);
+            using var memoryStream = new MemoryStream();
+            midiFile.Write(memoryStream);
+            var bson = memoryStream.ToArray();
+            memoryStream.Dispose();
+            return bson;
+        }
+
+        /// <summary>
+        /// Deserializes a TrackChunk from DryWetMidi.
+        /// </summary>
+        /// <param name="bson"></param>
+        /// <returns></returns>
+        private static TrackChunk DeserializeTrackChunk(byte[] bson)
+        {
+            using var memoryStream = new MemoryStream(bson);
+            var midiFile = MidiFile.Read(memoryStream);
+            var trackChunk = midiFile.GetTrackChunks().First();
+            memoryStream.Dispose();
+            return trackChunk;
         }
 
         /// <summary>
@@ -50,7 +151,7 @@ namespace BardMusicPlayer.Catalog
             // TODO: This is brute force and not memory efficient; there has to be a better
             // way to do this, but my knowledge of LINQ and BsonExpressions isn't there yet.
             var allSongs = songCol.FindAll();
-            var songList = new List<MMSong>();
+            var songList = new List<BmpSong>();
 
             foreach (var entry in allSongs)
             {
@@ -89,7 +190,7 @@ namespace BardMusicPlayer.Catalog
 
             var dbList = new DBPlaylist()
             {
-                Songs = new List<MMSong>(),
+                Songs = new List<BmpSong>(),
                 Name = name,
                 Id = null
             };
@@ -140,7 +241,7 @@ namespace BardMusicPlayer.Catalog
         /// </summary>
         /// <param name="title"></param>
         /// <returns>The song if found or null if no matching song exists.</returns>
-        public MMSong GetSong(string title)
+        public BmpSong GetSong(string title)
         {
             if (title == null)
             {
@@ -149,7 +250,7 @@ namespace BardMusicPlayer.Catalog
 
             var songCol = this.GetSongCollection();
 
-            return songCol.FindOne(x => x.title == title);
+            return songCol.FindOne(x => x.Title == title);
         }
 
         /// <summary>
@@ -161,7 +262,7 @@ namespace BardMusicPlayer.Catalog
             var songCol = this.GetSongCollection();
 
             return songCol.Query()
-                .Select<string>(x => x.title)
+                .Select<string>(x => x.Title)
                 .ToList();
         }
 
@@ -170,7 +271,7 @@ namespace BardMusicPlayer.Catalog
         /// </summary>
         /// <param name="song"></param>
         /// <exception cref="CatalogException">This is thrown if a title conflict occurs on save.</exception>
-        public void SaveSong(MMSong song)
+        public void SaveSong(BmpSong song)
         {
             if (song == null)
             {
@@ -271,9 +372,9 @@ namespace BardMusicPlayer.Catalog
         /// Utility method.
         /// </summary>
         /// <returns></returns>
-        private ILiteCollection<MMSong> GetSongCollection()
+        private ILiteCollection<BmpSong> GetSongCollection()
         {
-            return this.dbi.GetCollection<MMSong>(Constants.SONG_COL_NAME);
+            return this.dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
         }
 
         /// <summary>
@@ -282,14 +383,14 @@ namespace BardMusicPlayer.Catalog
         /// <param name="search"></param>
         /// <param name="song"></param>
         /// <returns></returns>
-        private static bool TagMatches(string search, MMSong song)
+        private static bool TagMatches(string search, BmpSong song)
         {
             bool ret = false;
-            var tags = song.tags;
+            var tags = song.Tags;
 
-            if (tags != null && tags.Length > 0)
+            if (tags != null && tags.Count > 0)
             {
-                for (int i = 0; i < tags.Length; ++i)
+                for (int i = 0; i < tags.Count; ++i)
                 {
                     if (string.Equals(search, tags[i], StringComparison.OrdinalIgnoreCase))
                     {
@@ -347,9 +448,9 @@ namespace BardMusicPlayer.Catalog
             }
 
             // Create the song collection and add indicies
-            var songs = dbi.GetCollection<MMSong>(Constants.SONG_COL_NAME);
-            songs.EnsureIndex(x => x.title, unique: true);
-            songs.EnsureIndex(x => x.tags);
+            var songs = dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
+            songs.EnsureIndex(x => x.Title, unique: true);
+            songs.EnsureIndex(x => x.Tags);
 
             // Create the custom playlist collection and add indicies
             var playlists = dbi.GetCollection<DBPlaylist>(Constants.PLAYLIST_COL_NAME);

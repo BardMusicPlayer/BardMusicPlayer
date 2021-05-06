@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// This is the main synthesizer component which can be used to
     /// play a <see cref="MidiFile"/> via a <see cref="ISynthOutput"/>.
     /// </summary>
-    public class AlphaSynth : IAlphaSynth
+    internal class AlphaSynth : IAlphaSynth
     {
         private readonly MidiFileSequencer _sequencer;
         private readonly TinySoundFont _synthesizer;
@@ -21,7 +21,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         private bool _isMidiLoaded;
         private int _tickPosition;
         private double _timePosition;
-        private float _metronomeVolume;
 
         /// <summary>
         /// Gets the <see cref="ISynthOutput"/> used for playing the generated samples.
@@ -52,18 +51,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             {
                 value = SynthHelper.ClampF(value, SynthConstants.MinVolume, SynthConstants.MaxVolume);
                 _synthesizer.GlobalGainDb = value;
-            }
-        }
-
-        /// <inheritdoc />
-        public float MetronomeVolume
-        {
-            get => _metronomeVolume;
-            set
-            {
-                value = SynthHelper.ClampF(value, SynthConstants.MinVolume, SynthConstants.MaxVolume);
-                _metronomeVolume = value;
-                _synthesizer.MetronomeVolume = value;
             }
         }
 
@@ -192,7 +179,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             }
 
             Output.Activate();
-            _synthesizer.SetupMetronomeChannel(MetronomeVolume);
 
             Logger.Debug("AlphaSynth", "Starting playback");
             State = PlayerState.Playing;
@@ -275,7 +261,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         {
             if (IsReadyForPlayback)
             {
-                _synthesizer.SetupMetronomeChannel(MetronomeVolume);
                 OnReadyForPlayback();
             }
         }
@@ -359,7 +344,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
             Logger.Debug("AlphaSynth",
                 "Position changed: (time: " + currentTime + "/" + endTime + ", tick: " + currentTick + "/" + endTime +
                 ", Active Voices: " + _synthesizer.ActiveVoiceCount);
-            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick));
+            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick, _synthesizer.ActiveVoiceCount));
         }
 
         #region Events
@@ -495,7 +480,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// <summary>
     /// Represents the info when the player state changes.
     /// </summary>
-    public class PlayerStateChangedEventArgs
+    internal class PlayerStateChangedEventArgs
     {
         /// <summary>
         /// The new state of the player.
@@ -522,7 +507,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// <summary>
     /// Represents the info when the time in the synthesizer changes.
     /// </summary>
-    public class PositionChangedEventArgs
+    internal class PositionChangedEventArgs
     {
         /// <summary>
         /// Gets the current time in milliseconds.
@@ -544,6 +529,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         /// </summary>
         public int EndTick { get; }
 
+        public int ActiveVoices { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PositionChangedEventArgs"/> class.
         /// </summary>
@@ -551,12 +538,13 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         /// <param name="endTime">The end time.</param>
         /// <param name="currentTick">The current tick.</param>
         /// <param name="endTick">The end tick.</param>
-        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick)
+        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick, int activeVoices)
         {
             CurrentTime = currentTime;
             EndTime = endTime;
             CurrentTick = currentTick;
             EndTick = endTick;
+            ActiveVoices = activeVoices;
         }
     }
 }

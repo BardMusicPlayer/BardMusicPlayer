@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists the modes how accidentals are handled for notes
     /// </summary>
-    public enum NoteAccidentalMode
+    internal enum NoteAccidentalMode
     {
         /// <summary>
         /// Accidentals are calculated automatically.

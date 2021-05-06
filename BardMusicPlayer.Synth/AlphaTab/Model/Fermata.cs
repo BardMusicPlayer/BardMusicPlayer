@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Represents a fermata. 
     /// </summary>
-    public class Fermata
+    internal class Fermata
     {
         /// <summary>
         /// Gets or sets the type of fermata. 

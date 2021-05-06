@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all fingers.
     /// </summary>
-    public enum Fingers
+    internal enum Fingers
     {
         /// <summary>
         /// Unknown type (not documented)

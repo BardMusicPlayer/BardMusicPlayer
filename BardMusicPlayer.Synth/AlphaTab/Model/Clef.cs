@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// This public enumeration lists all supported Clefs.
     /// </summary>
-    public enum Clef
+    internal enum Clef
     {
         /// <summary>
         /// Neutral clef.

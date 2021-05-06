@@ -44,7 +44,7 @@
     <Reference Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\To_The_Edge.mmsong">
+    <None Include="Resources\test.mid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="signature.snk" />

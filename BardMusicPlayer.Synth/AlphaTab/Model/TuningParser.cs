@@ -29,7 +29,7 @@
             for (var i = 0; i < name.Length; i++)
             {
                 var c = (int)name[i];
-                if (Platform.Platform.IsCharNumber(c, false))
+                if (Platform.IsCharNumber(c, false))
                 {
                     // number without note?
                     if (string.IsNullOrEmpty(note))
@@ -37,11 +37,11 @@
                         return null;
                     }
 
-                    octave += CSharp.Platform.Platform.StringFromCharCode(c);
+                    octave += Platform.StringFromCharCode(c);
                 }
                 else if (c >= 0x41 && c <= 0x5A || c >= 0x61 && c <= 0x7A || c == 0x23)
                 {
-                    note += CSharp.Platform.Platform.StringFromCharCode(c);
+                    note += Platform.StringFromCharCode(c);
                 }
                 else
                 {
@@ -55,7 +55,7 @@
             }
 
             var result = new TuningParseResult();
-            result.Octave = CSharp.Platform.Platform.ParseInt(octave) + 1;
+            result.Octave = Platform.ParseInt(octave) + 1;
             result.Note = note.ToLower();
             result.NoteValue = GetToneForText(result.Note);
             return result;

@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a range of the song that should be played.
     /// </summary>
-    public class PlaybackRange
+    internal class PlaybackRange
     {
         /// <summary>
         /// The position in midi ticks from where the song should start.

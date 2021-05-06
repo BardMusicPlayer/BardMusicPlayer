@@ -23,7 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Config", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Updater", "BardMusicPlayer.Updater\BardMusicPlayer.Updater.csproj", "{CE10813D-1110-4A36-8D74-C2C87FC0B4E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Catalog.Tests", "BardMusicPlayer.Catalog.Tests\BardMusicPlayer.Catalog.Tests.csproj", "{BB7B97AF-912B-406A-B392-9405452E2253}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Catalog.Tests", "BardMusicPlayer.Catalog.Tests\BardMusicPlayer.Catalog.Tests.csproj", "{BB7B97AF-912B-406A-B392-9405452E2253}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Seer.ApiTest", "BardMusicPlayer.Seer.ApiTest\BardMusicPlayer.Seer.ApiTest.csproj", "{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Notate.ApiTest", "BardMusicPlayer.Notate.ApiTest\BardMusicPlayer.Notate.ApiTest.csproj", "{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +171,30 @@ Global
 		{BB7B97AF-912B-406A-B392-9405452E2253}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
 		{BB7B97AF-912B-406A-B392-9405452E2253}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
 		{BB7B97AF-912B-406A-B392-9405452E2253}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.DebugLocalPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.DebugLocalPublish|Any CPU.Build.0 = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.DebugPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.DebugPublish|Any CPU.Build.0 = Debug|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.ReleaseLocalPublish|Any CPU.ActiveCfg = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
+		{F96AB280-5A05-4CF0-BA7D-5BB53EF0A34A}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.DebugLocalPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.DebugLocalPublish|Any CPU.Build.0 = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.DebugPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.DebugPublish|Any CPU.Build.0 = Debug|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleaseLocalPublish|Any CPU.ActiveCfg = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
+		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

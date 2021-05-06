@@ -1,11 +1,11 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
     /// <summary>
     /// A chord definition.
     /// </summary>
-    public class Chord
+    internal class Chord
     {
         /// <summary>
         /// Gets or sets the name of the chord

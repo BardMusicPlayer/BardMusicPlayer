@@ -1,6 +1,6 @@
 namespace BardMusicPlayer.Synth.AlphaTab.Util
 {
-    public class Logger
+    internal class Logger
     {
         public static LogLevel LogLevel { get; set; }
 
@@ -36,7 +36,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Util
                 return;
             }
 
-            CSharp.Platform.Platform.Log(logLevel, category, msg, details);
+            Platform.Log(logLevel, category, msg, details);
         }
     }
 
@@ -44,7 +44,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Util
     /// Defines all loglevels. 
     /// </summary>
     [JsonSerializable]
-    public enum LogLevel
+    internal enum LogLevel
     {
         /// <summary>
         /// No logging
