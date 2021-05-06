@@ -11,8 +11,8 @@ namespace BardMusicPlayer.Catalog.Tests
         private const string TEST_SONG_FILENAME = "test.mid";
 
         // Current tags in the file are "To The Edge" and "testing"
-        private const string TEST_SONG_TAG_A = "testing";
-        private const string TEST_SONG_TAG_B = "test";
+        private const string TEST_SONG_TAG_A = "Test Tag 1";
+        private const string TEST_SONG_TAG_B = "Test Tag 2";
 
         // Test playlist name
         private const string PLAYLIST_NAME = "Test Playlist";
@@ -74,6 +74,9 @@ namespace BardMusicPlayer.Catalog.Tests
         {
             BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
+
+            song.Tags.Add("Test Tag 1");
+            song.Tags.Add("Test Tag 2");
 
             using (CatalogManager test = this.CreateCatalogManager())
             {

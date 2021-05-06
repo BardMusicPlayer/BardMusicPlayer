@@ -36,7 +36,7 @@ namespace BardMusicPlayer.Notate.Song
         /// <summary>
         /// 
         /// </summary>
-        public string[] Tags { get; set; } = new string[0];
+        public List<string> Tags { get; set; } = new();
 
         /// <summary>
         /// 

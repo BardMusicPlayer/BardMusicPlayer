@@ -1,7 +1,11 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using BardMusicPlayer.Common.Structs;
 using BardMusicPlayer.Notate.Song;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Catalog
 {
@@ -27,10 +31,72 @@ namespace BardMusicPlayer.Catalog
         /// <returns></returns>
         public static CatalogManager CreateInstance(string dbPath)
         {
-            var dbi = new LiteDatabase(dbPath);
+            var mapper = new BsonMapper();
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => AutoToneInstrumentGroup.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => AutoToneOctaveRange.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => Instrument.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => InstrumentTone.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => OctaveRange.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                tempoMap => SerializeTempoMap(tempoMap),
+                bson => DeserializeTempoMap(bson.AsBinary)
+            );
+
+            var dbi = new LiteDatabase(dbPath, mapper);
             MigrateDatabase(dbi);
 
             return new CatalogManager(dbi);
+        }
+
+        /// <summary>
+        /// Serializes a TempoMap from DryWetMidi. This class does not expose a public creator so we store it in a midi file as a byte[].
+        /// </summary>
+        /// <param name="tempoMap"></param>
+        /// <returns></returns>
+        private static byte[] SerializeTempoMap(TempoMap tempoMap)
+        {
+            var midiFile = new MidiFile(new TrackChunk());
+            midiFile.ReplaceTempoMap(tempoMap);
+            using var memoryStream = new MemoryStream();
+            midiFile.Write(memoryStream);
+            var bson = memoryStream.ToArray();
+            memoryStream.Dispose();
+            return bson;
+        }
+
+        /// <summary>
+        /// Deserializes a TempoMap from DryWetMidi. This class does not expose a public creator so we store it in a midi file as a byte[].
+        /// </summary>
+        /// <param name="bson"></param>
+        /// <returns></returns>
+        private static TempoMap DeserializeTempoMap(byte[] bson)
+        {
+            using var memoryStream = new MemoryStream(bson);
+            var midiFile = MidiFile.Read(memoryStream);
+            var tempoMap = midiFile.GetTempoMap().Clone();
+            memoryStream.Dispose();
+            return tempoMap;
         }
 
         /// <summary>
@@ -287,9 +353,9 @@ namespace BardMusicPlayer.Catalog
             bool ret = false;
             var tags = song.Tags;
 
-            if (tags != null && tags.Length > 0)
+            if (tags != null && tags.Count > 0)
             {
-                for (int i = 0; i < tags.Length; ++i)
+                for (int i = 0; i < tags.Count; ++i)
                 {
                     if (string.Equals(search, tags[i], StringComparison.OrdinalIgnoreCase))
                     {
