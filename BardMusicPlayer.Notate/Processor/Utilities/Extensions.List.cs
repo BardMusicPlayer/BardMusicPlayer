@@ -61,7 +61,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         {
             notes = notes.OrderBy(x=>x.Time).ToList();
             
-            var thisNotes = new List<Note>();
+            var thisNotes = new List<Note>(notes.Count);
 
             long lastStartTime = 0;
             long lastStopTime = 0;
@@ -165,7 +165,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         {
             notes = notes.OrderBy(x=>x.Time).ToList();
             
-            var thisNotes = new List<Note>();
+            var thisNotes = new List<Note>(notes.Count);
             for (var j = 0; j < notes.Count; j++)
             {
                 var noteNum = notes[j].NoteNumber;

@@ -23,7 +23,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <returns></returns>
         internal static Task<Dictionary<int, Dictionary<long, Note>>> MoveNoteDictionaryToDefaultOctave(this Dictionary<int, Dictionary<long, Note>> sourceNotesDictionary, OctaveRange sourceOctaveRange)
         {
-            var notesDictionary = new Dictionary<int, Dictionary<long, Note>>();
+            var notesDictionary = new Dictionary<int, Dictionary<long, Note>>(sourceNotesDictionary.Count);
             for (var i = 0; i < 5; i++) if (sourceNotesDictionary.ContainsKey(i)) notesDictionary[i] = sourceNotesDictionary[i];
             for (var i = sourceOctaveRange.LowerNote; i <= sourceOctaveRange.UpperNote; i++)
             {
@@ -60,7 +60,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         {
             if (lowClamp >= highClamp) return Task.FromResult(new Dictionary<int, Dictionary<long, Note>>());
 
-            var notesDictionary = Tools.GetEmptyNotesDictionary(lowClamp, highClamp);
+            var notesDictionary = Tools.GetEmptyNotesDictionary(lowClamp, highClamp, trackChunks.Count);
 
             var currentChannel = startingChannel;
             tempoMap = tempoMap.Clone();
@@ -130,20 +130,19 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// <returns></returns>
         internal static Task<Dictionary<int, Dictionary<int, Dictionary<long, Note>>>> GetPlayerNoteDictionary(this TrackChunk trackChunk, int playerCount, int lowClamp = 12, int highClamp = 120)
         {
-            var playerNotesDictionary = Tools.GetEmptyPlayerNotesDictionary(playerCount, lowClamp, highClamp);
-
-            var indexList = new List<Note>();
+            var notes = trackChunk.GetNotes();
+            var playerNotesDictionary = Tools.GetEmptyPlayerNotesDictionary(playerCount, lowClamp, highClamp, notes.Count);
+            
             var index = 0;
-            foreach (var note in trackChunk.GetNotes())
+            foreach (var note in notes)
             {
                 note.Velocity = (SevenBitNumber) index;
                 note.OffVelocity = (SevenBitNumber)index;
-                indexList.Add(note);
                 index++;
                 if (index > 127) index = 0;
             }
 
-            trackChunk = TimedObjectUtilities.ToTrackChunk(indexList);
+            trackChunk = TimedObjectUtilities.ToTrackChunk(notes);
 
             using var loadBalancer = new LoadBalancer(playerCount);
             using var timedEventsManager = trackChunk.ManageTimedEvents();
