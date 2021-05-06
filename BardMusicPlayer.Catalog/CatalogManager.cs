@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BardMusicPlayer.Common.Structs;
 using BardMusicPlayer.Notate.Song;
 using Melanchall.DryWetMidi.Core;
@@ -62,6 +63,11 @@ namespace BardMusicPlayer.Catalog
                 tempoMap => SerializeTempoMap(tempoMap),
                 bson => DeserializeTempoMap(bson.AsBinary)
             );
+            mapper.RegisterType
+            (
+                trackChunk => SerializeTrackChunk(trackChunk),
+                bson => DeserializeTrackChunk(bson.AsBinary)
+            );
 
             var dbi = new LiteDatabase(dbPath, mapper);
             MigrateDatabase(dbi);
@@ -70,7 +76,7 @@ namespace BardMusicPlayer.Catalog
         }
 
         /// <summary>
-        /// Serializes a TempoMap from DryWetMidi. This class does not expose a public creator so we store it in a midi file as a byte[].
+        /// Serializes a TempoMap from DryWetMidi.
         /// </summary>
         /// <param name="tempoMap"></param>
         /// <returns></returns>
@@ -86,7 +92,7 @@ namespace BardMusicPlayer.Catalog
         }
 
         /// <summary>
-        /// Deserializes a TempoMap from DryWetMidi. This class does not expose a public creator so we store it in a midi file as a byte[].
+        /// Deserializes a TempoMap from DryWetMidi.
         /// </summary>
         /// <param name="bson"></param>
         /// <returns></returns>
@@ -97,6 +103,35 @@ namespace BardMusicPlayer.Catalog
             var tempoMap = midiFile.GetTempoMap().Clone();
             memoryStream.Dispose();
             return tempoMap;
+        }
+
+        /// <summary>
+        /// Serializes a TrackChunk from DryWetMidi.
+        /// </summary>
+        /// <param name="trackChunk"></param>
+        /// <returns></returns>
+        private static byte[] SerializeTrackChunk(TrackChunk trackChunk)
+        {
+            var midiFile = new MidiFile(trackChunk);
+            using var memoryStream = new MemoryStream();
+            midiFile.Write(memoryStream);
+            var bson = memoryStream.ToArray();
+            memoryStream.Dispose();
+            return bson;
+        }
+
+        /// <summary>
+        /// Deserializes a TrackChunk from DryWetMidi.
+        /// </summary>
+        /// <param name="bson"></param>
+        /// <returns></returns>
+        private static TrackChunk DeserializeTrackChunk(byte[] bson)
+        {
+            using var memoryStream = new MemoryStream(bson);
+            var midiFile = MidiFile.Read(memoryStream);
+            var trackChunk = midiFile.GetTrackChunks().First();
+            memoryStream.Dispose();
+            return trackChunk;
         }
 
         /// <summary>
