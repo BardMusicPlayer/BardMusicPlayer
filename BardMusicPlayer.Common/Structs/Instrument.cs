@@ -274,9 +274,15 @@ namespace BardMusicPlayer.Common.Structs
                 
             if (Equals(Lute) && note < 3) return 0;
 
-            if (Equals(Bongo) && note < 12) return 0;
+            if (Equals(Bongo) && note > 7 && note < 12) return 0;
 
-            if (Equals(Panpipes) && note < 15) return 0;
+            if (Equals(Bongo) && note > 35) return 100;
+
+            if (Equals(BassDrum) && note > 30) return 100;
+            
+            if (Equals(SnareDrum) && note > 32) return 100;
+
+            if (Equals(Timpani) && note > 32) return 100;
 
             return 50;
         }
