@@ -18,7 +18,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        internal static Task<List<Note>> FixClassicChords(this List<Note> notes)
+        internal static Task<List<Note>> FixChords(this List<Note> notes)
         {
             notes = notes.OrderByDescending(x=>x.Time).ToList();
             
@@ -50,7 +50,7 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        internal static async Task<List<Note>> FixClassicChords(this Task<List<Note>> notes) => await FixClassicChords(await notes);
+        internal static async Task<List<Note>> FixChords(this Task<List<Note>> notes) => await FixChords(await notes);
 
         /// <summary>
         /// 

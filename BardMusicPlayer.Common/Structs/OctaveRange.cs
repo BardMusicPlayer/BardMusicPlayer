@@ -215,6 +215,11 @@ namespace BardMusicPlayer.Common.Structs
                 result = All.First(x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
+            if (All.Any(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                result = All.First(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                return true;
+            }
             result = Invalid;
             return false;
         }

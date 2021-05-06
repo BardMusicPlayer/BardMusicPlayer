@@ -34,8 +34,8 @@ namespace BardMusicPlayer.Notate.Processor
                 Config.AutoToneOctaveRange.LowerNote + Config.AutoToneInstrumentGroup.Size1 * 12 - 1,
                 (int) Config.AutoToneInstrumentGroup.Instrument1.InstrumentToneMenuKey,
                 false,
-                -((OctaveRange)Config.AutoToneOctaveRange.Index).LowerNote)
-                .MoveNoteDictionaryToDefaultOctave(Config.AutoToneOctaveRange.Index)
+                -OctaveRange.Parse(Config.AutoToneOctaveRange.Index).LowerNote)
+                .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(Config.AutoToneOctaveRange.Index))
                 .ConcatNoteDictionaryToList();
 
             var instrumentGroup2 = trackChunks.GetNoteDictionary(Song.SourceTempoMap, Config.AutoToneInstrumentGroup.InstrumentTone,
@@ -43,8 +43,8 @@ namespace BardMusicPlayer.Notate.Processor
                 Config.AutoToneOctaveRange.LowerNote + Config.AutoToneInstrumentGroup.Size1 * 12 + Config.AutoToneInstrumentGroup.Size2 * 12 - 1,
                 (int) Config.AutoToneInstrumentGroup.Instrument2.InstrumentToneMenuKey,
                 false,
-                -((OctaveRange)(Config.AutoToneOctaveRange.Index + 1)).LowerNote)
-                .MoveNoteDictionaryToDefaultOctave(Config.AutoToneOctaveRange.Index + 1)
+                -OctaveRange.Parse(Config.AutoToneOctaveRange.Index + 1).LowerNote)
+                .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(Config.AutoToneOctaveRange.Index + 1))
                 .ConcatNoteDictionaryToList();
 
             var instrumentGroup3 = trackChunks.GetNoteDictionary(Song.SourceTempoMap, Config.AutoToneInstrumentGroup.InstrumentTone,
@@ -52,8 +52,8 @@ namespace BardMusicPlayer.Notate.Processor
                 Config.AutoToneOctaveRange.LowerNote + Config.AutoToneInstrumentGroup.Size1 * 12 + Config.AutoToneInstrumentGroup.Size2 * 12 + Config.AutoToneInstrumentGroup.Size3 * 12,
                 (int) Config.AutoToneInstrumentGroup.Instrument3.InstrumentToneMenuKey,
                 false,
-                -((OctaveRange)(Config.AutoToneOctaveRange.Index + 2)).LowerNote)
-                .MoveNoteDictionaryToDefaultOctave(Config.AutoToneOctaveRange.Index + 2)
+                -OctaveRange.Parse(Config.AutoToneOctaveRange.Index + 2).LowerNote)
+                .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(Config.AutoToneOctaveRange.Index + 2))
                 .ConcatNoteDictionaryToList();
 
             await Task.WhenAll(instrumentGroup1, instrumentGroup2, instrumentGroup3);
@@ -72,7 +72,7 @@ namespace BardMusicPlayer.Notate.Processor
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixClassicChords().OffSet50Ms().FixEndSpacing());
+                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
                     concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + Config.AutoToneInstrumentGroup.InstrumentTone.Name))});
                 }
             );

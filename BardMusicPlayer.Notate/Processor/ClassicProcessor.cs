@@ -36,7 +36,7 @@ namespace BardMusicPlayer.Notate.Processor
                         Config.OctaveRange.UpperNote, 
                         (int) Config.Instrument.InstrumentToneMenuKey, 
                         false,
-                        -(Config.OctaveRange.LowerNote))
+                        -Config.OctaveRange.LowerNote)
                 .MoveNoteDictionaryToDefaultOctave(Config.OctaveRange)
                 .ConcatNoteDictionaryToList());
 
@@ -46,7 +46,7 @@ namespace BardMusicPlayer.Notate.Processor
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixClassicChords().OffSet50Ms().FixEndSpacing());
+                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
                     concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + Config.Instrument.InstrumentTone.Name))});
                 }
             );
