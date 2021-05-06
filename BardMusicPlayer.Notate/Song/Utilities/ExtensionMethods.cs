@@ -3,14 +3,11 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 
-namespace BardMusicPlayer.Notate
+namespace BardMusicPlayer.Notate.Song.Utilities
 {
     public static class ExtensionMethods
     {

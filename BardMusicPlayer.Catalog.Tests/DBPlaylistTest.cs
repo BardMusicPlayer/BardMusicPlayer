@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog.Tests
 {
@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Catalog.Tests
             DBPlaylist test = new DBPlaylist()
             {
                 Name = playlistName,
-                Songs = new List<MMSong>(),
+                Songs = new List<BmpSong>(),
                 Id = playlistId
             };
 

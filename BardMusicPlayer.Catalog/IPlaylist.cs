@@ -1,22 +1,22 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog
 {
-    public interface IPlaylist : IEnumerable<MMSong>
+    public interface IPlaylist : IEnumerable<BmpSong>
     {
         /// <summary>
         /// This adds a song to the playlist.
         /// </summary>
         /// <param name="song"></param>
-        void Add(MMSong song);
+        void Add(BmpSong song);
 
         /// <summary>
         /// This song adds a song to the playlist at the given index.
         /// </summary>
         /// <param name="idx"></param>
         /// <param name="song"></param>
-        void Add(int idx, MMSong song);
+        void Add(int idx, BmpSong song);
 
         /// <summary>
         /// This moves a song within the playlist to the given index.

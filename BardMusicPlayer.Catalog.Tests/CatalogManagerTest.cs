@@ -1,18 +1,18 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog.Tests
 {
-    [TestClass, DeploymentItem("Resources\\To_The_Edge.mmsong")]
+    [TestClass, DeploymentItem("Resources\\test.mid")]
     public class CatalogManagerTest : CatalogTestBase
     {
         // Resource name
-        private const string TEST_SONG_FILENAME = "To_The_Edge.mmsong";
+        private const string TEST_SONG_FILENAME = "test.mid";
 
         // Current tags in the file are "To The Edge" and "testing"
         private const string TEST_SONG_TAG_A = "testing";
-        private const string TEST_SONG_TAG_B = "To The Edge";
+        private const string TEST_SONG_TAG_B = "test";
 
         // Test playlist name
         private const string PLAYLIST_NAME = "Test Playlist";
@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestSongBasics()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -28,7 +28,7 @@ namespace BardMusicPlayer.Catalog.Tests
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                MMSong resultTitle = test.GetSong(song.title);
+                BmpSong resultTitle = test.GetSong(song.Title);
                 Assert.AreEqual(song.Id, resultTitle.Id);
             }
         }
@@ -37,10 +37,10 @@ namespace BardMusicPlayer.Catalog.Tests
         [ExpectedException(typeof(CatalogException))]
         public void TestDuplicateSong()
         {
-            MMSong songA = LoadTestSong();
+            BmpSong songA = LoadTestSong();
             Assert.IsNull(songA.Id);
 
-            MMSong songB = LoadTestSong();
+            BmpSong songB = LoadTestSong();
             Assert.IsNull(songB.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -55,7 +55,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestSongListing()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -65,14 +65,14 @@ namespace BardMusicPlayer.Catalog.Tests
 
                 IList<string> resultAll = test.GetSongTitles();
                 Assert.AreEqual(1, resultAll.Count);
-                Assert.AreEqual(song.title, resultAll[0]);
+                Assert.AreEqual(song.Title, resultAll[0]);
             }
         }
 
         [TestMethod]
         public void TestPlaylistFromTag()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -83,8 +83,8 @@ namespace BardMusicPlayer.Catalog.Tests
                 IPlaylist tagPlaylist = test.CreatePlaylistFromTag(TEST_SONG_TAG_A);
                 Assert.IsNotNull(tagPlaylist);
 
-                List<MMSong> allTags = new List<MMSong>();
-                foreach (MMSong entry in tagPlaylist)
+                List<BmpSong> allTags = new List<BmpSong>();
+                foreach (BmpSong entry in tagPlaylist)
                 {
                     allTags.Add(entry);
                 }
@@ -96,7 +96,7 @@ namespace BardMusicPlayer.Catalog.Tests
                 Assert.IsNotNull(tagPlaylist);
 
                 allTags.Clear();
-                foreach (MMSong entry in tagPlaylist)
+                foreach (BmpSong entry in tagPlaylist)
                 {
                     allTags.Add(entry);
                 }
@@ -109,7 +109,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestPlaylistBasics()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -140,7 +140,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestPlaylistListing()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -165,7 +165,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [ExpectedException(typeof(CatalogException))]
         public void TestDuplicatePlaylist()
         {
-            MMSong song = LoadTestSong();
+            BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             using (CatalogManager test = this.CreateCatalogManager())
@@ -190,6 +190,6 @@ namespace BardMusicPlayer.Catalog.Tests
             return CatalogManager.CreateInstance(dbPath);
         }
 
-        private static MMSong LoadTestSong() => MMSong.Open(TEST_SONG_FILENAME);
+        private static BmpSong LoadTestSong() => BmpSong.OpenMidiFile(TEST_SONG_FILENAME).GetAwaiter().GetResult();
     }
 }

@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog.Tests
 {
@@ -24,7 +24,7 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestAddAppend()
         {
-            MMSong songA = new MMSong()
+            BmpSong songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
@@ -42,17 +42,17 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestAddInject()
         {
-            MMSong songA = new MMSong()
+            BmpSong songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songB = new MMSong()
+            BmpSong songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songC = new MMSong()
+            BmpSong songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
@@ -79,17 +79,17 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestMove()
         {
-            MMSong songA = new MMSong()
+            BmpSong songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songB = new MMSong()
+            BmpSong songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songC = new MMSong()
+            BmpSong songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
@@ -117,17 +117,17 @@ namespace BardMusicPlayer.Catalog.Tests
         [TestMethod]
         public void TestRemove()
         {
-            MMSong songA = new MMSong()
+            BmpSong songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songB = new MMSong()
+            BmpSong songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            MMSong songC = new MMSong()
+            BmpSong songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
@@ -157,7 +157,7 @@ namespace BardMusicPlayer.Catalog.Tests
             {
                 Name = TEST_PLAYLIST_NAME,
                 Id = null,
-                Songs = new List<MMSong>()
+                Songs = new List<BmpSong>()
             };
 
             return new DBPlaylistDecorator(decorateMe);

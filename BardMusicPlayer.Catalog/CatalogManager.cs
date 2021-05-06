@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.Notate.Objects;
-using LiteDB;
+﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog
 {
@@ -50,7 +50,7 @@ namespace BardMusicPlayer.Catalog
             // TODO: This is brute force and not memory efficient; there has to be a better
             // way to do this, but my knowledge of LINQ and BsonExpressions isn't there yet.
             var allSongs = songCol.FindAll();
-            var songList = new List<MMSong>();
+            var songList = new List<BmpSong>();
 
             foreach (var entry in allSongs)
             {
@@ -89,7 +89,7 @@ namespace BardMusicPlayer.Catalog
 
             var dbList = new DBPlaylist()
             {
-                Songs = new List<MMSong>(),
+                Songs = new List<BmpSong>(),
                 Name = name,
                 Id = null
             };
@@ -140,7 +140,7 @@ namespace BardMusicPlayer.Catalog
         /// </summary>
         /// <param name="title"></param>
         /// <returns>The song if found or null if no matching song exists.</returns>
-        public MMSong GetSong(string title)
+        public BmpSong GetSong(string title)
         {
             if (title == null)
             {
@@ -149,7 +149,7 @@ namespace BardMusicPlayer.Catalog
 
             var songCol = this.GetSongCollection();
 
-            return songCol.FindOne(x => x.title == title);
+            return songCol.FindOne(x => x.Title == title);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace BardMusicPlayer.Catalog
             var songCol = this.GetSongCollection();
 
             return songCol.Query()
-                .Select<string>(x => x.title)
+                .Select<string>(x => x.Title)
                 .ToList();
         }
 
@@ -170,7 +170,7 @@ namespace BardMusicPlayer.Catalog
         /// </summary>
         /// <param name="song"></param>
         /// <exception cref="CatalogException">This is thrown if a title conflict occurs on save.</exception>
-        public void SaveSong(MMSong song)
+        public void SaveSong(BmpSong song)
         {
             if (song == null)
             {
@@ -271,9 +271,9 @@ namespace BardMusicPlayer.Catalog
         /// Utility method.
         /// </summary>
         /// <returns></returns>
-        private ILiteCollection<MMSong> GetSongCollection()
+        private ILiteCollection<BmpSong> GetSongCollection()
         {
-            return this.dbi.GetCollection<MMSong>(Constants.SONG_COL_NAME);
+            return this.dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
         }
 
         /// <summary>
@@ -282,10 +282,10 @@ namespace BardMusicPlayer.Catalog
         /// <param name="search"></param>
         /// <param name="song"></param>
         /// <returns></returns>
-        private static bool TagMatches(string search, MMSong song)
+        private static bool TagMatches(string search, BmpSong song)
         {
             bool ret = false;
-            var tags = song.tags;
+            var tags = song.Tags;
 
             if (tags != null && tags.Length > 0)
             {
@@ -347,9 +347,9 @@ namespace BardMusicPlayer.Catalog
             }
 
             // Create the song collection and add indicies
-            var songs = dbi.GetCollection<MMSong>(Constants.SONG_COL_NAME);
-            songs.EnsureIndex(x => x.title, unique: true);
-            songs.EnsureIndex(x => x.tags);
+            var songs = dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
+            songs.EnsureIndex(x => x.Title, unique: true);
+            songs.EnsureIndex(x => x.Tags);
 
             // Create the custom playlist collection and add indicies
             var playlists = dbi.GetCollection<DBPlaylist>(Constants.PLAYLIST_COL_NAME);
