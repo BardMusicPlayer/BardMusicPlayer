@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using BardMusicPlayer.Config;
 using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Synth;
+using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Notate.ApiTest
 {
@@ -26,7 +28,7 @@ namespace BardMusicPlayer.Notate.ApiTest
 
             //var song = BmpSong.OpenMidiFile(@"bongocheck.mid").GetAwaiter().GetResult();
 
-            song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid", true);;
+            song.GetProcessedMidiFile().GetAwaiter().GetResult().Write(@"test.mid", true, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.UTF8 });;
 
             
 
