@@ -26,7 +26,7 @@ namespace BardMusicPlayer.Config
         public static void Initialize(string filename)
         {
             if (_instance != null) return;
-            Load<BmpConfig>(filename).EnableAutosave();
+            _instance = Load<BmpConfig>(filename).EnableAutosave();
         }
 
         /// <summary>
