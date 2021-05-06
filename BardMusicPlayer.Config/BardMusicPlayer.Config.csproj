@@ -19,4 +19,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
+  </ItemGroup>
+
 </Project>

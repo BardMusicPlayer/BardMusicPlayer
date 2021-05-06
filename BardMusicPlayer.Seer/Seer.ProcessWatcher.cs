@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using BardMusicPlayer.Common.UtcMilliTime;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
@@ -42,9 +43,9 @@ namespace BardMusicPlayer.Seer
                         // Add new games.
                         else if (!_games.ContainsKey(process.Id) && !process.HasExited && process.Responding)
                         {
-                            // Adding a game spikes the cpu when sharlayan scans memory. Meowchestra runs 21 games on a single computer.
+                            // Adding a game spikes the cpu when sharlayan scans memory.
                             var timeNow = Clock.Time.Now.ToUtcMilliTime() / 1000;
-                            if (coolDown + 50 > timeNow) continue;
+                            if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
                             coolDown = timeNow;
                             _games.Add(process.Id, new Game(process));
                         }
@@ -55,7 +56,7 @@ namespace BardMusicPlayer.Seer
                     PublishEvent(new SeerExceptionEvent(ex));
                 }
 
-                Thread.Sleep(50);
+                Thread.Sleep(BmpConfig.Instance.SeerGameScanCooldown);
             }
         }
 

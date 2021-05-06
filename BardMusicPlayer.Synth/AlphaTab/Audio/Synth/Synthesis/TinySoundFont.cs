@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util;
 using BardMusicPlayer.Synth.AlphaTab.Collections;
@@ -140,10 +141,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                 NoteOff(presetIndex, key);
                 return;
             }
-
-            // TODO: expose config switch to control this.
-            var enableVoiceLimiter = true;
-            if (enableVoiceLimiter && ActiveVoiceCount >= 16)
+            
+            if (BmpConfig.Instance.EnableSynthVoiceLimiter && ActiveVoiceCount >= 16)
             {
                 var voice = _voices.First(a => a.Counter == _voices.Where(b => b.PlayingPreset != -1).Min(b => b.Counter));
                 voice.EndQuick(OutSampleRate);

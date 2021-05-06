@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Synth;
 
@@ -9,6 +10,8 @@ namespace BardMusicPlayer.Notate.ApiTest
     {
         static void Main(string[] args)
         {
+            BmpConfig.Initialize(AppContext.BaseDirectory + @"\Notate.ApiTest.json");
+
             Synthesizer.Instance.Setup();
 
             if (args.Length == 0)
