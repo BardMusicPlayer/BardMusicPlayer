@@ -4,10 +4,12 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Notate.Song.Config;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Notate.Processor
 {
@@ -20,9 +22,32 @@ namespace BardMusicPlayer.Notate.Processor
             Config = config;
         }
 
-        public override async Task<List<TrackChunk>> Process()
+        public override Task<List<TrackChunk>> Process()
         {
-            throw new System.NotImplementedException();
+            var trackChunk = new List<TrackChunk> { Song.TrackContainers[Config.Track].SourceTrackChunk }.Concat(Config.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).Merge();
+
+            var lyricEvents = new List<TimedEvent>();
+
+            var lyricLineCount = 0;
+
+            foreach (var midiEvent in trackChunk.GetTimedEvents().Where(e => e.Event.EventType == MidiEventType.Lyric))
+            {
+                lyricLineCount++;
+                midiEvent.Time = midiEvent.TimeAs<MetricTimeSpan>(Song.SourceTempoMap).TotalMicroseconds / 1000 + 120000;
+                lyricEvents.Add(midiEvent);
+            }
+
+            var trackChunks = new List<TrackChunk>();
+
+            for (var i = 0; i < Config.PlayerCount; i++)
+            {
+                trackChunk = new TrackChunk();
+                trackChunk.AddObjects(lyricEvents);
+                trackChunk.AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("lyric:"+lyricLineCount))});
+                trackChunks.Add(trackChunk);
+            }
+
+            return Task.FromResult(trackChunks);
         }
     }
 }

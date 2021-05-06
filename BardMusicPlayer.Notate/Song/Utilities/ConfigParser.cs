@@ -96,10 +96,11 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                         return configContainers;
                     }
 
-                    else if (subfields[0].Equals("lyric"))
+                    else if (subfields[0].Equals("lyric") && subfields[1].Equals("default"))
                     {
-                        // TODO
-                        return configContainers;
+                        var config = (LyricConfig)(configContainer.Config = new LyricConfig { Track = trackNumber });
+                        ParseAdditionalOptions(config, song, fields);
+                        configContainers.Add(groupCounter, configContainer);
                     }
                 }
 
