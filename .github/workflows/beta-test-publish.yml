@@ -96,7 +96,3 @@ jobs:
           git add bmp/release/versionlist.json
           git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
-
-      - name: Deploy Downloads
-        run: |
-          curl -s -X POST "https://api.bardmusicplayer.com/ci/deploy/Downloads" -H "Api-Token: ${{ secrets.CI_KEY_DOWNLOADS }}"
