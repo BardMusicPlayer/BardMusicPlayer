@@ -32,7 +32,7 @@ namespace BardMusicPlayer.Notate.ApiTest
 
             
 
-            Console.WriteLine("Loading song into preview synthesizer (lyrics currently will not display if used)..");
+            Console.WriteLine("Loading song into preview synthesizer..");
 
             while (!Synthesizer.Instance.IsReady)
             {
