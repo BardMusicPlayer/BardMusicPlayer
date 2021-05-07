@@ -30,10 +30,12 @@ namespace BardMusicPlayer.Notate.Processor
 
             var lyricLineCount = 0;
 
+            var tempoMap = Song.SourceTempoMap.Clone();
+
             foreach (var midiEvent in trackChunk.GetTimedEvents().Where(e => e.Event.EventType == MidiEventType.Lyric))
             {
                 lyricLineCount++;
-                midiEvent.Time = midiEvent.TimeAs<MetricTimeSpan>(Song.SourceTempoMap).TotalMicroseconds / 1000 + 120000;
+                midiEvent.Time = midiEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000 + 120000;
                 lyricEvents.Add(midiEvent);
             }
 

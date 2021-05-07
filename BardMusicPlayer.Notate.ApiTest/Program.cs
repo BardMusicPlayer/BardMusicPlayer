@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using BardMusicPlayer.Config;
 using BardMusicPlayer.Notate.Song;
@@ -10,6 +9,7 @@ namespace BardMusicPlayer.Notate.ApiTest
 {
     class Program
     {
+        private static string _lastLyric = "";
         static void Main(string[] args)
         {
             BmpConfig.Initialize(AppContext.BaseDirectory + @"\Notate.ApiTest.json");
@@ -23,7 +23,7 @@ namespace BardMusicPlayer.Notate.ApiTest
                 Environment.Exit(0);
             }
 
-            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha 11..");
+            Console.WriteLine("Attempting to process midi file data with BmpNotate alpha 12..");
             var song = BmpSong.OpenMidiFile(args[0]).GetAwaiter().GetResult();
 
             //var song = BmpSong.OpenMidiFile(@"bongocheck.mid").GetAwaiter().GetResult();
@@ -39,6 +39,7 @@ namespace BardMusicPlayer.Notate.ApiTest
             }
 
             Synthesizer.Instance.SynthTimePositionChanged += PositionChanged;
+            Synthesizer.Instance.LyricTrigger += LyricTrigger;
 
             Synthesizer.Instance.Load(song).GetAwaiter().GetResult();
 
@@ -54,15 +55,21 @@ namespace BardMusicPlayer.Notate.ApiTest
             Console.ReadLine();
 
             Synthesizer.Instance.SynthTimePositionChanged -= PositionChanged;
+            Synthesizer.Instance.LyricTrigger -= LyricTrigger;
 
             Synthesizer.Instance.Stop();
             Synthesizer.Instance.ShutDown();
             Environment.Exit(0);
         }
 
+        private static void LyricTrigger(int singer, string line) =>_lastLyric = "Singer: " + singer + " Lyric: " + line;
+
         private static void PositionChanged(string songTitle, double currenttime, double endtime, int activeVoices)
         {
-            Console.Write("\r" + songTitle + ": " + TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices + "                     ");
+            Console.SetCursorPosition(0, Console.CursorTop -3);
+            Console.WriteLine(songTitle + ": ");
+            Console.WriteLine(TimeSpan.FromMilliseconds(currenttime).ToString(@"mm\:ss") + "/" + TimeSpan.FromMilliseconds(endtime).ToString(@"mm\:ss") + " ActiveVoices: " + activeVoices);
+            Console.WriteLine(_lastLyric);
         }
         
     }

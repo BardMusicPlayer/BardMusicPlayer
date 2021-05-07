@@ -3,6 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Common.Structs;
@@ -17,7 +19,7 @@ namespace BardMusicPlayer.Synth
 {
     internal static class Utils
     {
-        internal static async Task<MidiFile> GetSynthMidi(this BmpSong song)
+        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(this BmpSong song)
         {
             var file = new MidiFile {Division = 600};
             var events = new AlphaSynthMidiFileHandler(file);
@@ -28,33 +30,50 @@ namespace BardMusicPlayer.Synth
 
             var midiFile = await song.GetProcessedMidiFile();
 
-            foreach (var trackChunk in midiFile.GetTrackChunks())
+            var trackChunks = midiFile.GetTrackChunks().ToList();
+            
+            var lyrics = new Dictionary<int, Dictionary<long, string>>();
+            var lyricNum = 0;
+
+            foreach (var trackChunk in trackChunks)
             {
                 var options = trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text.Split(':');
-                if (options[0].Equals("lyric"))
+                switch (options[0])
                 {
-                    // TODO
-                }
-                else if (options[0].Equals("tone"))
-                {
-                    var tone = InstrumentTone.Parse(options[1]);
-                    foreach (var note in trackChunk.GetNotes())
+                    case "lyric":
                     {
-                        var instrument = tone.GetInstrumentFromChannel(note.Channel);
-                        var noteNum = note.NoteNumber;
-                        var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
-                        var time = (int) note.Time;
-                        events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
-                        events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
-                        if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
-                        else trackCounter++;
-                        if (time + dur > veryLast) veryLast = time + dur;
+                        if (!lyrics.ContainsKey(lyricNum)) lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
+
+                        foreach (var lyric in trackChunk.GetTimedEvents().Where(x => x.Event.EventType == MidiEventType.Lyric))
+                            lyrics[lyricNum].Add(lyric.Time, ((LyricEvent) lyric.Event).Text);
+
+                        lyricNum++;
+
+                        break;
                     }
-                    
+
+                    case "tone":
+                    {
+                        var tone = InstrumentTone.Parse(options[1]);
+                        foreach (var note in trackChunk.GetNotes())
+                        {
+                            var instrument = tone.GetInstrumentFromChannel(note.Channel);
+                            var noteNum = note.NoteNumber;
+                            var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
+                            var time = (int) note.Time;
+                            events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
+                            events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
+                            if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
+                            else trackCounter++;
+                            if (time + dur > veryLast) veryLast = time + dur;
+                        }
+
+                        break;
+                    }
                 }
             }
             events.FinishTrack(byte.MaxValue, (byte) veryLast);
-            return file;
+            return (file, lyrics);
         }
         
         private static long MinimumLength(Instrument instrument, int note, long duration)
