@@ -15,16 +15,16 @@ namespace BardMusicPlayer.Notate.Processor
 {
     internal class LyricProcessor : BaseProcessor
     {
-        public LyricConfig Config { get; set; }
+        public LyricConfig ProcessorConfig { get; set; }
 
-        internal LyricProcessor(LyricConfig config, BmpSong song) : base(song)
+        internal LyricProcessor(LyricConfig processorConfig, BmpSong song) : base(song)
         {
-            Config = config;
+            ProcessorConfig = processorConfig;
         }
 
         public override Task<List<TrackChunk>> Process()
         {
-            var trackChunk = new List<TrackChunk> { Song.TrackContainers[Config.Track].SourceTrackChunk }.Concat(Config.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).Merge();
+            var trackChunk = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).Merge();
 
             var lyricEvents = new List<TimedEvent>();
 
@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Notate.Processor
 
             var trackChunks = new List<TrackChunk>();
 
-            for (var i = 0; i < Config.PlayerCount; i++)
+            for (var i = 0; i < ProcessorConfig.PlayerCount; i++)
             {
                 trackChunk = new TrackChunk();
                 trackChunk.AddObjects(lyricEvents);
