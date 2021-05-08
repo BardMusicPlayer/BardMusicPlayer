@@ -7,10 +7,10 @@ using System.Collections.Generic;
 
 namespace BardMusicPlayer.Notate.Song.Config.Interfaces
 {
-    public interface IConfig
+    public interface IProcessorConfig
     {
         /// <summary>
-        /// The main track this config is applied against
+        /// The main track this processorConfig is applied against
         /// </summary>
         int Track { get; set; }
 

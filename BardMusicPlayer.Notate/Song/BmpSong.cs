@@ -131,9 +131,9 @@ namespace BardMusicPlayer.Notate.Song
             {
                 Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
                 {
-                    switch (song.TrackContainers[i].ConfigContainers[j].Config)
+                    switch (song.TrackContainers[i].ConfigContainers[j].ProcessorConfig)
                     {
-                        case ClassicConfig classicConfig:
+                        case ClassicProcessorConfig classicConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               classicConfig.GetType() +
                                               " Instrument:" + classicConfig.Instrument + " OctaveRange:" +
@@ -142,7 +142,7 @@ namespace BardMusicPlayer.Notate.Song
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
-                        case AutoToneConfig autoToneConfig:
+                        case AutoToneProcessorConfig autoToneConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               autoToneConfig.GetType() +
                                              " AutoToneInstrumentGroup:" + autoToneConfig.AutoToneInstrumentGroup + " OctaveRange:" +
@@ -151,7 +151,7 @@ namespace BardMusicPlayer.Notate.Song
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
-                        case LyricConfig lyricConfig:
+                        case LyricProcessorConfig lyricConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
                                               " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));

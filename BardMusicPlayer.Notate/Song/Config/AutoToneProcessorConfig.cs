@@ -9,7 +9,7 @@ using BardMusicPlayer.Common.Structs;
 
 namespace BardMusicPlayer.Notate.Song.Config
 {
-    public class AutoToneConfig : IConfig
+    public class AutoToneProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;

@@ -18,9 +18,9 @@ namespace BardMusicPlayer.Notate.Processor
 {
     internal class AutoToneProcessor : BaseProcessor
     {
-        public AutoToneConfig ProcessorConfig { get; set; }
+        public AutoToneProcessorConfig ProcessorConfig { get; set; }
 
-        internal AutoToneProcessor(AutoToneConfig processorConfig, BmpSong song) : base(song)
+        internal AutoToneProcessor(AutoToneProcessorConfig processorConfig, BmpSong song) : base(song)
         {
             ProcessorConfig = processorConfig;
         }

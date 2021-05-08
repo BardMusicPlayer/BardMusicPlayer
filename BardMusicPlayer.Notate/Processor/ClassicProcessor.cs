@@ -18,9 +18,9 @@ namespace BardMusicPlayer.Notate.Processor
 {
     internal class ClassicProcessor : BaseProcessor
     {
-        public ClassicConfig ProcessorConfig { get; set; }
+        public ClassicProcessorConfig ProcessorConfig { get; set; }
 
-        internal ClassicProcessor(ClassicConfig processorConfig, BmpSong song) : base(song)
+        internal ClassicProcessor(ClassicProcessorConfig processorConfig, BmpSong song) : base(song)
         {
             ProcessorConfig = processorConfig;
         }

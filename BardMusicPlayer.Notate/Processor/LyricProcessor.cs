@@ -15,9 +15,9 @@ namespace BardMusicPlayer.Notate.Processor
 {
     internal class LyricProcessor : BaseProcessor
     {
-        public LyricConfig ProcessorConfig { get; set; }
+        public LyricProcessorConfig ProcessorConfig { get; set; }
 
-        internal LyricProcessor(LyricConfig processorConfig, BmpSong song) : base(song)
+        internal LyricProcessor(LyricProcessorConfig processorConfig, BmpSong song) : base(song)
         {
             ProcessorConfig = processorConfig;
         }
