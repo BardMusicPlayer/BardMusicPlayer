@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Seer.ApiTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Notate.ApiTest", "BardMusicPlayer.Notate.ApiTest\BardMusicPlayer.Notate.ApiTest.csproj", "{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Grunt", "BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj", "{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +197,18 @@ Global
 		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
 		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
 		{548EAB64-3ADA-4013-9D8C-5F2D9F66D664}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.DebugLocalPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.DebugLocalPublish|Any CPU.Build.0 = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.DebugPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.DebugPublish|Any CPU.Build.0 = Debug|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.ReleaseLocalPublish|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEE27C7-EC8F-4028-9AE9-CAB2D6E77508}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
