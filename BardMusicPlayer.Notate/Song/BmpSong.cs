@@ -59,17 +59,33 @@ namespace BardMusicPlayer.Notate.Song
             var delta = sourceMidiData.GetNotes().First().Time;
             foreach (var trackChunk in sourceMidiData.GetTrackChunks())
             {
-                var notes = trackChunk.GetNotes();
-                var newTrackChunk = new TrackChunk(new SequenceTrackNameEvent(trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text));
-                var newNotes = new List<Note>();
-                foreach (var note in notes)
+                var trackName = trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text;
+                if (trackName.StartsWith("tone:"))
                 {
-                    if (note.Time - delta < 0) continue;
-                    note.Time -= delta;
-                    newNotes.Add(note);
+                    var newTrackChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    var newNotes = new List<Note>();
+                    foreach (var note in trackChunk.GetNotes())
+                    {
+                        if (note.Time - delta < 0) continue; // TODO: log this error, though this shouldn't be possible.
+                        note.Time -= delta;
+                        newNotes.Add(note);
+                    }
+                    newTrackChunk.AddObjects(newNotes);
+                    midiFile.Chunks.Add(newTrackChunk);
                 }
-                newTrackChunk.AddObjects(newNotes);
-                midiFile.Chunks.Add(newTrackChunk);
+                else if (trackName.StartsWith("lyric:"))
+                {
+                    var newTrackChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    var newLyrics = new List<TimedEvent>();
+                    foreach (var midiEvent in trackChunk.GetTimedEvents().Where(e => e.Event.EventType == MidiEventType.Lyric))
+                    {
+                        if (midiEvent.Time - delta < 0) continue; // TODO: log that you cannot have lyrics come before the first note.
+                        midiEvent.Time -= delta;
+                        newLyrics.Add(midiEvent);
+                    }
+                    newTrackChunk.AddObjects(newLyrics);
+                    midiFile.Chunks.Add(newTrackChunk);
+                }
             }
             midiFile.ReplaceTempoMap(Tools.GetMsTempoMap());
             return Task.FromResult(midiFile);
@@ -111,13 +127,13 @@ namespace BardMusicPlayer.Notate.Song
                 song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
             }
 
-            Parallel.For(0, song.TrackContainers.Count, async i =>
+            Parallel.For(0, song.TrackContainers.Count, i =>
             {
                 Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
                 {
-                    switch (song.TrackContainers[i].ConfigContainers[j].Config)
+                    switch (song.TrackContainers[i].ConfigContainers[j].ProcessorConfig)
                     {
-                        case ClassicConfig classicConfig:
+                        case ClassicProcessorConfig classicConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               classicConfig.GetType() +
                                               " Instrument:" + classicConfig.Instrument + " OctaveRange:" +
@@ -126,12 +142,19 @@ namespace BardMusicPlayer.Notate.Song
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
-                        case AutoToneConfig autoToneConfig:
+                        case AutoToneProcessorConfig autoToneConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               autoToneConfig.GetType() +
                                              " AutoToneInstrumentGroup:" + autoToneConfig.AutoToneInstrumentGroup + " OctaveRange:" +
                                               autoToneConfig.AutoToneOctaveRange + " PlayerCount:" + autoToneConfig.PlayerCount +
                                              " IncludeTracks:" + string.Join(",", autoToneConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case LyricProcessorConfig lyricConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;

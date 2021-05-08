@@ -5,11 +5,10 @@
 
 using BardMusicPlayer.Notate.Song.Config.Interfaces;
 using System.Collections.Generic;
-using BardMusicPlayer.Common.Structs;
 
 namespace BardMusicPlayer.Notate.Song.Config
 {
-    public class ManualToneConfig : IConfig
+    public class LyricProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;
@@ -19,15 +18,5 @@ namespace BardMusicPlayer.Notate.Song.Config
 
         ///<inheritdoc/>
         public int PlayerCount { get; set; } = 1;
-
-        /// <summary>
-        /// The instrument tone for this track
-        /// </summary>
-        public InstrumentTone InstrumentTone { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Dictionary<Instrument, OctaveRange> OctaveRanges { get; set; }
     }
 }

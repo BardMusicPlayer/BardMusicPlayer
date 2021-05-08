@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Notate.Song
         /// <summary>
         /// 
         /// </summary>
-        public IConfig Config { get; set; }
+        public IProcessorConfig ProcessorConfig { get; set; }
 
         /// <summary>
         /// 
@@ -26,15 +26,15 @@ namespace BardMusicPlayer.Notate.Song
 
         public async Task<List<TrackChunk>> RefreshTrackChunks(BmpSong song)
         {
-            if (Config is null) throw new BmpNotateException("No configuration in this container.");
-            return Config switch
+            if (ProcessorConfig is null) throw new BmpNotateException("No configuration in this container.");
+            return ProcessorConfig switch
             {
-                AutoToneConfig autoToneConfig => await new AutoToneProcessor(autoToneConfig, song).Process(),
-                ClassicConfig classicConfig => await new ClassicProcessor(classicConfig, song).Process(),
-                DrumToneConfig drumToneConfig => await new DrumToneProcessor(drumToneConfig, song).Process(),
-                LyricConfig lyricConfig => await new LyricProcessor(lyricConfig, song).Process(),
-                ManualToneConfig manualToneConfig => await new ManualToneProcessor(manualToneConfig, song).Process(),
-                _ => throw new BmpNotateException(Config.GetType() + " is not a supported configuration type."),
+                AutoToneProcessorConfig autoToneProcessorConfig => await new AutoToneProcessor(autoToneProcessorConfig, song).Process(),
+                ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
+                DrumToneProcessorConfig drumToneProcessorConfig => await new DrumToneProcessor(drumToneProcessorConfig, song).Process(),
+                LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
+                ManualToneProcessorConfig manualToneProcessorConfig => await new ManualToneProcessor(manualToneProcessorConfig, song).Process(),
+                _ => throw new BmpNotateException(ProcessorConfig.GetType() + " is not a supported configuration type."),
             };
         }
     }

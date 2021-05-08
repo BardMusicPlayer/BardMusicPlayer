@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using BardMusicPlayer.Common.Structs;
 using BardMusicPlayer.Notate.Song.Config;
 using Melanchall.DryWetMidi.Core;
@@ -40,7 +41,7 @@ namespace BardMusicPlayer.Notate.Song.Utilities
 
             var configContainers = new Dictionary<long, ConfigContainer>();
 
-            if (trackChunk.GetNotes().Count == 0) return configContainers;
+            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric)) return configContainers;
 
             var trackName = (trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "").Replace(" ", "").ToLower();
 
@@ -74,7 +75,7 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                     
                     else if (subfields[0].Equals("autotone"))
                     {
-                        var config = (AutoToneConfig)(configContainer.Config = new AutoToneConfig { Track = trackNumber });
+                        var config = (AutoToneProcessorConfig)(configContainer.ProcessorConfig = new AutoToneProcessorConfig { Track = trackNumber });
                         var instrumentAndOctaveRange = modifier.Match(subfields[1]);
 
                         if (instrumentAndOctaveRange.Success)
@@ -96,17 +97,18 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                         return configContainers;
                     }
 
-                    else if (subfields[0].Equals("lyric"))
+                    else if (subfields[0].Equals("lyric") && subfields[1].Equals("default"))
                     {
-                        // TODO
-                        return configContainers;
+                        var config = (LyricProcessorConfig)(configContainer.ProcessorConfig = new LyricProcessorConfig { Track = trackNumber });
+                        ParseAdditionalOptions(config, song, fields);
+                        configContainers.Add(groupCounter, configContainer);
                     }
                 }
 
                 // bmp 1.x style group name
                 else
                 {
-                    var config = (ClassicConfig)(configContainer.Config = new ClassicConfig { Track = trackNumber });
+                    var config = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
                     
                     var instrumentAndOctaveRange = modifier.Match(fields[0]);
 
@@ -125,7 +127,7 @@ namespace BardMusicPlayer.Notate.Song.Utilities
             }
 
             // TODO: let's expose the "default" track configuration as UI setting.
-            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { Config = new ClassicConfig { Track = trackNumber } });
+            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber } });
 
             return configContainers;
         }
@@ -133,10 +135,10 @@ namespace BardMusicPlayer.Notate.Song.Utilities
         /// <summary>
         /// Parses tracks to merge in, and bards to load balance distribute to.
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="processorConfig"></param>
         /// <param name="song"></param>
         /// <param name="fields"></param>
-        private static void ParseAdditionalOptions(IConfig config, BmpSong song, IReadOnlyList<string> fields)
+        private static void ParseAdditionalOptions(IProcessorConfig processorConfig, BmpSong song, IReadOnlyList<string> fields)
         {
             for (var fieldCounter = 1; fieldCounter < fields.Count; fieldCounter++)
             {
@@ -146,11 +148,11 @@ namespace BardMusicPlayer.Notate.Song.Utilities
                     foreach (var trackToMerge in tracksToMerge)
                     {
                         if (int.TryParse(trackToMerge, out var value) && value < song.TrackContainers.Count)
-                            config.IncludedTracks.Add(value);
+                            processorConfig.IncludedTracks.Add(value);
                     }
                 }
                 else if (fields[fieldCounter].StartsWith("bards=") && int.TryParse(fields[fieldCounter].Remove(0, 6), out var value) && value > 0 && value < 17)
-                    config.PlayerCount = value;
+                    processorConfig.PlayerCount = value;
             }
         }
     }

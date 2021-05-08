@@ -5,12 +5,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Common;
 using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Synth.AlphaTab;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth;
+using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Synth.Properties;
 using NAudio.CoreAudioApi;
 
@@ -20,6 +23,8 @@ namespace BardMusicPlayer.Synth
     {
         public string CurrentSongTitle { get; private set; } = "";
         private IAlphaSynth _player;
+        private Dictionary<int, Dictionary<long, string>> _lyrics;
+        private double _lyricIndex;
 
         private static readonly Lazy<Synthesizer> LazyInstance = new(() => new Synthesizer());
         public static Synthesizer Instance => LazyInstance.Value;
@@ -97,7 +102,10 @@ namespace BardMusicPlayer.Synth
         {
             if (!IsReady) throw new BmpException("Synthesizer not initialized.");
             if (_player.State == PlayerState.Playing) _player.Stop();
-            _player.LoadMidiFile(await song.GetSynthMidi());
+            MidiFile midiFile;
+            (midiFile, _lyrics) = await song.GetSynthMidi();
+            _lyricIndex = 0;
+            _player.LoadMidiFile(midiFile);
             CurrentSongTitle = song.Title;
             return this;
         }
@@ -132,6 +140,7 @@ namespace BardMusicPlayer.Synth
         {
             if (!IsReadyForPlayback) throw new BmpException("Synthesizer not loaded with a song.");
             _player.Stop();
+            _lyricIndex = 0;
             return this;
         }
 
@@ -145,8 +154,18 @@ namespace BardMusicPlayer.Synth
             if (time < 0) time = 0;
             if (time > _player.PlaybackRange.EndTick) return Stop();
             _player.TickPosition = time;
+            _lyricIndex = time;
             return this;
         }
+
+        /// <summary>
+        /// Event fired when there is a lyric line.
+        /// </summary>
+        /// <param name="singer"></param>
+        /// <param name="line"></param>
+        public delegate void Lyric(int singer, string line);
+
+        public event Lyric LyricTrigger;
 
         /// <summary>
         /// Event fired when the position of a synthesized song changes.
@@ -159,6 +178,15 @@ namespace BardMusicPlayer.Synth
 
         public event SynthTimePosition SynthTimePositionChanged;
 
-        internal void NotifyTimePosition(PositionChangedEventArgs obj) => SynthTimePositionChanged?.Invoke(CurrentSongTitle,obj.CurrentTime, obj.EndTime, obj.ActiveVoices);
+        internal void NotifyTimePosition(PositionChangedEventArgs obj)
+        {
+            SynthTimePositionChanged?.Invoke(CurrentSongTitle, obj.CurrentTime, obj.EndTime, obj.ActiveVoices);
+            for (var singer = 0; singer < _lyrics.Count; singer++)
+            {
+                var line = _lyrics[singer].FirstOrDefault(x => x.Key > _lyricIndex && x.Key < obj.CurrentTime).Value;
+                if (!string.IsNullOrWhiteSpace(line)) LyricTrigger?.Invoke(singer, line);
+            }
+            _lyricIndex = obj.CurrentTime;
+        }
     }
 }

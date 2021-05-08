@@ -70,6 +70,12 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
                 var noteNumber = note.NoteNumber;
                 if (!(noteNumber < 5) && (noteNumber < lowClamp || noteNumber > highClamp)) continue;
 
+                if (noteNumber < 5)
+                {
+                    if (readTones) currentChannel = noteNumber;
+                    continue;
+                }
+
                 var timeOn = note.GetTimedNoteOnEvent().GetNoteMs(tempoMap) + 120000 + 
                              tone.GetInstrumentFromChannel(currentChannel).SampleOffset + 
                              tone.GetInstrumentFromChannel(currentChannel)
@@ -84,12 +90,6 @@ namespace BardMusicPlayer.Notate.Processor.Utilities
 
                 note.Time = timeOn;
                 note.Length = dur;
-
-                if (noteNumber < 5)
-                {
-                    if (readTones) currentChannel = noteNumber;
-                    continue;
-                }
 
                 if (notesDictionary[noteNumber].ContainsKey(timeOn))
                 {

@@ -13,11 +13,11 @@ namespace BardMusicPlayer.Notate.Processor
 {
     internal class DrumToneProcessor : BaseProcessor
     {
-        public DrumToneConfig Config { get; set; }
+        public DrumToneProcessorConfig ProcessorConfig { get; set; }
 
-        internal DrumToneProcessor(DrumToneConfig config, BmpSong song) : base(song)
+        internal DrumToneProcessor(DrumToneProcessorConfig processorConfig, BmpSong song) : base(song)
         {
-            Config = config;
+            ProcessorConfig = processorConfig;
         }
 
         public override async Task<List<TrackChunk>> Process()

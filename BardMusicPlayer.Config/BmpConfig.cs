@@ -44,6 +44,9 @@ namespace BardMusicPlayer.Config
         /// </summary>
         public virtual int SeerGameScanCooldown { get; set; } = 20;
 
-
+        /// <summary>
+        /// Contains the last path of an opened midi file
+        /// </summary>
+        public virtual string LastOpenedMidiPath { get; set; } = "";
     }
 }
