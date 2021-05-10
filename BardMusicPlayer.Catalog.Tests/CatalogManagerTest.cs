@@ -75,8 +75,8 @@ namespace BardMusicPlayer.Catalog.Tests
             BmpSong song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            song.Tags.Add("Test Tag 1");
-            song.Tags.Add("Test Tag 2");
+            song.Tags.Add(TEST_SONG_TAG_A);
+            song.Tags.Add(TEST_SONG_TAG_B);
 
             using (CatalogManager test = this.CreateCatalogManager())
             {
