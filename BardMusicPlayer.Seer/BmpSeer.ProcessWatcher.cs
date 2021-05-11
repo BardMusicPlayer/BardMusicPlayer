@@ -44,7 +44,7 @@ namespace BardMusicPlayer.Seer
                         else if (!_games.ContainsKey(process.Id) && !process.HasExited && process.Responding)
                         {
                             // Adding a game spikes the cpu when sharlayan scans memory.
-                            var timeNow = Clock.Time.Now.ToUtcMilliTime() / 1000;
+                            var timeNow = Clock.Time.Now;
                             if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
                             coolDown = timeNow;
                             _games.Add(process.Id, new Game(process));
