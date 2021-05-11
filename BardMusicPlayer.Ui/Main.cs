@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using System.Threading.Tasks;
 using BardMusicPlayer.Catalog;
 using BardMusicPlayer.Config;
@@ -16,7 +21,7 @@ namespace BardMusicPlayer.Ui
 
             BmpConfig.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Config.json");
 
-            BmpCatalog.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Catalog.litedb");
+            BmpCatalog.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Catalog.db");
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
 

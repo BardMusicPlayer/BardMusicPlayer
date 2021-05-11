@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using System.Text;
 using BardMusicPlayer.Config;
 using BardMusicPlayer.Notate.Song;
