@@ -54,22 +54,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities
                 // need kr
                 // need cn
 
-                // Unused.
-                "A member of the ensemble has stopped the metronome." => EnsembleFlag.None,
-                "Ein Mitglied des Ensembles hat das Metronom angehalten." => EnsembleFlag.None,
-                "Le métronome a été arrêté par un membre de l'orchestre." => EnsembleFlag.None,
-                "演奏メンバーからメトロノームが停止されました。" => EnsembleFlag.None,
-                // need kr
-                // need cn
-
-                // Unused
-                "The ensemble mode metronome has stopped." => EnsembleFlag.None,
-                "Das Metronom für den Ensemblemodus wurde angehalten." => EnsembleFlag.None,
-                "Votre métronome a été arrêté suite au lancement de l'appel de préparation." => EnsembleFlag.None,
-                "合奏レディチェックでのメトロノームを停止しました。" => EnsembleFlag.None,
-                // need kr
-                // need cn
-
                 _ => EnsembleFlag.None
             };
         }
