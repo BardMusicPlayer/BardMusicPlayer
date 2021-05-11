@@ -57,7 +57,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                     _chatLogFirstRun = false;
 
                     if(currentArrayIndex - 1 > 0 && _chatLogReader.Indexes.Count >= currentArrayIndex - 1) _chatLogReader.PreviousOffset = _chatLogReader.Indexes[(int) currentArrayIndex - 1];
-                    else return result; // The player is logged out.
+                    else 
+                    {
+                        _chatLogReader.Indexes.Clear();
+                        _chatLogReader.PreviousOffset = 0;
+                        _chatLogReader.PreviousArrayIndex = 0;
+                        return result; // The player is logged out.
+                    }
 
                     _chatLogReader.PreviousArrayIndex = (int) currentArrayIndex - 1;
                 }
@@ -71,7 +77,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                         }
                         catch // Ignored. The player logged out.
                         {
-                            currentArrayIndex = 0;
+                            _chatLogReader.Indexes.Clear();
+                            _chatLogReader.PreviousOffset = 0;
+                            _chatLogReader.PreviousArrayIndex = 0;
+                            return result; 
                         } 
 
                         _chatLogReader.PreviousOffset = 0;
