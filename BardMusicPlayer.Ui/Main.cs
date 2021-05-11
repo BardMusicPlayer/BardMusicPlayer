@@ -29,8 +29,10 @@ namespace BardMusicPlayer.Ui
 
             BmpGrunt.Instance.Start();
 
-            var testWindow = new TestWindow();
-            testWindow.ShowDialog();
+            // BmpDoot.Instance.Start();
+
+            var mainView = new MainView();
+            mainView.ShowDialog();
 
             _started = true;
 
