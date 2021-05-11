@@ -5,11 +5,8 @@
 
 namespace BardMusicPlayer.Config.JsonSettings
 {
-    /// <summary>
-    ///     A class that uses modules.
-    /// </summary>
-    public interface ModulesLoader
+    public interface ISavable
     {
-        void ModuleLoad();
+        void Save();
     }
 }

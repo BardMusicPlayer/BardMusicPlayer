@@ -11,13 +11,6 @@ namespace BardMusicPlayer.Config
     public class BmpConfig : JsonSettings.JsonSettings
     {
         private static BmpConfig _instance;
-        public BmpConfig() { }
-        public BmpConfig(string fileName) : base(fileName) { }
-
-        /// <summary>
-        /// This configuration's filename
-        /// </summary>
-        public override string FileName { get; set; }
 
         /// <summary>
         /// Initializes the config file
