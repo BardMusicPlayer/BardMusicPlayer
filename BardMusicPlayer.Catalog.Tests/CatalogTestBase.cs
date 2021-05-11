@@ -1,4 +1,9 @@
-﻿using LiteDB;
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -50,7 +55,7 @@ namespace BardMusicPlayer.Catalog
         protected LiteDatabase CreateDatabase()
         {
             LiteDatabase ret = new LiteDatabase(this.dbpath);
-            CatalogManager.MigrateDatabase(ret);
+            BmpCatalog.MigrateDatabase(ret);
             return ret;
         }
 

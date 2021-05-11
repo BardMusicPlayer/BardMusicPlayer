@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+#nullable enable
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
     internal class DalamudServer : IDisposable
     {
         private readonly PipeServer<string> _pipe;
-        private ConcurrentDictionary<int, int> _clients;
+        private readonly ConcurrentDictionary<int, int> _clients;
 
         /// <summary>
         /// 
@@ -69,7 +70,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         {
             if (string.IsNullOrEmpty(e.Message)) return;
 
-            var fields = e.Message.Split(':');
+            var fields = e.Message?.Split(':') ?? new string[0];
 
             if (fields.Length != 3) return;
 

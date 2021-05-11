@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Grunt
                 clipboardThread.Start();
                 sent = await tcs.Task;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: Log errors
             }
@@ -78,7 +78,7 @@ namespace BardMusicPlayer.Grunt
 
                 tcs.SetResult(result);
             }
-            catch(Exception ex) {
+            catch(Exception) {
                 // TODO: Log errors
                 tcs.SetResult(false);
             }

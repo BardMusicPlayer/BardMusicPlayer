@@ -1,4 +1,9 @@
-﻿namespace BardMusicPlayer.Catalog
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+namespace BardMusicPlayer.Catalog
 {
     internal static class Constants
     {

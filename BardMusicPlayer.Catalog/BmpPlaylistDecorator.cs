@@ -1,20 +1,24 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using BardMusicPlayer.Notate.Song;
 
 namespace BardMusicPlayer.Catalog
 {
-    public sealed class DBPlaylistDecorator : IPlaylist
+    public sealed class BmpPlaylistDecorator : IPlaylist
     {
-        private readonly DBPlaylist target;
+        private readonly BmpPlaylist target;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target"></param>
-        internal DBPlaylistDecorator(DBPlaylist target) => this.target = target ?? throw new NullReferenceException();
+        internal BmpPlaylistDecorator(BmpPlaylist target) => this.target = target ?? throw new NullReferenceException();
 
         ///<inheritdoc/>
         void IPlaylist.Add(BmpSong song)
@@ -68,6 +72,6 @@ namespace BardMusicPlayer.Catalog
         }
 
         ///<inheritdoc/>
-        internal DBPlaylist GetDBPlaylist() => this.target;
+        internal BmpPlaylist GetBmpPlaylist() => this.target;
     }
 }

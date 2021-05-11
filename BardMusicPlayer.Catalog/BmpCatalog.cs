@@ -1,4 +1,9 @@
-﻿using LiteDB;
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +15,30 @@ using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Catalog
 {
-    public sealed class CatalogManager : IDisposable
+    public sealed class BmpCatalog : IDisposable
     {
+        private static BmpCatalog _instance;
+
+        /// <summary>
+        /// Initializes the default catalog instance
+        /// </summary>
+        /// <param name="filename">full path to the catalog file</param>
+        public static void Initialize(string filename)
+        {
+            if (Initialized) return;
+            _instance = CreateInstance(filename);
+        }
+
+        /// <summary>
+        /// Returns true if the default catalog instance is initialized
+        /// </summary>
+        public static bool Initialized => _instance != null;
+
+        /// <summary>
+        /// Gets the default catalog instance
+        /// </summary>
+        public static BmpCatalog Instance => _instance ?? throw new BmpCatalogException("This catalog must be initialized first.");
+
         private readonly LiteDatabase dbi;
         private bool disposedValue;
 
@@ -19,7 +46,7 @@ namespace BardMusicPlayer.Catalog
         /// Internal constructor; this object is constructed with a factory pattern.
         /// </summary>
         /// <param name="dbi"></param>
-        private CatalogManager(LiteDatabase dbi)
+        private BmpCatalog(LiteDatabase dbi)
         {
             this.dbi = dbi;
             this.disposedValue = false;
@@ -30,7 +57,7 @@ namespace BardMusicPlayer.Catalog
         /// </summary>
         /// <param name="dbPath"></param>
         /// <returns></returns>
-        public static CatalogManager CreateInstance(string dbPath)
+        internal static BmpCatalog CreateInstance(string dbPath)
         {
             var mapper = new BsonMapper();
             mapper.RegisterType
@@ -72,7 +99,7 @@ namespace BardMusicPlayer.Catalog
             var dbi = new LiteDatabase(dbPath, mapper);
             MigrateDatabase(dbi);
 
-            return new CatalogManager(dbi);
+            return new BmpCatalog(dbi);
         }
 
         /// <summary>
@@ -166,14 +193,14 @@ namespace BardMusicPlayer.Catalog
                 return null;
             }
 
-            var dbList = new DBPlaylist()
+            var dbList = new BmpPlaylist()
             {
                 Name = tag,
                 Songs = songList,
                 Id = null
             };
 
-            return new DBPlaylistDecorator(dbList);
+            return new BmpPlaylistDecorator(dbList);
         }
 
         /// <summary>
@@ -188,14 +215,14 @@ namespace BardMusicPlayer.Catalog
                 throw new ArgumentNullException();
             }
 
-            var dbList = new DBPlaylist()
+            var dbList = new BmpPlaylist()
             {
                 Songs = new List<BmpSong>(),
                 Name = name,
                 Id = null
             };
 
-            return new DBPlaylistDecorator(dbList);
+            return new BmpPlaylistDecorator(dbList);
         }
 
         /// <summary>
@@ -219,7 +246,7 @@ namespace BardMusicPlayer.Catalog
                 .Where(x => x.Name == name)
                 .Single();
 
-            return (dbList != null) ? new DBPlaylistDecorator(dbList) : null;
+            return (dbList != null) ? new BmpPlaylistDecorator(dbList) : null;
         }
 
         /// <summary>
@@ -230,7 +257,7 @@ namespace BardMusicPlayer.Catalog
         {
             var playlists = this.GetPlaylistCollection();
 
-            // Want to ensure we don't pull in the mmsong data.
+            // Want to ensure we don't pull in the trackchunk data.
             return playlists.Query()
                 .Select<string>(x => x.Name)
                 .ToList();
@@ -270,7 +297,7 @@ namespace BardMusicPlayer.Catalog
         /// This saves a song.
         /// </summary>
         /// <param name="song"></param>
-        /// <exception cref="CatalogException">This is thrown if a title conflict occurs on save.</exception>
+        /// <exception cref="BmpCatalogException">This is thrown if a title conflict occurs on save.</exception>
         public void SaveSong(BmpSong song)
         {
             if (song == null)
@@ -294,7 +321,7 @@ namespace BardMusicPlayer.Catalog
             }
             catch (LiteException e)
             {
-                throw new CatalogException(e.Message, e);
+                throw new BmpCatalogException(e.Message, e);
             }
         }
 
@@ -302,17 +329,17 @@ namespace BardMusicPlayer.Catalog
         /// This saves a playlist.
         /// </summary>
         /// <param name="songList"></param>
-        /// <exception cref="CatalogException">This is thrown if a name conflict occurs on save.</exception>
+        /// <exception cref="BmpCatalogException">This is thrown if a name conflict occurs on save.</exception>
         public void SavePlaylist(IPlaylist songList)
         {
-            if (songList.GetType() != typeof(DBPlaylistDecorator))
+            if (songList.GetType() != typeof(BmpPlaylistDecorator))
             {
                 throw new Exception("Unsupported implementation of IPlaylist");
             }
 
             var playlists = this.GetPlaylistCollection();
 
-            var dbList = ((DBPlaylistDecorator)songList).GetDBPlaylist();
+            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
 
             try
             {
@@ -328,7 +355,7 @@ namespace BardMusicPlayer.Catalog
             }
             catch (LiteException e)
             {
-                throw new CatalogException(e.Message, e);
+                throw new BmpCatalogException(e.Message, e);
             }
         }
 
@@ -363,9 +390,9 @@ namespace BardMusicPlayer.Catalog
         /// Utility method.
         /// </summary>
         /// <returns></returns>
-        private ILiteCollection<DBPlaylist> GetPlaylistCollection()
+        private ILiteCollection<BmpPlaylist> GetPlaylistCollection()
         {
-            return this.dbi.GetCollection<DBPlaylist>(Constants.PLAYLIST_COL_NAME);
+            return this.dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
         }
 
         /// <summary>
@@ -453,7 +480,7 @@ namespace BardMusicPlayer.Catalog
             songs.EnsureIndex(x => x.Tags);
 
             // Create the custom playlist collection and add indicies
-            var playlists = dbi.GetCollection<DBPlaylist>(Constants.PLAYLIST_COL_NAME);
+            var playlists = dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
             playlists.EnsureIndex(x => x.Name, unique: true);
         }
     }

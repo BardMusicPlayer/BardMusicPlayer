@@ -57,10 +57,8 @@ namespace BardMusicPlayer.Grunt
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
 
-            throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
-
             // TODO for 5.55
-            // if (game.GameRegion != GameRegion.Global) throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
+            if ((int) game.GameRegion < 4) throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
 
             var exitLock = 5;
 

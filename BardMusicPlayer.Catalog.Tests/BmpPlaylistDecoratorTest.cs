@@ -1,4 +1,9 @@
-﻿using LiteDB;
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using LiteDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using BardMusicPlayer.Notate.Song;
@@ -6,14 +11,14 @@ using BardMusicPlayer.Notate.Song;
 namespace BardMusicPlayer.Catalog.Tests
 {
     [TestClass]
-    public class DBPlaylistDecoratorTest
+    public class BmpPlaylistDecoratorTest
     {
         private const string TEST_PLAYLIST_NAME = "Test Playlist";
 
         [TestMethod]
         public void TestNaming()
         {
-            DBPlaylistDecorator test = CreateTestPlaylist();
+            BmpPlaylistDecorator test = CreateTestPlaylist();
             Assert.AreEqual(TEST_PLAYLIST_NAME, ((IPlaylist)test).GetName());
 
             string newName = TEST_PLAYLIST_NAME + " Version 2";
@@ -29,9 +34,9 @@ namespace BardMusicPlayer.Catalog.Tests
                 Id = ObjectId.NewObjectId()
             };
 
-            DBPlaylistDecorator test = CreateTestPlaylist();
+            BmpPlaylistDecorator test = CreateTestPlaylist();
 
-            var objRef = test.GetDBPlaylist();
+            var objRef = test.GetBmpPlaylist();
             Assert.AreEqual(0, objRef.Songs.Count);
 
             ((IPlaylist)test).Add(songA);
@@ -57,9 +62,9 @@ namespace BardMusicPlayer.Catalog.Tests
                 Id = ObjectId.NewObjectId()
             };
 
-            DBPlaylistDecorator test = CreateTestPlaylist();
+            BmpPlaylistDecorator test = CreateTestPlaylist();
 
-            var objRef = test.GetDBPlaylist();
+            var objRef = test.GetBmpPlaylist();
 
             ((IPlaylist)test).Add(songA);
             ((IPlaylist)test).Add(songB);
@@ -94,9 +99,9 @@ namespace BardMusicPlayer.Catalog.Tests
                 Id = ObjectId.NewObjectId()
             };
 
-            DBPlaylistDecorator test = CreateTestPlaylist();
+            BmpPlaylistDecorator test = CreateTestPlaylist();
 
-            var objRef = test.GetDBPlaylist();
+            var objRef = test.GetBmpPlaylist();
 
             ((IPlaylist)test).Add(songA);
             ((IPlaylist)test).Add(songB);
@@ -132,9 +137,9 @@ namespace BardMusicPlayer.Catalog.Tests
                 Id = ObjectId.NewObjectId()
             };
 
-            DBPlaylistDecorator test = CreateTestPlaylist();
+            BmpPlaylistDecorator test = CreateTestPlaylist();
 
-            var objRef = test.GetDBPlaylist();
+            var objRef = test.GetBmpPlaylist();
 
             ((IPlaylist)test).Add(songA);
             ((IPlaylist)test).Add(songB);
@@ -151,16 +156,16 @@ namespace BardMusicPlayer.Catalog.Tests
             Assert.AreSame(songC, objRef.Songs[1]);
         }
 
-        private static DBPlaylistDecorator CreateTestPlaylist()
+        private static BmpPlaylistDecorator CreateTestPlaylist()
         {
-            DBPlaylist decorateMe = new DBPlaylist()
+            BmpPlaylist decorateMe = new BmpPlaylist()
             {
                 Name = TEST_PLAYLIST_NAME,
                 Id = null,
                 Songs = new List<BmpSong>()
             };
 
-            return new DBPlaylistDecorator(decorateMe);
+            return new BmpPlaylistDecorator(decorateMe);
         }
     }
 }

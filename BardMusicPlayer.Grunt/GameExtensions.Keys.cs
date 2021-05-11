@@ -26,7 +26,6 @@ namespace BardMusicPlayer.Grunt
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
             
             var sent = false;
-
             try
             {
                 var baseKey = key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt;
@@ -47,7 +46,7 @@ namespace BardMusicPlayer.Grunt
 
                 sent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: log error message.
             }
@@ -100,7 +99,7 @@ namespace BardMusicPlayer.Grunt
 
                 sent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: log error message.
             }
@@ -139,7 +138,7 @@ namespace BardMusicPlayer.Grunt
 
                 sent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: log error message.
             }
@@ -167,7 +166,7 @@ namespace BardMusicPlayer.Grunt
 
                 sent = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: log error message.
             }
