@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
             }
             catch (Exception ex)
             {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
             return result;
         }

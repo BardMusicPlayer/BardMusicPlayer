@@ -105,7 +105,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 				}
 				catch (Exception ex)
 				{
-                    MemoryHandler.RaiseException(ex);
+                    MemoryHandler?.RaiseException(ex);
 				}
 			}
 		}

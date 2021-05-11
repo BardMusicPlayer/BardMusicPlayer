@@ -39,7 +39,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 if (result.Count == 1) result.Clear();
             }
             catch (Exception ex) {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
 
             return result;

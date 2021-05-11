@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 if(ActorIdTools.RangeOkay(actorId) && !string.IsNullOrEmpty(playerName)) result = new KeyValuePair<uint, string>(actorId, playerName);
             }
             catch (Exception ex) {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
             return result;
         }

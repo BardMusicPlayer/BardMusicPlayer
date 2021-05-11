@@ -109,9 +109,9 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
                 _pipe.ClientDisconnected -= OnConnected;
                 _pipe.DisposeAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                Debug.WriteLine($"Dalamud error: {ex.Message}");
             }
             _clients.Clear();
         }
