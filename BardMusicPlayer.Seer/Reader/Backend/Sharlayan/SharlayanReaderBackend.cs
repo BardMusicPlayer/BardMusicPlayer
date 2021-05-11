@@ -177,7 +177,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             var kvp = _reader.GetCurrentPlayer();
             if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key)) return;
             _lastScan.ActorId = kvp.Key;
-            _lastScan.PlayerName = kvp.Value;
+            _lastScan.PlayerName = kvp.Value.Item1;
+            // TODO: use known bard stone equipped status. kvp.Value.Item2
             ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Sharlayan, _lastScan.ActorId));
             ReaderHandler.Game.PublishEvent(new PlayerNameChanged(EventSource.Sharlayan, _lastScan.PlayerName));
         }

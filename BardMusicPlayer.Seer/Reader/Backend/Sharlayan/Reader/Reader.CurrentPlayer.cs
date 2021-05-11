@@ -13,8 +13,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
     internal partial class Reader
     {
         public bool CanGetPlayerInfo() => Scanner.Locations.ContainsKey(Signatures.PlayerInformationKey);
-        public KeyValuePair<uint,string> GetCurrentPlayer() {
-            var result = new KeyValuePair<uint,string>();
+        public KeyValuePair<uint, (string, bool)> GetCurrentPlayer() {
+            var result = new KeyValuePair<uint, (string, bool)>();
 
             if (!CanGetPlayerInfo() || !MemoryHandler.IsAttached) return result;
 
@@ -27,8 +27,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 var source = MemoryHandler.GetByteArray(playerInfoMap, MemoryHandler.Structures.CurrentPlayer.SourceSize);
                 var actorId = SBitConverter.TryToUInt32(source, MemoryHandler.Structures.CurrentPlayer.ID);
                 var playerName = MemoryHandler.GetStringFromBytes(source, MemoryHandler.Structures.CurrentPlayer.Name);
+                var isCurrentlyBard = source[MemoryHandler.Structures.CurrentPlayer.JobID] == 0x17;
                 
-                if(ActorIdTools.RangeOkay(actorId) && !string.IsNullOrEmpty(playerName)) result = new KeyValuePair<uint, string>(actorId, playerName);
+                if(ActorIdTools.RangeOkay(actorId) && !string.IsNullOrEmpty(playerName)) result = new KeyValuePair<uint, (string, bool)>(actorId, (playerName, isCurrentlyBard));
             }
             catch (Exception ex) {
                 MemoryHandler?.RaiseException(ex);

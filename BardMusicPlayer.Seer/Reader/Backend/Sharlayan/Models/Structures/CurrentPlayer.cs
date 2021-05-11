@@ -12,5 +12,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures
 		public int ID { get; set; }
 
 		public int Name { get; set; }
+
+        public int JobID { get; set; }
     }
 }
