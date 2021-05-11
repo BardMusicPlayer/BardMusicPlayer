@@ -56,7 +56,7 @@ namespace BardMusicPlayer.Grunt
         private static void SendLyricLineClipBoardTask(TaskCompletionSource<bool> tcs, Game game, string text)
         {
             try {
-                if (!SyncTapKey(game, Keys.Enter).GetAwaiter().GetResult())
+                if (!game.ChatStatus && !SyncTapKey(game, Keys.Enter).GetAwaiter().GetResult())
                 {
                     tcs.SetResult(false);
                     return;

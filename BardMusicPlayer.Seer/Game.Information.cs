@@ -88,6 +88,11 @@ namespace BardMusicPlayer.Seer
         public bool ChatStatus { get; private set; } = false;
 
         /// <summary>
+        /// Returns false if we know the player is not a bard.
+        /// </summary>
+        public bool IsBard { get; private set; } = true;
+
+        /// <summary>
         /// Contains nearby partymember list. Updated by Sharlayan & Machina. Currently only Sharlayan updates during logoff.
         /// Fields: uint ActorId, string PlayerName
         /// This dictionary is sorted on ActorId and can be compared to another Game's PartyMembers with .Equals() extension method.

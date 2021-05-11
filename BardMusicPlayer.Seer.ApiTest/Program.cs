@@ -32,6 +32,7 @@ namespace BardMusicPlayer.Seer.ApiTest
             BmpSeer.Instance.EnsembleStarted += PrintBackendEventInfo;
             BmpSeer.Instance.HomeWorldChanged += PrintBackendEventInfo;
             BmpSeer.Instance.InstrumentHeldChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.IsBardChanged += PrintBackendEventInfo;
             BmpSeer.Instance.KeyMapChanged += PrintBackendEventInfo;
             BmpSeer.Instance.PartyMembersChanged += PrintBackendEventInfo;
             BmpSeer.Instance.PlayerNameChanged += PrintBackendEventInfo;

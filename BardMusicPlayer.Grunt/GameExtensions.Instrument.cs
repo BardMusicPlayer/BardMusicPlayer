@@ -22,6 +22,8 @@ namespace BardMusicPlayer.Grunt
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
 
+            if (!game.IsBard) return false;
+
             // TODO, call EquipTone for regions that no longer support this.
             // if (game.GameRegion == GameRegion.Global) return await EquipTone(game, instrument.InstrumentTone);
 
@@ -56,6 +58,8 @@ namespace BardMusicPlayer.Grunt
         public static async Task<bool> EquipTone(this Game game, InstrumentTone instrumentToneWanted)
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
+
+            if (!game.IsBard) return false;
 
             // TODO for 5.55
             if ((int) game.GameRegion < 4) throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);

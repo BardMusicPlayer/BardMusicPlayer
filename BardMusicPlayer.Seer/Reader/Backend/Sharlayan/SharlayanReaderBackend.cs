@@ -43,6 +43,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 ConfigId = "",
                 Instrument = Instrument.None,
                 PlayerName = "Unknown",
+                IsBard = true,
                 World = "",
                 PartyMembers = new SortedDictionary<uint, string>(),
                 ChatOpen = false
@@ -93,6 +94,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             public string World;
             public Instrument Instrument;
             public string PlayerName;
+            public bool IsBard;
             public string ConfigId;
             public uint ActorId;
             public SortedDictionary<uint, string> PartyMembers;
@@ -113,7 +115,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                         continue;
                     }
                     
-                    GetPlayerNameAndActorId();
+                    GetPlayerInfo();
                     GetWorld();
                     GetConfigId();
                     GetInstrument();
@@ -171,16 +173,17 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             // TODO: ChatLog.
         }
 
-        private void GetPlayerNameAndActorId()
+        private void GetPlayerInfo()
         {
             if (!_reader.CanGetPlayerInfo()) return;
             var kvp = _reader.GetCurrentPlayer();
-            if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key)) return;
+            if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key) && _lastScan.IsBard.Equals(kvp.Value.Item2)) return;
             _lastScan.ActorId = kvp.Key;
             _lastScan.PlayerName = kvp.Value.Item1;
-            // TODO: use known bard stone equipped status. kvp.Value.Item2
+            _lastScan.IsBard = kvp.Value.Item2;
             ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Sharlayan, _lastScan.ActorId));
             ReaderHandler.Game.PublishEvent(new PlayerNameChanged(EventSource.Sharlayan, _lastScan.PlayerName));
+            ReaderHandler.Game.PublishEvent(new IsBardChanged(EventSource.Sharlayan, _lastScan.IsBard));
         }
 
         private void GetConfigId()

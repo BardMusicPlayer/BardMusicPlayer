@@ -89,6 +89,14 @@ namespace BardMusicPlayer.Seer
                         }
                         break;
 
+                    case IsBardChanged isBard:
+                        if (IsBard != isBard.IsBard)
+                        {
+                            IsBard = isBard.IsBard;
+                            BmpSeer.Instance.PublishEvent(isBard);
+                        }
+                        break;
+
                     case KeyMapChanged keyMap:
                         if (!NavigationMenuKeys.Equals(keyMap.NavigationMenuKeys) ||
                             !InstrumentToneMenuKeys.Equals(keyMap.InstrumentToneMenuKeys) ||

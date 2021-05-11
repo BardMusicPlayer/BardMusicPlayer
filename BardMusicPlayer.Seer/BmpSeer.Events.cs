@@ -109,6 +109,13 @@ namespace BardMusicPlayer.Seer
         public event InstrumentHeldChangedHandler InstrumentHeldChanged;
         private void OnInstrumentHeldChanged(InstrumentHeldChanged seerEvent) => InstrumentHeldChanged?.Invoke(seerEvent);
 
+        public delegate void IsBardChangedHandler(IsBardChanged seerEvent);
+        /// <summary>
+        /// Called when the player is, or is not, a bard.
+        /// </summary>
+        public event IsBardChangedHandler IsBardChanged;
+        private void OnIsBardChanged(IsBardChanged seerEvent) => IsBardChanged?.Invoke(seerEvent);
+
         public delegate void KeyMapChangedHandler(KeyMapChanged seerEvent);
         /// <summary>
         /// Called when the keybind configuration for a player is changed.
@@ -182,6 +189,9 @@ namespace BardMusicPlayer.Seer
                             break;
                         case InstrumentHeldChanged instrumentHeldChanged:
                             OnInstrumentHeldChanged(instrumentHeldChanged);
+                            break;
+                        case IsBardChanged isBardChanged:
+                            OnIsBardChanged(isBardChanged);
                             break;
                         case KeyMapChanged keyMapChanged:
                             OnKeyMapChanged(keyMapChanged);
