@@ -20,9 +20,9 @@ namespace BardMusicPlayer.Notate.Processor
             ProcessorConfig = processorConfig;
         }
 
-        public override async Task<List<TrackChunk>> Process()
+        public override Task<List<TrackChunk>> Process()
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(new List<TrackChunk>());
         }
     }
 }
