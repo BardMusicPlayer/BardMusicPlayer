@@ -69,20 +69,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 }
                 else
                 {
-                    if (currentArrayIndex < _chatLogReader.PreviousArrayIndex)
-                    {
-                        try
-                        {
-                            buffered.AddRange(_chatLogReader.ResolveEntries(_chatLogReader.PreviousArrayIndex, 1000));
-                        }
-                        catch // Ignored. The player logged out.
-                        {
-                            _chatLogReader.Indexes.Clear();
-                            _chatLogReader.PreviousOffset = 0;
-                            _chatLogReader.PreviousArrayIndex = 0;
-                            return result; 
-                        } 
-
+                    if (currentArrayIndex < _chatLogReader.PreviousArrayIndex) {
+                        buffered.AddRange(_chatLogReader.ResolveEntries(_chatLogReader.PreviousArrayIndex, 1000));
                         _chatLogReader.PreviousOffset = 0;
                         _chatLogReader.PreviousArrayIndex = 0;
                     }
