@@ -9,7 +9,7 @@ using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
 {
-    public partial class Seer
+    public partial class BmpSeer
     {
         public delegate void SeerExceptionEventHandler(SeerExceptionEvent seerExceptionEvent);
         /// <summary>

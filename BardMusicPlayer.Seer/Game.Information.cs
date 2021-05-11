@@ -78,6 +78,11 @@ namespace BardMusicPlayer.Seer
         public Instrument InstrumentHeld { get; private set; } = Instrument.None;
 
         /// <summary>
+        /// Shows the instrument tone held. Updated by Sharlayan and Machina.
+        /// </summary>
+        public InstrumentTone InstrumentToneHeld { get; private set; } = InstrumentTone.None;
+
+        /// <summary>
         /// Shows if the chatbox is open for input. Updated by Sharlayan.
         /// </summary>
         public bool ChatStatus { get; private set; } = false;

@@ -30,7 +30,19 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             _pipe.ClientDisconnected += OnDisconnected;
             _pipe.MessageReceived += OnMessage;
             _pipe.AllowUsersReadWrite();
-            _pipe.StartAsync();
+            Start();
+        }
+
+        internal async void Start()
+        {
+            if (_pipe.IsStarted) return;
+            await _pipe.StartAsync();
+        }
+
+        internal async void Stop()
+        {
+            if (!_pipe.IsStarted) return;
+            await _pipe.StopAsync();
         }
 
         /// <summary>
@@ -38,10 +50,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         /// </summary>
         /// <param name="pid"></param>
         /// <returns></returns>
-        internal bool IsConnected(int pid)
-        {
-            return _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected) is null;
-        }
+        internal bool IsConnected(int pid) => _clients.ContainsKey(pid) && _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected) is not null;
 
         /// <summary>
         /// 
@@ -70,6 +79,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             {
                 case "scanned" when bool.Parse(fields[2]):
                     _clients[pid] = e.Connection.Id;
+                    Debug.WriteLine($"Dalamud client Id {e.Connection.Id} sig scanned");
                     break;
                 case "chatted" when bool.Parse(fields[2]):
                     Debug.WriteLine($"Dalamud client Id {e.Connection.Id} chatted");
@@ -92,6 +102,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         {
             try
             {
+                Stop();
                 _pipe.MessageReceived -= OnMessage;
                 _pipe.ClientConnected -= OnDisconnected;
                 _pipe.ClientDisconnected -= OnConnected;

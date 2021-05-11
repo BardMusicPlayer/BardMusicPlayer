@@ -5,21 +5,27 @@
 
 using System;
 using System.Collections.Generic;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Seer.Utilities;
 
 namespace BardMusicPlayer.Seer
 {
-    public partial class Seer : IDisposable
+    public partial class BmpSeer : IDisposable
     {
-        private static readonly Lazy<Seer> LazyInstance = new(() => new Seer());
-        private bool _started;
+        private static readonly Lazy<BmpSeer> LazyInstance = new(() => new BmpSeer());
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Started { get; private set; }
+
         private readonly Dictionary<int, Game> _games;
-        private Seer()
+        private BmpSeer()
         {
             _games = new Dictionary<int, Game>();
         }
 
-        public static Seer Instance => LazyInstance.Value;
+        public static BmpSeer Instance => LazyInstance.Value;
 
         /// <summary>
         /// Current active games
@@ -37,10 +43,11 @@ namespace BardMusicPlayer.Seer
         /// </summary>
         public void Start()
         {
-            if (_started) return;
+            if (Started) return;
+            if (!BmpConfig.Initialized) throw new BmpSeerException("Seer requires Config to be initialized.");
             StartEventsHandler();
             StartProcessWatcher();
-            _started = true;
+            Started = true;
         }
 
         /// <summary>
@@ -48,15 +55,15 @@ namespace BardMusicPlayer.Seer
         /// </summary>
         public void Stop()
         {
-            if (!_started) return;
+            if (!Started) return;
             StopProcessWatcher();
             StopEventsHandler();
             foreach (var game in _games.Values) game?.Dispose();
             _games.Clear();
-            _started = false;
+            Started = false;
         }
 
-        ~Seer() => Dispose();
+        ~BmpSeer() => Dispose();
         public void Dispose()
         {
             Stop();

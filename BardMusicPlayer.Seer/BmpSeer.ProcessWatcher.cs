@@ -12,7 +12,7 @@ using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
 {
-    public partial class Seer
+    public partial class BmpSeer
     {
         private bool _shouldRunProcessWatcherThread;
         private Thread _processWatcherThread;
