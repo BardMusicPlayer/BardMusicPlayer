@@ -107,7 +107,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             {
                 try
                 {
-                    if (!_signaturesFound || _reader.Scanner.IsScanning)
+                    if (!_signaturesFound || _reader.Scanner.IsScanning || ReaderHandler.Game.Process.HasExited || ReaderHandler.Game.Process.Responding == false)
                     {
                         Thread.Sleep(SleepTimeInMs);
                         continue;
