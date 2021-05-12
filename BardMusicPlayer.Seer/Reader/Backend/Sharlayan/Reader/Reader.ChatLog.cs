@@ -18,6 +18,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
         public bool CanGetChatLog() => Scanner.Locations.ContainsKey(Signatures.ChatLogKey);
         private bool _chatLogFirstRun = true;
         private readonly ChatLogReader _chatLogReader;
+
+        private long _lastOffsetArrayStart = 0;
         public ChatLogResult GetChatLog(int previousArrayIndex = 0, int previousOffset = 0)
         {
             var result = new ChatLogResult();
@@ -49,7 +51,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                     LogEnd = MemoryHandler.GetPlatformUInt(chatPointerMap, MemoryHandler.Structures.ChatLogPointers.LogEnd)
                 };
 
-                _chatLogReader.EnsureArrayIndexes();
+                if (_lastOffsetArrayStart != _chatLogReader.ChatLogPointers.OffsetArrayStart)
+                {
+                    _lastOffsetArrayStart = _chatLogReader.ChatLogPointers.OffsetArrayStart;
+                    Console.WriteLine("ChatLog array offset start changed: " + _lastOffsetArrayStart);
+                    _chatLogReader.EnsureArrayIndexes();
+                }
+
                 var currentArrayIndex = (_chatLogReader.ChatLogPointers.OffsetArrayPos -
                                          _chatLogReader.ChatLogPointers.OffsetArrayStart) / 4;
                 if (_chatLogFirstRun)
