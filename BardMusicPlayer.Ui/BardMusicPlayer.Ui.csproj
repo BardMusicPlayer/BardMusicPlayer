@@ -30,6 +30,9 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BardMusicPlayer.Catalog\BardMusicPlayer.Catalog.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
