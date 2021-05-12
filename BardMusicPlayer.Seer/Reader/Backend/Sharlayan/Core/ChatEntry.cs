@@ -21,11 +21,12 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
                 chatLogEntry.Code = ByteArrayToString(raw.Skip(4).Take(2).Reverse().ToArray());
                 chatLogEntry.Raw = Encoding.UTF8.GetString(raw.ToArray());
                 var cleanable = raw.Skip(8).ToArray();
-                var cleaned = ChatCleaner.ProcessFullLine(memoryHandler, chatLogEntry.Code, cleanable);
+                var cleaned = new ChatCleaner(memoryHandler, cleanable).Result;
                 var cut = cleaned.Substring(1, 1) == ":"? 2 : 1;
                 chatLogEntry.Line = XMLCleaner.SanitizeXmlString(cleaned.Substring(cut));
-                chatLogEntry.Line = ChatCleaner.ProcessName(memoryHandler, chatLogEntry.Line);
+                chatLogEntry.Line = new ChatCleaner(memoryHandler, chatLogEntry.Line).Result;
                 chatLogEntry.JP = IsJapanese(chatLogEntry.Line);
+
                 chatLogEntry.Combined = $"{chatLogEntry.Code}:{chatLogEntry.Line}";
             }
             catch (Exception) {

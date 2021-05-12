@@ -9,7 +9,7 @@ using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 {
-    internal class ChatLogReader : IDisposable
+    internal class ChatLogReader
 	{
         public readonly List<int> Indexes = new();
 
@@ -49,10 +49,5 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
         }
 
         private List<byte> ResolveEntry(int offset, int length) => new(_memoryHandler.GetByteArray(new IntPtr(ChatLogPointers.LogStart + offset), length - offset));
-
-        public void Dispose()
-        {
-            Indexes.Clear();
-        }
     }
 }

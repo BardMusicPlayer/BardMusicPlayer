@@ -3,11 +3,9 @@
  * Licensed under the MIT license. See https://github.com/FFXIVAPP/sharlayan/blob/master/LICENSE.md for full license information.
  */
 
-using System;
-
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 {
-    internal partial class Reader : IDisposable
+    internal partial class Reader
     {
         public Reader(MemoryHandler memoryHandler)
         {
@@ -20,10 +18,5 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
         public Scanner Scanner { get; set; }
 
         public MemoryHandler MemoryHandler { get; set; }
-
-        public void Dispose()
-        {
-            _chatLogReader?.Dispose();
-        }
     }
 }
