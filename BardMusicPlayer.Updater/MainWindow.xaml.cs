@@ -19,6 +19,10 @@ namespace BardMusicPlayer.Updater
     /// </summary>
     public partial class MainWindow : Window
     {
+        internal EventHandler<Util.BmpVersionItem> OnDownloadRequested;
+        internal EventHandler<Util.BmpVersion> OnDownloadComplete;
+        internal EventHandler<Util.BmpVersion> OnLaunchRequested;
+
         private Util.BmpVersion LocalVersion;
         private Dictionary<string, Util.BmpVersion> RemoteVersions;
 
@@ -27,18 +31,35 @@ namespace BardMusicPlayer.Updater
             InitializeComponent();
         }
 
-        internal void ProvideVersions(Util.BmpVersion localVersion, Dictionary<string, Util.BmpVersion> inputRead)
+        internal void ProvideVersions(Util.BmpVersion localVersion, Dictionary<string, Util.BmpVersion> remoteVersions)
         {
             this.LocalVersion = localVersion;
-            this.RemoteVersions =
-                inputRead.OrderBy(version => version.Value.beta)
-                         .ThenByDescending(version => version.Value.build)
-                         .ToDictionary<KeyValuePair<string, Util.BmpVersion>, string, Util.BmpVersion>(pair => pair.Key, pair => pair.Value);
+            this.RemoteVersions = remoteVersions;
 
             this.label_CurrentVersion.Content = "Current version: " + localVersion.build;
             this.label_NewVersionAvailable.Content = "BMP version " + this.RemoteVersions.First().Value.build + " is available for download.";
 
             this.tbox_PatchNotes.Text = this.RemoteVersions.Select(version => "website url: " + version.Key + @"/" + Environment.NewLine + "beta: " + version.Value.beta + Environment.NewLine + "commit: " + version.Value.commit + Environment.NewLine + "build: " + version.Value.build + Environment.NewLine).First();
+        }
+
+        private void button_LaunchBMP_Click(object sender, RoutedEventArgs e)
+        {
+            OnLaunchRequested?.Invoke(this, this.LocalVersion);
+        }
+
+        private void button_InstallUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: show progress bar UI
+            Task.Run(() =>
+            {
+                foreach (var item in this.RemoteVersions.First().Value.items)
+                {
+                    // TODO: update progress bar UI with progress
+                    OnDownloadRequested?.Invoke(this, item);
+                }
+
+                OnDownloadComplete?.Invoke(this, this.RemoteVersions.First().Value);
+            });
         }
     }
 }

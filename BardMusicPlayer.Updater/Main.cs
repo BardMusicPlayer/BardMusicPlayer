@@ -67,9 +67,9 @@ namespace BardMusicPlayer.Updater
                 LocalVersion = new BmpVersion {items = new List<BmpVersionItem>()};
             }
 
+            var currentVersionBad = false;
             if (LocalVersion.build != 0)
             {
-                var currentVersionBad = false;
                 Parallel.ForEach(LocalVersion.items, item =>
                 {
                     if (!File.Exists(VersionPath + item.destination) ||
@@ -81,6 +81,7 @@ namespace BardMusicPlayer.Updater
             }
 
             // Fetch UpdateInfo and Versions or default values if failure.
+            var remoteVersionBad = false;
             RemoteVersions = new Dictionary<string, BmpVersion>();
             try
             {
@@ -97,17 +98,68 @@ namespace BardMusicPlayer.Updater
                     catch (Exception)
                     {
                         // Failed to grab a specific remote version.json. ignore.
+                        remoteVersionBad = true;
                     }
                 }
             }
             catch (Exception)
             {
                 // Failed to grab the list of remote versions available. ignore.
+                remoteVersionBad = true;
             }
 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
-            mainWindow.ShowDialog();
+            // sort the list of remote versions first by 'if !beta', then 'latest build', then convert back to dictionary
+            RemoteVersions =
+                RemoteVersions.OrderBy(version => version.Value.beta)
+                              .ThenByDescending(version => version.Value.build)
+                              .ToDictionary<KeyValuePair<string, Util.BmpVersion>, string, Util.BmpVersion>(pair => pair.Key, pair => pair.Value);
+
+            // 1. remote version was not able to be read, try and load local
+            // 2. remote version was able to be read but it's same as local, try and load local
+            if ((remoteVersionBad && !currentVersionBad) || (RemoteVersions.First().Value.build == LocalVersion.build))
+            {
+                await Loader.Load(LocalVersion, ExePath, VersionPath, DataPath, Args);
+                return;
+            }
+
+            // 1. we don't have a current version
+            // 2. remote version shows an update
+            if (currentVersionBad || (RemoteVersions.First().Value.build > LocalVersion.build))
+            {
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
+
+                mainWindow.OnDownloadRequested += new EventHandler<BmpVersionItem>(async (object sender, BmpVersionItem item) =>
+                {
+                    //foreach (var item in version.items)
+                    {
+                        try
+                        {
+                            byte[] file = await new Downloader().GetFileFromUrl(item.source);
+                            if (Sha256.GetChecksum(file).Equals(item.sha256))
+                            {
+                                File.WriteAllBytes(VersionPath + item.destination, file);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // unable to download file, show message to the user and throw
+                            throw new Exception("Unable to download file: " + item.source);
+                        }
+                    };
+                });
+
+                var launchHandler = new EventHandler<BmpVersion>(async (object sender, BmpVersion version) =>
+                {
+                    (sender as MainWindow).Close();
+                    await Loader.Load(version, ExePath, VersionPath, DataPath, Args);
+                });
+
+                mainWindow.OnDownloadComplete += launchHandler;
+                mainWindow.OnLaunchRequested  += launchHandler;
+
+                mainWindow.ShowDialog();
+            }
 
 #elif LOCAL
 

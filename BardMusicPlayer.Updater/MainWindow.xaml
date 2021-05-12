@@ -41,8 +41,8 @@
         <Label x:Name="label_NewVersionAvailable" Content="BMP xx.xx is available for download." HorizontalAlignment="Center" Margin="0,115,0,0" VerticalAlignment="Top" FontSize="21" FontFamily="{DynamicResource robotoBoldFont}" />
         <Button x:Name="button_NavigationClose" Content="✖" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Height="50" Width="50" Foreground="{DynamicResource MaterialDesignBody}" Background="Transparent" BorderBrush="Transparent" />
         <TextBox x:Name="tbox_PatchNotes" HorizontalAlignment="Stretch" Margin="16,0,16,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" IsReadOnly="true" FontFamily="{DynamicResource robotoRegularFont}" />
-        <Button x:Name="button_LaunchBMP" Style="{DynamicResource BMPOpaqueButton}" Content="LAUNCH BMP" HorizontalAlignment="Left" Margin="389,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="131" Height="36" />
-        <Button x:Name="button_InstallUpdate" Style="{DynamicResource BMPSolidButton}" Content="INSTALL UPDATE" HorizontalAlignment="Left" Margin="528,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="131" Height="36" />
+        <Button x:Name="button_LaunchBMP" Style="{DynamicResource BMPOpaqueButton}" Click="button_LaunchBMP_Click" Content="LAUNCH BMP" HorizontalAlignment="Left" Margin="389,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="131" Height="36" />
+        <Button x:Name="button_InstallUpdate" Style="{DynamicResource BMPSolidButton}" Click="button_InstallUpdate_Click" Content="INSTALL UPDATE" HorizontalAlignment="Left" Margin="528,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="131" Height="36" />
 
     </Grid>
 </Window>
