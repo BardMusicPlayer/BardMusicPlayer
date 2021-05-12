@@ -120,7 +120,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     GetInstrument();
                     GetPartyMembers();
                     GetChatInputOpen();
-                    GetEnsembleEventsAndChatLog();
+                    GetEnsembleEvents();
 
                     _lastScan.FirstScan = false;
                 } catch (Exception ex)
@@ -140,7 +140,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             GC.SuppressFinalize(this);
         }
 
-        private void GetEnsembleEventsAndChatLog()
+        private void GetEnsembleEvents()
         {
             if (!_reader.CanGetChatLog()) return;
             var result = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
@@ -168,8 +168,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
-            // TODO: ChatLog.
         }
 
         private void GetPlayerInfo()

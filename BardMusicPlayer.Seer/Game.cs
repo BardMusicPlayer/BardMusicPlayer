@@ -58,7 +58,7 @@ namespace BardMusicPlayer.Seer
                 _eventQueueOpen = true;
                 DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
                 MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
-               // NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
+                NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
                 _shouldRunEventQueueThread = true;
                 _eventQueueThread = new Thread(RunEventQueue) { IsBackground = true };
                 _eventQueueThread.Start();
@@ -129,7 +129,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                DatReader.Dispose();
+                DatReader?.Dispose();
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                MemoryReader.Dispose();
+                MemoryReader?.Dispose();
             }
             catch (Exception ex)
             {
@@ -145,7 +145,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                NetworkReader.Dispose();
+                NetworkReader?.Dispose();
             }
             catch (Exception ex)
             {
