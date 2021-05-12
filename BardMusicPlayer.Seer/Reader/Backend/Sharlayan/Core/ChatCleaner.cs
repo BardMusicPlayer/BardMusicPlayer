@@ -200,7 +200,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
                 line = cleaned;
             }
             catch (Exception ex) {
-                _memoryHandler.RaiseException(ex);
+                _memoryHandler?.RaiseException(ex);
             }
 
             return line;

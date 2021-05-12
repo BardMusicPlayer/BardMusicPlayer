@@ -11,13 +11,6 @@ namespace BardMusicPlayer.Config
     public class BmpConfig : JsonSettings.JsonSettings
     {
         private static BmpConfig _instance;
-        public BmpConfig() { }
-        public BmpConfig(string fileName) : base(fileName) { }
-
-        /// <summary>
-        /// This configuration's filename
-        /// </summary>
-        public override string FileName { get; set; }
 
         /// <summary>
         /// Initializes the config file
@@ -25,9 +18,14 @@ namespace BardMusicPlayer.Config
         /// <param name="filename">full path to the json config file</param>
         public static void Initialize(string filename)
         {
-            if (_instance != null) return;
+            if (Initialized) return;
             _instance = Load<BmpConfig>(filename).EnableAutosave();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool Initialized => _instance != null;
 
         /// <summary>
         /// Gets this configuration instance
@@ -48,5 +46,15 @@ namespace BardMusicPlayer.Config
         /// Contains the last path of an opened midi file
         /// </summary>
         public virtual string LastOpenedMidiPath { get; set; } = "";
+
+        /// <summary>
+        /// Contains the delay used for note pressing. This should be no less then 1 and no greater then 25.
+        /// </summary>
+        public virtual int NoteKeyDelay { get; set; } = 1;
+
+        /// <summary>
+        /// Contains the delay used for tone pressing. This should be no less then 1 and no greater then 25.
+        /// </summary>
+        public virtual int ToneKeyDelay { get; set; } = 3;
     }
 }

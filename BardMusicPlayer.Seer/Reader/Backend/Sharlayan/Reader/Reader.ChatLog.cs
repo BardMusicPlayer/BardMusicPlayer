@@ -88,7 +88,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
             }
             catch (Exception ex)
             {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
             
             foreach (var bytes in buffered.Where(b => b.Count > 0))
@@ -103,7 +103,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 }
                 catch (Exception ex)
                 {
-                    MemoryHandler.RaiseException(ex);
+                    MemoryHandler?.RaiseException(ex);
                 }
             }
             

@@ -49,47 +49,34 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
                         try
                         {
                             var instrumentKeys = new Dictionary<Instrument, Keys>();
-                            var instrumentSlots = _hotbarDatFile.GetSlotsFromType(HotbarDatFile.SlotType.Instrument);
 
+                            foreach (var instrument in Instrument.All)
+                            {
+                                if (instrument.Equals(Instrument.None)) continue;
+                                instrumentKeys.Add(instrument, Keys.None);
+
+                                var keyMap = _hotbarDatFile.GetInstrumentKeyMap(instrument);
+
+                                if (string.IsNullOrEmpty(keyMap)) continue;
+
+                                var keyBind = _keybindDatFile[keyMap];
+                                if (keyBind.GetKey() != Keys.None) instrumentKeys[instrument] = keyBind.GetKey();
+                            }
 
                             var instrumentToneKeys = new Dictionary<InstrumentTone, Keys>();
-                            var instrumentToneSlots = _hotbarDatFile.GetSlotsFromType(HotbarDatFile.SlotType.InstrumentTone);
-                           /* foreach (var instrument in Instrument.All)
-                            {
 
-                            }
-
-                            
                             foreach (var instrumentTone in InstrumentTone.All)
                             {
-
-
-
-                          
-                            }
-                            var instrument = Instrument.Parse(instrumentSlot.Action);
-                            if (instrument.Equals(Instrument.None)) continue;
-
-                            var keyMap = _hotbarDatFile.GetInstrumentKeyMap(instrument);
-                            if (string.IsNullOrEmpty(keyMap)) continue;
-                            var keyBind = _keybindDatFile[keyMap];
-                            if (keyBind.GetKey() != Keys.None) instrumentKeys.Add(instrument, keyBind.GetKey());
-
-                            
-                            
-
-
-                            foreach (var instrumentToneSlot in)
-                            {
-                                var instrumentTone = InstrumentTone.Parse(instrumentToneSlot.Action);
                                 if (instrumentTone.Equals(InstrumentTone.None)) continue;
+                                instrumentToneKeys.Add(instrumentTone, Keys.None);
 
                                 var keyMap = _hotbarDatFile.GetInstrumentToneKeyMap(instrumentTone);
+
                                 if (string.IsNullOrEmpty(keyMap)) continue;
+
                                 var keyBind = _keybindDatFile[keyMap];
-                                if (keyBind.GetKey() != Keys.None)
-                                    instrumentToneKeys.Add(instrumentTone, keyBind.GetKey());
-                            }*/
+                                if (keyBind.GetKey() != Keys.None) instrumentToneKeys[instrumentTone] = keyBind.GetKey();
+                            }
 
                             var navigationMenuKeys = Enum.GetValues(typeof(NavigationMenuKey)).Cast<NavigationMenuKey>().ToDictionary(navigationMenuKey => navigationMenuKey, navigationMenuKey => _keybindDatFile.GetKeybindFromKeyString(navigationMenuKey.ToString()));
 

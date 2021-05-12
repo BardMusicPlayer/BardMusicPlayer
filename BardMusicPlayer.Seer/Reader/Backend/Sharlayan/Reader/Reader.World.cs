@@ -18,7 +18,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 var world = MemoryHandler.GetString(worldMap, MemoryHandler.Structures.World.Offset, MemoryHandler.Structures.World.SourceSize);
                 return world;
             } catch(Exception ex) {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
             return string.Empty;
         }

@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using BardMusicPlayer.Config;
 using BardMusicPlayer.Seer.Events;
 
@@ -10,28 +15,29 @@ namespace BardMusicPlayer.Seer.ApiTest
         {
             BmpConfig.Initialize(AppContext.BaseDirectory + @"\Seer.ApiTest.json");
 
-            Seer.Instance.SeerExceptionEvent += PrintExceptionInfo;
-            Seer.Instance.GameExceptionEvent += PrintExceptionInfo;
-            Seer.Instance.BackendExceptionEvent += PrintExceptionInfo;
+            BmpSeer.Instance.SeerExceptionEvent += PrintExceptionInfo;
+            BmpSeer.Instance.GameExceptionEvent += PrintExceptionInfo;
+            BmpSeer.Instance.BackendExceptionEvent += PrintExceptionInfo;
 
-            Seer.Instance.MachinaManagerLogEvent += PrintMachinaManagerLogEvent;
+            BmpSeer.Instance.MachinaManagerLogEvent += PrintMachinaManagerLogEvent;
 
-            Seer.Instance.GameStarted += PrintGameEventInfo;
-            Seer.Instance.GameStopped += PrintGameEventInfo;
+            BmpSeer.Instance.GameStarted += PrintGameEventInfo;
+            BmpSeer.Instance.GameStopped += PrintGameEventInfo;
 
-            Seer.Instance.ActorIdChanged += PrintBackendEventInfo;
-            Seer.Instance.ChatStatusChanged += PrintBackendEventInfo;
-            Seer.Instance.ConfigIdChanged += PrintBackendEventInfo;
-            Seer.Instance.EnsembleRejected += PrintBackendEventInfo;
-            Seer.Instance.EnsembleRequested += PrintBackendEventInfo;
-            Seer.Instance.EnsembleStarted += PrintBackendEventInfo;
-            Seer.Instance.HomeWorldChanged += PrintBackendEventInfo;
-            Seer.Instance.InstrumentHeldChanged += PrintBackendEventInfo;
-            Seer.Instance.KeyMapChanged += PrintBackendEventInfo;
-            Seer.Instance.PartyMembersChanged += PrintBackendEventInfo;
-            Seer.Instance.PlayerNameChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.ActorIdChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.ChatStatusChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.ConfigIdChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.EnsembleRejected += PrintBackendEventInfo;
+            BmpSeer.Instance.EnsembleRequested += PrintBackendEventInfo;
+            BmpSeer.Instance.EnsembleStarted += PrintBackendEventInfo;
+            BmpSeer.Instance.HomeWorldChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.InstrumentHeldChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.IsBardChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.KeyMapChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.PartyMembersChanged += PrintBackendEventInfo;
+            BmpSeer.Instance.PlayerNameChanged += PrintBackendEventInfo;
 
-            Seer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
+            BmpSeer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
 
             Console.WriteLine("Hit enter to start Seer");
 
@@ -39,11 +45,11 @@ namespace BardMusicPlayer.Seer.ApiTest
 
             while (true)
             {
-                Seer.Instance.Start();
+                BmpSeer.Instance.Start();
 
                 Console.ReadLine();
 
-                Seer.Instance.Stop();
+                BmpSeer.Instance.Stop();
 
                 Console.WriteLine("Seer stopped. Hit enter to start it again.");
 

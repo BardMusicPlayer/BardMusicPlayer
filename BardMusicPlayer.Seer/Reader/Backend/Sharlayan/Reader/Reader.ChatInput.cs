@@ -18,7 +18,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 var pointer = ((IntPtr) MemoryHandler.GetInt32(chatInputMap)) != IntPtr.Zero;
                 return pointer;
             } catch(Exception ex) {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
             return false;
         }

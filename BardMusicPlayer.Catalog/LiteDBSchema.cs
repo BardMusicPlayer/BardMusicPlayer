@@ -1,4 +1,9 @@
-﻿using LiteDB;
+﻿/*
+ * Copyright(c) 2021 isaki
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using LiteDB;
 
 namespace BardMusicPlayer.Catalog
 {

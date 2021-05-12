@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
             try {
                 id = MemoryHandler.GetString(characterIdMap, MemoryHandler.Structures.CharacterId.Offset, MemoryHandler.Structures.CharacterId.SourceSize);
             } catch(Exception ex) {
-                MemoryHandler.RaiseException(ex);
+                MemoryHandler?.RaiseException(ex);
             }
 
             return id;

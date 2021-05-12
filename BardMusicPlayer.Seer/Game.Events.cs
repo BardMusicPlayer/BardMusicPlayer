@@ -23,7 +23,7 @@ namespace BardMusicPlayer.Seer
                 // pass exceptions up immediately
                 if (seerEvent is BackendExceptionEvent backendExceptionEvent)
                 {
-                    Seer.Instance.PublishEvent(backendExceptionEvent);
+                    BmpSeer.Instance.PublishEvent(backendExceptionEvent);
                     return;
                 }
 
@@ -40,7 +40,7 @@ namespace BardMusicPlayer.Seer
                         if (ActorId != actorId.ActorId)
                         {
                             ActorId = actorId.ActorId;
-                            Seer.Instance.PublishEvent(actorId);
+                            BmpSeer.Instance.PublishEvent(actorId);
                         }
                         break;
 
@@ -52,7 +52,7 @@ namespace BardMusicPlayer.Seer
                         if (ChatStatus != chatStatus.ChatStatus)
                         {
                             ChatStatus = chatStatus.ChatStatus;
-                            Seer.Instance.PublishEvent(chatStatus);
+                            BmpSeer.Instance.PublishEvent(chatStatus);
                         }
                         break;
 
@@ -60,20 +60,20 @@ namespace BardMusicPlayer.Seer
                         if (!ConfigId.Equals(configId.ConfigId))
                         {
                             ConfigId = configId.ConfigId;
-                            Seer.Instance.PublishEvent(configId);
+                            BmpSeer.Instance.PublishEvent(configId);
                         }
                         break;
 
                     case EnsembleRejected ensembleRejected:
-                        Seer.Instance.PublishEvent(ensembleRejected);
+                        BmpSeer.Instance.PublishEvent(ensembleRejected);
                         break;
 
                     case EnsembleRequested ensembleRequested:
-                        Seer.Instance.PublishEvent(ensembleRequested);
+                        BmpSeer.Instance.PublishEvent(ensembleRequested);
                         break;
 
                     case EnsembleStarted ensembleStarted:
-                        Seer.Instance.PublishEvent(ensembleStarted);
+                        BmpSeer.Instance.PublishEvent(ensembleStarted);
                         break;
 
                     // Currently unused. Currently unavailable from Machina backend.
@@ -85,7 +85,15 @@ namespace BardMusicPlayer.Seer
                         if (!InstrumentHeld.Equals(instrumentHeld.InstrumentHeld))
                         {
                             InstrumentHeld = instrumentHeld.InstrumentHeld;
-                            Seer.Instance.PublishEvent(instrumentHeld);
+                            BmpSeer.Instance.PublishEvent(instrumentHeld);
+                        }
+                        break;
+
+                    case IsBardChanged isBard:
+                        if (IsBard != isBard.IsBard)
+                        {
+                            IsBard = isBard.IsBard;
+                            BmpSeer.Instance.PublishEvent(isBard);
                         }
                         break;
 
@@ -101,7 +109,7 @@ namespace BardMusicPlayer.Seer
                             InstrumentKeys = keyMap.InstrumentKeys;
                             InstrumentToneKeys = keyMap.InstrumentToneKeys;
                             NoteKeys = keyMap.NoteKeys;
-                            Seer.Instance.PublishEvent(keyMap);
+                            BmpSeer.Instance.PublishEvent(keyMap);
                         }
                         break;
 
@@ -109,7 +117,7 @@ namespace BardMusicPlayer.Seer
                         if (!PartyMembers.KeysEquals(partyMembers.PartyMembers))
                         {
                             PartyMembers = partyMembers.PartyMembers;
-                            Seer.Instance.PublishEvent(partyMembers);
+                            BmpSeer.Instance.PublishEvent(partyMembers);
                         }
                         break;
 
@@ -117,7 +125,7 @@ namespace BardMusicPlayer.Seer
                         if (!PlayerName.Equals(playerName.PlayerName))
                         {
                             PlayerName = playerName.PlayerName;
-                            Seer.Instance.PublishEvent(playerName);
+                            BmpSeer.Instance.PublishEvent(playerName);
                         }
                         break;
 
@@ -125,14 +133,14 @@ namespace BardMusicPlayer.Seer
                         if (!HomeWorld.Equals(homeWorld.HomeWorld))
                         {
                             HomeWorld = homeWorld.HomeWorld;
-                            Seer.Instance.PublishEvent(homeWorld);
+                            BmpSeer.Instance.PublishEvent(homeWorld);
                         }
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
         }
     }

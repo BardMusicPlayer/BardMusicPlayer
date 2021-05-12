@@ -49,7 +49,7 @@ namespace BardMusicPlayer.Seer
             _shouldRunEventQueueThread = true;
             _eventQueueThread = new Thread(RunEventQueue) { IsBackground = true };
             _eventQueueThread.Start();
-            Seer.Instance.PublishEvent(new GameStarted(this, Pid));
+            BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
         }
 
         internal void PublishEvent(SeerEvent seerEvent)
@@ -71,7 +71,7 @@ namespace BardMusicPlayer.Seer
                     }
                     catch (Exception ex)
                     {
-                        Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                        BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                     }
                 }
 
@@ -83,7 +83,7 @@ namespace BardMusicPlayer.Seer
                     }
                     catch (Exception ex)
                     {
-                        Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                        BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                     }
                 }
 
@@ -96,7 +96,7 @@ namespace BardMusicPlayer.Seer
         ~Game() => Dispose();
         public void Dispose()
         {
-            Seer.Instance.PublishEvent(new GameStopped(Pid));
+            BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
             _eventQueueOpen = false;
             _shouldRunEventQueueThread = false;
             try
@@ -105,7 +105,7 @@ namespace BardMusicPlayer.Seer
             }
             catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
             try
             {
@@ -113,7 +113,7 @@ namespace BardMusicPlayer.Seer
             }
             catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
             try
             {
@@ -121,7 +121,7 @@ namespace BardMusicPlayer.Seer
             }
             catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
             try
             {
@@ -129,7 +129,7 @@ namespace BardMusicPlayer.Seer
             }
             catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
             try
             {
@@ -138,7 +138,7 @@ namespace BardMusicPlayer.Seer
                 _eventDedupeHistory.Clear();
             } catch (Exception ex)
             {
-                Seer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
             GC.SuppressFinalize(this);
         }

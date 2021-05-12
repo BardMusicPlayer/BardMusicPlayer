@@ -15,7 +15,7 @@ namespace BardMusicPlayer.Seer.Events
             EventSource = eventSource;
             DedupeThreshold = dedupeThreshold;
             HighPriority = highPriority;
-            TimeStamp = Clock.Time.Now.ToUtcMilliTime();
+            TimeStamp = Clock.Time.Now;
         }
         public long TimeStamp { get; }
         public EventSource EventSource { get; }
