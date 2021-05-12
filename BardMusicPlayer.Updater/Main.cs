@@ -99,10 +99,10 @@ namespace BardMusicPlayer.Updater
             {
                 // Failed to grab the list of remote versions available. ignore.
             }
-          
-            // Invoke Home.xaml here and do things. Version, UpdateInfo, and Versions may or may not be default/empty and logic will need to be done by the UI to decide what to do.
-            MessageBox.Show(string.Join(Environment.NewLine, RemoteVersions.OrderBy(version => version.Value.beta).ThenByDescending(version => version.Value.build).Select(version => "website url: " + BaseUrl + version.Key + @"/" + Environment.NewLine + "beta: " + version.Value.beta + Environment.NewLine + "commit: " + version.Value.commit + Environment.NewLine + "build: " + version.Value.build + Environment.NewLine)), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
-            Environment.Exit(0);
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
+            mainWindow.ShowDialog();
 
 #elif LOCAL
 
