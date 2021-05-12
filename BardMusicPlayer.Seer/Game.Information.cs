@@ -35,7 +35,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Contains the Proccess Id for this Game. Set on creation of this Game.
         /// </summary>
-        public int Pid { get; }
+        public int Pid { get; private set; }
 
         /// <summary>
         /// Contains the region of this Game. Set on creation of this Game.
