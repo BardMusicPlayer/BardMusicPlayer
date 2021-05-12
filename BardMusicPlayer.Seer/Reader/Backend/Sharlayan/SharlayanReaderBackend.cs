@@ -68,7 +68,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 
         private void SignaturesFound(object sender, SignaturesFoundEvent signaturesFoundEvent)
         {
-            //if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATLOG")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHATLOG")));
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATLOG")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHATLOG")));
             if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATINPUT")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHATINPUT")));
             if (!signaturesFoundEvent.Signatures.Keys.Contains("WORLD")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("WORLD")));
             if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARID")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHARID")));
@@ -120,7 +120,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     GetInstrument();
                     GetPartyMembers();
                     GetChatInputOpen();
-                    //GetEnsembleEventsAndChatLog();
+                    GetEnsembleEventsAndChatLog();
 
                     _lastScan.FirstScan = false;
                 } catch (Exception ex)
