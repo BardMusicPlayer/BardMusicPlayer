@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all simile mark types as they are assigned to bars. 
     /// </summary>
-    public enum SimileMark
+    internal enum SimileMark
     {
         /// <summary>
         /// No simile mark is applied

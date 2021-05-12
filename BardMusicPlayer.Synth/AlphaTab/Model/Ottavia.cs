@@ -5,7 +5,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all ottavia.  
     /// </summary>
-    public enum Ottavia
+    internal enum Ottavia
     {
         /// <summary>
         /// 2 octaves higher 

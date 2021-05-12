@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all types of pick strokes.
     /// </summary>
-    public enum PickStroke
+    internal enum PickStroke
     {
         /// <summary>
         /// No pickstroke used. 

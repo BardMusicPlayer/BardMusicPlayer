@@ -1,4 +1,4 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// This class describes a single staff within a track. There are instruments like pianos
     /// where a single track can contain multiple staffs. 
     /// </summary>
-    public class Staff
+    internal class Staff
     {
         /// <summary>
         /// Gets or sets the zero-based index of this staff within the track.
@@ -93,7 +93,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
         {
             dst.Capo = src.Capo;
             dst.Index = src.Index;
-            dst.Tuning = CSharp.Platform.Platform.CloneArray(src.Tuning);
+            dst.Tuning = Platform.CloneArray(src.Tuning);
             dst.TranspositionPitch = src.TranspositionPitch;
             dst.DisplayTranspositionPitch = src.DisplayTranspositionPitch;
             dst.ShowStandardNotation = src.ShowStandardNotation;
@@ -101,11 +101,11 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             dst.IsPercussion = src.IsPercussion;
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             for (int i = 0, j = Bars.Count; i < j; i++)
             {
-                Bars[i].Finish(settings);
+                Bars[i].Finish();
             }
         }
 

@@ -1,79 +1,79 @@
-﻿using System.Linq;
-using BardMusicPlayer.Common;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BardMusicPlayer.Common.Structs;
-using BardMusicPlayer.Notate.Objects;
+using BardMusicPlayer.Notate.Song;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Generator;
-using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Synth.AlphaTab.Model;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using MidiFile = BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.MidiFile;
 
 namespace BardMusicPlayer.Synth
 {
     internal static class Utils
     {
-        internal static MidiFile GetSynthMidi(this MMSong mmSong)
+        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(this BmpSong song)
         {
             var file = new MidiFile {Division = 600};
-            
             var events = new AlphaSynthMidiFileHandler(file);
             events.AddTempo(0, 100);
 
-            var trackCounter = 0;
-
+            var trackCounter = byte.MinValue;
             var veryLast = 0L;
-            foreach (var bard in mmSong.bards)
+
+            var midiFile = await song.GetProcessedMidiFile();
+
+            var trackChunks = midiFile.GetTrackChunks().ToList();
+            
+            var lyrics = new Dictionary<int, Dictionary<long, string>>();
+            var lyricNum = 0;
+
+            foreach (var trackChunk in trackChunks)
             {
-                var failure = false;
-                long lastTime = 0;
-                var lastNote = 254;
-                var currentInstrument = bard.instruments[NotateConfig.NotateGroup.VST.VST0];
-                
-                foreach (var noteEvent in bard.sequence.Where(_ => !failure))
-                { 
-                    var key = noteEvent.Key;
-                    var value = noteEvent.Value;
-                    if (lastNote == 254)
+                var options = trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text.Split(':');
+                switch (options[0])
+                {
+                    case "lyric":
                     {
-                        switch (value)
-                        {
-                            case > 120: // VST Switch
-                                currentInstrument = bard.instruments[(NotateConfig.NotateGroup.VST) value];
-                                break;
-                            case <= 60 and >= 24 when key * 25 % 100 == 50 || key * 25 % 100 == 0:
-                                lastNote = value;
-                                if(!OctaveRange.C3toC6.TryShiftNoteToOctave(OctaveRange.C1toC4, ref lastNote)) failure = true;
-                                lastTime = key * 25; 
-                                break; 
-                            default:
-                                failure = true;
-                                break;
-                        } 
-                    }  
-                    else
-                    {
-                        if (value == 254)
-                        {
-                            var dur = (int) MinimumLength(currentInstrument, lastNote-48, key * 25 - lastTime);
-                            var time = (int) (  lastTime);
-                            events.AddProgramChange(trackCounter, time, (byte) trackCounter, (byte) currentInstrument.MidiProgramChangeCode);
-                            events.AddNote(trackCounter, time, dur,(byte) lastNote, DynamicValue.FFF, (byte) trackCounter);
+                        if (!lyrics.ContainsKey(lyricNum)) lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
 
+                        foreach (var lyric in trackChunk.GetTimedEvents().Where(x => x.Event.EventType == MidiEventType.Lyric))
+                            lyrics[lyricNum].Add(lyric.Time, ((LyricEvent) lyric.Event).Text);
+
+                        lyricNum++;
+
+                        break;
+                    }
+
+                    case "tone":
+                    {
+                        var tone = InstrumentTone.Parse(options[1]);
+                        foreach (var note in trackChunk.GetNotes())
+                        {
+                            var instrument = tone.GetInstrumentFromChannel(note.Channel);
+                            var noteNum = note.NoteNumber;
+                            var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
+                            var time = (int) note.Time;
+                            events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
+                            events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
+                            if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
+                            else trackCounter++;
                             if (time + dur > veryLast) veryLast = time + dur;
-
-                            trackCounter++;
-                            if (trackCounter == byte.MaxValue) trackCounter = 0;
-
-                            lastNote = 254; 
-                            lastTime = key * 25;
                         }
-                        else failure = true;
+
+                        break;
                     }
                 }
-                if (failure) throw new BmpException("Error loading MMSong into Synth");
             }
-
             events.FinishTrack(byte.MaxValue, (byte) veryLast);
-
-            return file;
+            return (file, lyrics);
         }
         
         private static long MinimumLength(Instrument instrument, int note, long duration)
@@ -115,7 +115,7 @@ namespace BardMusicPlayer.Synth
                 case 8: // Fife
                 case 9: // Panpipes
                     if (duration > 4500) return 4500;
-                    return duration < 100 ? 100 : duration;
+                    return duration < 500 ? 500 : duration;
 
                 case 10: // Timpani
                     if (note <= 15) return 1193;
@@ -149,7 +149,7 @@ namespace BardMusicPlayer.Synth
                 case 22: // Cello
                 case 23: // DoubleBass
                     if (duration > 4500) return 4500;
-                    return duration < 100 ? 100 : duration;
+                    return duration < 300 ? 300 : duration;
 
                 default: return duration;
             }

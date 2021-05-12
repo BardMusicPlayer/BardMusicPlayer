@@ -84,17 +84,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio
         public static int DynamicToVelocity(DynamicValue dyn)
         {
             return MinVelocity + (int)dyn * VelocityIncrement;
-            // switch(dynamicValue)
-            // {
-            //     case PPP:   return (MinVelocity + (0 * VelocityIncrement));
-            //     case PP:    return (MinVelocity + (1 * VelocityIncrement));
-            //     case P:     return (MinVelocity + (2 * VelocityIncrement));
-            //     case MP:    return (MinVelocity + (3 * VelocityIncrement));
-            //     case MF:    return (MinVelocity + (4 * VelocityIncrement));
-            //     case F:     return (MinVelocity + (5 * VelocityIncrement));
-            //     case FF:    return (MinVelocity + (6 * VelocityIncrement));
-            //     case FFF:   return (MinVelocity + (7 * VelocityIncrement));
-            // }
         }
     }
 }

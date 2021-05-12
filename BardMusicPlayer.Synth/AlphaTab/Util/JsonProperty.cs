@@ -3,17 +3,17 @@ using System;
 namespace BardMusicPlayer.Synth.AlphaTab.Util
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum, Inherited = false, AllowMultiple = false)]
-    public sealed class JsonSerializableAttribute : Attribute
+    internal sealed class JsonSerializableAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class JsonImmutableAttribute : Attribute
+    internal sealed class JsonImmutableAttribute : Attribute
     {
     }
 
     [AttributeUsage(System.AttributeTargets.Property)]
-    public sealed class JsonNameAttribute : Attribute
+    internal sealed class JsonNameAttribute : Attribute
     {
         public string[] Names { get; }
 

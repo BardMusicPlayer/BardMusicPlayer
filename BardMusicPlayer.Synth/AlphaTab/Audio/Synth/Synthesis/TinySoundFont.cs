@@ -29,9 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using BardMusicPlayer.Config;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.SoundFont;
 using BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Util;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 // ReSharper disable UnusedMember.Global
 
@@ -48,7 +50,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
     /// </remarks>
     internal partial class TinySoundFont
     {
-        private readonly FastList<Voice> _voices;
+        private ulong _noteCounter = 0;
+        private readonly List<Voice> _voices;
         private Channels _channels;
         private uint _voicePlayIndex;
 
@@ -85,7 +88,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
         {
             OutSampleRate = sampleRate;
             OutputMode = OutputMode.StereoInterleaved;
-            _voices = new FastList<Voice>();
+            _voices = new List<Voice>();
         }
 
         /// <summary>
@@ -138,11 +141,20 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                 NoteOff(presetIndex, key);
                 return;
             }
+            
+            if (BmpConfig.Instance.EnableSynthVoiceLimiter && ActiveVoiceCount >= 16)
+            {
+                var voice = _voices.First(a => a.Counter == _voices.Where(b => b.PlayingPreset != -1).Min(b => b.Counter));
+                voice.EndQuick(OutSampleRate);
+                voice.Stopped = true;
+            }
 
             // Play all matching regions.
             var voicePlayIndex = _voicePlayIndex++;
             foreach (var region in Presets[presetIndex].Regions)
             {
+                if (_noteCounter == ulong.MaxValue) _noteCounter = 0;
+                _noteCounter++;
                 if (key < region.LoKey || key > region.HiKey || midiVelocity < region.LoVel ||
                     midiVelocity > region.HiVel)
                 {
@@ -194,6 +206,9 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
                 voice.PlayingKey = key;
                 voice.PlayIndex = voicePlayIndex;
                 voice.NoteGainDb = GlobalGainDb - region.Attenuation - SynthHelper.GainToDecibels(1.0f / vel);
+
+                voice.Counter = _noteCounter;
+                voice.Stopped = false;
 
                 if (_channels != null)
                 {
@@ -350,16 +365,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
         {
             get
             {
-                var count = 0;
-                foreach (var v in _voices)
-                {
-                    if (v.PlayingPreset != -1)
-                    {
-                        count++;
-                    }
-                }
-
-                return count;
+                return _voices.Count(v => v.PlayingPreset != -1 && v.Stopped != true);
             }
         }
 

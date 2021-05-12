@@ -3,7 +3,7 @@
     /// <summary>
     /// Lists all Crescendo and Decrescendo types. 
     /// </summary>
-    public enum CrescendoType
+    internal enum CrescendoType
     {
         /// <summary>
         /// No crescendo applied. 

@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all types of how to brush multiple notes on a beat. 
     /// </summary>
-    public enum BrushType
+    internal enum BrushType
     {
         /// <summary>
         /// No brush. 

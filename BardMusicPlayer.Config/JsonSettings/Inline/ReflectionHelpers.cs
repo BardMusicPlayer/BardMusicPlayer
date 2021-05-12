@@ -1,9 +1,14 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2017 Belash
+ * Licensed under the MIT license. See https://github.com/Nucs/JsonSettings/blob/master/LICENSE for full license information.
+ */
+
+using System;
 using System.Reflection;
 
 namespace BardMusicPlayer.Config.JsonSettings.Inline
 {
-    internal static partial class ReflectionHelpers
+    internal static class ReflectionHelpers
     {
         public static bool IsValueType(Type targetType)
         {
@@ -11,164 +16,7 @@ namespace BardMusicPlayer.Config.JsonSettings.Inline
             {
                 throw new NullReferenceException("Must supply the targetType parameter");
             }
-#if !NET40            
             return targetType.GetTypeInfo().IsValueType;
-#else
-            return targetType.IsValueType;
-#endif
-        }
-
-        public static Type GetBaseType(Type targetType)
-        {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
-#if !NET40            
-            return targetType.GetTypeInfo().BaseType;
-#else
-            return targetType.BaseType;
-#endif
-        }
-
-        /// <summary>
-        /// Returns the Assembly of a Type
-        /// </summary>
-        public static Assembly GetAssembly(Type targetType)
-        {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
-#if !NET40            
-            return targetType.GetTypeInfo().Assembly;
-#else
-            return targetType.Assembly;
-#endif
-        }
-
-        /// <summary>
-        /// Returns true if the given type represents a non-object type that is not abstract.
-        /// </summary>
-        public static bool IsConcreteClass(Type t)
-        {
-            if (t == null)
-            {
-                throw new NullReferenceException("Must supply the t (type) parameter");
-            }
-
-            if (t == typeof(object))
-                return false;
-#if !NET40            
-            var ti = t.GetTypeInfo();
-            if (ti.IsClass && !ti.IsAbstract)
-                return true;
-#else            
-            if (t.IsClass && !t.IsAbstract)
-                return true;
-#endif
-            return false;
-        }
-
-        public static MethodInfo GetMethodInfo(Type type, string methodName)
-        {
-#if !NET40            
-            return type.GetTypeInfo().GetDeclaredMethod(methodName);
-#else
-            return type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
-#endif
-        }
-
-        public static MethodInfo GetPropertyGetMethod(PropertyInfo property)
-        {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
-#if !NET40            
-            return property.GetMethod;
-#else
-            return property.GetGetMethod();
-#endif
-        }
-
-        public static MethodInfo GetPropertySetMethod(PropertyInfo property)
-        {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
-#if !NET40            
-            return property.SetMethod;
-#else
-            return property.GetSetMethod();
-#endif
-        }
-
-        public static T GetCustomAttribute<T>(MemberInfo member) where T : Attribute
-        {
-            if (member == null)
-                throw new NullReferenceException("Must supply the member parameter");
-
-#if !NET40            
-            return member.GetCustomAttribute(typeof(T)) as T;
-#else
-            return Attribute.GetCustomAttribute(member, typeof(T)) as T;
-#endif
-        }
-
-        /// <summary>
-        /// Returns true if the get method of the given property exist and are public.
-        /// Note that we allow a getter-only property to be serialized (and deserialized),
-        /// *if* CanDeserializeIntoExistingObject is true for the property type.
-        /// </summary>
-        public static bool PropertyIsPublic(PropertyInfo property)
-        {
-            if (property == null)
-            {
-                throw new NullReferenceException("Must supply the property parameter");
-            }
-
-            var getMethod = GetPropertyGetMethod(property);
-
-            if (getMethod == null || !getMethod.IsPublic)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Returns true if the given type can be assigned the given value
-        /// </summary>
-        public static bool IsAssignableFrom(Type type, object value)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
-            if (value == null)
-                throw new ArgumentNullException("value");
-
-            return IsAssignableFromType(type, value.GetType());
-        }
-
-        /// <summary>
-        /// Returns true if the given type can be assigned a value with the given object type
-        /// </summary>
-        public static bool IsAssignableFromType(Type type, Type objectType)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
-            if (objectType == null)
-                throw new ArgumentNullException("objectType");
-#if !NET40
-            if (type.GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()))
-                return true;
-#else
-            if (type.IsAssignableFrom(objectType))
-                return true;
-#endif
-            return false;
         }
     }
 }

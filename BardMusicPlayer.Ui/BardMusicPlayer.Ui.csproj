@@ -34,11 +34,13 @@
     <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Doot\BardMusicPlayer.Doot.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Notate\BardMusicPlayer.Notate.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Synth\BardMusicPlayer.Synth.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

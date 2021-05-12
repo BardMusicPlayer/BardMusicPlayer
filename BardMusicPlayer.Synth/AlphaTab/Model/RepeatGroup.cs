@@ -1,11 +1,11 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
     /// <summary>
     /// This public class can store the information about a group of measures which are repeated
     /// </summary>
-    public class RepeatGroup
+    internal class RepeatGroup
     {
         /// <summary>
         /// All masterbars repeated within this group

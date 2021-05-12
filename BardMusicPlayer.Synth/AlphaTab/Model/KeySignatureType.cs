@@ -3,7 +3,7 @@
     /// <summary>
     /// This public enumeration lists all available key signatures
     /// </summary>
-    public enum KeySignature
+    internal enum KeySignature
     {
         /// <summary>
         /// Cb (7 flats)

@@ -1,5 +1,5 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// A voice represents a group of beats 
     /// that can be played during a bar. 
     /// </summary>
-    public class Voice
+    internal class Voice
     {
         private FastDictionary<int, Beat> _beatLookup;
 
@@ -133,7 +133,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             return null;
         }
 
-        internal void Finish(Settings settings)
+        internal void Finish()
         {
             _beatLookup = new FastDictionary<int, Beat>();
             for (var index = 0; index < Beats.Count; index++)
@@ -149,7 +149,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
             {
                 var beat = Beats[i];
                 beat.Index = i;
-                beat.Finish(settings);
+                beat.Finish();
 
                 if (beat.GraceType == GraceType.None || beat.GraceType == GraceType.BendGrace)
                 {

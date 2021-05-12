@@ -5,7 +5,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Generator
     /// <summary>
     /// A handler is responsible for writing midi events to a custom structure
     /// </summary>
-    public interface IMidiFileHandler
+    internal interface IMidiFileHandler
     {
         /// <summary>
         /// Adds a time signature to the generated midi file

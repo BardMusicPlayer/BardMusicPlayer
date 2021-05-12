@@ -1,5 +1,5 @@
 using BardMusicPlayer.Synth.AlphaTab.Audio;
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// The MasterBar stores information about a bar which affects
     /// all tracks.
     /// </summary>
-    public class MasterBar
+    internal class MasterBar
     {
         /// <summary>
         /// The maximum alternate endings.  (1 byte with 8 bitflags)

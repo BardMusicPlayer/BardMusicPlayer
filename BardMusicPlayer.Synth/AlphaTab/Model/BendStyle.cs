@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists the different bend styles
     /// </summary>
-    public enum BendStyle
+    internal enum BendStyle
     {
         /// <summary>
         /// The bends are as described by the bend points 

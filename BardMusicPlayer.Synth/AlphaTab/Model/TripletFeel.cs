@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// This public enumeration lists all feels of triplets.
     /// </summary>
-    public enum TripletFeel
+    internal enum TripletFeel
     {
         /// <summary>
         /// No triplet feel

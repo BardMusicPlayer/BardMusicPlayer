@@ -1,12 +1,16 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2017 Belash
+ * Licensed under the MIT license. See https://github.com/Nucs/JsonSettings/blob/master/LICENSE for full license information.
+ */
+
+using System;
 using System.Diagnostics;
 using System.Linq;
-using BardMusicPlayer.Config.JsonSettings.Interface;
 using Castle.DynamicProxy;
 
 namespace BardMusicPlayer.Config.JsonSettings.Autosave
 {
-    public static class JsonSettingsAutosaveExtensions
+    internal static class JsonSettingsAutosaveExtensions
     {
         private static readonly string[] _jsonSettingsAbstractionVirtuals = { "FileName" };
 
@@ -35,18 +39,6 @@ namespace BardMusicPlayer.Config.JsonSettings.Autosave
 
             _generator = _generator ?? new ProxyGenerator();
             return _generator.CreateClassProxyWithTarget<TSettings>(settings, new JsonSettingsInterceptor((JsonSettings)(object)settings));
-        }
-
-        public static ISettings EnableIAutosave<ISettings>(this JsonSettings settings) where ISettings : class
-        {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings));
-            _generator = _generator ?? new ProxyGenerator();
-
-            if (!(settings is ISettings))
-                throw new InvalidCastException($"Settings class '{settings.GetType().FullName}' does not implement interface '{typeof(ISettings).FullName}'");
-
-            return _generator.CreateInterfaceProxyWithTarget<ISettings>((ISettings)(object)settings, new JsonSettingsInterceptor(settings));
         }
 
         /// <summary>

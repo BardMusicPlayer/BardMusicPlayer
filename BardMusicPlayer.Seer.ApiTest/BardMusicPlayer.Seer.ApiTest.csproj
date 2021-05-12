@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <StartupObject>BardMusicPlayer.Seer.ApiTest.Program</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <LangVersion>9</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
+  </ItemGroup>
+
+</Project>

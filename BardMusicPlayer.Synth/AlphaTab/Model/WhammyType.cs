@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Model
     /// <summary>
     /// Lists all types of whammy bars
     /// </summary>
-    public enum WhammyType
+    internal enum WhammyType
     {
         /// <summary>
         /// No whammy at all

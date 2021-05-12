@@ -1,24 +1,12 @@
 ﻿/*
- * MogLib/Common/Structs/OctaveRange.cs
- *
- * Copyright (C) 2021  MoogleTroupe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BardMusicPlayer.Common.Structs
 {
@@ -27,18 +15,24 @@ namespace BardMusicPlayer.Common.Structs
     /// </summary>
     public readonly struct OctaveRange : IComparable, IConvertible, IComparable<OctaveRange>, IEquatable<OctaveRange>
     {
-        public static OctaveRange VSTRange { get; } = new("VST", -3,-3, -3, 121, 127, "");
+        // TODO remove this one.
+        public static readonly OctaveRange Tone = new("Tone", -3,-3, -3, null);
 
-        public static OctaveRange Invalid { get; } = new("Invalid", -2, -2, -2, -1, -1, "");
-        public static OctaveRange Mapper { get; } = new("Mapper", -1, -1, 2, 0, 36, "+4");
-        public static OctaveRange C0toC3 { get; } = new("C0toC3", 0, 0, 3, 12, 48, "+3");
-        public static OctaveRange C1toC4 { get; } = new("C1toC4", 1, 1, 4, 24, 60, "+2");
-        public static OctaveRange C2toC5 { get; } = new("C2toC5", 2, 2, 5, 36, 72, "+1");
-        public static OctaveRange C3toC6 { get; } = new("C3toC6", 3, 3, 6, 48, 84, "");
-        public static OctaveRange C4toC7 { get; } = new("C4toC7", 4, 4, 7, 60, 96, "-1");
-        public static OctaveRange C5toC8 { get; } = new("C5toC8", 5, 5, 8, 72, 108, "-2");
-        public static OctaveRange C6toC9 { get; } = new("C6toC9", 6, 6, 9, 84, 120, "-3");
-        
+        public static readonly OctaveRange Invalid = new("Invalid", -2, -2, -2, null);
+
+        // TODO remove this one.
+        public static readonly OctaveRange Mapper = new("Mapper", -1, -1, 2, null);
+
+        public static readonly OctaveRange C0toC3 = new("C0toC3", 0, 0, 3, "+3");
+        public static readonly OctaveRange C1toC4 = new("C1toC4", 1, 1, 4, "+2");
+        public static readonly OctaveRange C2toC5 = new("C2toC5", 2, 2, 5, "+1");
+        public static readonly OctaveRange C3toC6 = new("C3toC6", 3, 3, 6, "");
+        public static readonly OctaveRange C4toC7 = new("C4toC7", 4, 4, 7, "-1");
+        public static readonly OctaveRange C5toC8 = new("C5toC8", 5, 5, 8, "-2");
+        public static readonly OctaveRange C6toC9 = new("C6toC9", 6, 6, 9, "-3");
+
+        public static readonly IReadOnlyList<OctaveRange> All = new ReadOnlyCollection<OctaveRange>(new List<OctaveRange> { C0toC3, C1toC4, C2toC5, C3toC6, C4toC7, C5toC8, C6toC9 });
+
         /// <summary>
         /// Gets the name.
         /// </summary>
@@ -67,13 +61,13 @@ namespace BardMusicPlayer.Common.Structs
         /// Gets the lowest note.
         /// </summary>
         /// <value>The lowest note.</value>
-        public int LowerNote { get; }
+        public int LowerNote => (Lower + 1) * 12;
 
         /// <summary>
         /// Gets the highest note.
         /// </summary>
         /// <value>The highest note.</value>
-        public int UpperNote { get; }
+        public int UpperNote => (Upper + 1) * 12;
 
         /// <summary>
         /// Gets the offset used in midi track names.
@@ -87,17 +81,13 @@ namespace BardMusicPlayer.Common.Structs
         /// <param name="index"></param>
         /// <param name="lower">Lower Octave.</param>
         /// <param name="upper">Upper Octave.</param>
-        /// <param name="lowerNote">Lowest possible note.</param>
-        /// <param name="upperNote">Highest possible note.</param>
         /// <param name="trackNameOffset">Track Name offset</param>
-        private OctaveRange(string name, int index, int lower, int upper, int lowerNote, int upperNote, string trackNameOffset)
+        private OctaveRange(string name, int index, int lower, int upper, string trackNameOffset)
         {
             Name = name;
             Index = index;
             Lower = lower;
             Upper = upper;
-            LowerNote = lowerNote;
-            UpperNote = upperNote;
             TrackNameOffset = trackNameOffset;
         }
 
@@ -171,7 +161,11 @@ namespace BardMusicPlayer.Common.Structs
         /// </summary>
         /// <param name="octaveRange"></param>
         /// <returns></returns>
-        public static OctaveRange Parse(int octaveRange) => Parse(octaveRange.ToString());
+        public static OctaveRange Parse(int octaveRange)
+        {
+            TryParse(octaveRange.ToString(), out var result);
+            return result;
+        }
 
         /// <summary>
         /// 
@@ -179,7 +173,12 @@ namespace BardMusicPlayer.Common.Structs
         /// <param name="octaveRange"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        public static bool TryParse(int octaveRange, out OctaveRange result) => TryParse(octaveRange.ToString(), out result);
+        public static bool TryParse(int octaveRange, out OctaveRange result)
+        {
+            var success = TryParse(octaveRange.ToString(), out var innerResult);
+            result = innerResult;
+            return success;
+        }
 
         /// <summary>
         /// Gets the octaveRange from a string.
@@ -200,67 +199,29 @@ namespace BardMusicPlayer.Common.Structs
         /// <returns>true if the <see cref="OctaveRange"/> is anything besides <see cref="Invalid"/></returns>
         public static bool TryParse(string octaveRange, out OctaveRange result)
         {
-            if (octaveRange == null)
+            if (octaveRange is null)
             {
                 result = Invalid;
                 return false;
             }
-            octaveRange = octaveRange.ToLower().Trim().Replace(" ", string.Empty).Replace("_", string.Empty);
-
-            switch (octaveRange)
+            octaveRange = octaveRange.Replace(" ", "").Replace("_", "");
+            if (All.Any(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
-                case "+4":
-                case "mapper":
-                    result = Mapper;
-                    return true;
-                case "+3":
-                case "0":
-                case "c0":
-                case "c0toc3":
-                    result = C0toC3;
-                    return true;
-                case "+2":
-                case "1":
-                case "c1":
-                case "c1toc4":
-                    result = C1toC4;
-                    return true;
-                case "+1":
-                case "2":
-                case "c2":
-                case "c2toc5":
-                    result = C2toC5;
-                    return true;
-                case "":
-                case "+0":
-                case "-0":
-                case "3":
-                case "c3":
-                case "c3toc6":
-                    result = C3toC6;
-                    return true;
-                case "-1":
-                case "4":
-                case "c4":
-                case "c4toc7":
-                    result = C4toC7;
-                    return true;
-                case "-2":
-                case "5":
-                case "c5":
-                case "c5toc8":
-                    result = C5toC8;
-                    return true;
-                case "-3":
-                case "6":
-                case "c6":
-                case "c6toc9":
-                    result = C6toC9;
-                    return true;
-                default: 
-                    result = Invalid;
-                    return false;
+                result = All.First(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                return true;
             }
+            if (All.Any(x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                result = All.First(x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                return true;
+            }
+            if (All.Any(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                result = All.First(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                return true;
+            }
+            result = Invalid;
+            return false;
         }
 
         /// <summary>
@@ -281,6 +242,12 @@ namespace BardMusicPlayer.Common.Structs
             if (!currentOctaveRange.ValidateNoteRange(note)) return false;
             note += LowerNote - currentOctaveRange.LowerNote;
             return true;
+        }
+
+        public int ShiftNoteToOctave(OctaveRange currentOctaveRange, int note)
+        {
+            if (!currentOctaveRange.ValidateNoteRange(note)) throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " + currentOctaveRange.Name);
+            return note + LowerNote - currentOctaveRange.LowerNote;
         }
     }
 }

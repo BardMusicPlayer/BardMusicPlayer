@@ -3,7 +3,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.IO
     /// <summary>
     /// Represents a stream of binary data that can be read from. 
     /// </summary>
-    public interface IReadable
+    internal interface IReadable
     {
         /// <summary>
         /// Gets or sets the current read position relative in the stream. 

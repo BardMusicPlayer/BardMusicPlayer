@@ -1,11 +1,11 @@
-﻿using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+﻿using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
     /// <summary>
     /// Represents the lyrics of a song. 
     /// </summary>
-    public class Lyrics
+    internal class Lyrics
     {
         private const int CharCodeLF = '\n';
         private const int CharCodeTab = '\t';

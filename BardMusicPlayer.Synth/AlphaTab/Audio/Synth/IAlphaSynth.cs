@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
     /// <summary>
     /// The public API interface for interacting with the synthesizer.
     /// </summary>
-    public interface IAlphaSynth
+    internal interface IAlphaSynth
     {
         /// <summary>
         /// Gets or sets whether the synthesizer is ready for interaction. (output and worker are initialized)
@@ -45,15 +45,6 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth
         /// Gets or sets the current master volume as percentage. (range: 0.0-3.0, default 1.0)
         /// </summary>
         float MasterVolume
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the metronome volume. (range: 0.0-3.0, default 0.0)
-        /// </summary>
-        float MetronomeVolume
         {
             get;
             set;

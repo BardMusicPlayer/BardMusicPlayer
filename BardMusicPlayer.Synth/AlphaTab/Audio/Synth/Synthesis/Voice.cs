@@ -38,7 +38,9 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
         /// Increasing the value significantly lowers the CPU usage of the voice rendering.
         /// If LFO affects the low-pass filter it can be hearable even as low as 8.
         /// </summary>
-        private const int RenderEffectSampleBLock = 64;
+        private const int RenderEffectSampleBLock = 4;
+
+        public bool Stopped { get; set; } = false;
 
         public int PlayingPreset { get; set; }
         public int PlayingKey { get; set; }
@@ -66,7 +68,8 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Synthesis
         public VoiceLfo VibLfo { get; set; }
 
         public float MixVolume { get; set; }
-        public bool Mute { get; set; }
+
+        public ulong Counter { get; set; }
 
         public Voice()
         {

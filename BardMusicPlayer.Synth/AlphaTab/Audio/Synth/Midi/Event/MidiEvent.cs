@@ -5,7 +5,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event
     /// <summary>
     /// Lists all midi events.
     /// </summary>
-    public enum MidiEventType
+    internal enum MidiEventType
     {
         /// <summary>
         /// A note is released.
@@ -51,7 +51,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event
     /// <summary>
     /// Lists all midi controllers.
     /// </summary>
-    public enum ControllerType
+    internal enum ControllerType
     {
         /// <summary>
         /// Bank Select. MSB
@@ -201,7 +201,7 @@ namespace BardMusicPlayer.Synth.AlphaTab.Audio.Synth.Midi.Event
     /// <summary>
     /// Represents a midi event.
     /// </summary>
-    public class MidiEvent
+    internal class MidiEvent
     {
         /// <summary>
         /// Gets or sets the raw midi message.

@@ -1,11 +1,11 @@
-using BardMusicPlayer.Synth.AlphaTab.CSharp.Collections;
+using BardMusicPlayer.Synth.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Model
 {
     /// <summary>
     /// This public class represents a predefined string tuning.
     /// </summary>
-    public class Tuning
+    internal class Tuning
     {
         private static FastList<Tuning> _sevenStrings;
         private static FastList<Tuning> _sixStrings;
