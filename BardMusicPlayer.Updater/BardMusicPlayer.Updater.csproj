@@ -48,6 +48,10 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\petmog.gif" />
   </ItemGroup>
