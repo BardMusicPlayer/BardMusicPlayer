@@ -19,7 +19,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
         private bool _chatLogFirstRun = true;
         private readonly ChatLogReader _chatLogReader;
 
-        private long _lastOffsetArrayStart;
         public ChatLogResult GetChatLog(int previousArrayIndex = 0, int previousOffset = 0)
         {
             var result = new ChatLogResult();
@@ -51,25 +50,12 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                     LogEnd = MemoryHandler.GetPlatformUInt(chatPointerMap, MemoryHandler.Structures.ChatLogPointers.LogEnd)
                 };
 
-                if (_lastOffsetArrayStart != _chatLogReader.ChatLogPointers.OffsetArrayStart)
-                {
-                    if (_lastOffsetArrayStart != 0) {
-                        _chatLogReader.PreviousOffset = 0;
-                        _chatLogReader.PreviousArrayIndex = 0;
-                        result.PreviousArrayIndex = _chatLogReader.PreviousArrayIndex;
-                        result.PreviousOffset = _chatLogReader.PreviousOffset;
-                        return result; // The game was shut down.
-                    }
-
-                    _lastOffsetArrayStart = _chatLogReader.ChatLogPointers.OffsetArrayStart;
-                    _chatLogReader.EnsureArrayIndexes();
-                }
-
                 var currentArrayIndex = (_chatLogReader.ChatLogPointers.OffsetArrayPos -
                                          _chatLogReader.ChatLogPointers.OffsetArrayStart) / 4;
                 if (_chatLogFirstRun)
                 {
                     _chatLogFirstRun = false;
+                    _chatLogReader.EnsureArrayIndexes();
 
                     if(currentArrayIndex - 1 > 0 && _chatLogReader.Indexes.Count >= currentArrayIndex - 1) _chatLogReader.PreviousOffset = _chatLogReader.Indexes[(int) currentArrayIndex - 1];
                     else
