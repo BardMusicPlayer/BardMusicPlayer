@@ -34,7 +34,7 @@ namespace BardMusicPlayer.Seer
                 {
                     var processes = Process.GetProcessesByName("ffxiv_dx11");
 
-                    foreach (var game in _games.Values.Where(game => game.Process.HasExited || !game.Process.Responding || processes.All(process => process.Id != game.Pid)))
+                    foreach (var game in _games.Values.Where(game => game.Process is null || game.Process.HasExited || !game.Process.Responding || processes.All(process => process.Id != game.Pid)))
                     {
                         game.Dispose();
                         _games.Remove(game.Pid);
