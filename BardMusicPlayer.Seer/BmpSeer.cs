@@ -4,7 +4,9 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using BardMusicPlayer.Config;
 using BardMusicPlayer.Seer.Utilities;
 
@@ -19,10 +21,10 @@ namespace BardMusicPlayer.Seer
         /// </summary>
         public bool Started { get; private set; }
 
-        private readonly Dictionary<int, Game> _games;
+        private readonly ConcurrentDictionary<int, Game> _games;
         private BmpSeer()
         {
-            _games = new Dictionary<int, Game>();
+            _games = new ConcurrentDictionary<int, Game>();
         }
 
         public static BmpSeer Instance => LazyInstance.Value;
@@ -30,7 +32,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Current active games
         /// </summary>
-        public IReadOnlyDictionary<int, Game> Games => _games;
+        public IReadOnlyDictionary<int, Game> Games => new ReadOnlyDictionary<int, Game>(_games);
 
         /// <summary>
         /// Configure the firewall for Machina

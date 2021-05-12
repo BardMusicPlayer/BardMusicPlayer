@@ -36,20 +36,21 @@ namespace BardMusicPlayer.Seer
 
                     foreach (var game in _games.Values.Where(game => game.Process is null || game.Process.HasExited || !game.Process.Responding || processes.All(process => process.Id != game.Pid)))
                     {
-                        game.Dispose();
-                        _games.Remove(game.Pid);
+                        _games.TryRemove(game.Pid, out _);
+                        game?.Dispose();
                     }
 
                     foreach (var process in processes)
                     {
                         // Add new games.
-                        if (_games.ContainsKey(process.Id) || process.HasExited || !process.Responding) continue;
+                        if (process is null || _games.ContainsKey(process.Id) || process.HasExited || !process.Responding) continue;
 
                         // Adding a game spikes the cpu when sharlayan scans memory.
                         var timeNow = Clock.Time.Now;
                         if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
                         coolDown = timeNow;
-                        _games.Add(process.Id, new Game(process));
+                        var game = new Game(process);
+                        if (!_games.TryAdd(process.Id, game) || !game.Initialize()) game.Dispose();
                     }
                 }
                 catch (Exception ex)

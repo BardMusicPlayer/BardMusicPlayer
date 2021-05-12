@@ -53,7 +53,14 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 
                 if (_lastOffsetArrayStart != _chatLogReader.ChatLogPointers.OffsetArrayStart)
                 {
-                    if (_lastOffsetArrayStart != 0) return result; // The game was shut down. This instance will soon be Disposed, if we continue there will be a memory leak.
+                    if (_lastOffsetArrayStart != 0) {
+                        _chatLogReader.PreviousOffset = 0;
+                        _chatLogReader.PreviousArrayIndex = 0;
+                        result.PreviousArrayIndex = _chatLogReader.PreviousArrayIndex;
+                        result.PreviousOffset = _chatLogReader.PreviousOffset;
+                        return result; // The game was shut down.
+                    }
+
                     _lastOffsetArrayStart = _chatLogReader.ChatLogPointers.OffsetArrayStart;
                     _chatLogReader.EnsureArrayIndexes();
                 }
@@ -65,7 +72,14 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                     _chatLogFirstRun = false;
 
                     if(currentArrayIndex - 1 > 0 && _chatLogReader.Indexes.Count >= currentArrayIndex - 1) _chatLogReader.PreviousOffset = _chatLogReader.Indexes[(int) currentArrayIndex - 1];
-                    else return result; // The player is logged out.
+                    else
+                    {
+                        _chatLogReader.PreviousOffset = 0;
+                        _chatLogReader.PreviousArrayIndex = 0;
+                        result.PreviousArrayIndex = _chatLogReader.PreviousArrayIndex;
+                        result.PreviousOffset = _chatLogReader.PreviousOffset;
+                        return result; // The player is logged out.
+                    }
 
                     _chatLogReader.PreviousArrayIndex = (int) currentArrayIndex - 1;
                 }
@@ -73,17 +87,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 {
                     if (currentArrayIndex < _chatLogReader.PreviousArrayIndex)
                     {
-                        try
-                        {
-                            buffered.AddRange(_chatLogReader.ResolveEntries(_chatLogReader.PreviousArrayIndex, 1000));
-                        }
-                        catch // Ignored. The player logged out.
-                        {
-                            currentArrayIndex = 0;
-                        } 
-
                         _chatLogReader.PreviousOffset = 0;
                         _chatLogReader.PreviousArrayIndex = 0;
+                        result.PreviousArrayIndex = _chatLogReader.PreviousArrayIndex;
+                        result.PreviousOffset = _chatLogReader.PreviousOffset;
+                        return result; // The player logged out.
                     }
 
                     if (_chatLogReader.PreviousArrayIndex < currentArrayIndex)
