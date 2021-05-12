@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
         private bool _chatLogFirstRun = true;
         private readonly ChatLogReader _chatLogReader;
 
-        private long _lastOffsetArrayStart = 0;
+        private long _lastOffsetArrayStart;
         public ChatLogResult GetChatLog(int previousArrayIndex = 0, int previousOffset = 0)
         {
             var result = new ChatLogResult();
@@ -53,8 +53,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 
                 if (_lastOffsetArrayStart != _chatLogReader.ChatLogPointers.OffsetArrayStart)
                 {
+                    if (_lastOffsetArrayStart != 0) return result; // The game was shut down. This instance will soon be Disposed, if we continue there will be a memory leak.
                     _lastOffsetArrayStart = _chatLogReader.ChatLogPointers.OffsetArrayStart;
-                    Console.WriteLine("ChatLog array offset start changed: " + _lastOffsetArrayStart);
                     _chatLogReader.EnsureArrayIndexes();
                 }
 
