@@ -5,6 +5,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using BardMusicPlayer.Common.UtcMilliTime;
 using BardMusicPlayer.Config;
@@ -31,24 +32,24 @@ namespace BardMusicPlayer.Seer
             {
                 try
                 {
-                    foreach (var process in Process.GetProcessesByName("ffxiv_dx11"))
-                    {
-                        // Remove dead games if we were watching them.
-                        if (process.HasExited || process.Responding == false && _games.ContainsKey(process.Id))
-                        {
-                            _games[process.Id]?.Dispose();
-                            _games.Remove(process.Id);
-                        }
+                    var processes = Process.GetProcessesByName("ffxiv_dx11");
 
+                    foreach (var game in _games.Values.Where(game => game.Process.HasExited || !game.Process.Responding || processes.All(process => process.Id != game.Pid)))
+                    {
+                        game.Dispose();
+                        _games.Remove(game.Pid);
+                    }
+
+                    foreach (var process in processes)
+                    {
                         // Add new games.
-                        else if (!_games.ContainsKey(process.Id) && !process.HasExited && process.Responding)
-                        {
-                            // Adding a game spikes the cpu when sharlayan scans memory.
-                            var timeNow = Clock.Time.Now;
-                            if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
-                            coolDown = timeNow;
-                            _games.Add(process.Id, new Game(process));
-                        }
+                        if (_games.ContainsKey(process.Id) || process.HasExited || !process.Responding) continue;
+
+                        // Adding a game spikes the cpu when sharlayan scans memory.
+                        var timeNow = Clock.Time.Now;
+                        if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
+                        coolDown = timeNow;
+                        _games.Add(process.Id, new Game(process));
                     }
                 }
                 catch (Exception ex)
@@ -56,7 +57,7 @@ namespace BardMusicPlayer.Seer
                     PublishEvent(new SeerExceptionEvent(ex));
                 }
 
-                Thread.Sleep(BmpConfig.Instance.SeerGameScanCooldown);
+                Thread.Sleep(1);
             }
         }
 
