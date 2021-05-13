@@ -4,7 +4,7 @@
  */
 
 using System;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects

@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;

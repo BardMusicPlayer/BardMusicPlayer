@@ -6,8 +6,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BardMusicPlayer.Common.Enums;
 using BardMusicPlayer.Grunt.Helper.Utilities;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Grunt

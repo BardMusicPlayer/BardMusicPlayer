@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 

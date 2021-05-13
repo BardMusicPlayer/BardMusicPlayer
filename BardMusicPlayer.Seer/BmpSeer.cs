@@ -7,7 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer.Utilities;
 
 namespace BardMusicPlayer.Seer
@@ -46,7 +46,7 @@ namespace BardMusicPlayer.Seer
         public void Start()
         {
             if (Started) return;
-            if (!BmpConfig.Initialized) throw new BmpSeerException("Seer requires Config to be initialized.");
+            if (!BmpPigeonhole.Initialized) throw new BmpSeerException("Seer requires Pigeonhole to be initialized.");
             StartEventsHandler();
             StartProcessWatcher();
             Started = true;

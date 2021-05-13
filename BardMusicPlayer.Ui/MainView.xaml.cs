@@ -5,9 +5,9 @@
 
 using System.ComponentModel;
 using System.Windows;
-using BardMusicPlayer.Catalog;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Ui
@@ -24,15 +24,15 @@ namespace BardMusicPlayer.Ui
 
         private void MainView_OnClosing(object _, CancelEventArgs e)
         {
-            // BmpDoot.Instance.Stop();
+            // BmpMaestro.Instance.Stop();
 
             BmpGrunt.Instance.Stop();
 
             BmpSeer.Instance.Stop();
 
-            BmpCatalog.Instance.Dispose();
+            BmpCoffer.Instance.Dispose();
 
-            BmpConfig.Instance.Dispose();
+            BmpPigeonhole.Instance.Dispose();
         }
     }
 }

@@ -10,8 +10,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Utilities;
 using BardMusicPlayer.Seer.Utilities.KnownFolder;
 

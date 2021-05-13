@@ -4,7 +4,7 @@
  */
 
 using System.Threading.Tasks;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Grunt

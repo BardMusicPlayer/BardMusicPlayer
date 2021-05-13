@@ -4,7 +4,7 @@
  */
 
 using System;
-using BardMusicPlayer.Common;
+using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
