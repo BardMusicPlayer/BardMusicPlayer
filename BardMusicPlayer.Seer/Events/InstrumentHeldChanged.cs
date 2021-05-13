@@ -3,7 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Structs;
 
 namespace BardMusicPlayer.Seer.Events
 {

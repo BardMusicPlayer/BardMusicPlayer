@@ -4,7 +4,7 @@
  */
 
 using System;
-using BardMusicPlayer.Common.UtcMilliTime;
+using BardMusicPlayer.Quotidian.UtcMilliTime;
 
 namespace BardMusicPlayer.Seer.Events
 {

@@ -7,8 +7,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using BardMusicPlayer.Common.UtcMilliTime;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.UtcMilliTime;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
@@ -47,7 +47,7 @@ namespace BardMusicPlayer.Seer
 
                         // Adding a game spikes the cpu when sharlayan scans memory.
                         var timeNow = Clock.Time.Now;
-                        if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
+                        if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow) continue;
                         coolDown = timeNow;
                         var game = new Game(process);
                         if (!_games.TryAdd(process.Id, game) || !game.Initialize()) game.Dispose();

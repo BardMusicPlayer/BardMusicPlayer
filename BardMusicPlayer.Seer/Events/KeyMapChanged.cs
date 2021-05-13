@@ -5,8 +5,8 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
 
 namespace BardMusicPlayer.Seer.Events
 {

@@ -5,9 +5,9 @@
 
 using System;
 using System.Threading.Tasks;
-using BardMusicPlayer.Catalog;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Ui
@@ -19,9 +19,9 @@ namespace BardMusicPlayer.Ui
         {
             if (_started) throw new Exception("Cannot start up twice.");
 
-            BmpConfig.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Config.json");
+            BmpPigeonhole.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Pigeonhole.json");
 
-            BmpCatalog.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Catalog.db");
+            BmpCoffer.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Coffer.db");
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
 
@@ -29,7 +29,7 @@ namespace BardMusicPlayer.Ui
 
             BmpGrunt.Instance.Start();
 
-            // BmpDoot.Instance.Start();
+            // BmpMaestro.Instance.Start();
 
             var mainView = new MainView();
             mainView.ShowDialog();
