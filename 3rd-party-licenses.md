@@ -82,3 +82,7 @@ https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/
 ### WindowsFirewallHelper by Soroush
 License: MIT
 https://github.com/falahati/WindowsFirewallHelper/blob/master/LICENSE
+
+### libzt by ZeroTier, Inc.
+License: BSL-1.1
+https://github.com/zerotier/libzt/blob/master/LICENSE.txt
