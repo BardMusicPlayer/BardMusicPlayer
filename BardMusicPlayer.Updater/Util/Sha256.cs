@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;

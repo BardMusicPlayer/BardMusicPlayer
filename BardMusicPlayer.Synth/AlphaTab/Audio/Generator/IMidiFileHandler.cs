@@ -1,4 +1,9 @@
-﻿using BardMusicPlayer.Synth.AlphaTab.Model;
+﻿/*
+ * Copyright(c) 2021 Daniel Kuschny
+ * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
+ */
+
+using BardMusicPlayer.Synth.AlphaTab.Model;
 
 namespace BardMusicPlayer.Synth.AlphaTab.Audio.Generator
 {
