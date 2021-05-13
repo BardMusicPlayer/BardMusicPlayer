@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Catalog.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt", "BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj", "{ECBCA11B-CB8A-4597-8F2F-D6DB9B14BDFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Jamboree", "BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj", "{B2A09109-3420-4273-A853-9CAB7D51C595}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +183,18 @@ Global
 		{ECBCA11B-CB8A-4597-8F2F-D6DB9B14BDFF}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
 		{ECBCA11B-CB8A-4597-8F2F-D6DB9B14BDFF}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
 		{ECBCA11B-CB8A-4597-8F2F-D6DB9B14BDFF}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.DebugLocalPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.DebugLocalPublish|Any CPU.Build.0 = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.DebugPublish|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.DebugPublish|Any CPU.Build.0 = Debug|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleaseLocalPublish|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
