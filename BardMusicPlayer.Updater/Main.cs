@@ -129,29 +129,39 @@ namespace BardMusicPlayer.Updater
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
 
-                mainWindow.OnDownloadRequested += new EventHandler<BmpVersionItem>(async (object sender, BmpVersionItem item) =>
+                mainWindow.OnDownloadRequested += new EventHandler<BmpDownloadEvent>( (object sender, BmpDownloadEvent e) =>
                 {
-                    //foreach (var item in version.items)
+                    var key = e.Key;
+                    var version = e.Version;
+                    var item = e.Item;
+
+                    string sourceUrl = $"{BaseUrl}{key}/{item.source}";
+                    string destFPath = VersionPath + item.destination;
+
+                    Downloader downloader = new Downloader();
+
+                    try
                     {
-                        try
+                        Debug.WriteLine($"Attempting to download {sourceUrl} and save to {destFPath}.");
+
+                        var dlTask = downloader.GetFileFromUrl(sourceUrl);
+                        dlTask.Wait();
+                        byte[] file = dlTask.Result;
+                        if (Sha256.GetChecksum(file).Equals(item.sha256))
                         {
-                            byte[] file = await new Downloader().GetFileFromUrl(item.source);
-                            if (Sha256.GetChecksum(file).Equals(item.sha256))
-                            {
-                                File.WriteAllBytes(VersionPath + item.destination, file);
-                            }
+                            Directory.CreateDirectory(VersionPath);
+                            File.WriteAllBytes(destFPath, file);
                         }
-                        catch (Exception)
-                        {
-                            // unable to download file, show message to the user and throw
-                            throw new Exception("Unable to download file: " + item.source);
-                        }
-                    };
+                    }
+                    catch (Exception)
+                    {
+                        // unable to download file, show message to the user and throw
+                        throw new Exception("Unable to download file: " + sourceUrl);
+                    }
                 });
 
                 var launchHandler = new EventHandler<BmpVersion>(async (object sender, BmpVersion version) =>
                 {
-                    (sender as MainWindow).Close();
                     await Loader.Load(version, ExePath, VersionPath, DataPath, Args);
                 });
 

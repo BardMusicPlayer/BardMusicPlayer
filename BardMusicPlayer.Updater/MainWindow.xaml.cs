@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace BardMusicPlayer.Updater
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal EventHandler<Util.BmpVersionItem> OnDownloadRequested;
+
+        internal EventHandler<BmpDownloadEvent> OnDownloadRequested;
         internal EventHandler<Util.BmpVersion> OnDownloadComplete;
         internal EventHandler<Util.BmpVersion> OnLaunchRequested;
 
@@ -45,21 +47,30 @@ namespace BardMusicPlayer.Updater
         private void button_LaunchBMP_Click(object sender, RoutedEventArgs e)
         {
             OnLaunchRequested?.Invoke(this, this.LocalVersion);
+            this.Close();
         }
 
-        private void button_InstallUpdate_Click(object sender, RoutedEventArgs e)
+        private async void button_InstallUpdate_Click(object sender, RoutedEventArgs e)
         {
             // TODO: show progress bar UI
-            Task.Run(() =>
+            await Task.Run(() =>
             {
-                foreach (var item in this.RemoteVersions.First().Value.items)
+                var version = this.RemoteVersions.First().Value;
+                foreach (var item in version.items)
                 {
                     // TODO: update progress bar UI with progress
-                    OnDownloadRequested?.Invoke(this, item);
+                    Debug.WriteLine($"Downloading {item.source}");
+                    BmpDownloadEvent downloadEvent = new BmpDownloadEvent(this.RemoteVersions.First().Key, version, item);
+                    OnDownloadRequested?.Invoke(this, downloadEvent);
                 }
 
                 OnDownloadComplete?.Invoke(this, this.RemoteVersions.First().Value);
             });
+        }
+
+        private void button_NavigationClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

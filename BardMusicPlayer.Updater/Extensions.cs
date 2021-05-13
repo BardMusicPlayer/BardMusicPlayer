@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -26,6 +27,20 @@ namespace BardMusicPlayer.Updater
             stream.Seek(0, SeekOrigin.Begin);
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
+        }
+    }
+
+    internal class BmpDownloadEvent : EventArgs
+    {
+        public string Key;
+        public Util.BmpVersion Version;
+        public Util.BmpVersionItem Item;
+
+        public BmpDownloadEvent(string k, Util.BmpVersion v, Util.BmpVersionItem i)
+        {
+            this.Key = k;
+            this.Version = v;
+            this.Item = i;
         }
     }
 }
