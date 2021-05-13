@@ -15,12 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
+    <None Update="libzt.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Lib\ZeroTier\" />
+    <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
   </ItemGroup>
 
 </Project>
