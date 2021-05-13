@@ -1,10 +1,10 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System.Threading.Tasks;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Grunt

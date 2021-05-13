@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -10,8 +10,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Utilities;
 using BardMusicPlayer.Seer.Utilities.KnownFolder;
 
@@ -35,7 +35,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Contains the Proccess Id for this Game. Set on creation of this Game.
         /// </summary>
-        public int Pid { get; }
+        public int Pid { get; private set; }
 
         /// <summary>
         /// Contains the region of this Game. Set on creation of this Game.

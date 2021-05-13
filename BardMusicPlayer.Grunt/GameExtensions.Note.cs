@@ -4,9 +4,9 @@
  */
 
 using System.Threading.Tasks;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Grunt
@@ -31,9 +31,9 @@ namespace BardMusicPlayer.Grunt
             note -= 48;
 
             // TODO: Tone select for global region here
-            // if (game.GameRegion == GameRegion.Global && !await SyncTapKey(game, game.InstrumentToneMenuKeys[(InstrumentToneMenuKey) channel], BmpConfig.Instance.ToneKeyDelay, BmpConfig.Instance.ToneKeyDelay)) return false;
+            // if (game.GameRegion == GameRegion.Global && !await SyncTapKey(game, game.InstrumentToneMenuKeys[(InstrumentToneMenuKey) channel], BmpPigeonhole.Instance.ToneKeyDelay, BmpPigeonhole.Instance.ToneKeyDelay)) return false;
 
-            return await SyncPushKey(game, game.NoteKeys[(NoteKey) note], BmpConfig.Instance.NoteKeyDelay);
+            return await SyncPushKey(game, game.NoteKeys[(NoteKey) note], BmpPigeonhole.Instance.NoteKeyDelay);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace BardMusicPlayer.Grunt
 
             note -= 48;
 
-            return await SyncReleaseKey(game, game.NoteKeys[(NoteKey) note], BmpConfig.Instance.NoteKeyDelay);
+            return await SyncReleaseKey(game, game.NoteKeys[(NoteKey) note], BmpPigeonhole.Instance.NoteKeyDelay);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Common;
+using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -18,15 +18,17 @@ namespace BardMusicPlayer.Seer
 {
     public partial class Game : IDisposable, IEquatable<Game>
     {
+        private readonly string _uuid;
+
         // readers
-        internal readonly ReaderHandler DatReader;
-        internal readonly ReaderHandler MemoryReader;
-        internal readonly ReaderHandler NetworkReader;
+        internal ReaderHandler DatReader;
+        internal ReaderHandler MemoryReader;
+        internal ReaderHandler NetworkReader;
 
         // reader events
-        private readonly Dictionary<Type, long> _eventDedupeHistory;
-        private readonly ConcurrentQueue<SeerEvent> _eventQueueHighPriority;
-        private readonly ConcurrentQueue<SeerEvent> _eventQueueLowPriority;
+        private Dictionary<Type, long> _eventDedupeHistory;
+        private ConcurrentQueue<SeerEvent> _eventQueueHighPriority;
+        private ConcurrentQueue<SeerEvent> _eventQueueLowPriority;
         private bool _eventQueueOpen;
 
         // reader events processor
@@ -37,19 +39,37 @@ namespace BardMusicPlayer.Seer
         {
             _uuid = Guid.NewGuid().ToString();
             Process = process;
-            Pid = Process.Id;
-            InitInformation();
-            _eventDedupeHistory = new Dictionary<Type, long>();
-            _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-            _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
-            _eventQueueOpen = true;
-            DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
-            MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
-            NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
-            _shouldRunEventQueueThread = true;
-            _eventQueueThread = new Thread(RunEventQueue) { IsBackground = true };
-            _eventQueueThread.Start();
-            BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
+        }
+
+        internal bool Initialize()
+        {
+            try
+            {
+                if (Process is null || Process.Id < 1 || Pid != 0)
+                {
+                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, new BmpSeerException("Game process is null or already initialized.")));
+                    return false;
+                }
+                Pid = Process.Id;
+                InitInformation();
+                _eventDedupeHistory = new Dictionary<Type, long>();
+                _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
+                _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
+                _eventQueueOpen = true;
+                DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
+                MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
+                NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
+                _shouldRunEventQueueThread = true;
+                _eventQueueThread = new Thread(RunEventQueue) { IsBackground = true };
+                _eventQueueThread.Start();
+                BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
+            }
+            catch (Exception ex)
+            {
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                return false;
+            }
+            return true;
         }
 
         internal void PublishEvent(SeerEvent seerEvent)
@@ -109,7 +129,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                DatReader.Dispose();
+                DatReader?.Dispose();
             }
             catch (Exception ex)
             {
@@ -117,7 +137,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                MemoryReader.Dispose();
+                MemoryReader?.Dispose();
             }
             catch (Exception ex)
             {
@@ -125,7 +145,7 @@ namespace BardMusicPlayer.Seer
             }
             try
             {
-                NetworkReader.Dispose();
+                NetworkReader?.Dispose();
             }
             catch (Exception ex)
             {
@@ -143,7 +163,7 @@ namespace BardMusicPlayer.Seer
             GC.SuppressFinalize(this);
         }
 
-        private readonly string _uuid;
+        
         public override bool Equals(object obj)
         {
             if (obj is null) return false;

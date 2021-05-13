@@ -36,14 +36,14 @@
     <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Catalog\BardMusicPlayer.Catalog.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Common\BardMusicPlayer.Common.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Config\BardMusicPlayer.Config.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Doot\BardMusicPlayer.Doot.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Coffer\BardMusicPlayer.Coffer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Notate\BardMusicPlayer.Notate.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Synth\BardMusicPlayer.Synth.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

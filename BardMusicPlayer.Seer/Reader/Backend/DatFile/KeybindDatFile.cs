@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 

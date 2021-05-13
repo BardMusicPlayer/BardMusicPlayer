@@ -1,13 +1,14 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
-using BardMusicPlayer.Common.UtcMilliTime;
-using BardMusicPlayer.Config;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.UtcMilliTime;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
@@ -31,24 +32,25 @@ namespace BardMusicPlayer.Seer
             {
                 try
                 {
-                    foreach (var process in Process.GetProcessesByName("ffxiv_dx11"))
-                    {
-                        // Remove dead games if we were watching them.
-                        if (process.HasExited || process.Responding == false && _games.ContainsKey(process.Id))
-                        {
-                            _games[process.Id]?.Dispose();
-                            _games.Remove(process.Id);
-                        }
+                    var processes = Process.GetProcessesByName("ffxiv_dx11");
 
+                    foreach (var game in _games.Values.Where(game => game.Process is null || game.Process.HasExited || !game.Process.Responding || processes.All(process => process.Id != game.Pid)))
+                    {
+                        _games.TryRemove(game.Pid, out _);
+                        game?.Dispose();
+                    }
+
+                    foreach (var process in processes)
+                    {
                         // Add new games.
-                        else if (!_games.ContainsKey(process.Id) && !process.HasExited && process.Responding)
-                        {
-                            // Adding a game spikes the cpu when sharlayan scans memory.
-                            var timeNow = Clock.Time.Now;
-                            if (coolDown + BmpConfig.Instance.SeerGameScanCooldown > timeNow) continue;
-                            coolDown = timeNow;
-                            _games.Add(process.Id, new Game(process));
-                        }
+                        if (process is null || _games.ContainsKey(process.Id) || process.HasExited || !process.Responding) continue;
+
+                        // Adding a game spikes the cpu when sharlayan scans memory.
+                        var timeNow = Clock.Time.Now;
+                        if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow) continue;
+                        coolDown = timeNow;
+                        var game = new Game(process);
+                        if (!_games.TryAdd(process.Id, game) || !game.Initialize()) game.Dispose();
                     }
                 }
                 catch (Exception ex)
@@ -56,7 +58,7 @@ namespace BardMusicPlayer.Seer
                     PublishEvent(new SeerExceptionEvent(ex));
                 }
 
-                Thread.Sleep(BmpConfig.Instance.SeerGameScanCooldown);
+                Thread.Sleep(1);
             }
         }
 

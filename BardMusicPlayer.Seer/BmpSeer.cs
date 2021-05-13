@@ -1,11 +1,13 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using BardMusicPlayer.Config;
+using System.Collections.ObjectModel;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer.Utilities;
 
 namespace BardMusicPlayer.Seer
@@ -19,10 +21,10 @@ namespace BardMusicPlayer.Seer
         /// </summary>
         public bool Started { get; private set; }
 
-        private readonly Dictionary<int, Game> _games;
+        private readonly ConcurrentDictionary<int, Game> _games;
         private BmpSeer()
         {
-            _games = new Dictionary<int, Game>();
+            _games = new ConcurrentDictionary<int, Game>();
         }
 
         public static BmpSeer Instance => LazyInstance.Value;
@@ -30,7 +32,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Current active games
         /// </summary>
-        public IReadOnlyDictionary<int, Game> Games => _games;
+        public IReadOnlyDictionary<int, Game> Games => new ReadOnlyDictionary<int, Game>(_games);
 
         /// <summary>
         /// Configure the firewall for Machina
@@ -44,7 +46,7 @@ namespace BardMusicPlayer.Seer
         public void Start()
         {
             if (Started) return;
-            if (!BmpConfig.Initialized) throw new BmpSeerException("Seer requires Config to be initialized.");
+            if (!BmpPigeonhole.Initialized) throw new BmpSeerException("Seer requires Pigeonhole to be initialized.");
             StartEventsHandler();
             StartProcessWatcher();
             Started = true;

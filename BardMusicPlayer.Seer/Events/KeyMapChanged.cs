@@ -1,12 +1,12 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
 
 namespace BardMusicPlayer.Seer.Events
 {

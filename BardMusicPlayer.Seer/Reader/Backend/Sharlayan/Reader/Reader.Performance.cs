@@ -4,7 +4,7 @@
  */
 
 using System;
-using BardMusicPlayer.Common.Structs;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core.Enums;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader

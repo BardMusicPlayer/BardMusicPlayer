@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using BardMusicPlayer.Common.Enums;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;
@@ -19,9 +19,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 {
     internal class MemoryHandler
 	{
-        private AttachmentWorker _attachmentWorker;
-
-		private bool _isNewInstance = true;
+        private bool _isNewInstance = true;
 
 		internal Scanner Scanner { get; }
 
@@ -237,8 +235,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 				_isNewInstance = false;
 				ResolveMemoryStructures();
 			}
-			_attachmentWorker = new AttachmentWorker(this);
-			_attachmentWorker.StartScanning(processModel);
 			SystemModules.Clear();
 			GetProcessModules();
 			Scanner.Locations.Clear();
@@ -247,11 +243,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 
 		public void UnsetProcess()
 		{
-			if (_attachmentWorker != null)
-			{
-				_attachmentWorker.StopScanning();
-				_attachmentWorker.Dispose();
-			}
 			try
 			{
 				if (IsAttached) UnsafeNativeMethods.CloseHandle(ProcessHandle);

@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using BardMusicPlayer.Common.Enums;
-using BardMusicPlayer.Common.Structs;
-using BardMusicPlayer.Common.UtcMilliTime;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
+using BardMusicPlayer.Quotidian.UtcMilliTime;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.DatFile

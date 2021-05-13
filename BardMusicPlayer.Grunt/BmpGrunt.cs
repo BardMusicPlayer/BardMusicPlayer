@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
+ * Copyright(c) 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
-using BardMusicPlayer.Config;
 using BardMusicPlayer.Grunt.Helper.Dalamud;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.Grunt
@@ -33,7 +33,7 @@ namespace BardMusicPlayer.Grunt
         public void Start()
         {
             if (Started) return;
-            if (!BmpConfig.Initialized) throw new BmpGruntException("Grunt requires Config to be initialized.");
+            if (!BmpPigeonhole.Initialized) throw new BmpGruntException("Grunt requires Pigeonhole to be initialized.");
             if (!BmpSeer.Instance.Started) throw new BmpGruntException("Grunt requires Seer to be running.");
             DalamudServer = new DalamudServer();
             Started = true;
