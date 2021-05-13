@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace BardMusicPlayer.Updater.Util

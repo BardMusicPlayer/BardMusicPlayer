@@ -1,6 +1,7 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Load Balancer based on example from CSharpSynthProject ( https://archive.codeplex.com/?p=csharpsynthproject & https://github.com/sinshu/CSharpSynthProject )
+ * C# Digital Audio Synth 
+ * Copyright Alex Veltsistas 2014  
  */
 
 using System;
