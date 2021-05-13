@@ -79,3 +79,7 @@ https://github.com/naudio/NAudio/blob/master/license.txt
 License: MIT
 https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/LICENSE
 
+### libzt by ZeroTier, Inc.
+License: BSL-1.1
+https://github.com/zerotier/libzt/blob/master/LICENSE.txt
+
