@@ -15,10 +15,10 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <!--
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Secondary}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BMPSuiteDarkPurple}"/>
                         </Trigger>
+                        <!--
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Alternate}"/>
                         </Trigger>
@@ -46,10 +46,10 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <!--
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Secondary}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BMPSuiteDarkPurple}"/>
                         </Trigger>
+                        <!--
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Alternate}"/>
                         </Trigger>

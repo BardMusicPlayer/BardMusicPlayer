@@ -31,6 +31,8 @@ namespace BardMusicPlayer.Updater
         public MainWindow()
         {
             InitializeComponent();
+
+            this.pbar_DownloadProgress.Opacity = 0;
         }
 
         internal void ProvideVersions(Util.BmpVersion localVersion, Dictionary<string, Util.BmpVersion> remoteVersions)
@@ -41,7 +43,24 @@ namespace BardMusicPlayer.Updater
             this.label_CurrentVersion.Content = "Current version: " + localVersion.build;
             this.label_NewVersionAvailable.Content = "BMP version " + this.RemoteVersions.First().Value.build + " is available for download.";
 
-            this.tbox_PatchNotes.Text = this.RemoteVersions.Select(version => "website url: " + version.Key + @"/" + Environment.NewLine + "beta: " + version.Value.beta + Environment.NewLine + "commit: " + version.Value.commit + Environment.NewLine + "build: " + version.Value.build + Environment.NewLine).First();
+            this.tbox_PatchNotes.Text = "⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
+                                        "⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
+                                        "⢕⢕⢕⢕⢕⠅⢗⢕⠕⣠⠄⣗⢕⢕⠕⢕⢕⢕⠕⢠⣿⠐⢕⢕⢕⠑⢕⢕⠵⢕\n" +
+                                        "⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕\n" +
+                                        "⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑\n" +
+                                        "⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐\n" +
+                                        "⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐\n" +
+                                        "⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔\n" +
+                                        "⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕\n" +
+                                        "⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕\n" +
+                                        "⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕\n" +
+                                        "⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕\n" +
+                                        "⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁\n" +
+                                        "⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿\n";
+            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
         }
 
         private void button_LaunchBMP_Click(object sender, RoutedEventArgs e)
@@ -52,16 +71,31 @@ namespace BardMusicPlayer.Updater
 
         private async void button_InstallUpdate_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: show progress bar UI
+            this.pbar_DownloadProgress.Opacity = 1;
+            this.tbox_PatchNotes.Text = string.Empty;
+
             await Task.Run(() =>
             {
                 var version = this.RemoteVersions.First().Value;
                 foreach (var item in version.items)
                 {
-                    // TODO: update progress bar UI with progress
-                    Debug.WriteLine($"Downloading {item.source}");
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        string currText = this.tbox_PatchNotes.Text;
+                        this.tbox_PatchNotes.Text = $"{currText}\nDownloading {item.source}...";
+                        this.tbox_PatchNotes.ScrollToEnd();
+                    });
+
                     BmpDownloadEvent downloadEvent = new BmpDownloadEvent(this.RemoteVersions.First().Key, version, item);
                     OnDownloadRequested?.Invoke(this, downloadEvent);
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        float iter = version.items.FindIndex(i => i.source.Equals(item.source));
+                        var currPercent = Math.Floor((iter / (float)version.items.Count) * 100.0f);
+                        Debug.WriteLine($"{currPercent}");
+                        this.pbar_DownloadProgress.Value = currPercent;
+                    });
                 }
 
                 OnDownloadComplete?.Invoke(this, this.RemoteVersions.First().Value);
