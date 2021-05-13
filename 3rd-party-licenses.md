@@ -5,6 +5,7 @@ The BardMusicPlayer project is licensed under the terms of the [GPLv3](https://g
 However, BardMusicPlayer includes several third-party Open-Source libraries,
 which are licensed under their own respective Open-Source licenses.
 
+
 ## Libraries included in BardMusicPlayer:
 
 ### Sharlayan by Ryan Wilson
@@ -39,7 +40,8 @@ https://github.com/schellingb/TinySoundFont/blob/master/LICENSE
 License: MIT
 https://github.com/stevefolta/SFZero/blob/master/License
 
-## Libraries referenced BardMusicPlayer:
+
+## Libraries referenced by BardMusicPlayer:
 
 ### Machina by Ravahn
 License: GPLv3
