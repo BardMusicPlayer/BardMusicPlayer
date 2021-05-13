@@ -1,6 +1,6 @@
 # License overview of included 3rd party libraries
 
-The BardMusicPlayer project is licensed under the terms of the [GPLv3](License).
+The BardMusicPlayer project is licensed under the terms of the [GPLv3](https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE).
 
 However, BardMusicPlayer includes several third-party Open-Source libraries,
 which are licensed under their own respective Open-Source licenses.
