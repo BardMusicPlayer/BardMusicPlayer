@@ -15,13 +15,7 @@ namespace BardMusicPlayer.Quotidian.Structs
     /// </summary>
     public readonly struct OctaveRange : IComparable, IConvertible, IComparable<OctaveRange>, IEquatable<OctaveRange>
     {
-        // TODO remove this one.
-        public static readonly OctaveRange Tone = new("Tone", -3,-3, -3, null);
-
-        public static readonly OctaveRange Invalid = new("Invalid", -2, -2, -2, null);
-
-        // TODO remove this one.
-        public static readonly OctaveRange Mapper = new("Mapper", -1, -1, 2, null);
+        public static readonly OctaveRange Invalid = new("Invalid", -1, -1, -1, null);
 
         public static readonly OctaveRange C0toC3 = new("C0toC3", 0, 0, 3, "+3");
         public static readonly OctaveRange C1toC4 = new("C1toC4", 1, 1, 4, "+2");

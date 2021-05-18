@@ -51,9 +51,15 @@ namespace BardMusicPlayer.Quotidian.Structs
         public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{ "ContraBass" }));
         public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
 
-        public static readonly IReadOnlyList<Instrument> SomethingNew = new ReadOnlyCollection<Instrument>(new List<Instrument> { });
 
-        public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(SomethingNew).ToList());
+        public static readonly Instrument Clean = new("Clean", 24, 28, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Distorted = new("Distorted", 25, 31, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Pick = new("Pick", 26, 27, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Slide = new("Slide", 27, 32, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument Mute = new("Mute", 28, 29, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly IReadOnlyList<Instrument> Guitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { Clean, Distorted, Pick, Slide, Mute });
+
+        public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(Guitar).ToList());
 
         /// <summary>
         /// Gets the name.

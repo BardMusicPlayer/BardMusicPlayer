@@ -147,6 +147,13 @@ namespace BardMusicPlayer.Siren
                 case 21: // Viola
                 case 22: // Cello
                 case 23: // DoubleBass
+
+                case 24: // Clean Guitar
+                case 25: // Distorted Guitar
+                case 26: // Pick Guitar
+                case 27: // Slide Guitar
+                case 28: // Mute Guitar
+
                     if (duration > 4500) return 4500;
                     return duration < 300 ? 300 : duration;
 

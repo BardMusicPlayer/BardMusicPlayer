@@ -181,13 +181,13 @@ namespace BardMusicPlayer.Quotidian.Structs
 
         #endregion
 
-        #region SomethingNew
+        #region Guitar
 
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> SomethingNew = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup>());
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> Guitar = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup>());
 
         #endregion
 
-        public static readonly IReadOnlyList<AutoToneInstrumentGroup> All = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(SomethingNew).ToList());
+        public static readonly IReadOnlyList<AutoToneInstrumentGroup> All = new ReadOnlyCollection<AutoToneInstrumentGroup>(new List<AutoToneInstrumentGroup>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(Guitar).ToList());
 
         /// <summary>
         /// Gets the name.
