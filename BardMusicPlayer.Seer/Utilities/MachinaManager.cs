@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using Machina;
 using Machina.FFXIV;
 
@@ -30,16 +29,6 @@ namespace BardMusicPlayer.Seer.Utilities
             };
             _monitor.MessageReceived2 += MessageReceived2;
             _monitor.ProcessIDList = new List<uint>();
-        }
-
-        internal void SetupFirewall(string appName)
-        {
-            var firewallWrapper = new FirewallWrapper();
-            if (firewallWrapper.IsFirewallEnabled() ?? false)
-            {
-                if(firewallWrapper.IsFirewallRuleConfigured(appName)) firewallWrapper.RemoveFirewallApplicationEntry(appName);
-                firewallWrapper.AddFirewallApplicationEntry(appName, Assembly.GetEntryAssembly()?.Location);
-            }
         }
 
         private static readonly List<int> Lengths = new() { 56, 88, 656, 664, 928, 3576 };

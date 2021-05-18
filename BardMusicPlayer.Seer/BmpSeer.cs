@@ -7,7 +7,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Utilities;
 
 namespace BardMusicPlayer.Seer
@@ -22,6 +24,7 @@ namespace BardMusicPlayer.Seer
         public bool Started { get; private set; }
 
         private readonly ConcurrentDictionary<int, Game> _games;
+
         private BmpSeer()
         {
             _games = new ConcurrentDictionary<int, Game>();
@@ -38,7 +41,23 @@ namespace BardMusicPlayer.Seer
         /// Configure the firewall for Machina
         /// </summary>
         /// <param name="appName">This application name.</param>
-        public void SetupFirewall(string appName) => MachinaManager.Instance.SetupFirewall(appName);
+        /// <returns>true if successful</returns>
+        public bool SetupFirewall(string appName)
+        {
+            try
+            {
+                var firewallWrapper = new FirewallWrapper();
+                if (!(firewallWrapper.IsFirewallEnabled() ?? false)) return true;
+                if (firewallWrapper.IsFirewallRuleConfigured(appName)) firewallWrapper.RemoveFirewallApplicationEntry(appName);
+                firewallWrapper.AddFirewallApplicationEntry(appName, Assembly.GetEntryAssembly()?.Location);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                PublishEvent(new SeerExceptionEvent(ex));
+                return false;
+            }
+        }
 
         /// <summary>
         /// Start Seer monitoring.
