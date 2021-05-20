@@ -9,6 +9,7 @@ namespace BardMusicPlayer.Seer.Events
     {
         internal ChatLog(EventSource readerBackendType) : base(readerBackendType)
         {
+            EventType = GetType();
             throw new System.NotImplementedException();
         }
 

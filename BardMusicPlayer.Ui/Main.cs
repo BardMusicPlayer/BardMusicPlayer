@@ -5,37 +5,27 @@
 
 using System;
 using System.Threading.Tasks;
-using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Grunt;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Seer;
+using BardMusicPlayer.Ui.Utilities;
 
 namespace BardMusicPlayer.Ui
 {
     public class Main
     {
         private bool _started;
-        public Task<bool> StartUp(bool beta, int build, string commit, string exePath, string versionPath, string dataPath, string[] args)
+        public Task<bool> StartUp(bool beta, int build, string commit, string exePath, string resourcePath, string dataPath, string[] args)
         {
             if (_started) throw new Exception("Cannot start up twice.");
 
-            BmpPigeonhole.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Pigeonhole.json");
-
-            BmpCoffer.Initialize(@Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\BardMusicPlayer\Coffer.db");
-
-            BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
-
-            BmpSeer.Instance.Start();
-
-            BmpGrunt.Instance.Start();
-
-            // BmpMaestro.Instance.Start();
+            Globals.IsBeta = beta;
+            Globals.Build = build;
+            Globals.Commit = commit;
+            Globals.ExePath = exePath;
+            Globals.ResourcePath = resourcePath;
+            Globals.DataPath = dataPath;
 
             var mainView = new MainView();
             mainView.ShowDialog();
-
             _started = true;
-
             return Task.FromResult(_started);
         }
     }
