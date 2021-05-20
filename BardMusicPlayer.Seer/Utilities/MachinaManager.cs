@@ -27,8 +27,7 @@ namespace BardMusicPlayer.Seer.Utilities
                 MonitorType = TCPNetworkMonitor.NetworkMonitorType.RawSocket,
                 UseSocketFilter = true
             };
-            _monitor.MessageReceived2 += MessageReceived2;
-            _monitor.ProcessIDList = new List<uint>();
+            _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
         }
 
         private static readonly List<int> Lengths = new() { 56, 88, 656, 664, 928, 3576 };
@@ -70,7 +69,7 @@ namespace BardMusicPlayer.Seer.Utilities
             }
         }
 
-        private void MessageReceived2(TCPConnection connection, long epoch, byte[] message)
+        private void MessageReceivedEventHandler(TCPConnection connection, long epoch, byte[] message)
         {
             if (Lengths.Contains(message.Length)) MessageReceived?.Invoke((int) connection.ProcessId, message);
         }
@@ -85,7 +84,7 @@ namespace BardMusicPlayer.Seer.Utilities
                     _monitorRunning = false;
                 }
                 _monitor.ProcessIDList.Clear();
-                _monitor.MessageReceived2 -= MessageReceived2;
+                _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
             }
         }
     }
