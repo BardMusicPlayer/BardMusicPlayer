@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="WindowsFirewallHelper" Version="2.0.4.70-beta2" />
   </ItemGroup>
 
   <ItemGroup>
