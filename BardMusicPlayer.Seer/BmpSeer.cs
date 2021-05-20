@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using WindowsFirewallHelper;
 using BardMusicPlayer.Pigeonhole;
@@ -48,11 +49,15 @@ namespace BardMusicPlayer.Seer
             try
             {
                 if (!FirewallManager.IsServiceRunning) return true;
+
+                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName))) FirewallManager.Instance.Rules.Remove(FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+
                 var rule = FirewallManager.Instance.CreateApplicationRule(
                     @appName,
                     FirewallAction.Allow,
                     Assembly.GetEntryAssembly()?.Location
                 );
+
                 FirewallManager.Instance.Rules.Add(rule);
                 return true;
             }
