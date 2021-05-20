@@ -21,8 +21,7 @@ namespace BardMusicPlayer.Seer.Utilities
 
         public override void WriteLine(string message, string category)
         {
-            if ((category?.ToLower().Equals("debug-machina") ?? false) || (category?.ToLower().Equals("firewall") ?? false))
-                BmpSeer.Instance.PublishEvent(new MachinaManagerLogEvent(message.Replace(Environment.NewLine, " ")));
+            if (category?.ToLower().Equals("debug-machina") ?? false) BmpSeer.Instance.PublishEvent(new MachinaManagerLogEvent(message.Replace(Environment.NewLine, " ")));
         }
 
         public override bool IsThreadSafe => true;

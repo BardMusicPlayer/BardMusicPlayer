@@ -56,5 +56,10 @@ namespace BardMusicPlayer.Pigeonhole
         /// Contains the delay used for tone pressing. This should be no less then 1 and no greater then 25.
         /// </summary>
         public virtual int ToneKeyDelay { get; set; } = 3;
+
+        /// <summary>
+        /// Defaults to log level Info
+        /// </summary>
+        public virtual BmpLog.Verbosity DefaultLogLevel { get; set; } = BmpLog.Verbosity.Info;
     }
 }

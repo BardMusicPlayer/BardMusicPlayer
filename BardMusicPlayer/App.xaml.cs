@@ -36,12 +36,12 @@ namespace BardMusicPlayer
 #if LOCAL
 
         private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
-        private static readonly string UpdaterPath = Directory.GetCurrentDirectory() + @"\";
+        private static readonly string ResourcePath = Directory.GetCurrentDirectory() + @"\";
 
 #elif PUBLISH
 
         private static readonly string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
-        private static readonly string UpdaterPath = DataPath + @"Updater\";
+        private static readonly string ResourcePath = DataPath + @"Resources\";
 
 #endif
 
@@ -52,12 +52,12 @@ namespace BardMusicPlayer
             try
             {
                 Directory.CreateDirectory(DataPath);
-                Directory.CreateDirectory(UpdaterPath);
+                Directory.CreateDirectory(ResourcePath);
 
 #if LOCAL
 
                 const bool localDev = true;
-                string DllSha256 = GetChecksum(UpdaterPath + DllName);
+                string DllSha256 = GetChecksum(ResourcePath + DllName);
 
 #elif PUBLISH
 
@@ -65,10 +65,10 @@ namespace BardMusicPlayer
                 string DllSha256 = null;
                 try
                 {
-                    if (File.Exists(UpdaterPath + DllSha256Name) && File.Exists(UpdaterPath + DllName))
+                    if (File.Exists(ResourcePath + DllSha256Name) && File.Exists(ResourcePath + DllName))
                     {
-                        DllSha256 = File.ReadAllText(UpdaterPath + DllSha256Name);
-                        if (!GetChecksum(UpdaterPath + DllName).Equals(DllSha256)) DllSha256 = null;
+                        DllSha256 = File.ReadAllText(ResourcePath + DllSha256Name);
+                        if (!GetChecksum(ResourcePath + DllName).Equals(DllSha256)) DllSha256 = null;
                     }
                 } catch (Exception)
                 {
@@ -103,18 +103,18 @@ namespace BardMusicPlayer
                         }
                         if (RemoteDll != null && GetChecksum(RemoteDll).Equals(RemoteDllSha256))
                         {
-                            File.WriteAllText(UpdaterPath + DllSha256Name, RemoteDllSha256);
-                            File.WriteAllBytes(UpdaterPath + DllName, RemoteDll);
+                            File.WriteAllText(ResourcePath + DllSha256Name, RemoteDllSha256);
+                            File.WriteAllBytes(ResourcePath + DllName, RemoteDll);
                             DllSha256 = RemoteDllSha256;
                         }
                     }
                 } 
 
 #endif
-
-                var updaterType = Assembly.LoadFrom(UpdaterPath + DllName).GetType(DllType);
+                
+                var updaterType = Assembly.LoadFrom(ResourcePath + DllName).GetType(DllType);
                 dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
-                main.StartUp(localDev, LauncherVersion, ExePath, DataPath, eventArgs.Args);
+                main.StartUp(localDev, LauncherVersion, ExePath, ResourcePath, DataPath, eventArgs.Args);
             }
             catch (Exception exception)
             {

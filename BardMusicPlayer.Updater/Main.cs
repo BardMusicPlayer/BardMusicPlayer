@@ -31,16 +31,16 @@ namespace BardMusicPlayer.Updater
         internal bool LocalDev { get; private set; }
         internal int LauncherVersion { get; private set; }
         internal string ExePath { get; private set; }
+        internal string ResourcePath { get; private set; }
         internal string DataPath { get; private set; }
         internal string[] Args { get; private set; }
 
-        internal string VersionPath { get; private set; }
-
-        public async void StartUp(bool localDev, int launcherVersion, string exePath, string dataPath, string[] args)
+        public async void StartUp(bool localDev, int launcherVersion, string exePath, string resourcePath, string dataPath, string[] args)
         {
             LocalDev = localDev;
             LauncherVersion = launcherVersion;
             ExePath = exePath;
+            ResourcePath = resourcePath;
             DataPath = dataPath;
             Args = args;
 
@@ -54,12 +54,11 @@ namespace BardMusicPlayer.Updater
             }
 
 #if PUBLISH
-            VersionPath = DataPath + @"Version\";
             // Read Version or default values if failure.
             try
             {
-                if (File.Exists(VersionPath + @"version.json"))
-                    LocalVersion = File.ReadAllText(VersionPath + @"version.json", Encoding.UTF8)
+                if (File.Exists(ResourcePath + @"version.json"))
+                    LocalVersion = File.ReadAllText(ResourcePath + @"version.json", Encoding.UTF8)
                         .DeserializeFromJson<BmpVersion>();
             }
             catch (Exception)
@@ -72,9 +71,9 @@ namespace BardMusicPlayer.Updater
             {
                 Parallel.ForEach(LocalVersion.items, item =>
                 {
-                    if (!File.Exists(VersionPath + item.destination) ||
-                        File.Exists(VersionPath + item.destination) && !item.sha256.ToLower()
-                            .Equals(Sha256.GetChecksum(VersionPath + item.destination).ToLower()))
+                    if (!File.Exists(ResourcePath + item.destination) ||
+                        File.Exists(ResourcePath + item.destination) && !item.sha256.ToLower()
+                            .Equals(Sha256.GetChecksum(ResourcePath + item.destination).ToLower()))
                         currentVersionBad = true;
                 });
                 if (currentVersionBad) LocalVersion = new BmpVersion {items = new List<BmpVersionItem>()};
@@ -118,7 +117,7 @@ namespace BardMusicPlayer.Updater
             // 2. remote version was able to be read but it's same as local, try and load local
             if ((remoteVersionBad && !currentVersionBad) || (RemoteVersions.First().Value.build == LocalVersion.build))
             {
-                await Loader.Load(LocalVersion, ExePath, VersionPath, DataPath, Args);
+                await Loader.Load(LocalVersion, ExePath, ResourcePath, DataPath, Args);
                 return;
             }
 
@@ -136,7 +135,7 @@ namespace BardMusicPlayer.Updater
                     var item = e.Item;
 
                     string sourceUrl = $"{BaseUrl}{key}/{item.source}";
-                    string destFPath = VersionPath + item.destination;
+                    string destFPath = ResourcePath + item.destination;
 
                     Downloader downloader = new Downloader();
 
@@ -149,7 +148,7 @@ namespace BardMusicPlayer.Updater
                         byte[] file = dlTask.Result;
                         if (Sha256.GetChecksum(file).Equals(item.sha256))
                         {
-                            Directory.CreateDirectory(VersionPath);
+                            Directory.CreateDirectory(ResourcePath);
                             File.WriteAllBytes(destFPath, file);
                         }
                     }
@@ -162,7 +161,7 @@ namespace BardMusicPlayer.Updater
 
                 var launchHandler = new EventHandler<BmpVersion>(async (object sender, BmpVersion version) =>
                 {
-                    await Loader.Load(version, ExePath, VersionPath, DataPath, Args);
+                    await Loader.Load(version, ExePath, ResourcePath, DataPath, Args);
                 });
 
                 mainWindow.OnDownloadComplete += launchHandler;
@@ -172,12 +171,6 @@ namespace BardMusicPlayer.Updater
             }
 
 #elif LOCAL
-
-#if DEBUG
-            VersionPath = @"..\..\..\..\BardMusicPlayer.Ui\bin\Debug\net48\";
-#else
-            VersionPath = @"..\..\..\..\BardMusicPlayer.Ui\bin\Release\net48\";
-#endif
             
             var version = new BmpVersion
             {
@@ -189,7 +182,7 @@ namespace BardMusicPlayer.Updater
                 items = new List<BmpVersionItem>()
             };
 
-            var items = Directory.GetFiles(VersionPath, "*.dll");
+            var items = Directory.GetFiles(ResourcePath, "*.dll").Where(name => !name.Equals("libzt.dll"));
             foreach (var item in items)
             {
                 version.items.Add(new BmpVersionItem
@@ -200,7 +193,7 @@ namespace BardMusicPlayer.Updater
                 });
             }
 
-            await Loader.Load(version, ExePath, VersionPath, DataPath, Args);
+            await Loader.Load(version, ExePath, ResourcePath, DataPath, Args);
 #endif
         }
     }

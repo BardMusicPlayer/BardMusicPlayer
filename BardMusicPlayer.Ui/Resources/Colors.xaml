@@ -1,4 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<!--
+  Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+  Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="BMPSuiteOrange" Color="#EB5B37" />
     <SolidColorBrush x:Key="BMPSuiteSand" Color="#FFE1A3" />

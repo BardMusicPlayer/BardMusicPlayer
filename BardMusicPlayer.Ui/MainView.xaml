@@ -19,7 +19,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource robotoRegularFont}"
         mc:Ignorable="d"
-        Title="BardMusicPlayer Alpha 2.0" Height="450" Width="800"
+        Title="BardMusicPlayer Alpha 2.0" Height="700" Width="900"
         Closing="MainView_OnClosing">
 
     <Window.Resources>
@@ -34,6 +34,7 @@
     </Window.Resources>
 
     <Grid>
-        
+        <TextBox x:Name="Log" Margin="10,471,10,10" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>
