@@ -50,6 +50,8 @@ namespace BardMusicPlayer.Ui
 
             BmpSeer.Instance.Stop();
 
+            BmpSeer.Instance.DestroyFirewall("BardMusicPlayer");
+
             BmpCoffer.Instance.Dispose();
 
             BmpPigeonhole.Instance.Dispose();

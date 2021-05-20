@@ -69,6 +69,28 @@ namespace BardMusicPlayer.Seer
         }
 
         /// <summary>
+        /// Unconfigure the firewall for Machina
+        /// </summary>
+        /// <param name="appName">This application name.</param>
+        /// <returns>true if successful</returns>
+        public bool DestroyFirewall(string appName)
+        {
+            try
+            {
+                if (!FirewallManager.IsServiceRunning) return true;
+
+                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName))) FirewallManager.Instance.Rules.Remove(FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                PublishEvent(new SeerExceptionEvent(ex));
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Start Seer monitoring.
         /// </summary>
         public void Start()
