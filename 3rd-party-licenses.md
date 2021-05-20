@@ -79,3 +79,6 @@ https://github.com/naudio/NAudio/blob/master/license.txt
 License: MIT
 https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/LICENSE
 
+### WindowsFirewallHelper by Soroush
+License: MIT
+https://github.com/falahati/WindowsFirewallHelper/blob/master/LICENSE
