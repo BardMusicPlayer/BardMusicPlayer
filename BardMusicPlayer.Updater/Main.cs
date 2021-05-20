@@ -182,7 +182,7 @@ namespace BardMusicPlayer.Updater
                 items = new List<BmpVersionItem>()
             };
 
-            var items = Directory.GetFiles(ResourcePath, "*.dll").Where(name => !name.Equals("libzt.dll"));
+            var items = Directory.GetFiles(ResourcePath, "*.dll").Where(name => !name.Contains("libzt.dll"));
             foreach (var item in items)
             {
                 version.items.Add(new BmpVersionItem
