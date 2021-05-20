@@ -63,7 +63,7 @@ jobs:
       - name: Move Updater.dll
         run: |
           mv bmp/release/beta/BardMusicPlayer.Updater.dll bmp/updater/release/1/
-          sha256sum bmp/updater/release/1/BardMusicPlayer.Updater.dll | cut -d" " -f1 > bmp/updater/release/1/BardMusicPlayer.Updater.dll.sha256sum
+          sha256sum bmp/updater/release/1/BardMusicPlayer.Updater.dll | cut -d" " -f1 > bmp/updater/release/1/BardMusicPlayer.Updater.dll.sha256
           
       - name: Generate Version Json
         run: |

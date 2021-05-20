@@ -67,9 +67,9 @@ namespace BardMusicPlayer.Updater
                 LocalVersion = new BmpVersion {items = new List<BmpVersionItem>()};
             }
 
+            var currentVersionBad = false;
             if (LocalVersion.build != 0)
             {
-                var currentVersionBad = false;
                 Parallel.ForEach(LocalVersion.items, item =>
                 {
                     if (!File.Exists(VersionPath + item.destination) ||
@@ -81,6 +81,7 @@ namespace BardMusicPlayer.Updater
             }
 
             // Fetch UpdateInfo and Versions or default values if failure.
+            var remoteVersionBad = false;
             RemoteVersions = new Dictionary<string, BmpVersion>();
             try
             {
@@ -97,17 +98,78 @@ namespace BardMusicPlayer.Updater
                     catch (Exception)
                     {
                         // Failed to grab a specific remote version.json. ignore.
+                        remoteVersionBad = true;
                     }
                 }
             }
             catch (Exception)
             {
                 // Failed to grab the list of remote versions available. ignore.
+                remoteVersionBad = true;
             }
-          
-            // Invoke Home.xaml here and do things. Version, UpdateInfo, and Versions may or may not be default/empty and logic will need to be done by the UI to decide what to do.
-            MessageBox.Show(string.Join(Environment.NewLine, RemoteVersions.OrderBy(version => version.Value.beta).ThenByDescending(version => version.Value.build).Select(version => "website url: " + BaseUrl + version.Key + @"/" + Environment.NewLine + "beta: " + version.Value.beta + Environment.NewLine + "commit: " + version.Value.commit + Environment.NewLine + "build: " + version.Value.build + Environment.NewLine)), "Can haz versionz", MessageBoxButton.OK, MessageBoxImage.Information);
-            Environment.Exit(0);
+
+            // sort the list of remote versions first by 'if !beta', then 'latest build', then convert back to dictionary
+            RemoteVersions =
+                RemoteVersions.OrderBy(version => version.Value.beta)
+                              .ThenByDescending(version => version.Value.build)
+                              .ToDictionary<KeyValuePair<string, Util.BmpVersion>, string, Util.BmpVersion>(pair => pair.Key, pair => pair.Value);
+
+            // 1. remote version was not able to be read, try and load local
+            // 2. remote version was able to be read but it's same as local, try and load local
+            if ((remoteVersionBad && !currentVersionBad) || (RemoteVersions.First().Value.build == LocalVersion.build))
+            {
+                await Loader.Load(LocalVersion, ExePath, VersionPath, DataPath, Args);
+                return;
+            }
+
+            // 1. we don't have a current version
+            // 2. remote version shows an update
+            if (currentVersionBad || (RemoteVersions.First().Value.build > LocalVersion.build))
+            {
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
+
+                mainWindow.OnDownloadRequested += new EventHandler<BmpDownloadEvent>( (object sender, BmpDownloadEvent e) =>
+                {
+                    var key = e.Key;
+                    var version = e.Version;
+                    var item = e.Item;
+
+                    string sourceUrl = $"{BaseUrl}{key}/{item.source}";
+                    string destFPath = VersionPath + item.destination;
+
+                    Downloader downloader = new Downloader();
+
+                    try
+                    {
+                        Debug.WriteLine($"Attempting to download {sourceUrl} and save to {destFPath}.");
+
+                        var dlTask = downloader.GetFileFromUrl(sourceUrl);
+                        dlTask.Wait();
+                        byte[] file = dlTask.Result;
+                        if (Sha256.GetChecksum(file).Equals(item.sha256))
+                        {
+                            Directory.CreateDirectory(VersionPath);
+                            File.WriteAllBytes(destFPath, file);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // unable to download file, show message to the user and throw
+                        throw new Exception("Unable to download file: " + sourceUrl);
+                    }
+                });
+
+                var launchHandler = new EventHandler<BmpVersion>(async (object sender, BmpVersion version) =>
+                {
+                    await Loader.Load(version, ExePath, VersionPath, DataPath, Args);
+                });
+
+                mainWindow.OnDownloadComplete += launchHandler;
+                mainWindow.OnLaunchRequested  += launchHandler;
+
+                mainWindow.ShowDialog();
+            }
 
 #elif LOCAL
 

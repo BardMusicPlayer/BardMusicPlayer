@@ -24,14 +24,13 @@ namespace BardMusicPlayer.Updater.Util
                 Type viewsType = null;
                 foreach (var item in version.items.Where(item => item.load))
                 {
+                    byte[] hashBytes = Sha256.StringToBytes(item.sha256);
                     if (item.destination.Equals(version.entryDll))
                         viewsType = Assembly
-                            .LoadFrom(versionPath + item.destination, Sha256.StringToBytes(item.sha256),
-                                AssemblyHashAlgorithm.SHA256)
+                            .LoadFrom(versionPath + item.destination)
                             .GetType(version.entryClass);
                     else
-                        Assembly.LoadFrom(versionPath + item.destination, Sha256.StringToBytes(item.sha256),
-                            AssemblyHashAlgorithm.SHA256);
+                        Assembly.LoadFrom(versionPath + item.destination);
                 }
 
                 dynamic main = Activator.CreateInstance(viewsType ?? throw new InvalidOperationException("Unable to run " + version.entryClass + " from " + version.entryDll));

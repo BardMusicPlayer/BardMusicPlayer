@@ -112,7 +112,7 @@ namespace BardMusicPlayer
 
 #endif
 
-                var updaterType = Assembly.LoadFrom(UpdaterPath + DllName, StringToBytes(DllSha256), AssemblyHashAlgorithm.SHA256).GetType(DllType);
+                var updaterType = Assembly.LoadFrom(UpdaterPath + DllName).GetType(DllType);
                 dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
                 main.StartUp(localDev, LauncherVersion, ExePath, DataPath, eventArgs.Args);
             }
