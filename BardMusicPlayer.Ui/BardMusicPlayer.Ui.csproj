@@ -46,13 +46,18 @@
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
-    <ProjectReference Include="..\Stylet\Stylet\Stylet.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Stylet">
+      <HintPath>Lib\Stylet\Stylet.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\Stylet\" />
   </ItemGroup>
 </Project>

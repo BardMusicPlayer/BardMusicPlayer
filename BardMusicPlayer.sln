@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Jamboree", "BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj", "{B2A09109-3420-4273-A853-9CAB7D51C595}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stylet", "Stylet\Stylet\Stylet.csproj", "{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,18 +195,6 @@ Global
 		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
 		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
 		{B2A09109-3420-4273-A853-9CAB7D51C595}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.DebugLocalPublish|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.DebugLocalPublish|Any CPU.Build.0 = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.DebugPublish|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.DebugPublish|Any CPU.Build.0 = Debug|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.ReleaseLocalPublish|Any CPU.ActiveCfg = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.ReleaseLocalPublish|Any CPU.Build.0 = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
-		{C0783DCA-1E22-4A03-9F0D-F8B7D315CB2E}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
