@@ -177,7 +177,7 @@ namespace BardMusicPlayer.Updater
                 beta = true,
                 build = 0,
                 commit = "DEBUG",
-                entryClass = "BardMusicPlayer.Ui.ViewModels.MainViewModel",
+                entryClass = "BardMusicPlayer.Ui.Bootstrapper",
                 entryDll = "BardMusicPlayer.Ui.dll",
                 items = new List<BmpVersionItem>()
             };
