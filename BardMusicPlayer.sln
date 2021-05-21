@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Coffer.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt", "BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj", "{ECBCA11B-CB8A-4597-8F2F-D6DB9B14BDFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.Jamboree", "BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj", "{B2A09109-3420-4273-A853-9CAB7D51C595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Jamboree", "BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj", "{B2A09109-3420-4273-A853-9CAB7D51C595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,44 +3,35 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
-using System.ComponentModel;
-using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Grunt;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
-using BardMusicPlayer.Ui.Controls;
 using BardMusicPlayer.Ui.Utilities;
+using BardMusicPlayer.Ui.Views;
+using Stylet;
 
-namespace BardMusicPlayer.Ui
+namespace BardMusicPlayer.Ui.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for MainView.xaml
-    /// </summary>
-    public partial class MainView : Window
+    public class MainViewModel : Screen
     {
-        public MainView()
+        protected override void OnViewLoaded()
         {
-            InitializeComponent();
-            
-            BmpPigeonhole.Initialize(@Globals.DataPath + @"\Configuration.json");
+            var view = (MainView) View;
+            BmpPigeonhole.Initialize(Globals.DataPath + @"\Configuration.json");
 
-            LogManager.Initialize(new LogTextWriter(Log));
+            LogManager.Initialize(new(view.Log));
 
-            BmpCoffer.Initialize(@Globals.DataPath + @"\MusicCatalog.db");
+            BmpCoffer.Initialize(Globals.DataPath + @"\MusicCatalog.db");
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
 
             BmpSeer.Instance.Start();
 
             BmpGrunt.Instance.Start();
-
-            // BmpMaestro.Instance.Start();
-
         }
 
-        private void MainView_OnClosing(object _, CancelEventArgs e)
+        protected override void OnClose()
         {
             LogManager.Shutdown();
 
