@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
@@ -177,7 +177,7 @@ namespace BardMusicPlayer.Updater
                 beta = true,
                 build = 0,
                 commit = "DEBUG",
-                entryClass = "BardMusicPlayer.Ui.Main",
+                entryClass = "BardMusicPlayer.Ui.ViewModels.MainViewModel",
                 entryDll = "BardMusicPlayer.Ui.dll",
                 items = new List<BmpVersionItem>()
             };

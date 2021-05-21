@@ -46,6 +46,7 @@
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
+    <ProjectReference Include="..\Stylet\Stylet\Stylet.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -53,16 +54,5 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Resources\Buttons.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Resources\Colors.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Resources\Fonts.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
   </ItemGroup>
 </Project>
