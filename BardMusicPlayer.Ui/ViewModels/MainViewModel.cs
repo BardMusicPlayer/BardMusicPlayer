@@ -15,6 +15,8 @@ namespace BardMusicPlayer.Ui.ViewModels
 {
     public class MainViewModel : Screen
     {
+        public BindableCollection<IGameInformation> Bards { get; } = new();
+
         protected override void OnViewLoaded()
         {
             var view = (MainView) View;

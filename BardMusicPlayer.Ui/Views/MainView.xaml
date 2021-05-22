@@ -1,42 +1,188 @@
 ﻿<!--
-  Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+  Copyright(c) 2021 MoogleTroupe, trotlinebeercan, sabihoshi
   Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
 -->
 
-<Window x:Class="BardMusicPlayer.Ui.Views.MainView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        
-        xmlns:viewmodels="clr-namespace:BardMusicPlayer.Ui.ViewModels"
-        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+<Window
+    x:Class="BardMusicPlayer.Ui.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextElement.FontFamily="{DynamicResource robotoRegularFont}"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource robotoRegularFont}"
-        mc:Ignorable="d"
-        Title="BardMusicPlayer Alpha 2.0" Height="700" Width="900">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
+    xmlns:controls="clr-namespace:BardMusicPlayer.Ui.Controls"
+    xmlns:views="clr-namespace:BardMusicPlayer.Ui.Views"
+
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+
+    TextElement.FontFamily="{DynamicResource robotoRegularFont}"
+    FontFamily="{DynamicResource robotoRegularFont}"
+
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+
+    Background="{DynamicResource MaterialDesignPaper}"
+    WindowStartupLocation="CenterScreen"
+
+    Title="BardMusicPlayer Alpha 2.0" Height="633" Width="783">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Orange" SecondaryColor="DeepOrange" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <md:BundledTheme BaseTheme="Dark" PrimaryColor="Orange" SecondaryColor="DeepOrange" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="../Resources/Fonts.xaml" />
                 <ResourceDictionary Source="../Resources/Buttons.xaml" />
+                <ResourceDictionary Source="../Resources/GroupBox.xaml" />
+                <ResourceDictionary Source="../Resources/PackIcon.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="16" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <TextBox x:Name="Log" Margin="10,471,10,10" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Party Info-->
+        <Grid Row="0">
+            <controls:SimpleStackPanel Spacing="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Bard Music Player 2.0" Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+                    <controls:SimpleStackPanel Grid.Column="1" Orientation="Horizontal" Spacing="24">
+                        <md:PackIcon Kind="Settings" />
+                        <md:PackIcon Kind="Close" />
+                    </controls:SimpleStackPanel>
+                </Grid>
+
+                <Separator />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0">
+                        <md:PackIcon Kind="CheckCircle" Foreground="#0BFFC4" />
+                        <Run BaselineAlignment="Center">Connected</Run>
+                    </TextBlock>
+                    <md:PackIcon Grid.Column="1" Kind="ContentCopy" />
+                    <TextBlock Grid.Column="2">Party Code: Unknown</TextBlock>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="7" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="AliceBlue" BorderThickness="1" CornerRadius="3">
+                        <TextBox Margin="10,0" Text="Paste Party Code" VerticalAlignment="Bottom" />
+                    </Border>
+                    <Button Grid.Column="2" Content="Connect" />
+                </Grid>
+            </controls:SimpleStackPanel>
+        </Grid>
+
+        <!--Information-->
+        <Grid Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" Header="Log Window">
+                <Border BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                    <ListView VerticalAlignment="Bottom">
+                        <TextBox x:Name="Log" Style="{StaticResource MaterialDesignCaptionTextBlock}" />
+                    </ListView>
+                </Border>
+            </GroupBox>
+
+            <GroupBox Grid.Column="2" Header="Instrument Held">
+                <Border BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <views:BardView Grid.Column="0" />
+                        <ListView Grid.Column="2">
+                            <TextBlock>T1: Strings</TextBlock>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </GroupBox>
+
+        </Grid>
+
+        <!--Playback-->
+        <Grid Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Dreamland"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Edit Song" />
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0,25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="00:00" VerticalAlignment="Center" />
+            <Slider Grid.Column="1" Margin="6,0" />
+            <TextBlock Grid.Column="2" Text="00:00" VerticalAlignment="Center" />
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <controls:SimpleStackPanel Orientation="Horizontal" Spacing="6">
+                <Button>Load Song</Button>
+                <Button>Queue Instruments</Button>
+                <Button>Play</Button>
+                <Button>Pause</Button>
+                <Button>Stop</Button>
+            </controls:SimpleStackPanel>
+
+            <md:PackIcon Grid.Column="1" VerticalAlignment="Center"
+                         Kind="QuestionMark" />
+        </Grid>
     </Grid>
 </Window>
