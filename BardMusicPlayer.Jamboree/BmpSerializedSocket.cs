@@ -35,7 +35,7 @@ namespace BardMusicPlayer.Jamboree
         /// <inheritdoc/>
         public void Close()
         {
-            if (!this.active)
+            if (this.active)
             {
                 try
                 {

@@ -12,7 +12,6 @@ namespace BardMusicPlayer.Jamboree
         private readonly ISerializationAdapter serializer;
         private readonly IServerSocket listener;
         private bool disposedValue;
-        private volatile bool active;
 
         /// <summary>
         /// Constructor.
@@ -24,17 +23,11 @@ namespace BardMusicPlayer.Jamboree
             this.serializer = serializer ?? throw new ArgumentNullException();
             this.listener = listener ?? throw new ArgumentNullException();
             this.disposedValue = false;
-            this.active = true;
         }
 
         /// <inheritdoc/>
         public ISerializedSocket Accept()
         {
-            if (!this.active)
-            {
-                throw new SocketException("Unable to accept incoming connections on inactive server socket");
-            }
-
             ISocket accepted = this.listener.Accept();
             return new BmpSerializedSocket(this.serializer, accepted);
         }
@@ -42,14 +35,7 @@ namespace BardMusicPlayer.Jamboree
         /// <inheritdoc/>
         public void Close()
         {
-            try
-            {
-                this.listener.Close();
-            }
-            finally
-            {
-                this.active = false;
-            }
+            this.listener.Close();
         }
 
         /// <inheritdoc/>
