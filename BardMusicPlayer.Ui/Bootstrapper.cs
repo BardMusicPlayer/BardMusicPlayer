@@ -21,8 +21,7 @@ namespace BardMusicPlayer.Ui
             Globals.ResourcePath = resourcePath;
             Globals.DataPath     = dataPath;
 
-            var bootstrapper = new Bootstrapper();
-            bootstrapper.Start(args);
+            Start(args);
 
             _started = true;
             return Task.FromResult(_started);

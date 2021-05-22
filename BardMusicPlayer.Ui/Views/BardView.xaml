@@ -1,0 +1,70 @@
+﻿<!--
+  Copyright(c) 2021 MoogleTroupe, trotlinebeercan, sabihoshi
+  Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+-->
+
+<UserControl
+    x:Class="BardMusicPlayer.Ui.Views.BardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
+
+    xmlns:seer="clr-namespace:BardMusicPlayer.Seer;assembly=BardMusicPlayer.Seer"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:viewModels="clr-namespace:BardMusicPlayer.Ui.ViewModels">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Orange" SecondaryColor="DeepOrange" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="../Resources/Fonts.xaml" />
+                <ResourceDictionary Source="../Resources/Buttons.xaml" />
+                <ResourceDictionary Source="../Resources/GroupBox.xaml" />
+                <ResourceDictionary Source="../Resources/PackIcon.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ListView ItemsSource="{Binding Bards}">
+        <ListView.ItemTemplate>
+            <DataTemplate DataType="seer:Game">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:PackIcon
+                        Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Kind="ReorderHorizontal" />
+
+                    <TextBlock
+                        Grid.Column="1" Grid.Row="0"
+                        Margin="12,0,0,0"
+
+                        Text="{Binding PlayerName, Mode=OneTime}"
+                        Style="{StaticResource MaterialDesignBody2TextBlock}" />
+
+                    <TextBlock
+                        Grid.Column="1" Grid.Row="1"
+                        Margin="12,0,0,0"
+
+                        Text="{Binding HomeWorld, Mode=OneTime, StringFormat=m\\:ss}"
+                        Style="{StaticResource MaterialDesignOverlineTextBlock}" />
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+</UserControl>

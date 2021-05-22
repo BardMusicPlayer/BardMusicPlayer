@@ -21,7 +21,7 @@ License: MIT
 https://github.com/Nucs/JsonSettings/blob/master/LICENSE
 
 ### CSharpSynthProject by Alex Veltsistas
-License: MIT 
+License: MIT
 https://github.com/sinshu/CSharpSynthProject
 
 ### KnownFolders by Syroot
@@ -86,3 +86,7 @@ https://github.com/falahati/WindowsFirewallHelper/blob/master/LICENSE
 ### libzt by ZeroTier, Inc.
 License: BSL-1.1
 https://github.com/zerotier/libzt/blob/master/LICENSE.txt
+
+### Stylet by canton7
+License: MIT
+https://github.com/canton7/Stylet/blob/master/LICENSE.txt
