@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.ViewModels;
 using Stylet;
@@ -24,7 +25,7 @@ namespace BardMusicPlayer.Ui
             Globals.ResourcePath = resourcePath;
             Globals.DataPath     = dataPath;
 
-            Start(args);
+            Setup(Application.Current);
 
             _started = true;
             return Task.FromResult(_started);
