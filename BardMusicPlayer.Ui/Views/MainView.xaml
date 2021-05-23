@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   Copyright(c) 2021 MoogleTroupe, trotlinebeercan, sabihoshi
   Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
 -->
@@ -133,7 +133,7 @@
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
 
-                        <views:BardView Grid.Column="0" />
+                        <ContentControl s:View.Model="{Binding Bards}" Grid.Column="0" />
                         <ListView Grid.Column="2">
                             <TextBlock>T1: Strings</TextBlock>
                         </ListView>

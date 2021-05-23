@@ -10,12 +10,15 @@ using BardMusicPlayer.Seer;
 using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.Views;
 using Stylet;
+using StyletIoC;
 
 namespace BardMusicPlayer.Ui.ViewModels
 {
     public class MainViewModel : Screen
     {
-        public BindableCollection<IGameInformation> Bards { get; } = new();
+        public MainViewModel(IContainer ioc) { Bards = ioc.Get<BardViewModel>(); }
+
+        public IScreen Bards { get; }
 
         protected override void OnViewLoaded()
         {
