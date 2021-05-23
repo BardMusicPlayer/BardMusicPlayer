@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.ViewModels;
