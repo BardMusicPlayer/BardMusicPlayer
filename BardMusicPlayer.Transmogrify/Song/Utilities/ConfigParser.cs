@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
@@ -36,19 +37,23 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
         /// <returns></returns>
         internal static Dictionary<long, ConfigContainer> ReadConfigs(this TrackChunk trackChunk, int trackNumber, BmpSong song)
         {
-            // TODO - Verbose logging of all parsing operations.
-
             var configContainers = new Dictionary<long, ConfigContainer>();
 
-            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric)) return configContainers;
+            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric))
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Skipping track " + trackNumber + " as it contains no notes and contains no lyric events.");
+                return configContainers;
+            }
 
             var trackName = (trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "").Replace(" ", "").ToLower();
 
-            if (trackName.StartsWith("ignore")) return configContainers;
+            if (trackName.Contains("ignore"))
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Skipping track " + trackNumber + " as the track title contains \"Ignore\"");
+                return configContainers;
+            }
 
             var groups = trackName.Split('|');
-
-            
 
             var modifier = new Regex(@"^([A-Za-z0-9]+)([-+]\d)?");
 
@@ -60,73 +65,255 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                 if (fields.Length == 0) continue;
 
                 // bmp 2.x style group name
-                if (fields[0].StartsWith("manualtone:") || fields[0].StartsWith("autotone:") || fields[0].StartsWith("drumtone:") || fields[0].StartsWith("lyric:"))
+                if (fields[0].StartsWith("manualtone:") || fields[0].StartsWith("notetone:") || fields[0].StartsWith("autotone:") || fields[0].StartsWith("drumtone:") || fields[0].Equals("drumtone") || fields[0].StartsWith("octavetone") || fields[0].Equals("lyric"))
                 {
                     var subfields = fields[0].Split(':');
 
-                    if (subfields.Length < 2) continue;
-
-                    if (subfields[0].Equals("manualtone"))
+                    switch (subfields[0])
                     {
-                        // TODO
-                        return configContainers;
-                    } 
-                    
-                    else if (subfields[0].Equals("autotone"))
-                    {
-                        var config = (AutoToneProcessorConfig)(configContainer.ProcessorConfig = new AutoToneProcessorConfig { Track = trackNumber });
-                        var instrumentAndOctaveRange = modifier.Match(subfields[1]);
+                        case "manualtone" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping ManualTone on track " + trackNumber + " due to the configuration not specifying a tone.");
+                            continue;
+                        case "manualtone":
+                            var manualToneConfig = (ManualToneProcessorConfig)(configContainer.ProcessorConfig = new ManualToneProcessorConfig { Track = trackNumber });
+                            manualToneConfig.InstrumentTone = InstrumentTone.Parse(subfields[1]);
+                            if (manualToneConfig.InstrumentTone.Equals(InstrumentTone.None))
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping ManualTone on track " + trackNumber + " due to the configuration specifying an invalid tone.");
+                                continue;
+                            }
+                            if (subfields.Length > 2)
+                            {
+                                var shifts = subfields[2].Split(',');
+                                foreach (var shift in shifts)
+                                {
+                                    var toneIndexAndOctaveRange = modifier.Match(shift);
+                                    if (!toneIndexAndOctaveRange.Success)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber);
+                                        continue;
+                                    }
+                                    if (!toneIndexAndOctaveRange.Groups[1].Success)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        continue;
+                                    }
+                                    if (!int.TryParse(toneIndexAndOctaveRange.Groups[1].Value, out var toneIndex) || toneIndex < 0 || toneIndex > 4)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        continue;
+                                    }
+                                    var octaveRange = OctaveRange.C3toC6;
+                                    if (toneIndexAndOctaveRange.Groups[2].Success) octaveRange = OctaveRange.Parse(toneIndexAndOctaveRange.Groups[2].Value);
+                                    if (octaveRange.Equals(OctaveRange.Invalid)) octaveRange = OctaveRange.C3toC6;
+                                    manualToneConfig.OctaveRanges[toneIndex] = octaveRange;
+                                }
+                            }
+                            ParseAdditionalOptions(trackNumber, manualToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found ManualTone Config Group with on track " + manualToneConfig.Track + " ;bards=" + manualToneConfig.PlayerCount + ";include=" + string.Join(",",manualToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
 
-                        if (instrumentAndOctaveRange.Success)
+                        case "notetone" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping NoteTone on track " + trackNumber + " due to the configuration not specifying a tone.");
+                            continue;
+                        case "notetone":
                         {
-                            if (instrumentAndOctaveRange.Groups[1].Success) config.AutoToneInstrumentGroup = AutoToneInstrumentGroup.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                            if (config.AutoToneInstrumentGroup.Equals(AutoToneInstrumentGroup.Invalid)) config.AutoToneInstrumentGroup = AutoToneInstrumentGroup.Lute1Harp3Piano1;
-                            if (instrumentAndOctaveRange.Groups[2].Success) config.AutoToneOctaveRange = AutoToneOctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
-                            if (config.AutoToneOctaveRange.Equals(AutoToneOctaveRange.Invalid)) config.AutoToneOctaveRange = AutoToneOctaveRange.C2toC7;
+                            var noteToneConfig = (NoteToneProcessorConfig)(configContainer.ProcessorConfig = new NoteToneProcessorConfig { Track = trackNumber });
+                            noteToneConfig.InstrumentTone = InstrumentTone.Parse(subfields[1]);
+                            if (noteToneConfig.InstrumentTone.Equals(InstrumentTone.None))
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping NoteTone on track " + trackNumber + " due to the configuration specifying an invalid tone.");
+                                continue;
+                            }
+                            var noteToneSubConfigurations = 0;
+                            if (subfields.Length > 2)
+                            {
+                                subfields = subfields.Skip(2).ToArray();
+                                foreach (var mapping in subfields)
+                                {
+                                    var split = mapping.Split(',');
+                                    if (split.Length != 3)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid NoteTone mapping \"" + mapping + "\" on track " + trackNumber);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[0], out var sourceNote) || sourceNote > 120 || sourceNote < 12)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid NoteTone mapping \"" + mapping + "\" on track " + trackNumber + " because source note \"" + split[0] + "\" is more then 120 or less then 12");
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[1], out var toneIndex) || toneIndex < -1 || toneIndex > 4 || (toneIndex == 0 && noteToneConfig.InstrumentTone.Tone0.Equals(Instrument.None)) || (toneIndex == 1 && noteToneConfig.InstrumentTone.Tone1.Equals(Instrument.None)) || (toneIndex == 2 && noteToneConfig.InstrumentTone.Tone2.Equals(Instrument.None)) || (toneIndex == 3 && noteToneConfig.InstrumentTone.Tone3.Equals(Instrument.None)) || (toneIndex == 4 && noteToneConfig.InstrumentTone.Tone4.Equals(Instrument.None)))
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid NoteTone mapping \"" + mapping + "\" on track " + trackNumber + " because \"" + split[1] + "\" is not a valid tone number for Tone " + noteToneConfig.InstrumentTone.Name);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[2], out var destinationNote) || destinationNote < -1 || destinationNote > 36)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid NoteTone mapping \"" + mapping + "\" on track " + trackNumber + " because destination note \"" + split[2] + "\" is more then 36 or less then -1");
+                                        continue;
+                                    }
+                                    noteToneConfig.Mapper[sourceNote] = (toneIndex, destinationNote);
+                                    noteToneSubConfigurations++;
+                                }
+                            }
+                            if (noteToneSubConfigurations == 0)
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping NoteTone on track " + trackNumber + " because no mappings are specified.");
+                                continue;
+                            }
+                            ParseAdditionalOptions(trackNumber, noteToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found NoteTone Config Group " + noteToneConfig.InstrumentTone.Name + " with " + noteToneSubConfigurations + " mappings on track " + noteToneConfig.Track + " ;bards=" + noteToneConfig.PlayerCount + ";include=" + string.Join(",",noteToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
                         }
 
-                        ParseAdditionalOptions(config, song, fields);
+                        case "octavetone" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping OctaveTone on track " + trackNumber + " due to the configuration not specifying a tone.");
+                            continue;
+                        case "octavetone":
+                            var octaveToneConfig = (OctaveToneProcessorConfig)(configContainer.ProcessorConfig = new OctaveToneProcessorConfig { Track = trackNumber });
+                            octaveToneConfig.InstrumentTone = InstrumentTone.Parse(subfields[1]);
+                            if (octaveToneConfig.InstrumentTone.Equals(InstrumentTone.None))
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping OctaveTone on track " + trackNumber + " due to the configuration specifying an invalid tone.");
+                                continue;
+                            }
+                            var octaveToneSubConfigurations = 0;
+                            if (subfields.Length > 2)
+                            {
+                                subfields = subfields.Skip(2).ToArray();
+                                foreach (var mapping in subfields)
+                                {
+                                    var split = mapping.Split(',');
+                                    if (split.Length != 3)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid OctaveTone mapping \"" + mapping + "\" on track " + trackNumber);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[0], out var sourceOctave) || sourceOctave > 8 || sourceOctave < 0)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid OctaveTone mapping \"" + mapping + "\" on track " + trackNumber + " because source octave \"" + split[0] + "\" is more then 8 or less then 0");
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[1], out var toneIndex) || toneIndex < -1 || toneIndex > 4 || (toneIndex == 0 && octaveToneConfig.InstrumentTone.Tone0.Equals(Instrument.None)) || (toneIndex == 1 && octaveToneConfig.InstrumentTone.Tone1.Equals(Instrument.None)) || (toneIndex == 2 && octaveToneConfig.InstrumentTone.Tone2.Equals(Instrument.None)) || (toneIndex == 3 && octaveToneConfig.InstrumentTone.Tone3.Equals(Instrument.None)) || (toneIndex == 4 && octaveToneConfig.InstrumentTone.Tone4.Equals(Instrument.None)))
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid OctaveTone mapping \"" + mapping + "\" on track " + trackNumber + " because \"" + split[1] + "\" is not a valid tone number for Tone " + octaveToneConfig.InstrumentTone.Name);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[2], out var destinationOctave) || destinationOctave < -1 || destinationOctave > 3)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid OctaveTone mapping \"" + mapping + "\" on track " + trackNumber + " because destination octave \"" + split[2] + "\" is more then 3 or less then -1");
+                                        continue;
+                                    }
+                                    octaveToneConfig.Mapper[sourceOctave] = (toneIndex, destinationOctave);
+                                    octaveToneSubConfigurations++;
+                                }
+                            }
+                            if (octaveToneSubConfigurations == 0)
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping OctaveTone on track " + trackNumber + " because no mappings are specified.");
+                                continue;
+                            }
+                            ParseAdditionalOptions(trackNumber, octaveToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found OctaveTone Config Group " + octaveToneConfig.InstrumentTone.Name + " with " + octaveToneSubConfigurations + " mappings on track " + octaveToneConfig.Track + " ;bards=" + octaveToneConfig.PlayerCount + ";include=" + string.Join(",",octaveToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
 
-                        configContainers.Add(groupCounter, configContainer);
-                    }
+                        case "autotone" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping AutoTone on track " + trackNumber + " due to the configuration not specifying an autotone group.");
+                            continue;
+                        case "autotone":
+                        {
+                            var autoToneConfig = (AutoToneProcessorConfig)(configContainer.ProcessorConfig = new AutoToneProcessorConfig { Track = trackNumber });
+                            var instrumentAndOctaveRange = modifier.Match(subfields[1]);
+                            if (!instrumentAndOctaveRange.Success)
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping AutoTone on track " + trackNumber + " due to the configuration specifying an invalid autotone group.");
+                                continue;
+                            }
+                            if (instrumentAndOctaveRange.Groups[1].Success) autoToneConfig.AutoToneInstrumentGroup = AutoToneInstrumentGroup.Parse(instrumentAndOctaveRange.Groups[1].Value);
+                            if (autoToneConfig.AutoToneInstrumentGroup.Equals(AutoToneInstrumentGroup.Invalid))
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping AutoTone on track " + trackNumber + " due to the configuration specifying an invalid autotone group.");
+                                continue;
+                            }
+                            if (instrumentAndOctaveRange.Groups[2].Success) autoToneConfig.AutoToneOctaveRange = AutoToneOctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
+                            if (autoToneConfig.AutoToneOctaveRange.Equals(AutoToneOctaveRange.Invalid)) autoToneConfig.AutoToneOctaveRange = AutoToneOctaveRange.C2toC7;
+                            ParseAdditionalOptions(trackNumber, autoToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found AutoTone Config Group " + autoToneConfig.AutoToneInstrumentGroup.Name + " OctaveRange " + autoToneConfig.AutoToneOctaveRange.Name +" on track " + autoToneConfig.Track + " ;bards=" + autoToneConfig.PlayerCount + ";include=" + string.Join(",",autoToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
+                        }
 
-                    else if (subfields[0].Equals("drumtone"))
-                    {
-                        // TODO
-                        return configContainers;
-                    }
+                        case "drumtone":
+                            var drumToneConfig = (DrumToneProcessorConfig)(configContainer.ProcessorConfig = new DrumToneProcessorConfig { Track = trackNumber });
+                            var drumToneSubConfigurations = 0;
+                            if (subfields.Length > 1)
+                            {
+                                subfields = subfields.Skip(1).ToArray();
+                                foreach (var mapping in subfields)
+                                {
+                                    var split = mapping.Split(',');
+                                    if (split.Length != 3)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid DrumTone mapping \"" + mapping + "\" on track " + trackNumber);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[0], out var sourceNote) || sourceNote > 87 || sourceNote < 27)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid DrumTone mapping \"" + mapping + "\" on track " + trackNumber + " because source note \"" + split[0] + "\" is more then 87 or less then 27");
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[1], out var toneIndex) || toneIndex < -1 || toneIndex > 4 || (toneIndex == 0 && InstrumentTone.Drums.Tone0.Equals(Instrument.None)) || (toneIndex == 1 && InstrumentTone.Drums.Tone1.Equals(Instrument.None)) || (toneIndex == 2 && InstrumentTone.Drums.Tone2.Equals(Instrument.None)) || (toneIndex == 3 && InstrumentTone.Drums.Tone3.Equals(Instrument.None)) || (toneIndex == 4 && InstrumentTone.Drums.Tone4.Equals(Instrument.None)))
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid DrumTone mapping \"" + mapping + "\" on track " + trackNumber + " because \"" + split[1] + "\" is not a valid tone number for Tone " + InstrumentTone.Drums.Name);
+                                        continue;
+                                    }
+                                    if (!int.TryParse(split[2], out var destinationNote) || destinationNote < -1 || destinationNote > 36)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid DrumTone mapping \"" + mapping + "\" on track " + trackNumber + " because destination note \"" + split[2] + "\" is more then 36 or less then -1");
+                                        continue;
+                                    }
+                                    drumToneConfig.Mapper[sourceNote] = (toneIndex, destinationNote);
+                                    drumToneSubConfigurations++;
+                                }
+                            }
+                            ParseAdditionalOptions(trackNumber, drumToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found DrumTone Config Group with " + drumToneSubConfigurations + " override mappings on track " + drumToneConfig.Track + " ;bards=" + drumToneConfig.PlayerCount + ";include=" + string.Join(",",drumToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
 
-                    else if (subfields[0].Equals("lyric") && subfields[1].Equals("default"))
-                    {
-                        var config = (LyricProcessorConfig)(configContainer.ProcessorConfig = new LyricProcessorConfig { Track = trackNumber });
-                        ParseAdditionalOptions(config, song, fields);
-                        configContainers.Add(groupCounter, configContainer);
+                        case "lyric":
+                            var lyricConfig = (LyricProcessorConfig)(configContainer.ProcessorConfig = new LyricProcessorConfig { Track = trackNumber });
+                            ParseAdditionalOptions(trackNumber, lyricConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found Lyric Config on track " + lyricConfig.Track + " ;bards=" + lyricConfig.PlayerCount + ";include=" + string.Join(",",lyricConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
                     }
-                }
+                } 
 
                 // bmp 1.x style group name
                 else
                 {
-                    var config = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
-                    
+                    var classicConfig = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
                     var instrumentAndOctaveRange = modifier.Match(fields[0]);
-
-                    if (instrumentAndOctaveRange.Success)
-                    {
-                        if (instrumentAndOctaveRange.Groups[1].Success) config.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                        if (config.Instrument.Equals(Instrument.None)) config.Instrument = Instrument.Harp;
-                        if (instrumentAndOctaveRange.Groups[2].Success) config.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
-                        if (config.OctaveRange.Equals(OctaveRange.Invalid)) config.OctaveRange = OctaveRange.C3toC6;
-                    }
-
-                    ParseAdditionalOptions(config, song, fields);
-
+                    if (!instrumentAndOctaveRange.Success) continue; // Invalid Instrument name.
+                    if (instrumentAndOctaveRange.Groups[1].Success) classicConfig.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
+                    if (classicConfig.Instrument.Equals(Instrument.None)) continue;  // Invalid Instrument name.
+                    if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
+                    if (classicConfig.OctaveRange.Equals(OctaveRange.Invalid)) classicConfig.OctaveRange = OctaveRange.C3toC6;
+                    ParseAdditionalOptions(trackNumber, classicConfig, song, fields);
+                    BmpLog.I(BmpLog.Source.Transmogrify, "Found Classic Config Instrument " + classicConfig.Instrument.Name + " OctaveRange " + classicConfig.OctaveRange.Name +" on track " + classicConfig.Track + " ;bards=" + classicConfig.PlayerCount + ";include=" + string.Join(",",classicConfig.IncludedTracks));
                     configContainers.Add(groupCounter, configContainer);
                 }
             }
 
-            // TODO: let's expose the "default" track configuration as UI setting.
-            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber } });
+            if (configContainers.Count == 0)
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Found 0 configurations on track " + trackNumber + ", and the keyword \"Ignore\" is not in the track title. Adding a default AutoTone.");
+                configContainers.Add(0, new ConfigContainer { ProcessorConfig = new AutoToneProcessorConfig { Track = trackNumber } });
+            }
 
             return configContainers;
         }
@@ -134,10 +321,11 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
         /// <summary>
         /// Parses tracks to merge in, and bards to load balance distribute to.
         /// </summary>
+        /// <param name="trackNumber"></param>
         /// <param name="processorConfig"></param>
         /// <param name="song"></param>
         /// <param name="fields"></param>
-        private static void ParseAdditionalOptions(IProcessorConfig processorConfig, BmpSong song, IReadOnlyList<string> fields)
+        private static void ParseAdditionalOptions(int trackNumber, IProcessorConfig processorConfig, BmpSong song, IReadOnlyList<string> fields)
         {
             for (var fieldCounter = 1; fieldCounter < fields.Count; fieldCounter++)
             {
@@ -146,7 +334,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                     var tracksToMerge = fields[fieldCounter].Remove(0, 8).Split(',');
                     foreach (var trackToMerge in tracksToMerge)
                     {
-                        if (int.TryParse(trackToMerge, out var value) && value < song.TrackContainers.Count)
+                        if (int.TryParse(trackToMerge, out var value) && value != trackNumber && value > -1 && value < song.TrackContainers.Count)
                             processorConfig.IncludedTracks.Add(value);
                     }
                 }
