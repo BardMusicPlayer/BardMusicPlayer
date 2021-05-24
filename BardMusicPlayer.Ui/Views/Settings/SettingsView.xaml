@@ -1,0 +1,53 @@
+﻿<UserControl
+    x:Class="BardMusicPlayer.Ui.Views.Settings.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+
+    xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    
+    xmlns:settings="clr-namespace:BardMusicPlayer.Ui.ViewModels.Settings"
+    d:DataContext="{d:DesignInstance settings:SettingsViewModel}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Page Selection-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Style="{DynamicResource Icon}" Content="{md:PackIcon ChevronLeft}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignHeadline5TextBlock}">
+                Settings
+            </TextBlock>
+
+            <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Pages}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Value}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <!--TODO: Fix Vertical Separators-->
+        <Separator Grid.Column="1" Style="{DynamicResource VerticalSeparatorStyle}" />
+
+        <ContentControl Grid.Column="1" s:View.Model="{Binding ActiveItem}" />
+    </Grid>
+</UserControl>

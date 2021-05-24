@@ -19,13 +19,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Orange" SecondaryColor="DeepOrange" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="../Resources/Fonts.xaml" />
-                <ResourceDictionary Source="../Resources/Buttons.xaml" />
-                <ResourceDictionary Source="../Resources/GroupBox.xaml" />
-                <ResourceDictionary Source="../Resources/PackIcon.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
