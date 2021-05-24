@@ -4,6 +4,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
@@ -22,6 +23,8 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
         public override Task<List<TrackChunk>> Process()
         {
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
+
             return Task.FromResult(new List<TrackChunk>());
         }
     }

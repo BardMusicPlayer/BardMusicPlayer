@@ -9,7 +9,7 @@ using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
 
 namespace BardMusicPlayer.Transmogrify.Song.Config
 {
-    public class AutoToneProcessorConfig : IProcessorConfig
+    public class OctaveToneProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;
@@ -21,13 +21,24 @@ namespace BardMusicPlayer.Transmogrify.Song.Config
         public int PlayerCount { get; set; } = 1;
 
         /// <summary>
-        /// The autotone group for this track
+        /// The instrument tone for this track
         /// </summary>
-        public AutoToneInstrumentGroup AutoToneInstrumentGroup { get; set; } = AutoToneInstrumentGroup.Lute1Harp3Piano1;
+        public InstrumentTone InstrumentTone { get; set; } = InstrumentTone.Strummed;
 
         /// <summary>
-        /// The autotone octave range to use
+        /// The mapper of octave to tone and octave
         /// </summary>
-        public AutoToneOctaveRange AutoToneOctaveRange { get; set; } = AutoToneOctaveRange.C2toC7;
+        public Dictionary<int, (int, int)> Mapper { get; set; } = new(9)
+        {
+            {0, (-1, -1)},
+            {1, (-1, -1)},
+            {2, (-1, -1)},
+            {3, (-1, -1)},
+            {4, (-1, -1)},
+            {5, (-1, -1)},
+            {6, (-1, -1)},
+            {7, (-1, -1)},
+            {8, (-1, -1)}
+        };
     }
 }
