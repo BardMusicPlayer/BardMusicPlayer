@@ -15,11 +15,7 @@ namespace BardMusicPlayer.Jamboree
 
         bool IsConnected();
 
-        int Send(byte[] data);
-
         int Send(byte[] data, int offset, int len);
-
-        int Receive(byte[] buffer);
 
         int Receive(byte[] buffer, int offset, int len);
     }

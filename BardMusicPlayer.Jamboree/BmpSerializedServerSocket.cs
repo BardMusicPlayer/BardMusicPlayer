@@ -9,27 +9,40 @@ namespace BardMusicPlayer.Jamboree
 {
     sealed internal class BmpSerializedServerSocket : ISerializedServerSocket
     {
-        private readonly ISerializationAdapter serializer;
         private readonly IServerSocket listener;
+        private readonly ISerializedSocketAcceptor accecptor;
         private bool disposedValue;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="serializer"></param>
         /// <param name="listener"></param>
-        internal BmpSerializedServerSocket(ISerializationAdapter serializer, IServerSocket listener)
+        /// <param name="acceptor"></param>
+        internal BmpSerializedServerSocket(IServerSocket listener, ISerializedSocketAcceptor acceptor)
         {
-            this.serializer = serializer ?? throw new ArgumentNullException();
             this.listener = listener ?? throw new ArgumentNullException();
+            this.accecptor = acceptor ?? throw new ArgumentNullException();
             this.disposedValue = false;
         }
 
         /// <inheritdoc/>
         public ISerializedSocket Accept()
         {
-            ISocket accepted = this.listener.Accept();
-            return new BmpSerializedSocket(this.serializer, accepted);
+            ISerializedSocket ret;
+            
+            for (;;)
+            {
+                ISocket accepted = this.listener.Accept();
+                ret = this.accecptor.Accept(accepted);
+                if (ret != null)
+                {
+                    break;
+                }
+
+                accepted.Close();
+            }
+
+            return ret;
         }
 
         /// <inheritdoc/>

@@ -16,13 +16,13 @@ using System;
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
     /// <summary>Exception class for ZeroTier service and low-level socket errors</summary>
-    internal class ZTSocketException : SocketException {
-        public ZTSocketException(int _serviceErrorCode)
+    internal class SocketException : Exception {
+        public SocketException(int _serviceErrorCode)
             : base(String.Format("ServiceErrorCode={0} (See Constants.cs for error code meanings)", _serviceErrorCode))
         {
             ServiceErrorCode = _serviceErrorCode;
         }
-        public ZTSocketException(int _serviceErrorCode, int _socketErrorCode)
+        public SocketException(int _serviceErrorCode, int _socketErrorCode)
             : base(String.Format(
                 "ServiceErrorCode={0}, SocketErrorCode={1} (See Constants.cs for error code meanings)",
                 _serviceErrorCode,

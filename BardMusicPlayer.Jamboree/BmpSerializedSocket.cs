@@ -145,17 +145,7 @@ namespace BardMusicPlayer.Jamboree
         /// <exception cref="SocketException"></exception>
         private void SocketWrite(byte[] data)
         {
-            int written = 0;
-            while (written < data.Length)
-            {
-                int tmp = this.socket.Send(data, written, data.Length - written);
-                if (tmp < 0)
-                {
-                    throw new SocketException("EOF hit during socket write");
-                }
-
-                written += tmp;
-            }
+            Sockets.FullWrite(this.socket, data);
         }
 
         /// <summary>
@@ -165,17 +155,7 @@ namespace BardMusicPlayer.Jamboree
         /// <exception cref="SocketException"></exception>
         private void SocketRead(int dataLength)
         {
-            int read = 0;
-            while (read < dataLength)
-            {
-                int tmp = this.socket.Receive(this.buffer, read, dataLength - read);
-                if (tmp < 0)
-                {
-                    throw new SocketException("EOF hit during socket read");
-                }
-
-                read += tmp;
-            }
+            Sockets.FullRead(this.socket, this.buffer, dataLength);
         }
 
         /// <summary>

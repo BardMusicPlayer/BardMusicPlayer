@@ -7,7 +7,7 @@ using System;
 
 namespace BardMusicPlayer.Jamboree
 {
-    internal interface ISerializationAdapter
+    public interface ISerializationAdapter
     {
         /// <summary>
         /// Decode the length bytes of data in the buffer starting at offset.

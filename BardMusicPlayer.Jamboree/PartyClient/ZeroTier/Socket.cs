@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class ZTSocket {
+    internal class Socket {
         /// <summary>No error.</summary>
         public static readonly int ZTS_ERR_OK = 0;
         /// <summary>Socket error, see Socket.ErrNo() for additional context.</summary>
@@ -53,7 +53,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             _isListening = false;
         }
 
-        public ZTSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
+        public Socket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
             int family = -1;
             int type = -1;
@@ -90,7 +90,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                     break;
             }
             if ((_fd = zts_bsd_socket(family, type, protocol)) < 0) {
-                throw new ZTSocketException((int)_fd);
+                throw new SocketException((int)_fd);
             }
             _socketFamily = addressFamily;
             _socketType = socketType;
@@ -98,7 +98,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             InitializeInternalFlags();
         }
 
-        private ZTSocket(
+        private Socket(
             int fileDescriptor,
             AddressFamily addressFamily,
             SocketType socketType,
@@ -122,14 +122,14 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             }
             if (_fd < 0) {
                 // Invalid file descriptor
-                throw new ZTSocketException((int)Constants.ERR_SOCKET);
+                throw new SocketException((int)Constants.ERR_SOCKET);
             }
             if (remoteEndPoint == null) {
                 throw new ArgumentNullException("remoteEndPoint");
             }
             int err = zts_connect(_fd, remoteEndPoint.Address.ToString(), (ushort)remoteEndPoint.Port, _connectTimeout);
             if (err < 0) {
-                throw new ZTSocketException(err, Node.ErrNo);
+                throw new SocketException(err, Node.ErrNo);
             }
             _remoteEndPoint = remoteEndPoint;
             _isConnected = true;
@@ -142,7 +142,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             }
             if (_fd < 0) {
                 // Invalid file descriptor
-                throw new ZTSocketException((int)Constants.ERR_SOCKET);
+                throw new SocketException((int)Constants.ERR_SOCKET);
             }
             if (localEndPoint == null) {
                 throw new ArgumentNullException("localEndPoint");
@@ -156,7 +156,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                 err = zts_bind(_fd, "::", (ushort)localEndPoint.Port);
             }
             if (err < 0) {
-                throw new ZTSocketException((int)err);
+                throw new SocketException((int)err);
             }
             _localEndPoint = localEndPoint;
             _isBound = true;
@@ -169,24 +169,24 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             }
             if (_fd < 0) {
                 // Invalid file descriptor
-                throw new ZTSocketException((int)Constants.ERR_SOCKET);
+                throw new SocketException((int)Constants.ERR_SOCKET);
             }
             int err = Constants.ERR_OK;
             if ((err = zts_bsd_listen(_fd, backlog)) < 0) {
                 // Invalid backlog value perhaps?
-                throw new ZTSocketException((int)Constants.ERR_SOCKET);
+                throw new SocketException((int)Constants.ERR_SOCKET);
             }
             _isListening = true;
         }
 
-        public ZTSocket Accept()
+        public Socket Accept()
         {
             if (_isClosed) {
                 throw new ObjectDisposedException("Socket has been closed");
             }
             if (_fd < 0) {
                 // Invalid file descriptor
-                throw new ZTSocketException((int)Constants.ERR_SOCKET);
+                throw new SocketException((int)Constants.ERR_SOCKET);
             }
             if (_isListening == false) {
                 throw new InvalidOperationException("Socket is not in a listening state. Call Listen() first");
@@ -201,8 +201,8 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Parse(str), port);
             Console.WriteLine("clientEndPoint = " + clientEndPoint.ToString());
             // Create new socket by providing file descriptor returned from zts_bsd_accept call.
-            ZTSocket clientSocket =
-                new ZTSocket(accepted_fd, _socketFamily, _socketType, _socketProtocol, _localEndPoint, clientEndPoint);
+            Socket clientSocket =
+                new Socket(accepted_fd, _socketFamily, _socketType, _socketProtocol, _localEndPoint, clientEndPoint);
             return clientSocket;
         }
 
@@ -267,7 +267,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             int timeout_ms = (microSeconds / 1000);
             uint numfds = 1;
             if ((result = zts_bsd_poll(poll_fd_ptr, numfds, timeout_ms)) < 0) {
-                throw new ZTSocketException(result, Node.ErrNo);
+                throw new SocketException(result, Node.ErrNo);
             }
             poll_set = (zts_pollfd)Marshal.PtrToStructure(poll_fd_ptr, typeof(zts_pollfd));
             if (result != 0) {
@@ -289,34 +289,50 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 
         public Int32 Send(Byte[] buffer)
         {
-            if (_isClosed) {
+            return this.Send(buffer, 0, Buffer.ByteLength(buffer));
+        }
+
+        public Int32 Send(Byte[] buffer, Int32 offset, Int32 length)
+        {
+            if (_isClosed)
+            {
                 throw new ObjectDisposedException("Socket has been closed");
             }
-            if (_fd < 0) {
-                throw new ZTSocketException((int)ZeroTier.Constants.ERR_SOCKET);
+            if (_fd < 0)
+            {
+                throw new SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
-            if (buffer == null) {
+            if (buffer == null)
+            {
                 throw new ArgumentNullException("buffer");
             }
             int flags = 0;
-            IntPtr bufferPtr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0);
-            return zts_bsd_send(_fd, bufferPtr, (uint)Buffer.ByteLength(buffer), (int)flags);
+            IntPtr bufferPtr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
+            return zts_bsd_send(_fd, bufferPtr, (uint)length, (int)flags);
         }
 
         public Int32 Receive(Byte[] buffer)
         {
-            if (_isClosed) {
+            return this.Receive(buffer, 0, Buffer.ByteLength(buffer));
+        }
+
+        public Int32 Receive(Byte[] buffer, Int32 offset, Int32 length)
+        {
+            if (_isClosed)
+            {
                 throw new ObjectDisposedException("Socket has been closed");
             }
-            if (_fd < 0) {
-                throw new ZTSocketException((int)ZeroTier.Constants.ERR_SOCKET);
+            if (_fd < 0)
+            {
+                throw new SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
-            if (buffer == null) {
+            if (buffer == null)
+            {
                 throw new ArgumentNullException("buffer");
             }
             int flags = 0;
-            IntPtr bufferPtr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0);
-            return zts_bsd_recv(_fd, bufferPtr, (uint)Buffer.ByteLength(buffer), (int)flags);
+            IntPtr bufferPtr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
+            return zts_bsd_recv(_fd, bufferPtr, (uint)length, (int)flags);
         }
 
         public int ReceiveTimeout
@@ -417,6 +433,14 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         {
             get {
                 return _isConnected;
+            }
+        }
+
+        public bool IsClosed
+        {
+            get
+            {
+                return _isClosed
             }
         }
 

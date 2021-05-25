@@ -172,8 +172,8 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             byte[] bytes = new Byte[1024];
 
             Console.WriteLine(localEndPoint.ToString());
-            ZTSocket listener =
-                new ZTSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Socket listener =
+                new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and
             // listen for incoming connections.
@@ -181,7 +181,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             try {
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
-                ZTSocket handler;
+                Socket handler;
                 Console.WriteLine("Server: Accepting...");
                 handler = listener.Accept();
 
@@ -194,7 +194,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                         Console.WriteLine("Server: Receiving...");
                         bytesRec = handler.Receive(bytes);
                     }
-                    catch (ZTSocketException e) {
+                    catch (SocketException e) {
                         Console.WriteLine(
                             "ServiceErrorCode={0} SocketErrorCode={1}",
                             e.ServiceErrorCode,
@@ -215,7 +215,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
-            catch (ZTSocketException e) {
+            catch (SocketException e) {
                 Console.WriteLine(e);
                 Console.WriteLine("ServiceErrorCode={0} SocketErrorCode={1}", e.ServiceErrorCode, e.SocketErrorCode);
             }
@@ -232,8 +232,8 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             // Connect to a remote device.
             try {
                 // Create a TCP/IP  socket.
-                ZTSocket sender =
-                    new ZTSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                Socket sender =
+                    new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 try {
                     Console.WriteLine("Client: Connecting to {0}...", remoteServerEndPoint.ToString());
@@ -257,7 +257,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                 catch (ArgumentNullException ane) {
                     Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                 }
-                catch (ZTSocketException e) {
+                catch (SocketException e) {
                     Console.WriteLine(e);
                     Console.WriteLine("ServiceErrorCode={0} SocketErrorCode={1}", e.ServiceErrorCode, e.SocketErrorCode);
                 }
