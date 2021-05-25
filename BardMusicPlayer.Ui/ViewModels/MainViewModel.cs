@@ -13,7 +13,8 @@ using StyletIoC;
 
 namespace BardMusicPlayer.Ui.ViewModels
 {
-    public class MainViewModel : Conductor<IScreen>,
+    public class MainViewModel : Conductor<IScreen>.StackNavigation,
+        IHandle<NavigateBackNotification>,
         IHandle<EditSongNotification>
     {
         public MainViewModel(IContainer ioc, IEventAggregator events)
@@ -38,6 +39,8 @@ namespace BardMusicPlayer.Ui.ViewModels
             var songEditor = new SongEditorViewModel(message.Song);
             ActivateItem(songEditor);
         }
+
+        public void Handle(NavigateBackNotification message) { GoBack(); }
 
         public void Navigate(object sender, RoutedEventArgs e)
         {

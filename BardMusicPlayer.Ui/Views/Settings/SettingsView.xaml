@@ -31,7 +31,8 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon ChevronLeft}"/>
+            <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Style="{DynamicResource MaterialDesignIconButton}"
+                    Content="{md:PackIcon ChevronLeft}" Command="{s:Action GoBack}" />
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignHeadline5TextBlock}">
                 Settings
             </TextBlock>
