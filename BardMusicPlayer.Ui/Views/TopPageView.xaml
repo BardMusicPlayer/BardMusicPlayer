@@ -118,7 +118,7 @@
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Dreamland"
                        Style="{DynamicResource MaterialDesignHeadline5TextBlock}" />
-            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Edit Song" />
+            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Edit Song" Command="{s:Action EditSong}" />
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,25">
@@ -147,7 +147,7 @@
                 <Button>Stop</Button>
             </controls:SimpleStackPanel>
 
-            <Button Grid.Column="1" Style="{DynamicResource Icon}" Content="{materialDesign:PackIcon QuestionMark}" />
+            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}" Content="{materialDesign:PackIcon QuestionMark}" />
         </Grid>
     </Grid>
 </UserControl>

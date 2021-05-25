@@ -39,7 +39,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="../Resources/Fonts.xaml" />
                 <ResourceDictionary Source="../Resources/Buttons.xaml" />
-                <ResourceDictionary Source="../Resources/PackIcon.xaml" />
                 <ResourceDictionary Source="../Resources/VerticalSeparator.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -62,13 +61,13 @@
             <TextBlock VerticalAlignment="Center" Text="Bard Music Player 2.0"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
             <controls:SimpleStackPanel Grid.Column="1" Orientation="Horizontal" Spacing="24">
-                <Button Style="{StaticResource Icon}" Content="{md:PackIcon Settings}" Click="{s:Action Navigate}"
+                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Settings}" Click="{s:Action Navigate}"
                         Tag="{Binding Settings}" />
-                <Button Style="{StaticResource Icon}" Content="{md:PackIcon Close}" />
+                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Close}" />
             </controls:SimpleStackPanel>
         </Grid>
 
         <Separator Grid.Row="1" />
         <ContentControl Grid.Row="2" s:View.Model="{Binding ActiveItem}" />
     </Grid>
-</Window>
+</Window>   
