@@ -22,6 +22,7 @@ namespace BardMusicPlayer.Quotidian
         {
             Coffer,
             Grunt,
+            Jamboree,
             Maestro,
             Pigeonhole,
             Quotidian,

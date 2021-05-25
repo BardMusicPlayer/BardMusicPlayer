@@ -11,6 +11,7 @@
  */
 /****/
 
+using BardMusicPlayer.Quotidian;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -515,6 +516,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             {
                 start = -1;
                 Debug.WriteLine(e.Message);
+                BmpLog.E(BmpLog.Source.Jamboree, "Unable to initialize ZeroTier connection");
             }
 
             return start;
