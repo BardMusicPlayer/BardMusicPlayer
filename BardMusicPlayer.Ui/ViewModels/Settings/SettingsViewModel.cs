@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BardMusicPlayer.Ui.Notifications;
 using Stylet;
 using StyletIoC;
 
@@ -6,8 +7,12 @@ namespace BardMusicPlayer.Ui.ViewModels.Settings
 {
     public class SettingsViewModel : Conductor<IScreen>
     {
-        public SettingsViewModel(IContainer ioc)
+        private readonly IEventAggregator _events;
+
+        public SettingsViewModel(IContainer ioc, IEventAggregator events)
         {
+            _events = events;
+
             About    = ioc.Get<AboutPageViewModel>();
             Advanced = ioc.Get<AdvancedPageViewModel>();
             General  = ioc.Get<GeneralPageViewModel>();
@@ -27,5 +32,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Settings
         public IScreen Advanced { get; }
 
         public IScreen General { get; }
+
+        public void GoBack() { _events.Publish(new NavigateBackNotification()); }
     }
 }
