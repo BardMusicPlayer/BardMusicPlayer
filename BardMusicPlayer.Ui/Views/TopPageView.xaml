@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="BardMusicPlayer.Ui.Views.TopPageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -97,8 +97,7 @@
 
                         <ContentControl s:View.Model="{Binding Instruments}" Grid.Column="0" />
 
-                        <!--TODO: Fix Vertical Separators-->
-                        <Separator Grid.Column="1" Style="{DynamicResource VerticalSeparatorStyle}" />
+                        <Border Grid.Column="1" Margin="0,12" Style="{DynamicResource VerticalDividerBorder}" />
 
                         <ListView Grid.Column="2">
                             <TextBlock>T1: Strings</TextBlock>

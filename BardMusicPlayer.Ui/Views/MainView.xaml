@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   Copyright(c) 2021 MoogleTroupe, trotlinebeercan, sabihoshi
   Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
 -->
@@ -39,7 +39,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="../Resources/Fonts.xaml" />
                 <ResourceDictionary Source="../Resources/Buttons.xaml" />
-                <ResourceDictionary Source="../Resources/VerticalSeparator.xaml" />
+                <ResourceDictionary Source="../Resources/Border.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -67,7 +67,7 @@
             </controls:SimpleStackPanel>
         </Grid>
 
-        <Separator Grid.Row="1" />
+        <Border Grid.Row="1" Margin="0,12"  Style="{DynamicResource HorizontalDividerBorder}"  />
         <ContentControl Grid.Row="2" s:View.Model="{Binding ActiveItem}" />
     </Grid>
 </Window>   
