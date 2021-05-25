@@ -5,7 +5,20 @@ namespace BardMusicPlayer.Ui.ViewModels
 {
     public class BardViewModel : Screen
     {
-        // TODO: Reference all the existing Game instances in here.
-        public BindableCollection<Game> Bards { get; } = new();
+        public BindableCollection<Game> Bards { get; } =
+            new(BmpSeer.Instance.Games.Values);
+
+        protected override void OnViewLoaded()
+        {
+            // TODO: Log when these event happens
+            BmpSeer.Instance.GameStarted += g => Bards.Add(g.Game);
+            BmpSeer.Instance.GameStopped += g => Bards.Remove(g.Game);
+        }
+
+        protected override void OnClose()
+        {
+            BmpSeer.Instance.GameStarted += g => Bards.Add(g.Game);
+            BmpSeer.Instance.GameStopped += g => Bards.Remove(g.Game);
+        }
     }
 }
