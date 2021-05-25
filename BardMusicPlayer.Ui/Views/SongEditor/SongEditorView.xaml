@@ -1,0 +1,88 @@
+﻿<UserControl
+    x:Class="BardMusicPlayer.Ui.Views.SongEditor.SongEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:se="clr-namespace:BardMusicPlayer.Ui.ViewModels.SongEditor"
+    xmlns:s="https://github.com/canton7/Stylet"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance se:SongEditorViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="../../Resources/GroupBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--Somehow the GroupBox Style is not applying by itself, should be looked into later-->
+            <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
+
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                <Setter Property="Height" Value="36"/>
+            </Style>
+
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+                <Setter Property="Height" Value="36" />
+                <Setter Property="Padding" Value="10" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Header="Imported from Midi">
+                <md:Card>
+                    <ItemsControl ItemsSource="{Binding CurrentSong.TrackContainers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander>
+                                    <!--TODO: Populate this with track information-->
+                                    <Expander.Header>
+                                        <TextBlock>
+                                            <Run Text="Track" />
+                                            <Run Text="{Binding Key, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </Expander.Header>
+                                    <TextBlock Text="{Binding Value}"/>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </md:Card>
+            </GroupBox>
+            <GroupBox Grid.Column="2" Header="Configurations">
+                <md:Card>
+                    <ItemsControl ItemsSource="{Binding TrackContainers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <md:Card>
+                                    <ContentControl s:View.Model="{Binding}"/>
+                                </md:Card>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </md:Card>
+            </GroupBox>
+            <GroupBox Grid.Column="4" Header="BRD Output">
+                <md:Card />
+            </GroupBox>
+        </Grid>
+
+
+    </Grid>
+</UserControl>

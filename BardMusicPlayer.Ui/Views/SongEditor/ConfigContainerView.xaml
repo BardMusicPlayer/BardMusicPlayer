@@ -1,0 +1,63 @@
+﻿<UserControl
+    x:Class="BardMusicPlayer.Ui.Views.SongEditor.ConfigContainerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+    xmlns:se="clr-namespace:BardMusicPlayer.Ui.ViewModels.SongEditor"
+
+    
+    xmlns:structs="clr-namespace:BardMusicPlayer.Quotidian.Structs;assembly=BardMusicPlayer.Quotidian"
+    xmlns:s="https://github.com/canton7/Stylet"
+
+    xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
+
+    d:DataContext="{d:DesignInstance se:ConfigContainerViewModel}">
+    <md:Card Margin="10">
+        <Expander Header="{Binding Name}" Background="Transparent">
+            <auto:StackPanel Margin="10" Orientation="Vertical" MarginBetweenChildren="12">
+                <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
+                    <GroupBox Header="Type" auto:StackPanel.Fill="Fill">
+                        <TextBox Text="{Binding Processor}" />
+                    </GroupBox>
+
+                    <GroupBox Header="Tracks used" auto:StackPanel.Fill="Fill">
+                        <TextBox Text="{Binding Processor.Track}"/>
+                    </GroupBox>
+                </auto:StackPanel>
+
+                <GroupBox Header="Instrument"
+                          Visibility="{Binding Instrument.HasValue, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                    <TextBox Text="{Binding Instrument.Value.Name}" />
+                </GroupBox>
+
+                <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
+                    <GroupBox Header="Octave Range"
+                              Visibility="{Binding OctaveRange.HasValue, Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                        <ComboBox ItemsSource="{x:Static structs:OctaveRange.All}"
+                                  SelectedItem="{Binding OctaveRange.Value}"
+                                  DisplayMemberPath="Name" />
+                    </GroupBox>
+
+                    <GroupBox Header="Bards">
+                        <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
+                            <Button Style="{DynamicResource MaterialDesignIconButton}"
+                                    Content="{md:PackIcon Minus}"
+                                    Command="{s:Action MinusBard}" />
+
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Bards}"/>
+
+                            <Button Style="{DynamicResource MaterialDesignIconButton}"
+                                    Content="{md:PackIcon Add}"
+                                    Command="{s:Action AddBard}" />
+                        </auto:StackPanel>
+                    </GroupBox>
+                </auto:StackPanel>
+            </auto:StackPanel>
+        </Expander>
+    </md:Card>
+</UserControl>

@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SpicyTaco.AutoGrid">
+      <HintPath>Lib\AutoGrid\SpicyTaco.AutoGrid.dll</HintPath>
+    </Reference>
     <Reference Include="Stylet">
       <HintPath>Lib\Stylet\Stylet.dll</HintPath>
     </Reference>
@@ -58,6 +61,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\AutoGrid\" />
     <Folder Include="Lib\Stylet\" />
   </ItemGroup>
 </Project>
