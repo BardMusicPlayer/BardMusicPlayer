@@ -6,26 +6,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
 
-    xmlns:controls="clr-namespace:BardMusicPlayer.Ui.Controls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:s="https://github.com/canton7/Stylet"
 
-    xmlns:s="https://github.com/canton7/Stylet" xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
+    xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
     xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
+
     d:DataContext="{d:DesignInstance Type=vm:TopPageViewModel}">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/GroupBox.xaml"/>
+                <ResourceDictionary Source="../Resources/Defaults.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <!--Somehow the GroupBox Style is not applying by itself, should be looked into later-->
-            <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
-
-            <Style TargetType="TextBlock">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="16" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -50,10 +43,10 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0">
-                        <materialDesign:PackIcon Kind="CheckCircle" Foreground="#0BFFC4" />
+                        <md:PackIcon Kind="CheckCircle" Foreground="#0BFFC4" />
                         <Run BaselineAlignment="Center">Connected</Run>
                     </TextBlock>
-                    <materialDesign:PackIcon Grid.Column="1" Kind="ContentCopy" />
+                    <md:PackIcon Grid.Column="1" Kind="ContentCopy" />
                     <TextBlock Grid.Column="2">Party Code: Unknown</TextBlock>
                 </Grid>
                 <Grid>
@@ -63,11 +56,11 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-              
+
                     <TextBox Text="Paste Party Code"
                              Height="36" Padding="10"
                              Style="{DynamicResource MaterialDesignOutlinedTextBox}"/>
-         
+
                     <Button Grid.Column="2" Content="Connect" />
                 </Grid>
             </auto:StackPanel>
@@ -138,14 +131,14 @@
             </Grid.ColumnDefinitions>
 
             <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
-                <Button>Load Song</Button>
+                <Button Style="{DynamicResource MaterialDesignRaisedButton}">Load Song</Button>
                 <Button>Queue Instruments</Button>
                 <Button>Play</Button>
                 <Button>Pause</Button>
                 <Button>Stop</Button>
             </auto:StackPanel>
 
-            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}" Content="{materialDesign:PackIcon QuestionMark}" />
+            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon QuestionMark}" />
         </Grid>
     </Grid>
 </UserControl>
