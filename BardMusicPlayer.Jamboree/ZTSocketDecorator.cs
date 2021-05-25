@@ -6,7 +6,6 @@
 
 using BardMusicPlayer.Jamboree.PartyClient.ZeroTier;
 using System;
-using System.Linq;
 
 namespace BardMusicPlayer.Jamboree
 {
