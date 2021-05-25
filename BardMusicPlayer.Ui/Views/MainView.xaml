@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   Copyright(c) 2021 MoogleTroupe, trotlinebeercan, sabihoshi
   Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
 -->
@@ -16,6 +16,7 @@
     xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
     xmlns:controls="clr-namespace:BardMusicPlayer.Ui.Controls"
     xmlns:s="https://github.com/canton7/Stylet"
+    xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
 
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
@@ -60,11 +61,11 @@
 
             <TextBlock VerticalAlignment="Center" Text="Bard Music Player 2.0"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
-            <controls:SimpleStackPanel Grid.Column="1" Orientation="Horizontal" Spacing="24">
+            <auto:StackPanel Grid.Column="1" Orientation="Horizontal" MarginBetweenChildren="6">
                 <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Settings}" Click="{s:Action Navigate}"
                         Tag="{Binding Settings}" />
                 <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Close}" />
-            </controls:SimpleStackPanel>
+            </auto:StackPanel>
         </Grid>
 
         <Border Grid.Row="1" Margin="0,12"  Style="{DynamicResource HorizontalDividerBorder}"  />

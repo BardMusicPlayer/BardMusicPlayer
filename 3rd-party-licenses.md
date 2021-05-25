@@ -40,6 +40,10 @@ https://github.com/schellingb/TinySoundFont/blob/master/LICENSE
 License: MIT
 https://github.com/stevefolta/SFZero/blob/master/License
 
+### AutoGrid by Kris McGinnes
+License: MIT
+https://github.com/SpicyTaco/SpicyTaco.AutoGrid/blob/master/license
+
 
 ## Libraries referenced by BardMusicPlayer:
 
