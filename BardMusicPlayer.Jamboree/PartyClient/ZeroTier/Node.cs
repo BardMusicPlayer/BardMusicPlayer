@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -501,7 +502,22 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                 throw new ObjectDisposedException(
                     "ZeroTier Node has previously been freed. Restart application to create new instance.");
             }
-            return zts_node_start();
+
+            _unmanagedCallback = OnZeroTierEvent;
+
+            int start;
+
+            try
+            {
+                start = zts_node_start();
+            }
+            catch (Exception e)
+            {
+                start = -1;
+                Debug.WriteLine(e.Message);
+            }
+
+            return start;
         }
 
         public int Free()
