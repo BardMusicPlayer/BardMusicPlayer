@@ -35,11 +35,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <md:BundledTheme BaseTheme="Dark" PrimaryColor="Orange" SecondaryColor="DeepOrange" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="../Resources/Fonts.xaml" />
-                <ResourceDictionary Source="../Resources/Buttons.xaml" />
-                <ResourceDictionary Source="../Resources/Border.xaml" />
+                <ResourceDictionary Source="../Resources/Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
