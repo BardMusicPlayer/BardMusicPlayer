@@ -80,40 +80,38 @@
                          Style="{DynamicResource MaterialDesignOutlinedTextBox}" />
             </GroupBox>
 
-            <GroupBox Grid.Column="2" Header="Instrument Held">
-                <Border BorderBrush="White" BorderThickness="1" CornerRadius="3">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="1" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="2" Header="Instrument Held" Style="{DynamicResource OutlinedGroupBox}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
 
-                        <ContentControl s:View.Model="{Binding BardsViewModel}" Grid.Column="0" />
+                    <ContentControl s:View.Model="{Binding BardsViewModel}" Grid.Column="0" />
 
-                        <Border Grid.Column="1" Margin="0,12" Style="{DynamicResource VerticalDividerBorder}" />
+                    <Border Grid.Column="1" Margin="0,12" Style="{DynamicResource VerticalDividerBorder}" />
 
-                        <ListBox  Grid.Column="2"
+                    <ListBox  Grid.Column="2"
                                   ItemsSource="{x:Static structs:Instrument.All}"
                                   SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=OneWay}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
                                         T<Run Text="{Binding Index, Mode=OneWay}"/>:
                                         <Run Text="{Binding Name, Mode=OneWay}"/>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
 
-                            <!--Disallow selection-->
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="IsHitTestVisible" Value="False"/>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </Grid>
-                </Border>
+                        <!--Disallow selection-->
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Grid>
             </GroupBox>
         </Grid>
 
