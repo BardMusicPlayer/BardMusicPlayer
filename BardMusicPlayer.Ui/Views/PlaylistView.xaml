@@ -106,10 +106,7 @@
             </Grid.ColumnDefinitions>
 
             <!--TODO: Playlist Selection-->
-            <GroupBox Grid.Column="0" Header="Playlist">
-                <TextBox VerticalContentAlignment="Bottom"
-                         Style="{DynamicResource MaterialDesignOutlinedTextBox}" />
-            </GroupBox>
+            <GroupBox Grid.Column="0" Header="Playlist" Style="{DynamicResource OutlinedGroupBox}" />
 
             <GroupBox Grid.Column="2" Header="Songs" Style="{DynamicResource OutlinedGroupBox}">
                 <ListView
