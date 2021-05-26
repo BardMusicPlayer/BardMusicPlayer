@@ -126,7 +126,11 @@
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Dreamland"
                        Style="{DynamicResource MaterialDesignHeadline5TextBlock}" />
-            <Button Grid.Column="1" HorizontalAlignment="Right" Content="Edit Song" Command="{s:Action EditSong}" />
+            <auto:StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" MarginBetweenChildren="6">
+                <Button  Content="Open Playlist" Command="{s:Action OpenPlaylist}" />
+                <Button  Content="Edit Song" Command="{s:Action EditSong}" Style="{DynamicResource MaterialDesignRaisedButton}" />
+            </auto:StackPanel>
+            
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,6">
@@ -148,7 +152,7 @@
             </Grid.ColumnDefinitions>
 
             <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
-                <Button Style="{DynamicResource MaterialDesignRaisedButton}">Load Song</Button>
+                <Button Style="{DynamicResource MaterialDesignRaisedButton}" Command="{s:Action LoadSong}">Load Song</Button>
                 <Button>Queue Instruments</Button>
                 <Button>Play</Button>
                 <Button>Pause</Button>

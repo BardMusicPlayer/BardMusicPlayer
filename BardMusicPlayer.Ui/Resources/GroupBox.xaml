@@ -43,5 +43,40 @@
         </Setter>
     </Style>
 
+    <Style x:Key="OutlinedGroupBox" TargetType="GroupBox">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+        <Setter Property="Padding" Value="{DynamicResource GroupBoxPadding}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="true">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ContentPresenter
+                            Grid.Row="0"
+                            TextElement.FontSize="{DynamicResource GroupBoxHeaderFontSize}"
+                            Margin="{DynamicResource GroupBoxHeaderMargin}"
+                            ContentSource="Header"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                        <Border Grid.Row="1" BorderThickness="1" BorderBrush="White" CornerRadius="3">
+                            <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
 </ResourceDictionary>
