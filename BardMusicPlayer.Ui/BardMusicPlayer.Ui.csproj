@@ -31,6 +31,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
