@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ListView ItemsSource="{Binding Bards}">
+    <ListView ItemsSource="{Binding Bards}" SelectedItem="{Binding SelectedBard}">
         <ListView.ItemTemplate>
             <DataTemplate DataType="seer:Game">
                 <Grid>
