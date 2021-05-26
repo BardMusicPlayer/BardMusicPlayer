@@ -8,7 +8,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using MogLib.Common.Structs;
+using FFBardMusicCommon;
 
 namespace Sharlayan.Core {
 	using System.Collections.Generic;
@@ -39,14 +39,5 @@ namespace Sharlayan.Core {
 			return (Status >= Performance.Status.Opened);
 		}
 
-		public bool IsSimpleInstrument()
-        {
-            return !Instrument.IsSustained;
-        }
-
-		public bool IsWindInstrument()
-        {
-            return Instrument.IsSustained;
-        }
 	}
 }

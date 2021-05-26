@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using MogLib.Common.Structs;
+using FFBardMusicCommon;
 using Sharlayan;
 using Sharlayan.Models.ReadResults;
 using Sharlayan.Core;

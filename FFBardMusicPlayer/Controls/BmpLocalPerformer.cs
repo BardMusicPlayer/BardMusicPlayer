@@ -15,7 +15,7 @@ using Sanford.Multimedia.Midi;
 using Timer = System.Timers.Timer;
 using System.Timers;
 using System.Threading;
-using MogLib.Common.Structs;
+using FFBardMusicCommon;
 using Sharlayan.Models.ReadResults;
 
 namespace FFBardMusicPlayer.Controls {
@@ -29,7 +29,7 @@ namespace FFBardMusicPlayer.Controls {
 		public Instrument ChosenInstrument {
 			set {
 				chosenInstrument = value;
-				InstrumentName.Text = string.Format("[{0}]", value.Name);
+				InstrumentName.Text = string.Format("[{0}]", value.ToString());
 			}
 		}
 

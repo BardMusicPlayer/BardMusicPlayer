@@ -113,41 +113,38 @@ namespace Sharlayan {
             }
         }
 
-        private int FindSuperSignature(byte[] buffer, byte[] pattern) {
-            var result = -1;
-            if (buffer.Length <= 0 || pattern.Length <= 0 || buffer.Length < pattern.Length) {
-                return result;
+        private int FindSuperSignature(IReadOnlyList<byte> buffer, IReadOnlyList<byte> pattern) {
+            if (pattern.Count > buffer.Count)
+                return -1;
+            var badShift = BuildBadCharTable(pattern);
+            var offset = 0;
+            var last = pattern.Count - 1;
+            var maxoffset = buffer.Count - pattern.Count;
+
+            while (offset <= maxoffset) {
+                int position;
+                for (position = last; pattern[position] == buffer[position + offset] || pattern[position] == 63; position--) {
+                    if (position == 0)
+                        return offset;
+                }
+                offset += badShift[buffer[offset + last]];
             }
 
-            for (var i = 0; i <= buffer.Length - pattern.Length; i++) {
-                if (buffer[i] != pattern[0]) {
-                    continue;
-                }
+            return -1;
+        }
 
-                if (buffer.Length > 1) {
-                    var matched = true;
-                    for (var y = 1; y <= pattern.Length - 1; y++) {
-                        if (buffer[i + y] == pattern[y] || pattern[y] == WildCardChar) {
-                            continue;
-                        }
-
-                        matched = false;
-                        break;
-                    }
-
-                    if (!matched) {
-                        continue;
-                    }
-
-                    result = i;
-                    break;
-                }
-
-                result = i;
-                break;
-            }
-
-            return result;
+        private static int[] BuildBadCharTable(IReadOnlyList<byte> pattern) {
+            int idx;
+            var last = pattern.Count - 1;
+            var badShift = new int[256];
+            for (idx = last; idx > 0 && pattern[idx] != 63; --idx) { }
+            var diff = last - idx;
+            if (diff == 0) diff = 1;
+            for (idx = 0; idx <= 255; ++idx)
+                badShift[idx] = diff;
+            for (idx = last - diff; idx < last; ++idx)
+                badShift[pattern[idx]] = last - idx;
+            return badShift;
         }
 
         private void LoadRegions() {

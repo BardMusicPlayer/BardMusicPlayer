@@ -25,19 +25,5 @@ namespace Sharlayan.Models.ReadResults {
 			return false;
 		}
 
-		// Original instrument were the instruments originally available when Performance was first added.
-		public bool IsOriginalInstrument() {
-			if(!Performances.IsEmpty) {
-				return (Performances[0].IsSimpleInstrument());
-			}
-			return false;
-		}
-
-		public bool IsWindInstrument() {
-			if(!Performances.IsEmpty) {
-				return (Performances[0].IsWindInstrument());
-			}
-			return false;
-		}
 	}
 }

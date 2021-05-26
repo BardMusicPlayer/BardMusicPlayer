@@ -9,7 +9,7 @@ using Sanford.Multimedia.Midi;
 using System.Windows.Forms;
 using static Sharlayan.Core.Enums.Performance;
 using System.Text.RegularExpressions;
-using MogLib.Common.Structs;
+using FFBardMusicCommon;
 
 /*
 public class TickList : Dictionary<int, List<MetaMidiEvent>> {

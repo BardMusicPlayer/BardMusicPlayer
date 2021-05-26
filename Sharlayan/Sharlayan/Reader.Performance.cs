@@ -9,7 +9,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Diagnostics;
-using MogLib.Common.Structs;
+using FFBardMusicCommon;
 
 namespace Sharlayan {
     using System;
@@ -74,7 +74,7 @@ namespace Sharlayan {
 						//item.Variant = (byte) variant;
 						//item.Type = (byte) type;
 						item.Status = (Performance.Status) status;
-						item.Instrument = instrument;
+						item.Instrument = (Instrument) instrument;
 
 						if(!result.Performances.ContainsKey(id)) {
 							result.Performances[id] = item;
