@@ -13,10 +13,10 @@ namespace BardMusicPlayer.Ui.ViewModels
         {
             _events = events;
 
-            Instruments = ioc.Get<BardViewModel>();
+            BardsViewModel = ioc.Get<BardViewModel>();
         }
 
-        public BardViewModel Instruments { get; }
+        public BardViewModel BardsViewModel { get; }
 
         public BmpSong CurrentSong { get; set; }
 

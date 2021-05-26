@@ -11,6 +11,7 @@
 
     xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
     xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
+    xmlns:structs="clr-namespace:BardMusicPlayer.Quotidian.Structs;assembly=BardMusicPlayer.Quotidian"
 
     d:DataContext="{d:DesignInstance Type=vm:TopPageViewModel}">
 
@@ -88,13 +89,29 @@
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
 
-                        <ContentControl s:View.Model="{Binding Instruments}" Grid.Column="0" />
+                        <ContentControl s:View.Model="{Binding BardsViewModel}" Grid.Column="0" />
 
                         <Border Grid.Column="1" Margin="0,12" Style="{DynamicResource VerticalDividerBorder}" />
 
-                        <ListView Grid.Column="2">
-                            <TextBlock>T1: Strings</TextBlock>
-                        </ListView>
+                        <ListBox  Grid.Column="2"
+                                  ItemsSource="{x:Static structs:Instrument.All}"
+                                  SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=OneWay}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        T<Run Text="{Binding Index, Mode=OneWay}"/>:
+                                        <Run Text="{Binding Name, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+
+                            <!--Disallow selection-->
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                     </Grid>
                 </Border>
             </GroupBox>
