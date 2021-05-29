@@ -550,24 +550,39 @@ namespace FFBardMusicPlayer.Forms {
                 }
             }
         }
-		private void NextSong() {
-			if(Playlist.AdvanceNext(out string filename, out int track)) {
-				Playlist.PlaySelectedMidi();
-			} else {
-				// If failed playlist when you wanted to, just stop
-				if (proceedPlaylistMidi)
+
+        private void NextSong()
+        {
+            if (Playlist.AdvanceNext(out string filename, out int track))
+            {
+                Playlist.PlaySelectedMidi();
+            }
+            else
+            {
+                // If failed playlist when you wanted to, just stop
+                if (proceedPlaylistMidi)
                 {
-					Player.Player.Stop();
-				}
-			}
-		}
+                    Player.Player.Stop();
+                }
+            }
+        }
 
-		private void OnSongSkip(Object o, EventArgs a) {
-			proceedPlaylistMidi = true;
-			NextSong();
-		}
+        private void OnSongSkip(Object o, EventArgs a)
+	{
+	    if (LocalOrchestra.OrchestraEnabled)
+	    {
+		LocalOrchestra.PerformerStop();
+	    }
+	    else
+            {
+		Player.Player.Stop();
+            }
 
-		private void OnPlayProgressChange(Object o, int progress) {
+	    proceedPlaylistMidi = true;
+            NextSong();
+        }
+
+        private void OnPlayProgressChange(Object o, int progress) {
 			if(LocalOrchestra.OrchestraEnabled) {
 				LocalOrchestra.PerformerProgress(progress);
 			}
