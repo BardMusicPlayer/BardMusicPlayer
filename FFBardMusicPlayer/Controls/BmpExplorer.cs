@@ -202,21 +202,27 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		private void SongBrowser_EnterFile(object sender, BmpMidiEntry file) {
+        private void SongBrowser_EnterFile(object sender, BmpMidiEntry file)
+        {
 
-			if(initState) {
-				selectFlashingTimer.Stop();
-				SelectorSong.BackColor = Color.White;
-				SelectorSong.Text = string.Empty;
-			}
+            if (initState)
+            {
+                selectFlashingTimer.Stop();
+                SelectorSong.BackColor = Color.White;
+                SelectorSong.Text = string.Empty;
+            }
 
-			BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
-			OnBrowserSelect?.Invoke(this, entry);
-			
-			SelectorTrack.Focus();
-		}
+            BmpMidiEntry entry = new BmpMidiEntry(file.FilePath.FilePath, decimal.ToInt32(SelectorTrack.Value));
+            OnBrowserSelect?.Invoke(this, entry);
 
-		protected override void OnKeyDown(KeyEventArgs e) {
+	    // make sure the filter is reset when a song is selected
+	    SongBrowser.FilenameFilter = string.Empty;
+	    SongBrowser.RefreshList();
+
+	    SelectorTrack.Focus();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e) {
 			base.OnKeyDown(e);
 
 			if(e.KeyCode == Keys.Escape) {
