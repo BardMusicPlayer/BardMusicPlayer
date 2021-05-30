@@ -16,21 +16,20 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        internal static MidiFile ReadAsMidiFile(this Stream stream)
-        {
-            return MidiFile.Read(stream, new ReadingSettings
+        internal static MidiFile ReadAsMidiFile(this Stream stream) =>
+            MidiFile.Read(stream, new ReadingSettings
             {
-                TextEncoding = Encoding.UTF8,
-                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
-                InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
+                TextEncoding                            = Encoding.UTF8,
+                InvalidChunkSizePolicy                  = InvalidChunkSizePolicy.Ignore,
+                InvalidMetaEventParameterValuePolicy    = InvalidMetaEventParameterValuePolicy.SnapToLimits,
                 InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
-                InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
-                MissedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore,
-                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                InvalidSystemCommonEventParameterValuePolicy =
+                    InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
+                MissedEndOfTrackPolicy           = MissedEndOfTrackPolicy.Ignore,
+                NotEnoughBytesPolicy             = NotEnoughBytesPolicy.Ignore,
                 UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore,
-                UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
-                UnknownChunkIdPolicy = UnknownChunkIdPolicy.ReadAsUnknownChunk
+                UnknownChannelEventPolicy        = UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte,
+                UnknownChunkIdPolicy             = UnknownChunkIdPolicy.ReadAsUnknownChunk
             });
-        }
     }
 }
