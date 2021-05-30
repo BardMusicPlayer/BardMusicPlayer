@@ -14,7 +14,7 @@ namespace BardMusicPlayer.Grunt
 {
     public static partial class GameExtensions
     {
-        private static readonly SemaphoreSlim LyricSemaphoreSlim = new (1,1);
+        private static readonly SemaphoreSlim LyricSemaphoreSlim = new(1, 1);
 
         /// <summary>
         /// 
@@ -55,7 +55,8 @@ namespace BardMusicPlayer.Grunt
 
         private static void SendLyricLineClipBoardTask(TaskCompletionSource<bool> tcs, Game game, string text)
         {
-            try {
+            try
+            {
                 if (!game.ChatStatus && !SyncTapKey(game, Keys.Enter).GetAwaiter().GetResult())
                 {
                     tcs.SetResult(false);
@@ -67,18 +68,14 @@ namespace BardMusicPlayer.Grunt
                 var result = true;
 
                 if (!SyncTapKey(game, (int) Keys.Control + Keys.V).GetAwaiter().GetResult())
-                {
                     result = false;
-                }
 
-                else if (!SyncTapKey(game, Keys.Enter).GetAwaiter().GetResult())
-                {
-                    result = false;
-                }
+                else if (!SyncTapKey(game, Keys.Enter).GetAwaiter().GetResult()) result = false;
 
                 tcs.SetResult(result);
             }
-            catch(Exception) {
+            catch (Exception)
+            {
                 // TODO: Log errors
                 tcs.SetResult(false);
             }

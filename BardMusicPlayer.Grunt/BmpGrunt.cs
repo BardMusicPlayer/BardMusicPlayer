@@ -21,9 +21,7 @@ namespace BardMusicPlayer.Grunt
 
         internal DalamudServer DalamudServer;
 
-        private BmpGrunt()
-        {
-        }
+        private BmpGrunt() { }
 
         public static BmpGrunt Instance => LazyInstance.Value;
 
@@ -33,10 +31,12 @@ namespace BardMusicPlayer.Grunt
         public void Start()
         {
             if (Started) return;
+
             if (!BmpPigeonhole.Initialized) throw new BmpGruntException("Grunt requires Pigeonhole to be initialized.");
             if (!BmpSeer.Instance.Started) throw new BmpGruntException("Grunt requires Seer to be running.");
+
             DalamudServer = new DalamudServer();
-            Started = true;
+            Started       = true;
         }
 
         /// <summary>
@@ -45,12 +45,14 @@ namespace BardMusicPlayer.Grunt
         public void Stop()
         {
             if (!Started) return;
+
             DalamudServer?.Dispose();
             DalamudServer = null;
-            Started = false;
+            Started       = false;
         }
 
-        ~BmpGrunt() => Dispose();
+        ~BmpGrunt() { Dispose(); }
+
         public void Dispose()
         {
             Stop();
