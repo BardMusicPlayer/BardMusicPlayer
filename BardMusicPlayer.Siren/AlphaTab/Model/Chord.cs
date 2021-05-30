@@ -59,22 +59,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Chord()
         {
-            Strings = new FastList<int>();
-            BarreFrets = new FastList<int>();
-            ShowDiagram = true;
-            ShowName = true;
+            Strings       = new FastList<int>();
+            BarreFrets    = new FastList<int>();
+            ShowDiagram   = true;
+            ShowName      = true;
             ShowFingering = true;
-            FirstFret = 1;
+            FirstFret     = 1;
         }
 
         internal static void CopyTo(Chord src, Chord dst)
         {
-            dst.FirstFret = src.FirstFret;
-            dst.Name = src.Name;
-            dst.Strings = src.Strings.Clone();
-            dst.BarreFrets = src.BarreFrets.Clone();
-            dst.ShowName = src.ShowName;
-            dst.ShowDiagram = src.ShowDiagram;
+            dst.FirstFret     = src.FirstFret;
+            dst.Name          = src.Name;
+            dst.Strings       = src.Strings.Clone();
+            dst.BarreFrets    = src.BarreFrets.Clone();
+            dst.ShowName      = src.ShowName;
+            dst.ShowDiagram   = src.ShowDiagram;
             dst.ShowFingering = src.ShowFingering;
         }
     }

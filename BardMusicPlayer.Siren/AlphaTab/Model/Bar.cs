@@ -78,9 +78,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 for (int i = 0, j = Voices.Count; i < j; i++)
                 {
                     if (!Voices[i].IsEmpty)
-                    {
                         return false;
-                    }
                 }
 
                 return true;
@@ -92,25 +90,25 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Bar()
         {
-            Id = _globalBarId++;
-            Voices = new FastList<Voice>();
-            Clef = Clef.G2;
+            Id         = _globalBarId++;
+            Voices     = new FastList<Voice>();
+            Clef       = Clef.G2;
             ClefOttava = Ottavia.Regular;
             SimileMark = SimileMark.None;
         }
 
         internal static void CopyTo(Bar src, Bar dst)
         {
-            dst.Id = src.Id;
-            dst.Index = src.Index;
-            dst.Clef = src.Clef;
+            dst.Id         = src.Id;
+            dst.Index      = src.Index;
+            dst.Clef       = src.Clef;
             dst.ClefOttava = src.ClefOttava;
             dst.SimileMark = src.SimileMark;
         }
 
         internal void AddVoice(Voice voice)
         {
-            voice.Bar = this;
+            voice.Bar   = this;
             voice.Index = Voices.Count;
             Voices.Add(voice);
         }
@@ -130,10 +128,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             foreach (var voice in Voices)
             {
                 var voiceDuration = voice.CalculateDuration();
-                if (voiceDuration > duration)
-                {
-                    duration = voiceDuration;
-                }
+                if (voiceDuration > duration) duration = voiceDuration;
             }
 
             return duration;

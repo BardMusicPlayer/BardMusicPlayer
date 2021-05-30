@@ -28,7 +28,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
         public ProgressEventArgs(int loaded, int total)
         {
             Loaded = loaded;
-            Total = total;
+            Total  = total;
         }
     }
 }

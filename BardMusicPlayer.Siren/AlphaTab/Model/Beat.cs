@@ -138,7 +138,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public bool IsPalmMute { get; set; }
 
-
         /// <summary>
         /// Gets or sets the number of dots applied to the duration of this beat.
         /// </summary>
@@ -331,8 +330,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public bool InvertBeamDirection { get; set; }
 
         internal bool IsEffectSlurOrigin { get; set; }
+
         internal bool IsEffectSlurDestination => EffectSlurOrigin != null;
+
         internal Beat EffectSlurOrigin { get; set; }
+
         internal Beat EffectSlurDestination { get; set; }
 
         /// <summary>
@@ -340,93 +342,83 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Beat()
         {
-            Id = _globalBeatId++;
-            WhammyBarType = WhammyType.None;
-            WhammyBarPoints = new FastList<BendPoint>();
-            Notes = new FastList<Note>();
-            BrushType = BrushType.None;
-            Vibrato = VibratoType.None;
-            GraceType = GraceType.None;
-            PickStroke = PickStroke.None;
-            Duration = Duration.Quarter;
-            TremoloSpeed = null;
-            Dots = 0;
-            DisplayStart = 0;
-            DisplayDuration = 0;
-            PlaybackStart = 0;
-            PlaybackDuration = 0;
-            TupletDenominator = -1;
-            TupletNumerator = -1;
-            Dynamics = DynamicValue.F;
-            Crescendo = CrescendoType.None;
+            Id                  = _globalBeatId++;
+            WhammyBarType       = WhammyType.None;
+            WhammyBarPoints     = new FastList<BendPoint>();
+            Notes               = new FastList<Note>();
+            BrushType           = BrushType.None;
+            Vibrato             = VibratoType.None;
+            GraceType           = GraceType.None;
+            PickStroke          = PickStroke.None;
+            Duration            = Duration.Quarter;
+            TremoloSpeed        = null;
+            Dots                = 0;
+            DisplayStart        = 0;
+            DisplayDuration     = 0;
+            PlaybackStart       = 0;
+            PlaybackDuration    = 0;
+            TupletDenominator   = -1;
+            TupletNumerator     = -1;
+            Dynamics            = DynamicValue.F;
+            Crescendo           = CrescendoType.None;
             InvertBeamDirection = false;
-            Ottava = Ottavia.Regular;
-            NoteStringLookup = new FastDictionary<int, Note>();
-            NoteValueLookup = new FastDictionary<int, Note>();
-            WhammyStyle = BendStyle.Default;
+            Ottava              = Ottavia.Regular;
+            NoteStringLookup    = new FastDictionary<int, Note>();
+            NoteValueLookup     = new FastDictionary<int, Note>();
+            WhammyStyle         = BendStyle.Default;
         }
 
         internal static void CopyTo(Beat src, Beat dst)
         {
-            dst.Id = src.Id;
-            dst.Index = src.Index;
-            dst.IsEmpty = src.IsEmpty;
+            dst.Id       = src.Id;
+            dst.Index    = src.Index;
+            dst.IsEmpty  = src.IsEmpty;
             dst.Duration = src.Duration;
-            dst.Dots = src.Dots;
-            dst.FadeIn = src.FadeIn;
+            dst.Dots     = src.Dots;
+            dst.FadeIn   = src.FadeIn;
             if (src.Lyrics != null)
             {
                 dst.Lyrics = new string[src.Lyrics.Length];
-                for (var i = 0; i < src.Lyrics.Length; i++)
-                {
-                    dst.Lyrics[i] = src.Lyrics[i];
-                }
+                for (var i = 0; i < src.Lyrics.Length; i++) dst.Lyrics[i] = src.Lyrics[i];
             }
 
-            dst.Pop = src.Pop;
-            dst.HasRasgueado = src.HasRasgueado;
-            dst.Slap = src.Slap;
-            dst.Tap = src.Tap;
-            dst.Text = src.Text;
-            dst.BrushType = src.BrushType;
-            dst.BrushDuration = src.BrushDuration;
-            dst.TupletDenominator = src.TupletDenominator;
-            dst.TupletNumerator = src.TupletNumerator;
-            dst.Vibrato = src.Vibrato;
-            dst.ChordId = src.ChordId;
-            dst.GraceType = src.GraceType;
-            dst.PickStroke = src.PickStroke;
-            dst.TremoloSpeed = src.TremoloSpeed;
-            dst.Crescendo = src.Crescendo;
-            dst.DisplayStart = src.DisplayStart;
-            dst.DisplayDuration = src.DisplayDuration;
-            dst.PlaybackStart = src.PlaybackStart;
-            dst.PlaybackDuration = src.PlaybackDuration;
-            dst.Dynamics = src.Dynamics;
-            dst.IsLegatoOrigin = src.IsLegatoOrigin;
+            dst.Pop                 = src.Pop;
+            dst.HasRasgueado        = src.HasRasgueado;
+            dst.Slap                = src.Slap;
+            dst.Tap                 = src.Tap;
+            dst.Text                = src.Text;
+            dst.BrushType           = src.BrushType;
+            dst.BrushDuration       = src.BrushDuration;
+            dst.TupletDenominator   = src.TupletDenominator;
+            dst.TupletNumerator     = src.TupletNumerator;
+            dst.Vibrato             = src.Vibrato;
+            dst.ChordId             = src.ChordId;
+            dst.GraceType           = src.GraceType;
+            dst.PickStroke          = src.PickStroke;
+            dst.TremoloSpeed        = src.TremoloSpeed;
+            dst.Crescendo           = src.Crescendo;
+            dst.DisplayStart        = src.DisplayStart;
+            dst.DisplayDuration     = src.DisplayDuration;
+            dst.PlaybackStart       = src.PlaybackStart;
+            dst.PlaybackDuration    = src.PlaybackDuration;
+            dst.Dynamics            = src.Dynamics;
+            dst.IsLegatoOrigin      = src.IsLegatoOrigin;
             dst.InvertBeamDirection = src.InvertBeamDirection;
-            dst.WhammyBarType = src.WhammyBarType;
-            dst.IsContinuedWhammy = src.IsContinuedWhammy;
-            dst.Ottava = src.Ottava;
-            dst.WhammyStyle = src.WhammyStyle;
+            dst.WhammyBarType       = src.WhammyBarType;
+            dst.IsContinuedWhammy   = src.IsContinuedWhammy;
+            dst.Ottava              = src.Ottava;
+            dst.WhammyStyle         = src.WhammyStyle;
         }
 
         internal Beat Clone()
         {
             var beat = new Beat();
             var id = beat.Id;
-            for (int i = 0, j = WhammyBarPoints.Count; i < j; i++)
-            {
-                beat.AddWhammyBarPoint(WhammyBarPoints[i].Clone());
-            }
+            for (int i = 0, j = WhammyBarPoints.Count; i < j; i++) beat.AddWhammyBarPoint(WhammyBarPoints[i].Clone());
 
-            for (int i = 0, j = Notes.Count; i < j; i++)
-            {
-                beat.AddNoteInternal(Notes[i].Clone(), Notes[i].RealValue);
-            }
+            for (int i = 0, j = Notes.Count; i < j; i++) beat.AddNoteInternal(Notes[i].Clone(), Notes[i].RealValue);
 
             CopyTo(this, beat);
-
 
             beat.Id = id;
             return beat;
@@ -435,29 +427,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         internal void AddWhammyBarPoint(BendPoint point)
         {
             WhammyBarPoints.Add(point);
-            if (MaxWhammyPoint == null || point.Value > MaxWhammyPoint.Value)
-            {
-                MaxWhammyPoint = point;
-            }
+            if (MaxWhammyPoint == null || point.Value > MaxWhammyPoint.Value) MaxWhammyPoint = point;
 
-            if (MinWhammyPoint == null || point.Value < MinWhammyPoint.Value)
-            {
-                MinWhammyPoint = point;
-            }
+            if (MinWhammyPoint == null || point.Value < MinWhammyPoint.Value) MinWhammyPoint = point;
 
-            if (WhammyBarType == WhammyType.None)
-            {
-                WhammyBarType = WhammyType.Custom;
-            }
+            if (WhammyBarType == WhammyType.None) WhammyBarType = WhammyType.Custom;
         }
 
         internal void RemoveWhammyBarPoint(int index)
         {
             // check index
-            if (index < 0 || index >= WhammyBarPoints.Count)
-            {
-                return;
-            }
+            if (index < 0 || index >= WhammyBarPoints.Count) return;
 
             // remove point
             WhammyBarPoints.RemoveAt(index);
@@ -470,9 +450,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 foreach (var currentPoint in WhammyBarPoints)
                 {
                     if (MaxWhammyPoint == null || currentPoint.Value > MaxWhammyPoint.Value)
-                    {
                         MaxWhammyPoint = currentPoint;
-                    }
                 }
             }
 
@@ -482,32 +460,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 foreach (var currentPoint in WhammyBarPoints)
                 {
                     if (MinWhammyPoint == null || currentPoint.Value < MinWhammyPoint.Value)
-                    {
                         MinWhammyPoint = currentPoint;
-                    }
                 }
             }
         }
 
-        internal void AddNote(Note note)
-        {
-            AddNoteInternal(note);
-        }
+        internal void AddNote(Note note) { AddNoteInternal(note); }
 
         private void AddNoteInternal(Note note, int realValue = -1)
         {
-            note.Beat = this;
+            note.Beat  = this;
             note.Index = Notes.Count;
             Notes.Add(note);
-            if (note.IsStringed)
-            {
-                NoteStringLookup[note.String] = note;
-            }
+            if (note.IsStringed) NoteStringLookup[note.String] = note;
 
-            if (realValue == -1)
-            {
-                realValue = note.RealValue;
-            }
+            if (realValue == -1) realValue = note.RealValue;
 
             NoteValueLookup[realValue] = note;
         }
@@ -515,20 +482,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         internal void RemoveNote(Note note)
         {
             var index = Notes.IndexOf(note);
-            if (index >= 0)
-            {
-                Notes.RemoveAt(index);
-            }
+            if (index >= 0) Notes.RemoveAt(index);
         }
-
-     
 
         internal Note GetNoteOnString(int @string)
         {
-            if (NoteStringLookup.ContainsKey(@string))
-            {
-                return NoteStringLookup[@string];
-            }
+            if (NoteStringLookup.ContainsKey(@string)) return NoteStringLookup[@string];
 
             return null;
         }
@@ -537,18 +496,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             var ticks = Duration.ToTicks();
             if (Dots == 2)
-            {
-                ticks = MidiUtils.ApplyDot(ticks, true);
-            }
-            else if (Dots == 1)
-            {
-                ticks = MidiUtils.ApplyDot(ticks, false);
-            }
+                ticks                 = MidiUtils.ApplyDot(ticks, true);
+            else if (Dots == 1) ticks = MidiUtils.ApplyDot(ticks, false);
 
             if (TupletDenominator > 0 && TupletNumerator >= 0)
-            {
                 ticks = MidiUtils.ApplyTuplet(ticks, TupletNumerator, TupletDenominator);
-            }
 
             return ticks;
         }
@@ -557,7 +509,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             var ticks = CalculateDuration();
             PlaybackDuration = ticks;
-            DisplayDuration = ticks;
+            DisplayDuration  = ticks;
 
             switch (GraceType)
             {
@@ -585,22 +537,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
                     var previous = PreviousBeat;
                     if (previous != null && previous.GraceType == GraceType.BendGrace)
-                    {
                         PlaybackDuration = previous.PlaybackDuration;
-                    }
                     else
                     {
                         while (previous != null && previous.GraceType == GraceType.OnBeat)
                         {
                             // if the previous beat is a on-beat grace it steals the duration from this beat
                             PlaybackDuration -= previous.PlaybackDuration;
-                            previous = previous.PreviousBeat;
+                            previous         =  previous.PreviousBeat;
                         }
                     }
 
                     break;
             }
-
 
             //// It can happen that the first beat of the next bar shifts into this
             //// beat due to before-beat grace. In this case we need to
@@ -637,10 +586,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal void Finish()
         {
-
             var needCopyBeatForBend = false;
-            MinNote = null;
-            MaxNote = null;
+            MinNote       = null;
+            MaxNote       = null;
             MinStringNote = null;
             MaxStringNote = null;
 
@@ -651,45 +599,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             {
                 var note = Notes[i];
                 note.Finish();
-                if (note.IsLetRing)
-                {
-                    IsLetRing = true;
-                }
+                if (note.IsLetRing) IsLetRing = true;
 
-                if (note.IsPalmMute)
-                {
-                    IsPalmMute = true;
-                }
-
-
+                if (note.IsPalmMute) IsPalmMute = true;
 
                 if (note.IsVisible)
                 {
                     visibleNotes++;
-                    if (MinNote == null || note.RealValue < MinNote.RealValue)
-                    {
-                        MinNote = note;
-                    }
+                    if (MinNote == null || note.RealValue < MinNote.RealValue) MinNote = note;
 
-                    if (MaxNote == null || note.RealValue > MaxNote.RealValue)
-                    {
-                        MaxNote = note;
-                    }
+                    if (MaxNote == null || note.RealValue > MaxNote.RealValue) MaxNote = note;
 
-                    if (MinStringNote == null || note.String < MinStringNote.String)
-                    {
-                        MinStringNote = note;
-                    }
+                    if (MinStringNote == null || note.String < MinStringNote.String) MinStringNote = note;
 
-                    if (MaxStringNote == null || note.String > MaxStringNote.String)
-                    {
-                        MaxStringNote = note;
-                    }
+                    if (MaxStringNote == null || note.String > MaxStringNote.String) MaxStringNote = note;
 
-                    if (note.HasEffectSlur)
-                    {
-                        isEffectSlurBeat = true;
-                    }
+                    if (note.HasEffectSlur) isEffectSlurBeat = true;
                 }
             }
 
@@ -697,22 +622,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             {
                 if (EffectSlurOrigin != null)
                 {
-                    EffectSlurOrigin.EffectSlurDestination = NextBeat;
+                    EffectSlurOrigin.EffectSlurDestination                  = NextBeat;
                     EffectSlurOrigin.EffectSlurDestination.EffectSlurOrigin = EffectSlurOrigin;
-                    EffectSlurOrigin = null;
+                    EffectSlurOrigin                                        = null;
                 }
                 else
                 {
-                    IsEffectSlurOrigin = true;
-                    EffectSlurDestination = NextBeat;
+                    IsEffectSlurOrigin                     = true;
+                    EffectSlurDestination                  = NextBeat;
                     EffectSlurDestination.EffectSlurOrigin = this;
                 }
             }
 
-            if (Notes.Count > 0 && visibleNotes == 0)
-            {
-                IsEmpty = true;
-            }
+            if (Notes.Count > 0 && visibleNotes == 0) IsEmpty = true;
 
             // we need to clean al letring/palmmute flags for rests
             // in case the effect is not continued on this beat
@@ -721,26 +643,18 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 var currentBeat = PreviousBeat;
                 while (currentBeat != null && currentBeat.IsRest)
                 {
-                    if (!IsLetRing)
-                    {
-                        currentBeat.IsLetRing = false;
-                    }
+                    if (!IsLetRing) currentBeat.IsLetRing = false;
 
-                    if (!IsPalmMute)
-                    {
-                        currentBeat.IsPalmMute = false;
-                    }
+                    if (!IsPalmMute) currentBeat.IsPalmMute = false;
 
                     currentBeat = currentBeat.PreviousBeat;
                 }
             }
 
-
             // try to detect what kind of bend was used and cleans unneeded points if required
             // Guitar Pro 6 and above (gpif.xml) uses exactly 4 points to define all whammys
             if (WhammyBarPoints.Count > 0 && WhammyBarType == WhammyType.Custom)
             {
-
                 var isContinuedWhammy = IsContinuedWhammy = PreviousBeat != null && PreviousBeat.HasWhammyBar;
                 if (WhammyBarPoints.Count == 4)
                 {
@@ -757,13 +671,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                             origin.Value > middle1.Value && middle1.Value > destination.Value)
                         {
                             if (origin.Value != 0 && !isContinuedWhammy)
-                            {
                                 WhammyBarType = WhammyType.PrediveDive;
-                            }
                             else
-                            {
                                 WhammyBarType = WhammyType.Dive;
-                            }
 
                             WhammyBarPoints.RemoveAt(2);
                             WhammyBarPoints.RemoveAt(1);
@@ -771,33 +681,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         // down-up or up-down
                         else if (origin.Value > middle1.Value && middle1.Value < destination.Value ||
                                  origin.Value < middle1.Value && middle1.Value > destination.Value)
-                        {
                             WhammyBarType = WhammyType.Dip;
-                         
-                        }
                         else if (origin.Value == middle1.Value && middle1.Value == destination.Value)
                         {
                             if (origin.Value != 0 && !isContinuedWhammy)
-                            {
                                 WhammyBarType = WhammyType.Predive;
-                            }
                             else
-                            {
                                 WhammyBarType = WhammyType.Hold;
-                            }
 
                             WhammyBarPoints.RemoveAt(2);
                             WhammyBarPoints.RemoveAt(1);
                         }
                         else
-                        {
                             Logger.Warning("Model", "Unsupported whammy type detected, fallback to custom");
-                        }
                     }
                     else
-                    {
                         Logger.Warning("Model", "Unsupported whammy type detected, fallback to custom");
-                    }
                 }
             }
 
@@ -814,11 +713,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 {
                     var cloneNote = cloneBeat.Notes[i];
                     // remove bend on cloned note
-                    cloneNote.BendType = BendType.None;
+                    cloneNote.BendType     = BendType.None;
                     cloneNote.MaxBendPoint = null;
-                    cloneNote.BendPoints = new FastList<BendPoint>();
-                    cloneNote.BendStyle = BendStyle.Default;
-                    cloneNote.Id = Note.GlobalNoteId++;
+                    cloneNote.BendPoints   = new FastList<BendPoint>();
+                    cloneNote.BendStyle    = BendStyle.Default;
+                    cloneNote.Id           = Note.GlobalNoteId++;
 
                     // if the note has a bend which is continued on the next note
                     // we need to convert this note into a hold bend
@@ -853,34 +752,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         /// <param name="beat"></param>
         /// <returns></returns>
-        internal bool IsBefore(Beat beat)
-        {
-            return Voice.Bar.Index < beat.Voice.Bar.Index ||
-                   beat.Voice.Bar.Index == Voice.Bar.Index && Index < beat.Index;
-        }
+        internal bool IsBefore(Beat beat) =>
+            Voice.Bar.Index < beat.Voice.Bar.Index ||
+            beat.Voice.Bar.Index == Voice.Bar.Index && Index < beat.Index;
 
         /// <summary>
         /// Checks whether the current beat is timewise after the given beat.
         /// </summary>
         /// <param name="beat"></param>
         /// <returns></returns>
-        internal bool IsAfter(Beat beat)
-        {
-            return Voice.Bar.Index > beat.Voice.Bar.Index ||
-                   beat.Voice.Bar.Index == Voice.Bar.Index && Index > beat.Index;
-        }
+        internal bool IsAfter(Beat beat) =>
+            Voice.Bar.Index > beat.Voice.Bar.Index ||
+            beat.Voice.Bar.Index == Voice.Bar.Index && Index > beat.Index;
 
-        internal bool HasNoteOnString(int noteString)
-        {
-            return NoteStringLookup.ContainsKey(noteString);
-        }
+        internal bool HasNoteOnString(int noteString) => NoteStringLookup.ContainsKey(noteString);
 
         internal Note GetNoteWithRealValue(int noteRealValue)
         {
-            if (NoteValueLookup.ContainsKey(noteRealValue))
-            {
-                return NoteValueLookup[noteRealValue];
-            }
+            if (NoteValueLookup.ContainsKey(noteRealValue)) return NoteValueLookup[noteRealValue];
 
             return null;
         }

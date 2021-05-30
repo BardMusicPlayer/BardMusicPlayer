@@ -45,10 +45,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         private void Parse(string str, int p, FastList<string> chunks)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(str)) return;
 
             var state = LyricsState.Begin;
             var next = LyricsState.Begin;
@@ -77,7 +74,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                                 break;
                             default:
                                 skipSpace = false;
-                                state = next;
+                                state     = next;
                                 continue;
                         }
 
@@ -118,7 +115,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                                 chunks.Add(PrepareChunk(txt));
 
                                 state = LyricsState.IgnoreSpaces;
-                                next = LyricsState.Begin;
+                                next  = LyricsState.Begin;
                                 break;
                         }
 
@@ -134,8 +131,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                                 chunks.Add(PrepareChunk(txt));
 
                                 skipSpace = true;
-                                state = LyricsState.IgnoreSpaces;
-                                next = LyricsState.Begin;
+                                state     = LyricsState.IgnoreSpaces;
+                                next      = LyricsState.Begin;
                                 continue;
                         }
 
@@ -148,16 +145,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (state == LyricsState.Text)
             {
                 if (p != start)
-                {
                     chunks.Add(str.Substring(start, p - start));
-                }
             }
         }
 
-        private string PrepareChunk(string txt)
-        {
-            return txt.Replace("+", " ");
-        }
+        private string PrepareChunk(string txt) => txt.Replace("+", " ");
 
         private enum LyricsState
         {

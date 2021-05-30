@@ -9,7 +9,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
 {
     internal static class IOHelper
     {
-
         public static uint ReadUInt32LE(this IReadable input)
         {
             var ch1 = input.ReadByte();
@@ -36,8 +35,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             return Platform.ToInt16((ch2 << 8) | ch1);
         }
 
-
-
         public static string Read8BitStringLength(this IReadable input, int length)
         {
             var s = new StringBuilder();
@@ -45,23 +42,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             for (var i = 0; i < length; i++)
             {
                 var c = input.ReadByte();
-                if (c == 0 && z == -1)
-                {
-                    z = i;
-                }
+                if (c == 0 && z == -1) z = i;
 
                 s.AppendChar(c);
             }
 
             var t = s.ToString();
-            if (z >= 0)
-            {
-                return t.Substring(0, z);
-            }
+            if (z >= 0) return t.Substring(0, z);
 
             return t;
         }
-
-
     }
 }

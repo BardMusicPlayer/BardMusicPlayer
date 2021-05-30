@@ -13,10 +13,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Util
         private bool _created;
         private T _value;
 
-        public Lazy(Func<T> factory)
-        {
-            _factory = factory;
-        }
+        public Lazy(Func<T> factory) { _factory = factory; }
 
         public T Value
         {
@@ -24,7 +21,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Util
             {
                 if (!_created)
                 {
-                    _value = _factory();
+                    _value   = _factory();
                     _created = true;
                 }
 

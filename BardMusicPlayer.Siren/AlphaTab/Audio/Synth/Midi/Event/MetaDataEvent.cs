@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         public override void WriteTo(IWriteable s)
         {
             s.WriteByte(0xFF);
-            s.WriteByte((byte)MetaStatus);
+            s.WriteByte((byte) MetaStatus);
 
             var l = Data.Length;
             MidiFile.WriteVariableInt(s, l);

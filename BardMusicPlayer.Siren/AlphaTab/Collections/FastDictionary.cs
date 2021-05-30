@@ -21,10 +21,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         /// <summary>
         /// Initializes a new instance of the <see cref="FastDictionary{TKey, TValue}"/> class.
         /// </summary>
-        public FastDictionary()
-        {
-            _dictionary = new Dictionary<TKey, TValue>();
-        }
+        public FastDictionary() { _dictionary = new Dictionary<TKey, TValue>(); }
 
         /// <summary>
         /// Gets or sets the value at the specified index.
@@ -44,19 +41,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         public int Count => _dictionary.Count;
 
         /// <inheritdoc />
-        public IEnumerator<TKey> GetEnumerator()
-        {
-            return _dictionary.Keys.GetEnumerator();
-        }
+        public IEnumerator<TKey> GetEnumerator() => _dictionary.Keys.GetEnumerator();
 
         /// <summary>
         /// Removes the value with the specified key.
         /// </summary>
         /// <param name="key">The key to remove from the dictionary. </param>
-        public void Remove(TKey key)
-        {
-            _dictionary.Remove(key);
-        }
+        public void Remove(TKey key) { _dictionary.Remove(key); }
 
         /// <summary>
         /// Determines whether the dictionary container contains the specified key.
@@ -65,15 +56,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         /// <returns>
         ///   <c>true</c> if the specified key is contained; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
-        }
+        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -87,36 +87,33 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Staff()
         {
-            Bars = new FastList<Bar>();
-            Tuning = new int[0];
-            Chords = new FastDictionary<string, Chord>();
+            Bars                 = new FastList<Bar>();
+            Tuning               = new int[0];
+            Chords               = new FastDictionary<string, Chord>();
             ShowStandardNotation = true;
-            ShowTablature = true;
+            ShowTablature        = true;
         }
 
         internal static void CopyTo(Staff src, Staff dst)
         {
-            dst.Capo = src.Capo;
-            dst.Index = src.Index;
-            dst.Tuning = Platform.CloneArray(src.Tuning);
-            dst.TranspositionPitch = src.TranspositionPitch;
+            dst.Capo                      = src.Capo;
+            dst.Index                     = src.Index;
+            dst.Tuning                    = Platform.CloneArray(src.Tuning);
+            dst.TranspositionPitch        = src.TranspositionPitch;
             dst.DisplayTranspositionPitch = src.DisplayTranspositionPitch;
-            dst.ShowStandardNotation = src.ShowStandardNotation;
-            dst.ShowTablature = src.ShowTablature;
-            dst.IsPercussion = src.IsPercussion;
+            dst.ShowStandardNotation      = src.ShowStandardNotation;
+            dst.ShowTablature             = src.ShowTablature;
+            dst.IsPercussion              = src.IsPercussion;
         }
 
         internal void Finish()
         {
-            for (int i = 0, j = Bars.Count; i < j; i++)
-            {
-                Bars[i].Finish();
-            }
+            for (int i = 0, j = Bars.Count; i < j; i++) Bars[i].Finish();
         }
 
         internal void AddChord(string chordId, Chord chord)
         {
-            chord.Staff = this;
+            chord.Staff     = this;
             Chords[chordId] = chord;
         }
 
@@ -127,7 +124,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             bar.Index = bars.Count;
             if (bars.Count > 0)
             {
-                bar.PreviousBar = bars[bars.Count - 1];
+                bar.PreviousBar         = bars[bars.Count - 1];
                 bar.PreviousBar.NextBar = bar;
             }
 
