@@ -13,7 +13,6 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Autosave
     internal static class JsonSettingsAutosaveExtensions
     {
         private static readonly string[] _jsonSettingsAbstractionVirtuals = { "FileName" };
-
         private static ProxyGenerator _generator;
 
         /// <summary>
@@ -28,9 +27,12 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Autosave
                 throw new ArgumentNullException(nameof(settings));
 
             //if it doesn't contain any virtual methods, notify developer about it.
-            if (!settings.GetType().GetProperties().Where(p => _jsonSettingsAbstractionVirtuals.All(av => !p.Name.Equals(av))).Any(p => p.GetGetMethod().IsVirtual))
+            if (!settings.GetType().GetProperties()
+                .Where(p => _jsonSettingsAbstractionVirtuals.All(av => !p.Name.Equals(av)))
+                .Any(p => p.GetGetMethod().IsVirtual))
             {
-                var msg = $"JsonSettings: During proxy creation of {settings.GetType().Name}, no virtual properties were found which will make Autosaving redundant.";
+                var msg =
+                    $"JsonSettings: During proxy creation of {settings.GetType().Name}, no virtual properties were found which will make Autosaving redundant.";
                 Debug.WriteLine(msg);
                 if (Debugger.IsAttached)
                     Console.Error.WriteLine(msg);
@@ -38,7 +40,8 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Autosave
             }
 
             _generator = _generator ?? new ProxyGenerator();
-            return _generator.CreateClassProxyWithTarget<TSettings>(settings, new JsonSettingsInterceptor((JsonSettings)(object)settings));
+            return _generator.CreateClassProxyWithTarget<TSettings>(settings,
+                new JsonSettingsInterceptor((JsonSettings) (object) settings));
         }
 
         /// <summary>
@@ -49,12 +52,9 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Autosave
         {
             private readonly ISavable _settings;
 
-            public JsonSettingsInterceptor(JsonSettings settings)
-            {
-                _settings = settings;
-                //_filename = filename;
-            }
+            public JsonSettingsInterceptor(JsonSettings settings) { _settings = settings; }
 
+            //_filename = filename;
             public void Intercept(IInvocation invocation)
             {
                 invocation.Proceed();

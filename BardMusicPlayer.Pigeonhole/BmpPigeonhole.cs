@@ -19,6 +19,7 @@ namespace BardMusicPlayer.Pigeonhole
         public static void Initialize(string filename)
         {
             if (Initialized) return;
+
             _instance = Load<BmpPigeonhole>(filename).EnableAutosave();
         }
 
@@ -30,7 +31,8 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// Gets this pigeonhole instance
         /// </summary>
-        public static BmpPigeonhole Instance => _instance ?? throw new BmpException("This pigeonhole must be initialized first.");
+        public static BmpPigeonhole Instance =>
+            _instance ?? throw new BmpException("This pigeonhole must be initialized first.");
 
         /// <summary>
         /// Enable the 16 voice limit in Synthesizer

@@ -12,10 +12,8 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Inline
     {
         public static bool IsValueType(Type targetType)
         {
-            if (targetType == null)
-            {
-                throw new NullReferenceException("Must supply the targetType parameter");
-            }
+            if (targetType == null) throw new NullReferenceException("Must supply the targetType parameter");
+
             return targetType.GetTypeInfo().IsValueType;
         }
     }
