@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Updater
         {
             var deserializer = new DataContractJsonSerializer(typeof(T));
             using var stream = new MemoryStream(Encoding.Unicode.GetBytes(json));
-            return (T)deserializer.ReadObject(stream);
+            return (T) deserializer.ReadObject(stream);
         }
 
         internal static string SerializeToJson<T>(this T type)
@@ -38,9 +38,9 @@ namespace BardMusicPlayer.Updater
 
         public BmpDownloadEvent(string k, Util.BmpVersion v, Util.BmpVersionItem i)
         {
-            this.Key = k;
-            this.Version = v;
-            this.Item = i;
+            Key     = k;
+            Version = v;
+            Item    = i;
         }
     }
 }

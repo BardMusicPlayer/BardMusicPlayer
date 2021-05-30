@@ -20,11 +20,9 @@ namespace BardMusicPlayer.Updater
     /// </summary>
     public partial class MainWindow : Window
     {
-
         internal EventHandler<BmpDownloadEvent> OnDownloadRequested;
         internal EventHandler<Util.BmpVersion> OnDownloadComplete;
         internal EventHandler<Util.BmpVersion> OnLaunchRequested;
-
         private Util.BmpVersion LocalVersion;
         private Dictionary<string, Util.BmpVersion> RemoteVersions;
 
@@ -32,79 +30,81 @@ namespace BardMusicPlayer.Updater
         {
             InitializeComponent();
 
-            this.pbar_DownloadProgress.Opacity = 0;
+            pbar_DownloadProgress.Opacity = 0;
         }
 
         internal void ProvideVersions(Util.BmpVersion localVersion, Dictionary<string, Util.BmpVersion> remoteVersions)
         {
-            this.LocalVersion = localVersion;
-            this.RemoteVersions = remoteVersions;
+            LocalVersion   = localVersion;
+            RemoteVersions = remoteVersions;
 
-            this.label_CurrentVersion.Content = "Current version: " + localVersion.build;
-            this.label_NewVersionAvailable.Content = "BMP version " + this.RemoteVersions.First().Value.build + " is available for download.";
+            label_CurrentVersion.Content = "Current version: " + localVersion.build;
+            label_NewVersionAvailable.Content =
+                "BMP version " + RemoteVersions.First().Value.build + " is available for download.";
 
-            this.tbox_PatchNotes.Text = "⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
-                                        "⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
-                                        "⢕⢕⢕⢕⢕⠅⢗⢕⠕⣠⠄⣗⢕⢕⠕⢕⢕⢕⠕⢠⣿⠐⢕⢕⢕⠑⢕⢕⠵⢕\n" +
-                                        "⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕\n" +
-                                        "⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑\n" +
-                                        "⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐\n" +
-                                        "⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐\n" +
-                                        "⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔\n" +
-                                        "⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕\n" +
-                                        "⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕\n" +
-                                        "⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕\n" +
-                                        "⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕\n" +
-                                        "⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁\n" +
-                                        "⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿\n";
-            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
-            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
-            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
-            this.tbox_PatchNotes.Text = this.tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            tbox_PatchNotes.Text = "⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
+                                   "⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕\n" +
+                                   "⢕⢕⢕⢕⢕⠅⢗⢕⠕⣠⠄⣗⢕⢕⠕⢕⢕⢕⠕⢠⣿⠐⢕⢕⢕⠑⢕⢕⠵⢕\n" +
+                                   "⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕\n" +
+                                   "⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑\n" +
+                                   "⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐\n" +
+                                   "⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐\n" +
+                                   "⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔\n" +
+                                   "⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕\n" +
+                                   "⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕\n" +
+                                   "⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕\n" +
+                                   "⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕\n" +
+                                   "⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁\n" +
+                                   "⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿\n";
+            tbox_PatchNotes.Text =
+                tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            tbox_PatchNotes.Text =
+                tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            tbox_PatchNotes.Text =
+                tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
+            tbox_PatchNotes.Text =
+                tbox_PatchNotes.Text + "\ntags within tags, like happy bonerjams and sad bonerjams\n";
         }
 
         private void button_LaunchBMP_Click(object sender, RoutedEventArgs e)
         {
-            OnLaunchRequested?.Invoke(this, this.LocalVersion);
-            this.Close();
+            OnLaunchRequested?.Invoke(this, LocalVersion);
+            Close();
         }
 
         private async void button_InstallUpdate_Click(object sender, RoutedEventArgs e)
         {
-            this.pbar_DownloadProgress.Opacity = 1;
-            this.tbox_PatchNotes.Text = string.Empty;
+            pbar_DownloadProgress.Opacity = 1;
+            tbox_PatchNotes.Text          = string.Empty;
 
             await Task.Run(() =>
             {
-                var version = this.RemoteVersions.First().Value;
+                var version = RemoteVersions.First().Value;
                 foreach (var item in version.items)
                 {
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
-                        string currText = this.tbox_PatchNotes.Text;
-                        this.tbox_PatchNotes.Text = $"{currText}\nDownloading {item.source}...";
-                        this.tbox_PatchNotes.ScrollToEnd();
+                        var currText = tbox_PatchNotes.Text;
+                        tbox_PatchNotes.Text = $"{currText}\nDownloading {item.source}...";
+                        tbox_PatchNotes.ScrollToEnd();
                     });
 
-                    BmpDownloadEvent downloadEvent = new BmpDownloadEvent(this.RemoteVersions.First().Key, version, item);
+                    var downloadEvent = new BmpDownloadEvent(RemoteVersions.First().Key, version, item);
                     OnDownloadRequested?.Invoke(this, downloadEvent);
 
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         float iter = version.items.FindIndex(i => i.source.Equals(item.source));
-                        var currPercent = Math.Floor((iter / (float)version.items.Count) * 100.0f);
+                        var currPercent = Math.Floor(iter / (float) version.items.Count * 100.0f);
                         Debug.WriteLine($"{currPercent}");
-                        this.pbar_DownloadProgress.Value = currPercent;
+                        pbar_DownloadProgress.Value = currPercent;
                     });
                 }
 
-                OnDownloadComplete?.Invoke(this, this.RemoteVersions.First().Value);
+                OnDownloadComplete?.Invoke(this, RemoteVersions.First().Value);
             });
         }
 
-        private void button_NavigationClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        private void button_NavigationClose_Click(object sender, RoutedEventArgs e) { Close(); }
     }
 }

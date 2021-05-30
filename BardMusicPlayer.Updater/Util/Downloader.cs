@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Updater.Util
             var httpClient = new HttpClient();
             return await Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .WaitAndRetryAsync(3, i => TimeSpan.FromMilliseconds(300))
                 .ExecuteAsync(async () =>
                 {
                     using var httpResponse = await httpClient.GetAsync(url);
@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Updater.Util
             var httpClient = new HttpClient();
             return await Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .WaitAndRetryAsync(3, i => TimeSpan.FromMilliseconds(300))
                 .ExecuteAsync(async () =>
                 {
                     using var httpResponse = await httpClient.GetAsync(url);
@@ -40,7 +40,6 @@ namespace BardMusicPlayer.Updater.Util
                 });
         }
     }
-
 
     /* 
     internal class Downloader : IDisposable
