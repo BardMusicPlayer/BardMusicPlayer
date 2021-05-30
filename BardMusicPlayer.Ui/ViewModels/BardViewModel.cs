@@ -64,7 +64,7 @@ namespace BardMusicPlayer.Ui.ViewModels
             if (g.Game is not null)
                 Bards.Remove(g.Game);
             else
-                Bards = new(BmpSeer.Instance.Games.Values);
+                Bards = new BindableCollection<Game>(BmpSeer.Instance.Games.Values);
         }
 
         private void EnsureGameExists(Game game)

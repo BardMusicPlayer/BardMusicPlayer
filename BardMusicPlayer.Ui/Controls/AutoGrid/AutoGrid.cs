@@ -250,7 +250,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
             for (var i = 0; i < (int) e.NewValue; i++)
             {
                 grid.ColumnDefinitions.Add(
-                    new() { Width = width });
+                    new ColumnDefinition() { Width = width });
             }
         }
 
@@ -268,7 +268,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
             var defs = Parse((string) e.NewValue);
             foreach (var def in defs)
             {
-                grid.ColumnDefinitions.Add(new() { Width = def });
+                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = def });
             }
         }
 
@@ -281,7 +281,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
 
             // add a default column if missing
             if (grid.ColumnDefinitions.Count == 0)
-                grid.ColumnDefinitions.Add(new());
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
 
             // set all existing columns to this width
             for (var i = 0; i < grid.ColumnDefinitions.Count; i++)
@@ -297,7 +297,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
 
             // add a default row if missing
             if (grid.RowDefinitions.Count == 0)
-                grid.RowDefinitions.Add(new());
+                grid.RowDefinitions.Add(new RowDefinition());
 
             // set all existing rows to this height
             for (var i = 0; i < grid.RowDefinitions.Count; i++)
@@ -322,14 +322,14 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
                     if (!double.TryParse(str.Replace("*", ""), out value))
                         value = 1.0;
 
-                    definitions[i] = new(value, GridUnitType.Star);
+                    definitions[i] = new GridLength(value, GridUnitType.Star);
                     continue;
                 }
 
                 // pixels
                 if (double.TryParse(str, out value))
                 {
-                    definitions[i] = new(value);
+                    definitions[i] = new GridLength(value);
                     continue;
                 }
 
@@ -360,7 +360,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
             for (var i = 0; i < (int) e.NewValue; i++)
             {
                 grid.RowDefinitions.Add(
-                    new() { Height = height });
+                    new RowDefinition() { Height = height });
             }
         }
 
@@ -378,7 +378,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
             var defs = Parse((string) e.NewValue);
             foreach (var def in defs)
             {
-                grid.RowDefinitions.Add(new() { Height = def });
+                grid.RowDefinitions.Add(new RowDefinition() { Height = def });
             }
         }
 
@@ -471,6 +471,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
                     foreach (UIElement child in Children)
                     {
                         if (GetAutoIndex(child) == false) continue;
+
                         cellCount += ColumnDefinitions.Count != 0 ? GetColumnSpan(child) : GetRowSpan(child);
                     }
 

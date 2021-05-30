@@ -12,7 +12,8 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="../../Resources/GroupBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -20,7 +21,7 @@
             <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
 
             <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-                <Setter Property="Height" Value="36"/>
+                <Setter Property="Height" Value="36" />
             </Style>
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
@@ -55,10 +56,10 @@
                                     <Expander.Header>
                                         <TextBlock>
                                             <Run Text="Track" />
-                                            <Run Text="{Binding Key, Mode=OneWay}"/>
+                                            <Run Text="{Binding Key, Mode=OneWay}" />
                                         </TextBlock>
                                     </Expander.Header>
-                                    <TextBlock Text="{Binding Value}"/>
+                                    <TextBlock Text="{Binding Value}" />
                                 </Expander>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -71,7 +72,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <md:Card>
-                                    <ContentControl s:View.Model="{Binding}"/>
+                                    <ContentControl s:View.Model="{Binding}" />
                                 </md:Card>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

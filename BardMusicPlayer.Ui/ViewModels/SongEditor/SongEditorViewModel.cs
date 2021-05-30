@@ -13,7 +13,7 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
         public SongEditorViewModel(BmpSong bmpSong)
         {
             _currentSong = bmpSong;
-            TrackContainers = new(bmpSong.TrackContainers
+            TrackContainers = new BindableCollection<ConfigContainerViewModel>(bmpSong.TrackContainers
                 .SelectMany(container => container.Value.ConfigContainers)
                 .Select((t, i) => new ConfigContainerViewModel(t, $"Config {i}")));
         }

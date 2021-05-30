@@ -70,7 +70,7 @@
                                 Margin="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
-                        
+
 
                     </Grid>
                 </ControlTemplate>

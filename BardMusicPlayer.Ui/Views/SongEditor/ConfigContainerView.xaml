@@ -10,7 +10,7 @@
 
     xmlns:se="clr-namespace:BardMusicPlayer.Ui.ViewModels.SongEditor"
 
-    
+
     xmlns:structs="clr-namespace:BardMusicPlayer.Quotidian.Structs;assembly=BardMusicPlayer.Quotidian"
     xmlns:s="https://github.com/canton7/Stylet"
 
@@ -26,7 +26,7 @@
                     </GroupBox>
 
                     <GroupBox Header="Tracks used" auto:StackPanel.Fill="Fill">
-                        <TextBox Text="{Binding Processor.Track}"/>
+                        <TextBox Text="{Binding Processor.Track}" />
                     </GroupBox>
                 </auto:StackPanel>
 
@@ -49,7 +49,7 @@
                                     Content="{md:PackIcon Minus}"
                                     Command="{s:Action MinusBard}" />
 
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Bards}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Bards}" />
 
                             <Button Style="{DynamicResource MaterialDesignIconButton}"
                                     Content="{md:PackIcon Add}"

@@ -18,5 +18,5 @@
     </Style>
 
     <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
-    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
+    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}" />
 </ResourceDictionary>

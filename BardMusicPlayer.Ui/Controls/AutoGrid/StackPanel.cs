@@ -119,7 +119,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
 
                 // Child constraint is the remaining size; this is total size minus size consumed by previous children.
                 var childConstraint = isHorizontal
-                    ? new(eachFillTypeSize,
+                    ? new Size(eachFillTypeSize,
                         Math.Max(0.0, constraint.Height - accumulatedHeight))
                     : new Size(Math.Max(0.0, constraint.Width - accumulatedWidth),
                         eachFillTypeSize);
@@ -187,6 +187,7 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
             {
                 var child = children[i];
                 if (child == null) continue;
+
                 var childDesiredSize = child.DesiredSize;
                 var fillType = GetFill(child);
                 var isCollapsed = child.Visibility == Visibility.Collapsed || fillType == StackPanelFill.Ignored;
