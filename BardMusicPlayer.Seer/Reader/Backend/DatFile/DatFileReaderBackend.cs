@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Quotidian.UtcMilliTime;
@@ -19,7 +20,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
     {
         public EventSource ReaderBackendType { get; }
         public ReaderHandler ReaderHandler { get; set; }
-        public CancellationToken CancellationToken { get; set; }
         public int SleepTimeInMs { get; set; }
         public DatFileReaderBackend(int sleepTimeInMs)
         {
@@ -33,11 +33,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
         private HotbarDatFile _hotbarDatFile;
         private readonly object _lock = new();
 
-        public void Loop()
+        public async Task Loop(CancellationToken token)
         {
-            while (!CancellationToken.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
-                Thread.Sleep(SleepTimeInMs);
+                await Task.Delay(SleepTimeInMs, token);
 
                 lock (_lock)
                 {
@@ -52,6 +52,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
                             foreach (var instrument in Instrument.All)
                             {
+                                if (token.IsCancellationRequested)
+                                    return;
+
                                 if (instrument.Equals(Instrument.None)) continue;
                                 instrumentKeys.Add(instrument, Keys.None);
 
@@ -67,6 +70,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
                             foreach (var instrumentTone in InstrumentTone.All)
                             {
+                                if (token.IsCancellationRequested)
+                                    return;
+
                                 if (instrumentTone.Equals(InstrumentTone.None)) continue;
                                 instrumentToneKeys.Add(instrumentTone, Keys.None);
 

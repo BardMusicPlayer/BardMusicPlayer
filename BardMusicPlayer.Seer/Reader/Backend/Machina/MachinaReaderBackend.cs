@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Utilities;
 
@@ -15,7 +16,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
     {
         public EventSource ReaderBackendType { get; }
         public ReaderHandler ReaderHandler { get; set; }
-        public CancellationToken CancellationToken { get; set; }
         public int SleepTimeInMs { get; set; }
         
         private ConcurrentQueue<byte[]> _messageQueue;
@@ -29,7 +29,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
             SleepTimeInMs = sleepTimeInMs;
         }
 
-        public void Loop()
+        public async Task Loop(CancellationToken token)
         {
             _messageQueue = new ConcurrentQueue<byte[]>();
             _messageQueueOpen = true;
@@ -37,7 +37,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
             MachinaManager.Instance.MessageReceived += OnMessageReceived;
             MachinaManager.Instance.AddGame(ReaderHandler.Game.Pid);
 
-            while (!CancellationToken.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 while(_messageQueue.TryDequeue(out var message))
                 {
@@ -82,7 +82,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                         ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, ex));
                     }
                 }
-                Thread.Sleep(SleepTimeInMs);
+
+                await Task.Delay(SleepTimeInMs, token);
             }
         }
 

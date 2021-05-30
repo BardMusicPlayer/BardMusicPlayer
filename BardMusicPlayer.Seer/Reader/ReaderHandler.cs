@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Reader.Backend;
 
 namespace BardMusicPlayer.Seer.Reader
@@ -13,8 +14,8 @@ namespace BardMusicPlayer.Seer.Reader
     {
         private readonly IReaderBackend _readerBackend;
         internal readonly Game Game;
-        private CancellationTokenSource _cancellationTokenSource;
-        private Thread _thread;
+        private CancellationTokenSource _cts;
+        private Task _task;
 
         internal ReaderHandler(Game game, IReaderBackend readerBackend)
         {
@@ -41,12 +42,10 @@ namespace BardMusicPlayer.Seer.Reader
         /// </summary>
         internal void StartBackend()
         {
-            if (_thread != null) throw new BmpSeerBackendAlreadyRunningException(Game.Process.Id, _readerBackend.ReaderBackendType);
+            if (_task != null) throw new BmpSeerBackendAlreadyRunningException(Game.Process.Id, _readerBackend.ReaderBackendType);
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            _readerBackend.CancellationToken = _cancellationTokenSource.Token;
-            _thread = new Thread(_readerBackend.Loop) { IsBackground = true };
-            _thread.Start();
+            _cts = new CancellationTokenSource();
+            _task = Task.Factory.StartNew(() => _readerBackend.Loop(_cts.Token), TaskCreationOptions.LongRunning);
         }
 
         /// <summary>
@@ -54,10 +53,10 @@ namespace BardMusicPlayer.Seer.Reader
         /// </summary>
         internal void StopBackend()
         {
-            if (_thread == null) return;
-            _cancellationTokenSource.Cancel();
-            if(!_thread.Join(500)) _thread.Abort();
-            _thread = null;
+            if (_task == null) return;
+
+            _cts.Cancel();
+            _task = null;
         }
     }
 }

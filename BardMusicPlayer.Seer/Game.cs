@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Reader;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile;
@@ -32,12 +33,11 @@ namespace BardMusicPlayer.Seer
         private bool _eventQueueOpen;
 
         // reader events processor
-        private bool _shouldRunEventQueueThread;
-        private Thread _eventQueueThread;
-        
+        private CancellationTokenSource _eventTokenSource;
+
         internal Game(Process process)
         {
-            _uuid = Guid.NewGuid().ToString();
+            _uuid   = Guid.NewGuid().ToString();
             Process = process;
         }
 
@@ -47,21 +47,26 @@ namespace BardMusicPlayer.Seer
             {
                 if (Process is null || Process.Id < 1 || Pid != 0)
                 {
-                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, new BmpSeerException("Game process is null or already initialized.")));
+                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid,
+                        new BmpSeerException("Game process is null or already initialized.")));
                     return false;
                 }
+
                 Pid = Process.Id;
                 InitInformation();
-                _eventDedupeHistory = new Dictionary<Type, long>();
+
+                _eventDedupeHistory     = new Dictionary<Type, long>();
                 _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueOpen = true;
-                DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
-                MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
+                _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
+                _eventQueueOpen         = true;
+
+                DatReader     = new ReaderHandler(this, new DatFileReaderBackend(1));
+                MemoryReader  = new ReaderHandler(this, new SharlayanReaderBackend(1));
                 NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
-                _shouldRunEventQueueThread = true;
-                _eventQueueThread = new Thread(RunEventQueue) { IsBackground = true };
-                _eventQueueThread.Start();
+
+                _eventTokenSource = new CancellationTokenSource();
+                Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
+
                 BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
             }
             catch (Exception ex)
@@ -69,6 +74,7 @@ namespace BardMusicPlayer.Seer
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                 return false;
             }
+
             return true;
         }
 
@@ -79,9 +85,9 @@ namespace BardMusicPlayer.Seer
             else _eventQueueLowPriority.Enqueue(seerEvent);
         }
 
-        private void RunEventQueue()
+        private async Task RunEventQueue(CancellationToken token)
         {
-            while (_shouldRunEventQueueThread)
+            while (!token.IsCancellationRequested)
             {
                 while (_eventQueueHighPriority.TryDequeue(out var high))
                 {
@@ -107,26 +113,19 @@ namespace BardMusicPlayer.Seer
                     }
                 }
 
-                Thread.Sleep(1);
+                await Task.Delay(1, token);
             }
-
-            _eventQueueThread = null;
         }
 
-        ~Game() => Dispose();
+        ~Game() { Dispose(); }
+
         public void Dispose()
         {
             BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
+
             _eventQueueOpen = false;
-            _shouldRunEventQueueThread = false;
-            try
-            {
-                if(_eventQueueThread!=null && !_eventQueueThread.Join(500)) _eventQueueThread?.Abort();
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-            }
+            _eventTokenSource.Cancel();
+
             try
             {
                 DatReader?.Dispose();
@@ -163,19 +162,20 @@ namespace BardMusicPlayer.Seer
             GC.SuppressFinalize(this);
         }
 
-        
         public override bool Equals(object obj)
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             return obj.GetType() == GetType() && Equals((Game) obj);
         }
+
         public bool Equals(Game other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return _uuid == other._uuid;
         }
+
         public override int GetHashCode() => _uuid != null ? _uuid.GetHashCode() : 0;
         public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
         public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
