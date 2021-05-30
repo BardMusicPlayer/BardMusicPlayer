@@ -22,29 +22,27 @@ namespace BardMusicPlayer
         private const string DllName = "BardMusicPlayer.Updater.dll";
         private const string DllType = "BardMusicPlayer.Updater.Main";
         private const string DllSha256Name = "BardMusicPlayer.Updater.dll.sha256";
-
 #if DEBUG
-        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" + LauncherVersion + @"/" + DllName ;
-        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" + LauncherVersion + @"/" + DllSha256Name;
+        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" + LauncherVersion +
+                                                @"/" + DllName;
+
+        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/debug/" +
+                                                      LauncherVersion + @"/" + DllSha256Name;
 #else
-        private static readonly string DllUrl = @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllName ;
-        private static readonly string DllSha256Url = @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllSha256Name;
+        private static readonly string DllUrl =
+ @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllName ;
+        private static readonly string DllSha256Url =
+ @"https://dl.bardmusicplayer.com/bmp/updater/release/" + LauncherVersion + @"/" + DllSha256Name;
 #endif
-
         private static readonly string ExePath = Assembly.GetExecutingAssembly().Location;
-
 #if LOCAL
-
         private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
         private static readonly string ResourcePath = Directory.GetCurrentDirectory() + @"\";
-
 #elif PUBLISH
-
-        private static readonly string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
+        private static readonly string DataPath =
+ @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
         private static readonly string ResourcePath = DataPath + @"Resources\";
-
 #endif
-
 #pragma warning disable CS1998
         protected override async void OnStartup(StartupEventArgs eventArgs)
 #pragma warning restore CS1998
@@ -57,10 +55,9 @@ namespace BardMusicPlayer
 #if LOCAL
 
                 const bool localDev = true;
-                string DllSha256 = GetChecksum(ResourcePath + DllName);
+                var DllSha256 = GetChecksum(ResourcePath + DllName);
 
 #elif PUBLISH
-
                 const bool localDev = false;
                 string DllSha256 = null;
                 try
@@ -108,17 +105,21 @@ namespace BardMusicPlayer
                             DllSha256 = RemoteDllSha256;
                         }
                     }
-                } 
+                }
 
 #endif
-                
+
                 var updaterType = Assembly.LoadFrom(ResourcePath + DllName).GetType(DllType);
-                dynamic main = Activator.CreateInstance(updaterType ?? throw new InvalidOperationException("Unable to run " + DllType + " from " + DllName));
+                dynamic main = Activator.CreateInstance(updaterType ??
+                                                        throw new InvalidOperationException("Unable to run " + DllType +
+                                                            " from " + DllName));
                 main.StartUp(localDev, LauncherVersion, ExePath, ResourcePath, DataPath, eventArgs.Args);
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Uh oh, something went wrong and BardMusicPlayer is shutting down.\nPlease ask for support in the Discord Server and provide a picture of this error message:\n\n" + exception.Message,
+                MessageBox.Show(
+                    "Uh oh, something went wrong and BardMusicPlayer is shutting down.\nPlease ask for support in the Discord Server and provide a picture of this error message:\n\n" +
+                    exception.Message,
                     "BardMusicPlayer Launcher Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -132,7 +133,8 @@ namespace BardMusicPlayer
         {
             text = text.ToUpper();
             var textArray = new string[text.Length / 2 + (text.Length % 2 == 0 ? 0 : 1)];
-            for (var i = 0; i < textArray.Length; i++) textArray[ i ] = text.Substring(i * 2, i * 2 + 2 > text.Length ? 1 : 2);
+            for (var i = 0; i < textArray.Length; i++)
+                textArray[i] = text.Substring(i * 2, i * 2 + 2 > text.Length ? 1 : 2);
             return textArray.Select(b => Convert.ToByte(b, 16)).ToArray();
         }
 
@@ -161,7 +163,7 @@ namespace BardMusicPlayer
             var httpClient = new HttpClient();
             return await Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .WaitAndRetryAsync(3, i => TimeSpan.FromMilliseconds(300))
                 .ExecuteAsync(async () =>
                 {
                     using var httpResponse = await httpClient.GetAsync(url);
@@ -175,7 +177,7 @@ namespace BardMusicPlayer
             var httpClient = new HttpClient();
             return await Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+                .WaitAndRetryAsync(3, i => TimeSpan.FromMilliseconds(300))
                 .ExecuteAsync(async () =>
                 {
                     using var httpResponse = await httpClient.GetAsync(url);
