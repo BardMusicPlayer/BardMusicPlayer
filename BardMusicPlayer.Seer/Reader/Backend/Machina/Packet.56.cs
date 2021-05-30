@@ -43,12 +43,14 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                         {
                             var partyLeader = BitConverter.ToUInt32(message, 40);
                             if (!ActorIdTools.RangeOkay(partyLeader)) return;
+
                             _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleRequested(EventSource.Machina));
                         }
                         else
                         {
                             var partyMember = BitConverter.ToUInt32(message, 40);
                             if (!ActorIdTools.RangeOkay(partyMember)) return;
+
                             uint reply = message[48];
                             if (reply > 2) return;
 
@@ -59,7 +61,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                 case 1: // "ready" reply.
                                     break;
                                 case 2: // rejected or timed out replying
-                                    _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleRejected(EventSource.Machina));
+                                    _machinaReader.ReaderHandler.Game.PublishEvent(
+                                        new EnsembleRejected(EventSource.Machina));
                                     break;
                                 default:
                                     return;
@@ -68,7 +71,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                     }
                     catch (Exception ex)
                     {
-                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56 (ensemble action): " + ex.Message)));
+                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                            new BmpSeerMachinaException("Exception in Packet.Size56 (ensemble action): " +
+                                                        ex.Message)));
                     }
                 }
                 else
@@ -88,25 +93,36 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                     switch (param1)
                                     {
                                         case 16: // equip instrument
-                                            _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                            _machinaReader.ReaderHandler.Game.PublishEvent(
+                                                new InstrumentHeldChanged(EventSource.Machina,
+                                                    Instrument.Parse((int) param2)));
                                             break;
                                         case 1: // de-equip instrument
-                                            if (param2 == 0) _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                            if (param2 == 0)
+                                            {
+                                                _machinaReader.ReaderHandler.Game.PublishEvent(
+                                                    new InstrumentHeldChanged(EventSource.Machina,
+                                                        Instrument.Parse((int) param2)));
+                                            }
+
                                             break;
                                     }
                                 }
+
                                 break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56 (equip action): " + ex.Message)));
+                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                            new BmpSeerMachinaException("Exception in Packet.Size56 (equip action): " + ex.Message)));
                     }
                 }
             }
             catch (Exception ex)
             {
-                _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56: " + ex.Message)));
+                _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                    new BmpSeerMachinaException("Exception in Packet.Size56: " + ex.Message)));
             }
         }
     }

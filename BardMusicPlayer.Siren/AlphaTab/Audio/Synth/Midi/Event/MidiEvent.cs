@@ -229,7 +229,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         /// <summary>
         /// Gets or sets the command of this midi event.
         /// </summary>
-        public virtual MidiEventType Command => (MidiEventType)(Message & 0x00000F0);
+        public virtual MidiEventType Command => (MidiEventType) (Message & 0x00000F0);
 
         /// <summary>
         /// Gets or sets the first data component of this midi event.
@@ -264,11 +264,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         /// <param name="status">The status information of this event.</param>
         /// <param name="data1">The first data component of this midi event.</param>
         /// <param name="data2">The second data component of this midi event.</param>
-        public MidiEvent(int tick, int status, byte data1, byte data2, bool customChannel = false, byte customChannelValue = 0)
+        public MidiEvent(int tick, int status, byte data1, byte data2, bool customChannel = false,
+            byte customChannelValue = 0)
         {
-            Tick = tick;
-            Message = status | (data1 << 8) | (data2 << 16);
-            _customChannel = customChannel;
+            Tick                = tick;
+            Message             = status | (data1 << 8) | (data2 << 16);
+            _customChannel      = customChannel;
             _customChannelValue = customChannelValue;
         }
 
@@ -280,8 +281,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         {
             var b = new[]
             {
-                (byte)((Message >> 24) & 0xFF), (byte)((Message >> 16) & 0xFF), (byte)((Message >> 8) & 0xFF),
-                (byte)(Message & 0xFF)
+                (byte) ((Message >> 24) & 0xFF), (byte) ((Message >> 16) & 0xFF), (byte) ((Message >> 8) & 0xFF),
+                (byte) (Message & 0xFF)
             };
             s.Write(b, 0, b.Length);
         }

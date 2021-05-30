@@ -25,9 +25,9 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
         public override async Task<List<TrackChunk>> Process()
         {
-            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
-
-
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }
+                .Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk))
+                .ToList();
 
             return new List<TrackChunk>();
         }

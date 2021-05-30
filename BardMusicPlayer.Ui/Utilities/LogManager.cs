@@ -26,9 +26,9 @@ namespace BardMusicPlayer.Ui.Utilities
 
             BmpLog.Instance.LogEvent += WriteLog;
 
-            BmpSeer.Instance.SeerExceptionEvent += PrintExceptionInfo;
-            BmpSeer.Instance.GameExceptionEvent += PrintExceptionInfo;
-            BmpSeer.Instance.BackendExceptionEvent += PrintExceptionInfo;
+            BmpSeer.Instance.SeerExceptionEvent     += PrintExceptionInfo;
+            BmpSeer.Instance.GameExceptionEvent     += PrintExceptionInfo;
+            BmpSeer.Instance.BackendExceptionEvent  += PrintExceptionInfo;
             BmpSeer.Instance.MachinaManagerLogEvent += PrintMachinaManagerLogEvent;
             return true;
         }
@@ -45,18 +45,21 @@ namespace BardMusicPlayer.Ui.Utilities
 
         public static bool Shutdown()
         {
-            BmpSeer.Instance.SeerExceptionEvent -= PrintExceptionInfo;
-            BmpSeer.Instance.GameExceptionEvent -= PrintExceptionInfo;
-            BmpSeer.Instance.BackendExceptionEvent -= PrintExceptionInfo;
+            BmpSeer.Instance.SeerExceptionEvent     -= PrintExceptionInfo;
+            BmpSeer.Instance.GameExceptionEvent     -= PrintExceptionInfo;
+            BmpSeer.Instance.BackendExceptionEvent  -= PrintExceptionInfo;
             BmpSeer.Instance.MachinaManagerLogEvent -= PrintMachinaManagerLogEvent;
 
             BmpLog.Instance.LogEvent -= WriteLog;
             return true;
         }
 
-
         private static void WriteLog(string output) => _LogTextWriter.Write(output);
-        private static void PrintExceptionInfo(SeerExceptionEvent seerExceptionEvent) => BmpLog.E(BmpLog.Source.Seer, "[" + seerExceptionEvent.EventType.Name + "] - " + seerExceptionEvent.Exception.Message);
-        private static void PrintMachinaManagerLogEvent(MachinaManagerLogEvent machinaManagerLogEvent) => BmpLog.D(BmpLog.Source.Seer, "[" + machinaManagerLogEvent.EventType.Name + "] - " + machinaManagerLogEvent.Message);
+
+        private static void PrintExceptionInfo(SeerExceptionEvent seerExceptionEvent) => BmpLog.E(BmpLog.Source.Seer,
+            "[" + seerExceptionEvent.EventType.Name + "] - " + seerExceptionEvent.Exception.Message);
+
+        private static void PrintMachinaManagerLogEvent(MachinaManagerLogEvent machinaManagerLogEvent) => BmpLog.D(
+            BmpLog.Source.Seer, "[" + machinaManagerLogEvent.EventType.Name + "] - " + machinaManagerLogEvent.Message);
     }
 }

@@ -39,13 +39,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public BendPoint(int offset = 0, int value = 0)
         {
             Offset = offset;
-            Value = value;
+            Value  = value;
         }
 
         internal static void CopyTo(BendPoint src, BendPoint dst)
         {
             dst.Offset = src.Offset;
-            dst.Value = src.Value;
+            dst.Value  = src.Value;
         }
 
         internal BendPoint Clone()

@@ -10,15 +10,14 @@ using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
-    internal class KeybindDatFile : IDisposable {
-
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
+{
+    internal class KeybindDatFile : IDisposable
+    {
         internal bool Fresh = true;
         private string _filePath;
-        internal KeybindDatFile(string filePath)
-        {
-            _filePath = filePath;
-        }
+
+        internal KeybindDatFile(string filePath) { _filePath = filePath; }
 
         internal bool Load()
         {
@@ -28,10 +27,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
 
             using var fileStream = File.Open(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             using var memStream = new MemoryStream();
-            if (fileStream.CanRead && fileStream.CanSeek)
-            {
-                fileStream.CopyTo(memStream);
-            }
+            if (fileStream.CanRead && fileStream.CanSeek) fileStream.CopyTo(memStream);
 
             fileStream.Dispose();
             if (memStream.Length == 0)
@@ -69,14 +65,15 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                     var dat = System.Text.Encoding.UTF8.GetString(keybind.Data);
                     var datKeys = dat.Split(',');
                     if (datKeys.Length != 3) continue;
+
                     var key1 = datKeys[0].Split('.');
                     var key2 = datKeys[1].Split('.');
                     KeybindList.Add(key, new Keybind
                     {
                         MainKey1 = int.Parse(key1[0], System.Globalization.NumberStyles.HexNumber),
                         MainKey2 = int.Parse(key2[0], System.Globalization.NumberStyles.HexNumber),
-                        ModKey1 = int.Parse(key1[1], System.Globalization.NumberStyles.HexNumber),
-                        ModKey2 = int.Parse(key2[1], System.Globalization.NumberStyles.HexNumber),
+                        ModKey1  = int.Parse(key1[1], System.Globalization.NumberStyles.HexNumber),
+                        ModKey2  = int.Parse(key2[1], System.Globalization.NumberStyles.HexNumber)
                     });
                 }
             }
@@ -89,29 +86,40 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                 reader.Dispose();
                 memStream.Dispose();
             }
+
             return true;
         }
 
         public readonly Dictionary<string, Keybind> KeybindList = new();
-		public Keybind this[string key] => !KeybindList.ContainsKey(key) ? new Keybind() : KeybindList[key];
+
+        public Keybind this[string key] => !KeybindList.ContainsKey(key) ? new Keybind() : KeybindList[key];
 
         public Keys GetKeybindFromKeyString(string nk) => !string.IsNullOrEmpty(nk) ? this[nk].GetKey() : Keys.None;
 
-        private static KeybindSection ParseSection(BinaryReader stream) {
-			var headerBytes = XorTools.ReadXorBytes(stream, 3, 0x73);
-			var section = new KeybindSection {
-				Type = headerBytes[0],
-				Size = headerBytes[1],
-			};
-			section.Data = XorTools.ReadXorBytes(stream, section.Size, 0x73);
-			Array.Reverse(section.Data);
-			return section;
-		}
-        ~KeybindDatFile() => Dispose();
+        private static KeybindSection ParseSection(BinaryReader stream)
+        {
+            var headerBytes = XorTools.ReadXorBytes(stream, 3, 0x73);
+            var section = new KeybindSection
+            {
+                Type = headerBytes[0],
+                Size = headerBytes[1]
+            };
+            section.Data = XorTools.ReadXorBytes(stream, section.Size, 0x73);
+            Array.Reverse(section.Data);
+            return section;
+        }
+
+        ~KeybindDatFile() { Dispose(); }
+
         public void Dispose()
         {
             if (KeybindList == null) return;
-            foreach(var keyBind in KeybindList.Values) keyBind?.Dispose();
+
+            foreach (var keyBind in KeybindList.Values)
+            {
+                keyBind?.Dispose();
+            }
+
             KeybindList.Clear();
         }
     }

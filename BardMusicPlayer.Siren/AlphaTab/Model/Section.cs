@@ -24,15 +24,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="Section"/> class.
         /// </summary>
-        public Section()
-        {
-            Text = Marker = "";
-        }
+        public Section() { Text = Marker = ""; }
 
         internal static void CopyTo(Section src, Section dst)
         {
             dst.Marker = src.Marker;
-            dst.Text = src.Text;
+            dst.Text   = src.Text;
         }
     }
 }

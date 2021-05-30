@@ -25,7 +25,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Voice Voice { get; set; }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TupletGroup"/> class.
         /// </summary>
@@ -39,12 +38,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <summary>
         /// Gets a value indicating whether the tuplet group is fully filled.
         /// </summary>
-        public bool IsFull
-        {
-            get;
-            private set;
-        }
-
+        public bool IsFull { get; private set; }
 
         private const int HalfTicks = 1920;
         private const int QuarterTicks = 960;
@@ -54,7 +48,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         private const int SixtyFourthTicks = 60;
         private const int OneHundredTwentyEighthTicks = 30;
         private const int TwoHundredFiftySixthTicks = 15;
-
 
         private static readonly int[] AllTicks =
         {
@@ -98,20 +91,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             // this logic is very likely not 100% correct but for most cases the tuplets
             // appeared correct.
 
-            if (beat.PlaybackDuration != Beats[0].PlaybackDuration)
-            {
-                _isEqualLengthTuplet = false;
-            }
+            if (beat.PlaybackDuration != Beats[0].PlaybackDuration) _isEqualLengthTuplet = false;
 
             Beats.Add(beat);
             _totalDuration += beat.PlaybackDuration;
 
             if (_isEqualLengthTuplet)
             {
-                if (Beats.Count == Beats[0].TupletNumerator)
-                {
-                    IsFull = true;
-                }
+                if (Beats.Count == Beats[0].TupletNumerator) IsFull = true;
             }
             else
             {

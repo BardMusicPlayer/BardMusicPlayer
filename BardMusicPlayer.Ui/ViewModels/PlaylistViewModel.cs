@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Ui.ViewModels
         public PlaylistViewModel()
         {
             var names = BmpCoffer.Instance.GetPlaylistNames();
-            Playlists = new(names.Select(BmpCoffer.Instance.GetPlaylist));
+            Playlists = new BindableCollection<IPlaylist>(names.Select(BmpCoffer.Instance.GetPlaylist));
         }
 
         public BindableCollection<BmpSong> Songs

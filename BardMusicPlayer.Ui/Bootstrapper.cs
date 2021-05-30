@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Grunt;
@@ -50,7 +51,7 @@ namespace BardMusicPlayer.Ui
         public Task<bool> StartUp(bool beta, int build, string commit, string exePath, string resourcePath,
             string dataPath, string[] args)
         {
-            if (_started) throw new("Cannot start up twice.");
+            if (_started) throw new Exception("Cannot start up twice.");
 
             Globals.IsBeta       = beta;
             Globals.Build        = build;

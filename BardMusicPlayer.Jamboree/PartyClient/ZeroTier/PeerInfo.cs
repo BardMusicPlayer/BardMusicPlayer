@@ -17,50 +17,30 @@ using System.Net;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class PeerInfo {
+    internal class PeerInfo
+    {
         public PeerInfo(ulong id, short versionMajor, short versionMinor, short versionRev, byte role)
         {
-            _id = id;
+            _id           = id;
             _versionMajor = versionMajor;
             _versionMinor = versionMinor;
-            _versionRev = versionRev;
-            _role = role;
+            _versionRev   = versionRev;
+            _role         = role;
         }
 
-        ulong _id;
-        short _versionMajor;
-        short _versionMinor;
-        short _versionRev;
-        byte _role;
+        private ulong _id;
+        private short _versionMajor;
+        private short _versionMinor;
+        private short _versionRev;
+        private byte _role;
+        internal ConcurrentDictionary<string, IPEndPoint> _paths = new();
 
-        internal ConcurrentDictionary<string, IPEndPoint> _paths = new ConcurrentDictionary<string, IPEndPoint>();
+        public ICollection<IPEndPoint> Paths => _paths.Values;
 
-        public ICollection<IPEndPoint> Paths
-        {
-            get {
-                return _paths.Values;
-            }
-        }
+        public ulong Id => _id;
 
-        public ulong Id
-        {
-            get {
-                return _id;
-            }
-        }
+        public byte Role => _role;
 
-        public byte Role
-        {
-            get {
-                return _role;
-            }
-        }
-
-        public string Version
-        {
-            get {
-                return string.Format("{0}.{1}.{2}", _versionMajor, _versionMinor, _versionRev);
-            }
-        }
+        public string Version => string.Format("{0}.{1}.{2}", _versionMajor, _versionMinor, _versionRev);
     }
 }

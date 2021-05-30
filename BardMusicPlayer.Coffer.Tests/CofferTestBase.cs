@@ -14,10 +14,7 @@ namespace BardMusicPlayer.Coffer.Tests
     {
         private string dbpath;
 
-        protected CofferTestBase()
-        {
-            this.dbpath = null;
-        }
+        protected CofferTestBase() { dbpath = null; }
 
         [TestInitialize]
         public void Initialize()
@@ -25,21 +22,21 @@ namespace BardMusicPlayer.Coffer.Tests
             // We cannot use Path.GetTempFileName() as this creates a zero byte file on disk.
             // This causes LiteDB to fail to load the file. As such, we need to create our
             // own temporary file path and allow LiteDB to do the actual file creation.
-            string tempDir = Path.GetTempPath();
-            long unixEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
+            var tempDir = Path.GetTempPath();
+            var unixEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            this.dbpath = tempDir + this.GetType().Name + "." + unixEpoch.ToString() + ".db";
-            Console.WriteLine("LiteDB path: " + this.dbpath);
+            dbpath = tempDir + GetType().Name + "." + unixEpoch.ToString() + ".db";
+            Console.WriteLine("LiteDB path: " + dbpath);
         }
 
         [TestCleanup]
         public void TearDown()
         {
-            if (this.dbpath != null)
+            if (dbpath != null)
             {
                 try
                 {
-                    File.Delete(this.dbpath);
+                    File.Delete(dbpath);
                 }
                 catch (Exception ex)
                 {
@@ -47,18 +44,18 @@ namespace BardMusicPlayer.Coffer.Tests
                 }
                 finally
                 {
-                    this.dbpath = null;
+                    dbpath = null;
                 }
             }
         }
 
         protected LiteDatabase CreateDatabase()
         {
-            LiteDatabase ret = new LiteDatabase(this.dbpath);
+            var ret = new LiteDatabase(dbpath);
             BmpCoffer.MigrateDatabase(ret);
             return ret;
         }
 
-        protected string GetDBPath() => this.dbpath;
+        protected string GetDBPath() => dbpath;
     }
 }

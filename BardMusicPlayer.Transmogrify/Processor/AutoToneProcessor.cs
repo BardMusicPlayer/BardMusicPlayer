@@ -27,32 +27,42 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
         public override async Task<List<TrackChunk>> Process()
         {
-            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }
+                .Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk))
+                .ToList();
 
-            var instrumentGroup1 = trackChunks.GetNoteDictionary(Song.SourceTempoMap, ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 - 1,
-                (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument1.InstrumentToneMenuKey,
-                false,
-                -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index).LowerNote)
+            var instrumentGroup1 = trackChunks.GetNoteDictionary(Song.SourceTempoMap,
+                    ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 -
+                    1,
+                    (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument1.InstrumentToneMenuKey,
+                    false,
+                    -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index).LowerNote)
                 .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index))
                 .ConcatNoteDictionaryToList();
 
-            var instrumentGroup2 = trackChunks.GetNoteDictionary(Song.SourceTempoMap, ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 + ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12 - 1,
-                (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument2.InstrumentToneMenuKey,
-                false,
-                -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 1).LowerNote)
+            var instrumentGroup2 = trackChunks.GetNoteDictionary(Song.SourceTempoMap,
+                    ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 +
+                    ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12 - 1,
+                    (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument2.InstrumentToneMenuKey,
+                    false,
+                    -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 1).LowerNote)
                 .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 1))
                 .ConcatNoteDictionaryToList();
 
-            var instrumentGroup3 = trackChunks.GetNoteDictionary(Song.SourceTempoMap, ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 + ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12,
-                ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 + ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12 + ProcessorConfig.AutoToneInstrumentGroup.Size3 * 12,
-                (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument3.InstrumentToneMenuKey,
-                false,
-                -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 2).LowerNote)
+            var instrumentGroup3 = trackChunks.GetNoteDictionary(Song.SourceTempoMap,
+                    ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 +
+                    ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12,
+                    ProcessorConfig.AutoToneOctaveRange.LowerNote + ProcessorConfig.AutoToneInstrumentGroup.Size1 * 12 +
+                    ProcessorConfig.AutoToneInstrumentGroup.Size2 * 12 +
+                    ProcessorConfig.AutoToneInstrumentGroup.Size3 * 12,
+                    (int) ProcessorConfig.AutoToneInstrumentGroup.Instrument3.InstrumentToneMenuKey,
+                    false,
+                    -OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 2).LowerNote)
                 .MoveNoteDictionaryToDefaultOctave(OctaveRange.Parse(ProcessorConfig.AutoToneOctaveRange.Index + 2))
                 .ConcatNoteDictionaryToList();
 
@@ -60,20 +70,31 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
             var notes = new List<Note>();
 
-            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument1.Equals(Instrument.None)) notes.AddRange(instrumentGroup1.Result);
-            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument2.Equals(Instrument.None)) notes.AddRange(instrumentGroup2.Result);
-            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument3.Equals(Instrument.None)) notes.AddRange(instrumentGroup3.Result);
-            
+            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument1.Equals(Instrument.None))
+                notes.AddRange(instrumentGroup1.Result);
+            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument2.Equals(Instrument.None))
+                notes.AddRange(instrumentGroup2.Result);
+            if (!ProcessorConfig.AutoToneInstrumentGroup.Instrument3.Equals(Instrument.None))
+                notes.AddRange(instrumentGroup3.Result);
+
             var trackChunk = TimedObjectUtilities.ToTrackChunk(notes);
 
-            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(ProcessorConfig.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
+            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(ProcessorConfig.PlayerCount,
+                OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
 
-            var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>(ProcessorConfig.PlayerCount, ProcessorConfig.PlayerCount);
+            var concurrentPlayerTrackDictionary =
+                new ConcurrentDictionary<long, TrackChunk>(ProcessorConfig.PlayerCount, ProcessorConfig.PlayerCount);
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
-                    concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone.Name))});
+                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(
+                        await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
+                    concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>
+                    {
+                        new TimedEvent(new SequenceTrackNameEvent("tone:" +
+                                                                  ProcessorConfig.AutoToneInstrumentGroup.InstrumentTone
+                                                                      .Name))
+                    });
                 }
             );
 

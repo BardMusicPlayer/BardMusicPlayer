@@ -21,12 +21,12 @@ namespace BardMusicPlayer.Seer
     {
         private void InitInformation()
         {
-            GamePath = GetGamePath();
+            GamePath        = GetGamePath();
             EnvironmentType = GetEnvironmentType();
-            GameRegion = GetGameRegion();
-            ConfigPath = GetConfigPath();
+            GameRegion      = GetGameRegion();
+            ConfigPath      = GetConfigPath();
         }
-        
+
         /// <summary>
         /// Contains the Process object for this Game. Set on creation of this Game.
         /// </summary>
@@ -97,7 +97,8 @@ namespace BardMusicPlayer.Seer
         /// Fields: uint ActorId, string PlayerName
         /// This dictionary is sorted on ActorId and can be compared to another Game's PartyMembers with .Equals() extension method.
         /// </summary>
-        public IReadOnlyDictionary<uint, string> PartyMembers { get; private set; } = new ReadOnlyDictionary<uint, string>(new SortedDictionary<uint, string>());
+        public IReadOnlyDictionary<uint, string> PartyMembers { get; private set; } =
+            new ReadOnlyDictionary<uint, string>(new SortedDictionary<uint, string>());
 
         /// <summary>
         /// Contains the config path used by DatReader. Updated by Sharlayan.
@@ -107,27 +108,38 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Contains KeyMaps for instrument hotbar keys. Unbound keys = Keys.None. Updated by DatReader via ConfigId from Sharlayan.
         /// </summary>
-        public IReadOnlyDictionary<Instrument, Keys> InstrumentKeys { get; private set; } = new ReadOnlyDictionary<Instrument, Keys>(Instrument.All.ToDictionary(instrument => instrument, _ => Keys.None));
+        public IReadOnlyDictionary<Instrument, Keys> InstrumentKeys { get; private set; } =
+            new ReadOnlyDictionary<Instrument, Keys>(Instrument.All.ToDictionary(instrument => instrument,
+                _ => Keys.None));
 
         /// <summary>
         /// Contains KeyMaps for instrument tone hotbar keys. Unbound keys = Keys.None. Updated by DatReader via ConfigId from Sharlayan.
         /// </summary>
-        public IReadOnlyDictionary<InstrumentTone, Keys> InstrumentToneKeys { get; private set; } = new ReadOnlyDictionary<InstrumentTone, Keys>(InstrumentTone.All.ToDictionary(instrumentTone => instrumentTone, _ => Keys.None));
+        public IReadOnlyDictionary<InstrumentTone, Keys> InstrumentToneKeys { get; private set; } =
+            new ReadOnlyDictionary<InstrumentTone, Keys>(
+                InstrumentTone.All.ToDictionary(instrumentTone => instrumentTone, _ => Keys.None));
 
         /// <summary>
         /// Contains KeyMaps for navigation menu keys. Unbound keys = Keys.None. Updated by DatReader via ConfigId from Sharlayan.
         /// </summary>
-        public IReadOnlyDictionary<NavigationMenuKey, Keys> NavigationMenuKeys { get; private set; } = new ReadOnlyDictionary<NavigationMenuKey, Keys>(Enum.GetValues(typeof(NavigationMenuKey)).Cast<NavigationMenuKey>().ToDictionary(navigationMenuKey => navigationMenuKey, _ => Keys.None));
+        public IReadOnlyDictionary<NavigationMenuKey, Keys> NavigationMenuKeys { get; private set; } =
+            new ReadOnlyDictionary<NavigationMenuKey, Keys>(Enum.GetValues(typeof(NavigationMenuKey))
+                .Cast<NavigationMenuKey>().ToDictionary(navigationMenuKey => navigationMenuKey, _ => Keys.None));
 
         /// <summary>
         /// Contains KeyMaps for instrument tone menu keys. Unbound keys = Keys.None. Updated by DatReader via ConfigId from Sharlayan.
         /// </summary>
-        public IReadOnlyDictionary<InstrumentToneMenuKey, Keys> InstrumentToneMenuKeys { get; private set; } = new ReadOnlyDictionary<InstrumentToneMenuKey, Keys>(Enum.GetValues(typeof(InstrumentToneMenuKey)).Cast<InstrumentToneMenuKey>().ToDictionary(instrumentToneMenuKey => instrumentToneMenuKey, _ => Keys.None));
+        public IReadOnlyDictionary<InstrumentToneMenuKey, Keys> InstrumentToneMenuKeys { get; private set; } =
+            new ReadOnlyDictionary<InstrumentToneMenuKey, Keys>(Enum.GetValues(typeof(InstrumentToneMenuKey))
+                .Cast<InstrumentToneMenuKey>()
+                .ToDictionary(instrumentToneMenuKey => instrumentToneMenuKey, _ => Keys.None));
 
         /// <summary>
         /// Contains KeyMaps for note keys. Unbound keys = Keys.None. Updated by DatReader via ConfigId from Sharlayan.
         /// </summary>
-        public IReadOnlyDictionary<NoteKey, Keys> NoteKeys { get; private set; } = new ReadOnlyDictionary<NoteKey, Keys>(Enum.GetValues(typeof(NoteKey)).Cast<NoteKey>().ToDictionary(noteKey => noteKey, _ => Keys.None));
+        public IReadOnlyDictionary<NoteKey, Keys> NoteKeys { get; private set; } =
+            new ReadOnlyDictionary<NoteKey, Keys>(Enum.GetValues(typeof(NoteKey)).Cast<NoteKey>()
+                .ToDictionary(noteKey => noteKey, _ => Keys.None));
 
         private string GetGamePath()
         {
@@ -146,8 +158,10 @@ namespace BardMusicPlayer.Seer
                     );
 
                 if (string.IsNullOrEmpty(gamePath))
+                {
                     throw new BmpSeerGamePathException(
                         "Cannot locate the running directory of this game's ffxiv_dx11.exe");
+                }
 
                 return gamePath + @"\";
             }
@@ -167,9 +181,9 @@ namespace BardMusicPlayer.Seer
                 var environmentType = modules.Cast<ProcessModule>()
                     .Aggregate(EnvironmentType.Normal, (current, module) => module.ModuleName.ToLower() switch
                     {
-                        "sbiedll.dll" => EnvironmentType.Sandboxie,
+                        "sbiedll.dll"    => EnvironmentType.Sandboxie,
                         "innerspace.dll" => EnvironmentType.InnerSpace,
-                        _ => current
+                        _                => current
                     });
                 return environmentType;
             }
@@ -188,7 +202,7 @@ namespace BardMusicPlayer.Seer
                 var gameRegion = GameRegion.Global;
 
                 if (File.Exists(GamePath + @"boot\locales\ko.pak")) gameRegion = GameRegion.Korea;
-                else if (Directory.Exists(GamePath + @"sdo")) gameRegion = GameRegion.China;
+                else if (Directory.Exists(GamePath + @"sdo")) gameRegion       = GameRegion.China;
 
                 return gameRegion;
             }
@@ -218,9 +232,12 @@ namespace BardMusicPlayer.Seer
                     {
                         if (File.Exists(
                             Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\Sandboxie.ini"))
+                        {
                             sandboxieConfigFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Windows) +
                                                       @"\Sandboxie.ini";
+                        }
                         else
+                        {
                             sandboxieConfigFilePath = Process.GetProcesses()
                                 .Where(process => process.ProcessName.ToLower().Equals("sbiectrl"))
                                 .Select(sandboxieProcess => sandboxieProcess.Modules)
@@ -233,16 +250,19 @@ namespace BardMusicPlayer.Seer
                                                               @"\Sandboxie.ini",
                                             _ => current
                                         }));
+                        }
                     }
                     finally
                     {
                         if (string.IsNullOrEmpty(sandboxieConfigFilePath))
+                        {
                             throw new BmpSeerConfigPathException(
                                 "This game is running in Sandboxie, however the Sandboxie.ini configuration file could not be found.");
+                        }
                     }
 
                     // We only accept sandbox windows with the sandbox in the title like " [#] [bard1] FINAL FANTASY XIV [#] ", this will fail otherwise.
-                    var boxName = Process.MainWindowTitle.Split('[')[2].Split(']')[0]; 
+                    var boxName = Process.MainWindowTitle.Split('[')[2].Split(']')[0];
 
                     // Note: sandboxie is a legacy program and writes it's config file in 2-byte per character mode, or Unicode in c# terms.
                     // There is a newer open source fork that may change this, we may have to deal with it later.
@@ -253,8 +273,10 @@ namespace BardMusicPlayer.Seer
                     if (Directory.Exists(boxRoot))
                     {
                         if (GameRegion == GameRegion.China)
+                        {
                             configPath = boxRoot + GamePath.Substring(0, 1) + @"\" +
                                          GamePath.Substring(2, GamePath.Length) + @"game\" + partialConfigPath;
+                        }
                         else configPath = boxRoot + @"user\current\Documents\" + partialConfigPath;
                     }
                     else
@@ -269,13 +291,17 @@ namespace BardMusicPlayer.Seer
                 {
                     if (GameRegion == GameRegion.China) configPath = GamePath + @"game\" + partialConfigPath;
                     else
+                    {
                         configPath = new KnownFolder(KnownFolderType.Documents, Process.WindowsIdentity()).Path + @"\" +
                                      partialConfigPath;
+                    }
                 }
 
                 if (string.IsNullOrEmpty(configPath) || !Directory.Exists(configPath))
+                {
                     throw new BmpSeerConfigPathException(
                         "Invalid config path for a running game: " + Environment.NewLine + configPath);
+                }
 
                 return configPath;
             }

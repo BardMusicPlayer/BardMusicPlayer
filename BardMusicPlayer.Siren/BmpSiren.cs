@@ -22,26 +22,23 @@ namespace BardMusicPlayer.Siren
     public class BmpSiren
     {
         public string CurrentSongTitle { get; private set; } = "";
+
         private IAlphaSynth _player;
         private Dictionary<int, Dictionary<long, string>> _lyrics;
         private double _lyricIndex;
-
         private static readonly Lazy<BmpSiren> LazyInstance = new(() => new BmpSiren());
+
         public static BmpSiren Instance => LazyInstance.Value;
 
-        internal BmpSiren()
-        {
-        }
+        internal BmpSiren() { }
 
-        ~BmpSiren()
-        {
-            ShutDown();
-        }
+        ~BmpSiren() { ShutDown(); }
 
         /// <summary>
         /// Gets a collection of available MMDevice objects
         /// </summary>
-        public MMDeviceCollection AudioDevices => new MMDeviceEnumerator().EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+        public MMDeviceCollection AudioDevices =>
+            new MMDeviceEnumerator().EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
 
         /// <summary>
         /// 
@@ -53,11 +50,15 @@ namespace BardMusicPlayer.Siren
         public void Setup(MMDevice device, float defaultVolume = 0.8f, byte bufferCount = 3, byte latency = 100)
         {
             ShutDown();
-            _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), AlphaTab.Util.LogLevel.None, BeginInvoke);
+            _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency),
+                AlphaTab.Util.LogLevel.None, BeginInvoke);
             foreach (var resource in Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
-                _player.LoadSoundFont((byte[])((DictionaryEntry)resource).Value, true);
+            {
+                _player.LoadSoundFont((byte[]) ((DictionaryEntry) resource).Value, true);
+            }
+
             _player.PositionChanged += NotifyTimePosition;
-            _player.MasterVolume = defaultVolume;
+            _player.MasterVolume    =  defaultVolume;
         }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace BardMusicPlayer.Siren
         public bool IsReadyForPlayback => IsReady && _player.IsReadyForPlayback;
 
         private readonly TaskQueue _taskQueue = new();
+
         internal void BeginInvoke(Action action) => _taskQueue.Enqueue(() => Task.Run(action));
 
         /// <summary>
@@ -80,7 +82,8 @@ namespace BardMusicPlayer.Siren
         /// <param name="bufferCount"></param>
         /// <param name="latency"></param>
         public void Setup(float defaultVolume = 0.8f, byte bufferCount = 2, byte latency = 100) => Setup(
-            new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia), defaultVolume, bufferCount, latency);
+            new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia), defaultVolume,
+            bufferCount, latency);
 
         /// <summary>
         /// 
@@ -88,11 +91,12 @@ namespace BardMusicPlayer.Siren
         public void ShutDown()
         {
             if (_player == null) return;
+
             _player.Stop();
             _player.PositionChanged -= NotifyTimePosition;
             _player.Destroy();
         }
-        
+
         /// <summary>
         /// Loads a BmpSong into the synthesizer
         /// </summary>
@@ -101,10 +105,11 @@ namespace BardMusicPlayer.Siren
         public async Task<BmpSiren> Load(BmpSong song)
         {
             if (!IsReady) throw new BmpException("Siren not initialized.");
+
             if (_player.State == PlayerState.Playing) _player.Stop();
             MidiFile midiFile;
             (midiFile, _lyrics) = await song.GetSynthMidi();
-            _lyricIndex = 0;
+            _lyricIndex         = 0;
             _player.LoadMidiFile(midiFile);
             CurrentSongTitle = song.Title;
             return this;
@@ -117,6 +122,7 @@ namespace BardMusicPlayer.Siren
         public BmpSiren Play()
         {
             if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
+
             _player.Play();
             return this;
         }
@@ -128,10 +134,11 @@ namespace BardMusicPlayer.Siren
         public BmpSiren Pause()
         {
             if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
+
             _player.Pause();
             return this;
         }
-        
+
         /// <summary>
         /// Stops the playback
         /// </summary>
@@ -139,6 +146,7 @@ namespace BardMusicPlayer.Siren
         public BmpSiren Stop()
         {
             if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
+
             _player.Stop();
             _lyricIndex = 0;
             return this;
@@ -151,10 +159,12 @@ namespace BardMusicPlayer.Siren
         public BmpSiren SetPosition(int time)
         {
             if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
+
             if (time < 0) time = 0;
             if (time > _player.PlaybackRange.EndTick) return Stop();
+
             _player.TickPosition = time;
-            _lyricIndex = time;
+            _lyricIndex          = time;
             return this;
         }
 
@@ -186,6 +196,7 @@ namespace BardMusicPlayer.Siren
                 var line = _lyrics[singer].FirstOrDefault(x => x.Key > _lyricIndex && x.Key < obj.CurrentTime).Value;
                 if (!string.IsNullOrWhiteSpace(line)) LyricTrigger?.Invoke(singer, line);
             }
+
             _lyricIndex = obj.CurrentTime;
         }
     }

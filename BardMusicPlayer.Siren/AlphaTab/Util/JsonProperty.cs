@@ -17,14 +17,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Util
     {
     }
 
-    [AttributeUsage(System.AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property)]
     internal sealed class JsonNameAttribute : Attribute
     {
         public string[] Names { get; }
 
-        public JsonNameAttribute(params string[] names)
-        {
-            Names = names;
-        }
+        public JsonNameAttribute(params string[] names) { Names = names; }
     }
 }

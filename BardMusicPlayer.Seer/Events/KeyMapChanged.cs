@@ -12,20 +12,28 @@ namespace BardMusicPlayer.Seer.Events
 {
     public sealed class KeyMapChanged : SeerEvent
     {
-        internal KeyMapChanged(EventSource readerBackendType, IDictionary<Instrument, Keys> instrumentKeys, IDictionary<InstrumentTone, Keys> instrumentToneKeys, IDictionary<NavigationMenuKey, Keys> navigationMenuKeys, IDictionary<InstrumentToneMenuKey, Keys> instrumentToneMenuKeys, IDictionary<NoteKey, Keys> noteKeys) : base(readerBackendType)
+        internal KeyMapChanged(EventSource readerBackendType, IDictionary<Instrument, Keys> instrumentKeys,
+            IDictionary<InstrumentTone, Keys> instrumentToneKeys,
+            IDictionary<NavigationMenuKey, Keys> navigationMenuKeys,
+            IDictionary<InstrumentToneMenuKey, Keys> instrumentToneMenuKeys, IDictionary<NoteKey, Keys> noteKeys) :
+            base(readerBackendType)
         {
-            EventType = GetType();
-            InstrumentKeys = new ReadOnlyDictionary<Instrument, Keys>(instrumentKeys);
-            InstrumentToneKeys = new ReadOnlyDictionary<InstrumentTone, Keys>(instrumentToneKeys);
-            NavigationMenuKeys = new ReadOnlyDictionary<NavigationMenuKey, Keys>(navigationMenuKeys);
+            EventType              = GetType();
+            InstrumentKeys         = new ReadOnlyDictionary<Instrument, Keys>(instrumentKeys);
+            InstrumentToneKeys     = new ReadOnlyDictionary<InstrumentTone, Keys>(instrumentToneKeys);
+            NavigationMenuKeys     = new ReadOnlyDictionary<NavigationMenuKey, Keys>(navigationMenuKeys);
             InstrumentToneMenuKeys = new ReadOnlyDictionary<InstrumentToneMenuKey, Keys>(instrumentToneMenuKeys);
-            NoteKeys = new ReadOnlyDictionary<NoteKey, Keys>(noteKeys);
+            NoteKeys               = new ReadOnlyDictionary<NoteKey, Keys>(noteKeys);
         }
 
         public IReadOnlyDictionary<Instrument, Keys> InstrumentKeys { get; }
+
         public IReadOnlyDictionary<InstrumentTone, Keys> InstrumentToneKeys { get; }
+
         public IReadOnlyDictionary<NavigationMenuKey, Keys> NavigationMenuKeys { get; }
+
         public IReadOnlyDictionary<InstrumentToneMenuKey, Keys> InstrumentToneMenuKeys { get; }
+
         public IReadOnlyDictionary<NoteKey, Keys> NoteKeys { get; }
 
         public override bool IsValid() => true;

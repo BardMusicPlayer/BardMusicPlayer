@@ -782,9 +782,9 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// <returns>The <see cref="Guid"/> of the <see cref="KnownFolderType"/>.</returns>
         internal static Guid GetGuid(this KnownFolderType value)
         {
-            FieldInfo member = typeof(KnownFolderType).GetField(value.ToString());
-            object[] attributes = member.GetCustomAttributes(typeof(KnownFolderGuidAttribute), false);
-            KnownFolderGuidAttribute guidAttribute = (KnownFolderGuidAttribute)attributes[0];
+            var member = typeof(KnownFolderType).GetField(value.ToString());
+            var attributes = member.GetCustomAttributes(typeof(KnownFolderGuidAttribute), false);
+            var guidAttribute = (KnownFolderGuidAttribute) attributes[0];
             return guidAttribute.Guid;
         }
     }
@@ -803,10 +803,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// representing the GUID of the <see cref="KnownFolderType"/>.
         /// </summary>
         /// <param name="guid">The GUID string of the <see cref="KnownFolderType"/>.</param>
-        internal KnownFolderGuidAttribute(string guid)
-        {
-            Guid = new Guid(guid);
-        }
+        internal KnownFolderGuidAttribute(string guid) { Guid = new Guid(guid); }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 

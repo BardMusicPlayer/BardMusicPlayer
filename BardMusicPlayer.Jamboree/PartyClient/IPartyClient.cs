@@ -22,7 +22,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient
         /// <param name="party">string uuid</param>
         /// <returns>true if successful</returns>
         bool JoinParty(string party);
-        
+
         /// <summary>
         /// requests a list of party members.
         /// </summary>
@@ -39,14 +39,14 @@ namespace BardMusicPlayer.Jamboree.PartyClient
         /// Fired when the PartyMembers changes
         /// </summary>
         event PartyMembersChangedHandler PartyMembersChanged;
-        
+
         /// <summary>
         /// assigns someone else to be the party leader.
         /// </summary>
         /// <param name="partyMember">string uuid</param>
         /// <returns>true if successful</returns>
         bool AssignPartyLeader(string partyMember);
-        
+
         /// <summary>
         /// returns the current party leader.
         /// </summary>
@@ -82,6 +82,5 @@ namespace BardMusicPlayer.Jamboree.PartyClient
         /// Fired when the PartyGame list changes in a PartyMember
         /// </summary>
         event PartyGamesChangedHandler PartyGamesChanged;
-
     }
 }

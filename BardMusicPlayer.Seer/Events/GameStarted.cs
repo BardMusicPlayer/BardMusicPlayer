@@ -10,11 +10,12 @@ namespace BardMusicPlayer.Seer.Events
         internal GameStarted(Game game, int pid) : base(EventSource.Game)
         {
             EventType = GetType();
-            Game = game;
-            Pid = pid;
+            Game      = game;
+            Pid       = pid;
         }
 
-        public  int Pid { get; }
+        public int Pid { get; }
+
         public override bool IsValid() => Game is not null;
     }
 }

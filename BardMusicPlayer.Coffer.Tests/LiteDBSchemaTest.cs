@@ -13,12 +13,12 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestBasics()
         {
-            int testId = 100;
+            var testId = 100;
             byte testVersion = 40;
 
-            LiteDBSchema test = new LiteDBSchema()
+            var test = new LiteDBSchema()
             {
-                Id = testId,
+                Id      = testId,
                 Version = testVersion
             };
 

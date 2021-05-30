@@ -11,16 +11,14 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
-    internal class HotbarDatFile : IDisposable {
-
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
+{
+    internal class HotbarDatFile : IDisposable
+    {
         internal bool Fresh = true;
         private string _filePath;
 
-        internal HotbarDatFile(string filePath)
-        {
-            _filePath = filePath;
-        }
+        internal HotbarDatFile(string filePath) { _filePath = filePath; }
 
         internal bool Load()
         {
@@ -29,10 +27,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
 
             using var fileStream = File.Open(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             using var memStream = new MemoryStream();
-            if (fileStream.CanRead && fileStream.CanSeek)
-            {
-                fileStream.CopyTo(memStream);
-            }
+            if (fileStream.CanRead && fileStream.CanSeek) fileStream.CopyTo(memStream);
 
             fileStream.Dispose();
             if (memStream.Length == 0)
@@ -69,6 +64,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                         {
                             //Console.WriteLine(string.Format("{0} ({1}): {2} {3}", ac.ToString(), ac.job, ac.action, ac.type));
                         }
+
                         _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
                     }
                 }
@@ -82,57 +78,68 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                 reader.Dispose();
                 memStream.Dispose();
             }
+
             return true;
         }
 
         private readonly HotbarData _hotbarData = new();
 
-		public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int) type);
-		public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
+        public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int) type);
+
+        public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values
+            from jobSlot in row.Slots.Values
+            from slot in jobSlot.JobSlots.Values
+            where slot.Type == type
+            select slot).ToList();
 
         internal enum SlotType
         {
-			Unknown,
-			Instrument = 0x1D,
+            Unknown,
+            Instrument = 0x1D,
             InstrumentTone = Unknown
         }
 
-        public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone) {
+        public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone)
+        {
             var slots = GetSlotsFromType(SlotType.InstrumentTone);
             foreach (var slot in slots.Where(slot => slot.Action == instrumentTone))
             {
                 return slot.ToString();
             }
+
             return string.Empty;
         }
 
-		public string GetInstrumentKeyMap(Instrument instrument) {
+        public string GetInstrumentKeyMap(Instrument instrument)
+        {
             var slots = GetSlotsFromType(SlotType.Instrument);
-			foreach (var slot in slots.Where(slot => slot.Action == instrument))
+            foreach (var slot in slots.Where(slot => slot.Action == instrument))
             {
                 return slot.ToString();
             }
-			return string.Empty;
-		}
 
-		private static HotbarSlot ParseSection(BinaryReader stream) {
-			const byte xor = 0x31;
-			var ac = new HotbarSlot {
-				Action = XorTools.ReadXorByte(stream, xor),
-				Flag = XorTools.ReadXorByte(stream, xor),
-				Unk1 = XorTools.ReadXorByte(stream, xor),
-				Unk2 = XorTools.ReadXorByte(stream, xor),
-				Job = XorTools.ReadXorByte(stream, xor),
-				Hotbar = XorTools.ReadXorByte(stream, xor),
-				Slot = XorTools.ReadXorByte(stream, xor),
-				Type = XorTools.ReadXorByte(stream, xor),
-			};
-			return ac;
-		}
-        ~HotbarDatFile() => Dispose();
-        public void Dispose()
-        {
-            _hotbarData?.Dispose();
+            return string.Empty;
         }
+
+        private static HotbarSlot ParseSection(BinaryReader stream)
+        {
+            const byte xor = 0x31;
+            var ac = new HotbarSlot
+            {
+                Action = XorTools.ReadXorByte(stream, xor),
+                Flag   = XorTools.ReadXorByte(stream, xor),
+                Unk1   = XorTools.ReadXorByte(stream, xor),
+                Unk2   = XorTools.ReadXorByte(stream, xor),
+                Job    = XorTools.ReadXorByte(stream, xor),
+                Hotbar = XorTools.ReadXorByte(stream, xor),
+                Slot   = XorTools.ReadXorByte(stream, xor),
+                Type   = XorTools.ReadXorByte(stream, xor)
+            };
+            return ac;
+        }
+
+        ~HotbarDatFile() { Dispose(); }
+
+        public void Dispose() { _hotbarData?.Dispose(); }
     }
 }

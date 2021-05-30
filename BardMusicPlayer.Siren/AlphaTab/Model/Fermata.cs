@@ -22,7 +22,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal static void CopyTo(Fermata src, Fermata dst)
         {
-            dst.Type = src.Type;
+            dst.Type   = src.Type;
             dst.Length = src.Length;
         }
     }

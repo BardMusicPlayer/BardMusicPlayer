@@ -21,13 +21,11 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short ERR_ARG = -3;
         public static readonly short ERR_NO_RESULT = -4;
         public static readonly short ERR_GENERAL = -5;
-
         public static readonly short EVENT_NODE_UP = 200;
         public static readonly short EVENT_NODE_ONLINE = 201;
         public static readonly short EVENT_NODE_OFFLINE = 202;
         public static readonly short EVENT_NODE_DOWN = 203;
         public static readonly short ZTS_EVENT_NODE_FATAL_ERROR = 204;
-
         public static readonly short EVENT_NETWORK_NOT_FOUND = 210;
         public static readonly short EVENT_NETWORK_CLIENT_TOO_OLD = 211;
         public static readonly short EVENT_NETWORK_REQ_CONFIG = 212;
@@ -38,30 +36,24 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short EVENT_NETWORK_READY_IP4_IP6 = 217;
         public static readonly short EVENT_NETWORK_DOWN = 218;
         public static readonly short EVENT_NETWORK_UPDATE = 219;
-
         public static readonly short EVENT_STACK_UP = 220;
         public static readonly short EVENT_STACK_DOWN = 221;
-
         public static readonly short EVENT_NETIF_UP = 230;
         public static readonly short EVENT_NETIF_DOWN = 231;
         public static readonly short EVENT_NETIF_REMOVED = 232;
         public static readonly short EVENT_NETIF_LINK_UP = 233;
         public static readonly short EVENT_NETIF_LINK_DOWN = 234;
-
         public static readonly short EVENT_PEER_DIRECT = 240;
         public static readonly short EVENT_PEER_RELAY = 241;
         public static readonly short EVENT_PEER_UNREACHABLE = 242;
         public static readonly short EVENT_PEER_PATH_DISCOVERED = 243;
         public static readonly short EVENT_PEER_PATH_DEAD = 244;
-
         public static readonly short EVENT_ROUTE_ADDED = 250;
         public static readonly short EVENT_ROUTE_REMOVED = 251;
-
         public static readonly short EVENT_ADDR_ADDED_IP4 = 260;
         public static readonly short EVENT_ADDR_REMOVED_IP4 = 261;
         public static readonly short EVENT_ADDR_ADDED_IP6 = 262;
         public static readonly short EVENT_ADDR_REMOVED_IP6 = 263;
-
         public static readonly short EVENT_STORE_IDENTITY_SECRET = 270;
         public static readonly short EVENT_STORE_IDENTITY_PUBLIC = 271;
         public static readonly short EVENT_STORE_PLANET = 272;
@@ -144,7 +136,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         // Socket protocol types
         public static readonly short SOCK_STREAM = 0x0001;
         public static readonly short SOCK_DGRAM = 0x0002;
-
         public static readonly short SOCK_RAW = 0x0003;
 
         // Socket family types
@@ -153,7 +144,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short AF_INET6 = 0x000a;
         public static readonly short PF_INET = AF_INET;
         public static readonly short PF_INET6 = AF_INET6;
-
         public static readonly short PF_UNSPEC = AF_UNSPEC;
 
         // Protocol command types
@@ -164,13 +154,12 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short IPPROTO_IPV6 = 0x0029;
         public static readonly short IPPROTO_ICMPV6 = 0x003a;
         public static readonly short IPPROTO_UDPLITE = 0x0088;
-
         public static readonly short IPPROTO_RAW = 0x00ff;
 
         // send() and recv() flags
         public static readonly short MSG_PEEK = 0x0001;
         public static readonly short MSG_WAITALL = 0x0002; // NOT YET SUPPORTED
-        public static readonly short MSG_OOB = 0x0004; // NOT YET SUPPORTED
+        public static readonly short MSG_OOB = 0x0004;     // NOT YET SUPPORTED
         public static readonly short MSG_DONTWAIT = 0x0008;
         public static readonly short MSG_MORE = 0x0010;
 
@@ -186,10 +175,10 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short SO_BROADCAST = 0x0020;
         public static readonly short SO_USELOOPBACK = 0x0040; // NOT YET SUPPORTED
         public static readonly short SO_LINGER = 0x0080;
-        public static readonly short SO_DONTLINGER = ((short) (~SO_LINGER));
+        public static readonly short SO_DONTLINGER = (short) ~SO_LINGER;
         public static readonly short SO_OOBINLINE = 0x0100; // NOT YET SUPPORTED
         public static readonly short SO_REUSEPORT = 0x0200; // NOT YET SUPPORTED
-        public static readonly short SO_SNDBUF = 0x1001; // NOT YET SUPPORTED
+        public static readonly short SO_SNDBUF = 0x1001;    // NOT YET SUPPORTED
         public static readonly short SO_RCVBUF = 0x1002;
         public static readonly short SO_SNDLOWAT = 0x1003; // NOT YET SUPPORTED
         public static readonly short SO_RCVLOWAT = 0x1004; // NOT YET SUPPORTED
@@ -199,13 +188,11 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short SO_TYPE = 0x1008;
         public static readonly short SO_CONTIMEO = 0x1009;
         public static readonly short SO_NO_CHECK = 0x100a;
-
         public static readonly short SO_BINDTODEVICE = 0x100b;
 
         // IPPROTO_IP options
         public static readonly short IP_TOS = 0x0001;
         public static readonly short IP_TTL = 0x0002;
-
         public static readonly short IP_PKTINFO = 0x0008;
 
         // IPPROTO_TCP options
@@ -213,7 +200,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short TCP_KEEPALIVE = 0x0002;
         public static readonly short TCP_KEEPIDLE = 0x0003;
         public static readonly short TCP_KEEPINTVL = 0x0004;
-
         public static readonly short TCP_KEEPCNT = 0x0005;
 
         // IPPROTO_IPV6 options
@@ -225,7 +211,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 
         // UDPLITE options
         public static readonly short UDPLITE_SEND_CSCOV = 0x01; // sender checksum coverage
-
         public static readonly short UDPLITE_RECV_CSCOV = 0x02; // minimal receiver checksum coverage
 
         // UDPLITE options
@@ -236,7 +221,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         // Multicast options
         public static readonly short IP_ADD_MEMBERSHIP = 3;
         public static readonly short IP_DROP_MEMBERSHIP = 4;
-
         public static readonly short IPV6_JOIN_GROUP = 12;
         public static readonly short IPV6_ADD_MEMBERSHIP = IPV6_JOIN_GROUP;
         public static readonly short IPV6_LEAVE_GROUP = 13;
@@ -246,7 +230,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short POLLIN = 0x001;
         public static readonly short POLLOUT = 0x002;
         public static readonly short POLLERR = 0x004;
-
         public static readonly short POLLNVAL = 0x008;
 
         // Below values are unimplemented
@@ -256,7 +239,6 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short POLLWRNORM = 0x080;
         public static readonly short POLLWRBAND = 0x100;
         public static readonly short POLLHUP = 0x200;
-
         public static readonly short F_GETFL = 0x0003;
         public static readonly short F_SETFL = 0x0004;
 
@@ -266,10 +248,8 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public static readonly short O_RDONLY = 2;
         public static readonly short O_WRONLY = 4;
         public static readonly short O_RDWR = (short) (O_RDONLY | O_WRONLY);
-
         public static readonly short MSG_TRUNC = 0x04;
         public static readonly short MSG_CTRUNC = 0x08;
-
         public static readonly short SHUT_RD = 0x0;
         public static readonly short SHUT_WR = 0x1;
         public static readonly short SHUT_RDWR = 0x2;

@@ -56,21 +56,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public PlaybackInformation()
         {
-            Volume = 15;
+            Volume  = 15;
             Balance = 8;
-            Port = 1;
+            Port    = 1;
         }
 
         internal static void CopyTo(PlaybackInformation src, PlaybackInformation dst)
         {
-            dst.Volume = src.Volume;
-            dst.Balance = src.Balance;
-            dst.Port = src.Port;
-            dst.Program = src.Program;
-            dst.PrimaryChannel = src.PrimaryChannel;
+            dst.Volume           = src.Volume;
+            dst.Balance          = src.Balance;
+            dst.Port             = src.Port;
+            dst.Program          = src.Program;
+            dst.PrimaryChannel   = src.PrimaryChannel;
             dst.SecondaryChannel = src.SecondaryChannel;
-            dst.IsMute = src.IsMute;
-            dst.IsSolo = src.IsSolo;
+            dst.IsMute           = src.IsMute;
+            dst.IsSolo           = src.IsSolo;
         }
     }
 }

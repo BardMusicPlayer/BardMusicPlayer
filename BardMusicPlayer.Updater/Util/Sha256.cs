@@ -16,7 +16,8 @@ namespace BardMusicPlayer.Updater.Util
         {
             text = text.ToUpper();
             var textArray = new string[text.Length / 2 + (text.Length % 2 == 0 ? 0 : 1)];
-            for (var i = 0; i < textArray.Length; i++) textArray[ i ] = text.Substring(i * 2, i * 2 + 2 > text.Length ? 1 : 2);
+            for (var i = 0; i < textArray.Length; i++)
+                textArray[i] = text.Substring(i * 2, i * 2 + 2 > text.Length ? 1 : 2);
             return textArray.Select(b => Convert.ToByte(b, 16)).ToArray();
         }
 

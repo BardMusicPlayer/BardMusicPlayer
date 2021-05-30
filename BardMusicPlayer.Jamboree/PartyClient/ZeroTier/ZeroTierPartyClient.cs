@@ -9,48 +9,26 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
     internal class ZeroTierPartyClient : IPartyClient
     {
-        internal ZeroTierPartyClient()
-        {
-        }
+        internal ZeroTierPartyClient() { }
 
-        public string RequestParty()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string RequestParty() => throw new System.NotImplementedException();
 
-        public bool JoinParty(string party)
-        {
-            throw new System.NotImplementedException();
-        }
+        public bool JoinParty(string party) => throw new System.NotImplementedException();
 
-        public List<string> RequestPartyMembers()
-        {
-            throw new System.NotImplementedException();
-        }
+        public List<string> RequestPartyMembers() => throw new System.NotImplementedException();
 
         public event IPartyClient.PartyMembersChangedHandler PartyMembersChanged;
 
-        public bool AssignPartyLeader(string partyMember)
-        {
-            throw new System.NotImplementedException();
-        }
+        public bool AssignPartyLeader(string partyMember) => throw new System.NotImplementedException();
 
-        public string RequestPartyLeader()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string RequestPartyLeader() => throw new System.NotImplementedException();
 
         public event IPartyClient.PartyLeaderChangedHandler PartyLeaderChanged;
 
-        public List<PartyGame> RequestPartyGames(string partyMember)
-        {
-            throw new System.NotImplementedException();
-        }
+        public List<PartyGame> RequestPartyGames(string partyMember) => throw new System.NotImplementedException();
 
         public event IPartyClient.PartyGamesChangedHandler PartyGamesChanged;
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 }

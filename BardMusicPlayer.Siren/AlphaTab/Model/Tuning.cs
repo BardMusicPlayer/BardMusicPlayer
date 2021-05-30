@@ -27,10 +27,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
             };
             var result = notes[note];
-            if (includeOctave)
-            {
-                result += octave - 1;
-            }
+            if (includeOctave) result += octave - 1;
 
             return result;
         }
@@ -42,10 +39,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <returns>The tuning for the given string count or null if the string count is not defined. </returns>
         public static Tuning GetDefaultTuningFor(int stringCount)
         {
-            if (_defaultTunings.ContainsKey(stringCount))
-            {
-                return _defaultTunings[stringCount];
-            }
+            if (_defaultTunings.ContainsKey(stringCount)) return _defaultTunings[stringCount];
 
             return null;
         }
@@ -72,17 +66,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             return new FastList<Tuning>();
         }
 
-        static Tuning()
-        {
-            Initialize();
-        }
+        static Tuning() { Initialize(); }
 
         private static void Initialize()
         {
-            _sevenStrings = new FastList<Tuning>();
-            _sixStrings = new FastList<Tuning>();
-            _fiveStrings = new FastList<Tuning>();
-            _fourStrings = new FastList<Tuning>();
+            _sevenStrings   = new FastList<Tuning>();
+            _sixStrings     = new FastList<Tuning>();
+            _fiveStrings    = new FastList<Tuning>();
+            _fourStrings    = new FastList<Tuning>();
             _defaultTunings = new FastDictionary<int, Tuning>();
 
             _defaultTunings[7] = new Tuning("Guitar 7 strings",
@@ -411,10 +402,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     }
                 }
 
-                if (equals)
-                {
-                    return tuning;
-                }
+                if (equals) return tuning;
             }
 
             return null;
@@ -444,8 +432,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public Tuning(string name, int[] tuning, bool isStandard)
         {
             IsStandard = isStandard;
-            Name = name;
-            Tunings = tuning;
+            Name       = name;
+            Tunings    = tuning;
         }
     }
 }

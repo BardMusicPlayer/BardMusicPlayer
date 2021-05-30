@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Seer.Events
     {
         internal ChatStatusChanged(EventSource readerBackendType, bool chatStatus) : base(readerBackendType, 0, true)
         {
-            EventType = GetType();
+            EventType  = GetType();
             ChatStatus = chatStatus;
         }
 

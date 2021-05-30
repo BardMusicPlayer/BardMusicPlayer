@@ -15,7 +15,7 @@ namespace BardMusicPlayer.Grunt.Helper.Utilities
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-        
+
         internal const int WM_KEYDOWN = 0x0100;
         internal const int WM_KEYUP = 0x0101;
         internal const int WM_SYSKEYDOWN = 0x104;
@@ -34,9 +34,7 @@ namespace BardMusicPlayer.Grunt.Helper.Utilities
 
         internal static bool CopyToClipboard(this string text)
         {
-            if (!OpenClipboard(IntPtr.Zero)){
-                return false;
-            }
+            if (!OpenClipboard(IntPtr.Zero)) return false;
 
             var clipboardText = Marshal.StringToHGlobalUni(text);
 

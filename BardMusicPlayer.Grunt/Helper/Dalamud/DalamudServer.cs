@@ -25,11 +25,11 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         /// </summary>
         internal DalamudServer()
         {
-            _clients = new ConcurrentDictionary<int, int>();
-            _pipe = new PipeServer<string>("BardMusicPlayer-Grunt-Dalamud");
-            _pipe.ClientConnected += OnConnected;
+            _clients                 =  new ConcurrentDictionary<int, int>();
+            _pipe                    =  new PipeServer<string>("BardMusicPlayer-Grunt-Dalamud");
+            _pipe.ClientConnected    += OnConnected;
             _pipe.ClientDisconnected += OnDisconnected;
-            _pipe.MessageReceived += OnMessage;
+            _pipe.MessageReceived    += OnMessage;
             _pipe.AllowUsersReadWrite();
             Start();
         }
@@ -37,12 +37,14 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         internal async void Start()
         {
             if (_pipe.IsStarted) return;
+
             await _pipe.StartAsync();
         }
 
         internal async void Stop()
         {
             if (!_pipe.IsStarted) return;
+
             await _pipe.StopAsync();
         }
 
@@ -51,7 +53,9 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         /// </summary>
         /// <param name="pid"></param>
         /// <returns></returns>
-        internal bool IsConnected(int pid) => _clients.ContainsKey(pid) && _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected) is not null;
+        internal bool IsConnected(int pid) => _clients.ContainsKey(pid) &&
+                                              _pipe.ConnectedClients.FirstOrDefault(x =>
+                                                  x.Id == _clients[pid] && x.IsConnected) is not null;
 
         /// <summary>
         /// 
@@ -62,7 +66,9 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         internal bool SendChat(int pid, string text)
         {
             if (!IsConnected(pid)) return false;
-            _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected)?.WriteAsync(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)));
+
+            _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected)
+                ?.WriteAsync(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)));
             return true;
         }
 
@@ -90,7 +96,8 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
 
         private void OnDisconnected(object sender, ConnectionEventArgs<string> e)
         {
-            if (_clients.Values.Contains(e.Connection.Id)) _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.Id).Key, out _);
+            if (_clients.Values.Contains(e.Connection.Id))
+                _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.Id).Key, out _);
             Debug.WriteLine($"Dalamud client Id {e.Connection.Id} disconnected");
         }
 
@@ -104,8 +111,8 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             try
             {
                 Stop();
-                _pipe.MessageReceived -= OnMessage;
-                _pipe.ClientConnected -= OnDisconnected;
+                _pipe.MessageReceived    -= OnMessage;
+                _pipe.ClientConnected    -= OnDisconnected;
                 _pipe.ClientDisconnected -= OnConnected;
                 _pipe.DisposeAsync();
             }
@@ -113,6 +120,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             {
                 Debug.WriteLine($"Dalamud error: {ex.Message}");
             }
+
             _clients.Clear();
         }
     }

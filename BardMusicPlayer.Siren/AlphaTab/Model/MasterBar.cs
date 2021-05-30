@@ -105,8 +105,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public bool IsSectionStart => Section != null;
 
- 
-
         /// <summary>
         /// Gets or sets the reference to the score this song belongs to. 
         /// </summary>
@@ -133,28 +131,28 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public MasterBar()
         {
             TimeSignatureDenominator = 4;
-            TimeSignatureNumerator = 4;
-            TripletFeel = TripletFeel.NoTripletFeel;
-            KeySignatureType = KeySignatureType.Major;
-            TimeSignatureCommon = false;
-            Fermata = new FastDictionary<int, Fermata>();
+            TimeSignatureNumerator   = 4;
+            TripletFeel              = TripletFeel.NoTripletFeel;
+            KeySignatureType         = KeySignatureType.Major;
+            TimeSignatureCommon      = false;
+            Fermata                  = new FastDictionary<int, Fermata>();
         }
 
         internal static void CopyTo(MasterBar src, MasterBar dst)
         {
-            dst.IsAnacrusis = src.IsAnacrusis;
-            dst.AlternateEndings = src.AlternateEndings;
-            dst.Index = src.Index;
-            dst.KeySignature = src.KeySignature;
-            dst.KeySignatureType = src.KeySignatureType;
-            dst.IsDoubleBar = src.IsDoubleBar;
-            dst.IsRepeatStart = src.IsRepeatStart;
-            dst.RepeatCount = src.RepeatCount;
-            dst.TimeSignatureNumerator = src.TimeSignatureNumerator;
+            dst.IsAnacrusis              = src.IsAnacrusis;
+            dst.AlternateEndings         = src.AlternateEndings;
+            dst.Index                    = src.Index;
+            dst.KeySignature             = src.KeySignature;
+            dst.KeySignatureType         = src.KeySignatureType;
+            dst.IsDoubleBar              = src.IsDoubleBar;
+            dst.IsRepeatStart            = src.IsRepeatStart;
+            dst.RepeatCount              = src.RepeatCount;
+            dst.TimeSignatureNumerator   = src.TimeSignatureNumerator;
             dst.TimeSignatureDenominator = src.TimeSignatureDenominator;
-            dst.TimeSignatureCommon = src.TimeSignatureCommon;
-            dst.TripletFeel = src.TripletFeel;
-            dst.Start = src.Start;
+            dst.TimeSignatureCommon      = src.TimeSignatureCommon;
+            dst.TripletFeel              = src.TripletFeel;
+            dst.Start                    = src.Start;
         }
 
         /// <summary>
@@ -171,10 +169,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     foreach (var staff in track.Staves)
                     {
                         var barDuration = staff.Bars[0].CalculateDuration();
-                        if (barDuration > duration)
-                        {
-                            duration = barDuration;
-                        }
+                        if (barDuration > duration) duration = barDuration;
                     }
                 }
 
@@ -189,10 +184,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         /// <param name="offset">The offset of the fermata within the bar in midi ticks. </param>
         /// <param name="fermata">The fermata.</param>
-        internal void AddFermata(int offset, Fermata fermata)
-        {
-            Fermata[offset] = fermata;
-        }
+        internal void AddFermata(int offset, Fermata fermata) { Fermata[offset] = fermata; }
 
         /// <summary>
         /// Gets the fermata for a given beat. 
@@ -201,10 +193,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <returns></returns>
         internal Fermata GetFermata(Beat beat)
         {
-            if (Fermata.ContainsKey(beat.PlaybackStart))
-            {
-                return Fermata[beat.PlaybackStart];
-            }
+            if (Fermata.ContainsKey(beat.PlaybackStart)) return Fermata[beat.PlaybackStart];
 
             return null;
         }

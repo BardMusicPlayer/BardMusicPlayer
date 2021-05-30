@@ -18,28 +18,28 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestNaming()
         {
-            BmpPlaylistDecorator test = CreateTestPlaylist();
-            Assert.AreEqual(TEST_PLAYLIST_NAME, ((IPlaylist)test).GetName());
+            var test = CreateTestPlaylist();
+            Assert.AreEqual(TEST_PLAYLIST_NAME, ((IPlaylist) test).GetName());
 
-            string newName = TEST_PLAYLIST_NAME + " Version 2";
-            ((IPlaylist)test).SetName(newName);
-            Assert.AreEqual(newName, ((IPlaylist)test).GetName());
+            var newName = TEST_PLAYLIST_NAME + " Version 2";
+            ((IPlaylist) test).SetName(newName);
+            Assert.AreEqual(newName, ((IPlaylist) test).GetName());
         }
 
         [TestMethod]
         public void TestAddAppend()
         {
-            BmpSong songA = new BmpSong()
+            var songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpPlaylistDecorator test = CreateTestPlaylist();
+            var test = CreateTestPlaylist();
 
             var objRef = test.GetBmpPlaylist();
             Assert.AreEqual(0, objRef.Songs.Count);
 
-            ((IPlaylist)test).Add(songA);
+            ((IPlaylist) test).Add(songA);
             Assert.AreEqual(1, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
         }
@@ -47,33 +47,33 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestAddInject()
         {
-            BmpSong songA = new BmpSong()
+            var songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songB = new BmpSong()
+            var songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songC = new BmpSong()
+            var songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpPlaylistDecorator test = CreateTestPlaylist();
+            var test = CreateTestPlaylist();
 
             var objRef = test.GetBmpPlaylist();
 
-            ((IPlaylist)test).Add(songA);
-            ((IPlaylist)test).Add(songB);
+            ((IPlaylist) test).Add(songA);
+            ((IPlaylist) test).Add(songB);
 
             Assert.AreEqual(2, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
             Assert.AreSame(songB, objRef.Songs[1]);
 
-            ((IPlaylist)test).Add(1, songC);
+            ((IPlaylist) test).Add(1, songC);
 
             Assert.AreEqual(3, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
@@ -84,35 +84,35 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestMove()
         {
-            BmpSong songA = new BmpSong()
+            var songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songB = new BmpSong()
+            var songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songC = new BmpSong()
+            var songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpPlaylistDecorator test = CreateTestPlaylist();
+            var test = CreateTestPlaylist();
 
             var objRef = test.GetBmpPlaylist();
 
-            ((IPlaylist)test).Add(songA);
-            ((IPlaylist)test).Add(songB);
-            ((IPlaylist)test).Add(songC);
+            ((IPlaylist) test).Add(songA);
+            ((IPlaylist) test).Add(songB);
+            ((IPlaylist) test).Add(songC);
 
             Assert.AreEqual(3, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
             Assert.AreSame(songB, objRef.Songs[1]);
             Assert.AreSame(songC, objRef.Songs[2]);
 
-            ((IPlaylist)test).Move(2, 0);
+            ((IPlaylist) test).Move(2, 0);
             Assert.AreEqual(3, objRef.Songs.Count);
             Assert.AreSame(songC, objRef.Songs[0]);
             Assert.AreSame(songA, objRef.Songs[1]);
@@ -122,35 +122,35 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestRemove()
         {
-            BmpSong songA = new BmpSong()
+            var songA = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songB = new BmpSong()
+            var songB = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpSong songC = new BmpSong()
+            var songC = new BmpSong()
             {
                 Id = ObjectId.NewObjectId()
             };
 
-            BmpPlaylistDecorator test = CreateTestPlaylist();
+            var test = CreateTestPlaylist();
 
             var objRef = test.GetBmpPlaylist();
 
-            ((IPlaylist)test).Add(songA);
-            ((IPlaylist)test).Add(songB);
-            ((IPlaylist)test).Add(songC);
+            ((IPlaylist) test).Add(songA);
+            ((IPlaylist) test).Add(songB);
+            ((IPlaylist) test).Add(songC);
 
             Assert.AreEqual(3, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
             Assert.AreSame(songB, objRef.Songs[1]);
             Assert.AreSame(songC, objRef.Songs[2]);
 
-            ((IPlaylist)test).Remove(1);
+            ((IPlaylist) test).Remove(1);
             Assert.AreEqual(2, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
             Assert.AreSame(songC, objRef.Songs[1]);
@@ -158,10 +158,10 @@ namespace BardMusicPlayer.Coffer.Tests
 
         private static BmpPlaylistDecorator CreateTestPlaylist()
         {
-            BmpPlaylist decorateMe = new BmpPlaylist()
+            var decorateMe = new BmpPlaylist()
             {
-                Name = TEST_PLAYLIST_NAME,
-                Id = null,
+                Name  = TEST_PLAYLIST_NAME,
+                Id    = null,
                 Songs = new List<BmpSong>()
             };
 

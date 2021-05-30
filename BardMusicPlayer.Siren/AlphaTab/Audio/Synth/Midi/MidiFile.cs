@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
         public MidiFile()
         {
             Division = MidiUtils.QuarterTime;
-            Events = new List<MidiEvent>();
+            Events   = new List<MidiEvent>();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
         /// <summary>
         /// Sort the event list by event tick.
         /// </summary>
-        public void Sort() => Events = Events.OrderBy(x=>x.Tick).ToList();
+        public void Sort() => Events = Events.OrderBy(x => x.Tick).ToList();
 
         /// <summary>
         /// Writes the midi file into a binary format.
@@ -88,14 +88,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
             short v = 1;
             b = new[]
             {
-                (byte)((v >> 8) & 0xFF), (byte)(v & 0xFF)
+                (byte) ((v >> 8) & 0xFF), (byte) (v & 0xFF)
             };
             s.Write(b, 0, b.Length);
 
             v = MidiUtils.QuarterTime;
             b = new[]
             {
-                (byte)((v >> 8) & 0xFF), (byte)(v & 0xFF)
+                (byte) ((v >> 8) & 0xFF), (byte) (v & 0xFF)
             };
             s.Write(b, 0, b.Length);
 
@@ -124,7 +124,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
             var l = data.Length;
             b = new[]
             {
-                (byte)((l >> 24) & 0xFF), (byte)((l >> 16) & 0xFF), (byte)((l >> 8) & 0xFF), (byte)(l & 0xFF)
+                (byte) ((l >> 24) & 0xFF), (byte) ((l >> 16) & 0xFF), (byte) ((l >> 8) & 0xFF), (byte) (l & 0xFF)
             };
             s.Write(b, 0, b.Length);
             s.Write(data, 0, data.Length);
@@ -137,21 +137,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
             var n = 0;
             do
             {
-                array[n++] = (byte)(value & 0x7F & 0xFF);
-                value >>= 7;
+                array[n++] =   (byte) (value & 0x7F & 0xFF);
+                value      >>= 7;
             } while (value > 0);
 
             while (n > 0)
             {
                 n--;
                 if (n > 0)
-                {
-                    s.WriteByte((byte)(array[n] | 0x80));
-                }
+                    s.WriteByte((byte) (array[n] | 0x80));
                 else
-                {
                     s.WriteByte(array[n]);
-                }
             }
         }
     }

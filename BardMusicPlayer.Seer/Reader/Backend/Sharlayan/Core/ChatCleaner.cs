@@ -15,66 +15,79 @@ using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
 {
-	internal class ChatCleaner : INotifyPropertyChanged {
+    internal class ChatCleaner : INotifyPropertyChanged
+    {
         private const RegexOptions DefaultOptions = RegexOptions.Compiled | RegexOptions.ExplicitCapture;
-
         private static readonly Regex Checks = new(@"^00(20|21|23|27|28|46|47|48|49|5C)$", DefaultOptions);
-
         private static bool _colorFound;
 
-        private readonly Regex _playerRegEx = new(@"(?<full>\[[A-Z0-9]{10}(?<first>[A-Z0-9]{3,})20(?<last>[A-Z0-9]{3,})\](?<short>[\w']+\.? [\w']+\.?)\[[A-Z0-9]{12}\])", DefaultOptions);
+        private readonly Regex _playerRegEx =
+            new(
+                @"(?<full>\[[A-Z0-9]{10}(?<first>[A-Z0-9]{3,})20(?<last>[A-Z0-9]{3,})\](?<short>[\w']+\.? [\w']+\.?)\[[A-Z0-9]{12}\])"
+                , DefaultOptions);
 
         private string _result;
-
         private readonly MemoryHandler _memoryHandler;
 
         public ChatCleaner(MemoryHandler memoryHandler, string line)
         {
             _memoryHandler = memoryHandler;
-            Result = ProcessName(line);
+            Result         = ProcessName(line);
         }
 
-        public ChatCleaner(MemoryHandler memoryHandler, byte[] bytes) {
+        public ChatCleaner(MemoryHandler memoryHandler, byte[] bytes)
+        {
             _memoryHandler = memoryHandler;
-            Result = ProcessFullLine(bytes).Trim();
+            Result         = ProcessFullLine(bytes).Trim();
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public string Result {
+        public string Result
+        {
             get => _result;
-            private set {
+            private set
+            {
                 _result = value;
                 RaisePropertyChanged();
             }
         }
 
-        private bool ColorFound {
+        private bool ColorFound
+        {
             get => _colorFound;
-            set {
+            set
+            {
                 _colorFound = value;
                 RaisePropertyChanged();
             }
         }
 
-        private string ProcessFullLine(byte[] bytes) {
+        private string ProcessFullLine(byte[] bytes)
+        {
             var line = HttpUtility.HtmlDecode(Encoding.UTF8.GetString(bytes.ToArray())).Replace("  ", " ");
-            try {
+            try
+            {
                 var autoTranslateList = new List<byte>();
                 var newList = new List<byte>();
-                for (var x = 0; x < bytes.Count(); x++) {
-                    if (bytes[x] == 238) {
+                for (var x = 0; x < bytes.Count(); x++)
+                {
+                    if (bytes[x] == 238)
+                    {
                         var byteString = $"{bytes[x]}{bytes[x + 1]}{bytes[x + 2]}";
-                        switch (byteString) {
+                        switch (byteString)
+                        {
                             case "238129156":
                                 x += 3;
                                 break;
                         }
                     }
 
-                    if (bytes[x] == 2) {
+                    if (bytes[x] == 2)
+                    {
                         var byteString = $"{bytes[x]}{bytes[x + 1]}{bytes[x + 2]}{bytes[x + 3]}";
-                        switch (byteString) {
+                        switch (byteString)
+                        {
                             case "22913":
                             case "21613":
                             case "22213":
@@ -83,15 +96,17 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
                         }
                     }
 
-                    switch (bytes[x]) {
+                    switch (bytes[x])
+                    {
                         case 2:
                             // 2 46 5 7 242 2 210 3
                             // 2 29 1 3
                             var length = bytes[x + 2];
                             var limit = length - 1;
-                            if (length > 1) {
+                            if (length > 1)
+                            {
                                 x += 3;
-								/*
+                                /*
                                 autoTranslateList.Add(Convert.ToByte('['));
                                 byte[] translated = new byte[limit];
                                 Buffer.BlockCopy(bytes, x, translated, 0, limit);
@@ -101,7 +116,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
 
                                 autoTranslateList.Add(Convert.ToByte(']'));
                                 var aCheckStr = string.Empty;
-								Console.WriteLine(string.Format("AUTO TRANSLATE: {0}", Encoding.UTF8.GetString(autoTranslateList.ToArray())));
+                                Console.WriteLine(string.Format("AUTO TRANSLATE: {0}", Encoding.UTF8.GetString(autoTranslateList.ToArray())));
 
                                 // var checkedAt = autoTranslateList.GetRange(1, autoTranslateList.Count - 1).ToArray();
                                 if (string.IsNullOrWhiteSpace(aCheckStr)) {
@@ -112,10 +127,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
                                 }
 
                                 autoTranslateList.Clear();
-								*/
-								var translated = new byte[limit];
-								Buffer.BlockCopy(bytes, x, translated, 0, limit);
-								Array.Reverse(translated);
+                                */
+                                var translated = new byte[limit];
+                                Buffer.BlockCopy(bytes, x, translated, 0, limit);
+                                Array.Reverse(translated);
 
                                 ulong id = limit switch
                                 {
@@ -123,15 +138,19 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
                                     4 => SBitConverter.TryToUInt32(translated, 0),
                                     _ => 0
                                 };
-                                if(id != 0) {
-									if(CompletionLookup.TryGetCompletion(id, out var completion)) {
-										var c = string.Format("{{{0}}}", completion);
-										newList.AddRange(Encoding.UTF8.GetBytes(c));
-									}
-								}
+                                if (id != 0)
+                                {
+                                    if (CompletionLookup.TryGetCompletion(id, out var completion))
+                                    {
+                                        var c = string.Format("{{{0}}}", completion);
+                                        newList.AddRange(Encoding.UTF8.GetBytes(c));
+                                    }
+                                }
+
                                 x += limit;
                             }
-                            else {
+                            else
+                            {
                                 x += 4;
                                 newList.Add(32);
                                 newList.Add(bytes[x]);
@@ -162,19 +181,23 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
 
                 line = cleaned;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _memoryHandler.RaiseException(ex);
             }
 
             return line;
         }
 
-        private string ProcessName(string cleaned) {
+        private string ProcessName(string cleaned)
+        {
             var line = cleaned;
-            try {
+            try
+            {
                 // cleanup name if using other settings
                 var playerMatch = _playerRegEx.Match(line);
-                if (playerMatch.Success) {
+                if (playerMatch.Success)
+                {
                     var fullName = playerMatch.Groups[1].Value;
                     var firstName = playerMatch.Groups[2].Value.FromHex();
                     var lastName = playerMatch.Groups[3].Value.FromHex();
@@ -185,7 +208,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
 
                     // remove single placement
                     cleaned = cleaned.Replace(fullName, "•name•");
-                    switch (Regex.IsMatch(cleaned, @"^([Vv]ous|[Dd]u|[Yy]ou)")) {
+                    switch (Regex.IsMatch(cleaned, @"^([Vv]ous|[Dd]u|[Yy]ou)"))
+                    {
                         case true:
                             cleaned = cleaned.Substring(1).Replace("•name•", string.Empty);
                             break;
@@ -197,17 +221,19 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core
 
                 cleaned = Regex.Replace(cleaned, @"[\r\n]+", string.Empty);
                 cleaned = Regex.Replace(cleaned, @"[\x00-\x1F]+", string.Empty);
-                line = cleaned;
+                line    = cleaned;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _memoryHandler?.RaiseException(ex);
             }
 
             return line;
         }
 
-        private void RaisePropertyChanged([CallerMemberName] string caller = "") {
+        private void RaisePropertyChanged([CallerMemberName] string caller = "")
+        {
             PropertyChanged(this, new PropertyChangedEventArgs(caller));
         }
-	}
+    }
 }

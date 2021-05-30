@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
@@ -81,6 +81,7 @@ namespace BardMusicPlayer.Seer
         internal void PublishEvent(SeerEvent seerEvent)
         {
             if (!_eventQueueOpen) return;
+
             if (seerEvent.HighPriority) _eventQueueHighPriority.Enqueue(seerEvent);
             else _eventQueueLowPriority.Enqueue(seerEvent);
         }
@@ -134,6 +135,7 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
                 MemoryReader?.Dispose();
@@ -142,6 +144,7 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
                 NetworkReader?.Dispose();
@@ -150,15 +153,24 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
-                while (_eventQueueHighPriority.TryDequeue(out _)) { }
-                while (_eventQueueLowPriority.TryDequeue(out _)) { }
+                while (_eventQueueHighPriority.TryDequeue(out _))
+                {
+                }
+
+                while (_eventQueueLowPriority.TryDequeue(out _))
+                {
+                }
+
                 _eventDedupeHistory.Clear();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             GC.SuppressFinalize(this);
         }
 
@@ -166,6 +178,7 @@ namespace BardMusicPlayer.Seer
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
+
             return obj.GetType() == GetType() && Equals((Game) obj);
         }
 
@@ -173,11 +186,14 @@ namespace BardMusicPlayer.Seer
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
+
             return _uuid == other._uuid;
         }
 
         public override int GetHashCode() => _uuid != null ? _uuid.GetHashCode() : 0;
+
         public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
+
         public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
     }
 }

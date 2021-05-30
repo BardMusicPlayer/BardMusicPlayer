@@ -54,8 +54,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             Staves = new FastList<Staff>();
             EnsureStaveCount(staveCount);
             PlaybackInfo = new PlaybackInformation();
-            Name = "";
-            ShortName = "";
+            Name         = "";
+            ShortName    = "";
         }
 
         internal void EnsureStaveCount(int staveCount)
@@ -75,9 +75,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal static void CopyTo(Track src, Track dst)
         {
-            dst.Name = src.Name;
+            dst.Name      = src.Name;
             dst.ShortName = src.ShortName;
-            dst.Index = src.Index;
+            dst.Index     = src.Index;
         }
 
         internal void Finish()
@@ -85,16 +85,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (string.IsNullOrEmpty(ShortName))
             {
                 ShortName = Name;
-                if (ShortName.Length > ShortNameMaxLength)
-                {
-                    ShortName = ShortName.Substring(0, ShortNameMaxLength);
-                }
+                if (ShortName.Length > ShortNameMaxLength) ShortName = ShortName.Substring(0, ShortNameMaxLength);
             }
 
-            for (int i = 0, j = Staves.Count; i < j; i++)
-            {
-                Staves[i].Finish();
-            }
+            for (int i = 0, j = Staves.Count; i < j; i++) Staves[i].Finish();
         }
 
         internal void ApplyLyrics(FastList<Lyrics> lyrics)
@@ -124,14 +118,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         if (beat != null)
                         {
                             // initialize lyrics list for beat if required
-                            if (beat.Lyrics == null)
-                            {
-                                beat.Lyrics = new string[lyrics.Count];
-                            }
+                            if (beat.Lyrics == null) beat.Lyrics = new string[lyrics.Count];
 
                             // assign chunk
                             beat.Lyrics[li] = lyric.Chunks[ci];
-                            beat = beat.NextBeat;
+                            beat            = beat.NextBeat;
                         }
                     }
                 }

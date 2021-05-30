@@ -13,8 +13,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend
     internal interface IReaderBackend : IDisposable
     {
         EventSource ReaderBackendType { get; }
+
         ReaderHandler ReaderHandler { get; set; }
+
         int SleepTimeInMs { get; set; }
+
         Task Loop(CancellationToken token);
     }
 }

@@ -23,26 +23,33 @@ namespace BardMusicPlayer.Updater
 #else
         internal const string BaseUrl = @"https://dl.bardmusicplayer.com/bmp/release/";
 #endif
-
         internal int CompatibleLauncherVersion = 1;
-        internal Dictionary<string, BmpVersion> RemoteVersions  { get; set; }
-        internal BmpVersion LocalVersion  { get; set; }
+
+        internal Dictionary<string, BmpVersion> RemoteVersions { get; set; }
+
+        internal BmpVersion LocalVersion { get; set; }
 
         internal bool LocalDev { get; private set; }
+
         internal int LauncherVersion { get; private set; }
+
         internal string ExePath { get; private set; }
+
         internal string ResourcePath { get; private set; }
+
         internal string DataPath { get; private set; }
+
         internal string[] Args { get; private set; }
 
-        public async void StartUp(bool localDev, int launcherVersion, string exePath, string resourcePath, string dataPath, string[] args)
+        public async void StartUp(bool localDev, int launcherVersion, string exePath, string resourcePath,
+            string dataPath, string[] args)
         {
-            LocalDev = localDev;
+            LocalDev        = localDev;
             LauncherVersion = launcherVersion;
-            ExePath = exePath;
-            ResourcePath = resourcePath;
-            DataPath = dataPath;
-            Args = args;
+            ExePath         = exePath;
+            ResourcePath    = resourcePath;
+            DataPath        = dataPath;
+            Args            = args;
 
             if (LauncherVersion != CompatibleLauncherVersion)
             {
@@ -91,7 +98,8 @@ namespace BardMusicPlayer.Updater
                 {
                     try
                     {
-                        var remoteVersionString = await new Downloader().GetStringFromUrl(BaseUrl + remoteVersion + "/version.json");
+                        var remoteVersionString =
+ await new Downloader().GetStringFromUrl(BaseUrl + remoteVersion + "/version.json");
                         RemoteVersions.Add(remoteVersion, remoteVersionString.DeserializeFromJson<BmpVersion>());
                     }
                     catch (Exception)
@@ -128,7 +136,8 @@ namespace BardMusicPlayer.Updater
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.ProvideVersions(LocalVersion, RemoteVersions);
 
-                mainWindow.OnDownloadRequested += new EventHandler<BmpDownloadEvent>( (object sender, BmpDownloadEvent e) =>
+                mainWindow.OnDownloadRequested +=
+ new EventHandler<BmpDownloadEvent>( (object sender, BmpDownloadEvent e) =>
                 {
                     var key = e.Key;
                     var version = e.Version;
@@ -165,21 +174,21 @@ namespace BardMusicPlayer.Updater
                 });
 
                 mainWindow.OnDownloadComplete += launchHandler;
-                mainWindow.OnLaunchRequested  += launchHandler;
+                mainWindow.OnLaunchRequested += launchHandler;
 
                 mainWindow.ShowDialog();
             }
 
 #elif LOCAL
-            
+
             var version = new BmpVersion
             {
-                beta = true,
-                build = 0,
-                commit = "DEBUG",
+                beta       = true,
+                build      = 0,
+                commit     = "DEBUG",
                 entryClass = "BardMusicPlayer.Ui.Bootstrapper",
-                entryDll = "BardMusicPlayer.Ui.dll",
-                items = new List<BmpVersionItem>()
+                entryDll   = "BardMusicPlayer.Ui.dll",
+                items      = new List<BmpVersionItem>()
             };
 
             var items = Directory.GetFiles(ResourcePath, "*.dll").Where(name => !name.Contains("libzt.dll"));
@@ -188,8 +197,8 @@ namespace BardMusicPlayer.Updater
                 version.items.Add(new BmpVersionItem
                 {
                     destination = Path.GetFileName(item),
-                    sha256 = Sha256.GetChecksum(item),
-                    load = true
+                    sha256      = Sha256.GetChecksum(item),
+                    load        = true
                 });
             }
 

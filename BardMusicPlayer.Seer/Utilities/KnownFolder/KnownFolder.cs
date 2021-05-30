@@ -32,7 +32,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// provided.</param>
         internal KnownFolder(KnownFolderType type, WindowsIdentity identity)
         {
-            Type = type;
+            Type     = type;
             Identity = identity;
         }
 
@@ -81,19 +81,16 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// Creates the folder using its Desktop.ini settings.
         /// </summary>
         /// <exception cref="ExternalException">The known folder could not be retrieved.</exception>
-        internal void Create()
-        {
-            GetPath(KnownFolderFlags.Init | KnownFolderFlags.Create);
-        }
+        internal void Create() { GetPath(KnownFolderFlags.Init | KnownFolderFlags.Create); }
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
         private string GetPath(KnownFolderFlags flags)
         {
-            int result = SHGetKnownFolderPath(Type.GetGuid(), (uint)flags, Identity.Token, out IntPtr outPath);
+            var result = SHGetKnownFolderPath(Type.GetGuid(), (uint) flags, Identity.Token, out var outPath);
             if (result >= 0)
             {
-                string path = Marshal.PtrToStringUni(outPath);
+                var path = Marshal.PtrToStringUni(outPath);
                 Marshal.FreeCoTaskMem(outPath);
                 return path;
             }
@@ -106,7 +103,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
 
         private void SetPath(KnownFolderFlags flags, string path)
         {
-            int result = SHSetKnownFolderPath(Type.GetGuid(), (uint)flags, Identity.Token, path);
+            var result = SHSetKnownFolderPath(Type.GetGuid(), (uint) flags, Identity.Token, path);
             if (result < 0)
             {
                 throw new ExternalException("Cannot set the known folder path. It may not be available on this system.",
@@ -129,7 +126,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
         /// <msdn-id>bb762188</msdn-id>
         [DllImport("Shell32.dll")]
-        private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags,
+        private static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags,
             IntPtr hToken, out IntPtr ppszPath);
 
         /// <summary>
@@ -142,8 +139,8 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         /// <returns></returns>
         /// <msdn-id>bb762249</msdn-id>
         [DllImport("Shell32.dll")]
-        private static extern int SHSetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags,
-            IntPtr hToken, [MarshalAs(UnmanagedType.LPWStr)]string pszPath);
+        private static extern int SHSetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags,
+            IntPtr hToken, [MarshalAs(UnmanagedType.LPWStr)] string pszPath);
 
         // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
 

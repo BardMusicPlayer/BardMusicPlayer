@@ -14,7 +14,6 @@
 
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
-    xmlns:controls="clr-namespace:BardMusicPlayer.Ui.Controls"
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
 
@@ -58,13 +57,14 @@
             <TextBlock VerticalAlignment="Center" Text="Bard Music Player 2.0"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
             <auto:StackPanel Grid.Column="1" Orientation="Horizontal" MarginBetweenChildren="6">
-                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Settings}" Click="{s:Action Navigate}"
+                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Settings}"
+                        Click="{s:Action Navigate}"
                         Tag="{Binding Settings}" />
                 <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Close}" />
             </auto:StackPanel>
         </Grid>
 
-        <Border Grid.Row="1" Margin="0,12"  Style="{DynamicResource HorizontalDividerBorder}"  />
+        <Border Grid.Row="1" Margin="0,12" Style="{DynamicResource HorizontalDividerBorder}" />
         <ContentControl Grid.Row="2" s:View.Model="{Binding ActiveItem}" />
     </Grid>
-</Window>   
+</Window>

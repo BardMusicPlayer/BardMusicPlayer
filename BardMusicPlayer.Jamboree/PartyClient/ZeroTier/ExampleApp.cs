@@ -6,47 +6,53 @@ using System.Threading;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class ExampleAppStart {
-        static int Main(string[] args)
+    internal class ExampleAppStart
+    {
+        private static int Main(string[] args)
         {
-            if (args.Length < 4 || args.Length > 5) {
+            if (args.Length < 4 || args.Length > 5)
+            {
                 Console.WriteLine("\nPlease specify either client or server mode and required arguments:");
                 Console.WriteLine("  Usage: example server <config_path> <nwid> <localPort>");
                 Console.WriteLine("  Usage: example client <config_path> <nwid> <remoteAddress> <remotePort>\n");
                 return 1;
             }
-            string configFilePath = args[1];
-            ulong networkId = (ulong)Int64.Parse(args[2], System.Globalization.NumberStyles.HexNumber);
 
-            ExampleApp exampleApp = new ExampleApp();
+            var configFilePath = args[1];
+            var networkId = (ulong) long.Parse(args[2], System.Globalization.NumberStyles.HexNumber);
 
-            if (args[0].Equals("server")) {
+            var exampleApp = new ExampleApp();
+
+            if (args[0].Equals("server"))
+            {
                 Console.WriteLine("Server mode...");
-                ushort serverPort = (ushort)Int16.Parse(args[3]);
+                var serverPort = (ushort) short.Parse(args[3]);
                 exampleApp.StartZeroTier(configFilePath, networkId);
-                IPAddress ipAddress = IPAddress.Parse("0.0.0.0");
-                IPEndPoint localEndPoint = new IPEndPoint(ipAddress, serverPort);
+                var ipAddress = IPAddress.Parse("0.0.0.0");
+                var localEndPoint = new IPEndPoint(ipAddress, serverPort);
                 exampleApp.SocketServer(localEndPoint);
             }
 
-            if (args[0].Equals("client")) {
+            if (args[0].Equals("client"))
+            {
                 Console.WriteLine("Client mode...");
-                string serverIP = args[3];
-                int port = Int16.Parse(args[4]);
-                IPAddress ipAddress = IPAddress.Parse(serverIP);
-                IPEndPoint remoteEndPoint = new IPEndPoint(ipAddress, port);
+                var serverIP = args[3];
+                int port = short.Parse(args[4]);
+                var ipAddress = IPAddress.Parse(serverIP);
+                var remoteEndPoint = new IPEndPoint(ipAddress, port);
                 exampleApp.StartZeroTier(configFilePath, networkId);
                 exampleApp.SocketClient(remoteEndPoint);
             }
+
             exampleApp.StopZeroTier();
             return 0;
         }
     }
 
-    internal class ExampleApp {
+    internal class ExampleApp
+    {
         // ZeroTier Node instance
-
-        Node node;
+        private Node node;
 
         // Initialize and start ZeroTier
 
@@ -93,8 +99,9 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         node.InitSetRoots(rootsData, rootsData.Length);
         */
 
-            node.Start();   // Network activity only begins after calling Start()
-            while (! node.Online) {
+            node.Start(); // Network activity only begins after calling Start()
+            while (!node.Online)
+            {
                 Thread.Sleep(50);
             }
 
@@ -106,23 +113,27 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 
             node.Join(networkId);
             Console.WriteLine("Waiting for join to complete...");
-            while (node.Networks.Count == 0) {
+            while (node.Networks.Count == 0)
+            {
                 Thread.Sleep(50);
             }
 
             // Wait until we've joined the network and we have routes + addresses
             Console.WriteLine("Waiting for network to become transport ready...");
-            while (! node.IsNetworkTransportReady(networkId)) {
+            while (!node.IsNetworkTransportReady(networkId))
+            {
                 Thread.Sleep(50);
             }
 
             Console.WriteLine("Num of assigned addresses : " + node.GetNetworkAddresses(networkId).Count);
-            foreach (IPAddress addr in node.GetNetworkAddresses(networkId)) {
+            foreach (var addr in node.GetNetworkAddresses(networkId))
+            {
                 Console.WriteLine(" - Address: " + addr);
             }
 
             Console.WriteLine("Num of routes             : " + node.GetNetworkRoutes(networkId).Count);
-            foreach (RouteInfo route in node.GetNetworkRoutes(networkId)) {
+            foreach (var route in node.GetNetworkRoutes(networkId))
+            {
                 Console.WriteLine(
                     " -   Route: target={0} via={1} flags={2} metric={3}",
                     route.Target.ToString(),
@@ -135,10 +146,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         /**
      * Stop ZeroTier
      */
-        public void StopZeroTier()
-        {
-            node.Free();
-        }
+        public void StopZeroTier() { node.Free(); }
 
         /**
      * (OPTIONAL)
@@ -169,16 +177,17 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
             string data = null;
 
             // Data buffer for incoming data.
-            byte[] bytes = new Byte[1024];
+            var bytes = new byte[1024];
 
             Console.WriteLine(localEndPoint.ToString());
-            Socket listener =
+            var listener =
                 new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and
             // listen for incoming connections.
 
-            try {
+            try
+            {
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
                 Socket handler;
@@ -188,34 +197,41 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
                 data = null;
                 Console.WriteLine("Server: Accepted connection from: " + handler.RemoteEndPoint.ToString());
 
-                for (int i = 0; i < 4; i++) {
-                    int bytesRec = 0;
-                    try {
+                for (var i = 0; i < 4; i++)
+                {
+                    var bytesRec = 0;
+                    try
+                    {
                         Console.WriteLine("Server: Receiving...");
                         bytesRec = handler.Receive(bytes);
                     }
-                    catch (SocketException e) {
+                    catch (SocketException e)
+                    {
                         Console.WriteLine(
                             "ServiceErrorCode={0} SocketErrorCode={1}",
                             e.ServiceErrorCode,
                             e.SocketErrorCode);
                     }
-                    if (bytesRec > 0) {
+
+                    if (bytesRec > 0)
+                    {
                         Console.WriteLine("Server: Bytes received: {0}", bytesRec);
                         data = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                         Console.WriteLine("Server: Text received : {0}", data);
                         Thread.Sleep(1000);
                         // Echo the data back to the client.
-                        byte[] msg = Encoding.ASCII.GetBytes(data);
+                        var msg = Encoding.ASCII.GetBytes(data);
                         handler.Send(msg);
                         Thread.Sleep(1000);
                     }
                 }
+
                 // Release the socket.
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
-            catch (SocketException e) {
+            catch (SocketException e)
+            {
                 Console.WriteLine(e);
                 Console.WriteLine("ServiceErrorCode={0} SocketErrorCode={1}", e.ServiceErrorCode, e.SocketErrorCode);
             }
@@ -227,42 +243,50 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public void SocketClient(IPEndPoint remoteServerEndPoint)
         {
             // Data buffer for incoming data.
-            byte[] bytes = new byte[1024];
+            var bytes = new byte[1024];
 
             // Connect to a remote device.
-            try {
+            try
+            {
                 // Create a TCP/IP  socket.
-                Socket sender =
+                var sender =
                     new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-                try {
+                try
+                {
                     Console.WriteLine("Client: Connecting to {0}...", remoteServerEndPoint.ToString());
                     sender.Connect(remoteServerEndPoint);
                     Console.WriteLine("Client: Connected to {0}", sender.RemoteEndPoint.ToString());
 
                     // Encode the data string into a byte array.
-                    for (int i = 0; i < 4; i++) {
-                        byte[] msg = Encoding.ASCII.GetBytes("This is a test");
-                        int bytesSent = sender.Send(msg);
+                    for (var i = 0; i < 4; i++)
+                    {
+                        var msg = Encoding.ASCII.GetBytes("This is a test");
+                        var bytesSent = sender.Send(msg);
                         Console.WriteLine("Client: Sent ({0}) bytes", bytesSent);
                         Thread.Sleep(1000);
-                        int bytesRec = sender.Receive(bytes);
+                        var bytesRec = sender.Receive(bytes);
                         Console.WriteLine("Client: Echoing {0}", Encoding.ASCII.GetString(bytes, 0, bytesRec));
                         Thread.Sleep(1000);
                     }
+
                     // Release the socket.
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
                 }
-                catch (ArgumentNullException ane) {
+                catch (ArgumentNullException ane)
+                {
                     Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                 }
-                catch (SocketException e) {
+                catch (SocketException e)
+                {
                     Console.WriteLine(e);
-                    Console.WriteLine("ServiceErrorCode={0} SocketErrorCode={1}", e.ServiceErrorCode, e.SocketErrorCode);
+                    Console.WriteLine("ServiceErrorCode={0} SocketErrorCode={1}", e.ServiceErrorCode,
+                        e.SocketErrorCode);
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Console.WriteLine(e.ToString());
             }
         }

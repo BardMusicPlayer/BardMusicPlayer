@@ -17,8 +17,10 @@ using System.Net;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class NetworkInfo {
+    internal class NetworkInfo
+    {
         public ulong Id { get; set; }
+
         public ulong MACAddress;
         public string Name;
         public int Status;
@@ -27,39 +29,19 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public int DHCP;
         public bool Bridge;
         public bool BroadcastEnabled;
-        internal bool transportReady;   // Synthetic value
+        internal bool transportReady; // Synthetic value
 
-        public bool IsPrivate
-        {
-            get {
-                return Type == Constants.NETWORK_TYPE_PRIVATE;
-            }
-        }
+        public bool IsPrivate => Type == Constants.NETWORK_TYPE_PRIVATE;
 
-        public bool IsPublic
-        {
-            get {
-                return Type == Constants.NETWORK_TYPE_PUBLIC;
-            }
-        }
+        public bool IsPublic => Type == Constants.NETWORK_TYPE_PUBLIC;
 
-        internal ConcurrentDictionary<string, IPAddress> _addrs = new ConcurrentDictionary<string, IPAddress>();
+        internal ConcurrentDictionary<string, IPAddress> _addrs = new();
 
-        public ICollection<IPAddress> Addresses
-        {
-            get {
-                return _addrs.Values;
-            }
-        }
+        public ICollection<IPAddress> Addresses => _addrs.Values;
 
         internal ConcurrentDictionary<string, RouteInfo> _routes =
-            new ConcurrentDictionary<string, RouteInfo>();
+            new();
 
-        public ICollection<RouteInfo> Routes
-        {
-            get {
-                return _routes.Values;
-            }
-        }
+        public ICollection<RouteInfo> Routes => _routes.Values;
     }
 }

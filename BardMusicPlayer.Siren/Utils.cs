@@ -18,9 +18,10 @@ namespace BardMusicPlayer.Siren
 {
     internal static class Utils
     {
-        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(this BmpSong song)
+        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(
+            this BmpSong song)
         {
-            var file = new MidiFile {Division = 600};
+            var file = new MidiFile { Division = 600 };
             var events = new AlphaSynthMidiFileHandler(file);
             events.AddTempo(0, 100);
 
@@ -30,7 +31,7 @@ namespace BardMusicPlayer.Siren
             var midiFile = await song.GetProcessedMidiFile();
 
             var trackChunks = midiFile.GetTrackChunks().ToList();
-            
+
             var lyrics = new Dictionary<int, Dictionary<long, string>>();
             var lyricNum = 0;
 
@@ -41,10 +42,14 @@ namespace BardMusicPlayer.Siren
                 {
                     case "lyric":
                     {
-                        if (!lyrics.ContainsKey(lyricNum)) lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
+                        if (!lyrics.ContainsKey(lyricNum))
+                            lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
 
-                        foreach (var lyric in trackChunk.GetTimedEvents().Where(x => x.Event.EventType == MidiEventType.Lyric))
+                        foreach (var lyric in trackChunk.GetTimedEvents()
+                            .Where(x => x.Event.EventType == MidiEventType.Lyric))
+                        {
                             lyrics[lyricNum].Add(lyric.Time, ((LyricEvent) lyric.Event).Text);
+                        }
 
                         lyricNum++;
 
@@ -58,10 +63,11 @@ namespace BardMusicPlayer.Siren
                         {
                             var instrument = tone.GetInstrumentFromChannel(note.Channel);
                             var noteNum = note.NoteNumber;
-                            var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
+                            var dur = (int) MinimumLength(instrument, noteNum - 48, note.Length);
                             var time = (int) note.Time;
-                            events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
-                            events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
+                            events.AddProgramChange(trackCounter, time, trackCounter,
+                                (byte) instrument.MidiProgramChangeCode);
+                            events.AddNote(trackCounter, time, dur, noteNum, DynamicValue.FFF, trackCounter);
                             if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
                             else trackCounter++;
                             if (time + dur > veryLast) veryLast = time + dur;
@@ -71,10 +77,11 @@ namespace BardMusicPlayer.Siren
                     }
                 }
             }
+
             events.FinishTrack(byte.MaxValue, (byte) veryLast);
             return (file, lyrics);
         }
-        
+
         private static long MinimumLength(Instrument instrument, int note, long duration)
         {
             switch (instrument.Index)
@@ -114,6 +121,7 @@ namespace BardMusicPlayer.Siren
                 case 8: // Fife
                 case 9: // Panpipes
                     if (duration > 4500) return 4500;
+
                     return duration < 500 ? 500 : duration;
 
                 case 10: // Timpani
@@ -155,6 +163,7 @@ namespace BardMusicPlayer.Siren
                 case 28: // Mute Guitar
 
                     if (duration > 4500) return 4500;
+
                     return duration < 300 ? 300 : duration;
 
                 default: return duration;

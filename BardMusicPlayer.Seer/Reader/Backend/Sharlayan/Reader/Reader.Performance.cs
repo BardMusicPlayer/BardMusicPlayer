@@ -12,15 +12,17 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
     internal partial class Reader
     {
         public bool CanGetPerformance() => Scanner.Locations.ContainsKey(Signatures.PerformanceStatusKey);
+
         public Instrument GetPerformance()
         {
             var result = Instrument.None;
             if (!CanGetPerformance() || !MemoryHandler.IsAttached) return result;
-            
+
             try
             {
-                var performanceData = MemoryHandler.GetByteArray(Scanner.Locations[Signatures.PerformanceStatusKey], MemoryHandler.Structures.PerformanceInfo.SourceSize);
-              
+                var performanceData = MemoryHandler.GetByteArray(Scanner.Locations[Signatures.PerformanceStatusKey],
+                    MemoryHandler.Structures.PerformanceInfo.SourceSize);
+
                 var status = (Performance.Status) performanceData[MemoryHandler.Structures.PerformanceInfo.Status];
                 var instrument = Instrument.Parse(performanceData[MemoryHandler.Structures.PerformanceInfo.Instrument]);
 
@@ -43,6 +45,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
             {
                 MemoryHandler?.RaiseException(ex);
             }
+
             return result;
         }
     }

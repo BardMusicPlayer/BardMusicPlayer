@@ -24,7 +24,7 @@ namespace BardMusicPlayer.Grunt
         public static async Task<bool> SyncPushKey(this Game game, Keys key, int delay = 25)
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
-            
+
             var sent = false;
             try
             {
@@ -34,14 +34,30 @@ namespace BardMusicPlayer.Grunt
                 {
                     for (var i = 0; i < 5; i++)
                     {
-                        if ((key & Keys.Control) == Keys.Control) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) Keys.ControlKey, (IntPtr) 0);
-                        if ((key & Keys.Alt) == Keys.Alt) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYDOWN, (IntPtr) Keys.Menu, (IntPtr) 0);
-                        if ((key & Keys.Shift) == Keys.Shift) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) Keys.ShiftKey, (IntPtr) 0);
+                        if ((key & Keys.Control) == Keys.Control)
+                        {
+                            NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN,
+                                (IntPtr) Keys.ControlKey, (IntPtr) 0);
+                        }
+
+                        if ((key & Keys.Alt) == Keys.Alt)
+                        {
+                            NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYDOWN,
+                                (IntPtr) Keys.Menu, (IntPtr) 0);
+                        }
+
+                        if ((key & Keys.Shift) == Keys.Shift)
+                        {
+                            NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN,
+                                (IntPtr) Keys.ShiftKey, (IntPtr) 0);
+                        }
+
                         await Task.Delay(5);
                     }
                 }
 
-                NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) baseKey, (IntPtr) 0);
+                NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) baseKey,
+                    (IntPtr) 0);
                 await Task.Delay(delay);
 
                 sent = true;
@@ -65,33 +81,37 @@ namespace BardMusicPlayer.Grunt
         public static async Task<bool> SyncReleaseKey(this Game game, Keys key, int delay = 25)
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
-            
+
             var sent = false;
-            
+
             try
             {
                 var baseKey = key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt;
 
-                NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) baseKey, (IntPtr) 0);
+                NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) baseKey,
+                    (IntPtr) 0);
 
                 if (baseKey != key)
                 {
                     if ((key & Keys.Shift) == Keys.Shift)
                     {
                         await Task.Delay(5);
-                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) Keys.ShiftKey, (IntPtr) 0);
+                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP,
+                            (IntPtr) Keys.ShiftKey, (IntPtr) 0);
                     }
 
                     if ((key & Keys.Alt) == Keys.Alt)
                     {
                         await Task.Delay(5);
-                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYUP, (IntPtr) Keys.Menu, (IntPtr) 0);
+                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYUP,
+                            (IntPtr) Keys.Menu, (IntPtr) 0);
                     }
 
                     if ((key & Keys.Control) == Keys.Control)
                     {
                         await Task.Delay(5);
-                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) Keys.ControlKey, (IntPtr) 0);
+                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP,
+                            (IntPtr) Keys.ControlKey, (IntPtr) 0);
                     }
                 }
 
@@ -116,8 +136,9 @@ namespace BardMusicPlayer.Grunt
         /// <param name="downDelay"></param>
         /// <param name="upDelay"></param>
         /// <returns></returns>
-        public static async Task<bool> SyncTapKey(this Game game, Keys key, int downDelay = 25, int upDelay = 25) => await SyncPushKey(game, key, downDelay) && await SyncReleaseKey(game, key, upDelay);
-        
+        public static async Task<bool> SyncTapKey(this Game game, Keys key, int downDelay = 25, int upDelay = 25) =>
+            await SyncPushKey(game, key, downDelay) && await SyncReleaseKey(game, key, upDelay);
+
         /// <summary>
         /// Named opposite of behavior, this runs synced in this thread, async to postmessage the ffixv game.
         /// </summary>
@@ -127,14 +148,16 @@ namespace BardMusicPlayer.Grunt
         public static bool ASyncPushKey(this Game game, Keys key)
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
-            
+
             var sent = false;
-            
+
             try
             {
-                if (key != (key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt)) throw new BmpGruntException("ASync Key methods do not accept modifier keys.");
+                if (key != (key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt))
+                    throw new BmpGruntException("ASync Key methods do not accept modifier keys.");
 
-                NativeMethods.PostMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) key, (IntPtr) 0);
+                NativeMethods.PostMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) key,
+                    (IntPtr) 0);
 
                 sent = true;
             }
@@ -155,14 +178,16 @@ namespace BardMusicPlayer.Grunt
         public static bool ASyncReleaseKey(this Game game, Keys key)
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
-            
+
             var sent = false;
-            
+
             try
             {
-                if (key != (key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt)) throw new BmpGruntException("ASync Key methods do not accept modifier keys.");
+                if (key != (key & ~Keys.Control & key & ~Keys.Shift & key & ~Keys.Alt))
+                    throw new BmpGruntException("ASync Key methods do not accept modifier keys.");
 
-                NativeMethods.PostMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) key, (IntPtr) 0);
+                NativeMethods.PostMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYUP, (IntPtr) key,
+                    (IntPtr) 0);
 
                 sent = true;
             }

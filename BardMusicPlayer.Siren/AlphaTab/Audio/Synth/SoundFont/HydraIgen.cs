@@ -8,7 +8,6 @@
 
 // C# port for alphaTab: (C) 2019 by Daniel Kuschny
 // Licensed under: MPL-2.0
-
 /*
  * LICENSE (MIT)
  *
@@ -41,12 +40,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
         public const int SizeInFile = 4;
 
         public ushort GenOper { get; set; }
+
         public HydraGenAmount GenAmount { get; set; }
 
         public static HydraIgen Load(IReadable reader)
         {
             var igen = new HydraIgen();
-            igen.GenOper = reader.ReadUInt16LE();
+            igen.GenOper   = reader.ReadUInt16LE();
             igen.GenAmount = HydraGenAmount.Load(reader);
             return igen;
         }

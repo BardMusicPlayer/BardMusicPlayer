@@ -19,7 +19,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
     internal class MidiFileSequencer
     {
         private readonly TinySoundFont _synthesizer;
-
         private FastList<MidiFileSequencerTempoChange> _tempoChanges;
         private readonly FastDictionary<int, SynthEvent> _firstProgramEventPerChannel;
         private FastList<SynthEvent> _synthData;
@@ -31,7 +30,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         /// Depending on the buffer size of the output, this position is after the actual playback.
         /// </remarks>
         private double _currentTime;
-
 
         private PlaybackRange _playbackRange;
         private double _playbackRangeStartTime;
@@ -47,7 +45,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
                 if (value != null)
                 {
                     _playbackRangeStartTime = TickPositionToTimePositionWithSpeed(value.StartTick, 1);
-                    _playbackRangeEndTime = TickPositionToTimePositionWithSpeed(value.EndTick, 1);
+                    _playbackRangeEndTime   = TickPositionToTimePositionWithSpeed(value.EndTick, 1);
                 }
             }
         }
@@ -67,18 +65,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         /// <summary>
         /// Gets or sets the playback speed.
         /// </summary>
-        public double PlaybackSpeed
-        {
-            get;
-            set;
-        }
+        public double PlaybackSpeed { get; set; }
 
         public MidiFileSequencer(TinySoundFont synthesizer)
         {
-            _synthesizer = synthesizer;
+            _synthesizer                 = synthesizer;
             _firstProgramEventPerChannel = new FastDictionary<int, SynthEvent>();
-            _tempoChanges = new FastList<MidiFileSequencerTempoChange>();
-            PlaybackSpeed = 1;
+            _tempoChanges                = new FastList<MidiFileSequencerTempoChange>();
+            PlaybackSpeed                = 1;
         }
 
         public void Seek(double timePosition)
@@ -90,31 +84,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             if (PlaybackRange != null)
             {
                 if (timePosition < _playbackRangeStartTime)
-                {
-                    timePosition = _playbackRangeStartTime;
-                }
-                else if (timePosition > _playbackRangeEndTime)
-                {
-                    timePosition = _playbackRangeEndTime;
-                }
+                    timePosition                                            = _playbackRangeStartTime;
+                else if (timePosition > _playbackRangeEndTime) timePosition = _playbackRangeEndTime;
             }
 
             // move back some ticks to ensure the on-time events are played
             timePosition -= 25;
-            if (timePosition < 0)
-            {
-                timePosition = 0;
-            }
+            if (timePosition < 0) timePosition = 0;
 
             if (timePosition > _currentTime)
-            {
                 SilentProcess(timePosition - _currentTime);
-            }
             else if (timePosition < _currentTime)
             {
                 //we have to restart the midi to make sure we get the right state: instruments, volume, pan, etc
                 _currentTime = 0;
-                _eventIndex = 0;
+                _eventIndex  = 0;
                 _synthesizer.NoteOffAll(true);
                 _synthesizer.ResetSoft();
 
@@ -124,10 +108,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
 
         private void SilentProcess(double milliseconds)
         {
-            if (milliseconds <= 0)
-            {
-                return;
-            }
+            if (milliseconds <= 0) return;
 
             var start = Platform.GetCurrentMilliseconds();
 
@@ -135,23 +116,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
 
             while (_currentTime < finalTime)
             {
-                if (FillMidiEventQueueLimited(finalTime - _currentTime))
-                {
-                    _synthesizer.SynthesizeSilent();
-                }
+                if (FillMidiEventQueueLimited(finalTime - _currentTime)) _synthesizer.SynthesizeSilent();
             }
 
             var duration = Platform.GetCurrentMilliseconds() - start;
             Logger.Debug("Sequencer", "Silent seek finished in " + duration + "ms");
         }
 
-
         public void LoadMidi(MidiFile midiFile)
         {
             _tempoChanges = new FastList<MidiFileSequencerTempoChange>();
 
-            _division = midiFile.Division;
-            _eventIndex = 0;
+            _division    = midiFile.Division;
+            _eventIndex  = 0;
             _currentTime = 0;
 
             // build synth events.
@@ -170,65 +147,52 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
                 _synthData.Add(synthData);
 
                 var deltaTick = mEvent.Tick - previousTick;
-                absTick += deltaTick;
-                absTime += deltaTick * (60000.0 / (bpm * midiFile.Division));
-                synthData.Time = absTime;
-                previousTick = mEvent.Tick;
+                absTick        += deltaTick;
+                absTime        += deltaTick * (60000.0 / (bpm * midiFile.Division));
+                synthData.Time =  absTime;
+                previousTick   =  mEvent.Tick;
 
-                if (mEvent.Command == MidiEventType.Meta && mEvent.Data1 == (int)MetaEventTypeEnum.Tempo)
+                if (mEvent.Command == MidiEventType.Meta && mEvent.Data1 == (int) MetaEventTypeEnum.Tempo)
                 {
-                    var meta = (MetaNumberEvent)mEvent;
-                    bpm = MidiHelper.MicroSecondsPerMinute / (double)meta.Value;
-                    _tempoChanges.Add(new MidiFileSequencerTempoChange(bpm, absTick, (int)absTime));
+                    var meta = (MetaNumberEvent) mEvent;
+                    bpm = MidiHelper.MicroSecondsPerMinute / (double) meta.Value;
+                    _tempoChanges.Add(new MidiFileSequencerTempoChange(bpm, absTick, (int) absTime));
                 }
                 else if (mEvent.Command == MidiEventType.ProgramChange)
                 {
                     var channel = mEvent.Channel;
                     if (!_firstProgramEventPerChannel.ContainsKey(channel))
-                    {
                         _firstProgramEventPerChannel[channel] = synthData;
-                    }
                 }
             }
 
             _synthData.Sort((a, b) =>
             {
-                if (a.Time > b.Time)
-                {
-                    return 1;
-                }
+                if (a.Time > b.Time) return 1;
 
-                if (a.Time < b.Time)
-                {
-                    return -1;
-                }
+                if (a.Time < b.Time) return -1;
 
                 return a.EventIndex - b.EventIndex;
             });
             _endTime = absTime;
-            EndTick = absTick;
+            EndTick  = absTick;
         }
 
-
-        public bool FillMidiEventQueue()
-        {
-            return FillMidiEventQueueLimited(-1);
-        }
+        public bool FillMidiEventQueue() => FillMidiEventQueueLimited(-1);
 
         private bool FillMidiEventQueueLimited(double maxMilliseconds)
         {
-            var millisecondsPerBuffer = TinySoundFont.MicroBufferSize / (double)_synthesizer.OutSampleRate * 1000 * PlaybackSpeed;
-            if (maxMilliseconds > 0 && maxMilliseconds < millisecondsPerBuffer)
-            {
-                millisecondsPerBuffer = maxMilliseconds;
-            }
+            var millisecondsPerBuffer = TinySoundFont.MicroBufferSize / (double) _synthesizer.OutSampleRate * 1000 *
+                                        PlaybackSpeed;
+            if (maxMilliseconds > 0 && maxMilliseconds < millisecondsPerBuffer) millisecondsPerBuffer = maxMilliseconds;
 
             var anyEventsDispatched = false;
             var endTime = InternalEndTime;
             for (var i = 0; i < TinySoundFont.MicroBufferCount; i++)
             {
                 _currentTime += millisecondsPerBuffer;
-                while (_eventIndex < _synthData.Count && _synthData[_eventIndex].Time < _currentTime && _currentTime < endTime)
+                while (_eventIndex < _synthData.Count && _synthData[_eventIndex].Time < _currentTime &&
+                       _currentTime < endTime)
                 {
                     _synthesizer.DispatchEvent(i, _synthData[_eventIndex]);
                     _eventIndex++;
@@ -239,15 +203,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             return anyEventsDispatched;
         }
 
-        public double TickPositionToTimePosition(int tickPosition)
-        {
-            return TickPositionToTimePositionWithSpeed(tickPosition, PlaybackSpeed);
-        }
+        public double TickPositionToTimePosition(int tickPosition) =>
+            TickPositionToTimePositionWithSpeed(tickPosition, PlaybackSpeed);
 
-        public int TimePositionToTickPosition(double timePosition)
-        {
-            return TimePositionToTickPositionWithSpeed(timePosition, PlaybackSpeed);
-        }
+        public int TimePositionToTickPosition(double timePosition) =>
+            TimePositionToTickPositionWithSpeed(timePosition, PlaybackSpeed);
 
         private double TickPositionToTimePositionWithSpeed(int tickPosition, double playbackSpeed)
         {
@@ -259,14 +219,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             for (var i = 0; i < _tempoChanges.Count; i++)
             {
                 var c = _tempoChanges[i];
-                if (tickPosition < c.Ticks)
-                {
-                    break;
-                }
+                if (tickPosition < c.Ticks) break;
 
                 timePosition = c.Time;
-                bpm = c.Bpm;
-                lastChange = c.Ticks;
+                bpm          = c.Bpm;
+                lastChange   = c.Ticks;
             }
 
             // add the missing millis
@@ -288,19 +245,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             for (var i = 0; i < _tempoChanges.Count; i++)
             {
                 var c = _tempoChanges[i];
-                if (timePosition < c.Time)
-                {
-                    break;
-                }
+                if (timePosition < c.Time) break;
 
-                ticks = c.Ticks;
-                bpm = c.Bpm;
+                ticks      = c.Ticks;
+                bpm        = c.Bpm;
                 lastChange = c.Time;
             }
 
             // add the missing ticks
             timePosition -= lastChange;
-            ticks += (int)(timePosition / (60000.0 / (bpm * _division)));
+            ticks        += (int) (timePosition / (60000.0 / (bpm * _division)));
             // we add 1 for possible rounding errors.(floating point issuses)
             return ticks + 1;
         }
@@ -310,12 +264,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         protected virtual void OnFinished()
         {
             var finished = Finished;
-            if (finished != null)
-            {
-                finished();
-            }
+            if (finished != null) finished();
         }
-
 
         private double InternalEndTime => PlaybackRange == null ? _endTime : _playbackRangeEndTime;
 
@@ -334,35 +284,35 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             if (PlaybackRange == null)
             {
                 _currentTime = 0;
-                _eventIndex = 0;
+                _eventIndex  = 0;
             }
             else if (PlaybackRange != null)
             {
                 _currentTime = PlaybackRange.StartTick;
-                _eventIndex = 0;
+                _eventIndex  = 0;
             }
         }
 
         public void SetChannelProgram(int channel, byte program)
         {
             if (_firstProgramEventPerChannel.ContainsKey(channel))
-            {
                 _firstProgramEventPerChannel[channel].Event.Data1 = program;
-            }
         }
     }
 
     internal class MidiFileSequencerTempoChange
     {
         public double Bpm { get; set; }
+
         public int Ticks { get; set; }
+
         public int Time { get; set; }
 
         public MidiFileSequencerTempoChange(double bpm, int ticks, int time)
         {
-            Bpm = bpm;
+            Bpm   = bpm;
             Ticks = ticks;
-            Time = time;
+            Time  = time;
         }
     }
 }

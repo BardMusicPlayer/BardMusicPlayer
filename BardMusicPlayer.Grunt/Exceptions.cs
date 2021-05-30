@@ -9,11 +9,8 @@ namespace BardMusicPlayer.Grunt
 {
     public class BmpGruntException : BmpException
     {
-        internal BmpGruntException() : base()
-        {
-        }
-        internal BmpGruntException(string message) : base(message)
-        {
-        }
+        internal BmpGruntException() : base() { }
+
+        internal BmpGruntException(string message) : base(message) { }
     }
 }

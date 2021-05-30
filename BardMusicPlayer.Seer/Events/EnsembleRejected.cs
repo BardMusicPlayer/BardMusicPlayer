@@ -11,6 +11,7 @@ namespace BardMusicPlayer.Seer.Events
         {
             EventType = GetType();
         }
+
         public override bool IsValid() => true;
     }
 }

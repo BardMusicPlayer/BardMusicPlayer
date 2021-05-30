@@ -43,6 +43,7 @@ namespace BardMusicPlayer.Grunt
                     await SyncTapKey(game, game.NavigationMenuKeys[NavigationMenuKey.ESC]);
                     await Task.Delay(1000);
                 }
+
                 exitLock--;
             }
 
@@ -62,7 +63,8 @@ namespace BardMusicPlayer.Grunt
             if (!game.IsBard) return false;
 
             // TODO for 5.55
-            if ((int) game.GameRegion < 4) throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
+            if ((int) game.GameRegion < 4)
+                throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
 
             var exitLock = 5;
 
@@ -70,14 +72,11 @@ namespace BardMusicPlayer.Grunt
             {
                 if (game.InstrumentToneHeld.Equals(instrumentToneWanted)) return true;
 
-                if (!instrumentToneWanted.Equals(InstrumentTone.None) && game.InstrumentToneHeld.Equals(InstrumentTone.None))
-                {
+                if (!instrumentToneWanted.Equals(InstrumentTone.None) &&
+                    game.InstrumentToneHeld.Equals(InstrumentTone.None))
                     await SyncTapKey(game, game.InstrumentToneKeys[instrumentToneWanted]);
-                }
                 else
-                {
                     await SyncTapKey(game, game.NavigationMenuKeys[NavigationMenuKey.ESC]);
-                }
                 exitLock--;
             }
 

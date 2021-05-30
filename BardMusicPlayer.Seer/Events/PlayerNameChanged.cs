@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Seer.Events
     {
         internal PlayerNameChanged(EventSource readerBackendType, string playerName) : base(readerBackendType)
         {
-            EventType = GetType();
+            EventType  = GetType();
             PlayerName = playerName;
         }
 

@@ -10,7 +10,7 @@ namespace BardMusicPlayer.Seer.Events
         internal IsBardChanged(EventSource readerBackendType, bool isBard) : base(readerBackendType)
         {
             EventType = GetType();
-            IsBard = isBard;
+            IsBard    = isBard;
         }
 
         public bool IsBard { get; }

@@ -9,7 +9,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BardMusicPlayer.Coffer.Tests
 {
-    [TestClass, DeploymentItem("Resources\\test.mid")]
+    [TestClass]
+    [DeploymentItem("Resources\\test.mid")]
     public class CofferManagerTest : CofferTestBase
     {
         // Resource name
@@ -25,15 +26,15 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestSongBasics()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                BmpSong resultTitle = test.GetSong(song.Title);
+                var resultTitle = test.GetSong(song.Title);
                 Assert.AreEqual(song.Id, resultTitle.Id);
             }
         }
@@ -42,13 +43,13 @@ namespace BardMusicPlayer.Coffer.Tests
         [ExpectedException(typeof(BmpCofferException))]
         public void TestDuplicateSong()
         {
-            BmpSong songA = LoadTestSong();
+            var songA = LoadTestSong();
             Assert.IsNull(songA.Id);
 
-            BmpSong songB = LoadTestSong();
+            var songB = LoadTestSong();
             Assert.IsNull(songB.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(songA);
                 Assert.IsNotNull(songA.Id);
@@ -60,15 +61,15 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestSongListing()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                IList<string> resultAll = test.GetSongTitles();
+                var resultAll = test.GetSongTitles();
                 Assert.AreEqual(1, resultAll.Count);
                 Assert.AreEqual(song.Title, resultAll[0]);
             }
@@ -77,22 +78,22 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestPlaylistFromTag()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
             song.Tags.Add(TEST_SONG_TAG_A);
             song.Tags.Add(TEST_SONG_TAG_B);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                IPlaylist tagPlaylist = test.CreatePlaylistFromTag(TEST_SONG_TAG_A);
+                var tagPlaylist = test.CreatePlaylistFromTag(TEST_SONG_TAG_A);
                 Assert.IsNotNull(tagPlaylist);
 
-                List<BmpSong> allTags = new List<BmpSong>();
-                foreach (BmpSong entry in tagPlaylist)
+                var allTags = new List<BmpSong>();
+                foreach (var entry in tagPlaylist)
                 {
                     allTags.Add(entry);
                 }
@@ -104,7 +105,7 @@ namespace BardMusicPlayer.Coffer.Tests
                 Assert.IsNotNull(tagPlaylist);
 
                 allTags.Clear();
-                foreach (BmpSong entry in tagPlaylist)
+                foreach (var entry in tagPlaylist)
                 {
                     allTags.Add(entry);
                 }
@@ -117,21 +118,21 @@ namespace BardMusicPlayer.Coffer.Tests
         [TestMethod]
         public void TestPlaylistBasics()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                IPlaylist playlist = test.CreatePlaylist(PLAYLIST_NAME);
+                var playlist = test.CreatePlaylist(PLAYLIST_NAME);
                 Assert.IsNotNull(playlist);
                 Assert.IsTrue(playlist is BmpPlaylistDecorator);
                 Assert.AreEqual(PLAYLIST_NAME, playlist.GetName());
 
                 // Internal things...
-                BmpPlaylist backingData = ((BmpPlaylistDecorator)playlist).GetBmpPlaylist();
+                var backingData = ((BmpPlaylistDecorator) playlist).GetBmpPlaylist();
                 Assert.IsNull(backingData.Id);
 
                 playlist.Add(song);
@@ -139,31 +140,31 @@ namespace BardMusicPlayer.Coffer.Tests
                 test.SavePlaylist(playlist);
                 Assert.IsNotNull(backingData.Id);
 
-                IPlaylist result = test.GetPlaylist(PLAYLIST_NAME);
+                var result = test.GetPlaylist(PLAYLIST_NAME);
                 Assert.IsNotNull(result);
-                Assert.AreEqual(backingData.Id, ((BmpPlaylistDecorator)playlist).GetBmpPlaylist().Id);
+                Assert.AreEqual(backingData.Id, ((BmpPlaylistDecorator) playlist).GetBmpPlaylist().Id);
             }
         }
 
         [TestMethod]
         public void TestPlaylistListing()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                IPlaylist playlist = test.CreatePlaylist(PLAYLIST_NAME);
+                var playlist = test.CreatePlaylist(PLAYLIST_NAME);
                 Assert.IsNotNull(playlist);
 
                 playlist.Add(song);
 
                 test.SavePlaylist(playlist);
 
-                IList<string> names = test.GetPlaylistNames();
+                var names = test.GetPlaylistNames();
                 Assert.AreEqual(1, names.Count);
                 Assert.AreEqual(playlist.GetName(), names[0]);
             }
@@ -173,18 +174,18 @@ namespace BardMusicPlayer.Coffer.Tests
         [ExpectedException(typeof(BmpCofferException))]
         public void TestDuplicatePlaylist()
         {
-            BmpSong song = LoadTestSong();
+            var song = LoadTestSong();
             Assert.IsNull(song.Id);
 
-            using (BmpCoffer test = this.CreateCofferManager())
+            using (var test = CreateCofferManager())
             {
                 test.SaveSong(song);
                 Assert.IsNotNull(song.Id);
 
-                IPlaylist playlistA = test.CreatePlaylist(PLAYLIST_NAME);
+                var playlistA = test.CreatePlaylist(PLAYLIST_NAME);
                 Assert.IsNotNull(playlistA);
 
-                IPlaylist playlistB = test.CreatePlaylist(PLAYLIST_NAME);
+                var playlistB = test.CreatePlaylist(PLAYLIST_NAME);
                 Assert.IsNotNull(playlistB);
 
                 test.SavePlaylist(playlistA);
@@ -194,7 +195,7 @@ namespace BardMusicPlayer.Coffer.Tests
 
         private BmpCoffer CreateCofferManager()
         {
-            string dbPath = this.GetDBPath();
+            var dbPath = GetDBPath();
             return BmpCoffer.CreateInstance(dbPath);
         }
 

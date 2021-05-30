@@ -18,7 +18,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/Defaults.xaml"/>
+                <ResourceDictionary Source="../Resources/Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -60,7 +60,7 @@
 
                     <TextBox Text="Paste Party Code"
                              Height="36" Padding="10"
-                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"/>
+                             Style="{DynamicResource MaterialDesignOutlinedTextBox}" />
 
                     <Button Grid.Column="2" Content="Connect" />
                 </Grid>
@@ -92,14 +92,14 @@
 
                     <Border Grid.Column="1" Margin="0,12" Style="{DynamicResource VerticalDividerBorder}" />
 
-                    <ListBox  Grid.Column="2"
-                                  ItemsSource="{x:Static structs:Instrument.All}"
-                                  SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=OneWay}">
+                    <ListBox Grid.Column="2"
+                             ItemsSource="{x:Static structs:Instrument.All}"
+                             SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=OneWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
-                                        T<Run Text="{Binding Index, Mode=OneWay}"/>:
-                                        <Run Text="{Binding Name, Mode=OneWay}"/>
+                                    T<Run Text="{Binding Index, Mode=OneWay}" />:
+                                    <Run Text="{Binding Name, Mode=OneWay}" />
                                 </TextBlock>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -107,7 +107,7 @@
                         <!--Disallow selection-->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="IsHitTestVisible" Value="False" />
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -124,11 +124,13 @@
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Dreamland"
                        Style="{DynamicResource MaterialDesignHeadline5TextBlock}" />
-            <auto:StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" MarginBetweenChildren="6">
-                <Button  Content="Open Playlist" Command="{s:Action OpenPlaylist}" />
-                <Button  Content="Edit Song" Command="{s:Action EditSong}" Style="{DynamicResource MaterialDesignRaisedButton}" />
+            <auto:StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal"
+                             MarginBetweenChildren="6">
+                <Button Content="Open Playlist" Command="{s:Action OpenPlaylist}" />
+                <Button Content="Edit Song" Command="{s:Action EditSong}"
+                        Style="{DynamicResource MaterialDesignRaisedButton}" />
             </auto:StackPanel>
-            
+
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,6">
@@ -157,7 +159,8 @@
                 <Button>Stop</Button>
             </auto:StackPanel>
 
-            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon QuestionMark}" />
+            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}"
+                    Content="{md:PackIcon QuestionMark}" />
         </Grid>
     </Grid>
 </UserControl>
