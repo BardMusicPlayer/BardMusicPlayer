@@ -10,25 +10,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BardMusicPlayer.Coffer.Tests
 {
-
     [TestClass]
     public class BmpPlaylistTest : CofferTestBase
     {
         [TestMethod]
         public void TestSerialization()
         {
-            string playlistName = "Test Playlist";
-            ObjectId playlistId = ObjectId.NewObjectId();
-            BmpPlaylist test = new BmpPlaylist()
+            var playlistName = "Test Playlist";
+            var playlistId = ObjectId.NewObjectId();
+            var test = new BmpPlaylist()
             {
-                Name = playlistName,
+                Name  = playlistName,
                 Songs = new List<BmpSong>(),
-                Id = playlistId
+                Id    = playlistId
             };
 
             BmpPlaylist saved;
 
-            using (var dbi = this.CreateDatabase())
+            using (var dbi = CreateDatabase())
             {
                 var collection = dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
                 collection.Insert(test);
