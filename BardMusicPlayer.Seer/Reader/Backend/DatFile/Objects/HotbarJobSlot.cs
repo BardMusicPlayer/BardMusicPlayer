@@ -12,21 +12,27 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
     {
         public Dictionary<int, HotbarSlot> JobSlots = new();
 
-        public HotbarSlot this[int i] {
-            get {
-                if(!JobSlots.ContainsKey(i)) {
-                    JobSlots[i] = new HotbarSlot();
-                }
+        public HotbarSlot this[int i]
+        {
+            get
+            {
+                if (!JobSlots.ContainsKey(i)) JobSlots[i] = new HotbarSlot();
                 return JobSlots[i];
             }
             set => JobSlots[i] = value;
         }
 
-        ~HotbarJobSlot() => Dispose();
+        ~HotbarJobSlot() { Dispose(); }
+
         public void Dispose()
         {
             if (JobSlots == null) return;
-            foreach(var slot in JobSlots.Values) slot?.Dispose();
+
+            foreach (var slot in JobSlots.Values)
+            {
+                slot?.Dispose();
+            }
+
             JobSlots.Clear();
         }
     }

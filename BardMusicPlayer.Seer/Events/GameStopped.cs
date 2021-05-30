@@ -14,10 +14,11 @@ namespace BardMusicPlayer.Seer.Events
         internal GameStopped(int pid) : base(EventSource.Game)
         {
             EventType = GetType();
-            Pid = pid;
+            Pid       = pid;
         }
 
         public int Pid { get; }
+
         public override bool IsValid() => true;
     }
 }

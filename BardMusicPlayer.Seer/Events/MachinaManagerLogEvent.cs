@@ -10,7 +10,7 @@ namespace BardMusicPlayer.Seer.Events
         public MachinaManagerLogEvent(string message) : base(EventSource.MachinaManager, 0, false)
         {
             EventType = GetType();
-            Message = message;
+            Message   = message;
         }
 
         public string Message { get; }

@@ -13,9 +13,6 @@ namespace BardMusicPlayer.Seer.Events
             throw new System.NotImplementedException();
         }
 
-        public override bool IsValid()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override bool IsValid() => throw new System.NotImplementedException();
     }
 }

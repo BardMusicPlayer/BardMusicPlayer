@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Seer.Events
         internal ActorIdChanged(EventSource readerBackendType, uint actorId) : base(readerBackendType)
         {
             EventType = GetType();
-            ActorId = actorId;
+            ActorId   = actorId;
         }
 
         public uint ActorId { get; }

@@ -15,31 +15,33 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
     internal class MachinaReaderBackend : IReaderBackend
     {
         public EventSource ReaderBackendType { get; }
+
         public ReaderHandler ReaderHandler { get; set; }
+
         public int SleepTimeInMs { get; set; }
-        
+
         private ConcurrentQueue<byte[]> _messageQueue;
         private bool _messageQueueOpen;
-
         private Packet _packet;
 
         public MachinaReaderBackend(int sleepTimeInMs)
         {
             ReaderBackendType = EventSource.Machina;
-            SleepTimeInMs = sleepTimeInMs;
+            SleepTimeInMs     = sleepTimeInMs;
         }
 
         public async Task Loop(CancellationToken token)
         {
-            _messageQueue = new ConcurrentQueue<byte[]>();
+            _messageQueue     = new ConcurrentQueue<byte[]>();
             _messageQueueOpen = true;
-            _packet = new Packet(this);
+            _packet           = new Packet(this);
+
             MachinaManager.Instance.MessageReceived += OnMessageReceived;
             MachinaManager.Instance.AddGame(ReaderHandler.Game.Pid);
 
             while (!token.IsCancellationRequested)
             {
-                while(_messageQueue.TryDequeue(out var message))
+                while (_messageQueue.TryDequeue(out var message))
                 {
                     try
                     {
@@ -50,7 +52,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
 
                         if (!(ActorIdTools.RangeOkay(myActorId) && ActorIdTools.RangeOkay(otherActorId))) continue;
 
-                        if(myActorId == otherActorId) ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Machina, myActorId));
+                        if (myActorId == otherActorId)
+                            ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Machina, myActorId));
 
                         switch (message.Length)
                         {
@@ -77,7 +80,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                     new BmpSeerMachinaException("Unknown packet size: " + message.Length)));
                                 break;
                         }
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, ex));
                     }
@@ -90,15 +94,19 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
         private void OnMessageReceived(int processId, byte[] message)
         {
             if (!_messageQueueOpen || ReaderHandler.Game.Pid != processId) return;
+
             _messageQueue.Enqueue(message);
         }
 
         public void Dispose()
         {
-            _messageQueueOpen = false;
+            _messageQueueOpen                       =  false;
             MachinaManager.Instance.MessageReceived -= OnMessageReceived;
             MachinaManager.Instance.RemoveGame(ReaderHandler.Game.Pid);
-            while (_messageQueue.TryDequeue(out _)) { }
+            while (_messageQueue.TryDequeue(out _))
+            {
+            }
+
             _packet?.Dispose();
             GC.SuppressFinalize(this);
         }

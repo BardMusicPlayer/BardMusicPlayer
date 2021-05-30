@@ -27,10 +27,7 @@ namespace BardMusicPlayer.Seer
 
         private readonly ConcurrentDictionary<int, Game> _games;
 
-        private BmpSeer()
-        {
-            _games = new ConcurrentDictionary<int, Game>();
-        }
+        private BmpSeer() { _games = new ConcurrentDictionary<int, Game>(); }
 
         public static BmpSeer Instance => LazyInstance.Value;
 
@@ -50,7 +47,11 @@ namespace BardMusicPlayer.Seer
             {
                 if (!FirewallManager.IsServiceRunning) return true;
 
-                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName))) FirewallManager.Instance.Rules.Remove(FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName)))
+                {
+                    FirewallManager.Instance.Rules.Remove(
+                        FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+                }
 
                 var rule = FirewallManager.Instance.CreateApplicationRule(
                     @appName,
@@ -79,7 +80,11 @@ namespace BardMusicPlayer.Seer
             {
                 if (!FirewallManager.IsServiceRunning) return true;
 
-                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName))) FirewallManager.Instance.Rules.Remove(FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+                if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName)))
+                {
+                    FirewallManager.Instance.Rules.Remove(
+                        FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
+                }
 
                 return true;
             }
@@ -96,7 +101,9 @@ namespace BardMusicPlayer.Seer
         public void Start()
         {
             if (Started) return;
+
             if (!BmpPigeonhole.Initialized) throw new BmpSeerException("Seer requires Pigeonhole to be initialized.");
+
             StartEventsHandler();
             StartProcessWatcher();
             Started = true;
@@ -108,14 +115,22 @@ namespace BardMusicPlayer.Seer
         public void Stop()
         {
             if (!Started) return;
+
             StopProcessWatcher();
             StopEventsHandler();
-            foreach (var game in _games.Values) game?.Dispose();
+
+            foreach (var game in _games.Values)
+            {
+                game?.Dispose();
+            }
+
             _games.Clear();
+
             Started = false;
         }
 
-        ~BmpSeer() => Dispose();
+        ~BmpSeer() { Dispose(); }
+
         public void Dispose()
         {
             Stop();

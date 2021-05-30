@@ -9,9 +9,10 @@ namespace BardMusicPlayer.Seer.Events
 {
     public sealed class InstrumentHeldChanged : SeerEvent
     {
-        internal InstrumentHeldChanged(EventSource readerBackendType, Instrument instrumentHeld) : base(readerBackendType)
+        internal InstrumentHeldChanged(EventSource readerBackendType, Instrument instrumentHeld) : base(
+            readerBackendType)
         {
-            EventType = GetType();
+            EventType      = GetType();
             InstrumentHeld = instrumentHeld;
         }
 

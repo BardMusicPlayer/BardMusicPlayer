@@ -10,18 +10,18 @@ using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events
 {
     internal class SignaturesFoundEvent : EventArgs
-	{
+    {
         public long ProcessingTime { get; set; }
 
-		public object Sender { get; set; }
+        public object Sender { get; set; }
 
-		public Dictionary<string, Signature> Signatures { get; }
+        public Dictionary<string, Signature> Signatures { get; }
 
-		public SignaturesFoundEvent(object sender, Dictionary<string, Signature> signatures, long processingTime)
-		{
-			Sender = sender;
-			Signatures = signatures;
-			ProcessingTime = processingTime;
-		}
-	}
+        public SignaturesFoundEvent(object sender, Dictionary<string, Signature> signatures, long processingTime)
+        {
+            Sender         = sender;
+            Signatures     = signatures;
+            ProcessingTime = processingTime;
+        }
+    }
 }

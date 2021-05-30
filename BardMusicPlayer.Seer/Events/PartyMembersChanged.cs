@@ -12,14 +12,17 @@ namespace BardMusicPlayer.Seer.Events
 {
     public sealed class PartyMembersChanged : SeerEvent
     {
-        internal PartyMembersChanged(EventSource readerBackendType, SortedDictionary<uint, string> partyMembers) : base(readerBackendType)
+        internal PartyMembersChanged(EventSource readerBackendType, SortedDictionary<uint, string> partyMembers) : base(
+            readerBackendType)
         {
-            EventType = GetType();
+            EventType    = GetType();
             PartyMembers = new ReadOnlyDictionary<uint, string>(partyMembers);
         }
 
         public IReadOnlyDictionary<uint, string> PartyMembers { get; set; }
 
-        public override bool IsValid() => (PartyMembers.Count == 0 || PartyMembers.Count > 1 && PartyMembers.Count < 9) && PartyMembers.Keys.All(ActorIdTools.RangeOkay) && !PartyMembers.Values.Any(string.IsNullOrEmpty);
+        public override bool IsValid() =>
+            (PartyMembers.Count == 0 || PartyMembers.Count > 1 && PartyMembers.Count < 9) &&
+            PartyMembers.Keys.All(ActorIdTools.RangeOkay) && !PartyMembers.Values.Any(string.IsNullOrEmpty);
     }
 }
