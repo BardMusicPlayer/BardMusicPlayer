@@ -13,17 +13,19 @@ namespace BardMusicPlayer.Quotidian.Structs
     /// <summary>
     /// Represents available autotone octave ranges.
     /// </summary>
-    public readonly struct AutoToneOctaveRange : IComparable, IConvertible, IComparable<AutoToneOctaveRange>, IEquatable<AutoToneOctaveRange>
+    public readonly struct AutoToneOctaveRange : IComparable, IConvertible, IComparable<AutoToneOctaveRange>,
+        IEquatable<AutoToneOctaveRange>
     {
         public static readonly AutoToneOctaveRange Invalid = new("Invalid", -1, -1, -1, null);
-
         public static readonly AutoToneOctaveRange C0toC5 = new("C0toC5", 0, 0, 5, "+2");
         public static readonly AutoToneOctaveRange C1toC6 = new("C1toC6", 1, 1, 6, "+1");
         public static readonly AutoToneOctaveRange C2toC7 = new("C2toC7", 2, 2, 7, "");
         public static readonly AutoToneOctaveRange C3toC8 = new("C3toC8", 3, 3, 8, "-1");
         public static readonly AutoToneOctaveRange C4toC9 = new("C4toC9", 4, 4, 9, "-2");
 
-        public static readonly IReadOnlyList<AutoToneOctaveRange> All = new ReadOnlyCollection<AutoToneOctaveRange>(new List<AutoToneOctaveRange> { C0toC5, C1toC6, C2toC7, C3toC8, C4toC9 });
+        public static readonly IReadOnlyList<AutoToneOctaveRange> All =
+            new ReadOnlyCollection<AutoToneOctaveRange>(new List<AutoToneOctaveRange>
+                { C0toC5, C1toC6, C2toC7, C3toC8, C4toC9 });
 
         /// <summary>
         /// Gets the name.
@@ -76,10 +78,10 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// <param name="trackNameOffset">Track Name offset</param>
         private AutoToneOctaveRange(string name, int index, int lower, int upper, string trackNameOffset)
         {
-            Name = name;
-            Index = index;
-            Lower = lower;
-            Upper = upper;
+            Name            = name;
+            Index           = index;
+            Lower           = lower;
+            Upper           = upper;
             TrackNameOffset = trackNameOffset;
         }
 
@@ -107,39 +109,70 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// </summary>
         /// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a
         /// hash table.</returns>
-        public override int GetHashCode() => (Name, Index, Lower, Upper, LowerNote, UpperNote, TrackNameOffset).GetHashCode();
+        public override int GetHashCode() =>
+            (Name, Index, Lower, Upper, LowerNote, UpperNote, TrackNameOffset).GetHashCode();
 
         public static implicit operator string(AutoToneOctaveRange octaveRange) => octaveRange.Name;
+
         public static implicit operator AutoToneOctaveRange(string name) => Parse(name);
+
         public static implicit operator int(AutoToneOctaveRange octaveRange) => octaveRange.Index;
+
         public static implicit operator AutoToneOctaveRange(int lower) => Parse(lower);
 
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
+
             if (!(obj is AutoToneOctaveRange)) throw new ArgumentException("This is not an AutoToneOctaveRange");
+
             return Index - ((AutoToneOctaveRange) obj).Index;
         }
 
         public int CompareTo(AutoToneOctaveRange other) => Index - other.Index;
+
         public TypeCode GetTypeCode() => TypeCode.Int32;
-        public bool ToBoolean(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Boolean");
-        public char ToChar(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Char");
+
+        public bool ToBoolean(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Boolean");
+
+        public char ToChar(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Char");
+
         public sbyte ToSByte(IFormatProvider provider) => Convert.ToSByte(Index);
+
         public byte ToByte(IFormatProvider provider) => Convert.ToByte(Index);
+
         public short ToInt16(IFormatProvider provider) => Convert.ToInt16(Index);
+
         public ushort ToUInt16(IFormatProvider provider) => Convert.ToUInt16(Index);
+
         public int ToInt32(IFormatProvider provider) => Convert.ToInt32(Index);
+
         public uint ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Index);
+
         public long ToInt64(IFormatProvider provider) => Convert.ToInt64(Index);
+
         public ulong ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Index);
-        public float ToSingle(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Single");
-        public double ToDouble(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Double");
-        public decimal ToDecimal(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Decimal");
-        public DateTime ToDateTime(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to DateTime");
+
+        public float ToSingle(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Single");
+
+        public double ToDouble(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Double");
+
+        public decimal ToDecimal(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to Decimal");
+
+        public DateTime ToDateTime(IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to DateTime");
+
         public string ToString(IFormatProvider provider) => Index.ToString();
+
         public override string ToString() => Index.ToString();
-        public object ToType(Type conversionType, IFormatProvider provider) => throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to " + conversionType);
+
+        public object ToType(Type conversionType, IFormatProvider provider) =>
+            throw new InvalidCastException("Invalid cast from AutoToneOctaveRange to " + conversionType);
 
         /// <summary>
         /// 
@@ -189,22 +222,28 @@ namespace BardMusicPlayer.Quotidian.Structs
                 result = Invalid;
                 return false;
             }
+
             autoToneOctaveRange = autoToneOctaveRange.Replace(" ", "").Replace("_", "");
             if (All.Any(x => x.Name.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
                 result = All.First(x => x.Name.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
+
             if (All.Any(x => x.TrackNameOffset.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
-                result = All.First(x => x.TrackNameOffset.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));
+                result = All.First(x =>
+                    x.TrackNameOffset.Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
+
             if (All.Any(x => x.Index.ToString().Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
-                result = All.First(x => x.Index.ToString().Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));
+                result = All.First(x =>
+                    x.Index.ToString().Equals(autoToneOctaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
+
             result = Invalid;
             return false;
         }
@@ -225,13 +264,19 @@ namespace BardMusicPlayer.Quotidian.Structs
         public bool TryShiftNoteToOctave(AutoToneOctaveRange currentOctaveRange, ref int note)
         {
             if (!currentOctaveRange.ValidateNoteRange(note)) return false;
+
             note += LowerNote - currentOctaveRange.LowerNote;
             return true;
         }
 
         public int ShiftNoteToOctave(AutoToneOctaveRange currentOctaveRange, int note)
         {
-            if (!currentOctaveRange.ValidateNoteRange(note)) throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " + currentOctaveRange.Name);
+            if (!currentOctaveRange.ValidateNoteRange(note))
+            {
+                throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " +
+                                       currentOctaveRange.Name);
+            }
+
             return note + LowerNote - currentOctaveRange.LowerNote;
         }
     }
