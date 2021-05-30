@@ -20,7 +20,8 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
     /// <summary>
     /// Structure containing information about the local Node.
     /// </summary>
-    internal class NodeInfo {
+    internal class NodeInfo
+    {
         // Node ID
         public ulong Id { get; set; }
 
@@ -29,14 +30,18 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
          * all encapsulated traffic
          */
         public ushort PrimaryPort { get; set; }
+
         public ushort SecondaryPort { get; set; }
+
         public ushort TertiaryPort { get; set; }
 
         /**
          * ZT version
          */
         public byte VersionMajor { get; set; }
+
         public byte VersionMinor { get; set; }
+
         public byte VersionRev { get; set; }
     }
 }

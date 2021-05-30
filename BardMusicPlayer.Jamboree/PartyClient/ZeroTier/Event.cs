@@ -13,13 +13,20 @@
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class Event {
+    internal class Event
+    {
         public NodeInfo NodeInfo { get; set; }
+
         public NetworkInfo NetworkInfo { get; set; }
+
         public RouteInfo RouteInfo { get; set; }
+
         public PeerInfo PeerInfo { get; set; }
+
         public AddressInfo AddressInfo { get; set; }
+
         public int Code { get; set; }
+
         public string Name { get; set; }
     }
 }

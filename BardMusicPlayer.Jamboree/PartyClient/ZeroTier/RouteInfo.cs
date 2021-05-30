@@ -15,12 +15,13 @@ using System.Net;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class RouteInfo {
+    internal class RouteInfo
+    {
         public RouteInfo(IPAddress target, IPAddress via, ushort flags, ushort metric)
         {
             _target = target;
-            _via = via;
-            _flags = flags;
+            _via    = via;
+            _flags  = flags;
             _metric = metric;
         }
 
@@ -29,29 +30,12 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         public ushort _flags;
         public ushort _metric;
 
-        public IPAddress Target
-        {
-            get {
-                return _target;
-            }
-        }
-        public IPAddress Via
-        {
-            get {
-                return _via;
-            }
-        }
-        public ushort Flags
-        {
-            get {
-                return _flags;
-            }
-        }
-        public ushort Metric
-        {
-            get {
-                return _metric;
-            }
-        }
+        public IPAddress Target => _target;
+
+        public IPAddress Via => _via;
+
+        public ushort Flags => _flags;
+
+        public ushort Metric => _metric;
     }
 }

@@ -16,21 +16,25 @@ using System;
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
     /// <summary>Exception class for ZeroTier service and low-level socket errors</summary>
-    internal class SocketException : Exception {
+    internal class SocketException : Exception
+    {
         public SocketException(int _serviceErrorCode)
-            : base(String.Format("ServiceErrorCode={0} (See Constants.cs for error code meanings)", _serviceErrorCode))
+            : base(string.Format("ServiceErrorCode={0} (See Constants.cs for error code meanings)",
+                _serviceErrorCode))
         {
             ServiceErrorCode = _serviceErrorCode;
         }
+
         public SocketException(int _serviceErrorCode, int _socketErrorCode)
-            : base(String.Format(
+            : base(string.Format(
                 "ServiceErrorCode={0}, SocketErrorCode={1} (See Constants.cs for error code meanings)",
                 _serviceErrorCode,
                 _socketErrorCode))
         {
             ServiceErrorCode = _serviceErrorCode;
-            SocketErrorCode = _socketErrorCode;
+            SocketErrorCode  = _socketErrorCode;
         }
+
         /// <value>High-level service error code. See Constants.cs</value>
         public int ServiceErrorCode { get; private set; }
 

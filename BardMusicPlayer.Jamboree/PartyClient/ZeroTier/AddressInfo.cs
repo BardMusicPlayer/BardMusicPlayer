@@ -15,27 +15,19 @@ using System.Net;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class AddressInfo {
+    internal class AddressInfo
+    {
         public AddressInfo(IPAddress addr, ulong net_id)
         {
-            _addr = addr;
+            _addr   = addr;
             _net_id = net_id;
         }
 
         public ulong _net_id;
         public IPAddress _addr;
 
-        public IPAddress Address
-        {
-            get {
-                return _addr;
-            }
-        }
-        public ulong NetworkId
-        {
-            get {
-                return _net_id;
-            }
-        }
+        public IPAddress Address => _addr;
+
+        public ulong NetworkId => _net_id;
     }
 }
