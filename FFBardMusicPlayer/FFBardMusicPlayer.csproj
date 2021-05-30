@@ -125,7 +125,12 @@
       <DependentUpon>BmpStatistics.cs</DependentUpon>
     </Compile>
     <Compile Include="DryWetUtil.cs" />
+    <Compile Include="FFXIV\MyDocumentsResolver\Extensions.cs" />
     <Compile Include="FFXIV\FFXIVDatAddon.cs" />
+    <Compile Include="FFXIV\FFXIVDocsResolver.cs" />
+    <Compile Include="FFXIV\MyDocumentsResolver\KnownFolder.cs" />
+    <Compile Include="FFXIV\MyDocumentsResolver\KnownFolders.cs" />
+    <Compile Include="FFXIV\MyDocumentsResolver\KnownFolderType.cs" />
     <Compile Include="Forms\BmpAbout.cs">
       <SubType>Form</SubType>
     </Compile>

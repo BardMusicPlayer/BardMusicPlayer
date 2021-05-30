@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FFBardMusicPlayer.FFXIV;
 
 namespace FFBardMusicPlayer {
 	class FFXIVConfigFile {
@@ -18,7 +19,7 @@ namespace FFBardMusicPlayer {
 		public FFXIVConfigFile() {
 
 			//string subDirName = Registry.LocalMachine.OpenSubKey("Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\SquareEnix\FINAL FANTASY XIV - A Realm Reborn");
-			string doc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			string doc = FFXIVDocsResolver.GetPath();
 			string dirPath = Path.Combine(new string[] { doc, "My Games" });
 			foreach(string dir in Directory.GetDirectories(dirPath, "FINAL FANTASY XIV - *")) {
 				string ffc = Path.Combine(new string[] { dir, "FFXIV.cfg" });

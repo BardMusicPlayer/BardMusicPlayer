@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using FFBardMusicPlayer.FFXIV;
 
 // Key/Keybind - the actual key to simulate
 // PerfKey/pk - PERFORMANCE_MODE_ key to get the keybind
@@ -35,7 +36,7 @@ namespace FFBardMusicPlayer {
 
 		public static List<string> GetIdList() {
 			List<string> ids = new List<string>();
-			string doc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string doc = FFXIVDocsResolver.GetPath();
 			string dirPath = Path.Combine(new string[] { doc, "My Games" });
 			foreach(string dir in Directory.GetDirectories(dirPath, "FINAL FANTASY XIV - *")) {
 				foreach(string dir2 in Directory.GetDirectories(dir, "FFXIV_CHR*", SearchOption.TopDirectoryOnly)) {
@@ -47,7 +48,7 @@ namespace FFBardMusicPlayer {
 		}
 
 		protected string FindFFXIVDatFile(string charId, string file) {
-			string doc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			string doc = FFXIVDocsResolver.GetPath();
 			string dirPath = Path.Combine(new string[] { doc, "My Games" });
 			foreach(string dir in Directory.GetDirectories(dirPath, "FINAL FANTASY XIV - *")) {
 				string path = Path.Combine(new string[] { dir, charId, file });
