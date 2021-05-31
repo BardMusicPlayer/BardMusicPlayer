@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Events;
@@ -20,7 +21,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
     {
         public EventSource ReaderBackendType { get; }
         public ReaderHandler ReaderHandler { get; set; }
-        public CancellationToken CancellationToken { get; set; }
+
         public int SleepTimeInMs { get; set; }
         public SharlayanReaderBackend(int sleepTimeInMs)
         {
@@ -100,27 +101,27 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             public bool ChatOpen;
         }
 
-        public void Loop()
+        public async Task Loop(CancellationToken token)
         {
             InitializeSharlayan();
 
-            while (!CancellationToken.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
                     if (!_signaturesFound || _reader.Scanner.IsScanning)
                     {
-                        Thread.Sleep(SleepTimeInMs);
+                        await Task.Delay(SleepTimeInMs, token);
                         continue;
                     }
                     
-                    GetPlayerInfo();
-                    GetWorld();
-                    GetConfigId();
-                    GetInstrument();
-                    GetPartyMembers();
-                    GetChatInputOpen();
-                    GetEnsembleEvents();
+                    GetPlayerInfo(token);
+                    GetWorld(token);
+                    GetConfigId(token);
+                    GetInstrument(token);
+                    GetPartyMembers(token);
+                    GetChatInputOpen(token);
+                    GetEnsembleEvents(token);
 
                     _lastScan.FirstScan = false;
                 } catch (Exception ex)
@@ -128,7 +129,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, ex));
                 }
 
-                Thread.Sleep(SleepTimeInMs);
+                await Task.Delay(SleepTimeInMs, token);
             }
 
             DestroySharlayan();
@@ -140,14 +141,20 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             GC.SuppressFinalize(this);
         }
 
-        private void GetEnsembleEvents()
+        private void GetEnsembleEvents(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetChatLog()) return;
             var result = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
             _lastScan.PreviousArrayIndex = result.PreviousArrayIndex;
             _lastScan.PreviousOffset = result.PreviousOffset;
             foreach (var ensembleFlag in from item in result.ChatLogItems where item.Code.Equals("0039") || item.Code.Equals("003C") select EnsembleMessageLookup.GetEnsembleFlag(item.Line))
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return;
+
                 switch (ensembleFlag)
                 {
                     case EnsembleMessageLookup.EnsembleFlag.Request:
@@ -170,8 +177,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
         }
 
-        private void GetPlayerInfo()
+        private void GetPlayerInfo(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetPlayerInfo()) return;
             var kvp = _reader.GetCurrentPlayer();
             if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key) && _lastScan.IsBard.Equals(kvp.Value.Item2)) return;
@@ -183,8 +193,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ReaderHandler.Game.PublishEvent(new IsBardChanged(EventSource.Sharlayan, _lastScan.IsBard));
         }
 
-        private void GetConfigId()
+        private void GetConfigId(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetCharacterId()) return;
             var configId = _reader.GetCharacterId();
             if (!_lastScan.FirstScan && _lastScan.ConfigId.Equals(configId)) return;
@@ -192,8 +205,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ReaderHandler.Game.PublishEvent(new ConfigIdChanged(EventSource.Sharlayan, configId));
         }
 
-        private void GetWorld()
+        private void GetWorld(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetWorld()) return;
             var world = _reader.GetWorld();
             if (!_lastScan.FirstScan && _lastScan.World.Equals(world)) return;
@@ -201,8 +217,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Sharlayan, world));
         }
 
-        private void GetInstrument()
+        private void GetInstrument(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetPerformance()) return;
             var instrument = _reader.GetPerformance();
             if (!_lastScan.FirstScan && _lastScan.Instrument.Equals(instrument)) return;
@@ -210,8 +229,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Sharlayan, instrument));
         }
 
-        private void GetPartyMembers()
+        private void GetPartyMembers(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetPartyMembers()) return;
             var partyResult = _reader.GetPartyMembers();
             if (!_lastScan.FirstScan && partyResult.KeysEquals(_lastScan.PartyMembers)) return;
@@ -219,8 +241,11 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ReaderHandler.Game.PublishEvent(new PartyMembersChanged(EventSource.Sharlayan, _lastScan.PartyMembers));
         }
 
-        private void GetChatInputOpen()
+        private void GetChatInputOpen(CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             if (!_reader.CanGetChatInput()) return;
             var result = _reader.IsChatInputOpen();
             if (!_lastScan.FirstScan && _lastScan.ChatOpen.Equals(result)) return;

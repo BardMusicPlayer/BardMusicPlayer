@@ -5,6 +5,7 @@
 
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer
@@ -137,12 +138,15 @@ namespace BardMusicPlayer.Seer
         public event PlayerNameChangedHandler PlayerNameChanged;
         private void OnPlayerNameChanged(PlayerNameChanged seerEvent) => PlayerNameChanged?.Invoke(seerEvent);
 
-        private void RunEventsHandler()
+        private async Task RunEventsHandler(CancellationToken token)
         {
-            while (_shouldRunEventsHandlerThread)
+            while (!token.IsCancellationRequested)
             {
                 while(_eventQueue.TryDequeue(out var seerEvent))
                 {
+                    if (token.IsCancellationRequested)
+                        break;
+
                     switch (seerEvent)
                     {
                         // Exceptions
@@ -204,7 +208,8 @@ namespace BardMusicPlayer.Seer
                             break;
                     }
                 }
-                Thread.Sleep(1);
+
+                await Task.Delay(1, token);
             }
         }
 
@@ -216,24 +221,23 @@ namespace BardMusicPlayer.Seer
 
         private ConcurrentQueue<SeerEvent> _eventQueue;
         private bool _eventQueueOpen;
-        private bool _shouldRunEventsHandlerThread;
-        private Thread _eventsHandlerThread;
+        private CancellationTokenSource _eventsTokenSource;
+
 
         private void StartEventsHandler()
         {
             _eventQueue = new ConcurrentQueue<SeerEvent>();
-            _shouldRunEventsHandlerThread = true;
-            _eventsHandlerThread = new Thread(RunEventsHandler) { IsBackground = true };
-            _eventsHandlerThread.Start();
+
+            _eventsTokenSource = new CancellationTokenSource();
+            Task.Factory.StartNew(() => RunEventsHandler(_eventsTokenSource.Token), TaskCreationOptions.LongRunning);
+
             _eventQueueOpen = true;
         }
 
         private void StopEventsHandler()
         {
             _eventQueueOpen = false;
-            _shouldRunEventsHandlerThread = false;
-            if (_eventsHandlerThread != null && !_eventsHandlerThread.Join(500)) _eventsHandlerThread.Abort();
-            _eventsHandlerThread = null;
+            _eventsTokenSource.Cancel();
             while (_eventQueue.TryDequeue(out _)) { }
         }
     }

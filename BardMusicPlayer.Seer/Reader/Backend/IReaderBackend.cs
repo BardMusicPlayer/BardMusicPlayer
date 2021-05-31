@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer.Reader.Backend
@@ -13,8 +14,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend
     {
         EventSource ReaderBackendType { get; }
         ReaderHandler ReaderHandler { get; set; }
-        CancellationToken CancellationToken { get; set; }
         int SleepTimeInMs { get; set; }
-        void Loop();
+        Task Loop(CancellationToken token);
     }
 }
