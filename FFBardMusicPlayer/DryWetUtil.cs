@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FFBardMusicCommon;
@@ -25,7 +26,7 @@ namespace FFBardMusicPlayer
         public static MemoryStream ScrubFile(string filePath)
         {
             MidiFile midiFile;
-            IEnumerable<TrackChunk> originalTrackChunks;
+            List<TrackChunk> originalTrackChunks;
             TempoMap tempoMap;
 
             MidiFile newMidiFile;
@@ -37,7 +38,7 @@ namespace FFBardMusicPlayer
                 if (lastMD5.Equals(md5) && lastFile != null)
                 {
                     var oldfile = new MemoryStream();
-                    lastFile.Write(oldfile, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                    lastFile.Write(oldfile, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
                     oldfile.Flush();
                     oldfile.Position = 0;
                     return oldfile;
@@ -95,20 +96,27 @@ namespace FFBardMusicPlayer
 
                 Console.WriteLine("Scrubbing " + filePath);
                 var loaderWatch = Stopwatch.StartNew();
-
-                originalTrackChunks = midiFile.GetTrackChunks();
-
+                
                 tempoMap = midiFile.GetTempoMap();
                 newTrackChunks = new ConcurrentDictionary<int, TrackChunk>();
 
-                long firstNote = originalTrackChunks.GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
+                long firstNote = midiFile.GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
+
+                originalTrackChunks = new List<TrackChunk>();
 
                 TrackChunk allTracks = new TrackChunk();
-                allTracks.AddNotes(originalTrackChunks.GetNotes());
-                midiFile.Chunks.Add(allTracks);
-                originalTrackChunks = midiFile.GetTrackChunks();
+                allTracks.AddObjects(originalTrackChunks.GetNotes());
 
-                Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Count() > 0), (originalChunk, loopState, index) =>
+                foreach (var trackChunk in midiFile.GetTrackChunks())
+                {
+                    allTracks.AddObjects(trackChunk.GetNotes());
+                    var thisTrack = new TrackChunk(new SequenceTrackNameEvent(trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text));
+                    thisTrack.AddObjects(trackChunk.GetNotes());
+                    originalTrackChunks.Add(thisTrack);
+                }
+                originalTrackChunks.Add(allTracks);
+
+                Parallel.ForEach(originalTrackChunks.Where(x => x.GetNotes().Any()), (originalChunk, loopState, index) =>
                 {
                     var watch = Stopwatch.StartNew();
 
@@ -167,7 +175,7 @@ namespace FFBardMusicPlayer
                             lastNoteTimeStamp = noteEvent.Key;
                         }
                     }
-                    newChunk.AddNotes(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
+                    newChunk.AddObjects(allNoteEvents.SelectMany(s => s.Value).Select(s => s.Value).ToArray());
                     allNoteEvents = null;
 
                     watch.Stop();
@@ -267,7 +275,7 @@ namespace FFBardMusicPlayer
                     }
 
                     newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-                    newChunk.AddNotes(fixedNotes);
+                    newChunk.AddObjects(fixedNotes);
                     fixedNotes = null;
 
                     watch.Stop();
@@ -307,7 +315,7 @@ namespace FFBardMusicPlayer
                 using (var manager = new TimedEventsManager(newMidiFile.GetTrackChunks().First().Events))
                     manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
 
-                newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { CompressionPolicy = CompressionPolicy.NoCompression });
+                newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
                 stream.Flush();
                 stream.Position = 0;
 
