@@ -24,21 +24,19 @@ namespace FFBardMusicPlayer.Controls {
 			// OnTextChange?.Invoke(this, this.Text);
 		}
 
-        protected override void OnKeyPress(KeyPressEventArgs e)
+        protected override void OnKeyUp(KeyEventArgs e)
         {
-            base.OnKeyPress(e);
+	    // here, we can check if the input character in the search bar is either a
+	    // letter or a number, and invoke the text change
+	    // since backspace and delete are special, we'll want to listen for those as well
+	    if (char.IsLetterOrDigit((char)e.KeyCode) ||
+		e.KeyCode == Keys.Delete  ||
+		e.KeyCode == Keys.Back)
+            {
+		OnTextChange?.Invoke(this, this.Text);
+            }
 
-			// here, we can check if the input character in the search bar is either a
-			// letter or a number, and invoke the text change
-			if (char.IsLetterOrDigit(e.KeyChar))
-            {
-				OnTextChange?.Invoke(this, this.Text);
-			}
-			// since backspace and delete are special, we'll want to listen for those as well
-			else if (e.KeyChar == (char)Keys.Delete || e.KeyChar == (char)Keys.Back)
-            {
-				OnTextChange?.Invoke(this, this.Text);
-			}
+	    base.OnKeyUp(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {

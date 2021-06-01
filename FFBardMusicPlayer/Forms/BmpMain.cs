@@ -641,13 +641,13 @@ namespace FFBardMusicPlayer.Forms {
 						System.Threading.Thread.Sleep(100);
 					}
 				}
-				//if(key == Keys.Space) {
-				//	if(Player.Player.IsPlaying) {
-				//		Player.Player.Pause();
-				//	} else {
-				//		Player.Player.Play();
-				//	}
-				//}
+				if(key == Keys.Space) {
+					if(Player.Player.IsPlaying) {
+						Player.Player.Pause();
+					} else {
+						Player.Player.Play();
+					}
+				}
 				if(key == Keys.Right) {
 					if(Player.Player.IsPlaying) {
 						Player.Player.Seek(1000);

@@ -238,6 +238,11 @@ namespace FFBardMusicPlayer.Components {
 			MidiFile singleEntry = null;
 			MidiFile focusEntry = null;
 
+	    // this function is called so many times. since we're clearing the list each time,
+	    // the UI element is resetting it's selected index and forcing the selected item to always be 0
+	    // storing the previously selected index should be sufficient, for now
+	    int previouslySelectedIndex = this.SelectedIndex;
+
 			if(!string.IsNullOrEmpty(filenameFilter)) {
 				if(!IsFilenameValid(FilenameFilter)) {
 					midis.Clear();
@@ -304,7 +309,8 @@ namespace FFBardMusicPlayer.Components {
 			} else {
 				if(this.SelectedIndex == -1) {
 					if(this.Items.Count > 0) {
-						this.SelectedIndex = 0;
+			// don't allow this to pass the current index limits. this could change, say, when the user is using the search feature
+						this.SelectedIndex = previouslySelectedIndex < this.Items.Count ? previouslySelectedIndex : this.Items.Count - 1;
 					}
 				}
 			}
