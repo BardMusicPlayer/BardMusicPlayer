@@ -25,12 +25,12 @@ namespace FFBardMusicPlayer.Components
             {
                 get
                 {
-                    var sp = Properties.Settings.Default.SongDirectory;
-                    var file1 = Path.GetFullPath(FileName);
-                    var path2 = Path.GetFullPath(sp);
-                    return file1.IndexOf(path2) != 0 
-                        ? file1 
-                        : file1.Remove(0, path2.Length - sp.Length);
+                    var songDirectory = Properties.Settings.Default.SongDirectory;
+                    var fileDirectory = Path.GetDirectoryName(FileName) ?? string.Empty;
+
+                    return Path.GetFullPath(songDirectory).Contains(fileDirectory)
+                        ? Path.Combine(songDirectory, Path.GetFileName(FileName))
+                        : Path.GetFullPath(FileName);
                 }
             }
 
