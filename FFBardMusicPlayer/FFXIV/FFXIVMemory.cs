@@ -1,351 +1,406 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Threading;
 using System.Diagnostics;
-using System.Windows.Forms;
-
+using System.Linq;
+using System.Threading;
 using Sharlayan;
+using Sharlayan.Core;
+using Sharlayan.Events;
 using Sharlayan.Models;
 using Sharlayan.Models.ReadResults;
-using Sharlayan.Events;
-using Sharlayan.Core;
 
-namespace FFBardMusicPlayer {
-	public class FFXIVMemory {
+namespace FFBardMusicPlayer.FFXIV
+{
+    public class FFXIVMemory
+    {
+        public CurrentPlayerResult CurrentPlayer;
+        public PartyResult Party;
+        public ActorResult Actors;
+        public PerformanceResult Performance;
+        public bool PerformanceReady;
+        private string characterId;
 
-		public CurrentPlayerResult currentPlayer;
-		public PartyResult party;
-		public ActorResult actors;
-		public PerformanceResult performance;
-		public bool performanceReady;
+        public string CharacterId
+        {
+            get => characterId;
+            set
+            {
+                characterId = value;
+                OnCharacterIdChanged?.Invoke(this, characterId);
+            }
+        }
 
-		private string characterId;
-		public string CharacterID {
-			get {
-				return characterId;
-			}
-			set {
-				characterId = value;
-				OnCharacterIdChanged?.Invoke(this, characterId);
-			}
-		}
+        public bool ChatInputOpen => Reader.CanGetChatInput() && Reader.IsChatInputOpen();
 
-		public bool ChatInputOpen {
-			get {
-				if(Reader.CanGetChatInput()) {
-					return Reader.IsChatInputOpen();
-				}
-				return false;
-			}
-		}
-		public string ChatInputString {
-			get {
-				if(Reader.CanGetChatInput()) {
-					return Reader.GetChatInputString();
-				}
-				return string.Empty;
-			}
-		}
+        public string ChatInputString => Reader.CanGetChatInput() ? Reader.GetChatInputString() : string.Empty;
 
-		int _previousArrayIndex = 0;
-		int _previousOffset = 0;
-		Stack<ChatLogItem> logItems = new Stack<ChatLogItem>();
-		List<ChatLogItem> completeLog = new List<ChatLogItem>();
+        private int previousArrayIndex;
+        private int previousOffset;
+        private readonly Stack<ChatLogItem> logItems = new Stack<ChatLogItem>();
+        private readonly List<ChatLogItem> completeLog = new List<ChatLogItem>();
 
-		public event EventHandler OnProcessSeek;
-		public event EventHandler OnProcessLost;
-		public event EventHandler<Process> OnProcessReady;
+        public event EventHandler OnProcessSeek;
 
-		public event EventHandler<ChatLogItem> OnChatReceived;
-		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogin;
-		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogout;
-		public event EventHandler<CurrentPlayerResult> OnCurrentPlayerJobChange;
-		public event EventHandler<PartyResult> OnPartyChanged;
-		public event EventHandler<Dictionary<uint, ActorItemBase>> OnPcChanged;
-		public event EventHandler<List<uint>> OnPerformanceChanged;
-		public event EventHandler<bool> OnPerformanceReadyChanged;
-		public event EventHandler<string> OnCharacterIdChanged;
+        public event EventHandler OnProcessLost;
 
-		bool hasLost = true;
+        public event EventHandler<Process> OnProcessReady;
 
-		Process ffxivProcess;
-		Thread thread;
-		bool hasScanned;
-		bool isLoggedIn;
+        public event EventHandler<ChatLogItem> OnChatReceived;
 
-		public FFXIVMemory() {
-			Reset();
-		}
+        public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogin;
 
-		private void Reset() {
-			hasScanned = false;
-			isLoggedIn = false;
+        public event EventHandler<CurrentPlayerResult> OnCurrentPlayerLogout;
 
-			logItems.Clear();
-			completeLog.Clear();
-			_previousArrayIndex = 0;
-			_previousOffset = 0;
+        public event EventHandler<CurrentPlayerResult> OnCurrentPlayerJobChange;
 
-			currentPlayer = new CurrentPlayerResult();
-			party = new PartyResult();
-			actors = new ActorResult();
-			performance = new PerformanceResult();
-		}
+        public event EventHandler<PartyResult> OnPartyChanged;
 
-		public void SetProcess(Process process) {
-			if(process == null || process.HasExited) {
-				return;
-			}
-			ffxivProcess = process;
-			Reset();
+        public event EventHandler<Dictionary<uint, ActorItemBase>> OnPcChanged;
 
-			string gameLanguage = "English";
-			bool useLocalCache = true;
-			string patchVersion = "latest";
+        public event EventHandler<List<uint>> OnPerformanceChanged;
 
-			ProcessModel processModel = new ProcessModel {
-				Process = process,
-				IsWin64 = process.ProcessName.Contains("_dx11")
-			};
-			MemoryHandler.Instance.ExceptionEvent += MemoryHandler_ExceptionEvent;
-			MemoryHandler.Instance.SignaturesFoundEvent += MemoryHandler_SignaturesFoundEvent;
-			MemoryHandler.Instance.SetProcess(processModel, gameLanguage, patchVersion, useLocalCache, false);
-		}
+        public event EventHandler<bool> OnPerformanceReadyChanged;
 
-		public void UnsetProcess() {
-			MemoryHandler.Instance.ExceptionEvent -= MemoryHandler_ExceptionEvent;
-			MemoryHandler.Instance.SignaturesFoundEvent -= MemoryHandler_SignaturesFoundEvent;
-			MemoryHandler.Instance.UnsetProcess();
-			ffxivProcess = null;
-		}
+        public event EventHandler<string> OnCharacterIdChanged;
 
-		public void StartThread() {
+        private bool hasLost = true;
+        private Process ffxivProcess;
+        private Thread thread;
+        private bool hasScanned;
+        private bool isLoggedIn;
+
+        public FFXIVMemory() { Reset(); }
+
+        private void Reset()
+        {
+            hasScanned = false;
+            isLoggedIn = false;
+
+            logItems.Clear();
+            completeLog.Clear();
+            previousArrayIndex = 0;
+            previousOffset     = 0;
+
+            CurrentPlayer = new CurrentPlayerResult();
+            Party         = new PartyResult();
+            Actors        = new ActorResult();
+            Performance   = new PerformanceResult();
+        }
+
+        public void SetProcess(Process process)
+        {
+            if (process == null || process.HasExited)
+            {
+                return;
+            }
+
+            ffxivProcess = process;
+            Reset();
+
+            var gameLanguage = "English";
+            var useLocalCache = true;
+            var patchVersion = "latest";
+
+            var processModel = new ProcessModel
+            {
+                Process = process,
+                IsWin64 = process.ProcessName.Contains("_dx11")
+            };
+            MemoryHandler.Instance.ExceptionEvent       += MemoryHandler_ExceptionEvent;
+            MemoryHandler.Instance.SignaturesFoundEvent += MemoryHandler_SignaturesFoundEvent;
+            MemoryHandler.Instance.SetProcess(processModel, gameLanguage, patchVersion, useLocalCache);
+        }
+
+        public void UnsetProcess()
+        {
+            MemoryHandler.Instance.ExceptionEvent       -= MemoryHandler_ExceptionEvent;
+            MemoryHandler.Instance.SignaturesFoundEvent -= MemoryHandler_SignaturesFoundEvent;
+            MemoryHandler.Instance.UnsetProcess();
+            ffxivProcess = null;
+        }
+
+        public void StartThread()
+        {
             // run the refresh through once first, so other things aren't waiting
             // for valid information on initialization
             // this is a hack around threading
             Refresh();
-			if(thread == null) {
-				ThreadStart memoryThread = new ThreadStart(FFXIVMemory_Main);
-				thread = new Thread(memoryThread);
-				thread.Start();
-			}
-		}
+            if (thread == null)
+            {
+                var memoryThread = new ThreadStart(FFXIVMemory_Main);
+                thread = new Thread(memoryThread);
+                thread.Start();
+            }
+        }
 
-		public void StopThread() {
-			if(thread != null) {
-				thread.Interrupt();
-				thread = null;
-			}
-		}
+        public void StopThread()
+        {
+            if (thread != null)
+            {
+                thread.Interrupt();
+                thread = null;
+            }
+        }
 
-		public bool IsThreadAlive() {
-			if(thread == null) {
-				return false;
-			}
-			return thread.IsAlive;
-		}
+        public bool IsThreadAlive() => thread != null && thread.IsAlive;
 
-		public void FFXIVMemory_Main() {
-			Console.WriteLine("Memory main loop");
-			bool alive = true;
-			try {
-				while(alive) {
-					if(!Refresh()) {
-						// Restart?
-					}
-					Thread.Sleep(100);
-				}
-			} catch(ThreadInterruptedException) {
-				alive = false;
-			}
-			Console.WriteLine("Reached end");
-		}
+        public void FFXIVMemory_Main()
+        {
+            Console.WriteLine("Memory main loop");
+            
+            try
+            {
+                if (!Refresh())
+                {
+                    // Restart?
+                }
 
-		public bool Refresh() {
+                Thread.Sleep(100);
+            }
+            catch (ThreadInterruptedException)
+            {
+                
+            }
 
-			if(ffxivProcess != null) {
-				ffxivProcess.Refresh();
-				if(ffxivProcess.HasExited) {
-					OnProcessLost?.Invoke(this, EventArgs.Empty);
-					ffxivProcess = null;
-					hasLost = true;
-					Reset();
+            Console.WriteLine("Reached end");
+        }
 
-					Console.WriteLine("Exited game");
-				}
-				if(IsScanning() && !hasScanned) {
-					Console.WriteLine("Scanning...");
-					while(IsScanning()) {
-						Thread.Sleep(100);
-					}
-					Console.WriteLine("Finished scanning");
-					OnProcessReady?.Invoke(this, ffxivProcess);
-					hasScanned = true;
-				}
-			}
-			if((ffxivProcess == null) && hasLost) {
-				OnProcessSeek?.Invoke(this, EventArgs.Empty);
-				hasLost = false;
-				return false;
-			}
+        public bool Refresh()
+        {
+            if (ffxivProcess != null)
+            {
+                ffxivProcess.Refresh();
+                if (ffxivProcess.HasExited)
+                {
+                    OnProcessLost?.Invoke(this, EventArgs.Empty);
+                    ffxivProcess = null;
+                    hasLost      = true;
+                    Reset();
 
+                    Console.WriteLine("Exited game");
+                }
 
-			if(Reader.CanGetCharacterId()) {
-				string id = Reader.GetCharacterId();
-				if(!string.IsNullOrEmpty(id)) {
-					if(string.IsNullOrEmpty(CharacterID) ||
-						(!string.IsNullOrEmpty(CharacterID) && !CharacterID.Equals(id))) {
-						CharacterID = id;
-					}
-				}
-			}
-			if(Reader.CanGetPlayerInfo()) {
-				CurrentPlayerResult res = Reader.GetCurrentPlayer();
-				if(res.CurrentPlayer.Job != currentPlayer.CurrentPlayer.Job) {
-					if(currentPlayer.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.Unknown) {
-						// Logged in
-						OnCurrentPlayerLogin?.Invoke(this, res);
-						isLoggedIn = true;
+                if (IsScanning() && !hasScanned)
+                {
+                    Console.WriteLine("Scanning...");
+                    while (IsScanning())
+                    {
+                        Thread.Sleep(100);
+                    }
 
-					} else if(res.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.Unknown) {
-						// Logged out
-						OnCurrentPlayerLogout?.Invoke(this, currentPlayer);
-						isLoggedIn = false;
-						Reset();
+                    Console.WriteLine("Finished scanning");
+                    OnProcessReady?.Invoke(this, ffxivProcess);
+                    hasScanned = true;
+                }
+            }
 
-					} else {
-						OnCurrentPlayerJobChange?.Invoke(this, currentPlayer);
-					}
-				}
-				currentPlayer = res;
-			}
-			if(!isLoggedIn) {
-				return false;
-			}
-			if(Reader.CanGetPartyMembers()) {
-				PartyResult party2 = Reader.GetPartyMembers();
-				if(party2.NewPartyMembers.Count > 0 ||
-					party2.RemovedPartyMembers.Count > 0) {
-					// Something changed
-					party = party2;
-					OnPartyChanged?.Invoke(this, party2);
-				}
-				int pcount = party.PartyMembers.Count;
-				int pcount2 = party2.PartyMembers.Count;
-				if(!(party is PartyResult) || (party is PartyResult && (pcount != pcount2))) {
-					party = party2;
-					OnPartyChanged?.Invoke(this, party2);
-				}
-			}
-			if(Reader.CanGetPerformance()) {
+            if (ffxivProcess == null && hasLost)
+            {
+                OnProcessSeek?.Invoke(this, EventArgs.Empty);
+                hasLost = false;
+                return false;
+            }
 
+            if (Reader.CanGetCharacterId())
+            {
+                var id = Reader.GetCharacterId();
+                if (!string.IsNullOrEmpty(id))
+                {
+                    if (string.IsNullOrEmpty(CharacterId) ||
+                        !string.IsNullOrEmpty(CharacterId) && !CharacterId.Equals(id))
+                    {
+                        CharacterId = id;
+                    }
+                }
+            }
 
-				List<uint> changedIds = new List<uint>();
-				PerformanceResult perf = Reader.GetPerformance();
-				if(!perf.Performances.IsEmpty && !performance.Performances.IsEmpty) {
-					foreach(KeyValuePair<uint, PerformanceItem> pp in perf.Performances) {
-						if(performance.Performances.ContainsKey(pp.Key) && pp.Value.Status != performance.Performances[pp.Key].Status) {
-							changedIds.Add(pp.Key);
-						}
-					}
-				}
+            if (Reader.CanGetPlayerInfo())
+            {
+                var res = Reader.GetCurrentPlayer();
+                if (res.CurrentPlayer.Job != CurrentPlayer.CurrentPlayer.Job)
+                {
+                    if (CurrentPlayer.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.Unknown)
+                    {
+                        // Logged in
+                        OnCurrentPlayerLogin?.Invoke(this, res);
+                        isLoggedIn = true;
+                    }
+                    else if (res.CurrentPlayer.Job == Sharlayan.Core.Enums.Actor.Job.Unknown)
+                    {
+                        // Logged out
+                        OnCurrentPlayerLogout?.Invoke(this, CurrentPlayer);
+                        isLoggedIn = false;
+                        Reset();
+                    }
+                    else
+                    {
+                        OnCurrentPlayerJobChange?.Invoke(this, CurrentPlayer);
+                    }
+                }
 
-				if(changedIds.Count > 0) {
-					List<uint> actorIds = new List<uint>();
-					if(Reader.CanGetActors()) {
-						foreach(ActorItem actor in Reader.GetActors().CurrentPCs.Values) {
-							if(changedIds.Contains(actor.PerformanceID / 2)) {
-								actorIds.Add(actor.ID);
-							}
-						}
-					}
-					if(actorIds.Count > 0) {
-						OnPerformanceChanged?.Invoke(this, actorIds);
-					}
-				}
-				
-				//Update
-				performance = perf;
+                CurrentPlayer = res;
+            }
 
-				bool r = perf.Performances[0].IsReady();
-				if(r != performanceReady) {
-					performanceReady = r;
-					OnPerformanceReadyChanged?.Invoke(this, performanceReady);
-				}
-			}
+            if (!isLoggedIn)
+            {
+                return false;
+            }
 
-			logItems.Clear();
-			if(Reader.CanGetChatLog()) {
-				ChatLogResult readResult = Reader.GetChatLog(_previousArrayIndex, _previousOffset);
-				_previousArrayIndex = readResult.PreviousArrayIndex;
-				_previousOffset = readResult.PreviousOffset;
-				foreach(ChatLogItem item in readResult.ChatLogItems) {
-					logItems.Push(item);
-					completeLog.Add(item);
-					OnChatReceived?.Invoke(this, item);
-				}
-			}
-			if(Reader.CanGetActors()) {
-				int jobsum0 = 0;
-				if(actors != null) {
-					jobsum0 = actors.CurrentPCs.Sum(e => (int) e.Value.Job);
-				}
+            if (Reader.CanGetPartyMembers())
+            {
+                var party2 = Reader.GetPartyMembers();
+                if (party2.NewPartyMembers.Count > 0 ||
+                    party2.RemovedPartyMembers.Count > 0)
+                {
+                    // Something changed
+                    Party = party2;
+                    OnPartyChanged?.Invoke(this, party2);
+                }
 
-				ActorResult actorRes = Reader.GetActors();
-				if(actors != null) {
-					if(actorRes.CurrentPCs.Count != actors.CurrentPCs.Count) {
-						actors = actorRes;
-						OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-					}
-					int jobsum1 = actorRes.CurrentPCs.Sum(e => (int) e.Value.Job);
+                var pcount = Party.PartyMembers.Count;
+                var pcount2 = party2.PartyMembers.Count;
+                if (pcount != pcount2)
+                {
+                    Party = party2;
+                    OnPartyChanged?.Invoke(this, party2);
+                }
+            }
 
-					if(jobsum0 != jobsum1) {
-						actors = actorRes;
-						OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-					}
-				} else {
-					actors = actorRes;
-					OnPcChanged?.Invoke(this, actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
-				}
-			}
-			return true;
-		}
+            if (Reader.CanGetPerformance())
+            {
+                var changedIds = new List<uint>();
+                var perf = Reader.GetPerformance();
+                if (!perf.Performances.IsEmpty && !Performance.Performances.IsEmpty)
+                {
+                    foreach (var pp in perf.Performances)
+                    {
+                        if (Performance.Performances.ContainsKey(pp.Key) &&
+                            pp.Value.Status != Performance.Performances[pp.Key].Status)
+                        {
+                            changedIds.Add(pp.Key);
+                        }
+                    }
+                }
 
-		public List<ActorItem> GetActorItems(List<uint> keys) {
-			if(Reader.CanGetActors()) {
-				ActorResult res = Reader.GetActors();
-				if(res != null && res.CurrentPCs.Count > 0) {
-					List<ActorItem> actors = res.CurrentPCs.Where(t => keys.Contains(t.Key)).Select(t => t.Value).ToList();
-					return actors;
-				}
-			}
-			return new List<ActorItem>();
-		}
+                if (changedIds.Count > 0)
+                {
+                    var actorIds = new List<uint>();
+                    if (Reader.CanGetActors())
+                    {
+                        foreach (var actor in Reader.GetActors().CurrentPCs.Values)
+                        {
+                            if (changedIds.Contains(actor.PerformanceID / 2))
+                            {
+                                actorIds.Add(actor.ID);
+                            }
+                        }
+                    }
 
-		public bool IsScanning() {
-			return Scanner.Instance.IsScanning;
-		}
-		public bool IsAttached() {
-			return ffxivProcess != null;
-		}
-		public bool IsReady() {
-			return (IsAttached() && !IsScanning());
-		}
+                    if (actorIds.Count > 0)
+                    {
+                        OnPerformanceChanged?.Invoke(this, actorIds);
+                    }
+                }
 
-		private static void MemoryHandler_ExceptionEvent(object sender, ExceptionEvent e) {
-			if(true) {
-				Console.WriteLine(e.Exception.Message);
-			}
-		}
+                //Update
+                Performance = perf;
 
-		private static void MemoryHandler_SignaturesFoundEvent(object sender, SignaturesFoundEvent e) {
-			foreach(KeyValuePair<string, Signature> kvp in e.Signatures) {
-				Console.WriteLine(string.Format($"Signature [{kvp.Key}] Found At Address: [{((IntPtr) kvp.Value).ToString("X")}]"));
-			}
-		}
-	}
+                var r = perf.Performances[0].IsReady();
+                if (r != PerformanceReady)
+                {
+                    PerformanceReady = r;
+                    OnPerformanceReadyChanged?.Invoke(this, PerformanceReady);
+                }
+            }
+
+            logItems.Clear();
+            if (Reader.CanGetChatLog())
+            {
+                var readResult = Reader.GetChatLog(previousArrayIndex, previousOffset);
+                previousArrayIndex = readResult.PreviousArrayIndex;
+                previousOffset     = readResult.PreviousOffset;
+                foreach (var item in readResult.ChatLogItems)
+                {
+                    logItems.Push(item);
+                    completeLog.Add(item);
+                    OnChatReceived?.Invoke(this, item);
+                }
+            }
+
+            if (Reader.CanGetActors())
+            {
+                var jobsum0 = 0;
+                if (Actors != null)
+                {
+                    jobsum0 = Actors.CurrentPCs.Sum(e => (int) e.Value.Job);
+                }
+
+                var actorRes = Reader.GetActors();
+                if (Actors != null)
+                {
+                    if (actorRes.CurrentPCs.Count != Actors.CurrentPCs.Count)
+                    {
+                        Actors = actorRes;
+                        OnPcChanged?.Invoke(this,
+                            actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
+                    }
+
+                    var jobsum1 = actorRes.CurrentPCs.Sum(e => (int) e.Value.Job);
+
+                    if (jobsum0 != jobsum1)
+                    {
+                        Actors = actorRes;
+                        OnPcChanged?.Invoke(this,
+                            actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
+                    }
+                }
+                else
+                {
+                    Actors = actorRes;
+                    OnPcChanged?.Invoke(this,
+                        actorRes.CurrentPCs.ToDictionary(k => k.Key, k => k.Value as ActorItemBase));
+                }
+            }
+
+            return true;
+        }
+
+        public List<ActorItem> GetActorItems(List<uint> keys)
+        {
+            if (Reader.CanGetActors())
+            {
+                var res = Reader.GetActors();
+                if (res != null && res.CurrentPCs.Count > 0)
+                {
+                    var actors = res.CurrentPCs.Where(t => keys.Contains(t.Key)).Select(t => t.Value).ToList();
+                    return actors;
+                }
+            }
+
+            return new List<ActorItem>();
+        }
+
+        public bool IsScanning() => Scanner.Instance.IsScanning;
+
+        public bool IsAttached() => ffxivProcess != null;
+
+        public bool IsReady() => IsAttached() && !IsScanning();
+
+        private static void MemoryHandler_ExceptionEvent(object sender, ExceptionEvent e)
+        {
+            if (true)
+            {
+                Console.WriteLine(e.Exception.Message);
+            }
+        }
+
+        private static void MemoryHandler_SignaturesFoundEvent(object sender, SignaturesFoundEvent e)
+        {
+            foreach (var kvp in e.Signatures)
+            {
+                Console.WriteLine(
+                    string.Format($"Signature [{kvp.Key}] Found At Address: [{((IntPtr) kvp.Value).ToString("X")}]"));
+            }
+        }
+    }
 }

@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace FFBardMusicPlayer.Components {
-	public partial class BmpCheckButton : CheckBox {
-		public BmpCheckButton() {
-			InitializeComponent();
-		}
+namespace FFBardMusicPlayer.Components
+{
+    public partial class BmpCheckButton : CheckBox
+    {
+        public BmpCheckButton() { InitializeComponent(); }
 
-		public BmpCheckButton(IContainer container) {
-			container.Add(this);
+        public BmpCheckButton(IContainer container)
+        {
+            container.Add(this);
 
-			InitializeComponent();
-		}
+            InitializeComponent();
+        }
 
-		protected override bool ShowFocusCues {
-			get { return false; }
-		}
-	}
+        protected override bool ShowFocusCues => false;
+    }
 }

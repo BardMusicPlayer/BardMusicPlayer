@@ -13,7 +13,6 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
     internal static class KnownFolders
     {
         // ---- MEMBERS ------------------------------------------------------------------------------------------------
-
         private static Dictionary<KnownFolderType, KnownFolder> _knownFolderInstances;
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -74,7 +73,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// The per-user Temporary Burn Folder.
         /// Defaults to &quot;%LOCALAPPDATA%\Microsoft\Windows\Burn\Burn&quot;.
         /// </summary>
-        internal static KnownFolder CDBurning => GetInstance(KnownFolderType.CDBurning);
+        internal static KnownFolder CdBurning => GetInstance(KnownFolderType.CdBurning);
 
         /// <summary>
         /// The common Administrative Tools folder.
@@ -454,7 +453,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// The common Recorded TV library. Introduced in Windows 7.
         /// Defaults to &quot;%PUBLIC%\RecordedTV.library-ms&quot;.
         /// </summary>
-        internal static KnownFolder RecordedTVLibrary => GetInstance(KnownFolderType.RecordedTVLibrary);
+        internal static KnownFolder RecordedTvLibrary => GetInstance(KnownFolderType.RecordedTvLibrary);
 
         /// <summary>
         /// The fixed Resources folder.
@@ -670,14 +669,17 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         {
             // Check if the caching directory exists yet.
             if (_knownFolderInstances == null)
+            {
                 _knownFolderInstances = new Dictionary<KnownFolderType, KnownFolder>();
+            }
 
             // Get a KnownFolder instance out of the cache dictionary or create it when not cached yet.
-            if (!_knownFolderInstances.TryGetValue(type, out KnownFolder knownFolder))
+            if (!_knownFolderInstances.TryGetValue(type, out var knownFolder))
             {
                 knownFolder = new KnownFolder(type);
                 _knownFolderInstances.Add(type, knownFolder);
             }
+
             return knownFolder;
         }
     }

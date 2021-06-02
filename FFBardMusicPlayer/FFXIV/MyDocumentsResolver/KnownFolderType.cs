@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Reflection;
 
 namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
 {
@@ -80,7 +79,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// Defaults to &quot;%LOCALAPPDATA%\Microsoft\Windows\Burn\Burn&quot;.
         /// </summary>
         [KnownFolderGuid("9E52AB10-F80D-49DF-ACB8-4330F5687855")]
-        CDBurning,
+        CdBurning,
 
         /// <summary>
         /// The common Administrative Tools folder.
@@ -522,7 +521,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// Defaults to &quot;%PUBLIC%\RecordedTV.library-ms&quot;.
         /// </summary>
         [KnownFolderGuid("1A6FDBA2-F42D-4358-A798-B74D745926C5")]
-        RecordedTVLibrary,
+        RecordedTvLibrary,
 
         /// <summary>
         /// The fixed Resources folder.
@@ -782,9 +781,9 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// <returns>The <see cref="Guid"/> of the <see cref="KnownFolderType"/>.</returns>
         internal static Guid GetGuid(this KnownFolderType value)
         {
-            FieldInfo member = typeof(KnownFolderType).GetField(value.ToString());
-            object[] attributes = member.GetCustomAttributes(typeof(KnownFolderGuidAttribute), false);
-            KnownFolderGuidAttribute guidAttribute = (KnownFolderGuidAttribute)attributes[0];
+            var member = typeof(KnownFolderType).GetField(value.ToString());
+            var attributes = member.GetCustomAttributes(typeof(KnownFolderGuidAttribute), false);
+            var guidAttribute = (KnownFolderGuidAttribute) attributes[0];
             return guidAttribute.Guid;
         }
     }
@@ -793,7 +792,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
     /// Represents an attribute to decorate the members of the <see cref="KnownFolderType"/> enumeration with their
     /// corresponding <see cref="Guid"/> on the Windows system.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     internal class KnownFolderGuidAttribute : Attribute
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
@@ -803,10 +802,7 @@ namespace FFBardMusicPlayer.FFXIV.MyDocumentsResolver
         /// representing the GUID of the <see cref="KnownFolderType"/>.
         /// </summary>
         /// <param name="guid">The GUID string of the <see cref="KnownFolderType"/>.</param>
-        internal KnownFolderGuidAttribute(string guid)
-        {
-            Guid = new Guid(guid);
-        }
+        internal KnownFolderGuidAttribute(string guid) { Guid = new Guid(guid); }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
