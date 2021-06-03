@@ -37,6 +37,12 @@ namespace BardMusicPlayer.Coffer
         void Remove(int idx);
 
         /// <summary>
+        /// This removes the specified <see cref="BmpSong"/>.
+        /// </summary>
+        /// <param name="song">The song the remove</param>
+        void Remove(BmpSong song);
+
+        /// <summary>
         /// Returns the name of the playlist.
         /// </summary>
         /// <returns></returns>
