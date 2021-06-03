@@ -120,7 +120,7 @@ namespace BardMusicPlayer.Coffer.Tests
         }
 
         [TestMethod]
-        public void TestRemove()
+        public void TestRemoveIndex()
         {
             BmpSong songA = new BmpSong()
             {
@@ -151,6 +151,43 @@ namespace BardMusicPlayer.Coffer.Tests
             Assert.AreSame(songC, objRef.Songs[2]);
 
             ((IPlaylist)test).Remove(1);
+            Assert.AreEqual(2, objRef.Songs.Count);
+            Assert.AreSame(songA, objRef.Songs[0]);
+            Assert.AreSame(songC, objRef.Songs[1]);
+        }
+
+        [TestMethod]
+        public void TestRemoveSong()
+        {
+            BmpSong songA = new BmpSong()
+            {
+                Id = ObjectId.NewObjectId()
+            };
+
+            BmpSong songB = new BmpSong()
+            {
+                Id = ObjectId.NewObjectId()
+            };
+
+            BmpSong songC = new BmpSong()
+            {
+                Id = ObjectId.NewObjectId()
+            };
+
+            BmpPlaylistDecorator test = CreateTestPlaylist();
+
+            var objRef = test.GetBmpPlaylist();
+
+            ((IPlaylist)test).Add(songA);
+            ((IPlaylist)test).Add(songB);
+            ((IPlaylist)test).Add(songC);
+
+            Assert.AreEqual(3, objRef.Songs.Count);
+            Assert.AreSame(songA, objRef.Songs[0]);
+            Assert.AreSame(songB, objRef.Songs[1]);
+            Assert.AreSame(songC, objRef.Songs[2]);
+
+            ((IPlaylist)test).Remove(songB);
             Assert.AreEqual(2, objRef.Songs.Count);
             Assert.AreSame(songA, objRef.Songs[0]);
             Assert.AreSame(songC, objRef.Songs[1]);
