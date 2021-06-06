@@ -6,24 +6,18 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
     public class BmpPlaylistViewModel : Screen
     {
         private readonly IPlaylist _bmpPlaylist;
-        private bool _isReadOnly = true;
 
         public BmpPlaylistViewModel(IPlaylist bmpPlaylist) { _bmpPlaylist = bmpPlaylist; }
 
-        public bool IsReadOnly
-        {
-            get => _isReadOnly;
-            set => SetAndNotify(ref _isReadOnly, value);
-        }
+        public bool IsReadOnly { get; set; }
 
-        public string Name
+        public string Name { get; set; }
+
+        public void OnNameChanged()
         {
-            get => _bmpPlaylist.GetName();
-            set
-            {
-                _bmpPlaylist.SetName(value);
-                IsReadOnly = true;
-            }
+            _bmpPlaylist.SetName(Name);
+            BmpCoffer.Instance.SavePlaylist(_bmpPlaylist);
+            IsReadOnly = true;
         }
 
         public void RenamePlaylist() { IsReadOnly = false; }

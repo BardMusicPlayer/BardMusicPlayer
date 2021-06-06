@@ -15,13 +15,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
     public class PlaylistViewModel : Screen
     {
         private readonly IContainer _ioc;
-        private BmpSong? _currentSong;
-        private DialogueViewModel _dialog;
-        private bool _dialogIsOpen;
-        private BindableCollection<BmpPlaylistViewModel> _playlists;
-        private IPlaylist? _selectedPlaylist;
-        private BmpSong? _selectedSong;
-        private BindableCollection<BmpSong> _songs;
 
         public PlaylistViewModel(IContainer ioc)
         {
@@ -33,47 +26,19 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 .ToBindableCollection();
         }
 
-        public BindableCollection<BmpPlaylistViewModel> Playlists
-        {
-            get => _playlists;
-            set => SetAndNotify(ref _playlists, value);
-        }
+        public BindableCollection<BmpPlaylistViewModel> Playlists { get; set; }
 
-        public BindableCollection<BmpSong> Songs
-        {
-            get => _songs;
-            set => SetAndNotify(ref _songs, value);
-        }
+        public BindableCollection<BmpSong> Songs { get; set; }
 
-        public BmpSong? CurrentSong
-        {
-            get => _currentSong;
-            set => SetAndNotify(ref _currentSong, value);
-        }
+        public BmpSong? CurrentSong { get; set; }
 
-        public BmpSong? SelectedSong
-        {
-            get => _selectedSong;
-            set => SetAndNotify(ref _selectedSong, value);
-        }
+        public BmpSong? SelectedSong { get; set; }
 
-        public bool DialogIsOpen
-        {
-            get => _dialogIsOpen;
-            set => SetAndNotify(ref _dialogIsOpen, value);
-        }
+        public bool DialogIsOpen { get; set; }
 
-        public DialogueViewModel Dialog
-        {
-            get => _dialog;
-            set => SetAndNotify(ref _dialog, value);
-        }
+        public DialogueViewModel Dialog { get; set; }
 
-        public IPlaylist? SelectedPlaylist
-        {
-            get => _selectedPlaylist;
-            set => SetAndNotify(ref _selectedPlaylist, value);
-        }
+        public IPlaylist? SelectedPlaylist { get; set; }
 
         public void ChangeSong() { }
 
