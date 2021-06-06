@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Transmogrify.Song;
+using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.ViewModels.Dialogue;
-using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Stylet;
 using StyletIoC;
@@ -16,31 +16,33 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
     {
         private readonly IContainer _ioc;
         private BmpSong? _currentSong;
-        private BindableCollection<IPlaylist> _playlists;
+        private DialogueViewModel _dialog;
+        private bool _dialogIsOpen;
+        private BindableCollection<BmpPlaylistViewModel> _playlists;
         private IPlaylist? _selectedPlaylist;
         private BmpSong? _selectedSong;
         private BindableCollection<BmpSong> _songs;
-        private bool _dialogIsOpen;
-        private DialogueViewModel _dialog;
 
         public PlaylistViewModel(IContainer ioc)
         {
             _ioc = ioc;
 
             var names = BmpCoffer.Instance.GetPlaylistNames();
-            Playlists = new BindableCollection<IPlaylist>(names.Select(BmpCoffer.Instance.GetPlaylist));
+            Playlists = names.Select(BmpCoffer.Instance.GetPlaylist)
+                .Select(playlist => new BmpPlaylistViewModel(playlist))
+                .ToBindableCollection();
+        }
+
+        public BindableCollection<BmpPlaylistViewModel> Playlists
+        {
+            get => _playlists;
+            set => SetAndNotify(ref _playlists, value);
         }
 
         public BindableCollection<BmpSong> Songs
         {
             get => _songs;
             set => SetAndNotify(ref _songs, value);
-        }
-
-        public BindableCollection<IPlaylist> Playlists
-        {
-            get => _playlists;
-            set => SetAndNotify(ref _playlists, value);
         }
 
         public BmpSong? CurrentSong
@@ -53,6 +55,18 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         {
             get => _selectedSong;
             set => SetAndNotify(ref _selectedSong, value);
+        }
+
+        public bool DialogIsOpen
+        {
+            get => _dialogIsOpen;
+            set => SetAndNotify(ref _dialogIsOpen, value);
+        }
+
+        public DialogueViewModel Dialog
+        {
+            get => _dialog;
+            set => SetAndNotify(ref _dialog, value);
         }
 
         public IPlaylist? SelectedPlaylist
@@ -89,30 +103,29 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             }
         }
 
-        public void ShowPlaylist()
+        public void CreatePlaylist()
         {
-            Dialog       = new DialogueViewModel("Playlist name");
-            DialogIsOpen = true;
+            var regex = new Regex(@"New Playlist [(](\d+)[)]", RegexOptions.Compiled);
+            var conflicts = BmpCoffer.Instance
+                .GetPlaylistNames()
+                .Select(p => regex.Match(p))
+                .Where(m => m.Success)
+                .ToList();
+
+            var name = "New Playlist";
+            if (conflicts.Count > 0)
+                name += $" ({conflicts.Max(m => int.Parse(m.Groups[1].Value)) + 1})";
+            else
+                name += " (1)";
+
+            var playlist = BmpCoffer.Instance.CreatePlaylist(name);
+            Playlists.Add(new BmpPlaylistViewModel(playlist));
+            BmpCoffer.Instance.SavePlaylist(playlist);
         }
 
-        public void RemoveSong() {}
+        public void RemoveSong() { }
 
-        public bool DialogIsOpen
-        {
-            get => _dialogIsOpen;
-            set => SetAndNotify(ref _dialogIsOpen, value);
-        }
-
-        public DialogueViewModel Dialog
-        {
-            get => _dialog;
-            set => SetAndNotify(ref _dialog, value);
-        }
-
-        public void ClearPlaylist()
-        {
-            
-        }
+        public void ClearPlaylist() { }
 
         public void DeletePlaylist() { }
 

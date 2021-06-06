@@ -58,7 +58,7 @@
                     </Grid.ColumnDefinitions>
 
 
-                    <TextBox Text="Paste Party Code"
+                    <TextBox md:HintAssist.Hint="Paste Party Code"
                              Height="36" Padding="10"
                              Style="{DynamicResource MaterialDesignOutlinedTextBox}" />
 

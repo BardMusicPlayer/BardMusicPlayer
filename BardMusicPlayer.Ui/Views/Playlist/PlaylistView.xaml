@@ -9,7 +9,6 @@
     xmlns:s="https://github.com/canton7/Stylet"
     xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
 
-    xmlns:vm="clr-namespace:BardMusicPlayer.Ui.ViewModels"
     xmlns:u="clr-namespace:BardMusicPlayer.Ui.Utilities"
 
     xmlns:song="clr-namespace:BardMusicPlayer.Transmogrify.Song;assembly=BardMusicPlayer.Transmogrify"
@@ -109,18 +108,32 @@
             <!--TODO: Playlist Selection-->
             <md:DialogHost Grid.Column="0" IsOpen="{Binding DialogIsOpen}">
                 <md:DialogHost.DialogContent>
-                    <ContentControl s:View.Model="{Binding Dialog}"/>
+                    <ContentControl s:View.Model="{Binding Dialog}" />
                 </md:DialogHost.DialogContent>
                 <GroupBox Header="Playlist" Style="{DynamicResource OutlinedGroupBox}">
                     <GroupBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Create Playlist" Command="{s:Action ShowPlaylist}" />
+                            <MenuItem Header="Create Playlist" Command="{s:Action CreatePlaylist}" />
                             <MenuItem Header="Clear Playlist" Command="{s:Action ClearPlaylist}" />
                         </ContextMenu>
                     </GroupBox.ContextMenu>
+
+                    <ItemsControl ItemsSource="{Binding Playlists}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type playlist:BmpPlaylistViewModel}">
+                                <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0">
+                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center" />
+                                    <TextBox
+                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}"
+                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
+                                        BorderThickness="0" />
+                                    <md:PackIcon Kind="Play" />
+                                </auto:AutoGrid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </GroupBox>
             </md:DialogHost>
-            
 
             <GroupBox Grid.Column="2" Header="Songs" Style="{DynamicResource OutlinedGroupBox}">
                 <ListView
