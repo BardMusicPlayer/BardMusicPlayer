@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="BardMusicPlayer.Ui.Views.PlaylistView"
+    x:Class="BardMusicPlayer.Ui.Views.Playlist.PlaylistView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
@@ -16,8 +16,9 @@
 
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:auto="clr-namespace:BardMusicPlayer.Ui.Controls.AutoGrid"
+    xmlns:playlist="clr-namespace:BardMusicPlayer.Ui.ViewModels.Playlist"
 
-    d:DataContext="{d:DesignInstance vm:PlaylistViewModel}">
+    d:DataContext="{d:DesignInstance playlist:PlaylistViewModel}">
     <UserControl.Resources>
         <u:TrackGroupKeyConverter x:Key="TrackGroupKeyConverter" />
         <CollectionViewSource x:Key="Songs" Source="{Binding SelectedPlaylist}">
@@ -106,7 +107,20 @@
             </Grid.ColumnDefinitions>
 
             <!--TODO: Playlist Selection-->
-            <GroupBox Grid.Column="0" Header="Playlist" Style="{DynamicResource OutlinedGroupBox}" />
+            <md:DialogHost Grid.Column="0" IsOpen="{Binding DialogIsOpen}">
+                <md:DialogHost.DialogContent>
+                    <ContentControl s:View.Model="{Binding Dialog}"/>
+                </md:DialogHost.DialogContent>
+                <GroupBox Header="Playlist" Style="{DynamicResource OutlinedGroupBox}">
+                    <GroupBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Create Playlist" Command="{s:Action ShowPlaylist}" />
+                            <MenuItem Header="Clear Playlist" Command="{s:Action ClearPlaylist}" />
+                        </ContextMenu>
+                    </GroupBox.ContextMenu>
+                </GroupBox>
+            </md:DialogHost>
+            
 
             <GroupBox Grid.Column="2" Header="Songs" Style="{DynamicResource OutlinedGroupBox}">
                 <ListView

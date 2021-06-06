@@ -1,4 +1,5 @@
 ﻿using BardMusicPlayer.Ui.Notifications;
+using BardMusicPlayer.Ui.ViewModels.Playlist;
 using BardMusicPlayer.Ui.ViewModels.SongEditor;
 using Stylet;
 using StyletIoC;
