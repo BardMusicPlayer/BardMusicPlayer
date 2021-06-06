@@ -1,23 +1,32 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Transmogrify.Song;
+using BardMusicPlayer.Ui.ViewModels.Dialogue;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Stylet;
+using StyletIoC;
 
-namespace BardMusicPlayer.Ui.ViewModels
+namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
     public class PlaylistViewModel : Screen
     {
+        private readonly IContainer _ioc;
         private BmpSong? _currentSong;
         private BindableCollection<IPlaylist> _playlists;
         private IPlaylist? _selectedPlaylist;
         private BmpSong? _selectedSong;
         private BindableCollection<BmpSong> _songs;
+        private bool _dialogIsOpen;
+        private DialogueViewModel _dialog;
 
-        public PlaylistViewModel()
+        public PlaylistViewModel(IContainer ioc)
         {
+            _ioc = ioc;
+
             var names = BmpCoffer.Instance.GetPlaylistNames();
             Playlists = new BindableCollection<IPlaylist>(names.Select(BmpCoffer.Instance.GetPlaylist));
         }
@@ -80,11 +89,30 @@ namespace BardMusicPlayer.Ui.ViewModels
             }
         }
 
-        public void RemoveSong() { }
+        public void ShowPlaylist()
+        {
+            Dialog       = new DialogueViewModel("Playlist name");
+            DialogIsOpen = true;
+        }
 
-        public void CreatePlaylist() { }
+        public void RemoveSong() {}
 
-        public void ClearPlaylist() { }
+        public bool DialogIsOpen
+        {
+            get => _dialogIsOpen;
+            set => SetAndNotify(ref _dialogIsOpen, value);
+        }
+
+        public DialogueViewModel Dialog
+        {
+            get => _dialog;
+            set => SetAndNotify(ref _dialog, value);
+        }
+
+        public void ClearPlaylist()
+        {
+            
+        }
 
         public void DeletePlaylist() { }
 
