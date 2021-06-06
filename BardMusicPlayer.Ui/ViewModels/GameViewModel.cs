@@ -11,8 +11,7 @@ namespace BardMusicPlayer.Ui.ViewModels
         IHandle<HomeWorldChanged>
     {
         private readonly IEventAggregator _events;
-        private string _homeWorld;
-        private string _playerName;
+
 
         public GameViewModel(IContainer ioc, Game game)
         {
@@ -24,17 +23,9 @@ namespace BardMusicPlayer.Ui.ViewModels
 
         public Game Game { get; }
 
-        public string HomeWorld
-        {
-            get => _homeWorld;
-            set => SetAndNotify(ref _homeWorld, value);
-        }
+        public string HomeWorld { get; set; }
 
-        public string PlayerName
-        {
-            get => _playerName;
-            set => SetAndNotify(ref _playerName, value);
-        }
+        public string PlayerName { get; set; }
 
         public void Dispose()
         {

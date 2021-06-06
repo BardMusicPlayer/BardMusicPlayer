@@ -9,21 +9,13 @@ namespace BardMusicPlayer.Ui.ViewModels
     {
         private readonly IEventAggregator _events;
         private BindableCollection<Game> _bards = new(BmpSeer.Instance.Games.Values);
-        private Game? _selectedBard;
+
 
         public BardViewModel(IEventAggregator events) { _events = events; }
 
-        public BindableCollection<Game> Bards
-        {
-            get => _bards;
-            private set => SetAndNotify(ref _bards, value);
-        }
+        public BindableCollection<Game> Bards { get; set; }
 
-        public Game? SelectedBard
-        {
-            get => _selectedBard;
-            set => SetAndNotify(ref _selectedBard, value);
-        }
+        public Game? SelectedBard { get; set; }
 
         public Instrument? InstrumentHeld
         {

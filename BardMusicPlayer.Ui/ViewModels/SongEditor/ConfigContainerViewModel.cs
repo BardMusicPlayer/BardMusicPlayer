@@ -32,11 +32,7 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
 
         public string Name { get; set; }
 
-        public uint Bards
-        {
-            get => _bards;
-            set => SetAndNotify(ref _bards, value);
-        }
+        public uint Bards { get; set; }
 
         public void AddBard() { Bards++; }
 

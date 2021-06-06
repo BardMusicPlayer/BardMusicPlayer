@@ -8,12 +8,11 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
 {
     public class SongEditorViewModel : Screen
     {
-        private BmpSong _currentSong;
-
         public SongEditorViewModel(BmpSong bmpSong)
         {
-            _currentSong = bmpSong;
-            TrackContainers = new(bmpSong.TrackContainers
+
+            CurrentSong = bmpSong;
+            TrackContainers = new BindableCollection<ConfigContainerViewModel>(bmpSong.TrackContainers
                 .SelectMany(container => container.Value.ConfigContainers)
                 .Select((t, i) => new ConfigContainerViewModel(t, $"Config {i}")));
         }
@@ -22,11 +21,7 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
 
         public BmpCoffer Playlist => BmpCoffer.Instance;
 
-        public BmpSong CurrentSong
-        {
-            get => _currentSong;
-            set => SetAndNotify(ref _currentSong, value);
-        }
+        public BmpSong CurrentSong { get; set; }
 
         // TODO: Save the song configuration
         public async Task Save() { }
