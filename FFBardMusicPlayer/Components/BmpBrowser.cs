@@ -241,7 +241,7 @@ namespace FFBardMusicPlayer.Components
             // this function is called so many times. since we're clearing the list each time,
             // the UI element is resetting it's selected index and forcing the selected item to always be 0
             // storing the previously selected index should be sufficient, for now
-            var previouslySelectedIndex = SelectedIndex;
+            var previouslySelectedItem = SelectedItem;
 
             if (!string.IsNullOrEmpty(FilenameFilter))
             {
@@ -315,12 +315,10 @@ namespace FFBardMusicPlayer.Components
             }
             else
             {
-                if (SelectedIndex == -1 && Items.Count > 0)
+                if (previouslySelectedItem is MidiFile previousMidi && Items.Count > 0)
                 {
-                    // don't allow this to pass the current index limits. this could change, say, when the user is using the search feature
-                    SelectedIndex = previouslySelectedIndex < Items.Count
-                        ? previouslySelectedIndex
-                        : Items.Count - 1;
+                    var previousItem = List.FirstOrDefault(song => song.FileName.FileName == previousMidi.FileName.FileName);
+                    SelectedItem = previousItem ?? List.First();
                 }
             }
         }
