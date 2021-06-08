@@ -53,6 +53,14 @@ namespace FFBardMusicPlayer.FFXIV
             { "Oem1", ";" }
         };
 
+		private static Dictionary<int, int> guitarKeyMap = new Dictionary<int, int> {
+           { 27, 135 }, // ElectricGuitarClean
+           { 28, 134 }, // ElectricGuitarMuted
+           { 29, 136 }, // ElectricGuitarOverdriven			
+           { 30, 139 }, // ElectricGuitarPowerChords
+           { 31, 140 }, // ElectricGuitarSpecial
+        };
+
         public class Keybind
         {
             public int MainKey1;
@@ -229,6 +237,18 @@ namespace FFBardMusicPlayer.FFXIV
 
             return null;
         }
+
+		public Keybind GetKeybindFromVoiceByte(int note)
+		{
+			FFXIVKeybindDat.Keybind _keybind = new FFXIVKeybindDat.Keybind();
+			int key = guitarKeyMap[note];
+			if (key != 0)
+			{
+				_keybind.MainKey1 = key;
+				return _keybind;
+            }
+			return null;
+		}
 
         public Keybind GetKeybindFromNoteKey(string nk)
         {

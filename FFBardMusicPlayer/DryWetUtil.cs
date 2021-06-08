@@ -110,8 +110,10 @@ namespace FFBardMusicPlayer
                 foreach (var trackChunk in midiFile.GetTrackChunks())
                 {
                     allTracks.AddObjects(trackChunk.GetNotes());
+                    allTracks.AddObjects(trackChunk.GetTimedEvents());
                     var thisTrack = new TrackChunk(new SequenceTrackNameEvent(trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text));
                     thisTrack.AddObjects(trackChunk.GetNotes());
+                    thisTrack.AddObjects(trackChunk.GetTimedEvents());
                     originalTrackChunks.Add(thisTrack);
                 }
                 originalTrackChunks.Add(allTracks);
@@ -275,6 +277,20 @@ namespace FFBardMusicPlayer
                     }
 
                     newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    //Create Progchange Event
+                    foreach (var timedEvent in originalChunk.GetTimedEvents())
+                    {
+                        var programChangeEvent = timedEvent.Event as ProgramChangeEvent;
+                        if (programChangeEvent == null)
+                            continue;
+
+                        var channel = programChangeEvent.Channel;
+                        using (var manager = new TimedEventsManager(newChunk.Events))
+                        {
+                            TimedEventsCollection timedEvents = manager.Events;
+                            timedEvents.Add(new TimedEvent(new ProgramChangeEvent(programChangeEvent.ProgramNumber), 5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote/* Absolute time too */));
+                        }
+                    }
                     newChunk.AddObjects(fixedNotes);
                     fixedNotes = null;
 
@@ -308,12 +324,24 @@ namespace FFBardMusicPlayer
                             note.Time = newStart;
                         }
                     }
+                    using (var manager = chunk.ManageTimedEvents())
+                    {
+                        foreach (TimedEvent _event in manager.Events)
+                        {
+                            var programChangeEvent = _event.Event as ProgramChangeEvent;
+                            if (programChangeEvent == null)
+                                continue;
+
+                            long newStart = _event.Time - delta;
+                            _event.Time = newStart;
+                        }
+                    }
                 }
 
                 var stream = new MemoryStream();
                 
                 using (var manager = new TimedEventsManager(newMidiFile.GetTrackChunks().First().Events))
-                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
+                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000)));
 
                 newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
                 stream.Flush();

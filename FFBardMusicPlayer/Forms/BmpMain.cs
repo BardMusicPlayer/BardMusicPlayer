@@ -226,6 +226,7 @@ namespace FFBardMusicPlayer.Forms
 
             Player.OnMidiNote  += OnMidiVoice;
             Player.OffMidiNote += OffMidiVoice;
+            Player.ProgChangeMidi += ChangeMidiVoice;
 
             Player.Player.OpenInputDevice(Settings.GetMidiInput().Name);
 
@@ -258,6 +259,20 @@ namespace FFBardMusicPlayer.Forms
                     }
 
                     t.UpdatePerformance();
+                });
+            };
+
+            Settings.OnGuitarKeybind += delegate (object o, int key)
+            {
+                this.Invoke(t => {
+                    if (!FFXIV.Memory.ChatInputOpen)
+                    {
+                        if (FFXIV.Hotkeys.GetKeybindFromVoiceByte(key) is FFXIVKeybindDat.Keybind keybind)
+                        {
+                            FFXIV.Hook.SendKeybindDown(keybind);
+                            FFXIV.Hook.SendKeybindUp(keybind);
+                        }
+                    }
                 });
             };
 
@@ -886,6 +901,30 @@ namespace FFBardMusicPlayer.Forms
                         FFXIV.Hook.SendKeybindUp(keybind);
                     }
                 }
+            }
+        }
+
+		private void ChangeMidiVoice(Object o, ProgChangeEvent progdata)
+		{
+			if (LocalOrchestra.OrchestraEnabled)
+				return;
+
+			if (Player.Status == PlayerStatus.Conducting)
+				return;
+
+			if (!FFXIV.IsPerformanceReady())
+				return;
+
+			if (progdata.track != null)
+				if (progdata.track != Player.Player.LoadedTrack)
+					return;
+			
+			if (!FFXIV.Memory.ChatInputOpen)
+			{
+				if (FFXIV.Hotkeys.GetKeybindFromVoiceByte(progdata.voice) is FFXIVKeybindDat.Keybind keybind)
+				{
+					FFXIV.Hook.SendSyncKeybind(keybind);
+				}
             }
         }
 
