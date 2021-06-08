@@ -10,10 +10,9 @@ namespace BardMusicPlayer.Ui.ViewModels
         private readonly IEventAggregator _events;
         private BindableCollection<Game> _bards = new(BmpSeer.Instance.Games.Values);
 
-
         public BardViewModel(IEventAggregator events) { _events = events; }
 
-        public BindableCollection<Game> Bards { get; set; }
+        public BindableCollection<Game> Bards { get { return _bards; } }
 
         public Game? SelectedBard { get; set; }
 
@@ -54,16 +53,16 @@ namespace BardMusicPlayer.Ui.ViewModels
         private void OnInstanceOnGameStopped(GameStopped g)
         {
             if (g.Game is not null)
-                Bards.Remove(g.Game);
+                _bards.Remove(g.Game);
             else
-                Bards = new BindableCollection<Game>(BmpSeer.Instance.Games.Values);
+                _bards = new BindableCollection<Game>(BmpSeer.Instance.Games.Values);
         }
 
         private void EnsureGameExists(Game game)
         {
-            if (!Bards.Contains(game))
+            if (!_bards.Contains(game))
             {
-                Bards.Add(game);
+                _bards.Add(game);
                 SelectedBard ??= game;
             }
         }
