@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Transmogrify.Song;
+using BardMusicPlayer.Ui.Notifications;
 using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.ViewModels.Dialogue;
 using Microsoft.Win32;
@@ -12,7 +13,8 @@ using StyletIoC;
 
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
-    public class PlaylistViewModel : Screen
+    public class PlaylistViewModel : Screen,
+        IHandle<SelectPlaylistNotification>
     {
         private readonly IContainer _ioc;
 
@@ -22,7 +24,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
             var names = BmpCoffer.Instance.GetPlaylistNames();
             Playlists = names.Select(BmpCoffer.Instance.GetPlaylist)
-                .Select(playlist => new BmpPlaylistViewModel(playlist, this))
+                .Select(playlist => new BmpPlaylistViewModel(ioc, playlist))
                 .ToBindableCollection();
 
             Songs = new BindableCollection<BmpSongViewModel>();
@@ -49,6 +51,8 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         public DialogueViewModel Dialog { get; set; }
 
         public IPlaylist? SelectedPlaylist { get; set; }
+
+        public void Handle(SelectPlaylistNotification message) { SelectPlaylist(message.Playlist); }
 
         public void ChangeSong() { Console.WriteLine(SelectedSong.Title); }
 
@@ -111,7 +115,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 name += " (1)";
 
             SelectedPlaylist = BmpCoffer.Instance.CreatePlaylist(name);
-            Playlists.Add(new BmpPlaylistViewModel(SelectedPlaylist, this));
+            Playlists.Add(new BmpPlaylistViewModel(_ioc, SelectedPlaylist!));
             BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
         }
 
