@@ -154,7 +154,7 @@
             <auto:StackPanel Orientation="Horizontal" MarginBetweenChildren="6">
                 <Button Style="{DynamicResource MaterialDesignRaisedButton}" Command="{s:Action LoadSong}">Load Song</Button>
                 <Button>Queue Instruments</Button>
-                <Button>Play</Button>
+                <Button Command="{s:Action PlaySong}">Play</Button>
                 <Button>Pause</Button>
                 <Button>Stop</Button>
             </auto:StackPanel>

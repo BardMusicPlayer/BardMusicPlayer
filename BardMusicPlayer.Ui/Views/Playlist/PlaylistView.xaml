@@ -123,11 +123,11 @@
                     <ItemsControl ItemsSource="{Binding Playlists}" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type playlist:BmpPlaylistViewModel}">
-                                <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0">
-                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center"/>
+                                <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0" s:View.ActionTarget="{Binding}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}">
+                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center" Foreground="{Binding ActiveColor}" />
                                     <TextBox
-                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}" LostFocus="{s:Action SetReadOnly}"
-                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}"
+                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}" LostFocus="{s:Action SetReadOnly}" IsEnabled="{Binding IsEnabled}" 
+                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
                                         BorderThickness="0" />
                                     <md:PackIcon Kind="Play" />
                                 </auto:AutoGrid>
