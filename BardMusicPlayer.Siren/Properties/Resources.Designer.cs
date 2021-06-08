@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace BardMusicPlayer.Siren.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -113,6 +116,56 @@ namespace BardMusicPlayer.Siren.Properties {
         internal static byte[] vst_doublebass {
             get {
                 object obj = ResourceManager.GetObject("vst_doublebass", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] vst_electricguitarclean {
+            get {
+                object obj = ResourceManager.GetObject("vst_electricguitarclean", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] vst_electricguitarmuted {
+            get {
+                object obj = ResourceManager.GetObject("vst_electricguitarmuted", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] vst_electricguitaroverdriven {
+            get {
+                object obj = ResourceManager.GetObject("vst_electricguitaroverdriven", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] vst_electricguitarpowerchords {
+            get {
+                object obj = ResourceManager.GetObject("vst_electricguitarpowerchords", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] vst_electricguitarspecial {
+            get {
+                object obj = ResourceManager.GetObject("vst_electricguitarspecial", resourceCulture);
                 return ((byte[])(obj));
             }
         }

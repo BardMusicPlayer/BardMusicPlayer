@@ -52,14 +52,14 @@ namespace BardMusicPlayer.Quotidian.Structs
         public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
 
 
-        public static readonly Instrument Clean = new("Clean", 24, 28, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly Instrument Distorted = new("Distorted", 25, 31, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly Instrument Pick = new("Pick", 26, 27, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly Instrument Slide = new("Slide", 27, 32, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly Instrument Mute = new("Mute", 28, 29, OctaveRange.C3toC6, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly IReadOnlyList<Instrument> Guitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { Clean, Distorted, Pick, Slide, Mute });
+        public static readonly Instrument ElectricGuitarOverdriven = new("Electric Guitar: Overdriven", 24, 29, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument ElectricGuitarClean = new("Electric Guitar: Clean", 25, 27, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument ElectricGuitarMuted = new("Electric Guitar: Muted", 26, 28, OctaveRange.C2toC5, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument ElectricGuitarPowerChords = new("Electric Guitar: Power Chords", 27, 30, OctaveRange.C1toC4, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument ElectricGuitarSpecial = new("Electric Guitar: Special", 28, 31, OctaveRange.C3toC6, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly IReadOnlyList<Instrument> ElectricGuitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { ElectricGuitarOverdriven, ElectricGuitarClean, ElectricGuitarMuted, ElectricGuitarPowerChords, ElectricGuitarSpecial });
 
-        public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(Guitar).ToList());
+        public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(ElectricGuitar).ToList());
 
         /// <summary>
         /// Gets the name.

@@ -22,9 +22,9 @@ namespace BardMusicPlayer.Quotidian.Structs
         public static readonly InstrumentTone Drums = new("Drums", 3,  Instrument.Timpani, Instrument.Bongo, Instrument.BassDrum, Instrument.SnareDrum, Instrument.Cymbal);
         public static readonly InstrumentTone Brass = new("Brass", 4,  Instrument.Trumpet, Instrument.Trombone, Instrument.Tuba, Instrument.Horn, Instrument.Saxophone);
         public static readonly InstrumentTone Strings = new("Strings", 5, Instrument.Violin, Instrument.Viola, Instrument.Cello, Instrument.DoubleBass,Instrument.None);
-        public static readonly InstrumentTone Guitar = new("Guitar", 6,  Instrument.Clean, Instrument.Distorted, Instrument.Pick, Instrument.Slide, Instrument.Mute);
+        public static readonly InstrumentTone ElectricGuitar = new("ElectricGuitar", 6,  Instrument.ElectricGuitarOverdriven, Instrument.ElectricGuitarClean, Instrument.ElectricGuitarMuted, Instrument.ElectricGuitarPowerChords, Instrument.ElectricGuitarSpecial);
 
-        public static readonly IReadOnlyList<InstrumentTone> All = new ReadOnlyCollection<InstrumentTone>(new List<InstrumentTone> { Strummed, Wind, Drums, Brass, Strings, Guitar });
+        public static readonly IReadOnlyList<InstrumentTone> All = new ReadOnlyCollection<InstrumentTone>(new List<InstrumentTone> { Strummed, Wind, Drums, Brass, Strings, ElectricGuitar });
 
         /// <summary>
         /// Gets the name.

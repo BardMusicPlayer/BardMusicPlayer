@@ -136,6 +136,21 @@
   <data name="vst_doublebass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\vst_doublebass.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="vst_electricguitarclean" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vst_electricguitarclean.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="vst_electricguitarmuted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vst_electricguitarmuted.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="vst_electricguitaroverdriven" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vst_electricguitaroverdriven.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="vst_electricguitarpowerchords" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vst_electricguitarpowerchords.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="vst_electricguitarspecial" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\vst_electricguitarspecial.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="vst_fiddle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\vst_fiddle.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
