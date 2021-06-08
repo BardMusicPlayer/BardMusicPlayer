@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using Stylet;
 using StyletIoC;
 
+
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
     public class PlaylistViewModel : Screen
@@ -22,7 +23,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
             var names = BmpCoffer.Instance.GetPlaylistNames();
             Playlists = names.Select(BmpCoffer.Instance.GetPlaylist)
-                .Select(playlist => new BmpPlaylistViewModel(playlist))
+                .Select(playlist => new BmpPlaylistViewModel(playlist, this))
                 .ToBindableCollection();
         }
 
@@ -42,7 +43,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public void ChangeSong() { }
 
-        public async Task AddSong()
+        public async Task AddSong(bool to_playlist = true)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -59,6 +60,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 {
                     var bmpSong = await BmpSong.OpenMidiFile(openFileDialog.FileName);
                     BmpCoffer.Instance.SaveSong(bmpSong);
+
                 }
                 catch (Exception e)
                 {
@@ -83,16 +85,41 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             else
                 name += " (1)";
 
-            var playlist = BmpCoffer.Instance.CreatePlaylist(name);
-            Playlists.Add(new BmpPlaylistViewModel(playlist));
-            BmpCoffer.Instance.SavePlaylist(playlist);
+            SelectedPlaylist = BmpCoffer.Instance.CreatePlaylist(name);
+            Playlists.Add(new BmpPlaylistViewModel(SelectedPlaylist, this));
+            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
+        }
+
+        public void SelectPlaylist(BmpPlaylistViewModel mdl)
+        {
+            foreach (BmpPlaylistViewModel idx in Playlists)
+            {
+                idx.IsActivePlaylist = false;
+            }
+            SelectedPlaylist = mdl.GetPlaylist();
+            mdl.IsActivePlaylist = true;
         }
 
         public void RemoveSong() { }
 
         public void ClearPlaylist() { }
 
-        public void DeletePlaylist() { }
+        public void DeletePlaylist()
+        {
+            if (SelectedPlaylist == null)
+                return;
+
+            BmpCoffer.Instance.DeletePlaylist(SelectedPlaylist);
+            SelectedPlaylist = null;
+            foreach (BmpPlaylistViewModel idx in Playlists)
+            {
+                if (idx.IsActivePlaylist)
+                {
+                    Playlists.Remove(idx);
+                    return;
+                }
+            }
+        }
 
         public void LoadPlaylist(IPlaylist playlist) { }
     }

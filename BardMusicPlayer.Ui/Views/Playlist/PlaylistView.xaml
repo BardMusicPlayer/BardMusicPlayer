@@ -93,6 +93,7 @@
             </TextBlock>
 
             <auto:StackPanel Grid.Column="2" Orientation="Horizontal" MarginBetweenChildren="6">
+                <Button Command="{s:Action CreatePlaylist}" Content="New" />
                 <Button Command="{s:Action RemoveTrack}" Content="Remove" />
                 <Button Command="{s:Action ClearPlaylist}" Content="Clear Playlist" />
             </auto:StackPanel>
@@ -115,17 +116,18 @@
                         <ContextMenu>
                             <MenuItem Header="Create Playlist" Command="{s:Action CreatePlaylist}" />
                             <MenuItem Header="Clear Playlist" Command="{s:Action ClearPlaylist}" />
+                            <MenuItem Header="Delete Playlist" Command="{s:Action DeletePlaylist}" />
                         </ContextMenu>
                     </GroupBox.ContextMenu>
 
-                    <ItemsControl ItemsSource="{Binding Playlists}">
+                    <ItemsControl ItemsSource="{Binding Playlists}" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type playlist:BmpPlaylistViewModel}">
                                 <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0">
-                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center" />
+                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center"/>
                                     <TextBox
-                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}"
-                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
+                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}" LostFocus="{s:Action SetReadOnly}"
+                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}"
                                         BorderThickness="0" />
                                     <md:PackIcon Kind="Play" />
                                 </auto:AutoGrid>
