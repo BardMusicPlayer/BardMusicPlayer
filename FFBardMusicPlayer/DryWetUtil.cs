@@ -284,6 +284,10 @@ namespace FFBardMusicPlayer
                         if (programChangeEvent == null)
                             continue;
 
+                        //Skip all except guitar | remove if we need this for other instruments
+                        if ((programChangeEvent.ProgramNumber < 27) || (programChangeEvent.ProgramNumber > 31))
+                            continue;
+
                         var channel = programChangeEvent.Channel;
                         using (var manager = new TimedEventsManager(newChunk.Events))
                         {
@@ -333,7 +337,10 @@ namespace FFBardMusicPlayer
                                 continue;
 
                             long newStart = _event.Time - delta;
-                            _event.Time = newStart;
+                            if (newStart < -1) //remove negative time events
+                                manager.Events.Remove(_event);
+                            else
+                                _event.Time = newStart;
                         }
                     }
                 }
