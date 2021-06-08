@@ -56,7 +56,7 @@
                     Margin="12,6,0,0"
 
                     Text="{Binding Title, Mode=OneTime}"
-                    Style="{DynamicResource MaterialDesignHeadline4TextBlock}" />
+                    Style="{DynamicResource MaterialDesignHeadline7TextBlock}" />
 
                 <ItemsControl Grid.Column="1" Grid.Row="1"
                               ItemsSource="{Binding Tags}">
@@ -139,7 +139,7 @@
 
             <GroupBox Grid.Column="2" Header="Songs" Style="{DynamicResource OutlinedGroupBox}">
                 <ListView
-                    ItemsSource="{Binding Source={StaticResource Songs}}"
+                    ItemsSource="{Binding Songs}"
                     ItemTemplate="{StaticResource ListViewTemplate}"
                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                     VirtualizingPanel.VirtualizationMode="Recycling"
@@ -150,9 +150,9 @@
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
-                                <DataTemplate DataType="CollectionViewGroup">
+                                <DataTemplate DataType="{x:Type playlist:BmpSongViewModel}">
                                     <TextBlock
-                                        Text="{Binding Name, Mode=OneTime}"
+                                        Text="{Binding Title, Mode=OneTime}"
                                         Style="{DynamicResource TitleTextBlockStyle}" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
