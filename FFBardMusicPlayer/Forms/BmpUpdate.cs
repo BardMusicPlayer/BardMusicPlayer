@@ -151,7 +151,7 @@ namespace FFBardMusicPlayer.Forms
 #if DEBUG
         public string AppVersion { get; set; } = "Beta";
 #else
-		public string appVersion { get; set; } = string.Empty;
+		public string AppVersion { get; set; } = string.Empty;
 #endif
         public string CreatorName { get; set; } = string.Empty;
 

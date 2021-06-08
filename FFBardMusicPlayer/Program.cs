@@ -14,7 +14,7 @@ namespace FFBardMusicPlayer
 #if DEBUG
         public static string AppBase = Application.StartupPath;
 #else
-        public static string appBase = Application.CommonAppDataPath;
+        public static string AppBase = Application.CommonAppDataPath;
 #endif
 
         [DllImport("kernel32.dll")]
