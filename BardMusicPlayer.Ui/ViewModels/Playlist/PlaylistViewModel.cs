@@ -43,6 +43,10 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public void ChangeSong() { }
 
+        /// <summary>
+        /// This opens a song or adds it to the current playlist
+        /// </summary>
+        /// <param name="to_playlist"></param>
         public async Task AddSong(bool to_playlist = true)
         {
             var openFileDialog = new OpenFileDialog
@@ -59,7 +63,12 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 try
                 {
                     var bmpSong = await BmpSong.OpenMidiFile(openFileDialog.FileName);
-                    BmpCoffer.Instance.SaveSong(bmpSong);
+                    CurrentSong = bmpSong;
+                    if (to_playlist)
+                    {
+                        BmpCoffer.Instance.SaveSong(bmpSong);
+                        //TODO: Add to playlist
+                    }
 
                 }
                 catch (Exception e)
