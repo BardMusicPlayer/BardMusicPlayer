@@ -46,7 +46,6 @@ namespace FFBardMusicPlayer.Controls
 
         public EventHandler<bool> OnForcedOpen;
         public EventHandler OnKeyboardTest;
-        public EventHandler<int> OnGuitarKeybind;
         public EventHandler<MidiInput> OnMidiInputChange;
         private readonly List<MidiInput> midiInputs = new List<MidiInput>();
 
@@ -200,27 +199,6 @@ namespace FFBardMusicPlayer.Controls
         {
             Properties.Settings.Default.Verbose = verboseToggle.Checked;
             Properties.Settings.Default.Save();
-        }
-
-        private void g_Overdriven_Click(object sender, EventArgs e)
-        {
-            OnGuitarKeybind?.Invoke(this, 29);
-        }
-        private void g_Clean_Click(object sender, EventArgs e)
-        {
-            OnGuitarKeybind?.Invoke(this, 27);
-        }
-        private void g_Muted_Click(object sender, EventArgs e)
-        {
-            OnGuitarKeybind?.Invoke(this, 28);
-        }
-        private void g_PowerChords_Click(object sender, EventArgs e)
-        {
-            OnGuitarKeybind?.Invoke(this, 30);
-        }
-        private void g_Special_Click(object sender, EventArgs e)
-        {
-            OnGuitarKeybind?.Invoke(this, 31);
         }
     }
     public class MidiInput

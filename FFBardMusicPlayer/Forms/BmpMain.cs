@@ -262,20 +262,6 @@ namespace FFBardMusicPlayer.Forms
                 });
             };
 
-            Settings.OnGuitarKeybind += delegate (object o, int key)
-            {
-                this.Invoke(t => {
-                    if (!FFXIV.Memory.ChatInputOpen)
-                    {
-                        if (FFXIV.Hotkeys.GetKeybindFromVoiceByte(key) is FFXIVKeybindDat.Keybind keybind)
-                        {
-                            FFXIV.Hook.SendKeybindDown(keybind);
-                            FFXIV.Hook.SendKeybindUp(keybind);
-                        }
-                    }
-                });
-            };
-
             Explorer.OnBrowserVisibleChange += delegate(object o, bool visible)
             {
                 MainTable.SuspendLayout();
@@ -920,8 +906,28 @@ namespace FFBardMusicPlayer.Forms
 					return;
 			
 			if (!FFXIV.Memory.ChatInputOpen)
-			{
-				if (FFXIV.Hotkeys.GetKeybindFromVoiceByte(progdata.voice) is FFXIVKeybindDat.Keybind keybind)
+            {
+                int tone = -1;
+                switch (progdata.voice)
+                {
+                    case 29: // overdriven guitar
+                        tone = 0;
+                        break;
+                    case 27: // clean guitar
+                        tone = 1;
+                        break;
+                    case 28: // muted guitar
+                        tone = 2;
+                        break;
+                    case 30: // power chords
+                        tone = 3;
+                        break;
+                    case 31: // special guitar
+                        tone = 4;
+                        break;
+                }
+
+				if (tone > -1 && tone < 5 && FFXIV.Hotkeys.GetKeybindFromToneKey(tone) is FFXIVKeybindDat.Keybind keybind)
 				{
 					FFXIV.Hook.SendSyncKeybind(keybind);
 				}
