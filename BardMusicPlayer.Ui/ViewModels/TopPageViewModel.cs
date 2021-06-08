@@ -34,7 +34,7 @@ namespace BardMusicPlayer.Ui.ViewModels
         {
             if (Playlist.CurrentSong is not null)
             {
-                var songEditor = new SongEditorViewModel(Playlist.CurrentSong);
+                var songEditor = new SongEditorViewModel(Playlist.CurrentSong.BmpSong);
                 _events.Publish(new NavigateToNotification(songEditor));
             }
         }
