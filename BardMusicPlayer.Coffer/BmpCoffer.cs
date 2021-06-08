@@ -293,6 +293,7 @@ namespace BardMusicPlayer.Coffer
                 if (song.Id == null)
                 {
                     song.Id = ObjectId.NewObjectId();
+                    //TODO: Fix this to get a real unique idendifier
                     var results = songCol.Find(x => x.Title.Equals(song.Title));
                     if (results.Count() > 0)
                     {
@@ -333,6 +334,33 @@ namespace BardMusicPlayer.Coffer
                 }
                 else
                     playlists.Update(dbList);
+            }
+            catch (LiteException e)
+            {
+                throw new BmpCofferException(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// This deletes a playlist. TODO: Make sure all data is erased
+        /// </summary>
+        /// <param name="songList"></param>
+        /// <exception cref="BmpCofferException">This is thrown if a name conflict occurs on save.</exception>
+        public void DeletePlaylist(IPlaylist songList)
+        {
+            if (songList.GetType() != typeof(BmpPlaylistDecorator))
+                throw new Exception("Unsupported implementation of IPlaylist");
+
+            var playlists = GetPlaylistCollection();
+
+            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
+
+            try
+            {
+                if (dbList.Id != null)
+                {
+                    playlists.Delete(dbList.Id);
+                }
             }
             catch (LiteException e)
             {
