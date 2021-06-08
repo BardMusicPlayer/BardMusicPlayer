@@ -10,8 +10,6 @@ using Microsoft.Win32;
 using Stylet;
 using StyletIoC;
 
-using System.Windows.Controls;
-
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
     public class PlaylistViewModel : Screen
@@ -27,17 +25,14 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 .Select(playlist => new BmpPlaylistViewModel(playlist, this))
                 .ToBindableCollection();
 
-
             Songs = new BindableCollection<BmpSong>();
             var titles = BmpCoffer.Instance.GetSongTitles();
-            foreach(var s in titles)
+            foreach (var s in titles)
             {
-                BmpSong song  = BmpCoffer.Instance.GetSong(s);
+                BmpSong song = BmpCoffer.Instance.GetSong(s);
                 Songs.Add(song);
                 SelectedSong = song;
             }
-
-
         }
 
         public BindableCollection<BmpPlaylistViewModel> Playlists { get; set; }
@@ -54,13 +49,10 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public IPlaylist? SelectedPlaylist { get; set; }
 
-        public void ChangeSong()
-        {
-            Console.WriteLine(SelectedSong.Title);
-        }
+        public void ChangeSong() { Console.WriteLine(SelectedSong.Title); }
 
         /// <summary>
-        /// This opens a song or adds it to the current playlist
+        ///     This opens a song or adds it to the current playlist
         /// </summary>
         /// <param name="onthefly"></param>
         public async Task AddSong(bool onthefly = true)
@@ -91,7 +83,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                             BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
                         }
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -127,7 +118,8 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             {
                 idx.IsActivePlaylist = false;
             }
-            SelectedPlaylist = mdl.GetPlaylist();
+
+            SelectedPlaylist     = mdl.GetPlaylist();
             mdl.IsActivePlaylist = true;
         }
 
@@ -139,7 +131,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 return;
             }
 
-            int idx = 0;
+            var idx = 0;
             foreach (var item in SelectedPlaylist.ToList())
             {
                 if (item.Id.Equals(SelectedSong.Id))
@@ -148,8 +140,10 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                     Songs.Remove(SelectedSong);
                     break;
                 }
+
                 idx++;
             }
+
             BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
         }
 
@@ -158,12 +152,10 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             if (SelectedPlaylist == null)
                 return;
 
-            var templist = SelectedPlaylist;
-            for (int item = 0; item < templist.Count(); item++ )
-                templist.Remove(0);
+            for (var i = 0; i < SelectedPlaylist.Count(); i++) SelectedPlaylist.Remove(0);
+            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
+
             Songs.Clear();
-            BmpCoffer.Instance.SavePlaylist(templist);
-            SelectedPlaylist = templist;
         }
 
         public void DeletePlaylist()
@@ -187,9 +179,11 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         {
             Songs.Clear();
             foreach (var s in playlist)
+            {
                 Songs.Add(s);
+            }
 
-            if(Songs.Count > 0)
+            if (Songs.Count > 0)
                 SelectedSong = Songs.First();
         }
     }

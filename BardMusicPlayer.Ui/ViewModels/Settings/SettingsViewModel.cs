@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Settings
             Advanced = ioc.Get<AdvancedPageViewModel>();
             General  = ioc.Get<GeneralPageViewModel>();
 
-            Pages = new Dictionary<IScreen, string>()
+            Pages = new Dictionary<IScreen, string>
             {
                 [General]  = "General",
                 [About]    = "About",

@@ -1,7 +1,6 @@
-﻿using BardMusicPlayer.Coffer;
+﻿using System.Windows.Input;
+using BardMusicPlayer.Coffer;
 using Stylet;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
@@ -10,21 +9,18 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         private readonly IPlaylist _bmpPlaylist;
         private readonly PlaylistViewModel _playlistview;
         private bool _isActivePlaylist;
+
         public BmpPlaylistViewModel(IPlaylist bmpPlaylist, PlaylistViewModel parent)
         {
-            _bmpPlaylist = bmpPlaylist;
-            _playlistview = parent;
-            Name = _bmpPlaylist.GetName();
+            _bmpPlaylist     = bmpPlaylist;
+            _playlistview    = parent;
+            Name             = _bmpPlaylist.GetName();
             IsActivePlaylist = false;
         }
 
-        public bool IsReadOnly { get; set; } = false;
-
-        public bool IsEnabled { get; set; } = false;
-
         public bool IsActivePlaylist
         {
-            get { return _isActivePlaylist; }
+            get => _isActivePlaylist;
             set
             {
                 _isActivePlaylist = value;
@@ -35,11 +31,15 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             }
         }
 
+        public bool IsEnabled { get; set; }
+
+        public bool IsReadOnly { get; set; }
+
         public string ActiveColor { get; set; } = "White";
 
-        public IPlaylist GetPlaylist() { return _bmpPlaylist; }
-
         public string Name { get; set; }
+
+        public IPlaylist GetPlaylist() => _bmpPlaylist;
 
         public void OnNameChanged()
         {
@@ -48,28 +48,33 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             IsReadOnly = true;
         }
 
-        public void RenamePlaylist() { IsReadOnly = false; IsEnabled = true; }
+        public void RenamePlaylist()
+        {
+            IsReadOnly = false;
+            IsEnabled  = true;
+        }
 
-        public void SetReadOnly() { IsReadOnly = true; IsEnabled = false; }
+        public void SetReadOnly()
+        {
+            IsReadOnly = true;
+            IsEnabled  = false;
+        }
 
         public void SelectPlaylist(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
-                IsEnabled = true;
+                IsEnabled  = true;
                 IsReadOnly = false;
             }
 
             if (IsActivePlaylist)
                 return;
+
             IsActivePlaylist = true;
             _playlistview.SelectPlaylist(this);
         }
 
-        public void LoadPlaylist()
-        {
-            _playlistview.LoadPlaylist(_bmpPlaylist);
-        }
-
+        public void LoadPlaylist() { _playlistview.LoadPlaylist(_bmpPlaylist); }
     }
 }
