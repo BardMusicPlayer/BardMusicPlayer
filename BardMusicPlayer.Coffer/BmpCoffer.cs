@@ -63,16 +63,6 @@ namespace BardMusicPlayer.Coffer
             mapper.RegisterType
             (
                 group => group.Index,
-                bson => AutoToneInstrumentGroup.Parse(bson.AsInt32)
-            );
-            mapper.RegisterType
-            (
-                group => group.Index,
-                bson => AutoToneOctaveRange.Parse(bson.AsInt32)
-            );
-            mapper.RegisterType
-            (
-                group => group.Index,
                 bson => Instrument.Parse(bson.AsInt32)
             );
             mapper.RegisterType
