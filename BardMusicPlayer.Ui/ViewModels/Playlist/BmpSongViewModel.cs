@@ -17,7 +17,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             Title = _bmpSong.Title;
         }
 
-
         public string Title { get; set; }
 
     }

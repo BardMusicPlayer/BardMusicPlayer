@@ -93,8 +93,8 @@
             </TextBlock>
 
             <auto:StackPanel Grid.Column="2" Orientation="Horizontal" MarginBetweenChildren="6">
-                <Button Command="{s:Action CreatePlaylist}" Content="New" />
-                <Button Command="{s:Action RemoveTrack}" Content="Remove" />
+                <Button Command="{s:Action CreatePlaylist}" Content="New Playlist" />
+                <Button Command="{s:Action RemoveSong}" Content="Remove" />
                 <Button Command="{s:Action ClearPlaylist}" Content="Clear Playlist" />
             </auto:StackPanel>
         </Grid>
@@ -129,7 +129,7 @@
                                         Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}" LostFocus="{s:Action SetReadOnly}" IsEnabled="{Binding IsEnabled}" 
                                         s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
                                         BorderThickness="0" />
-                                    <md:PackIcon Kind="Play" />
+                                    <md:PackIcon Kind="Play" MouseDoubleClick="{s:Action LoadPlaylist}"/>
                                 </auto:AutoGrid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -150,9 +150,9 @@
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
-                                <DataTemplate DataType="{x:Type playlist:BmpSongViewModel}">
+                                <DataTemplate DataType="CollectionViewGroup">
                                     <TextBlock
-                                        Text="{Binding Title, Mode=OneTime}"
+                                        Text="{Binding Name, Mode=OneTime}"
                                         Style="{DynamicResource TitleTextBlockStyle}" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
