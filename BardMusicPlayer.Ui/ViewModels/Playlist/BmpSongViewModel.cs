@@ -1,20 +1,27 @@
-﻿using BardMusicPlayer.Transmogrify.Song;
+﻿using System.Collections.Generic;
+using BardMusicPlayer.Transmogrify.Song;
 using Stylet;
+using StyletIoC;
 
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
     public class BmpSongViewModel : Screen
     {
-        private readonly BmpSong _bmpSong;
-        private readonly PlaylistViewModel _playlistview;
+        private readonly IContainer _ioc;
 
-        public BmpSongViewModel(BmpSong bmpsong, PlaylistViewModel parent)
+        public BmpSongViewModel(IContainer ioc, BmpSong song)
         {
-            _bmpSong      = bmpsong;
-            _playlistview = parent;
-            Title         = _bmpSong.Title;
+            _ioc    = ioc;
+            BmpSong = song;
         }
 
-        public string Title { get; set; }
+        public BmpSong BmpSong { get; set; }
+
+        public List<string> Tags => BmpSong.Tags;
+
+        public string Title => BmpSong.Title;
+
+        // TODO: Let the user change the tags of the song in here
+        public void EditTags() { }
     }
 }
