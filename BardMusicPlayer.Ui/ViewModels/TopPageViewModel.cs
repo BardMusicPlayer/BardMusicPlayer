@@ -24,7 +24,7 @@ namespace BardMusicPlayer.Ui.ViewModels
 
         public void LoadSong()
         {
-            Playlist.AddSong(false);
+            Playlist.AddSong(true);
         }
 
         public void OpenPlaylist()

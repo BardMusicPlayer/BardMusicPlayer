@@ -48,7 +48,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             IsReadOnly = true;
         }
 
-        public void RenamePlaylist() { IsReadOnly = false; IsEnabled = false; }
+        public void RenamePlaylist() { IsReadOnly = false; IsEnabled = true; }
 
         public void SetReadOnly() { IsReadOnly = true; IsEnabled = false; }
 
