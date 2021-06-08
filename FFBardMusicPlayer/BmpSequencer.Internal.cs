@@ -1,358 +1,365 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using Sanford.Multimedia.Midi;
 
-namespace FFBardMusicPlayer {
-	public class BmpCustomSequencer : IComponent {
-		private Sequence sequence = null;
-
-		private List<IEnumerator<int>> enumerators = new List<IEnumerator<int>>();
-
-		private MessageDispatcher dispatcher = new MessageDispatcher();
-
-		private ChannelChaser chaser = new ChannelChaser();
-
-		private ChannelStopper stopper = new ChannelStopper();
-
-		private MidiInternalClock clock = new MidiInternalClock();
-
-		private int tracksPlayingCount;
-
-		private readonly object lockObject = new object();
-
-		private bool playing = false;
-		public bool IsPlaying {
-			get {
-				return playing;
-			}
-		}
-
-		public MidiInternalClock InternalClock {
-			get {
-				return clock;
-			}
-		}
-
-		private bool disposed = false;
-
-		private ISite site = null;
-
-		#region Events
-
-		public event EventHandler PlayStatusChange;
-		public event EventHandler PlayEnded;
-
-		public event EventHandler<ChannelMessageEventArgs> ChannelMessagePlayed {
-			add {
-				dispatcher.ChannelMessageDispatched += value;
-			}
-			remove {
-				dispatcher.ChannelMessageDispatched -= value;
-			}
-		}
-
-		public event EventHandler<SysExMessageEventArgs> SysExMessagePlayed {
-			add {
-				dispatcher.SysExMessageDispatched += value;
-			}
-			remove {
-				dispatcher.SysExMessageDispatched -= value;
-			}
-		}
-
-		public event EventHandler<MetaMessageEventArgs> MetaMessagePlayed {
-			add {
-				dispatcher.MetaMessageDispatched += value;
-			}
-			remove {
-				dispatcher.MetaMessageDispatched -= value;
-			}
-		}
-
-		public event EventHandler<ChasedEventArgs> Chased {
-			add {
-				chaser.Chased += value;
-			}
-			remove {
-				chaser.Chased -= value;
-			}
-		}
-
-		public event EventHandler<StoppedEventArgs> Stopped {
-			add {
-				stopper.Stopped += value;
-			}
-			remove {
-				stopper.Stopped -= value;
-			}
-		}
-
-		#endregion
-
-		public BmpCustomSequencer() {
-			dispatcher.MetaMessageDispatched += delegate (object sender, MetaMessageEventArgs e) {
-				if(e.Message.MetaType == MetaType.EndOfTrack) {
-					tracksPlayingCount--;
-
-					if(tracksPlayingCount == 0) {
-						Stop();
-					}
-				} else {
-					clock.Process(e.Message);
-				}
-			};
-
-			dispatcher.ChannelMessageDispatched += delegate (object sender, ChannelMessageEventArgs e) {
-				stopper.Process(e.Message);
-			};
+namespace FFBardMusicPlayer
+{
+    public class BmpCustomSequencer : IComponent
+    {
+        private Sequence sequence;
+        private readonly List<IEnumerator<int>> enumerators = new List<IEnumerator<int>>();
+        private readonly MessageDispatcher dispatcher = new MessageDispatcher();
+        private readonly ChannelChaser chaser = new ChannelChaser();
+        private readonly ChannelStopper stopper = new ChannelStopper();
+        private int tracksPlayingCount;
+        private readonly object lockObject = new object();
+
+        public bool IsPlaying { get; private set; }
+
+        public MidiInternalClock InternalClock { get; } = new MidiInternalClock();
+
+        private bool disposed;
+
+        #region Events
+
+        public event EventHandler PlayStatusChange;
+
+        public event EventHandler PlayEnded;
+
+        public event EventHandler<ChannelMessageEventArgs> ChannelMessagePlayed
+        {
+            add => dispatcher.ChannelMessageDispatched += value;
+            remove => dispatcher.ChannelMessageDispatched -= value;
+        }
+
+        public event EventHandler<SysExMessageEventArgs> SysExMessagePlayed
+        {
+            add => dispatcher.SysExMessageDispatched += value;
+            remove => dispatcher.SysExMessageDispatched -= value;
+        }
+
+        public event EventHandler<MetaMessageEventArgs> MetaMessagePlayed
+        {
+            add => dispatcher.MetaMessageDispatched += value;
+            remove => dispatcher.MetaMessageDispatched -= value;
+        }
+
+        public event EventHandler<ChasedEventArgs> Chased
+        {
+            add => chaser.Chased += value;
+            remove => chaser.Chased -= value;
+        }
+
+        public event EventHandler<StoppedEventArgs> Stopped
+        {
+            add => stopper.Stopped += value;
+            remove => stopper.Stopped -= value;
+        }
+
+        #endregion
+
+        public BmpCustomSequencer()
+        {
+            dispatcher.MetaMessageDispatched += delegate(object sender, MetaMessageEventArgs e)
+            {
+                if (e.Message.MetaType == MetaType.EndOfTrack)
+                {
+                    tracksPlayingCount--;
+
+                    if (tracksPlayingCount == 0)
+                    {
+                        Stop();
+                    }
+                }
+                else
+                {
+                    InternalClock.Process(e.Message);
+                }
+            };
+
+            dispatcher.ChannelMessageDispatched += delegate(object sender, ChannelMessageEventArgs e)
+            {
+                stopper.Process(e.Message);
+            };
+
+            InternalClock.Tick += delegate
+            {
+                lock (lockObject)
+                {
+                    if (!IsPlaying)
+                    {
+                        return;
+                    }
+
+                    foreach (var enumerator in enumerators)
+                    {
+                        enumerator.MoveNext();
+                    }
+                }
+
+                if (tracksPlayingCount == 0)
+                {
+                    PlayEnded?.Invoke(this, EventArgs.Empty);
+                }
+            };
+        }
 
-			clock.Tick += delegate (object sender, EventArgs e) {
-				lock(lockObject) {
-					if(!playing) {
-						return;
-					}
+        ~BmpCustomSequencer() { Dispose(false); }
 
-					foreach(IEnumerator<int> enumerator in enumerators) {
-						enumerator.MoveNext();
-					}
-				}
-				if(tracksPlayingCount == 0) {
-					PlayEnded?.Invoke(this, EventArgs.Empty);
-				}
-			};
-		}
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                lock (lockObject)
+                {
+                    Stop();
 
-		~BmpCustomSequencer() {
-			Dispose(false);
-		}
+                    InternalClock.Dispose();
 
-		protected virtual void Dispose(bool disposing) {
-			if(disposing) {
-				lock(lockObject) {
-					Stop();
+                    disposed = true;
 
-					clock.Dispose();
+                    GC.SuppressFinalize(this);
+                }
+            }
+        }
 
-					disposed = true;
+        public void Stop()
+        {
+            #region Require
 
-					GC.SuppressFinalize(this);
-				}
-			}
-		}
+            if (disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
 
-		public void Stop() {
-			#region Require
+            #endregion
 
-			if(disposed) {
-				throw new ObjectDisposedException(this.GetType().Name);
-			}
+            lock (lockObject)
+            {
+                Pause();
+                Position = 0;
 
-			#endregion
+                OnPlayStatusChange(EventArgs.Empty);
+            }
+        }
 
-			lock(lockObject) {
-				Pause();
-				Position = 0;
+        public void Play()
+        {
+            #region Require
 
-				OnPlayStatusChange(EventArgs.Empty);
-			}
-		}
+            if (disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
 
-		public void Play() {
-			#region Require
+            #endregion
 
-			if(disposed) {
-				throw new ObjectDisposedException(this.GetType().Name);
-			}
+            #region Guard
 
-			#endregion
+            if (Sequence == null)
+            {
+                return;
+            }
 
-			#region Guard
+            #endregion
 
-			if(Sequence == null) {
-				return;
-			}
+            lock (lockObject)
+            {
+                Pause();
 
-			#endregion
+                enumerators.Clear();
 
-			lock(lockObject) {
-				Pause();
+                foreach (var t in Sequence)
+                {
+                    enumerators.Add(t.TickIterator(Position, chaser, dispatcher).GetEnumerator());
+                }
 
-				enumerators.Clear();
+                tracksPlayingCount = Sequence.Count;
 
-				foreach(Track t in Sequence) {
-					enumerators.Add(t.TickIterator(Position, chaser, dispatcher).GetEnumerator());
-				}
+                IsPlaying    = true;
+                InternalClock.Ppqn = sequence.Division;
+                InternalClock.Continue();
 
-				tracksPlayingCount = Sequence.Count;
+                OnPlayStatusChange(EventArgs.Empty);
+            }
+        }
+
+        public void Pause()
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
 
-				playing = true;
-				clock.Ppqn = sequence.Division;
-				clock.Continue();
+            #endregion
 
-				OnPlayStatusChange(EventArgs.Empty);
-			}
-		}
+            lock (lockObject)
+            {
+                #region Guard
 
-		public void Pause() {
-			#region Require
+                if (!IsPlaying)
+                {
+                    return;
+                }
 
-			if(disposed) {
-				throw new ObjectDisposedException(this.GetType().Name);
-			}
+                #endregion
 
-			#endregion
+                IsPlaying = false;
+
+                InternalClock.Stop();
+                stopper.AllSoundOff();
 
-			lock(lockObject) {
-				#region Guard
+                OnPlayStatusChange(EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnPlayStatusChange(EventArgs e)
+        {
+            var handler = PlayStatusChange;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnDisposed(EventArgs e)
+        {
+            var handler = Disposed;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public float Speed
+        {
+            get => InternalClock.TempoSpeed;
+            set => InternalClock.TempoSpeed = value;
+        }
+
+        public int Length
+        {
+            get
+            {
+                #region Require
 
-				if(!playing) {
-					return;
-				}
+                if (disposed)
+                {
+                    throw new ObjectDisposedException(GetType().Name);
+                }
+
+                #endregion
+
+                return sequence.GetLength();
+            }
+        }
 
-				#endregion
+        public int Position
+        {
+            get
+            {
+                #region Require
 
-				playing = false;
+                if (disposed)
+                {
+                    throw new ObjectDisposedException(GetType().Name);
+                }
 
-				clock.Stop();
-				stopper.AllSoundOff();
+                #endregion
 
-				OnPlayStatusChange(EventArgs.Empty);
-			}
-		}
+                return InternalClock.Ticks;
+            }
+            set
+            {
+                #region Require
 
-		protected virtual void OnPlayStatusChange(EventArgs e) {
-			EventHandler handler = PlayStatusChange;
+                if (disposed)
+                {
+                    throw new ObjectDisposedException(GetType().Name);
+                }
+                else if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
-			if(handler != null) {
-				handler(this, e);
-			}
-		}
+                #endregion
 
-		protected virtual void OnDisposed(EventArgs e) {
-			EventHandler handler = Disposed;
+                bool wasPlaying;
 
-			if(handler != null) {
-				handler(this, e);
-			}
-		}
+                lock (lockObject)
+                {
+                    wasPlaying = IsPlaying;
 
-		public float Speed {
-			get {
-				return clock.TempoSpeed;
-			}
-			set {
-				clock.TempoSpeed = value;
-			}
-		}
+                    Pause();
 
-		public int Length {
-			get {
-				#region Require
+                    InternalClock.SetTicks(value);
+                }
 
-				if(disposed) {
-					throw new ObjectDisposedException(this.GetType().Name);
-				}
+                lock (lockObject)
+                {
+                    if (wasPlaying)
+                    {
+                        Play();
+                    }
+                }
+            }
+        }
 
-				#endregion
+        public Sequence Sequence
+        {
+            get { return sequence; }
+            set
+            {
+                #region Require
 
-				return sequence.GetLength();
-			}
-		}
+                if (value == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                else if (value.SequenceType == SequenceType.Smpte)
+                {
+                    throw new NotSupportedException();
+                }
 
-		public int Position {
-			get {
-				#region Require
+                #endregion
 
-				if(disposed) {
-					throw new ObjectDisposedException(this.GetType().Name);
-				}
+                lock (lockObject)
+                {
+                    Stop();
+                    sequence = value;
+                }
+            }
+        }
 
-				#endregion
+        #region IComponent Members
 
-				return clock.Ticks;
-			}
-			set {
-				#region Require
+        public event EventHandler Disposed;
 
-				if(disposed) {
-					throw new ObjectDisposedException(this.GetType().Name);
-				} else if(value < 0) {
-					throw new ArgumentOutOfRangeException();
-				}
+        public ISite Site { get; set; }
 
-				#endregion
+        #endregion
 
-				bool wasPlaying;
+        #region IDisposable Members
 
-				lock(lockObject) {
-					wasPlaying = playing;
+        public void Dispose()
+        {
+            #region Guard
 
-					Pause();
+            if (disposed)
+            {
+                return;
+            }
 
-					clock.SetTicks(value);
-				}
+            #endregion
 
-				lock(lockObject) {
-					if(wasPlaying) {
-						Play();
-					}
-				}
-			}
-		}
+            Dispose(true);
+        }
 
-		public Sequence Sequence {
-			get {
-				return sequence;
-			}
-			set {
-				#region Require
-
-				if(value == null) {
-					throw new ArgumentNullException();
-				} else if(value.SequenceType == SequenceType.Smpte) {
-					throw new NotSupportedException();
-				}
-
-				#endregion
-
-				lock(lockObject) {
-					Stop();
-					sequence = value;
-				}
-			}
-		}
-
-		#region IComponent Members
-
-		public event EventHandler Disposed;
-
-		public ISite Site {
-			get {
-				return site;
-			}
-			set {
-				site = value;
-			}
-		}
-
-		#endregion
-
-		#region IDisposable Members
-
-		public void Dispose() {
-			#region Guard
-
-			if(disposed) {
-				return;
-			}
-
-			#endregion
-
-			Dispose(true);
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }
