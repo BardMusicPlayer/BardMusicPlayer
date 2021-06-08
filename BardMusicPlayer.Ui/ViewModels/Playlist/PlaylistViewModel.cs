@@ -71,7 +71,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             {
                 try
                 {
-                    var bmpSong = await BmpSong.OpenMidiFile(openFileDialog.FileName);
+                    var bmpSong = await BmpSong.OpenMidiFile(file);
                     var songModel = new BmpSongViewModel(_ioc, bmpSong);
                     CurrentSong = songModel;
 
