@@ -12,11 +12,11 @@ using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Processor
 {
-    internal class ManualToneProcessor : BaseProcessor
+    internal class VSTProcessor : BaseProcessor
     {
-        public ManualToneProcessorConfig ProcessorConfig { get; set; }
+        public VSTProcessorConfig ProcessorConfig { get; set; }
 
-        internal ManualToneProcessor(ManualToneProcessorConfig processorConfig, BmpSong song) : base(song)
+        internal VSTProcessor(VSTProcessorConfig processorConfig, BmpSong song) : base(song)
         {
             ProcessorConfig = processorConfig;
         }

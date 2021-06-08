@@ -65,21 +65,21 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                 if (fields.Length == 0) continue;
 
                 // bmp 2.x style group name
-                if (fields[0].StartsWith("manualtone:") || fields[0].StartsWith("notetone:") || fields[0].StartsWith("autotone:") || fields[0].StartsWith("drumtone:") || fields[0].Equals("drumtone") || fields[0].StartsWith("octavetone") || fields[0].Equals("lyric"))
+                if (fields[0].StartsWith("vst:") || fields[0].StartsWith("notetone:") || fields[0].StartsWith("autotone:") || fields[0].StartsWith("drumtone:") || fields[0].Equals("drumtone") || fields[0].StartsWith("octavetone") || fields[0].Equals("lyric"))
                 {
                     var subfields = fields[0].Split(':');
 
                     switch (subfields[0])
                     {
-                        case "manualtone" when subfields.Length < 2:
-                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping ManualTone on track " + trackNumber + " due to the configuration not specifying a tone.");
+                        case "vst" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping VST on track " + trackNumber + " due to the configuration not specifying a tone.");
                             continue;
-                        case "manualtone":
-                            var manualToneConfig = (ManualToneProcessorConfig)(configContainer.ProcessorConfig = new ManualToneProcessorConfig { Track = trackNumber });
+                        case "vst":
+                            var manualToneConfig = (VSTProcessorConfig)(configContainer.ProcessorConfig = new VSTProcessorConfig { Track = trackNumber });
                             manualToneConfig.InstrumentTone = InstrumentTone.Parse(subfields[1]);
                             if (manualToneConfig.InstrumentTone.Equals(InstrumentTone.None))
                             {
-                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping ManualTone on track " + trackNumber + " due to the configuration specifying an invalid tone.");
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping VST on track " + trackNumber + " due to the configuration specifying an invalid tone.");
                                 continue;
                             }
                             if (subfields.Length > 2)
@@ -90,17 +90,17 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                                     var toneIndexAndOctaveRange = modifier.Match(shift);
                                     if (!toneIndexAndOctaveRange.Success)
                                     {
-                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber);
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber);
                                         continue;
                                     }
                                     if (!toneIndexAndOctaveRange.Groups[1].Success)
                                     {
-                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
                                         continue;
                                     }
                                     if (!int.TryParse(toneIndexAndOctaveRange.Groups[1].Value, out var toneIndex) || toneIndex < 0 || toneIndex > 4)
                                     {
-                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid ManualTone octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
                                         continue;
                                     }
                                     var octaveRange = OctaveRange.C3toC6;
@@ -110,7 +110,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                                 }
                             }
                             ParseAdditionalOptions(trackNumber, manualToneConfig, song, fields);
-                            BmpLog.I(BmpLog.Source.Transmogrify, "Found ManualTone Config Group with on track " + manualToneConfig.Track + " ;bards=" + manualToneConfig.PlayerCount + ";include=" + string.Join(",",manualToneConfig.IncludedTracks));
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found VST Config Group with on track " + manualToneConfig.Track + " ;bards=" + manualToneConfig.PlayerCount + ";include=" + string.Join(",",manualToneConfig.IncludedTracks));
                             configContainers.Add(groupCounter, configContainer);
                             continue;
 

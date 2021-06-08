@@ -9,7 +9,7 @@ using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
 
 namespace BardMusicPlayer.Transmogrify.Song.Config
 {
-    public class ManualToneProcessorConfig : IProcessorConfig
+    public class VSTProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;

@@ -33,7 +33,7 @@ namespace BardMusicPlayer.Transmogrify.Song
                 ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
                 //DrumToneProcessorConfig drumToneProcessorConfig => await new DrumToneProcessor(drumToneProcessorConfig, song).Process(),
                 LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
-                ManualToneProcessorConfig manualToneProcessorConfig => await new ManualToneProcessor(manualToneProcessorConfig, song).Process(),
+                VSTProcessorConfig vstProcessorConfig => await new VSTProcessor(vstProcessorConfig, song).Process(),
                 //NoteToneProcessorConfig noteToneProcessorConfig => await new NoteToneProcessor(noteToneProcessorConfig, song).Process(),
                 //OctaveToneProcessorConfig octaveToneProcessorConfig => await new OctaveToneProcessor(octaveToneProcessorConfig, song).Process(),
                 _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type."),
