@@ -65,6 +65,12 @@ namespace BardMusicPlayer.Coffer
             this.target.Songs.RemoveAt(idx);
         }
 
+        /// <inheritdoc />
+        void IPlaylist.Remove(BmpSong song)
+        {
+            this.target.Songs.Remove(song);
+        }
+
         ///<inheritdoc/>
         void IPlaylist.SetName(string name)
         {
