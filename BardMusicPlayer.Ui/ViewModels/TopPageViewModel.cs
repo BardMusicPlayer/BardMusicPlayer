@@ -22,7 +22,7 @@ namespace BardMusicPlayer.Ui.ViewModels
 
         public PlaylistViewModel Playlist { get; }
 
-        public void LoadSong() { Playlist.AddSong(); }
+        public async void LoadSong() { await Playlist.AddSongs(); }
 
         public void OpenPlaylist()
         {
@@ -34,7 +34,7 @@ namespace BardMusicPlayer.Ui.ViewModels
         {
             if (Playlist.CurrentSong is not null)
             {
-                var songEditor = new SongEditorViewModel(Playlist.CurrentSong.BmpSong);
+                var songEditor = new SongEditorViewModel(Playlist.CurrentSong);
                 _events.Publish(new NavigateToNotification(songEditor));
             }
         }

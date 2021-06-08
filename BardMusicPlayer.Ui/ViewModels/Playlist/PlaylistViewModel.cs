@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,50 +18,44 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         IHandle<SelectPlaylistNotification>
     {
         private readonly IContainer _ioc;
+        private readonly IEventAggregator _events;
 
         public PlaylistViewModel(IContainer ioc)
         {
-            _ioc = ioc;
+            _ioc    = ioc;
+
+            _events = ioc.Get<IEventAggregator>();
+            _events.Subscribe(this);
 
             var names = BmpCoffer.Instance.GetPlaylistNames();
             Playlists = names.Select(BmpCoffer.Instance.GetPlaylist)
-                .Select(playlist => new BmpPlaylistViewModel(ioc, playlist))
+                .Select(playlist => playlist.ToViewModel(ioc))
                 .ToBindableCollection();
-
-            Songs = new BindableCollection<BmpSongViewModel>();
-            var titles = BmpCoffer.Instance.GetSongTitles();
-            foreach (var s in titles)
-            {
-                var bmpSong = BmpCoffer.Instance.GetSong(s);
-                var songModel = new BmpSongViewModel(_ioc, bmpSong);
-                Songs.Add(songModel);
-                SelectedSong = songModel;
-            }
         }
 
         public BindableCollection<BmpPlaylistViewModel> Playlists { get; set; }
 
-        public BindableCollection<BmpSongViewModel> Songs { get; set; }
+        public BmpPlaylistViewModel? SelectedPlaylist { get; set; }
 
-        public BmpSongViewModel? CurrentSong { get; set; }
+        public BmpSong? CurrentSong { get; set; }
 
-        public BmpSongViewModel? SelectedSong { get; set; }
+        public BmpSong? SelectedSong { get; set; }
 
         public bool DialogIsOpen { get; set; }
 
         public DialogueViewModel Dialog { get; set; }
 
-        public IPlaylist? SelectedPlaylist { get; set; }
+        public IEnumerable<BmpSong>? Songs => SelectedPlaylist?.Songs;
 
         public void Handle(SelectPlaylistNotification message) { SelectPlaylist(message.Playlist); }
 
         public void ChangeSong() { Console.WriteLine(SelectedSong.Title); }
 
         /// <summary>
-        ///     This opens a song or adds it to the current playlist
+        ///     This opens a song or adds it to the current <see cref="IPlaylist" /> provided.
         /// </summary>
-        /// <param name="onthefly"></param>
-        public async Task AddSong(bool onthefly = true)
+        /// <param name="playlist">The <see cref="IPlaylist" /> to add the user selected <see cref="BmpSong" />.</param>
+        public async Task AddSongs(IPlaylist? playlist = null)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -76,20 +71,17 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 try
                 {
                     var bmpSong = await BmpSong.OpenMidiFile(file);
-                    var songModel = new BmpSongViewModel(_ioc, bmpSong);
-                    CurrentSong = songModel;
 
-                    if (!onthefly)
+                    BmpCoffer.Instance.SaveSong(bmpSong);
+                    if (playlist is not null)
                     {
-                        BmpCoffer.Instance.SaveSong(bmpSong);
-                        //TODO: Add to playlist
-                        Songs.Add(new BmpSongViewModel(_ioc, bmpSong));
-                        if (SelectedPlaylist != null)
-                        {
-                            SelectedPlaylist.Add(bmpSong);
-                            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
-                        }
+                        playlist.Add(bmpSong);
+                        BmpCoffer.Instance.SavePlaylist(playlist);
                     }
+
+                    // Select the first song when there is nothing selected yet
+                    CurrentSong ??= bmpSong;
+                    SelectedPlaylist?.Add(bmpSong);
                 }
                 catch (Exception e)
                 {
@@ -114,47 +106,36 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             else
                 name += " (1)";
 
-            SelectedPlaylist = BmpCoffer.Instance.CreatePlaylist(name);
-            Playlists.Add(new BmpPlaylistViewModel(_ioc, SelectedPlaylist!));
-            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
+            SelectedPlaylist = BmpCoffer.Instance.CreatePlaylist(name).ToViewModel(_ioc);
+            Playlists.Add(SelectedPlaylist);
+
+            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist.Playlist);
         }
 
-        public void SelectPlaylist(BmpPlaylistViewModel mdl)
+        public void SelectPlaylist(BmpPlaylistViewModel model)
         {
             foreach (BmpPlaylistViewModel idx in Playlists)
             {
                 idx.IsActivePlaylist = false;
             }
 
-            SelectedPlaylist     = mdl.GetPlaylist();
-            mdl.IsActivePlaylist = true;
+            SelectedPlaylist       = model;
+            model.IsActivePlaylist = true;
         }
 
         public void RemoveSong()
         {
-            if (SelectedSong is null)
+            if (SelectedSong is null || SelectedPlaylist is null)
                 return;
 
-            if (SelectedPlaylist is null)
+            var index = SelectedPlaylist.Songs
+                .ToList().IndexOf(SelectedSong);
+
+            if (index > -1)
             {
-                Songs.Remove(SelectedSong);
-                return;
+                SelectedPlaylist.Remove(index);
+                BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
             }
-
-            var idx = 0;
-            foreach (var item in SelectedPlaylist)
-            {
-                if (item.Id.Equals(SelectedSong.BmpSong.Id))
-                {
-                    SelectedPlaylist.Remove(idx);
-                    Songs.Remove(SelectedSong);
-                    break;
-                }
-
-                idx++;
-            }
-
-            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
         }
 
         public void ClearPlaylist()
@@ -164,8 +145,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
             for (var i = 0; i < SelectedPlaylist.Count(); i++) SelectedPlaylist.Remove(0);
             BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
-
-            Songs.Clear();
         }
 
         public void DeletePlaylist()
@@ -183,18 +162,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                     return;
                 }
             }
-        }
-
-        public void LoadPlaylist(IPlaylist playlist)
-        {
-            Songs.Clear();
-            foreach (var s in playlist)
-            {
-                Songs.Add(new BmpSongViewModel(_ioc, s));
-            }
-
-            if (Songs.Count > 0)
-                SelectedSong = Songs.First();
         }
     }
 }
