@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
 using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Ui.Notifications;
 using Stylet;
+using StyletIoC;
 
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
@@ -9,11 +11,14 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         private readonly IPlaylist _bmpPlaylist;
         private readonly PlaylistViewModel _playlistview;
         private bool _isActivePlaylist;
+        private readonly IEventAggregator _events;
 
-        public BmpPlaylistViewModel(IPlaylist bmpPlaylist, PlaylistViewModel parent)
+        public BmpPlaylistViewModel(IContainer ioc, IPlaylist bmpPlaylist)
         {
+            _events          = ioc.Get<IEventAggregator>();
+
             _bmpPlaylist     = bmpPlaylist;
-            _playlistview    = parent;
+
             Name             = _bmpPlaylist.GetName();
             IsActivePlaylist = false;
         }
@@ -72,7 +77,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 return;
 
             IsActivePlaylist = true;
-            _playlistview.SelectPlaylist(this);
+            _events.Publish(new SelectPlaylistNotification(this));
         }
 
         public void LoadPlaylist() { _playlistview.LoadPlaylist(_bmpPlaylist); }
