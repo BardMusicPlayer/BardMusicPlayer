@@ -65,5 +65,11 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             IsActivePlaylist = true;
             _playlistview.SelectPlaylist(this);
         }
+
+        public void LoadPlaylist()
+        {
+            _playlistview.LoadPlaylist(_bmpPlaylist);
+        }
+
     }
 }
