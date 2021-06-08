@@ -111,13 +111,16 @@
                             <DataTemplate DataType="{x:Type playlist:BmpPlaylistViewModel}">
                                 <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0"
                                                s:View.ActionTarget="{Binding}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}">
-                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center" Foreground="{Binding ActiveColor}" />
+                                    <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center"
+                                                 Foreground="{Binding ActiveColor}" />
                                     <TextBox
-                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}"
-                                        LostFocus="{s:Action SetReadOnly}" IsEnabled="{Binding IsEnabled}"
-                                        s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
-                                        BorderThickness="0" />
-                                    <md:PackIcon Kind="Play" MouseDoubleClick="{s:Action LoadPlaylist}" />
+                                        Text="{Binding Name}" BorderThickness="0"
+                                        IsReadOnly="{Binding IsReadOnly}" IsEnabled="{Binding IsEnabled}"
+                                        s:View.ActionTarget="{Binding}" LostFocus="{s:Action SetReadOnly}"
+                                        MouseDoubleClick="{s:Action RenamePlaylist}" />
+                                    <md:PackIcon Kind="Play" Visibility="{Binding 
+                                        Path=IsActivePlaylist,
+                                        Converter={x:Static s:BoolToVisibilityConverter.Instance}}" />
                                 </auto:AutoGrid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
