@@ -32,6 +32,10 @@ namespace BardMusicPlayer.Transmogrify.Song
         public string Title { get; set; } = "";
 
         /// <summary>
+        /// Get/Set the real path and name
+        /// </summary>
+        public string FullPath { get; set;  } = "";
+        /// <summary>
         /// 
         /// </summary>
         public List<string> Tags { get; set; } = new();
@@ -120,6 +124,7 @@ namespace BardMusicPlayer.Transmogrify.Song
 
             var song = new BmpSong
             {
+                FullPath        = path,
                 Title           = Path.GetFileNameWithoutExtension(path),
                 SourceTempoMap  = midiFile.GetTempoMap().Clone(),
                 TrackContainers = new Dictionary<long, TrackContainer>()
