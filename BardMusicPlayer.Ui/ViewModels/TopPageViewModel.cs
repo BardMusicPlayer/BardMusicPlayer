@@ -22,10 +22,7 @@ namespace BardMusicPlayer.Ui.ViewModels
 
         public PlaylistViewModel Playlist { get; }
 
-        public void LoadSong()
-        {
-            Playlist.AddSong(true);
-        }
+        public void LoadSong() { Playlist.AddSong(); }
 
         public void OpenPlaylist()
         {
@@ -42,9 +39,6 @@ namespace BardMusicPlayer.Ui.ViewModels
             }
         }
 
-        public void PlaySong()
-        {
-
-        }
+        public void PlaySong() { }
     }
 }

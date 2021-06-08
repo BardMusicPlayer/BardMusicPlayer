@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="BardMusicPlayer.Ui.Views.Playlist.PlaylistView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -120,16 +120,18 @@
                         </ContextMenu>
                     </GroupBox.ContextMenu>
 
-                    <ItemsControl ItemsSource="{Binding Playlists}" >
+                    <ItemsControl ItemsSource="{Binding Playlists}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type playlist:BmpPlaylistViewModel}">
-                                <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0" s:View.ActionTarget="{Binding}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}">
+                                <auto:AutoGrid Columns="Auto, *, Auto" Margin="10" ChildMargin="3,0"
+                                               s:View.ActionTarget="{Binding}" PreviewMouseLeftButtonDown="{s:Action SelectPlaylist}">
                                     <md:PackIcon Kind="ReorderHorizontal" VerticalAlignment="Center" Foreground="{Binding ActiveColor}" />
                                     <TextBox
-                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}" LostFocus="{s:Action SetReadOnly}" IsEnabled="{Binding IsEnabled}" 
+                                        Text="{Binding Name}" IsReadOnly="{Binding IsReadOnly}"
+                                        LostFocus="{s:Action SetReadOnly}" IsEnabled="{Binding IsEnabled}"
                                         s:View.ActionTarget="{Binding}" MouseDoubleClick="{s:Action RenamePlaylist}"
                                         BorderThickness="0" />
-                                    <md:PackIcon Kind="Play" MouseDoubleClick="{s:Action LoadPlaylist}"/>
+                                    <md:PackIcon Kind="Play" MouseDoubleClick="{s:Action LoadPlaylist}" />
                                 </auto:AutoGrid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

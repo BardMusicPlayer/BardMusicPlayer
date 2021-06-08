@@ -12,7 +12,6 @@ namespace BardMusicPlayer.Ui.ViewModels
     {
         private readonly IEventAggregator _events;
 
-
         public GameViewModel(IContainer ioc, Game game)
         {
             _events = ioc.Get<IEventAggregator>();
