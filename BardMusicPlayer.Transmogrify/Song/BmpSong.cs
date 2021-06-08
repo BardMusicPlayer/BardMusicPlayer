@@ -142,19 +142,17 @@ namespace BardMusicPlayer.Transmogrify.Song
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
-                        case AutoToneProcessorConfig autoToneConfig:
-                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
-                                              autoToneConfig.GetType() +
-                                             " AutoToneInstrumentGroup:" + autoToneConfig.AutoToneInstrumentGroup + " OctaveRange:" +
-                                              autoToneConfig.AutoToneOctaveRange + " PlayerCount:" + autoToneConfig.PlayerCount +
-                                             " IncludeTracks:" + string.Join(",", autoToneConfig.IncludedTracks));
-                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
-                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
-                            break;
                         case LyricProcessorConfig lyricConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
                                               " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case VSTProcessorConfig vstConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              vstConfig.GetType() + " PlayerCount:" + vstConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", vstConfig.IncludedTracks));
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;

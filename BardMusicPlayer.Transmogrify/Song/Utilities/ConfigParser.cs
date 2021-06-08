@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
@@ -36,19 +37,23 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
         /// <returns></returns>
         internal static Dictionary<long, ConfigContainer> ReadConfigs(this TrackChunk trackChunk, int trackNumber, BmpSong song)
         {
-            // TODO - Verbose logging of all parsing operations.
-
             var configContainers = new Dictionary<long, ConfigContainer>();
 
-            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric)) return configContainers;
+            if (trackChunk.GetNotes().Count == 0 && trackChunk.GetTimedEvents().All(x => x.Event.EventType != MidiEventType.Lyric))
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Skipping track " + trackNumber + " as it contains no notes and contains no lyric events.");
+                return configContainers;
+            }
 
             var trackName = (trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "").Replace(" ", "").ToLower();
 
-            if (trackName.StartsWith("ignore")) return configContainers;
+            if (trackName.Contains("ignore"))
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Skipping track " + trackNumber + " as the track title contains \"Ignore\"");
+                return configContainers;
+            }
 
             var groups = trackName.Split('|');
-
-            
 
             var modifier = new Regex(@"^([A-Za-z0-9]+)([-+]\d)?");
 
@@ -60,73 +65,85 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                 if (fields.Length == 0) continue;
 
                 // bmp 2.x style group name
-                if (fields[0].StartsWith("manualtone:") || fields[0].StartsWith("autotone:") || fields[0].StartsWith("drumtone:") || fields[0].StartsWith("lyric:"))
+                if (fields[0].StartsWith("vst:") || fields[0].Equals("lyrics"))
                 {
                     var subfields = fields[0].Split(':');
 
-                    if (subfields.Length < 2) continue;
-
-                    if (subfields[0].Equals("manualtone"))
+                    switch (subfields[0])
                     {
-                        // TODO
-                        return configContainers;
-                    } 
-                    
-                    else if (subfields[0].Equals("autotone"))
-                    {
-                        var config = (AutoToneProcessorConfig)(configContainer.ProcessorConfig = new AutoToneProcessorConfig { Track = trackNumber });
-                        var instrumentAndOctaveRange = modifier.Match(subfields[1]);
+                        case "vst" when subfields.Length < 2:
+                            BmpLog.W(BmpLog.Source.Transmogrify, "Skipping VST on track " + trackNumber + " due to the configuration not specifying a tone.");
+                            continue;
+                        case "vst":
+                            var manualToneConfig = (VSTProcessorConfig)(configContainer.ProcessorConfig = new VSTProcessorConfig { Track = trackNumber });
+                            manualToneConfig.InstrumentTone = InstrumentTone.Parse(subfields[1]);
+                            if (manualToneConfig.InstrumentTone.Equals(InstrumentTone.None))
+                            {
+                                BmpLog.W(BmpLog.Source.Transmogrify, "Skipping VST on track " + trackNumber + " due to the configuration specifying an invalid tone.");
+                                continue;
+                            }
+                            if (subfields.Length > 2)
+                            {
+                                var shifts = subfields[2].Split(',');
+                                foreach (var shift in shifts)
+                                {
+                                    var toneIndexAndOctaveRange = modifier.Match(shift);
+                                    if (!toneIndexAndOctaveRange.Success)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber);
+                                        continue;
+                                    }
+                                    if (!toneIndexAndOctaveRange.Groups[1].Success)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        continue;
+                                    }
+                                    if (!int.TryParse(toneIndexAndOctaveRange.Groups[1].Value, out var toneIndex) || toneIndex < 0 || toneIndex > 4)
+                                    {
+                                        BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
+                                        continue;
+                                    }
+                                    var octaveRange = OctaveRange.C3toC6;
+                                    if (toneIndexAndOctaveRange.Groups[2].Success) octaveRange = OctaveRange.Parse(toneIndexAndOctaveRange.Groups[2].Value);
+                                    if (octaveRange.Equals(OctaveRange.Invalid)) octaveRange = OctaveRange.C3toC6;
+                                    manualToneConfig.OctaveRanges[toneIndex] = octaveRange;
+                                }
+                            }
+                            ParseAdditionalOptions(trackNumber, manualToneConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found VST Config Group with on track " + manualToneConfig.Track + " ;bards=" + manualToneConfig.PlayerCount + ";include=" + string.Join(",",manualToneConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
 
-                        if (instrumentAndOctaveRange.Success)
-                        {
-                            if (instrumentAndOctaveRange.Groups[1].Success) config.AutoToneInstrumentGroup = AutoToneInstrumentGroup.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                            if (config.AutoToneInstrumentGroup.Equals(AutoToneInstrumentGroup.Invalid)) config.AutoToneInstrumentGroup = AutoToneInstrumentGroup.Lute1Harp3Piano1;
-                            if (instrumentAndOctaveRange.Groups[2].Success) config.AutoToneOctaveRange = AutoToneOctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
-                            if (config.AutoToneOctaveRange.Equals(AutoToneOctaveRange.Invalid)) config.AutoToneOctaveRange = AutoToneOctaveRange.C2toC7;
-                        }
-
-                        ParseAdditionalOptions(config, song, fields);
-
-                        configContainers.Add(groupCounter, configContainer);
+                        case "lyrics":
+                            var lyricConfig = (LyricProcessorConfig)(configContainer.ProcessorConfig = new LyricProcessorConfig { Track = trackNumber });
+                            ParseAdditionalOptions(trackNumber, lyricConfig, song, fields);
+                            BmpLog.I(BmpLog.Source.Transmogrify, "Found Lyric Config on track " + lyricConfig.Track + " ;bards=" + lyricConfig.PlayerCount + ";include=" + string.Join(",",lyricConfig.IncludedTracks));
+                            configContainers.Add(groupCounter, configContainer);
+                            continue;
                     }
-
-                    else if (subfields[0].Equals("drumtone"))
-                    {
-                        // TODO
-                        return configContainers;
-                    }
-
-                    else if (subfields[0].Equals("lyric") && subfields[1].Equals("default"))
-                    {
-                        var config = (LyricProcessorConfig)(configContainer.ProcessorConfig = new LyricProcessorConfig { Track = trackNumber });
-                        ParseAdditionalOptions(config, song, fields);
-                        configContainers.Add(groupCounter, configContainer);
-                    }
-                }
+                } 
 
                 // bmp 1.x style group name
                 else
                 {
-                    var config = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
-                    
+                    var classicConfig = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
                     var instrumentAndOctaveRange = modifier.Match(fields[0]);
-
-                    if (instrumentAndOctaveRange.Success)
-                    {
-                        if (instrumentAndOctaveRange.Groups[1].Success) config.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                        if (config.Instrument.Equals(Instrument.None)) config.Instrument = Instrument.Harp;
-                        if (instrumentAndOctaveRange.Groups[2].Success) config.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
-                        if (config.OctaveRange.Equals(OctaveRange.Invalid)) config.OctaveRange = OctaveRange.C3toC6;
-                    }
-
-                    ParseAdditionalOptions(config, song, fields);
-
+                    if (!instrumentAndOctaveRange.Success) continue; // Invalid Instrument name.
+                    if (instrumentAndOctaveRange.Groups[1].Success) classicConfig.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
+                    if (classicConfig.Instrument.Equals(Instrument.None)) continue;  // Invalid Instrument name.
+                    if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
+                    if (classicConfig.OctaveRange.Equals(OctaveRange.Invalid)) classicConfig.OctaveRange = OctaveRange.C3toC6;
+                    ParseAdditionalOptions(trackNumber, classicConfig, song, fields);
+                    BmpLog.I(BmpLog.Source.Transmogrify, "Found Classic Config Instrument " + classicConfig.Instrument.Name + " OctaveRange " + classicConfig.OctaveRange.Name +" on track " + classicConfig.Track + " ;bards=" + classicConfig.PlayerCount + ";include=" + string.Join(",",classicConfig.IncludedTracks));
                     configContainers.Add(groupCounter, configContainer);
                 }
             }
 
-            // TODO: let's expose the "default" track configuration as UI setting.
-            if (configContainers.Count == 0) configContainers.Add(0, new ConfigContainer { ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber } });
+            if (configContainers.Count == 0)
+            {
+                BmpLog.I(BmpLog.Source.Transmogrify, "Found 0 configurations on track " + trackNumber + ", and the keyword \"Ignore\" is not in the track title. Adding a default harp.");
+                configContainers.Add(0, new ConfigContainer { ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber } });
+            }
 
             return configContainers;
         }
@@ -134,10 +151,11 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
         /// <summary>
         /// Parses tracks to merge in, and bards to load balance distribute to.
         /// </summary>
+        /// <param name="trackNumber"></param>
         /// <param name="processorConfig"></param>
         /// <param name="song"></param>
         /// <param name="fields"></param>
-        private static void ParseAdditionalOptions(IProcessorConfig processorConfig, BmpSong song, IReadOnlyList<string> fields)
+        private static void ParseAdditionalOptions(int trackNumber, IProcessorConfig processorConfig, BmpSong song, IReadOnlyList<string> fields)
         {
             for (var fieldCounter = 1; fieldCounter < fields.Count; fieldCounter++)
             {
@@ -146,7 +164,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                     var tracksToMerge = fields[fieldCounter].Remove(0, 8).Split(',');
                     foreach (var trackToMerge in tracksToMerge)
                     {
-                        if (int.TryParse(trackToMerge, out var value) && value < song.TrackContainers.Count)
+                        if (int.TryParse(trackToMerge, out var value) && value != trackNumber && value > -1 && value < song.TrackContainers.Count)
                             processorConfig.IncludedTracks.Add(value);
                     }
                 }

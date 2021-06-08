@@ -50,13 +50,14 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
         /// <param name="trackChunks"></param>
         /// <param name="tempoMap"></param>
         /// <param name="tone"></param>
+        /// <param name="mapper"></param>
         /// <param name="lowClamp"></param>
         /// <param name="highClamp"></param>
         /// <param name="startingChannel"></param>
         /// <param name="readTones"></param>
         /// <param name="noteSampleOffset"></param>
         /// <returns></returns>
-        internal static Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this List<TrackChunk> trackChunks, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0)
+        internal static Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this List<TrackChunk> trackChunks, TempoMap tempoMap, InstrumentTone tone, Dictionary<int, (int,int)> mapper, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0)
         {
             if (lowClamp >= highClamp) return Task.FromResult(new Dictionary<int, Dictionary<long, Note>>());
 
@@ -108,7 +109,7 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="trackChunk"></param>
+        /// <param name="trackChunks"></param>
         /// <param name="tempoMap"></param>
         /// <param name="tone"></param>
         /// <param name="lowClamp"></param>
@@ -117,8 +118,38 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
         /// <param name="readTones"></param>
         /// <param name="noteSampleOffset"></param>
         /// <returns></returns>
+        internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this List<TrackChunk> trackChunks, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
+        await GetNoteDictionary(trackChunks, tempoMap, tone, new Dictionary<int, (int, int)>(), lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="trackChunk"></param>
+        /// <param name="tempoMap"></param>
+        /// <param name="tone"></param>
+        /// <param name="mapper"></param>
+        /// <param name="lowClamp"></param>
+        /// <param name="highClamp"></param>
+        /// <param name="startingChannel"></param>
+        /// <param name="readTones"></param>
+        /// <param name="noteSampleOffset"></param>
+        /// <returns></returns>
+        internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk, TempoMap tempoMap, InstrumentTone tone, Dictionary<int, (int,int)> mapper, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
+            await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, tone, mapper, lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="trackChunk"></param>
+        /// <param name="tempoMap"></param>
+        /// <param name="tone"></param>
+        /// <param name="lowClamp"></param>
+        /// <param name="highClamp"></param>
+        /// <param name="startingChannel"></param>
+        /// <param name="readTones"></param>
+        /// <param name="noteSampleOffset"></param>
         internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
-            await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, tone, lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
+            await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, tone, new Dictionary<int, (int, int)>(), lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
 
         /// <summary>
         /// 

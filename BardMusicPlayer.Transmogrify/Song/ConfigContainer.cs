@@ -29,11 +29,9 @@ namespace BardMusicPlayer.Transmogrify.Song
             if (ProcessorConfig is null) throw new BmpTransmogrifyException("No configuration in this container.");
             return ProcessorConfig switch
             {
-                AutoToneProcessorConfig autoToneProcessorConfig => await new AutoToneProcessor(autoToneProcessorConfig, song).Process(),
                 ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
-                DrumToneProcessorConfig drumToneProcessorConfig => await new DrumToneProcessor(drumToneProcessorConfig, song).Process(),
                 LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
-                ManualToneProcessorConfig manualToneProcessorConfig => await new ManualToneProcessor(manualToneProcessorConfig, song).Process(),
+                VSTProcessorConfig vstProcessorConfig => await new VSTProcessor(vstProcessorConfig, song).Process(),
                 _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type."),
             };
         }
