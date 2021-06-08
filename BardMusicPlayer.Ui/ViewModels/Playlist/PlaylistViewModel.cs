@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using Stylet;
 using StyletIoC;
 
+using System.Windows.Controls;
 
 namespace BardMusicPlayer.Ui.ViewModels.Playlist
 {
@@ -25,11 +26,17 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             Playlists = names.Select(BmpCoffer.Instance.GetPlaylist)
                 .Select(playlist => new BmpPlaylistViewModel(playlist, this))
                 .ToBindableCollection();
+
+            var titles = BmpCoffer.Instance.GetSongTitles();
+            Songs = titles.Select(BmpCoffer.Instance.GetSong)
+                .Select(song => new BmpSongViewModel(song, this))
+                .ToBindableCollection();
+
         }
 
         public BindableCollection<BmpPlaylistViewModel> Playlists { get; set; }
 
-        public BindableCollection<BmpSong> Songs { get; set; }
+        public BindableCollection<BmpSongViewModel> Songs { get; set; }
 
         public BmpSong? CurrentSong { get; set; }
 
@@ -46,7 +53,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         /// <summary>
         /// This opens a song or adds it to the current playlist
         /// </summary>
-        /// <param name="to_playlist"></param>
+        /// <param name="onthefly"></param>
         public async Task AddSong(bool onthefly = true)
         {
             var openFileDialog = new OpenFileDialog
@@ -68,7 +75,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                     {
                         BmpCoffer.Instance.SaveSong(bmpSong);
                         //TODO: Add to playlist
-                        Songs.Add(bmpSong);
+                        Songs.Add(new BmpSongViewModel(bmpSong, this));
                     }
 
                 }
