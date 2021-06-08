@@ -133,6 +133,12 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public void RemoveSong()
         {
+            if (SelectedPlaylist == null)
+            {
+                Songs.Remove(SelectedSong);
+                return;
+            }
+
             int idx = 0;
             foreach (var item in SelectedPlaylist.ToList())
             {
@@ -147,7 +153,18 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
         }
 
-        public void ClearPlaylist() { }
+        public void ClearPlaylist()
+        {
+            if (SelectedPlaylist == null)
+                return;
+
+            var templist = SelectedPlaylist;
+            for (int item = 0; item < templist.Count(); item++ )
+                templist.Remove(0);
+            Songs.Clear();
+            BmpCoffer.Instance.SavePlaylist(templist);
+            SelectedPlaylist = templist;
+        }
 
         public void DeletePlaylist()
         {
@@ -166,7 +183,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             }
         }
 
-        public void LoadPlaylist(IPlaylist playlist) 
+        public void LoadPlaylist(IPlaylist playlist)
         {
             Songs.Clear();
             foreach (var s in playlist)
