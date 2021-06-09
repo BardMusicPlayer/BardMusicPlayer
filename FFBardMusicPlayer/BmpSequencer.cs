@@ -244,19 +244,6 @@ namespace FFBardMusicPlayer
         {
             switch (prog)
             {
-                case 0: { return "Piano"; }
-                case 46: { return "Harp"; }
-                case 24: { return "Lute"; }
-                case 68: { return "Oboe"; }
-                case 71: { return "Clarinet"; }
-                case 75: { return "Panpipes"; }
-                case 72: { return "Fife"; }
-                case 47: { return "Timpani"; }
-
-                // Drums
-                //case 59: { }
-                //case 35: { }
-                //Guitar
                 case 27: { return "ElectricGuitarClean"; }
                 case 28: { return "ElectricGuitarMuted"; }
                 case 29: { return "ElectricGuitarOverdriven"; }
