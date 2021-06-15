@@ -15,20 +15,23 @@ namespace BardMusicPlayer.Ui.ViewModels
             _events = events;
 
             BardsViewModel = ioc.Get<BardViewModel>();
-            Playlist       = ioc.Get<PlaylistViewModel>();
+            Playlist = ioc.Get<PlaylistViewModel>();
         }
+
+        public string SongName { get; set; } = "Dreamland";
 
         public BardViewModel BardsViewModel { get; }
 
         public PlaylistViewModel Playlist { get; }
 
-        public async void LoadSong() { await Playlist.AddSongs(); }
+        public async void LoadSong() 
+        { 
+            await Playlist.AddSongs();
+            SongName = Playlist.CurrentSong.Title;
+        }
 
         public void OpenPlaylist()
-        {
-            var navigate = new NavigateToNotification(Playlist);
-            _events.Publish(navigate);
-        }
+        { var navigate = new NavigateToNotification(Playlist); }
 
         public void EditSong()
         {

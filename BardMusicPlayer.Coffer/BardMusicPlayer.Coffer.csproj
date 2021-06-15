@@ -12,6 +12,7 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <UserSecretsId>9705d18d-4e1e-4eba-a865-deffc1c16d5b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
