@@ -27,25 +27,12 @@ namespace BardMusicPlayer.Transmogrify.Song
         public async Task<List<TrackChunk>> RefreshTrackChunks(BmpSong song)
         {
             if (ProcessorConfig is null) throw new BmpTransmogrifyException("No configuration in this container.");
-
             return ProcessorConfig switch
             {
-                AutoToneProcessorConfig autoToneProcessorConfig => await new AutoToneProcessor(autoToneProcessorConfig,
-                    song).Process(),
-                ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig,
-                    song).Process(),
-                DrumToneProcessorConfig drumToneProcessorConfig => await new DrumToneProcessor(drumToneProcessorConfig,
-                    song).Process(),
-                LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song)
-                    .Process(),
-                ManualToneProcessorConfig manualToneProcessorConfig => await new ManualToneProcessor(
-                    manualToneProcessorConfig, song).Process(),
-                NoteToneProcessorConfig noteToneProcessorConfig => await new NoteToneProcessor(noteToneProcessorConfig,
-                    song).Process(),
-                OctaveToneProcessorConfig octaveToneProcessorConfig => await new OctaveToneProcessor(
-                    octaveToneProcessorConfig, song).Process(),
-                _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() +
-                                                        " is not a supported configuration type.")
+                ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
+                LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
+                VSTProcessorConfig vstProcessorConfig => await new VSTProcessor(vstProcessorConfig, song).Process(),
+                _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type."),
             };
         }
     }

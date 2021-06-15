@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
     {
         public override int Channel => -1;
 
-        public override MidiEventType Command => (MidiEventType) (Message & 0x00000FF);
+        public override MidiEventType Command => (MidiEventType)(Message & 0x00000FF);
 
         public int MetaStatus => Data1;
 

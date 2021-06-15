@@ -8,6 +8,7 @@
 
 // C# port for alphaTab: (C) 2019 by Daniel Kuschny
 // Licensed under: MPL-2.0
+
 /*
  * LICENSE (MIT)
  *
@@ -30,19 +31,15 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
     internal class Preset
     {
+
         public string Name { get; set; }
-
         public ushort PresetNumber { get; set; }
-
         public ushort Bank { get; set; }
-
         public Region[] Regions { get; set; }
-
         public float[] FontSamples { get; set; }
     }
 }

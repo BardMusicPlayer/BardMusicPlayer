@@ -24,9 +24,7 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
         public override Task<List<TrackChunk>> Process()
         {
-            var trackChunk = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }
-                .Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk))
-                .Merge();
+            var trackChunk = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).Merge();
 
             var lyricEvents = new List<TimedEvent>();
 
@@ -47,8 +45,7 @@ namespace BardMusicPlayer.Transmogrify.Processor
             {
                 trackChunk = new TrackChunk();
                 trackChunk.AddObjects(lyricEvents);
-                trackChunk.AddObjects(new List<ITimedObject>
-                    { new TimedEvent(new SequenceTrackNameEvent("lyric:" + lyricLineCount)) });
+                trackChunk.AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("lyric:"+lyricLineCount))});
                 trackChunks.Add(trackChunk);
             }
 

@@ -9,7 +9,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Util
     {
         public static LogLevel LogLevel { get; set; }
 
-        static Logger() { LogLevel = LogLevel.Info; }
+        static Logger()
+        {
+            LogLevel = LogLevel.Info;
+        }
 
         public static void Debug(string category, string msg, object details = null)
         {
@@ -33,7 +36,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Util
 
         public static void Log(LogLevel logLevel, string category, string msg, object details = null)
         {
-            if (logLevel < LogLevel || LogLevel == LogLevel.None) return;
+            if (logLevel < LogLevel || LogLevel == LogLevel.None)
+            {
+                return;
+            }
 
             Platform.Log(logLevel, category, msg, details);
         }

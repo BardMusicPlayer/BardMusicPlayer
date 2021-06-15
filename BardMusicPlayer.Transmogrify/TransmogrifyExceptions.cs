@@ -9,6 +9,8 @@ namespace BardMusicPlayer.Transmogrify
 {
     public class BmpTransmogrifyException : BmpException
     {
-        public BmpTransmogrifyException(string message) : base(message) { }
+        public BmpTransmogrifyException(string message) : base(message)
+        {
+        }
     }
 }

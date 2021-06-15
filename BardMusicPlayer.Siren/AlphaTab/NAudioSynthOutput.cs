@@ -18,15 +18,16 @@ namespace BardMusicPlayer.Siren.AlphaTab
     internal class NAudioSynthOutput : WaveProvider32, ISynthOutput, IDisposable
     {
         private const int BufferSize = 4096;
+        
         private const int PreferredSampleRate = 48000;
+
         private WasapiOut _context;
         private CircularSampleBuffer _circularBuffer;
         private bool _finished;
         private readonly MMDevice _device;
         private readonly byte _latency;
         private readonly byte _bufferCount;
-        private readonly int _bufferCountSize;
-
+        private readonly int _bufferCountSize; 
         /// <inheritdoc />
         public int SampleRate => PreferredSampleRate;
 
@@ -36,19 +37,21 @@ namespace BardMusicPlayer.Siren.AlphaTab
         public NAudioSynthOutput(MMDevice device, byte bufferCount, byte latency)
             : base(PreferredSampleRate, 2)
         {
-            _device          = device;
-            _latency         = latency;
-            _bufferCount     = bufferCount;
+            _device = device;
+            _latency = latency;
+            _bufferCount = bufferCount;
             _bufferCountSize = _bufferCount / 2 * BufferSize;
         }
 
         /// <inheritdoc />
-        public void Activate() { }
+        public void Activate()
+        {
+        }
 
         /// <inheritdoc />
         public void Open()
         {
-            _finished       = false;
+            _finished = false;
             _circularBuffer = new CircularSampleBuffer(BufferSize * _bufferCount);
 
             _context = new WasapiOut(_device, AudioClientShareMode.Shared, true, _latency);
@@ -58,7 +61,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
         }
 
         /// <inheritdoc />
-        public void Dispose() { Close(); }
+        public void Dispose()
+        {
+            Close();
+        }
 
         /// <summary>
         /// Closes the synth output and disposes all resources.
@@ -80,21 +86,32 @@ namespace BardMusicPlayer.Siren.AlphaTab
         }
 
         /// <inheritdoc />
-        public void Pause() { _context.Pause(); }
+        public void Pause()
+        {
+            _context.Pause();
+        }
 
         /// <inheritdoc />
-        public void SequencerFinished() { _finished = true; }
+        public void SequencerFinished()
+        {
+            _finished = true;
+        }
 
         /// <inheritdoc />
-        public void AddSamples(float[] f) { _circularBuffer.Write(f, 0, f.Length); }
+        public void AddSamples(float[] f)
+        {
+            _circularBuffer.Write(f, 0, f.Length);
+        }
 
         /// <inheritdoc />
-        public void ResetSamples() { _circularBuffer.Clear(); }
+        public void ResetSamples()
+        {
+            _circularBuffer.Clear();
+        }
 
         private void RequestBuffers()
         {
             if (_circularBuffer.Count >= _bufferCountSize || SampleRequest == null) return;
-
             for (var i = 0; i < _bufferCount / 2; i++) SampleRequest();
         }
 
@@ -103,33 +120,39 @@ namespace BardMusicPlayer.Siren.AlphaTab
         {
             if (_circularBuffer.Count < count)
             {
-                if (_finished) Finished();
+                if (_finished)
+                {
+                    Finished();
+                }
             }
             else
             {
                 var read = new float[count];
                 _circularBuffer.Read(read, 0, read.Length);
 
-                for (var i = 0; i < count; i++) buffer[offset + i] = read[i];
+                for (var i = 0; i < count; i++)
+                {
+                    buffer[offset + i] = read[i];
+                }
 
                 var samples = count / 2;
                 SamplesPlayed(samples);
             }
 
-            if (!_finished) RequestBuffers();
+            if (!_finished)
+            {
+                RequestBuffers();
+            }
 
             return count;
         }
 
         /// <inheritdoc />
         public event Action Ready;
-
         /// <inheritdoc />
         public event Action<int> SamplesPlayed;
-
         /// <inheritdoc />
         public event Action SampleRequest;
-
         /// <inheritdoc />
         public event Action Finished;
     }

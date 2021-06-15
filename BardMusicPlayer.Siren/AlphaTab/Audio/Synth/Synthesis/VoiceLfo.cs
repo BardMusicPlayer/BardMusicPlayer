@@ -8,6 +8,7 @@
 
 // C# port for alphaTab: (C) 2019 by Daniel Kuschny
 // Licensed under: MPL-2.0
+
 /*
  * LICENSE (MIT)
  *
@@ -38,16 +39,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
     internal class VoiceLfo
     {
         public int SamplesUntil { get; set; }
-
         public float Level { get; set; }
-
         public float Delta { get; set; }
 
         public void Setup(float delay, int freqCents, float outSampleRate)
         {
-            SamplesUntil = (int) (delay * outSampleRate);
-            Delta        = 4.0f * SynthHelper.Cents2Hertz(freqCents) / outSampleRate;
-            Level        = 0;
+            SamplesUntil = (int)(delay * outSampleRate);
+            Delta = (4.0f * SynthHelper.Cents2Hertz(freqCents) / outSampleRate);
+            Level = 0;
         }
 
         public void Process(int blockSamples)
@@ -57,7 +56,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 SamplesUntil -= blockSamples;
                 return;
             }
-
             Level += Delta * blockSamples;
             if (Level > 1.0f)
             {

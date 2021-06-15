@@ -8,6 +8,7 @@
 
 // C# port for alphaTab: (C) 2019 by Daniel Kuschny
 // Licensed under: MPL-2.0
+
 /*
  * LICENSE (MIT)
  *
@@ -40,30 +41,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
         public const int SizeInFile = 38;
 
         public string PresetName { get; set; }
-
         public ushort Preset { get; set; }
-
         public ushort Bank { get; set; }
-
         public ushort PresetBagNdx { get; set; }
-
         public uint Library { get; set; }
-
         public uint Genre { get; set; }
-
         public uint Morphology { get; set; }
 
         public static HydraPhdr Load(IReadable reader)
         {
-            var phdr = new HydraPhdr();
+            HydraPhdr phdr = new HydraPhdr();
 
-            phdr.PresetName   = reader.Read8BitStringLength(20);
-            phdr.Preset       = reader.ReadUInt16LE();
-            phdr.Bank         = reader.ReadUInt16LE();
+            phdr.PresetName = reader.Read8BitStringLength(20);
+            phdr.Preset = reader.ReadUInt16LE();
+            phdr.Bank = reader.ReadUInt16LE();
             phdr.PresetBagNdx = reader.ReadUInt16LE();
-            phdr.Library      = reader.ReadUInt32LE();
-            phdr.Genre        = reader.ReadUInt32LE();
-            phdr.Morphology   = reader.ReadUInt32LE();
+            phdr.Library = reader.ReadUInt32LE();
+            phdr.Genre = reader.ReadUInt32LE();
+            phdr.Morphology = reader.ReadUInt32LE();
 
             return phdr;
         }

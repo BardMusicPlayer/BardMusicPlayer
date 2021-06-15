@@ -27,35 +27,26 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
         public override async Task<List<TrackChunk>> Process()
         {
-            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }
-                .Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk))
-                .ToList();
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
 
-            var trackChunk = TimedObjectUtilities.ToTrackChunk(await
+            var trackChunk = TimedObjectUtilities.ToTrackChunk(await 
                 trackChunks.GetNoteDictionary(Song.SourceTempoMap, ProcessorConfig.Instrument.InstrumentTone,
-                        ProcessorConfig.OctaveRange.LowerNote,
-                        ProcessorConfig.OctaveRange.UpperNote,
-                        (int) ProcessorConfig.Instrument.InstrumentToneMenuKey,
+                        ProcessorConfig.OctaveRange.LowerNote, 
+                        ProcessorConfig.OctaveRange.UpperNote, 
+                        (int) ProcessorConfig.Instrument.InstrumentToneMenuKey, 
                         false,
                         -ProcessorConfig.OctaveRange.LowerNote)
-                    .MoveNoteDictionaryToDefaultOctave(ProcessorConfig.OctaveRange)
-                    .ConcatNoteDictionaryToList());
+                .MoveNoteDictionaryToDefaultOctave(ProcessorConfig.OctaveRange)
+                .ConcatNoteDictionaryToList());
 
-            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(ProcessorConfig.PlayerCount,
-                OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
+            var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(ProcessorConfig.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
 
-            var concurrentPlayerTrackDictionary =
-                new ConcurrentDictionary<long, TrackChunk>(ProcessorConfig.PlayerCount, ProcessorConfig.PlayerCount);
+            var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>(ProcessorConfig.PlayerCount, ProcessorConfig.PlayerCount);
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(
-                        await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
-                    concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>
-                    {
-                        new TimedEvent(
-                            new SequenceTrackNameEvent("tone:" + ProcessorConfig.Instrument.InstrumentTone.Name))
-                    });
+                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
+                    concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + ProcessorConfig.Instrument.InstrumentTone.Name))});
                 }
             );
 

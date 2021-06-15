@@ -11,14 +11,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         public int Length { get; private set; }
 
-        public LinkedList() { Length = 0; }
+        public LinkedList()
+        {
+            Length = 0;
+        }
 
         public void AddFirst(T value)
         {
             var node = new LinkedListNode<T>();
             node.Value = value;
             if (First == null)
+            {
                 InsertNodeToEmptyList(node);
+            }
             else
             {
                 InsertNodeBefore(First, node);
@@ -31,14 +36,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
             var node = new LinkedListNode<T>();
             node.Value = value;
             if (First == null)
+            {
                 InsertNodeToEmptyList(node);
+            }
             else
+            {
                 InsertNodeBefore(First, node);
+            }
         }
 
         public T RemoveFirst()
         {
-            if (First == null) return null;
+            if (First == null)
+            {
+                return null;
+            }
 
             var v = First.Value;
             Remove(First);
@@ -47,7 +59,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         public T RemoveLast()
         {
-            if (First == null) return null;
+            if (First == null)
+            {
+                return null;
+            }
 
             var v = First.PrevInternal != null ? First.PrevInternal.Value : null;
             Remove(First.PrevInternal);
@@ -57,12 +72,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         public void Remove(LinkedListNode<T> n)
         {
             if (n.NextInternal == n)
+            {
                 First = null;
+            }
             else
             {
                 n.NextInternal.PrevInternal = n.PrevInternal;
                 n.PrevInternal.NextInternal = n.NextInternal;
-                if (First == n) First = n.NextInternal;
+                if (First == n)
+                {
+                    First = n.NextInternal;
+                }
             }
 
             n.Invalidate();
@@ -71,11 +91,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         private void InsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode)
         {
-            newNode.NextInternal           = node;
-            newNode.PrevInternal           = node.PrevInternal;
+            newNode.NextInternal = node;
+            newNode.PrevInternal = node.PrevInternal;
             node.PrevInternal.NextInternal = newNode;
-            node.PrevInternal              = newNode;
-            newNode.List                   = this;
+            node.PrevInternal = newNode;
+            newNode.List = this;
             Length++;
         }
 
@@ -83,8 +103,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         {
             node.NextInternal = node;
             node.PrevInternal = node;
-            node.List         = this;
-            First             = node;
+            node.List = this;
+            First = node;
             Length++;
         }
     }
@@ -103,7 +123,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         public void Invalidate()
         {
-            List         = null;
+            List = null;
             NextInternal = null;
             PrevInternal = null;
         }

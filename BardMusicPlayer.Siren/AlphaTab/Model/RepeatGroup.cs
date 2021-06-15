@@ -43,14 +43,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public RepeatGroup()
         {
             MasterBars = new FastList<MasterBar>();
-            Openings   = new FastList<MasterBar>();
-            Closings   = new FastList<MasterBar>();
-            IsClosed   = false;
+            Openings = new FastList<MasterBar>();
+            Closings = new FastList<MasterBar>();
+            IsClosed = false;
         }
 
         internal void AddMasterBar(MasterBar masterBar)
         {
-            if (Openings.Count == 0) Openings.Add(masterBar);
+            if (Openings.Count == 0)
+            {
+                Openings.Add(masterBar);
+            }
 
             MasterBars.Add(masterBar);
             masterBar.RepeatGroup = this;
@@ -62,7 +65,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 if (!IsOpened)
                 {
                     MasterBars[0].IsRepeatStart = true;
-                    IsOpened                    = true;
+                    IsOpened = true;
                 }
             }
             // a new item after the header was closed? -> repeat alternative reopens the group

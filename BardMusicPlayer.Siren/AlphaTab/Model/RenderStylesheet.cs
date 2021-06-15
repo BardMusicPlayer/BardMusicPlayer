@@ -19,8 +19,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderStylesheet"/> class.
         /// </summary>
-        public RenderStylesheet() { HideDynamics = false; }
+        public RenderStylesheet()
+        {
+            HideDynamics = false;
+        }
 
-        internal static void CopyTo(RenderStylesheet src, RenderStylesheet dst) { dst.HideDynamics = src.HideDynamics; }
+        internal static void CopyTo(RenderStylesheet src, RenderStylesheet dst)
+        {
+            dst.HideDynamics = src.HideDynamics;
+        }
     }
 }

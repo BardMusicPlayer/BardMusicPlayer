@@ -34,49 +34,63 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <summary>
         /// Gets or sets a value indicating whether this voice is empty. 
         /// </summary>
-        public bool IsEmpty { get; set; }
+        public bool IsEmpty
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Voice"/> class.
         /// </summary>
         public Voice()
         {
-            Beats   = new FastList<Beat>();
+            Beats = new FastList<Beat>();
             IsEmpty = true;
         }
 
         internal static void CopyTo(Voice src, Voice dst)
         {
-            dst.Index   = src.Index;
+            dst.Index = src.Index;
             dst.IsEmpty = src.IsEmpty;
         }
 
         internal void InsertBeat(Beat after, Beat newBeat)
         {
             newBeat.NextBeat = after.NextBeat;
-            if (newBeat.NextBeat != null) newBeat.NextBeat.PreviousBeat = newBeat;
+            if (newBeat.NextBeat != null)
+            {
+                newBeat.NextBeat.PreviousBeat = newBeat;
+            }
 
             newBeat.PreviousBeat = after;
-            newBeat.Voice        = this;
-            after.NextBeat       = newBeat;
+            newBeat.Voice = this;
+            after.NextBeat = newBeat;
             Beats.InsertAt(after.Index + 1, newBeat);
         }
+
 
         internal void AddBeat(Beat beat)
         {
             beat.Voice = this;
             beat.Index = Beats.Count;
             Beats.Add(beat);
-            if (!beat.IsEmpty) IsEmpty = false;
+            if (!beat.IsEmpty)
+            {
+                IsEmpty = false;
+            }
         }
 
         private void Chain(Beat beat)
         {
-            if (Bar == null) return;
+            if (Bar == null)
+            {
+                return;
+            }
 
             if (beat.Index < Beats.Count - 1)
             {
-                beat.NextBeat              = Beats[beat.Index + 1];
+                beat.NextBeat = Beats[beat.Index + 1];
                 beat.NextBeat.PreviousBeat = beat;
             }
             else if (beat.IsLastOfVoice && beat.Voice.Bar.NextBar != null)
@@ -84,11 +98,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 var nextVoice = Bar.NextBar.Voices[Index];
                 if (nextVoice.Beats.Count > 0)
                 {
-                    beat.NextBeat              = nextVoice.Beats[0];
+                    beat.NextBeat = nextVoice.Beats[0];
                     beat.NextBeat.PreviousBeat = beat;
                 }
                 else
+                {
                     beat.NextBeat.PreviousBeat = beat;
+                }
             }
         }
 
@@ -114,7 +130,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal Beat GetBeatAtDisplayStart(int displayStart)
         {
-            if (_beatLookup.ContainsKey(displayStart)) return _beatLookup[displayStart];
+            if (_beatLookup.ContainsKey(displayStart))
+            {
+                return _beatLookup[displayStart];
+            }
 
             return null;
         }
@@ -139,9 +158,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
                 if (beat.GraceType == GraceType.None || beat.GraceType == GraceType.BendGrace)
                 {
-                    beat.DisplayStart   =  currentDisplayTick;
-                    beat.PlaybackStart  =  currentPlaybackTick;
-                    currentDisplayTick  += beat.DisplayDuration;
+                    beat.DisplayStart = currentDisplayTick;
+                    beat.PlaybackStart = currentPlaybackTick;
+                    currentDisplayTick += beat.DisplayDuration;
                     currentPlaybackTick += beat.PlaybackDuration;
                 }
                 else
@@ -160,13 +179,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         var graceDuration = Duration.Eighth;
                         var stolenDuration = 0;
                         if (numberOfGraceBeats == 1)
+                        {
                             graceDuration = Duration.Eighth;
+                        }
                         else if (numberOfGraceBeats == 2)
+                        {
                             graceDuration = Duration.Sixteenth;
+                        }
                         else
+                        {
                             graceDuration = Duration.ThirtySecond;
+                        }
 
-                        if (nonGrace != null) nonGrace.UpdateDurations();
+                        if (nonGrace != null)
+                        {
+                            nonGrace.UpdateDurations();
+                        }
 
                         // grace beats have 1/4 size of the non grace beat preceeding them
                         var perGraceDisplayDuration = beat.PreviousBeat == null
@@ -192,15 +220,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         // steal needed duration from beat duration
                         if (beat.GraceType == GraceType.BeforeBeat)
                         {
-                            if (beat.PreviousBeat != null) beat.PreviousBeat.PlaybackDuration -= stolenDuration;
+                            if (beat.PreviousBeat != null)
+                            {
+                                beat.PreviousBeat.PlaybackDuration -= stolenDuration;
+                            }
 
                             currentPlaybackTick -= stolenDuration;
                         }
                         else if (nonGrace != null && beat.GraceType == GraceType.OnBeat)
+                        {
                             nonGrace.PlaybackDuration -= stolenDuration;
+                        }
                     }
 
-                    beat.PlaybackStart  = currentPlaybackTick;
+                    beat.PlaybackStart = currentPlaybackTick;
                     currentPlaybackTick = beat.PlaybackStart + beat.PlaybackDuration;
                 }
 
@@ -211,7 +244,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         public int CalculateDuration()
         {
-            if (IsEmpty || Beats.Count == 0) return 0;
+            if (IsEmpty || Beats.Count == 0)
+            {
+                return 0;
+            }
 
             var lastBeat = Beats[Beats.Count - 1];
             return lastBeat.PlaybackStart + lastBeat.PlaybackDuration;

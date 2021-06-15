@@ -17,16 +17,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
             Value = number;
         }
 
+
         public override void WriteTo(IWriteable s)
         {
             s.WriteByte(0xFF);
-            s.WriteByte((byte) MetaStatus);
+            s.WriteByte((byte)MetaStatus);
 
             MidiFile.WriteVariableInt(s, 3);
 
             var b = new[]
             {
-                (byte) ((Value >> 16) & 0xFF), (byte) ((Value >> 8) & 0xFF), (byte) (Value & 0xFF)
+                (byte)((Value >> 16) & 0xFF), (byte)((Value >> 8) & 0xFF), (byte)(Value & 0xFF)
             };
             s.Write(b, 0, b.Length);
         }

@@ -16,14 +16,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
 
         public int Position { get; set; }
 
-        public virtual byte[] GetBuffer() => _buffer;
+        public virtual byte[] GetBuffer()
+        {
+            return _buffer;
+        }
 
-        public static ByteBuffer Empty() => WithCapactiy(0);
+
+        public static ByteBuffer Empty()
+        {
+            return WithCapactiy(0);
+        }
 
         public static ByteBuffer WithCapactiy(int capacity)
         {
             var buffer = new ByteBuffer();
-            buffer._buffer   = new byte[capacity];
+            buffer._buffer = new byte[capacity];
             buffer._capacity = capacity;
             return buffer;
         }
@@ -31,16 +38,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
         public static ByteBuffer FromBuffer(byte[] data)
         {
             var buffer = new ByteBuffer();
-            buffer._buffer   = data;
+            buffer._buffer = data;
             buffer._capacity = buffer.Length = data.Length;
             return buffer;
         }
 
-        private ByteBuffer() { }
+        private ByteBuffer()
+        {
+        }
 
-        public void Reset() { Position = 0; }
+        public void Reset()
+        {
+            Position = 0;
+        }
 
-        public void Skip(int offset) { Position += offset; }
+        public void Skip(int offset)
+        {
+            Position += offset;
+        }
 
         private void SetCapacity(int value)
         {
@@ -49,12 +64,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
                 if (value > 0)
                 {
                     var newBuffer = new byte[value];
-                    if (Length > 0) Platform.BlockCopy(_buffer, 0, newBuffer, 0, Length);
+                    if (Length > 0)
+                    {
+                        Platform.BlockCopy(_buffer, 0, newBuffer, 0, Length);
+                    }
 
                     _buffer = newBuffer;
                 }
                 else
+                {
                     _buffer = null;
+                }
 
                 _capacity = value;
             }
@@ -63,7 +83,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
         public int ReadByte()
         {
             var n = Length - Position;
-            if (n <= 0) return -1;
+            if (n <= 0)
+            {
+                return -1;
+            }
 
             return _buffer[Position++];
         }
@@ -71,9 +94,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
         public int Read(byte[] buffer, int offset, int count)
         {
             var n = Length - Position;
-            if (n > count) n = count;
+            if (n > count)
+            {
+                n = count;
+            }
 
-            if (n <= 0) return 0;
+            if (n <= 0)
+            {
+                return 0;
+            }
 
             if (n <= 8)
             {
@@ -84,7 +113,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
                 }
             }
             else
+            {
                 Platform.BlockCopy(_buffer, Position, buffer, offset, n);
+            }
 
             Position += n;
 
@@ -104,7 +135,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
 
             if (i > Length)
             {
-                if (i > _capacity) EnsureCapacity(i);
+                if (i > _capacity)
+                {
+                    EnsureCapacity(i);
+                }
 
                 Length = i;
             }
@@ -118,7 +152,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
                 }
             }
             else
+            {
                 Platform.BlockCopy(buffer, offset, _buffer, Position, Math.Min(count, buffer.Length - offset));
+            }
 
             Position = i;
         }
@@ -128,15 +164,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             if (value > _capacity)
             {
                 var newCapacity = value;
-                if (newCapacity < 256) newCapacity = 256;
+                if (newCapacity < 256)
+                {
+                    newCapacity = 256;
+                }
 
-                if (newCapacity < _capacity * 2) newCapacity = _capacity * 2;
+                if (newCapacity < _capacity * 2)
+                {
+                    newCapacity = _capacity * 2;
+                }
 
                 SetCapacity(newCapacity);
             }
         }
 
-        public byte[] ReadAll() => ToArray();
+        public byte[] ReadAll()
+        {
+            return ToArray();
+        }
 
         public virtual byte[] ToArray()
         {

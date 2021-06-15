@@ -24,11 +24,11 @@ namespace BardMusicPlayer.Siren.AlphaTab
         {
             _uiInvoke = uiInvoke;
 
-            _threadStartedEvent      = new ManualResetEventSlim(false);
-            _workerQueue             = new BlockingCollection<Action>();
+            _threadStartedEvent = new ManualResetEventSlim(false);
+            _workerQueue = new BlockingCollection<Action>();
             _workerCancellationToken = new CancellationTokenSource();
 
-            _workerThread              = new Thread(DoWork);
+            _workerThread = new Thread(DoWork);
             _workerThread.IsBackground = true;
             _workerThread.Start();
 
@@ -44,16 +44,26 @@ namespace BardMusicPlayer.Siren.AlphaTab
             _workerThread.Join();
         }
 
-        protected override void DispatchOnUiThread(Action action) { _uiInvoke(action); }
+        protected override void DispatchOnUiThread(Action action)
+        {
+            _uiInvoke(action);
+        }
 
-        private bool CheckAccess() => Thread.CurrentThread == _workerThread;
+        private bool CheckAccess()
+        {
+            return Thread.CurrentThread == _workerThread;
+        }
 
         protected override void DispatchOnWorkerThread(Action action)
         {
             if (CheckAccess())
+            {
                 action();
+            }
             else
+            {
                 _workerQueue.Add(action);
+            }
         }
 
         private void DoWork()
@@ -63,7 +73,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
                 _threadStartedEvent.Set();
                 while (_workerQueue.TryTake(out var action, Timeout.Infinite, _workerCancellationToken.Token))
                 {
-                    if (_workerCancellationToken.IsCancellationRequested) break;
+                    if (_workerCancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
 
                     action();
                 }

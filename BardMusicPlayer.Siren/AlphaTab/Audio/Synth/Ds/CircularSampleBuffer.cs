@@ -22,10 +22,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         /// <param name="size">The size.</param>
         public CircularSampleBuffer(int size)
         {
-            _buffer        = new float[size];
+            _buffer = new float[size];
             _writePosition = 0;
-            _readPosition  = 0;
-            Count          = 0;
+            _readPosition = 0;
+            Count = 0;
         }
 
         /// <summary>
@@ -38,10 +38,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         /// </summary>
         public void Clear()
         {
-            _readPosition  = 0;
+            _readPosition = 0;
             _writePosition = 0;
-            Count          = 0;
-            _buffer        = new float[_buffer.Length];
+            Count = 0;
+            _buffer = new float[_buffer.Length];
         }
 
         /// <summary>
@@ -54,7 +54,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         public int Write(float[] data, int offset, int count)
         {
             var samplesWritten = 0;
-            if (count > _buffer.Length - Count) count = _buffer.Length - Count;
+            if (count > _buffer.Length - Count)
+            {
+                count = _buffer.Length - Count;
+            }
 
             var writeToEnd = Math.Min(_buffer.Length - _writePosition, count);
             Platform.ArrayCopy(data, offset, _buffer, _writePosition, writeToEnd);
@@ -65,7 +68,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
             {
                 Platform.ArrayCopy(data, offset + samplesWritten, _buffer, _writePosition, count - samplesWritten);
                 _writePosition += count - samplesWritten;
-                samplesWritten =  count;
+                samplesWritten = count;
             }
 
             Count += samplesWritten;
@@ -81,12 +84,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         /// <returns>The number of items actually read from the buffer.</returns>
         public int Read(float[] data, int offset, int count)
         {
-            if (count > Count) count = Count;
+            if (count > Count)
+            {
+                count = Count;
+            }
 
             var samplesRead = 0;
             var readToEnd = Math.Min(_buffer.Length - _readPosition, count);
             Platform.ArrayCopy(_buffer, _readPosition, data, offset, readToEnd);
-            samplesRead   += readToEnd;
+            samplesRead += readToEnd;
             _readPosition += readToEnd;
             _readPosition %= _buffer.Length;
 
@@ -94,7 +100,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
             {
                 Platform.ArrayCopy(_buffer, _readPosition, data, offset + samplesRead, count - samplesRead);
                 _readPosition += count - samplesRead;
-                samplesRead   =  count;
+                samplesRead = count;
             }
 
             Count -= samplesRead;

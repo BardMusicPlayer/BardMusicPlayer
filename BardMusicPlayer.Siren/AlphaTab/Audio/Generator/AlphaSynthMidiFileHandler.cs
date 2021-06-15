@@ -21,7 +21,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         /// Initializes a new instance of the <see cref="AlphaSynthMidiFileHandler"/> class.
         /// </summary>
         /// <param name="midiFile">The midi file.</param>
-        public AlphaSynthMidiFileHandler(MidiFile midiFile) { _midiFile = midiFile; }
+        public AlphaSynthMidiFileHandler(MidiFile midiFile)
+        {
+            _midiFile = midiFile;
+        }
 
         /// <inheritdoc />
         public void AddTimeSignature(int tick, int timeSignatureNumerator, int timeSignatureDenominator)
@@ -34,10 +37,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
 
             var message = new MetaDataEvent(tick,
                 0xFF,
-                (byte) MetaEventTypeEnum.TimeSignature,
+                (byte)MetaEventTypeEnum.TimeSignature,
                 new byte[]
                 {
-                    (byte) (timeSignatureNumerator & 0xFF), (byte) (denominatorIndex & 0xFF), 48, 8
+                    (byte)(timeSignatureNumerator & 0xFF), (byte)(denominatorIndex & 0xFF), 48, 8
                 });
             _midiFile.AddEvent(message);
         }
@@ -46,7 +49,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         public void AddRest(int track, int tick, int channel)
         {
             var message = new SystemExclusiveEvent(tick,
-                (byte) SystemCommonTypeEnum.SystemExclusive,
+                (byte)SystemCommonTypeEnum.SystemExclusive,
                 0,
                 new byte[]
                 {
@@ -61,38 +64,47 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
             var velocity = MidiUtils.DynamicToVelocity(dynamicValue);
 
             var noteOn = new MidiEvent(start,
-                MakeCommand((byte) MidiEventType.NoteOn, channel),
+                MakeCommand((byte)MidiEventType.NoteOn, channel),
                 FixValue(key),
-                FixValue((byte) velocity),
+                FixValue((byte)velocity),
                 true,
                 channel);
             _midiFile.AddEvent(noteOn);
 
             var noteOff = new MidiEvent(start + length,
-                MakeCommand((byte) MidiEventType.NoteOff, channel),
+                MakeCommand((byte)MidiEventType.NoteOff, channel),
                 FixValue(key),
-                FixValue((byte) velocity),
+                FixValue((byte)velocity),
                 true,
                 channel);
             _midiFile.AddEvent(noteOff);
         }
 
-        private byte MakeCommand(byte command, byte channel) => (byte) ((command & 0xF0) | (channel & 0x0F));
+        private byte MakeCommand(byte command, byte channel)
+        {
+            return (byte)((command & 0xF0) | (channel & 0x0F));
+        }
 
         private static byte FixValue(int value)
         {
-            if (value > 127) return 127;
+            if (value > 127)
+            {
+                return 127;
+            }
 
-            if (value < 0) return 0;
+            if (value < 0)
+            {
+                return 0;
+            }
 
-            return (byte) value;
+            return (byte)value;
         }
 
         /// <inheritdoc />
         public void AddControlChange(int track, int tick, byte channel, byte controller, byte value)
         {
             var message = new MidiEvent(tick,
-                MakeCommand((byte) MidiEventType.Controller, channel),
+                MakeCommand((byte)MidiEventType.Controller, channel),
                 FixValue(controller),
                 FixValue(value));
             _midiFile.AddEvent(message);
@@ -102,7 +114,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         public void AddProgramChange(int track, int tick, byte channel, byte program)
         {
             var message = new MidiEvent(tick,
-                MakeCommand((byte) MidiEventType.ProgramChange, channel),
+                MakeCommand((byte)MidiEventType.ProgramChange, channel),
                 FixValue(program),
                 0,
                 true,
@@ -118,7 +130,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
 
             var message = new MetaNumberEvent(tick,
                 0xFF,
-                (byte) MetaEventTypeEnum.Tempo,
+                (byte)MetaEventTypeEnum.Tempo,
                 tempoInUsq);
             _midiFile.AddEvent(message);
         }
@@ -126,7 +138,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         /// <inheritdoc />
         public void AddBend(int track, int tick, byte channel, int value)
         {
-            var message = new MidiEvent(tick, MakeCommand((byte) MidiEventType.PitchBend, channel), 0, FixValue(value));
+            var message = new MidiEvent(tick, MakeCommand((byte)MidiEventType.PitchBend, channel), 0, FixValue(value));
             _midiFile.AddEvent(message);
         }
 
@@ -135,7 +147,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         {
             var message = new MetaDataEvent(tick,
                 0xFF,
-                (byte) MetaEventTypeEnum.EndOfTrack,
+                (byte)MetaEventTypeEnum.EndOfTrack,
                 new byte[0]);
             _midiFile.AddEvent(message);
             _midiFile.Sort();

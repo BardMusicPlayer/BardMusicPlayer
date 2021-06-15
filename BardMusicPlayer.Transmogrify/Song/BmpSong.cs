@@ -32,10 +32,6 @@ namespace BardMusicPlayer.Transmogrify.Song
         public string Title { get; set; } = "";
 
         /// <summary>
-        /// Get/Set the real path and name
-        /// </summary>
-        public string FullPath { get; set;  } = "";
-        /// <summary>
         /// 
         /// </summary>
         public List<string> Tags { get; set; } = new();
@@ -56,12 +52,10 @@ namespace BardMusicPlayer.Transmogrify.Song
         /// <returns></returns>
         public Task<MidiFile> GetProcessedMidiFile()
         {
-            var sourceMidiData = new MidiFile(TrackContainers.Values.SelectMany(track => track.ConfigContainers)
-                .SelectMany(track => track.Value.ProccesedTrackChunks));
+            var sourceMidiData = new MidiFile(TrackContainers.Values.SelectMany(track => track.ConfigContainers).SelectMany(track => track.Value.ProccesedTrackChunks));
             sourceMidiData.ReplaceTempoMap(Tools.GetMsTempoMap());
             var midiFile = new MidiFile();
             if (sourceMidiData.GetNotes().Count < 1) return Task.FromResult(midiFile);
-
             var delta = sourceMidiData.GetNotes().First().Time;
             foreach (var trackChunk in sourceMidiData.GetTrackChunks())
             {
@@ -73,11 +67,9 @@ namespace BardMusicPlayer.Transmogrify.Song
                     foreach (var note in trackChunk.GetNotes())
                     {
                         if (note.Time - delta < 0) continue; // TODO: log this error, though this shouldn't be possible.
-
                         note.Time -= delta;
                         newNotes.Add(note);
                     }
-
                     newTrackChunk.AddObjects(newNotes);
                     midiFile.Chunks.Add(newTrackChunk);
                 }
@@ -85,21 +77,16 @@ namespace BardMusicPlayer.Transmogrify.Song
                 {
                     var newTrackChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
                     var newLyrics = new List<TimedEvent>();
-                    foreach (var midiEvent in trackChunk.GetTimedEvents()
-                        .Where(e => e.Event.EventType == MidiEventType.Lyric))
+                    foreach (var midiEvent in trackChunk.GetTimedEvents().Where(e => e.Event.EventType == MidiEventType.Lyric))
                     {
-                        if (midiEvent.Time - delta < 0)
-                            continue; // TODO: log that you cannot have lyrics come before the first note.
-
+                        if (midiEvent.Time - delta < 0) continue; // TODO: log that you cannot have lyrics come before the first note.
                         midiEvent.Time -= delta;
                         newLyrics.Add(midiEvent);
                     }
-
                     newTrackChunk.AddObjects(newLyrics);
                     midiFile.Chunks.Add(newTrackChunk);
                 }
             }
-
             midiFile.ReplaceTempoMap(Tools.GetMsTempoMap());
             return Task.FromResult(midiFile);
         }
@@ -124,26 +111,20 @@ namespace BardMusicPlayer.Transmogrify.Song
 
             var song = new BmpSong
             {
-                FullPath        = path,
-                Title           = Path.GetFileNameWithoutExtension(path),
-                SourceTempoMap  = midiFile.GetTempoMap().Clone(),
+                Title = Path.GetFileNameWithoutExtension(path),
+                SourceTempoMap = midiFile.GetTempoMap().Clone(),
                 TrackContainers = new Dictionary<long, TrackContainer>()
             };
 
             var trackChunkArray = midiFile.GetTrackChunks().ToArray();
 
-            for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++)
+            for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++) song.TrackContainers[i] = new TrackContainer
             {
-                song.TrackContainers[i] = new TrackContainer
-                {
-                    SourceTrackChunk = (TrackChunk) trackChunkArray[i].Clone()
-                };
-            }
-
-            for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++)
+                SourceTrackChunk = (TrackChunk) trackChunkArray[i].Clone()
+            };
+            for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++) 
             {
-                song.TrackContainers[i].ConfigContainers =
-                    song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
+                song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
             }
 
             Parallel.For(0, song.TrackContainers.Count, i =>
@@ -161,21 +142,17 @@ namespace BardMusicPlayer.Transmogrify.Song
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;
-                        case AutoToneProcessorConfig autoToneConfig:
-                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
-                                              autoToneConfig.GetType() +
-                                              " AutoToneInstrumentGroup:" + autoToneConfig.AutoToneInstrumentGroup +
-                                              " OctaveRange:" +
-                                              autoToneConfig.AutoToneOctaveRange + " PlayerCount:" +
-                                              autoToneConfig.PlayerCount +
-                                              " IncludeTracks:" + string.Join(",", autoToneConfig.IncludedTracks));
-                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
-                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
-                            break;
                         case LyricProcessorConfig lyricConfig:
                             Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
                                               lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
                                               " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case VSTProcessorConfig vstConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              vstConfig.GetType() + " PlayerCount:" + vstConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", vstConfig.IncludedTracks));
                             song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
                                 await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
                             break;

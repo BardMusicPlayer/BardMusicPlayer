@@ -8,9 +8,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
     internal class TuningParseResult
     {
         public string Note { get; set; }
-
         public int NoteValue { get; set; }
-
         public int Octave { get; set; }
 
         public int RealValue => Octave * 12 + NoteValue;
@@ -23,7 +21,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>Checks if the given string is a tuning inticator.
         /// <param name="name"></param>
         /// <returns></returns>
-        public static bool IsTuning(string name) => Parse(name) != null;
+        public static bool IsTuning(string name)
+        {
+            return Parse(name) != null;
+        }
 
         public static TuningParseResult Parse(string name)
         {
@@ -32,25 +33,35 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
             for (var i = 0; i < name.Length; i++)
             {
-                var c = (int) name[i];
+                var c = (int)name[i];
                 if (Platform.IsCharNumber(c, false))
                 {
                     // number without note?
-                    if (string.IsNullOrEmpty(note)) return null;
+                    if (string.IsNullOrEmpty(note))
+                    {
+                        return null;
+                    }
 
                     octave += Platform.StringFromCharCode(c);
                 }
                 else if (c >= 0x41 && c <= 0x5A || c >= 0x61 && c <= 0x7A || c == 0x23)
+                {
                     note += Platform.StringFromCharCode(c);
+                }
                 else
+                {
                     return null;
+                }
             }
 
-            if (string.IsNullOrEmpty(octave) || string.IsNullOrEmpty(note)) return null;
+            if (string.IsNullOrEmpty(octave) || string.IsNullOrEmpty(note))
+            {
+                return null;
+            }
 
             var result = new TuningParseResult();
-            result.Octave    = Platform.ParseInt(octave) + 1;
-            result.Note      = note.ToLower();
+            result.Octave = Platform.ParseInt(octave) + 1;
+            result.Note = note.ToLower();
             result.NoteValue = GetToneForText(result.Note);
             return result;
         }
@@ -58,7 +69,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public static int GetTuningForText(string str)
         {
             var result = Parse(str);
-            if (result == null) return -1;
+            if (result == null)
+            {
+                return -1;
+            }
 
             return result.RealValue;
         }

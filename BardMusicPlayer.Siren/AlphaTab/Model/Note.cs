@@ -31,6 +31,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public int Index { get; set; }
 
+
         /// <summary>
         /// Gets or sets the bend type for this note.
         /// </summary>
@@ -316,14 +317,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         public DynamicValue Dynamics { get; set; }
 
         internal bool IsEffectSlurOrigin { get; set; }
-
         internal bool HasEffectSlur { get; set; }
-
         internal bool IsEffectSlurDestination => EffectSlurOrigin != null;
-
         internal Note EffectSlurOrigin { get; set; }
-
         internal Note EffectSlurDestination { get; set; }
+
 
         /// <summary>
         /// Gets the base note value for the string of this note.
@@ -332,7 +330,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal static int GetStringTuning(Staff staff, int noteString)
         {
-            if (staff.Tuning.Length > 0) return staff.Tuning[staff.Tuning.Length - (noteString - 1) - 1];
+            if (staff.Tuning.Length > 0)
+            {
+                return staff.Tuning[staff.Tuning.Length - (noteString - 1) - 1];
+            }
 
             return 0;
         }
@@ -344,15 +345,21 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             get
             {
+
                 if (IsStringed)
                 {
                     if (HarmonicType == HarmonicType.Natural)
+                    {
                         return HarmonicPitch + StringTuning - Beat.Voice.Bar.Staff.TranspositionPitch;
+                    }
 
                     return Fret + StringTuning - Beat.Voice.Bar.Staff.TranspositionPitch + HarmonicPitch;
                 }
 
-                if (IsPiano) return Octave * 12 + Tone - Beat.Voice.Bar.Staff.TranspositionPitch;
+                if (IsPiano)
+                {
+                    return Octave * 12 + Tone - Beat.Voice.Bar.Staff.TranspositionPitch;
+                }
 
                 return 0;
             }
@@ -365,12 +372,18 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             get
             {
-                if (HarmonicType == HarmonicType.None || !IsStringed) return 0;
+                if (HarmonicType == HarmonicType.None || !IsStringed)
+                {
+                    return 0;
+                }
 
                 var value = HarmonicValue;
 
                 // add semitones to reach corresponding harmonic frets
-                if (value.IsAlmostEqualTo(2.4f)) return 36;
+                if (value.IsAlmostEqualTo(2.4f))
+                {
+                    return 36;
+                }
 
                 if (value.IsAlmostEqualTo(2.7f))
                 {
@@ -390,23 +403,50 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     return 31;
                 }
 
-                if (value <= 4) return 28;
+                if (value <= 4)
+                {
+                    return 28;
+                }
 
-                if (value <= 5) return 24;
+                if (value <= 5)
+                {
+                    return 24;
+                }
 
-                if (value <= 6 /* 5.8 */) return 34;
+                if (value <= 6 /* 5.8 */)
+                {
+                    return 34;
+                }
 
-                if (value <= 7) return 19;
+                if (value <= 7)
+                {
+                    return 19;
+                }
 
-                if (value <= 8.5 /*8.2*/) return 36;
+                if (value <= 8.5 /*8.2*/)
+                {
+                    return 36;
+                }
 
-                if (value <= 9) return 28;
+                if (value <= 9)
+                {
+                    return 28;
+                }
 
-                if (value <= 10 /*9.6*/) return 34;
+                if (value <= 10 /*9.6*/)
+                {
+                    return 34;
+                }
 
-                if (value <= 11) return 0;
+                if (value <= 11)
+                {
+                    return 0;
+                }
 
-                if (value <= 12) return 12;
+                if (value <= 12)
+                {
+                    return 12;
+                }
 
                 if (value < 14)
                 {
@@ -414,15 +454,30 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     return 0;
                 }
 
-                if (value <= 15 /*14.7*/) return 34;
+                if (value <= 15 /*14.7*/)
+                {
+                    return 34;
+                }
 
-                if (value <= 16) return 28;
+                if (value <= 16)
+                {
+                    return 28;
+                }
 
-                if (value <= 17) return 36;
+                if (value <= 17)
+                {
+                    return 36;
+                }
 
-                if (value <= 18) return 0;
+                if (value <= 18)
+                {
+                    return 0;
+                }
 
-                if (value <= 19) return 19;
+                if (value <= 19)
+                {
+                    return 19;
+                }
 
                 if (value <= 21)
                 {
@@ -430,9 +485,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     return 0;
                 }
 
-                if (value <= 22 /* 21.7 */) return 36;
+                if (value <= 22 /* 21.7 */)
+                {
+                    return 36;
+                }
 
-                if (value <= 24) return 24;
+                if (value <= 24)
+                {
+                    return 24;
+                }
 
                 return 0;
             }
@@ -449,18 +510,27 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 var noteValue = DisplayValueWithoutBend;
 
                 if (HasBend)
+                {
                     noteValue += BendPoints[0].Value / 2;
+                }
                 else if (BendOrigin != null)
+                {
                     noteValue += BendOrigin.BendPoints[BendOrigin.BendPoints.Count - 1].Value / 2;
+                }
                 else if (IsTieDestination && TieOrigin.BendOrigin != null)
+                {
                     noteValue += TieOrigin.BendOrigin.BendPoints[TieOrigin.BendOrigin.BendPoints.Count - 1].Value / 2;
+                }
                 else if (Beat.HasWhammyBar)
+                {
                     noteValue += Beat.WhammyBarPoints[0].Value / 2;
+                }
                 else if (Beat.IsContinuedWhammy)
                 {
                     noteValue += Beat.PreviousBeat.WhammyBarPoints[Beat.PreviousBeat.WhammyBarPoints.Count - 1].Value /
                                  2;
                 }
+
 
                 return noteValue;
             }
@@ -476,7 +546,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 var noteValue = RealValue;
 
                 if (HarmonicType != HarmonicType.Natural && HarmonicType != HarmonicType.None)
+                {
                     noteValue -= HarmonicPitch;
+                }
 
                 switch (Beat.Ottava)
                 {
@@ -525,11 +597,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             get
             {
-                if (HasBend) return BendPoints[0].Value % 2 != 0;
+                if (HasBend)
+                {
+                    return BendPoints[0].Value % 2 != 0;
+                }
 
-                if (BendOrigin != null) return BendOrigin.BendPoints[BendOrigin.BendPoints.Count - 1].Value % 2 != 0;
+                if (BendOrigin != null)
+                {
+                    return BendOrigin.BendPoints[BendOrigin.BendPoints.Count - 1].Value % 2 != 0;
+                }
 
-                if (Beat.HasWhammyBar) return Beat.WhammyBarPoints[0].Value % 2 != 0;
+                if (Beat.HasWhammyBar)
+                {
+                    return Beat.WhammyBarPoints[0].Value % 2 != 0;
+                }
 
                 if (Beat.IsContinuedWhammy)
                 {
@@ -541,75 +622,76 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             }
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Note"/> class.
         /// </summary>
         public Note()
         {
-            Id         = GlobalNoteId++;
-            BendType   = BendType.None;
-            BendStyle  = BendStyle.Default;
+            Id = GlobalNoteId++;
+            BendType = BendType.None;
+            BendStyle = BendStyle.Default;
             BendPoints = new FastList<BendPoint>();
-            Dynamics   = DynamicValue.F;
-
-            Fret         = int.MinValue;
+            Dynamics = DynamicValue.F;
+            
+            Fret = int.MinValue;
             HarmonicType = HarmonicType.None;
-            SlideInType  = SlideInType.None;
+            SlideInType = SlideInType.None;
             SlideOutType = SlideOutType.None;
-            Vibrato      = VibratoType.None;
+            Vibrato = VibratoType.None;
 
-            LeftHandFinger  = Fingers.Unknown;
+            LeftHandFinger = Fingers.Unknown;
             RightHandFinger = Fingers.Unknown;
 
-            TrillValue      = -1;
-            TrillSpeed      = Duration.ThirtySecond;
+            TrillValue = -1;
+            TrillSpeed = Duration.ThirtySecond;
             DurationPercent = 1;
 
             Octave = -1;
-            Tone   = -1;
+            Tone = -1;
 
-            Fret   = -1;
+            Fret = -1;
             String = -1;
 
-            Element   = -1;
+            Element = -1;
             Variation = -1;
             IsVisible = true;
         }
 
         internal static void CopyTo(Note src, Note dst)
         {
-            dst.Id                 = src.Id;
-            dst.Fret               = src.Fret;
-            dst.String             = src.String;
-            dst.HarmonicValue      = src.HarmonicValue;
-            dst.HarmonicType       = src.HarmonicType;
-            dst.IsGhost            = src.IsGhost;
-            dst.IsLetRing          = src.IsLetRing;
-            dst.IsPalmMute         = src.IsPalmMute;
-            dst.IsDead             = src.IsDead;
-            dst.IsStaccato         = src.IsStaccato;
-            dst.SlideInType        = src.SlideInType;
-            dst.SlideOutType       = src.SlideOutType;
-            dst.Vibrato            = src.Vibrato;
-            dst.IsTieDestination   = src.IsTieDestination;
-            dst.IsSlurDestination  = src.IsSlurDestination;
+            dst.Id = src.Id;
+            dst.Fret = src.Fret;
+            dst.String = src.String;
+            dst.HarmonicValue = src.HarmonicValue;
+            dst.HarmonicType = src.HarmonicType;
+            dst.IsGhost = src.IsGhost;
+            dst.IsLetRing = src.IsLetRing;
+            dst.IsPalmMute = src.IsPalmMute;
+            dst.IsDead = src.IsDead;
+            dst.IsStaccato = src.IsStaccato;
+            dst.SlideInType = src.SlideInType;
+            dst.SlideOutType = src.SlideOutType;
+            dst.Vibrato = src.Vibrato;
+            dst.IsTieDestination = src.IsTieDestination;
+            dst.IsSlurDestination = src.IsSlurDestination;
             dst.IsHammerPullOrigin = src.IsHammerPullOrigin;
-            dst.LeftHandFinger     = src.LeftHandFinger;
-            dst.RightHandFinger    = src.RightHandFinger;
-            dst.IsFingering        = src.IsFingering;
-            dst.TrillValue         = src.TrillValue;
-            dst.TrillSpeed         = src.TrillSpeed;
-            dst.DurationPercent    = src.DurationPercent;
-            dst.AccidentalMode     = src.AccidentalMode;
-            dst.Dynamics           = src.Dynamics;
-            dst.Octave             = src.Octave;
-            dst.Tone               = src.Tone;
-            dst.Element            = src.Element;
-            dst.Variation          = src.Variation;
-            dst.BendType           = src.BendType;
-            dst.BendStyle          = src.BendStyle;
-            dst.IsContinuedBend    = src.IsContinuedBend;
-            dst.IsVisible          = src.IsVisible;
+            dst.LeftHandFinger = src.LeftHandFinger;
+            dst.RightHandFinger = src.RightHandFinger;
+            dst.IsFingering = src.IsFingering;
+            dst.TrillValue = src.TrillValue;
+            dst.TrillSpeed = src.TrillSpeed;
+            dst.DurationPercent = src.DurationPercent;
+            dst.AccidentalMode = src.AccidentalMode;
+            dst.Dynamics = src.Dynamics;
+            dst.Octave = src.Octave;
+            dst.Tone = src.Tone;
+            dst.Element = src.Element;
+            dst.Variation = src.Variation;
+            dst.BendType = src.BendType;
+            dst.BendStyle = src.BendStyle;
+            dst.IsContinuedBend = src.IsContinuedBend;
+            dst.IsVisible = src.IsVisible;
         }
 
         internal Note Clone()
@@ -617,7 +699,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             var n = new Note();
             var id = n.Id;
             CopyTo(this, n);
-            for (int i = 0, j = BendPoints.Count; i < j; i++) n.AddBendPoint(BendPoints[i].Clone());
+            for (int i = 0, j = BendPoints.Count; i < j; i++)
+            {
+                n.AddBendPoint(BendPoints[i].Clone());
+            }
 
             n.Id = id;
             return n;
@@ -626,14 +711,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         internal void AddBendPoint(BendPoint point)
         {
             BendPoints.Add(point);
-            if (MaxBendPoint == null || point.Value > MaxBendPoint.Value) MaxBendPoint = point;
+            if (MaxBendPoint == null || point.Value > MaxBendPoint.Value)
+            {
+                MaxBendPoint = point;
+            }
 
-            if (BendType == BendType.None) BendType = BendType.Custom;
+            if (BendType == BendType.None)
+            {
+                BendType = BendType.Custom;
+            }
         }
 
         internal void Finish()
         {
-            var nextNoteOnLine = new Lazy<Note>(() => NextNoteOnSameLine(this));
+            var nextNoteOnLine = new Util.Lazy<Note>(() => NextNoteOnSameLine(this));
 
             var isSongBook = false;
 
@@ -641,56 +732,81 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (IsTieDestination)
             {
                 if (TieOrigin != null)
+                {
                     TieOrigin.TieDestination = this;
+                }
                 else
                 {
                     var tieOrigin = FindTieOrigin(this);
                     if (tieOrigin == null)
+                    {
                         IsTieDestination = false;
+                    }
                     else
                     {
-                        TieOrigin                = tieOrigin;
+                        TieOrigin = tieOrigin;
                         TieOrigin.TieDestination = this;
-                        Fret                     = TieOrigin.Fret;
-                        Octave                   = TieOrigin.Octave;
-                        Tone                     = TieOrigin.Tone;
+                        Fret = TieOrigin.Fret;
+                        Octave = TieOrigin.Octave;
+                        Tone = TieOrigin.Tone;
 
-                        if (TieOrigin.HasBend) BendOrigin = TieOrigin;
+                        if (TieOrigin.HasBend)
+                        {
+                            BendOrigin = TieOrigin;
+                        }
                     }
                 }
 
+
                 // implicit let ring
-                if (isSongBook && TieOrigin.IsLetRing) IsLetRing = true;
+                if (isSongBook && TieOrigin.IsLetRing)
+                {
+                    IsLetRing = true;
+                }
             }
 
             // connect letring
             if (IsLetRing)
             {
                 if (nextNoteOnLine.Value == null || !nextNoteOnLine.Value.IsLetRing)
+                {
                     LetRingDestination = this;
+                }
                 else
+                {
                     LetRingDestination = nextNoteOnLine.Value;
+                }
 
-                if (isSongBook && IsTieDestination && !TieOrigin.HasBend) IsVisible = false;
+                if (isSongBook && IsTieDestination && !TieOrigin.HasBend)
+                {
+                    IsVisible = false;
+                }
             }
+
 
             // connect palmmute
             if (IsPalmMute)
             {
                 if (nextNoteOnLine.Value == null || !nextNoteOnLine.Value.IsPalmMute)
+                {
                     PalmMuteDestination = this;
+                }
                 else
+                {
                     PalmMuteDestination = nextNoteOnLine.Value;
+                }
             }
 
             // set hammeron/pulloffs
             if (IsHammerPullOrigin)
             {
                 if (nextNoteOnLine.Value == null)
+                {
                     IsHammerPullOrigin = false;
+                }
                 else
                 {
-                    HammerPullDestination                  = nextNoteOnLine.Value;
+                    HammerPullDestination = nextNoteOnLine.Value;
                     HammerPullDestination.HammerPullOrigin = this;
                 }
             }
@@ -701,32 +817,41 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 case SlideOutType.Shift:
                 case SlideOutType.Legato:
                     SlideTarget = nextNoteOnLine.Value;
-                    if (SlideTarget == null) SlideOutType = SlideOutType.None;
+                    if (SlideTarget == null)
+                    {
+                        SlideOutType = SlideOutType.None;
+                    }
 
                     break;
             }
 
             Note effectSlurDestination = null;
             if (IsHammerPullOrigin)
+            {
                 effectSlurDestination = HammerPullDestination;
-            else if (SlideOutType == SlideOutType.Legato && SlideTarget != null) effectSlurDestination = SlideTarget;
+            }
+            else if (SlideOutType == SlideOutType.Legato && SlideTarget != null)
+            {
+                effectSlurDestination = SlideTarget;
+            }
 
             if (effectSlurDestination != null)
             {
                 HasEffectSlur = true;
                 if (EffectSlurOrigin != null)
                 {
-                    EffectSlurOrigin.EffectSlurDestination                  = effectSlurDestination;
+                    EffectSlurOrigin.EffectSlurDestination = effectSlurDestination;
                     EffectSlurOrigin.EffectSlurDestination.EffectSlurOrigin = EffectSlurOrigin;
-                    EffectSlurOrigin                                        = null;
+                    EffectSlurOrigin = null;
                 }
                 else
                 {
-                    IsEffectSlurOrigin                     = true;
-                    EffectSlurDestination                  = effectSlurDestination;
+                    IsEffectSlurOrigin = true;
+                    EffectSlurDestination = effectSlurDestination;
                     EffectSlurDestination.EffectSlurOrigin = this;
                 }
             }
+
 
             // try to detect what kind of bend was used and cleans unneeded points if required
             // Guitar Pro 6 and above (gpif.xml) uses exactly 4 points to define all bends
@@ -747,7 +872,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         if (destination.Value > origin.Value)
                         {
                             if (middle1.Value > destination.Value)
+                            {
                                 BendType = BendType.BendRelease;
+                            }
                             else if (!isContinuedBend && origin.Value > 0)
                             {
                                 BendType = BendType.PrebendBend;
@@ -782,7 +909,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         else
                         {
                             if (middle1.Value > origin.Value)
+                            {
                                 BendType = BendType.BendRelease;
+                            }
                             else if (origin.Value > 0 && !isContinuedBend)
                             {
                                 BendType = BendType.Prebend;
@@ -798,7 +927,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         }
                     }
                     else
+                    {
                         Logger.Warning("Model", "Unsupported bend type detected, fallback to custom");
+                    }
                 }
                 else if (BendPoints.Count == 2)
                 {
@@ -809,25 +940,38 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     if (destination.Value > origin.Value)
                     {
                         if (!isContinuedBend && origin.Value > 0)
+                        {
                             BendType = BendType.PrebendBend;
+                        }
                         else
+                        {
                             BendType = BendType.Bend;
+                        }
                     }
                     // release?
                     else if (destination.Value < origin.Value)
                     {
                         // origin must be > 0 otherwise it's no release, we cannot bend negative
                         if (isContinuedBend)
+                        {
                             BendType = BendType.Release;
+                        }
                         else
+                        {
                             BendType = BendType.PrebendRelease;
+                        }
                     }
                     // hold?
                     else
+                    {
                         BendType = BendType.Hold;
+                    }
                 }
             }
-            else if (BendPoints.Count == 0) BendType = BendType.None;
+            else if (BendPoints.Count == 0)
+            {
+                BendType = BendType.None;
+            }
         }
 
         private const int MaxOffsetForSameLineSearch = 3;
@@ -840,7 +984,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                    nextBeat.Voice.Bar.Index <= note.Beat.Voice.Bar.Index + MaxOffsetForSameLineSearch)
             {
                 var noteOnString = nextBeat.GetNoteOnString(note.String);
-                if (noteOnString != null) return noteOnString;
+                if (noteOnString != null)
+                {
+                    return noteOnString;
+                }
 
                 nextBeat = nextBeat.NextBeat;
             }
@@ -859,7 +1006,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 if (note.IsStringed)
                 {
                     var noteOnString = previousBeat.GetNoteOnString(note.String);
-                    if (noteOnString != null) return noteOnString;
+                    if (noteOnString != null)
+                    {
+                        return noteOnString;
+                    }
                 }
                 else
                 {
@@ -867,12 +1017,18 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     {
                         // if the note has no value (e.g. alphaTex dash tie), we try to find a matching
                         // note on the previous beat by index.
-                        if (note.Index < previousBeat.Notes.Count) return previousBeat.Notes[note.Index];
+                        if (note.Index < previousBeat.Notes.Count)
+                        {
+                            return previousBeat.Notes[note.Index];
+                        }
                     }
                     else
                     {
                         var noteWithValue = previousBeat.GetNoteWithRealValue(note.RealValue);
-                        if (noteWithValue != null) return noteWithValue;
+                        if (noteWithValue != null)
+                        {
+                            return noteWithValue;
+                        }
                     }
                 }
 

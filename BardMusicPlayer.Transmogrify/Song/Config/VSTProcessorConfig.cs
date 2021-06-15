@@ -9,7 +9,7 @@ using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
 
 namespace BardMusicPlayer.Transmogrify.Song.Config
 {
-    public class OctaveToneProcessorConfig : IProcessorConfig
+    public class VSTProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
         public int Track { get; set; } = 0;
@@ -26,19 +26,15 @@ namespace BardMusicPlayer.Transmogrify.Song.Config
         public InstrumentTone InstrumentTone { get; set; } = InstrumentTone.Strummed;
 
         /// <summary>
-        /// The mapper of octave to tone and octave
+        /// Octave Range for each Tone
         /// </summary>
-        public Dictionary<int, (int, int)> Mapper { get; set; } = new(9)
+        public Dictionary<int, OctaveRange> OctaveRanges { get; set; } = new(5)
         {
-            { 0, (-1, -1) },
-            { 1, (-1, -1) },
-            { 2, (-1, -1) },
-            { 3, (-1, -1) },
-            { 4, (-1, -1) },
-            { 5, (-1, -1) },
-            { 6, (-1, -1) },
-            { 7, (-1, -1) },
-            { 8, (-1, -1) }
+            {0, OctaveRange.C3toC6},
+            {1, OctaveRange.C3toC6},
+            {2, OctaveRange.C3toC6},
+            {3, OctaveRange.C3toC6},
+            {4, OctaveRange.C3toC6}
         };
     }
 }

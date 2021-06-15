@@ -8,6 +8,7 @@
 
 // C# port for alphaTab: (C) 2019 by Daniel Kuschny
 // Licensed under: MPL-2.0
+
 /*
  * LICENSE (MIT)
  *
@@ -38,23 +39,36 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
     internal class RiffChunk
     {
         public string Id { get; set; }
-
         public uint Size { get; set; }
 
         public static bool Load(RiffChunk parent, RiffChunk chunk, IReadable stream)
         {
-            if (parent != null && HeaderSize > parent.Size) return false;
+            if (parent != null && RiffChunk.HeaderSize > parent.Size)
+            {
+                return false;
+            }
 
-            if (stream.Position + HeaderSize >= stream.Length) return false;
+            if (stream.Position + HeaderSize >= stream.Length)
+            {
+                return false;
+            }
 
             chunk.Id = stream.Read8BitStringLength(4);
-            if (chunk.Id[0] <= ' ' || chunk.Id[0] >= 'z') return false;
-
+            if (chunk.Id[0] <= ' ' || chunk.Id[0] >= 'z')
+            {
+                return false;
+            }
             chunk.Size = stream.ReadUInt32LE();
 
-            if (parent != null && HeaderSize + chunk.Size > parent.Size) return false;
+            if (parent != null && HeaderSize + chunk.Size > parent.Size)
+            {
+                return false;
+            }
 
-            if (parent != null) parent.Size -= HeaderSize + chunk.Size;
+            if (parent != null)
+            {
+                parent.Size -= HeaderSize + chunk.Size;
+            }
 
             var isRiff = chunk.Id == "RIFF";
             var isList = chunk.Id == "LIST";
@@ -73,8 +87,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
             // for lists unwrap the list type
             chunk.Id = stream.Read8BitStringLength(4);
-            if (chunk.Id[0] <= ' ' || chunk.Id[0] >= 'z') return false;
-
+            if (chunk.Id[0] <= ' ' || chunk.Id[0] >= 'z')
+            {
+                return false;
+            }
             chunk.Size -= 4;
 
             return true;

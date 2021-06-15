@@ -16,53 +16,90 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         /// <summary>
         /// Gets or sets whether the synthesizer is ready for interaction. (output and worker are initialized)
         /// </summary>
-        bool IsReady { get; }
+        bool IsReady
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets or sets whether the synthesizer is ready for playback. (output, worker are initialized, soundfont and midi are loaded)
         /// </summary>p
-        bool IsReadyForPlayback { get; }
+        bool IsReadyForPlayback
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the current player state.
         /// </summary>
-        PlayerState State { get; }
+        PlayerState State
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets or sets the loging level.
         /// </summary>
-        AlphaTab.Util.LogLevel LogLevel { get; set; }
+        AlphaTab.Util.LogLevel LogLevel
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the current master volume as percentage. (range: 0.0-3.0, default 1.0)
         /// </summary>
-        float MasterVolume { get; set; }
+        float MasterVolume
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the current playback speed as percentage. (range: 0.125-8.0, default: 1.0)
         /// </summary>
-        double PlaybackSpeed { get; set; }
+        double PlaybackSpeed
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the position within the song in midi ticks.
         /// </summary>
-        int TickPosition { get; set; }
+        int TickPosition
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the position within the song in milliseconds.
         /// </summary>
-        double TimePosition { get; set; }
+        double TimePosition
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the range of the song that should be played. Set this to null
         /// to play the whole song.
         /// </summary>
-        PlaybackRange PlaybackRange { get; set; }
+        PlaybackRange PlaybackRange
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets whether the playback should automatically restart after it finished.
         /// </summary>
-        bool IsLooping { get; set; }
+        bool IsLooping
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Destroys the synthesizer and all related components
@@ -120,6 +157,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         /// <param name="channel">The channel number</param>
         /// <param name="solo">true if the channel should be played solo, otherwise false.</param>
         void SetChannelSolo(int channel, bool solo);
+
 
         /// <summary>
         /// Gets or sets the current and initial volume of the given channel.

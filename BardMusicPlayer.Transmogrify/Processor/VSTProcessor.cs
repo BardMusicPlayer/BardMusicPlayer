@@ -3,7 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,20 +12,18 @@ using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Processor
 {
-    internal class NoteToneProcessor : BaseProcessor
+    internal class VSTProcessor : BaseProcessor
     {
-        public NoteToneProcessorConfig ProcessorConfig { get; set; }
+        public VSTProcessorConfig ProcessorConfig { get; set; }
 
-        internal NoteToneProcessor(NoteToneProcessorConfig processorConfig, BmpSong song) : base(song)
+        internal VSTProcessor(VSTProcessorConfig processorConfig, BmpSong song) : base(song)
         {
             ProcessorConfig = processorConfig;
         }
 
         public override Task<List<TrackChunk>> Process()
         {
-            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }
-                .Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk))
-                .ToList();
+            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
 
             return Task.FromResult(new List<TrackChunk>());
         }
