@@ -13,17 +13,15 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
         public bool priorSyncState;
         public byte[] buffer = new byte[Constants.bytes_per_buffer];
         public short methodsCompleted;
-        public Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         public Stopwatch latency;
         public Stopwatch timer;
         public string serverResolved;
-
         public NTPCallState()
         {
-            latency   = Stopwatch.StartNew();
+            latency = Stopwatch.StartNew();
             buffer[0] = 0x1B;
         }
-
         public void OrderlyShutdown()
         {
             if (timer != null)
@@ -31,7 +29,6 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
                 if (timer.IsRunning) timer.Stop();
                 timer = null;
             }
-
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
             socket = null;

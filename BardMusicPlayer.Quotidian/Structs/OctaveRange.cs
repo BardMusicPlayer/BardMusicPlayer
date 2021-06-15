@@ -16,6 +16,7 @@ namespace BardMusicPlayer.Quotidian.Structs
     public readonly struct OctaveRange : IComparable, IConvertible, IComparable<OctaveRange>, IEquatable<OctaveRange>
     {
         public static readonly OctaveRange Invalid = new("Invalid", -1, -1, -1, null);
+
         public static readonly OctaveRange C0toC3 = new("C0toC3", 0, 0, 3, "+3");
         public static readonly OctaveRange C1toC4 = new("C1toC4", 1, 1, 4, "+2");
         public static readonly OctaveRange C2toC5 = new("C2toC5", 2, 2, 5, "+1");
@@ -24,9 +25,7 @@ namespace BardMusicPlayer.Quotidian.Structs
         public static readonly OctaveRange C5toC8 = new("C5toC8", 5, 5, 8, "-2");
         public static readonly OctaveRange C6toC9 = new("C6toC9", 6, 6, 9, "-3");
 
-        public static readonly IReadOnlyList<OctaveRange> All =
-            new ReadOnlyCollection<OctaveRange>(new List<OctaveRange>
-                { C0toC3, C1toC4, C2toC5, C3toC6, C4toC7, C5toC8, C6toC9 });
+        public static readonly IReadOnlyList<OctaveRange> All = new ReadOnlyCollection<OctaveRange>(new List<OctaveRange> { C0toC3, C1toC4, C2toC5, C3toC6, C4toC7, C5toC8, C6toC9 });
 
         /// <summary>
         /// Gets the name.
@@ -79,10 +78,10 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// <param name="trackNameOffset">Track Name offset</param>
         private OctaveRange(string name, int index, int lower, int upper, string trackNameOffset)
         {
-            Name            = name;
-            Index           = index;
-            Lower           = lower;
-            Upper           = upper;
+            Name = name;
+            Index = index;
+            Lower = lower;
+            Upper = upper;
             TrackNameOffset = trackNameOffset;
         }
 
@@ -110,70 +109,39 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// </summary>
         /// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a
         /// hash table.</returns>
-        public override int GetHashCode() =>
-            (Name, Index, Lower, Upper, LowerNote, UpperNote, TrackNameOffset).GetHashCode();
+        public override int GetHashCode() => (Name, Index, Lower, Upper, LowerNote, UpperNote, TrackNameOffset).GetHashCode();
 
         public static implicit operator string(OctaveRange octaveRange) => octaveRange.Name;
-
         public static implicit operator OctaveRange(string name) => Parse(name);
-
         public static implicit operator int(OctaveRange octaveRange) => octaveRange.Index;
-
         public static implicit operator OctaveRange(int lower) => Parse(lower);
 
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
-
             if (!(obj is OctaveRange)) throw new ArgumentException("This is not an OctaveRange");
-
             return Index - ((OctaveRange) obj).Index;
         }
 
         public int CompareTo(OctaveRange other) => Index - other.Index;
-
         public TypeCode GetTypeCode() => TypeCode.Int32;
-
-        public bool ToBoolean(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to Boolean");
-
-        public char ToChar(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to Char");
-
+        public bool ToBoolean(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to Boolean");
+        public char ToChar(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to Char");
         public sbyte ToSByte(IFormatProvider provider) => Convert.ToSByte(Index);
-
         public byte ToByte(IFormatProvider provider) => Convert.ToByte(Index);
-
         public short ToInt16(IFormatProvider provider) => Convert.ToInt16(Index);
-
         public ushort ToUInt16(IFormatProvider provider) => Convert.ToUInt16(Index);
-
         public int ToInt32(IFormatProvider provider) => Convert.ToInt32(Index);
-
         public uint ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Index);
-
         public long ToInt64(IFormatProvider provider) => Convert.ToInt64(Index);
-
         public ulong ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Index);
-
-        public float ToSingle(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to Single");
-
-        public double ToDouble(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to Double");
-
-        public decimal ToDecimal(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to Decimal");
-
-        public DateTime ToDateTime(IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to DateTime");
-
+        public float ToSingle(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to Single");
+        public double ToDouble(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to Double");
+        public decimal ToDecimal(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to Decimal");
+        public DateTime ToDateTime(IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to DateTime");
         public string ToString(IFormatProvider provider) => Index.ToString();
-
         public override string ToString() => Index.ToString();
-
-        public object ToType(Type conversionType, IFormatProvider provider) =>
-            throw new InvalidCastException("Invalid cast from OctaveRange to " + conversionType);
+        public object ToType(Type conversionType, IFormatProvider provider) => throw new InvalidCastException("Invalid cast from OctaveRange to " + conversionType);
 
         /// <summary>
         /// Get's a string with the instrument plus this octave range for use as a midi track name
@@ -230,28 +198,22 @@ namespace BardMusicPlayer.Quotidian.Structs
                 result = Invalid;
                 return false;
             }
-
             octaveRange = octaveRange.Replace(" ", "").Replace("_", "");
             if (All.Any(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
                 result = All.First(x => x.Name.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
-
             if (All.Any(x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
-                result = All.First(
-                    x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                result = All.First(x => x.TrackNameOffset.Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
-
             if (All.Any(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase)))
             {
-                result = All.First(x =>
-                    x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
+                result = All.First(x => x.Index.ToString().Equals(octaveRange, StringComparison.CurrentCultureIgnoreCase));
                 return true;
             }
-
             result = Invalid;
             return false;
         }
@@ -272,19 +234,13 @@ namespace BardMusicPlayer.Quotidian.Structs
         public bool TryShiftNoteToOctave(OctaveRange currentOctaveRange, ref int note)
         {
             if (!currentOctaveRange.ValidateNoteRange(note)) return false;
-
             note += LowerNote - currentOctaveRange.LowerNote;
             return true;
         }
 
         public int ShiftNoteToOctave(OctaveRange currentOctaveRange, int note)
         {
-            if (!currentOctaveRange.ValidateNoteRange(note))
-            {
-                throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " +
-                                       currentOctaveRange.Name);
-            }
-
+            if (!currentOctaveRange.ValidateNoteRange(note)) throw new BmpException("ShiftNoteToOctave note " + note + " not in range of " + currentOctaveRange.Name);
             return note + LowerNote - currentOctaveRange.LowerNote;
         }
     }
