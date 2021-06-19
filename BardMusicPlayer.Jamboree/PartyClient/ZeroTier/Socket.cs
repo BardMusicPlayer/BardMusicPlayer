@@ -440,7 +440,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
         {
             get
             {
-                return _isClosed
+                return _isClosed;
             }
         }
 

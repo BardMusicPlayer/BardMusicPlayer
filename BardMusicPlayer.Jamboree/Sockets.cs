@@ -19,9 +19,10 @@ namespace BardMusicPlayer.Jamboree
         internal static void FullWrite(ISocket socket, byte[] data)
         {
             int written = 0;
+            int tmp;
             while (written < data.Length)
             {
-                int tmp = socket.Send(data, written, data.Length - written);
+                tmp = socket.Send(data, written, data.Length - written);
                 if (tmp < 0)
                 {
                     throw new SocketException("EOF hit during socket write");
@@ -41,9 +42,10 @@ namespace BardMusicPlayer.Jamboree
         internal static void FullRead(ISocket socket, byte[] buffer, int dataLength)
         {
             int read = 0;
+            int tmp;
             while (read < dataLength)
             {
-                int tmp = socket.Receive(buffer, read, dataLength - read);
+                tmp = socket.Receive(buffer, read, dataLength - read);
                 if (tmp < 0)
                 {
                     throw new SocketException("EOF hit during socket read");

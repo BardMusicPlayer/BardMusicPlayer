@@ -35,9 +35,9 @@ namespace BardMusicPlayer.Jamboree
             {
                 throw new SocketException(e.Message, e);
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
-                throw new SocketException(e.Message, e);
+                // Close should be safe to call repeatedly.
             }
         }
 
