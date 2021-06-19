@@ -14,6 +14,10 @@ namespace BardMusicPlayer.Jamboree
         private readonly Socket socket;
         private bool disposedValue;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="socket"></param>
         internal ZTSocketDecorator(Socket socket)
         {
             if (socket.IsBound || !socket.Connected)
@@ -25,6 +29,7 @@ namespace BardMusicPlayer.Jamboree
             this.disposedValue = false;
         }
 
+        /// <inheritdoc/>
         public void Close()
         {
             try
@@ -41,16 +46,19 @@ namespace BardMusicPlayer.Jamboree
             }
         }
 
+        /// <inheritdoc/>
         public bool IsClosed()
         {
             return this.socket.IsClosed;
         }
 
+        /// <inheritdoc/>
         public bool IsConnected()
         {
             return this.socket.Connected;
         }
 
+        /// <inheritdoc/>
         public int Receive(byte[] buffer, int offset, int len)
         {
             int ret;
@@ -71,6 +79,7 @@ namespace BardMusicPlayer.Jamboree
             return ret;
         }
 
+        /// <inheritdoc/>
         public int Send(byte[] data, int offset, int len)
         {
             int ret;
@@ -91,6 +100,7 @@ namespace BardMusicPlayer.Jamboree
             return ret;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
@@ -98,6 +108,10 @@ namespace BardMusicPlayer.Jamboree
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// VS2019 Dispose Pattern
+        /// </summary>
+        /// <param name="disposing"></param>
         private void Dispose(bool disposing)
         {
             if (!disposedValue)

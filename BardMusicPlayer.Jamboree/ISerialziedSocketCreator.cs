@@ -5,7 +5,7 @@
 
 namespace BardMusicPlayer.Jamboree
 {
-    interface ISerialziedSocketCreator
+    internal interface ISerialziedSocketCreator
     {
         /// <summary>
         /// This should never return null; this should throw on error.
