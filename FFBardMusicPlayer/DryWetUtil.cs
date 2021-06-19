@@ -246,7 +246,7 @@ namespace FFBardMusicPlayer
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
                    
-                    if (!trackName.ToLower().Equals("program:electricguitar"))
+                    if (!trackName?.ToLower().Equals("program:electricguitar") ?? false)
                     {
                         if (trackName == null) trackName = "";
                         trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);

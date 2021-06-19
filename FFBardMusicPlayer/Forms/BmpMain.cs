@@ -1,4 +1,4 @@
-﻿using FFBardMusicCommon;
+using FFBardMusicCommon;
 using FFBardMusicPlayer.Controls;
 using NLog;
 using NLog.Targets;
@@ -68,14 +68,14 @@ namespace FFBardMusicPlayer.Forms
                     ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(log, Color.LightYellow, true));
                 }
 
-                if (!string.IsNullOrEmpty(update.Version.UpdateLog))
+                if (!string.IsNullOrEmpty(update.Version?.UpdateLog))
                 {
                     var log = $"= BMP Update =\n {update.Version.UpdateLog} \n";
                     ChatLogAll.AppendRtf(BmpChatParser.FormatRtf(log, Color.LightGreen, true));
                 }
             }
 
-            Text = update.Version.ToString();
+            Text = update.Version?.ToString();
 
             // Clear local orchestra
             InfoTabs.TabPages.Remove(localOrchestraTab);
