@@ -226,6 +226,7 @@ namespace FFBardMusicPlayer.Forms
 
             Player.OnMidiNote  += OnMidiVoice;
             Player.OffMidiNote += OffMidiVoice;
+            Player.ProgChangeMidi += ChangeMidiVoice;
 
             Player.Player.OpenInputDevice(Settings.GetMidiInput().Name);
 
@@ -886,6 +887,50 @@ namespace FFBardMusicPlayer.Forms
                         FFXIV.Hook.SendKeybindUp(keybind);
                     }
                 }
+            }
+        }
+
+		private void ChangeMidiVoice(Object o, ProgChangeEvent progdata)
+		{
+			if (LocalOrchestra.OrchestraEnabled)
+				return;
+
+			if (Player.Status == PlayerStatus.Conducting)
+				return;
+
+			if (!FFXIV.IsPerformanceReady())
+				return;
+
+			if (progdata.track != null)
+				if (progdata.track != Player.Player.LoadedTrack)
+					return;
+			
+			if (!FFXIV.Memory.ChatInputOpen)
+            {
+                int tone = -1;
+                switch (progdata.voice)
+                {
+                    case 29: // overdriven guitar
+                        tone = 0;
+                        break;
+                    case 27: // clean guitar
+                        tone = 1;
+                        break;
+                    case 28: // muted guitar
+                        tone = 2;
+                        break;
+                    case 30: // power chords
+                        tone = 3;
+                        break;
+                    case 31: // special guitar
+                        tone = 4;
+                        break;
+                }
+
+				if (tone > -1 && tone < 5 && FFXIV.Hotkeys.GetKeybindFromToneKey(tone) is FFXIVKeybindDat.Keybind keybind)
+				{
+					FFXIV.Hook.SendSyncKeybind(keybind);
+				}
             }
         }
 

@@ -201,7 +201,6 @@ namespace FFBardMusicPlayer.Controls
             Properties.Settings.Default.Save();
         }
     }
-
     public class MidiInput
     {
         public string Name;

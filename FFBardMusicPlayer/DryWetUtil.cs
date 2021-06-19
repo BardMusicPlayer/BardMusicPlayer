@@ -110,8 +110,10 @@ namespace FFBardMusicPlayer
                 foreach (var trackChunk in midiFile.GetTrackChunks())
                 {
                     allTracks.AddObjects(trackChunk.GetNotes());
+                    allTracks.AddObjects(trackChunk.GetTimedEvents());
                     var thisTrack = new TrackChunk(new SequenceTrackNameEvent(trackChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text));
                     thisTrack.AddObjects(trackChunk.GetNotes());
+                    thisTrack.AddObjects(trackChunk.GetTimedEvents());
                     originalTrackChunks.Add(thisTrack);
                 }
                 originalTrackChunks.Add(allTracks);
@@ -243,38 +245,61 @@ namespace FFBardMusicPlayer
 
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
-                    if (trackName == null) trackName = "";
-                    trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
-                    Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
-                    if (rex.Match(trackName) is Match match)
+                   
+                    if (!trackName.ToLower().Equals("program:electricguitar"))
                     {
-                        if (!string.IsNullOrEmpty(match.Groups[1].Value))
+                        if (trackName == null) trackName = "";
+                        trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
+                        Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
+                        if (rex.Match(trackName) is Match match)
                         {
-                            trackName = match.Groups[1].Value;
-                            if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
-
-                            (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
-
-                            if (success) trackName = parsedTrackName;
-                            else
+                            if (!string.IsNullOrEmpty(match.Groups[1].Value))
                             {
-                                (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
+                                trackName = match.Groups[1].Value;
+                                if (!string.IsNullOrEmpty(match.Groups[2].Value)) if (int.TryParse(match.Groups[2].Value, out int os)) octaveShift = os;
+
+                                (bool success, string parsedTrackName) = TrackNameToEnumInstrumentName(trackName);
 
                                 if (success) trackName = parsedTrackName;
                                 else
                                 {
-                                    var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
-                                    if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
-                                    if (success) trackName = parsedTrackName;
-                                }
-                            }
+                                    (success, parsedTrackName) = TrackNameToStringInstrumentName(trackName);
 
-                            if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
-                            else if (octaveShift < 0) trackName = trackName + octaveShift;
+                                    if (success) trackName = parsedTrackName;
+                                    else
+                                    {
+                                        var originalInstrument = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault()?.ProgramNumber;
+                                        if (!(originalInstrument is null) && originalInstrument.Equals(typeof(SevenBitNumber))) (success, parsedTrackName) = ProgramToStringInstrumentName((SevenBitNumber)originalInstrument);
+                                        if (success) trackName = parsedTrackName;
+                                    }
+                                }
+
+                                if (octaveShift > 0) trackName = trackName + "+" + octaveShift;
+                                else if (octaveShift < 0) trackName = trackName + octaveShift;
+                            }
+                        }
+                        newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    } else
+                    {
+                        newChunk = new TrackChunk(new SequenceTrackNameEvent("ElectricGuitarOverdriven"));
+                        foreach (var timedEvent in originalChunk.GetTimedEvents())
+                        {
+                            var programChangeEvent = timedEvent.Event as ProgramChangeEvent;
+                            if (programChangeEvent == null)
+                                continue;
+
+                            //Skip all except guitar | remove if we need this for other instruments
+                            if ((programChangeEvent.ProgramNumber < 27) || (programChangeEvent.ProgramNumber > 31))
+                                continue;
+
+                            var channel = programChangeEvent.Channel;
+                            using (var manager = new TimedEventsManager(newChunk.Events))
+                            {
+                                TimedEventsCollection timedEvents = manager.Events;
+                                timedEvents.Add(new TimedEvent(new ProgramChangeEvent(programChangeEvent.ProgramNumber), 5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote/* Absolute time too */));
+                            }
                         }
                     }
-
-                    newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
                     newChunk.AddObjects(fixedNotes);
                     fixedNotes = null;
 
@@ -308,12 +333,40 @@ namespace FFBardMusicPlayer
                             note.Time = newStart;
                         }
                     }
+                    using (var manager = chunk.ManageTimedEvents())
+                    {
+                        bool firstProg = true;
+                        int prognum = 0;
+                        foreach (TimedEvent _event in manager.Events)
+                        {
+                            var programChangeEvent = _event.Event as ProgramChangeEvent;
+                            if (programChangeEvent == null)
+                                continue;
+                            
+                            if (firstProg)
+                            {
+                                prognum = programChangeEvent.ProgramNumber;
+                                firstProg = false;
+                            }
+                            long newStart = _event.Time - delta;
+                            if (newStart < -1) //remove negative time events
+                                manager.Events.Remove(_event);
+                            else
+                                _event.Time = newStart;
+                        }
+                        if (!firstProg)
+                        {
+                            TimedEvent ent = manager.Events.First();
+                            var che = ent.Event as SequenceTrackNameEvent;
+                            che.Text = GuitarProgramToStringInstrumentName(prognum).Item2;
+                        }
+                    }
                 }
 
                 var stream = new MemoryStream();
                 
                 using (var manager = new TimedEventsManager(newMidiFile.GetTrackChunks().First().Events))
-                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000) + 100));
+                    manager.Events.Add(new TimedEvent(new MarkerEvent(), (newMidiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000)));
 
                 newMidiFile.Write(stream, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
                 stream.Flush();
@@ -515,5 +568,20 @@ namespace FFBardMusicPlayer
             }
             return (true, null);
         }
+
+        private static (bool, string) GuitarProgramToStringInstrumentName(int prog)
+        {
+            if (prog.Equals(null)) return (false, null);
+            switch (prog)
+            {
+                case 27: return (true, "ElectricGuitarClean");
+                case 28: return (true, "ElectricGuitarMuted");
+                case 29: return (true, "ElectricGuitarOverdriven");
+                case 30: return (true, "ElectricGuitarPowerChords");
+                case 31: return (true, "ElectricGuitarSpecial");
+            }
+            return (true, null);
+        }
+
     }
 }

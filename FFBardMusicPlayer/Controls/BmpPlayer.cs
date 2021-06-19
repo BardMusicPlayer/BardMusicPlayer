@@ -23,8 +23,16 @@ namespace FFBardMusicPlayer.Controls
             public int OrigNote;
         };
 
+        public class ProgChangeEvent
+        {
+            public Track track;
+            public int trackNum;
+            public int voice;
+        };
+
         public EventHandler<NoteEvent> OnMidiNote;
         public EventHandler<NoteEvent> OffMidiNote;
+        public EventHandler<ProgChangeEvent> ProgChangeMidi;
         public EventHandler OnSongSkip;
         public EventHandler<PlayerStatus> OnStatusChange;
         private PlayerStatus bmpStatus;
@@ -155,6 +163,7 @@ namespace FFBardMusicPlayer.Controls
 
             Player.OnNote  += OnPlayerMidiNote;
             Player.OffNote += OffPlayerMidiNote;
+            Player.ProgChange += ProgChangePlayerMidi;
 
             Player.PlayEnded        += OnPlayEnded;
             Player.PlayStatusChange += OnMidiPlayStatusChange;
@@ -245,6 +254,16 @@ namespace FFBardMusicPlayer.Controls
                 TrackNum = GetTrackLutNum(e.MidiTrack),
                 Note     = ApplyOctaveShift(e.Message.Data1),
                 OrigNote = e.Message.Data1
+            });
+        }
+
+        private void ProgChangePlayerMidi(Object o, ChannelMessageEventArgs e)
+        {
+            ProgChangeMidi?.Invoke(o, new ProgChangeEvent
+            {
+                track = e.MidiTrack,
+                trackNum = GetTrackLutNum(e.MidiTrack),
+                voice = e.Message.Data1,
             });
         }
 

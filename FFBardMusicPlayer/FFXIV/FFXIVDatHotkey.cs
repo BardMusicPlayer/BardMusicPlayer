@@ -152,6 +152,16 @@ namespace FFBardMusicPlayer.FFXIV
             }
         }
 
+        private static Dictionary<int, string> ToneKeyMap = new Dictionary<int, string> {
+            { 0, "PERFORMANCE_MODE_EX_TONE0" },
+            { 1, "PERFORMANCE_MODE_EX_TONE1" },
+            { 2, "PERFORMANCE_MODE_EX_TONE2" },
+            { 3, "PERFORMANCE_MODE_EX_TONE3" },
+            { 4, "PERFORMANCE_MODE_EX_TONE4" }
+        };
+
+        public Keybind GetKeybindFromToneKey(int tone) => this[ToneKeyMap[tone]];
+
         public static Dictionary<string, string> PianoKeyMap = new Dictionary<string, string>
         {
             { "C-1", "PERFORMANCE_MODE_EX_C3" }, { "C#-1", "PERFORMANCE_MODE_EX_C3_SHARP" },

@@ -22,6 +22,7 @@ namespace FFBardMusicPlayer
         public EventHandler OnLoad;
         public EventHandler<ChannelMessageEventArgs> OnNote;
         public EventHandler<ChannelMessageEventArgs> OffNote;
+        public EventHandler<ChannelMessageEventArgs> ProgChange;
         public EventHandler<string> OnLyric;
         public EventHandler<int> OnTempoChange;
         public EventHandler<string> OnTrackNameChange;
@@ -243,43 +244,12 @@ namespace FFBardMusicPlayer
         {
             switch (prog)
             {
-                case 0:
-                {
-                    return "Piano";
-                }
-                case 46:
-                {
-                    return "Harp";
-                }
-                case 24:
-                {
-                    return "Lute";
-                }
-                case 68:
-                {
-                    return "Oboe";
-                }
-                case 71:
-                {
-                    return "Clarinet";
-                }
-                case 75:
-                {
-                    return "Panpipes";
-                }
-                case 72:
-                {
-                    return "Fife";
-                }
-                case 47:
-                {
-                    return "Timpani";
-                }
-                // Drums
-                //case 59: { }
-                //case 35: { }
+                case 27: { return "ElectricGuitarClean"; }
+                case 28: { return "ElectricGuitarMuted"; }
+                case 29: { return "ElectricGuitarOverdriven"; }
+                case 30: { return "ElectricGuitarPowerChords"; }
+                case 31: { return "ElectricGuitarSpecial"; }
             }
-
             return string.Empty;
         }
 
@@ -303,9 +273,7 @@ namespace FFBardMusicPlayer
             {
                 var instName = ProgramToInstrumentName(e.Message.Data1);
                 if (!string.IsNullOrEmpty(instName))
-                {
-                    Console.WriteLine($"Program change to voice/instrument: {instName} {e.Message.Data2}");
-                }
+                    ProgChange?.Invoke(this, e);
             }
         }
 
