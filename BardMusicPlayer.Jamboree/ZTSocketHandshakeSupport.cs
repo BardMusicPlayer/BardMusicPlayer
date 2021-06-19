@@ -7,7 +7,7 @@ using System;
 
 namespace BardMusicPlayer.Jamboree
 {
-    internal class SocketHandshakeSupport : ISerializedSocketAcceptor, ISerialziedSocketCreator
+    internal sealed class ZTSocketHandshakeSupport : ISerializedSocketAcceptor, ISerialziedSocketCreator
     {
         private const int ZT_SOCKET_VERSION = 1;
         private const int GUID_SIZE = 16;
@@ -15,12 +15,22 @@ namespace BardMusicPlayer.Jamboree
         private readonly ISerializationAdapter adapter;
         private readonly Guid sessionId;
 
-        internal SocketHandshakeSupport(ISerializationAdapter adapter, Guid sessionId)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="adapter"></param>
+        /// <param name="sessionId"></param>
+        internal ZTSocketHandshakeSupport(ISerializationAdapter adapter, Guid sessionId)
         {
             this.adapter = adapter ?? throw new ArgumentNullException();
             this.sessionId = sessionId;
         }
 
+        /// <summary>
+        /// Socket acceptance method.
+        /// </summary>
+        /// <param name="accepted"></param>
+        /// <returns></returns>
         public ISerializedSocket Accept(ISocket accepted)
         {
             int version = ReadHandshakeVersion(accepted);
@@ -51,6 +61,11 @@ namespace BardMusicPlayer.Jamboree
             return ret;
         }
 
+        /// <summary>
+        /// Socket creation method.
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <returns></returns>
         public ISerializedSocket Create(ISocket socket)
         {
             // Write out the handshake.
@@ -67,6 +82,11 @@ namespace BardMusicPlayer.Jamboree
             return new BmpSerializedSocket(this.adapter, socket);
         } 
 
+        /// <summary>
+        /// Internal helper method for reading the version.
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <returns></returns>
         private static int ReadHandshakeVersion(ISocket socket)
         {
             byte[] buffer = new byte[sizeof(int)];
