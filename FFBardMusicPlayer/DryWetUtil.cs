@@ -245,8 +245,8 @@ namespace FFBardMusicPlayer
 
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
-                    var tempname = trackName.ToLower().Split(':');
-                    if ((!trackName.Contains(':')) && (!tempname[0].Equals("program")))
+                   
+                    if (!trackName.ToLower().Equals("program:electricguitar"))
                     {
                         if (trackName == null) trackName = "";
                         trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
@@ -278,11 +278,10 @@ namespace FFBardMusicPlayer
                                 else if (octaveShift < 0) trackName = trackName + octaveShift;
                             }
                         }
-                    }
-                    newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
-                    //Create Progchange Event
-                    if ((trackName.Contains(':')) && (tempname[0].Equals("program")))
+                        newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+                    } else
                     {
+                        newChunk = new TrackChunk(new SequenceTrackNameEvent("ElectricGuitarOverdriven"));
                         foreach (var timedEvent in originalChunk.GetTimedEvents())
                         {
                             var programChangeEvent = timedEvent.Event as ProgramChangeEvent;

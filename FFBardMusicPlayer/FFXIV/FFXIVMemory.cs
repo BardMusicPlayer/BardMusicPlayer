@@ -150,12 +150,15 @@ namespace FFBardMusicPlayer.FFXIV
             
             try
             {
-                if (!Refresh())
+                while (true)
                 {
-                    // Restart?
-                }
+                    if (!Refresh())
+                    {
+                        // Restart?
+                    }
 
-                Thread.Sleep(100);
+                    Thread.Sleep(100);
+                }
             }
             catch (ThreadInterruptedException)
             {
