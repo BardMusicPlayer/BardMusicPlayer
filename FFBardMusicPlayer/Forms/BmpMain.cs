@@ -831,14 +831,14 @@ namespace FFBardMusicPlayer.Forms
 
             if (!FFXIV.IsPerformanceReady())
                 return;
-            
+
             // If from midi file
-            if (onNote.Track != Player.Player.LoadedTrack)
-                return;
+            if (onNote.Track != null)
+                if (onNote.Track != Player.Player.LoadedTrack)
+                    return;
 
             if (Sharlayan.Reader.CanGetChatInput() && FFXIV.Memory.ChatInputOpen)
                 return;
-            
 
             if (FFXIV.Hotkeys.GetKeybindFromNoteByte(onNote.Note) is FFXIVKeybindDat.Keybind keybind)
             {
