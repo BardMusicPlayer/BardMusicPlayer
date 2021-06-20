@@ -245,10 +245,12 @@ namespace FFBardMusicPlayer
 
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
-                   
+
+                    if (trackName == null)
+                        trackName = "";
+
                     if (!trackName.ToLower().Equals("program:electricguitar"))
                     {
-                        if (trackName == null) trackName = "";
                         trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
                         Regex rex = new Regex(@"^([A-Za-z]+)([-+]\d)?");
                         if (rex.Match(trackName) is Match match)
