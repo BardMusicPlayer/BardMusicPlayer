@@ -315,7 +315,7 @@ namespace FFBardMusicPlayer.Components
             }
             else
             {
-                if (previouslySelectedItem is MidiFile previousMidi && Items.Count > 0)
+                if (previouslySelectedItem is MidiFile previousMidi && List.Count > 0)
                 {
                     var previousItem = List.FirstOrDefault(song => song.FileName.FileName == previousMidi.FileName.FileName);
                     SelectedItem = previousItem ?? List.First();
