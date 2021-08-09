@@ -26,7 +26,7 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
@@ -47,7 +47,6 @@
     <None Include="Resources\test.mid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="signature.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BardMusicPlayer.Coffer\BardMusicPlayer.Coffer.csproj" />
