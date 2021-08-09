@@ -10,7 +10,7 @@
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>9</LangVersion>
     <Configurations>Debug;DebugPublish;Release;ReleasePublish</Configurations>
@@ -61,11 +61,12 @@
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="Polly" Version="7.2.2" />
+    <PackageReference Include="Stylet" Version="1.3.6" />
     <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Updater\BardMusicPlayer.Updater.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Ui\BardMusicPlayer.Ui.csproj" />
   </ItemGroup>
 
   <ItemGroup>
