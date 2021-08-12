@@ -63,13 +63,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                 while (reader.BaseStream.Position < dataSize)
                 {
                     var ac = ParseSection(reader);
-                    if (ac.Job <= 0x23)
+                    if (ac.Job == 0x17 || ac.Job == 0)
                     {
                         if (ac.Type == 0x1D)
                         {
+                            _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
                             //Console.WriteLine(string.Format("{0} ({1}): {2} {3}", ac.ToString(), ac.job, ac.action, ac.type));
                         }
-                        _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
         {
 			Unknown,
 			Instrument = 0x1D,
-            InstrumentTone = Unknown
+            InstrumentTone = 0x1D
         }
 
         public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone) {
