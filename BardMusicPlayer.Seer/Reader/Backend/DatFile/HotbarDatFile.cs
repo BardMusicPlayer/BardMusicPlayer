@@ -68,7 +68,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
                         if (ac.Type == 0x1D)
                         {
                             _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
-                            //Console.WriteLine(string.Format("{0} ({1}): {2} {3}", ac.ToString(), ac.job, ac.action, ac.type));
                         }
                     }
                 }
@@ -87,17 +86,21 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
 
         private readonly HotbarData _hotbarData = new();
 
-		public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int) type);
-		public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
+        public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int)type);
+        public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
+
+        public List<HotbarSlot> GetBRDSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0x17 select slot).ToList();
+        public List<HotbarSlot> GetGlobalSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0 select slot).ToList();
 
         internal enum SlotType
         {
-			Unknown,
-			Instrument = 0x1D,
-            InstrumentTone = 0x1D
+            Unknown,
+            Instrument = 0x1D,
+            InstrumentTone = Unknown // Leaving this as unknown as we can just use 'Instrument' for now, they have the same id in hex.
         }
 
-        public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone) {
+        public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone)
+        {
             var slots = GetSlotsFromType(SlotType.InstrumentTone);
             foreach (var slot in slots.Where(slot => slot.Action == instrumentTone))
             {
@@ -106,29 +109,32 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
             return string.Empty;
         }
 
-		public string GetInstrumentKeyMap(Instrument instrument) {
+        public string GetInstrumentKeyMap(Instrument instrument)
+        {
             var slots = GetSlotsFromType(SlotType.Instrument);
-			foreach (var slot in slots.Where(slot => slot.Action == instrument))
+            foreach (var slot in slots.Where(slot => slot.Action == instrument))
             {
                 return slot.ToString();
             }
-			return string.Empty;
-		}
+            return string.Empty;
+        }
 
-		private static HotbarSlot ParseSection(BinaryReader stream) {
-			const byte xor = 0x31;
-			var ac = new HotbarSlot {
-				Action = XorTools.ReadXorByte(stream, xor),
-				Flag = XorTools.ReadXorByte(stream, xor),
-				Unk1 = XorTools.ReadXorByte(stream, xor),
-				Unk2 = XorTools.ReadXorByte(stream, xor),
-				Job = XorTools.ReadXorByte(stream, xor),
-				Hotbar = XorTools.ReadXorByte(stream, xor),
-				Slot = XorTools.ReadXorByte(stream, xor),
-				Type = XorTools.ReadXorByte(stream, xor),
-			};
-			return ac;
-		}
+        private static HotbarSlot ParseSection(BinaryReader stream)
+        {
+            const byte xor = 0x31;
+            var ac = new HotbarSlot
+            {
+                Action = XorTools.ReadXorByte(stream, xor),
+                Flag = XorTools.ReadXorByte(stream, xor),
+                Unk1 = XorTools.ReadXorByte(stream, xor),
+                Unk2 = XorTools.ReadXorByte(stream, xor),
+                Job = XorTools.ReadXorByte(stream, xor),
+                Hotbar = XorTools.ReadXorByte(stream, xor),
+                Slot = XorTools.ReadXorByte(stream, xor),
+                Type = XorTools.ReadXorByte(stream, xor),
+            };
+            return ac;
+        }
         ~HotbarDatFile() => Dispose();
         public void Dispose()
         {
