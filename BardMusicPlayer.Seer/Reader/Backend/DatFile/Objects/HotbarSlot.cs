@@ -33,6 +33,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
         public byte Job { get; set; } = 0;
         public byte Type { get; set; } = 0;
 
+        public bool IsBard => Job == 0x17;
+
         public override string ToString() => string.Format("HOTBAR_{0}_{1:X}", Hotbar, Slot);
 
         ~HotbarSlot() => Dispose();
