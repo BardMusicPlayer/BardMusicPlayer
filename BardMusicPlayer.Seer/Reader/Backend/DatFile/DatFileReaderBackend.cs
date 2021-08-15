@@ -31,6 +31,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
         private FileSystemWatcher _fileSystemWatcher;
         private KeybindDatFile _keybindDatFile;
         private HotbarDatFile _hotbarDatFile;
+        private CommonDatFile _commonDatFile;
         private readonly object _lock = new();
 
         public async Task Loop(CancellationToken token)
@@ -41,9 +42,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
                 lock (_lock)
                 {
-                    if (_keybindDatFile != null && _hotbarDatFile != null && (_keybindDatFile.Fresh || _hotbarDatFile.Fresh))
+                    if (_keybindDatFile != null && _hotbarDatFile != null && _commonDatFile != null && (_keybindDatFile.Fresh || _hotbarDatFile.Fresh || _commonDatFile.Fresh))
                     {
                         _keybindDatFile.Fresh = false;
+                        _commonDatFile.Fresh = false;
                         _hotbarDatFile.Fresh = false;
 
                         try
@@ -118,6 +120,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
                 ParseHotbar(new DirectoryInfo(ReaderHandler.Game.ConfigPath + _configId).GetFiles()
                     .Where(file => file.Name.ToLower().StartsWith("hotbar")).Where(file => file.Name.ToLower().EndsWith(".dat"))
+                    .OrderByDescending(file => file.LastWriteTimeUtc.ToUtcMilliTime()).First().FullName);
+
+                ParseCommon(new DirectoryInfo(ReaderHandler.Game.ConfigPath + _configId).GetFiles()
+                    .Where(file => file.Name.ToLower().StartsWith("common")).Where(file => file.Name.ToLower().EndsWith(".dat"))
                     .OrderByDescending(file => file.LastWriteTimeUtc.ToUtcMilliTime()).First().FullName);
             }
             catch (Exception ex)
@@ -203,12 +209,37 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
             }
         }
 
+        private void ParseCommon(string filePath)
+        {
+            lock (_lock)
+            {
+                try
+                {
+                    var newDat = new CommonDatFile(filePath);
+                    if (newDat.Load())
+                    {
+                        _commonDatFile?.Dispose();
+                        _commonDatFile = newDat;
+                    }
+                    else
+                    {
+                        newDat?.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.DatFile, ex));
+                }
+            }
+        }
+
         ~DatFileReaderBackend() => Dispose();
         public void Dispose()
         {
             DisposeWatcher();
             _keybindDatFile?.Dispose();
             _hotbarDatFile?.Dispose();
+            _commonDatFile?.Dispose();
             GC.SuppressFinalize(this);
         }
     }
