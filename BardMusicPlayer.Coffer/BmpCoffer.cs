@@ -316,6 +316,34 @@ namespace BardMusicPlayer.Coffer
         }
 
         /// <summary>
+        /// This deletes a playlist.
+        /// </summary>
+        /// <param name="songList"></param>
+        public void DeletePlaylist(IPlaylist songList)
+        {
+            if (songList.GetType() != typeof(BmpPlaylistDecorator))
+            {
+                throw new Exception("Unsupported implementation of IPlaylist");
+            }
+
+            var playlists = this.GetPlaylistCollection();
+
+            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
+
+            try
+            {
+                if (dbList.Id != null)
+                {
+                    playlists.Delete(dbList.Id);
+                }
+            }
+            catch (LiteException e)
+            {
+                throw new BmpCofferException(e.Message, e);
+            }
+        }
+
+        /// <summary>
         /// This saves a playlist.
         /// </summary>
         /// <param name="songList"></param>

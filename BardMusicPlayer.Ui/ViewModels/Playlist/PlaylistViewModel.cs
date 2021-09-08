@@ -50,7 +50,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         public void Handle(SelectPlaylistNotification message) { SelectPlaylist(message.Playlist); }
 
         public void ChangeSong() { Console.WriteLine(SelectedSong.Title); }
-
+        
         /// <summary>
         ///     This opens a song or adds it to the current <see cref="IPlaylist" /> provided.
         /// </summary>
@@ -152,7 +152,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             if (SelectedPlaylist == null)
                 return;
 
-            BmpCoffer.Instance.DeletePlaylist(SelectedPlaylist);
+            BmpCoffer.Instance.DeletePlaylist(SelectedPlaylist.Playlist);
             SelectedPlaylist = null;
             foreach (BmpPlaylistViewModel idx in Playlists)
             {

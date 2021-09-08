@@ -53,6 +53,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
         public void Move(int source, int target) { Playlist.Move(source, target); }
 
         public void Remove(int idx) { Playlist.Remove(idx); }
+        public void Remove(BmpSong song) { Playlist.Remove(song); }
 
         public string GetName() => Playlist.GetName();
 
