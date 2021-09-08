@@ -39,12 +39,18 @@ namespace BardMusicPlayer.Ui.ViewModels
 
             BmpSeer.Instance.PlayerNameChanged     += OnPlayerNameChanged;
             BmpSeer.Instance.InstrumentHeldChanged += OnInstrumentHeldChanged;
+            BmpSeer.Instance.HomeWorldChanged      += OnHomeWorldChanged;
         }
 
         private void OnPlayerNameChanged(PlayerNameChanged e)
         {
             EnsureGameExists(e.Game);
+            _events.Publish(e);
+        }
 
+        private void OnHomeWorldChanged(HomeWorldChanged e)
+        {
+            EnsureGameExists(e.Game);
             _events.Publish(e);
         }
 
@@ -68,6 +74,10 @@ namespace BardMusicPlayer.Ui.ViewModels
             {
                 Bards.Add(game);
                 SelectedBard ??= game;
+            }
+            else
+            {
+                Bards.Refresh();
             }
         }
     }

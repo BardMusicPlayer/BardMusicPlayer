@@ -27,9 +27,12 @@ namespace BardMusicPlayer.Ui
             BmpCoffer.Initialize(Globals.DataPath + @"\MusicCatalog.db");
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
+        }
 
+        protected override void OnLaunch()
+        {
+            // OnLaunch is fired after root ViewModel is loaded, so Seer events are fired after views have started.
             BmpSeer.Instance.Start();
-
             BmpGrunt.Instance.Start();
         }
 
