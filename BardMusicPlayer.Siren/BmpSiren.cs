@@ -79,8 +79,12 @@ namespace BardMusicPlayer.Siren
         /// <param name="defaultVolume"></param>
         /// <param name="bufferCount"></param>
         /// <param name="latency"></param>
-        public void Setup(float defaultVolume = 0.8f, byte bufferCount = 2, byte latency = 100) => Setup(
-            new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia), defaultVolume, bufferCount, latency);
+        public void Setup(float defaultVolume = 0.8f, byte bufferCount = 2, byte latency = 100)
+        {
+            var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+
+            Setup(mmAudio, defaultVolume, bufferCount, latency);
+        }
 
         /// <summary>
         /// 

@@ -3,8 +3,10 @@
 using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
+using BardMusicPlayer.Siren;
 using BardMusicPlayer.Ui.Utilities;
 using BardMusicPlayer.Ui.ViewModels;
 using Stylet;
@@ -34,13 +36,15 @@ namespace BardMusicPlayer.Ui
             // OnLaunch is fired after root ViewModel is loaded, so Seer events are fired after views have started.
             BmpSeer.Instance.Start();
             BmpGrunt.Instance.Start();
+            BmpMaestro.Instance.Start();
+            BmpSiren.Instance.Setup();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             LogManager.Shutdown();
 
-            // BmpMaestro.Instance.Stop();
+            BmpMaestro.Instance.Stop();
 
             BmpGrunt.Instance.Stop();
 

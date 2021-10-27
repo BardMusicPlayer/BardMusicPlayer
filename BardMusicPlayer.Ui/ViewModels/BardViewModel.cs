@@ -1,4 +1,5 @@
-﻿using BardMusicPlayer.Quotidian.Structs;
+﻿using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 using Stylet;
@@ -28,6 +29,14 @@ namespace BardMusicPlayer.Ui.ViewModels
                 var holdingNone = held.Equals(Instrument.None);
 
                 return held is null || holdingNone ? null : held;
+            }
+            set
+            {
+                var held = SelectedBard?.InstrumentHeld;
+                if (held is null || held.Value.Index != value.Value.Index)
+                {
+                    GameExtensions.EquipInstrument(SelectedBard, value.Value);
+                }
             }
         }
 

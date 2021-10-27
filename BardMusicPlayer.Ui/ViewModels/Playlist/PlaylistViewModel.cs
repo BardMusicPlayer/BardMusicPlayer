@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Siren;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Ui.Notifications;
 using BardMusicPlayer.Ui.Utilities;
@@ -49,7 +50,14 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public void Handle(SelectPlaylistNotification message) { SelectPlaylist(message.Playlist); }
 
-        public void ChangeSong() { Console.WriteLine(SelectedSong.Title); }
+        public async void ChangeSong() {
+            if (SelectedSong != null)
+            {
+                await BmpSiren.Instance.Load(SelectedSong);
+                Console.WriteLine($"Changed song: {SelectedSong.Title}");
+                CurrentSong = SelectedSong;
+            }
+        }
         
         /// <summary>
         ///     This opens a song or adds it to the current <see cref="IPlaylist" /> provided.
@@ -81,7 +89,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
                     // Select the first song when there is nothing selected yet
                     CurrentSong ??= bmpSong;
-                    SelectedPlaylist?.Add(bmpSong);
+                    SelectedPlaylist?.Refresh();
                 }
                 catch (Exception e)
                 {
@@ -134,7 +142,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
             if (index > -1)
             {
                 SelectedPlaylist.Remove(index);
-                BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
+                BmpCoffer.Instance.SavePlaylist(SelectedPlaylist.Playlist);
             }
         }
 
@@ -144,7 +152,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
                 return;
 
             for (var i = 0; i < SelectedPlaylist.Count(); i++) SelectedPlaylist.Remove(0);
-            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist);
+            BmpCoffer.Instance.SavePlaylist(SelectedPlaylist.Playlist);
         }
 
         public void DeletePlaylist()

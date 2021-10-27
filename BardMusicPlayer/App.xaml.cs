@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace BardMusicPlayer
@@ -18,6 +19,12 @@ namespace BardMusicPlayer
         private static readonly bool Debug = true;
         private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
         private static readonly string ResourcePath = Directory.GetCurrentDirectory() + @"\";
+
+        [DllImport("Kernel32")]
+        public static extern void AllocConsole();
+
+        [DllImport("Kernel32")]
+        public static extern void FreeConsole();
 #else
         private static readonly bool Debug = false;
         private static readonly string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
@@ -33,6 +40,10 @@ namespace BardMusicPlayer
             {
                 Directory.CreateDirectory(DataPath);
                 Directory.CreateDirectory(ResourcePath);
+
+#if DEBUG
+                AllocConsole();
+#endif
 
                 Ui.Bootstrapper.Instance.StartUp(Debug, 2, "2", ExePath, ResourcePath, DataPath, eventArgs.Args);
 

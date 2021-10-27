@@ -59,7 +59,8 @@
             <controls:SimpleStackPanel Grid.Column="1" Orientation="Horizontal" Spacing="24">
                 <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Settings}" Click="{s:Action Navigate}"
                         Tag="{Binding Settings}" />
-                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Close}" />
+                <Button Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon Close}" Click="{s:Action Navigate}"
+                        Tag="{Binding TopPage}"/>
             </controls:SimpleStackPanel>
         </Grid>
 

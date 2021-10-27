@@ -494,7 +494,7 @@ namespace BardMusicPlayer.Coffer
 
             // Create the song collection and add indicies
             var songs = dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
-            songs.EnsureIndex(x => x.Title, unique: true);
+            songs.EnsureIndex(x => x.Title);
             songs.EnsureIndex(x => x.Tags);
 
             // Create the custom playlist collection and add indicies

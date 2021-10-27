@@ -70,7 +70,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Command="{s:Action AddSong}" Background="Transparent">
+            <Button Command="{s:Action AddSongs}" CommandParameter="{Binding SelectedPlaylist.Songs}" Background="Transparent">
                 <md:PackIcon Kind="MusicNotePlus" />
             </Button>
 
@@ -130,7 +130,7 @@
 
             <GroupBox Grid.Column="2" Header="Songs" Style="{DynamicResource OutlinedGroupBox}">
                 <ListView
-                    ItemsSource="{Binding Songs}"
+                    ItemsSource="{Binding SelectedPlaylist}"
                     ItemTemplate="{StaticResource ListViewTemplate}"
                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                     VirtualizingPanel.VirtualizationMode="Recycling"
@@ -143,7 +143,7 @@
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate DataType="CollectionViewGroup">
                                     <TextBlock
-                                        Text="{Binding Name, Mode=OneTime}"
+                                        Text="{Binding Name, Mode=OneWay}"
                                         Style="{DynamicResource TitleTextBlockStyle}" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>

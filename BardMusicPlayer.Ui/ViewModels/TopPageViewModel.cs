@@ -1,8 +1,11 @@
-﻿using BardMusicPlayer.Ui.Notifications;
+﻿using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Siren;
+using BardMusicPlayer.Ui.Notifications;
 using BardMusicPlayer.Ui.ViewModels.Playlist;
 using BardMusicPlayer.Ui.ViewModels.SongEditor;
 using Stylet;
 using StyletIoC;
+using System;
 
 namespace BardMusicPlayer.Ui.ViewModels
 {
@@ -39,6 +42,18 @@ namespace BardMusicPlayer.Ui.ViewModels
             }
         }
 
-        public void PlaySong() { }
+        public async void PlaySong() {
+            BmpMaestro.Instance.PlayWithLocalPerformer(Playlist.CurrentSong, -1);
+            BmpMaestro.Instance.StartLocalPerformer();
+            if (BmpSiren.Instance.IsReadyForPlayback)
+            {
+                BmpSiren.Instance.Play();
+
+            }
+            else
+            {
+                Console.WriteLine("Not ready to play");
+            }
+        }
     }
 }

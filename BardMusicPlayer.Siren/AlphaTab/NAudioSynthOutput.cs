@@ -38,6 +38,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
             : base(PreferredSampleRate, 2)
         {
             _device = device;
+            _context = new WasapiOut(device, AudioClientShareMode.Shared, true, _latency);
             _latency = latency;
             _bufferCount = bufferCount;
             _bufferCountSize = _bufferCount / 2 * BufferSize;
@@ -53,8 +54,6 @@ namespace BardMusicPlayer.Siren.AlphaTab
         {
             _finished = false;
             _circularBuffer = new CircularSampleBuffer(BufferSize * _bufferCount);
-
-            _context = new WasapiOut(_device, AudioClientShareMode.Shared, true, _latency);
             _context.Init(this);
 
             Ready();

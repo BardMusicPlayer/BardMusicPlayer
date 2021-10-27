@@ -94,7 +94,8 @@
 
                     <ListBox  Grid.Column="2"
                                   ItemsSource="{x:Static structs:Instrument.All}"
-                                  SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=OneWay}">
+                                  SelectedItem="{Binding BardsViewModel.InstrumentHeld, Mode=TwoWay}"
+                                  SelectionMode="Single">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
@@ -107,7 +108,7 @@
                         <!--Disallow selection-->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="IsHitTestVisible" Value="True"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -122,8 +123,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="Dreamland"
-                       Style="{DynamicResource MaterialDesignHeadline5TextBlock}" />
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding Playlist.CurrentSong.Title, FallbackValue=No Song Selected}"
+                       Style="{DynamicResource MaterialDesignBody2TextBlock}" />
             <auto:StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" MarginBetweenChildren="6">
                 <Button  Content="Open Playlist" Command="{s:Action OpenPlaylist}" />
                 <Button  Content="Edit Song" Command="{s:Action EditSong}" Style="{DynamicResource MaterialDesignRaisedButton}" />
