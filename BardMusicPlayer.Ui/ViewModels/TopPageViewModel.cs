@@ -1,8 +1,8 @@
 ﻿using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Siren;
 using BardMusicPlayer.Ui.Notifications;
 using BardMusicPlayer.Ui.ViewModels.Playlist;
 using BardMusicPlayer.Ui.ViewModels.SongEditor;
+using Melanchall.DryWetMidi.Interaction;
 using Stylet;
 using StyletIoC;
 using System;
@@ -19,13 +19,59 @@ namespace BardMusicPlayer.Ui.ViewModels
 
             BardsViewModel = ioc.Get<BardViewModel>();
             Playlist       = ioc.Get<PlaylistViewModel>();
+
+
+            BmpMaestro.Instance.OnPlaybackTimeChanged += OnPlaybackTimeChanged;
+            BmpMaestro.Instance.OnSongMaxTime += OnSongMaxTime;
         }
 
         public BardViewModel BardsViewModel { get; }
 
         public PlaylistViewModel Playlist { get; }
 
-        public async void LoadSong() { await Playlist.AddSongs(); }
+        public TimeSpan SongMaxTime { get; set; }
+
+        public TimeSpan CurrentPlaybackTime { get; set; }
+
+        public int SongProgress => GetSongProgress();
+
+        private void OnSongMaxTime(object sender, ITimeSpan e)
+        {
+            if (e is MetricTimeSpan mts)
+            {
+                SongMaxTime = mts;
+            }
+        }
+
+        private int GetSongProgress()
+        {
+            if (CurrentPlaybackTime != null && SongMaxTime != null)
+            {
+                var totalPlayTime = CurrentPlaybackTime.TotalSeconds;
+                var maxPlayTime = SongMaxTime.TotalSeconds;
+
+                var totalPercentage = (int)((totalPlayTime * 100) / maxPlayTime);
+                return totalPercentage;
+            }
+            return 0;
+        }
+
+        private void OnPlaybackTimeChanged(object sender, ITimeSpan e)
+        {
+            if (e is MetricTimeSpan mts)
+            {
+                CurrentPlaybackTime = mts;
+            }
+        }
+
+        public async void LoadSong() {
+            Playlist.RemoveSong();
+            await Playlist.AddSongs();
+            if (Playlist.CurrentSong != null)
+            {
+                BmpMaestro.Instance.PlayWithLocalPerformer(Playlist.CurrentSong, -1);
+            }
+        }
 
         public void OpenPlaylist()
         {
@@ -43,17 +89,17 @@ namespace BardMusicPlayer.Ui.ViewModels
         }
 
         public async void PlaySong() {
-            BmpMaestro.Instance.PlayWithLocalPerformer(Playlist.CurrentSong, -1);
             BmpMaestro.Instance.StartLocalPerformer();
-            if (BmpSiren.Instance.IsReadyForPlayback)
-            {
-                BmpSiren.Instance.Play();
+        }
 
-            }
-            else
-            {
-                Console.WriteLine("Not ready to play");
-            }
+        public async void StopSong()
+        {
+            BmpMaestro.Instance.StopLocalPerformer();
+        }
+
+        public async void PauseSong()
+        {
+            BmpMaestro.Instance.PauseLocalPerformer();
         }
     }
 }

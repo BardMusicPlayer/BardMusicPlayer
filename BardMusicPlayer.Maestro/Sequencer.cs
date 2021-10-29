@@ -21,6 +21,7 @@ namespace BardMusicPlayer.Maestro
             //Start the melanchall sequencer
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(_playback, TimeSpanType.Metric);
             PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += OnTick;
+            PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeSpan.FromMilliseconds(250);
             PlaybackCurrentTimeWatcher.Instance.Start();
 
             _playback.Speed = 1;                    //Yep that's the playback speed and we'll set it

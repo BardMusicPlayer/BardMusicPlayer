@@ -139,9 +139,9 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="00:00" VerticalAlignment="Center" />
-            <Slider Grid.Column="1" Margin="6,0" />
-            <TextBlock Grid.Column="2" Text="00:00" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Text="{Binding CurrentPlaybackTime, StringFormat=mm\\:ss, Mode=OneWay}" VerticalAlignment="Center" />
+            <Slider Grid.Column="1" Margin="6,0" Value="{Binding SongProgress, Mode=OneWay}" Maximum="100" Interval="1" />
+            <TextBlock Grid.Column="2" Text="{Binding SongMaxTime, StringFormat=mm\\:ss, Mode=OneWay}" VerticalAlignment="Center" />
         </Grid>
 
         <Grid Grid.Row="4">
@@ -154,8 +154,8 @@
                 <Button Style="{DynamicResource MaterialDesignRaisedButton}" Command="{s:Action LoadSong}">Load Song</Button>
                 <Button>Queue Instruments</Button>
                 <Button Command="{s:Action PlaySong}">Play</Button>
-                <Button>Pause</Button>
-                <Button>Stop</Button>
+                <Button Command="{s:Action PauseSong}">Pause</Button>
+                <Button Command="{s:Action StopSong}">Stop</Button>
             </auto:StackPanel>
 
             <Button Grid.Column="1" Style="{DynamicResource MaterialDesignIconButton}" Content="{md:PackIcon QuestionMark}" />
