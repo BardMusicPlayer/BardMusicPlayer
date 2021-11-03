@@ -146,7 +146,8 @@ namespace BardMusicPlayer.Coffer
         {
             using var memoryStream = new MemoryStream(bson);
             var midiFile = MidiFile.Read(memoryStream);
-            var trackChunk = midiFile.GetTrackChunks().First();
+            //In case we have more than 1 chunk per track, combine them
+            TrackChunk trackChunk = Melanchall.DryWetMidi.Core.TrackChunkUtilities.Merge(midiFile.GetTrackChunks());
             memoryStream.Dispose();
             return trackChunk;
         }
@@ -296,17 +297,54 @@ namespace BardMusicPlayer.Coffer
             }
 
             var songCol = this.GetSongCollection();
-
             try
             {
                 if (song.Id == null)
                 {
+                    //TODO: Fix this if more than one song with the name exists
+                    var results = songCol.Find(x => x.Title.Equals(song.Title));
+                    if (results.Count() > 0)
+                    {
+                        //Get the ID from the found song and update the data
+                        song.Id = results.First().Id;
+                        songCol.Update(song);
+                        return;
+                    }
+
+                    //TODO: Fix this to get a real unique idendifier
                     song.Id = ObjectId.NewObjectId();
                     songCol.Insert(song);
                 }
                 else
-                {
                     songCol.Update(song);
+            }
+            catch (LiteException e)
+            {
+                throw new BmpCofferException(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// This deletes a song. TODO: Make sure all data is erased
+        /// </summary>
+        /// <param name="song"></param>
+        /// <exception cref="BmpCofferException">This is thrown if a name conflict occurs on save.</exception>
+        public void DeleteSong(BmpSong song)
+        {
+
+            if (song == null) throw new ArgumentNullException();
+
+            var songCol = this.GetSongCollection();
+            try
+            {
+                if (song.Id != null)
+                {
+                    var results = songCol.Find(x => x.Title.Equals(song.Title));
+                    if (results.Count() > 0)
+                    {
+                        songCol.Delete(song.Id);
+                        return;
+                    }
                 }
             }
             catch (LiteException e)
