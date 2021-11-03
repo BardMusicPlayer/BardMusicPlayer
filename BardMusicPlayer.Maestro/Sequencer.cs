@@ -11,7 +11,7 @@ namespace BardMusicPlayer.Maestro
     {
         private Game _game;
         private Playback _playback;
-
+        
         private int _tracknumber = 0;
         ITimeSpan _startingpoint;
         public Sequencer(Game game, MidiFile container, int tracknr = -1)
@@ -21,19 +21,19 @@ namespace BardMusicPlayer.Maestro
             //Start the melanchall sequencer
             PlaybackCurrentTimeWatcher.Instance.AddPlayback(_playback, TimeSpanType.Metric);
             PlaybackCurrentTimeWatcher.Instance.CurrentTimeChanged += OnTick;
-            PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeSpan.FromMilliseconds(250);
+            //PlaybackCurrentTimeWatcher.Instance.PollingInterval = TimeSpan.FromMilliseconds(250);  //Not sure, but seems to affect OnNoteEvent polling too
             PlaybackCurrentTimeWatcher.Instance.Start();
-
+            
             _playback.Speed = 1;                    //Yep that's the playback speed and we'll set it
             _playback.EventPlayed += OnNoteEvent;
             _tracknumber = tracknr;
 
-            BmpMaestro.Instance.OnSongMaxTime?.Invoke(this, _playback.GetDuration(TimeSpanType.Metric));
+            BmpMaestro.Instance.PublishEvent(new MaxPlayTimeEvent(_playback.GetDuration(TimeSpanType.Metric)));
         }
 
         public void SetPlaybackStart(double f)
         {
-            TimeSpan time = TimeSpan.FromMilliseconds(f / 1000); //We have microseconds and want some milis....
+            TimeSpan time = TimeSpan.FromMilliseconds(f/1000); //We have microseconds and want some milis....
             _startingpoint = new MetricTimeSpan(hours: time.Hours, minutes: time.Minutes, seconds: time.Seconds, milliseconds: time.Milliseconds);
 
             _playback.MoveToTime(_startingpoint);
@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Maestro
 
         public void OnTick(object sender, PlaybackCurrentTimeChangedEventArgs e)
         {
-            BmpMaestro.Instance.OnPlaybackTimeChanged?.Invoke(this, _playback.GetCurrentTime(TimeSpanType.Metric));
+            BmpMaestro.Instance.PublishEvent(new CurrentPlayPositionEvent(_playback.GetCurrentTime(TimeSpanType.Metric)));
         }
 
         public void OnNoteEvent(object sender, MidiEventPlayedEventArgs e)

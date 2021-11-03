@@ -1,8 +1,6 @@
-﻿using BardMusicPlayer.Transmogrify.Song;
+﻿using Melanchall.DryWetMidi.Interaction;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,10 +8,31 @@ namespace BardMusicPlayer.Maestro
 {
     public partial class BmpMaestro
     {
+        public EventHandler<ITimeSpan> OnPlaybackTimeChanged;
+        public EventHandler<ITimeSpan> OnSongMaxTime;
+
+        private ConcurrentQueue<MaestroEvent> _eventQueue;
+        private bool _eventQueueOpen;
+
         private async Task RunEventsHandler(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
+                while (_eventQueue.TryDequeue(out var meastroEvent))
+                {
+                    if (token.IsCancellationRequested)
+                        break;
+
+                    switch (meastroEvent)
+                    {
+                        case CurrentPlayPositionEvent currentPlayPosition:
+                            OnPlaybackTimeChanged(this, currentPlayPosition.timeSpan);
+                            break;
+                        case MaxPlayTimeEvent maxPlayTime:
+                            OnSongMaxTime(this, maxPlayTime.timeSpan);
+                            break;
+                    };
+                }
                 await Task.Delay(1, token);
             }
         }
@@ -22,18 +41,27 @@ namespace BardMusicPlayer.Maestro
 
         private void StartEventsHandler()
         {
+            _eventQueue = new ConcurrentQueue<MaestroEvent>();
             _eventsTokenSource = new CancellationTokenSource();
             Task.Factory.StartNew(() => RunEventsHandler(_eventsTokenSource.Token), TaskCreationOptions.LongRunning);
+            _eventQueueOpen = true;
         }
 
         private void StopEventsHandler()
         {
+            _eventQueueOpen = false;
             _eventsTokenSource.Cancel();
+            while (_eventQueue.TryDequeue(out _))
+            {
+            }
         }
 
-        public void PlayWithLocalPerformer(Task<BmpSong> bmpSong, int v)
+        internal void PublishEvent(MaestroEvent meastroEvent)
         {
-            throw new NotImplementedException();
+            if (!_eventQueueOpen)
+                return;
+
+            _eventQueue.Enqueue(meastroEvent);
         }
     }
 }
