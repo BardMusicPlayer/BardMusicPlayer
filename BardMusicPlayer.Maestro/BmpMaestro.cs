@@ -58,12 +58,26 @@ namespace BardMusicPlayer.Maestro
             //add the chunks
             foreach (var data in bmpSong.TrackContainers)
             {
-                //Set the channel
+                //Set the channel for notes and progchanges
                 using (var manager = data.Value.SourceTrackChunk.ManageNotes())
+                {
                     foreach (Note note in manager.Notes)
                         note.Channel = Melanchall.DryWetMidi.Common.FourBitNumber.Parse(index.ToString());
+                }
+                using (var manager = data.Value.SourceTrackChunk.ManageTimedEvents())
+                {
+                    foreach (var e in manager.Events)
+                    {
+                        var programChangeEvent = e.Event as ProgramChangeEvent;
+                        if (programChangeEvent == null)
+                            continue;
+                        programChangeEvent.Channel = Melanchall.DryWetMidi.Common.FourBitNumber.Parse(index.ToString());
+                    }
+                }
                 midiFile.Chunks.Add(data.Value.SourceTrackChunk);
-                index++;
+
+                if (data.Value.SourceTrackChunk.ManageNotes().Notes.Count() > 0)
+                    index++;
             }
             //and set the tempo map
             midiFile.ReplaceTempoMap(bmpSong.SourceTempoMap);

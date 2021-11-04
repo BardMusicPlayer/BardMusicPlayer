@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -9,6 +11,15 @@ namespace BardMusicPlayer.Maestro
 {
     public partial class Sequencer
     {
+
+        private static Dictionary<int, Keys> guitarKeyMap = new Dictionary<int, Keys> {
+            { 27, Keys.OemSemicolon }, // ElectricGuitarClean
+			{ 28, Keys.Oem2 }, // ElectricGuitarMuted
+			{ 29, Keys.Oem3 }, // ElectricGuitarOverdriven			
+			{ 30, Keys.Oem6 }, // ElectricGuitarPowerChords
+			{ 31, Keys.Oem7 }, // ElectricGuitarSpecial*/
+		};
+
         private Game _game;
         private Playback _playback;
         
@@ -65,7 +76,9 @@ namespace BardMusicPlayer.Maestro
                     ProgramChangeEvent prog = e.Event as ProgramChangeEvent;
                     if (prog.Channel == _tracknumber) //No progchange for all tracks, else it will be messy as hell
                     {
-                        Console.WriteLine(prog.ProgramNumber);
+                        if ((prog.ProgramNumber < 27) || (prog.ProgramNumber > 31))
+                            return;
+                        GameExtensions.SyncTapKey(_game, guitarKeyMap[prog.ProgramNumber]);
                     }
                     return;
                 default:
