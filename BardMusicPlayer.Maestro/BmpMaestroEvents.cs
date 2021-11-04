@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.Maestro.Events;
+using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -10,6 +11,7 @@ namespace BardMusicPlayer.Maestro
     {
         public EventHandler<ITimeSpan> OnPlaybackTimeChanged;
         public EventHandler<ITimeSpan> OnSongMaxTime;
+        public EventHandler<bool> OnPlaybackStopped;
 
         private ConcurrentQueue<MaestroEvent> _eventQueue;
         private bool _eventQueueOpen;
@@ -30,6 +32,11 @@ namespace BardMusicPlayer.Maestro
                             break;
                         case MaxPlayTimeEvent maxPlayTime:
                             OnSongMaxTime(this, maxPlayTime.timeSpan);
+                            break;
+                        case PlaybackStoppedEvent playbackStopped:
+                            if (OnPlaybackStopped == null)
+                                break;
+                            OnPlaybackStopped(this, playbackStopped.Stopped);
                             break;
                     };
                 }

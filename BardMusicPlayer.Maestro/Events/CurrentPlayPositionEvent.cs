@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
 
-namespace BardMusicPlayer.Maestro
+namespace BardMusicPlayer.Maestro.Events
 {
     public sealed class CurrentPlayPositionEvent : MaestroEvent
     {

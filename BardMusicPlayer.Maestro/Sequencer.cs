@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using BardMusicPlayer.Grunt;
+using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer;
 using Melanchall.DryWetMidi.Core;
@@ -12,7 +15,7 @@ namespace BardMusicPlayer.Maestro
     public partial class Sequencer
     {
 
-        private static Dictionary<int, Keys> guitarKeyMap = new Dictionary<int, Keys> {
+        public static Dictionary<int, Keys> GuitarKeyMap = new Dictionary<int, Keys> {
             { 27, Keys.OemSemicolon }, // ElectricGuitarClean
 			{ 28, Keys.Oem2 }, // ElectricGuitarMuted
 			{ 29, Keys.Oem3 }, // ElectricGuitarOverdriven			
@@ -25,6 +28,7 @@ namespace BardMusicPlayer.Maestro
         
         private int _tracknumber = 0;
         ITimeSpan _startingpoint;
+
         public Sequencer(Game game, MidiFile container, int tracknr = -1)
         {
             _game = game;
@@ -37,6 +41,7 @@ namespace BardMusicPlayer.Maestro
             
             _playback.Speed = 1;                    //Yep that's the playback speed and we'll set it
             _playback.EventPlayed += OnNoteEvent;
+            _playback.Stopped     += OnPlaybackStopped;
             _tracknumber = tracknr;
 
             BmpMaestro.Instance.PublishEvent(new MaxPlayTimeEvent(_playback.GetDuration(TimeSpanType.Metric)));
@@ -53,6 +58,11 @@ namespace BardMusicPlayer.Maestro
         public void OnTick(object sender, PlaybackCurrentTimeChangedEventArgs e)
         {
             BmpMaestro.Instance.PublishEvent(new CurrentPlayPositionEvent(_playback.GetCurrentTime(TimeSpanType.Metric)));
+        }
+
+        private void OnPlaybackStopped(object sender, EventArgs e)
+        {
+            BmpMaestro.Instance.PublishEvent(new PlaybackStoppedEvent());
         }
 
         public void OnNoteEvent(object sender, MidiEventPlayedEventArgs e)
@@ -78,7 +88,7 @@ namespace BardMusicPlayer.Maestro
                     {
                         if ((prog.ProgramNumber < 27) || (prog.ProgramNumber > 31))
                             return;
-                        GameExtensions.SyncTapKey(_game, guitarKeyMap[prog.ProgramNumber]);
+                        GameExtensions.SyncTapKey(_game, GuitarKeyMap[prog.ProgramNumber]);
                     }
                     return;
                 default:
@@ -107,6 +117,7 @@ namespace BardMusicPlayer.Maestro
 
         public void Destroy()
         {
+            _playback.Stop();
             _playback.Dispose();
         }
 

@@ -1,7 +1,7 @@
 ﻿using BardMusicPlayer.Quotidian.UtcMilliTime;
 using System;
 
-namespace BardMusicPlayer.Maestro
+namespace BardMusicPlayer.Maestro.Events
 {
     public abstract class MaestroEvent
     {
