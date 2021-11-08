@@ -92,11 +92,11 @@ namespace BardMusicPlayer.Transmogrify.Song
         }
 
         /// <summary>
-        /// 
+        /// The original routine, this one imports all tracks (even if they have no notes)
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static Task<BmpSong> OpenMidiFile(string path)
+        public static Task<BmpSong> OpenMidiFileWithAllTracks(string path)
         {
             var timer = new Stopwatch();
             timer.Start();
@@ -127,6 +127,92 @@ namespace BardMusicPlayer.Transmogrify.Song
                 song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
             }
 
+            Parallel.For(0, song.TrackContainers.Count, i =>
+            {
+                Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
+                {
+                    switch (song.TrackContainers[i].ConfigContainers[j].ProcessorConfig)
+                    {
+                        case ClassicProcessorConfig classicConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              classicConfig.GetType() +
+                                              " Instrument:" + classicConfig.Instrument + " OctaveRange:" +
+                                              classicConfig.OctaveRange + " PlayerCount:" + classicConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", classicConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case LyricProcessorConfig lyricConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              lyricConfig.GetType() + " PlayerCount:" + lyricConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", lyricConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        case VSTProcessorConfig vstConfig:
+                            Console.WriteLine("Processing: Track:" + i + " ConfigContainer:" + j + " ConfigType:" +
+                                              vstConfig.GetType() + " PlayerCount:" + vstConfig.PlayerCount +
+                                              " IncludeTracks:" + string.Join(",", vstConfig.IncludedTracks));
+                            song.TrackContainers[i].ConfigContainers[j].ProccesedTrackChunks =
+                                await song.TrackContainers[i].ConfigContainers[j].RefreshTrackChunks(song);
+                            break;
+                        default:
+                            Console.WriteLine("error unknown config.");
+                            break;
+                    }
+                });
+            });
+
+            timer.Stop();
+
+            var timeTaken = timer.Elapsed;
+            Console.WriteLine("Time taken: " + timeTaken.ToString(@"m\:ss\.fff"));
+            return Task.FromResult(song);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Task<BmpSong> OpenMidiFile(string path)
+        {
+            var timer = new Stopwatch();
+            timer.Start();
+
+            if (!File.Exists(path)) throw new BmpTransmogrifyException("File " + path + " does not exist!");
+
+            using var fileStream = File.OpenRead(path);
+
+            var midiFile = fileStream.ReadAsMidiFile();
+
+            fileStream.Dispose();
+
+            var song = new BmpSong
+            {
+                Title = Path.GetFileNameWithoutExtension(path),
+                SourceTempoMap = midiFile.GetTempoMap().Clone(),
+                TrackContainers = new Dictionary<long, TrackContainer>()
+            };
+
+            var trackChunkArray = midiFile.GetTrackChunks().ToArray();
+
+            int index = 0;
+            for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++)
+            {
+                if (trackChunkArray[i].ManageNotes().Notes.Count() > 0)
+                {
+                    song.TrackContainers[index] = new TrackContainer
+                    {
+                        SourceTrackChunk = (TrackChunk)trackChunkArray[i].Clone()
+                    };
+                    index++;
+                }
+            }
+            for (var i = 0; i < song.TrackContainers.Count(); i++)
+            {
+                song.TrackContainers[i].ConfigContainers = song.TrackContainers[i].SourceTrackChunk.ReadConfigs(i, song);
+            }
             Parallel.For(0, song.TrackContainers.Count, i =>
             {
                 Parallel.For(0, song.TrackContainers[i].ConfigContainers.Count, async j =>
