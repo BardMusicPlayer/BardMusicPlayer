@@ -14,15 +14,6 @@ namespace BardMusicPlayer.Maestro
 {
     public partial class Sequencer
     {
-
-        public static Dictionary<int, Keys> GuitarKeyMap = new Dictionary<int, Keys> {
-            { 27, Keys.OemSemicolon }, // ElectricGuitarClean
-			{ 28, Keys.Oem2 }, // ElectricGuitarMuted
-			{ 29, Keys.Oem3 }, // ElectricGuitarOverdriven			
-			{ 30, Keys.Oem6 }, // ElectricGuitarPowerChords
-			{ 31, Keys.Oem7 }, // ElectricGuitarSpecial*/
-		};
-
         private Game _game;
         private Playback _playback;
         
@@ -75,21 +66,17 @@ namespace BardMusicPlayer.Maestro
                 case MidiEventType.NoteOn:
                     NoteOnEvent non = e.Event as NoteOnEvent;
                     if ((non.Channel == _tracknumber) || (_tracknumber == -1))
-                        GameExtensions.SendNoteOn(_game, non.NoteNumber, non.Channel); //No await here, we don't wait else we'll get a messy timing
+                       _ = GameExtensions.SendNoteOn(_game, non.NoteNumber, non.Channel); //No await here, we don't wait else we'll get a messy timing
                     return;
                 case MidiEventType.NoteOff:
                     NoteOffEvent noff = e.Event as NoteOffEvent;
                     if ((noff.Channel == _tracknumber) || (_tracknumber == -1))
-                        GameExtensions.SendNoteOff(_game, noff.NoteNumber); //same as above
+                        _ = GameExtensions.SendNoteOff(_game, noff.NoteNumber); //same as above
                     return;
                 case MidiEventType.ProgramChange:
                     ProgramChangeEvent prog = e.Event as ProgramChangeEvent;
                     if (prog.Channel == _tracknumber) //No progchange for all tracks, else it will be messy as hell
-                    {
-                        if ((prog.ProgramNumber < 27) || (prog.ProgramNumber > 31))
-                            return;
-                        GameExtensions.SyncTapKey(_game, GuitarKeyMap[prog.ProgramNumber]);
-                    }
+                        _ = GameExtensions.GuitarByPrognumber(_game, prog.ProgramNumber);
                     return;
                 default:
                     return;

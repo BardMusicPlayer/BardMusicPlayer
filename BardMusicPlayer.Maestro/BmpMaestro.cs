@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song;
 using Melanchall.DryWetMidi.Core;
@@ -19,6 +20,7 @@ namespace BardMusicPlayer.Maestro
 
         public IEnumerable<Game> Bards { get; private set; }
         public Game SelectedBard { get; set; }
+        private int _NoteKeyDelay;
 
         private Sequencer _sequencer;
         /// <summary>
@@ -91,7 +93,11 @@ namespace BardMusicPlayer.Maestro
         public void StartLocalPerformer()
         {
             if (_sequencer != null)
+            {
+                _NoteKeyDelay = BmpPigeonhole.Instance.NoteKeyDelay;
+                BmpPigeonhole.Instance.NoteKeyDelay = 1;
                 _sequencer.Start();
+            }
         }
 
         /// <summary>
@@ -101,7 +107,10 @@ namespace BardMusicPlayer.Maestro
         public void PauseLocalPerformer()
         {
             if (_sequencer != null)
+            {
+                BmpPigeonhole.Instance.NoteKeyDelay = _NoteKeyDelay;
                 _sequencer.Pause();
+            }
         }
 
         /// <summary>
@@ -111,12 +120,16 @@ namespace BardMusicPlayer.Maestro
         public void StopLocalPerformer()
         {
             if (_sequencer != null)
+            {
+                BmpPigeonhole.Instance.NoteKeyDelay = _NoteKeyDelay;
                 _sequencer.Stop();
+            }
         }
 
         /// <summary>
-        /// Change the tracknumber
+        /// Change the tracknumber (-1 all tracks)
         /// </summary>
+        /// <param name="track"></param>
         /// <returns></returns>
         public void ChangeTracknumber(int track)
         {
@@ -134,6 +147,10 @@ namespace BardMusicPlayer.Maestro
                 _sequencer.Destroy();
         }
 
+        /// <summary>
+        /// Start the eventhandler
+        /// </summary>
+        /// <returns></returns>
         public void Start()
         {
             if (Started) return;
@@ -141,6 +158,10 @@ namespace BardMusicPlayer.Maestro
             Started = true;
         }
 
+        /// <summary>
+        /// Stop the eventhandler
+        /// </summary>
+        /// <returns></returns>
         public void Stop()
         {
             if (!Started) return;
@@ -148,11 +169,15 @@ namespace BardMusicPlayer.Maestro
             Started = false;
         }
 
-
-        public void SetPlaybackStart(double t)
+        /// <summary>
+        /// Sets the playback at position (timeindex in microseconds)
+        /// </summary>
+        /// <param name="timeindex"></param>
+        /// <returns></returns>
+        public void SetPlaybackStart(double timeindex)
         {
             if (_sequencer != null)
-                _sequencer.SetPlaybackStart(t);
+                _sequencer.SetPlaybackStart(timeindex);
         }
 
         ~BmpMaestro() { Dispose(); }
