@@ -33,6 +33,11 @@ namespace BardMusicPlayer.Pigeonhole
         public static BmpPigeonhole Instance => _instance ?? throw new BmpException("This pigeonhole must be initialized first.");
 
         /// <summary>
+        /// Sets the autostart method
+        /// </summary>
+        public virtual int AutostartMethod { get; set; } = 0;
+
+        /// <summary>
         /// Enable the 16 voice limit in Synthesizer
         /// </summary>
         public virtual bool EnableSynthVoiceLimiter { get; set; } = true;
