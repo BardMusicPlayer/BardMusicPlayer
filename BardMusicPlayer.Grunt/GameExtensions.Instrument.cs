@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
@@ -43,6 +44,7 @@ namespace BardMusicPlayer.Grunt
                     await SyncTapKey(game, game.NavigationMenuKeys[NavigationMenuKey.ESC]);
                     await Task.Delay(1000);
                 }
+
                 exitLock--;
             }
 
@@ -62,7 +64,8 @@ namespace BardMusicPlayer.Grunt
             if (!game.IsBard) return false;
 
             // TODO for 5.55
-            if ((int) game.GameRegion < 4) throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
+            if ((int) game.GameRegion < 4)
+                throw new BmpGruntException("Equipping a Tone is not supported in region " + game.GameRegion);
 
             var exitLock = 5;
 
@@ -70,18 +73,39 @@ namespace BardMusicPlayer.Grunt
             {
                 if (game.InstrumentToneHeld.Equals(instrumentToneWanted)) return true;
 
-                if (!instrumentToneWanted.Equals(InstrumentTone.None) && game.InstrumentToneHeld.Equals(InstrumentTone.None))
-                {
+                if (!instrumentToneWanted.Equals(InstrumentTone.None) &&
+                    game.InstrumentToneHeld.Equals(InstrumentTone.None))
                     await SyncTapKey(game, game.InstrumentToneKeys[instrumentToneWanted]);
-                }
                 else
-                {
                     await SyncTapKey(game, game.NavigationMenuKeys[NavigationMenuKey.ESC]);
-                }
                 exitLock--;
             }
 
             return game.InstrumentToneHeld.Equals(instrumentToneWanted);
         }
+
+
+        public static Dictionary<int, Keys> GuitarKeyMap = new Dictionary<int, Keys> {
+            { 27, Keys.OemSemicolon }, // ElectricGuitarClean
+			{ 28, Keys.Oem2 }, // ElectricGuitarMuted
+			{ 29, Keys.Oem3 }, // ElectricGuitarOverdriven			
+			{ 30, Keys.Oem6 }, // ElectricGuitarPowerChords
+			{ 31, Keys.Oem7 }, // ElectricGuitarSpecial*/
+		};
+
+        /// <summary>
+        /// Switches the guitar tone by programnumber
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="prognumber"></param>
+        /// <returns></returns>
+        public static async Task<bool> GuitarByPrognumber(this Game game, int prognumber)
+        {
+            if ((prognumber < 27) || (prognumber > 31))
+                return false;
+
+            return await SyncTapKey(game, GuitarKeyMap[prognumber]);
+        }
+
     }
 }
