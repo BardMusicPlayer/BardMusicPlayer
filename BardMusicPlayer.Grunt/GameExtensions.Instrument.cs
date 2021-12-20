@@ -29,6 +29,7 @@ namespace BardMusicPlayer.Grunt
             // if (game.GameRegion == GameRegion.Global) return await EquipTone(game, instrument.InstrumentTone);
 
             var exitLock = 5;
+            var exitLockWaitInMs = 1000 / exitLock;
 
             while (exitLock > 0)
             {
@@ -37,18 +38,23 @@ namespace BardMusicPlayer.Grunt
                 if (!instrumentWanted.Equals(Instrument.None) && game.InstrumentHeld.Equals(Instrument.None))
                 {
                     await SyncTapKey(game, game.InstrumentKeys[instrumentWanted]);
-                    await Task.Delay(1000);
+                    await Task.Delay(exitLockWaitInMs);
                 }
                 else
                 {
                     await SyncTapKey(game, game.NavigationMenuKeys[NavigationMenuKey.ESC]);
-                    await Task.Delay(1000);
+                    await Task.Delay(exitLockWaitInMs);
                 }
 
                 exitLock--;
             }
 
             return game.InstrumentHeld.Equals(instrumentWanted);
+        }
+
+        public static bool EquipInstrumentSync(this Game game, Instrument instrumentWanted)
+        {
+            return Task.Run(() => EquipInstrument(game, instrumentWanted)).GetAwaiter().GetResult();
         }
 
         /// <summary>
