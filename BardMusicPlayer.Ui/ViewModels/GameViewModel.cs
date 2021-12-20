@@ -22,9 +22,9 @@ namespace BardMusicPlayer.Ui.ViewModels
 
         public Game Game { get; }
 
-        public string HomeWorld { get; set; }
+        public string? HomeWorld { get; set; }
 
-        public string PlayerName { get; set; }
+        public string? PlayerName { get; set; }
 
         public void Dispose()
         {

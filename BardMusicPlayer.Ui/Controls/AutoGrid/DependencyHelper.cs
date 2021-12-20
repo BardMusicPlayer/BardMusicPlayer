@@ -20,9 +20,9 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
         /// <param name="type">The type.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns></returns>
-        public static DependencyProperty GetDependencyProperty(Type type, string propertyName)
+        public static DependencyProperty? GetDependencyProperty(Type type, string propertyName)
         {
-            DependencyProperty prop = null;
+            DependencyProperty? prop = null;
 
             if (type != null)
             {
@@ -40,9 +40,9 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
         /// <param name="o"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static DependencyProperty GetDependencyProperty(this DependencyObject o, string propertyName)
+        public static DependencyProperty? GetDependencyProperty(this DependencyObject o, string propertyName)
         {
-            DependencyProperty prop = null;
+            DependencyProperty? prop = null;
 
             if (o != null) prop = GetDependencyProperty(o.GetType(), propertyName);
 

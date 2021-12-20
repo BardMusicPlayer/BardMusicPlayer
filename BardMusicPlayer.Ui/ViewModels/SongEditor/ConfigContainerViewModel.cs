@@ -8,7 +8,7 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
 {
     public class ConfigContainerViewModel : Screen
     {
-        private uint _bards;
+        // private uint _bards;
 
         public ConfigContainerViewModel(KeyValuePair<long, ConfigContainer> container, string name)
         {
@@ -24,7 +24,7 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
 
         public Instrument? Instrument { get; set; }
 
-        public IProcessorConfig Processor { get; set; }
+        public IProcessorConfig? Processor { get; set; }
 
         public long ConfigurationId { get; set; }
 

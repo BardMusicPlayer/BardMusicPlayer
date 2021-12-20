@@ -6,7 +6,7 @@ namespace BardMusicPlayer.Ui.Utilities
 {
     public class TrackGroupKeyConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             ((string) value)?.Substring(0, 1).ToUpper();
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>

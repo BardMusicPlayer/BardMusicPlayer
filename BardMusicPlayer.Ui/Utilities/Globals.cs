@@ -9,9 +9,9 @@ namespace BardMusicPlayer.Ui.Utilities
     {
         public static bool IsBeta;
         public static int Build;
-        public static string Commit;
-        public static string ExePath;
-        public static string ResourcePath;
-        public static string DataPath;
+        public static string? Commit;
+        public static string? ExePath;
+        public static string? ResourcePath;
+        public static string? DataPath;
     }
 }

@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Ui.Utilities
 {
     public static class LogManager
     {
-        private static Controls.LogTextWriter _LogTextWriter;
+        private static Controls.LogTextWriter? _LogTextWriter;
 
         public static bool Initialize(Controls.LogTextWriter logTextWriter)
         {
@@ -55,7 +55,7 @@ namespace BardMusicPlayer.Ui.Utilities
         }
 
 
-        private static void WriteLog(string output) => _LogTextWriter.Write(output);
+        private static void WriteLog(string output) => _LogTextWriter?.Write(output);
         private static void PrintExceptionInfo(SeerExceptionEvent seerExceptionEvent) => BmpLog.E(BmpLog.Source.Seer, "[" + seerExceptionEvent.EventType.Name + "] - " + seerExceptionEvent.Exception.Message);
         private static void PrintMachinaManagerLogEvent(MachinaManagerLogEvent machinaManagerLogEvent) => BmpLog.D(BmpLog.Source.Seer, "[" + machinaManagerLogEvent.EventType.Name + "] - " + machinaManagerLogEvent.Message);
     }

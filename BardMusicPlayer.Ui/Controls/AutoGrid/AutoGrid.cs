@@ -10,6 +10,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
+#pragma warning disable 8602
+
 namespace BardMusicPlayer.Ui.Controls.AutoGrid
 {
     /// <summary>
@@ -611,3 +613,5 @@ namespace BardMusicPlayer.Ui.Controls.AutoGrid
         #endregion Overrides
     }
 }
+
+#pragma warning restore 8602

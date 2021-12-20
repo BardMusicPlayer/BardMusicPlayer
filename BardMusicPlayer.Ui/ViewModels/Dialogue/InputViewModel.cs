@@ -8,6 +8,6 @@ namespace BardMusicPlayer.Ui.ViewModels.Dialogue
 
         public string Header { get; }
 
-        public string Input { get; set; }
+        public string? Input { get; set; }
     }
 }

@@ -88,16 +88,16 @@ namespace BardMusicPlayer.Ui.ViewModels
             }
         }
 
-        public async void PlaySong() {
+        public /*async*/ void PlaySong() {
             BmpMaestro.Instance.StartLocalPerformer();
         }
 
-        public async void StopSong()
+        public /*async*/ void StopSong()
         {
             BmpMaestro.Instance.StopLocalPerformer();
         }
 
-        public async void PauseSong()
+        public /*async*/ void PauseSong()
         {
             BmpMaestro.Instance.PauseLocalPerformer();
         }

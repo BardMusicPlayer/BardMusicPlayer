@@ -44,7 +44,7 @@ namespace BardMusicPlayer.Ui.ViewModels.Playlist
 
         public bool DialogIsOpen { get; set; }
 
-        public DialogueViewModel Dialog { get; set; }
+        public DialogueViewModel? Dialog { get; set; }
 
         public IEnumerable<BmpSong>? Songs => SelectedPlaylist?.Songs;
 

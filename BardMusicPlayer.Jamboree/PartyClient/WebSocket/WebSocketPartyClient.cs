@@ -28,7 +28,11 @@ namespace BardMusicPlayer.Jamboree.PartyClient.WebSocket
             throw new System.NotImplementedException();
         }
 
-        public event IPartyClient.PartyMembersChangedHandler PartyMembersChanged;
+        public event IPartyClient.PartyMembersChangedHandler PartyMembersChanged
+        {
+            add { throw new System.NotImplementedException(); }
+            remove { throw new System.NotImplementedException(); }
+        }
 
         public bool AssignPartyLeader(string partyMember)
         {
@@ -40,14 +44,22 @@ namespace BardMusicPlayer.Jamboree.PartyClient.WebSocket
             throw new System.NotImplementedException();
         }
 
-        public event IPartyClient.PartyLeaderChangedHandler PartyLeaderChanged;
+        public event IPartyClient.PartyLeaderChangedHandler PartyLeaderChanged
+        {
+            add { throw new System.NotImplementedException(); }
+            remove { throw new System.NotImplementedException(); }
+        }
 
         public List<PartyGame> RequestPartyGames(string partyMember)
         {
             throw new System.NotImplementedException();
         }
 
-        public event IPartyClient.PartyGamesChangedHandler PartyGamesChanged;
+        public event IPartyClient.PartyGamesChangedHandler PartyGamesChanged
+        {
+            add { throw new System.NotImplementedException(); }
+            remove { throw new System.NotImplementedException(); }
+        }
 
         public void Dispose()
         {

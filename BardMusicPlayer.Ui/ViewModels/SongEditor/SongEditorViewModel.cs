@@ -24,8 +24,8 @@ namespace BardMusicPlayer.Ui.ViewModels.SongEditor
         public BmpSong CurrentSong { get; set; }
 
         // TODO: Save the song configuration
-        public async Task Save() { }
+        public async Task Save() { await Task.Run(() => { throw new System.NotImplementedException(); }); }
 
-        public void NewConfiguration() { }
+        public void NewConfiguration() { throw new System.NotImplementedException(); }
     }
 }

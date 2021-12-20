@@ -32,10 +32,16 @@ namespace BardMusicPlayer.Ui.ViewModels
             }
             set
             {
-                var held = SelectedBard?.InstrumentHeld;
-                if (held is null || held.Value.Index != value.Value.Index)
+                if (!value.HasValue)
                 {
-                    GameExtensions.EquipInstrument(SelectedBard, value.Value);
+                    throw new System.ArgumentException();
+                }
+
+                var held = SelectedBard?.InstrumentHeld;
+                if (held is null || (held.Value.Index != value.Value.Index))
+                {
+                    // use discard token to let the compiler know we /want/ fire and forget
+                    _ = GameExtensions.EquipInstrument(SelectedBard, value.Value);
                 }
             }
         }

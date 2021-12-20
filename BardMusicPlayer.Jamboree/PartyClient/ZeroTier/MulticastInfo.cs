@@ -13,8 +13,9 @@
 
 namespace BardMusicPlayer.Jamboree.PartyClient.ZeroTier
 {
-    internal class MulticastInfo {
-        public ulong MACAddress;
-        public uint additionalDistinguishingInformation;
+    internal class MulticastInfo
+    {
+        public ulong MACAddress = 0u;
+        public uint additionalDistinguishingInformation = 0;
     }
 }
