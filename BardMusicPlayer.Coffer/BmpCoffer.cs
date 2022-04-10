@@ -146,7 +146,8 @@ namespace BardMusicPlayer.Coffer
         {
             using var memoryStream = new MemoryStream(bson);
             var midiFile = MidiFile.Read(memoryStream);
-            var trackChunk = midiFile.GetTrackChunks().First();
+            //In case we have more than 1 chunk per track, combine them
+            TrackChunk trackChunk = Melanchall.DryWetMidi.Core.TrackChunkUtilities.Merge(midiFile.GetTrackChunks());
             memoryStream.Dispose();
             return trackChunk;
         }
