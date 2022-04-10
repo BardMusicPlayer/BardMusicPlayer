@@ -54,7 +54,7 @@ namespace BardMusicPlayer.Quotidian.Structs
 
         public static readonly Instrument ElectricGuitarOverdriven = new("ElectricGuitarOverdriven", 24, 29, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{}));
         public static readonly Instrument ElectricGuitarClean = new("ElectricGuitarClean", 25, 27, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{}));
-        public static readonly Instrument ElectricGuitarMuted = new("ElectricGuitarMuted", 26, 28, OctaveRange.C2toC5, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
+        public static readonly Instrument ElectricGuitarMuted = new("ElectricGuitarMuted", 26, 28, OctaveRange.C2toC5, false, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{}));
         public static readonly Instrument ElectricGuitarPowerChords = new("ElectricGuitarPowerChords", 27, 30, OctaveRange.C1toC4, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string>{}));
         public static readonly Instrument ElectricGuitarSpecial = new("ElectricGuitarSpecial", 28, 31, OctaveRange.C3toC6, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string>{}));
         public static readonly IReadOnlyList<Instrument> ElectricGuitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { ElectricGuitarOverdriven, ElectricGuitarClean, ElectricGuitarMuted, ElectricGuitarPowerChords, ElectricGuitarSpecial });
@@ -276,17 +276,17 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// <returns>The millisecond offset</returns>
         public long NoteSampleOffset(int note)
         {
-            if (Equals(Clarinet) && note < 12) return 0;
+            if (Equals(Clarinet) && note < 12) return -100;
                 
-            if (Equals(Lute) && note < 3) return 0;
+            if (Equals(Lute) && note < 3) return -50;
 
-            if (Equals(Bongo) && note > 7 && note < 12) return 0;
-
-            if (Equals(Bongo) && note > 34) return 100;
+            if (Equals(Bongo) && note > 7) return 100;
 
             if (Equals(BassDrum) && note > 30) return 100;
             
             if (Equals(SnareDrum) && note > 32) return 100;
+
+            if (Equals(SnareDrum) && note < 12) return -50;
 
             if (Equals(Timpani) && note > 32) return 100;
 
