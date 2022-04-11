@@ -276,17 +276,25 @@ namespace BardMusicPlayer.Quotidian.Structs
         /// <returns>The millisecond offset</returns>
         public long NoteSampleOffset(int note)
         {
-            if (Equals(Clarinet) && note < 12) return -100;
-                
-            if (Equals(Lute) && note < 3) return -50;
+            if (Equals(Clarinet) && note < 3) return -150;
 
-            if (Equals(Bongo) && note > 7) return 100;
+            if (Equals(Clarinet) && note > 2 && note < 8) return -100;
+
+            if (Equals(Clarinet) && note > 7 && note < 11) return -50;
+
+            if (Equals(Lute) && note < 3) return -100;
+
+            if (Equals(Lute) && note >= 3 && note < 8) return -50;
+
+            if (Equals(Lute) && note == 36) return 50;
+
+            if (Equals(Bongo) && note > 7 && note < 12) return 0;
+
+            if (Equals(Bongo) && note > 34) return 100;
 
             if (Equals(BassDrum) && note > 30) return 100;
-            
-            if (Equals(SnareDrum) && note > 32) return 100;
 
-            if (Equals(SnareDrum) && note < 12) return -50;
+            if (Equals(SnareDrum) && note > 32) return 100;
 
             if (Equals(Timpani) && note > 32) return 100;
 
