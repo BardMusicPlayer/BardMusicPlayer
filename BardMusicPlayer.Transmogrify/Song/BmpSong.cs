@@ -116,6 +116,18 @@ namespace BardMusicPlayer.Transmogrify.Song
                 TrackContainers = new Dictionary<long, TrackContainer>()
             };
 
+            foreach (var chunk in midiFile.GetTrackChunks())
+            {
+                using (TimedEventsManager timedEventsManager = chunk.ManageTimedEvents())
+                {
+                    TimedEventsCollection events = timedEventsManager.Events;
+                    List<TimedEvent> prefixList = events.Where(e => e.Event is ChannelPrefixEvent).ToList();
+                    foreach (TimedEvent tevent in prefixList)
+                        if((tevent.Event as ChannelPrefixEvent).Channel > 0xF)
+                            events.Remove(tevent);
+                }
+            }
+
             var trackChunkArray = midiFile.GetTrackChunks().ToArray();
 
             for (var i = 0; i < midiFile.GetTrackChunks().Count(); i++) song.TrackContainers[i] = new TrackContainer
