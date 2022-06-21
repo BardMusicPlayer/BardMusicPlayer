@@ -29,6 +29,7 @@ namespace FFBardMusicPlayer.Forms
         private readonly string updateText = string.Empty;
         private bool proceedPlaylistMidi;
         private bool tempPlaying;
+        private long lastNoteTimestamp = 0;
 
         public bool DonationStatus
         {
@@ -803,6 +804,7 @@ namespace FFBardMusicPlayer.Forms
         }
 
         private bool WantsHold => Properties.Settings.Default.HoldNotes;
+        private float NoteCooldownLength => Properties.Settings.Default.NoteCooldownLength;
 
         // OnMidiVoice + OffMidiVoice is called with correct octave shift
         private void OnMidiVoice(object o, NoteEvent onNote)
@@ -842,6 +844,14 @@ namespace FFBardMusicPlayer.Forms
 
             if (FFXIV.Hotkeys.GetKeybindFromNoteByte(onNote.Note) is FFXIVKeybindDat.Keybind keybind)
             {
+                long diff = Stopwatch.GetTimestamp() / 10000 - lastNoteTimestamp;
+                if (diff < NoteCooldownLength)
+                {
+                    int sleepDuration = (int)(NoteCooldownLength - diff);
+                    Console.WriteLine($"Inputs too close! Sleep for {sleepDuration} ms.");
+                    Thread.Sleep(sleepDuration);
+                }
+
                 if (WantsHold)
                 {
                     FFXIV.Hook.SendKeybindDown(keybind);
@@ -850,6 +860,8 @@ namespace FFBardMusicPlayer.Forms
                 {
                     FFXIV.Hook.SendAsyncKeybind(keybind);
                 }
+
+                lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
             }
         }
 

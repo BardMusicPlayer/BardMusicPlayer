@@ -76,6 +76,7 @@ namespace FFBardMusicPlayer.Controls
             UnequipPause.Checked     = Properties.Settings.Default.UnequipPause;
             verboseToggle.Checked    = Properties.Settings.Default.Verbose;
             SettingHoldNotes.Checked = Properties.Settings.Default.HoldNotes;
+            noteCooldownLength.Value = (decimal)Properties.Settings.Default.NoteCooldownLength;
         }
 
         private void SettingMidiInput_SelectedValueChanged(object sender, EventArgs e)
@@ -198,6 +199,12 @@ namespace FFBardMusicPlayer.Controls
         private void verboseToggle_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Verbose = verboseToggle.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void noteCooldownLength_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.NoteCooldownLength = (float)noteCooldownLength.Value;
             Properties.Settings.Default.Save();
         }
     }
