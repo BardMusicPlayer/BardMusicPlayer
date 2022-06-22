@@ -30,6 +30,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BmpSettings));
             this.GeneralSettings = new System.Windows.Forms.GroupBox();
             this.KeyboardTest = new System.Windows.Forms.Button();
             this.SignatureFolder = new System.Windows.Forms.Button();
@@ -132,9 +133,7 @@
             this.noteCooldownLabel.Size = new System.Drawing.Size(124, 13);
             this.noteCooldownLabel.TabIndex = 22;
             this.noteCooldownLabel.Text = "Note cooldown length";
-            this.HelpTip.SetToolTip(this.noteCooldownLabel, "Specifies the minimum accepted delay between two notes.\r\nValue should be close, b" +
-        "ut higher than the minimum frame-time\r\nto prevent dropped notes (ex. 17ms for 60" +
-        "fps).");
+            this.HelpTip.SetToolTip(this.noteCooldownLabel, resources.GetString("noteCooldownLabel.ToolTip"));
             // 
             // noteCooldownLength
             // 
@@ -142,9 +141,7 @@
             this.noteCooldownLength.Name = "noteCooldownLength";
             this.noteCooldownLength.Size = new System.Drawing.Size(49, 22);
             this.noteCooldownLength.TabIndex = 21;
-            this.HelpTip.SetToolTip(this.noteCooldownLength, "Specifies the minimum accepted delay between two notes.\r\nValue should be close, b" +
-        "ut higher than the minimum frame-time\r\nto prevent dropped notes (ex. 17ms for 60" +
-        "fps).\r\n");
+            this.HelpTip.SetToolTip(this.noteCooldownLength, resources.GetString("noteCooldownLength.ToolTip"));
             this.noteCooldownLength.ValueChanged += new System.EventHandler(this.noteCooldownLength_ValueChanged);
             // 
             // noteCooldownLabelMs

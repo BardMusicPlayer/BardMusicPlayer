@@ -120,4 +120,16 @@
   <metadata name="HelpTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="noteCooldownLabel.ToolTip" xml:space="preserve">
+    <value>Specifies the minimum accepted delay between two notes.
+Value should be close, but higher than the minimum frame-time
+to prevent dropped notes (ex. 17ms for 60fps).
+* Only applied when no MIDI file is playing</value>
+  </data>
+  <data name="noteCooldownLength.ToolTip" xml:space="preserve">
+    <value>Specifies the minimum accepted delay between two notes.
+Value should be close, but higher than the minimum frame-time
+to prevent dropped notes (ex. 17ms for 60fps).
+* Only applied when no MIDI file is playing</value>
+  </data>
 </root>

@@ -844,12 +844,16 @@ namespace FFBardMusicPlayer.Forms
 
             if (FFXIV.Hotkeys.GetKeybindFromNoteByte(onNote.Note) is FFXIVKeybindDat.Keybind keybind)
             {
-                long diff = Stopwatch.GetTimestamp() / 10000 - lastNoteTimestamp;
-                if (diff < NoteCooldownLength)
+                if (Player.Player.IsPlaying && NoteCooldownLength != 0)
                 {
-                    int sleepDuration = (int)(NoteCooldownLength - diff);
-                    Console.WriteLine($"Inputs too close! Sleep for {sleepDuration} ms.");
-                    Thread.Sleep(sleepDuration);
+                    long diff = Stopwatch.GetTimestamp() / 10000 - lastNoteTimestamp;
+                    if (diff < NoteCooldownLength)
+                    {
+                        int sleepDuration = (int)(NoteCooldownLength - diff);
+                        Console.WriteLine($"Inputs too close! Sleep for {sleepDuration} ms.");
+                        Thread.Sleep(sleepDuration);
+                    }
+                    lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
                 }
 
                 if (WantsHold)
@@ -860,8 +864,6 @@ namespace FFBardMusicPlayer.Forms
                 {
                     FFXIV.Hook.SendAsyncKeybind(keybind);
                 }
-
-                lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
             }
         }
 
