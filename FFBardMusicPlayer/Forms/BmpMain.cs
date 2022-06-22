@@ -833,18 +833,18 @@ namespace FFBardMusicPlayer.Forms
 
             if (!FFXIV.IsPerformanceReady())
                 return;
-            
+
             // If from midi file
             if (onNote.Track != Player.Player.LoadedTrack)
                 return;
-
+            
             if (Sharlayan.Reader.CanGetChatInput() && FFXIV.Memory.ChatInputOpen)
                 return;
             
 
             if (FFXIV.Hotkeys.GetKeybindFromNoteByte(onNote.Note) is FFXIVKeybindDat.Keybind keybind)
             {
-                if (Player.Player.IsPlaying && NoteCooldownLength != 0)
+                if (!Player.Player.IsPlaying && NoteCooldownLength != 0)
                 {
                     long diff = Stopwatch.GetTimestamp() / 10000 - lastNoteTimestamp;
                     if (diff < NoteCooldownLength)
