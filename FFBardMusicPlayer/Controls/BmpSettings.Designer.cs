@@ -138,10 +138,15 @@
             // noteCooldownLength
             // 
             this.noteCooldownLength.Location = new System.Drawing.Point(15, 33);
+            this.noteCooldownLength.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
             this.noteCooldownLength.Name = "noteCooldownLength";
             this.noteCooldownLength.Size = new System.Drawing.Size(49, 22);
             this.noteCooldownLength.TabIndex = 21;
-            this.HelpTip.SetToolTip(this.noteCooldownLength, resources.GetString("noteCooldownLength.ToolTip"));
+            this.HelpTip.SetToolTip(this.noteCooldownLength, "Enter a value between 0-50ms.");
             this.noteCooldownLength.ValueChanged += new System.EventHandler(this.noteCooldownLength_ValueChanged);
             // 
             // noteCooldownLabelMs

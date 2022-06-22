@@ -126,10 +126,4 @@ Value should be close, but higher than the minimum frame-time
 to prevent dropped notes (ex. 17ms for 60fps).
 * Only applied when no MIDI file is playing</value>
   </data>
-  <data name="noteCooldownLength.ToolTip" xml:space="preserve">
-    <value>Specifies the minimum accepted delay between two notes.
-Value should be close, but higher than the minimum frame-time
-to prevent dropped notes (ex. 17ms for 60fps).
-* Only applied when no MIDI file is playing</value>
-  </data>
 </root>

@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FFBardMusicPlayer.Controls.BmpPlayer;
 using System.Security.Principal;
@@ -29,7 +30,6 @@ namespace FFBardMusicPlayer.Forms
         private readonly string updateText = string.Empty;
         private bool proceedPlaylistMidi;
         private bool tempPlaying;
-        private long lastNoteTimestamp = 0;
 
         public bool DonationStatus
         {
@@ -803,6 +803,7 @@ namespace FFBardMusicPlayer.Forms
             }
         }
 
+        private long lastNoteTimestamp = 0;
         private bool WantsHold => Properties.Settings.Default.HoldNotes;
         private float NoteCooldownLength => Properties.Settings.Default.NoteCooldownLength;
 
@@ -835,35 +836,44 @@ namespace FFBardMusicPlayer.Forms
                 return;
 
             // If from midi file
-            if (onNote.Track != Player.Player.LoadedTrack)
+            if (onNote.Track != Player.Player.LoadedTrack && Player.Player.IsPlaying)
                 return;
-            
+
             if (Sharlayan.Reader.CanGetChatInput() && FFXIV.Memory.ChatInputOpen)
                 return;
             
 
             if (FFXIV.Hotkeys.GetKeybindFromNoteByte(onNote.Note) is FFXIVKeybindDat.Keybind keybind)
             {
-                if (!Player.Player.IsPlaying && NoteCooldownLength != 0)
-                {
-                    long diff = Stopwatch.GetTimestamp() / 10000 - lastNoteTimestamp;
-                    if (diff < NoteCooldownLength)
-                    {
-                        int sleepDuration = (int)(NoteCooldownLength - diff);
-                        Console.WriteLine($"Inputs too close! Sleep for {sleepDuration} ms.");
-                        Thread.Sleep(sleepDuration);
-                    }
-                    lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
-                }
+                long diff = Stopwatch.GetTimestamp() / 10000L - lastNoteTimestamp;
 
-                if (WantsHold)
+                if (!Player.Player.IsPlaying && diff < NoteCooldownLength)
                 {
-                    FFXIV.Hook.SendKeybindDown(keybind);
-                }
-                else
+                    int sleepDuration = (int)(NoteCooldownLength - diff); 
+                    Console.WriteLine($"Inputs too close! Wait for {sleepDuration} ms.");
+                    Task.Run(async () =>
+                    {
+                        lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000L + sleepDuration;
+                        await Task.Delay(sleepDuration);
+                        SendKeybindToHook(keybind);
+                    });
+                } else
                 {
-                    FFXIV.Hook.SendAsyncKeybind(keybind);
+                    SendKeybindToHook(keybind);
+                    lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000L;
                 }
+            }
+        }
+
+        private void SendKeybindToHook(FFXIVKeybindDat.Keybind keybind)
+        {
+            if (WantsHold)
+            {
+                FFXIV.Hook.SendKeybindDown(keybind);
+            }
+            else
+            {
+                FFXIV.Hook.SendAsyncKeybind(keybind);
             }
         }
 
@@ -886,7 +896,7 @@ namespace FFBardMusicPlayer.Forms
 
             if (offNote.Track != null)
             {
-                if (offNote.Track != Player.Player.LoadedTrack)
+                if (offNote.Track != Player.Player.LoadedTrack && Player.Player.IsPlaying)
                 {
                     return;
                 }
