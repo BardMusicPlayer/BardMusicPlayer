@@ -142,6 +142,9 @@ namespace BardMusicPlayer.Ui.Classic
             if (_currentPlaylist == null)
                 return;
 
+            if (_showingPlaylists)
+                return;
+
             foreach (string s in PlaylistContainer.SelectedItems)
             {
                 BmpSong song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, s);
