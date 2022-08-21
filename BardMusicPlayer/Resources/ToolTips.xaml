@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- The tooltip text file -->
+
+    <!-- Playlist -->
+    <sys:String x:Key="PLAYLIST_NEW"     xml:space="preserve">Create a new playlist</sys:String>
+    <sys:String x:Key="PLAYLIST_ADD"     xml:space="preserve">Add song(s) to the current playlist &#13;Right click add a folder</sys:String>
+    <sys:String x:Key="PLAYLIST_REM"     xml:space="preserve">Remove the selected song(s) from the playlist</sys:String>
+    <sys:String x:Key="PLAYLIST_DEL"     xml:space="preserve">delete the current playlist</sys:String>
+    <sys:String x:Key="PLAYLIST_SEARCH"  xml:space="preserve">Search for a song in the playlist</sys:String>
+    <sys:String x:Key="PLAYLIST_NEWCAT"  xml:space="preserve">Creates a new MusicCatalog</sys:String>
+    <sys:String x:Key="PLAYLIST_OPEN"    xml:space="preserve">opens a MusicCatalog</sys:String>
+    <sys:String x:Key="PLAYLIST_EXPORT"  xml:space="preserve">Export the current MusicCatalog</sys:String>
+    <sys:String x:Key="PLAYLIST_CLEANUP" xml:space="preserve">Reorganise the MusicCatalog to save space</sys:String>
+    <sys:String x:Key="PLAYLIST_AUTO"    xml:space="preserve">auto plays the next song in the playlist</sys:String>
+    <sys:String x:Key="PLAYLIST_SKIP"    xml:space="preserve">skips the current playing song</sys:String>
+
+    <!-- Settings: Game -->
+    <sys:String x:Key="GAME_AMPFRONT"    xml:space="preserve">Brings the amp in front after a new song was loaded from the playlist</sys:String>
+
+    <!-- Settings: Misc-->
+    <sys:String x:Key="MISC_AUTOSTART"   xml:space="preserve">Select the autostart trigger [Metronome is prefered]</sys:String>
+    <sys:String x:Key="MISC_MIDIBARD"    xml:space="preserve">Enables the MidiBard sync start</sys:String>
+    <sys:String x:Key="MISC_AUTOEQSOLO"  xml:space="preserve">Enables autoequip the solo bard on song load</sys:String>
+    <sys:String x:Key="MISC_SKINNEDUI"   xml:space="preserve">Enables the Skinned Ui (needs a restart)</sys:String>
+    <sys:String x:Key="MISC_CLASSICUI"   xml:space="preserve">Enables the BMP Ui (needs a restart)</sys:String>
+
+    <!-- Settings: LocalOchestra-->
+    <sys:String x:Key="LO_ENABLE"        xml:space="preserve">Enables the local orchestra</sys:String>
+    <sys:String x:Key="LO_AUTOEQ"        xml:space="preserve">Autoequip the ochestra at song loading</sys:String>
+    <sys:String x:Key="LO_KEEPTRACKS"    xml:space="preserve">Keep the performer settings</sys:String>
+    <sys:String x:Key="LO_INGOREPROG"    xml:space="preserve">Only for City-Wok &#13;(doesn't let you play like City-Wok)</sys:String>
+    <sys:String x:Key="LO_ISTART"        xml:space="preserve">Start each performer by it's own metronome signal &#13; Only for up to 8 bards</sys:String>
+
+    <!-- Settings: Playback-->
+    <sys:String x:Key="PL_HOLDNOTES"     xml:space="preserve">Plays the leght of a note as it supposed to</sys:String>
+    <sys:String x:Key="PL_FORCE"         xml:space="preserve">Ignore verything and play</sys:String>
+    <sys:String x:Key="PL_MIDIINPUT"     xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
+    <sys:String x:Key="PL_LIVE"          xml:space="preserve">Improves the live play (should be disabled when playing a midi)&#13;Will be set/unset after loading a song</sys:String>
+
+</ResourceDictionary>

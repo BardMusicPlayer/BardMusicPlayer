@@ -18,14 +18,14 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
     internal class DalamudServer : IDisposable
     {
         private readonly PipeServer<string> _pipe;
-        private readonly ConcurrentDictionary<int, int> _clients;
+        private readonly ConcurrentDictionary<int, string> _clients;
 
         /// <summary>
         /// 
         /// </summary>
         internal DalamudServer()
         {
-            _clients = new ConcurrentDictionary<int, int>();
+            _clients = new ConcurrentDictionary<int, string>();
             _pipe = new PipeServer<string>("BardMusicPlayer-Grunt-Dalamud");
             _pipe.ClientConnected += OnConnected;
             _pipe.ClientDisconnected += OnDisconnected;
@@ -51,7 +51,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         /// </summary>
         /// <param name="pid"></param>
         /// <returns></returns>
-        internal bool IsConnected(int pid) => _clients.ContainsKey(pid) && _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected) is not null;
+        internal bool IsConnected(int pid) => _clients.ContainsKey(pid) && _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected) is not null;
 
         /// <summary>
         /// 
@@ -62,7 +62,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         internal bool SendChat(int pid, string text)
         {
             if (!IsConnected(pid)) return false;
-            _pipe.ConnectedClients.FirstOrDefault(x => x.Id == _clients[pid] && x.IsConnected)?.WriteAsync(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)));
+            _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)));
             return true;
         }
 
@@ -79,24 +79,24 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             switch (fields[1])
             {
                 case "scanned" when bool.Parse(fields[2]):
-                    _clients[pid] = e.Connection.Id;
-                    Debug.WriteLine($"Dalamud client Id {e.Connection.Id} sig scanned");
+                    _clients[pid] = e.Connection.PipeName;
+                    Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} sig scanned");
                     break;
                 case "chatted" when bool.Parse(fields[2]):
-                    Debug.WriteLine($"Dalamud client Id {e.Connection.Id} chatted");
+                    Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} chatted");
                     break;
             }
         }
 
         private void OnDisconnected(object sender, ConnectionEventArgs<string> e)
         {
-            if (_clients.Values.Contains(e.Connection.Id)) _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.Id).Key, out _);
-            Debug.WriteLine($"Dalamud client Id {e.Connection.Id} disconnected");
+            if (_clients.Values.Contains(e.Connection.PipeName)) _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.PipeName).Key, out _);
+            Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} disconnected");
         }
 
         private void OnConnected(object sender, ConnectionEventArgs<string> e)
         {
-            Debug.WriteLine($"Dalamud client Id {e.Connection.Id} connected");
+            Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} connected");
         }
 
         public void Dispose()

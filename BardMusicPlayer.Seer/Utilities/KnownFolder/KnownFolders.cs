@@ -13,7 +13,6 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
     internal static class KnownFolders
     {
         // ---- MEMBERS ------------------------------------------------------------------------------------------------
-
         private static Dictionary<KnownFolderType, KnownFolder> _knownFolderInstances;
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -673,11 +672,12 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
                 _knownFolderInstances = new Dictionary<KnownFolderType, KnownFolder>();
 
             // Get a KnownFolder instance out of the cache dictionary or create it when not cached yet.
-            if (!_knownFolderInstances.TryGetValue(type, out KnownFolder knownFolder))
+            if (!_knownFolderInstances.TryGetValue(type, out var knownFolder))
             {
                 knownFolder = new KnownFolder(type);
                 _knownFolderInstances.Add(type, knownFolder);
             }
+
             return knownFolder;
         }
     }

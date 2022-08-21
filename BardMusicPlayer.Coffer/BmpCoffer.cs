@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, isaki
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Copyright(c) 2022 MoogleTroupe, isaki, GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
 using System;
@@ -86,10 +86,79 @@ namespace BardMusicPlayer.Coffer
                 bson => DeserializeTrackChunk(bson.AsBinary)
             );
 
-            var dbi = new LiteDatabase(dbPath, mapper);
+            var dbi = new LiteDatabase(@"filename="+dbPath+"; journal = false", mapper);
             MigrateDatabase(dbi);
 
             return new BmpCoffer(dbi);
+        }
+
+        /// <summary>
+        /// load an other database
+        /// </summary>
+        /// <param name="file"></param>
+        public void LoadNew(string file)
+        {
+            this.dbi.Dispose();
+            var mapper = new BsonMapper();
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => Instrument.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => InstrumentTone.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                group => group.Index,
+                bson => OctaveRange.Parse(bson.AsInt32)
+            );
+            mapper.RegisterType
+            (
+                tempoMap => SerializeTempoMap(tempoMap),
+                bson => DeserializeTempoMap(bson.AsBinary)
+            );
+            mapper.RegisterType
+            (
+                trackChunk => SerializeTrackChunk(trackChunk),
+                bson => DeserializeTrackChunk(bson.AsBinary)
+            );
+
+            var dbi = new LiteDatabase(@"filename=" + file + "; journal = false", mapper); //turn journal off, for big containers
+            MigrateDatabase(dbi);
+
+            _instance = new BmpCoffer(dbi);
+            return;
+        }
+
+        public void Export(string filename)
+        {
+            var t = new LiteDatabase(filename);
+            var names = this.dbi.GetCollectionNames();
+            foreach (var name in names)
+            {
+                var col2 = this.dbi.GetCollection(name);
+                var col = t.GetCollection(name);
+                try
+                {
+                    col.InsertBulk(col2.FindAll());
+                }
+                catch { }
+            }
+            t.Dispose();
+        }
+
+        public void CleanUpDB()
+        {
+            //Try it and catch if the log file can't be removed
+            try
+            {
+                this.dbi.Checkpoint();
+                this.dbi.Rebuild();
+            }
+            catch { }
         }
 
         /// <summary>
@@ -146,11 +215,13 @@ namespace BardMusicPlayer.Coffer
         {
             using var memoryStream = new MemoryStream(bson);
             var midiFile = MidiFile.Read(memoryStream);
-            var trackChunk = midiFile.GetTrackChunks().First();
+            //In case we have more than 1 chunk per track, combine them
+            TrackChunk trackChunk = Melanchall.DryWetMidi.Core.TrackChunkUtilities.Merge(midiFile.GetTrackChunks());
             memoryStream.Dispose();
             return trackChunk;
         }
 
+        #region Playlist
         /// <summary>
         /// This creates a playlist containing songs that match the given tag.
         /// </summary>
@@ -254,6 +325,70 @@ namespace BardMusicPlayer.Coffer
         }
 
         /// <summary>
+        /// This saves a playlist.
+        /// </summary>
+        /// <param name="songList"></param>
+        /// <exception cref="BmpCofferException">This is thrown if a name conflict occurs on save.</exception>
+        public void SavePlaylist(IPlaylist songList)
+        {
+            if (songList.GetType() != typeof(BmpPlaylistDecorator))
+            {
+                throw new Exception("Unsupported implementation of IPlaylist");
+            }
+
+            var playlists = this.GetPlaylistCollection();
+
+            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
+
+            try
+            {
+                if (dbList.Id == null)
+                {
+                    dbList.Id = ObjectId.NewObjectId();
+                    playlists.Insert(dbList);
+                }
+                else
+                {
+                    playlists.Update(dbList);
+                }
+            }
+            catch (LiteException e)
+            {
+                throw new BmpCofferException(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// This deletes a playlist.
+        /// </summary>
+        /// <param name="songList"></param>
+        public void DeletePlaylist(IPlaylist songList)
+        {
+            if (songList.GetType() != typeof(BmpPlaylistDecorator))
+            {
+                throw new Exception("Unsupported implementation of IPlaylist");
+            }
+
+            var playlists = this.GetPlaylistCollection();
+
+            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
+
+            try
+            {
+                if (dbList.Id != null)
+                {
+                    playlists.Delete(dbList.Id);
+                }
+            }
+            catch (LiteException e)
+            {
+                throw new BmpCofferException(e.Message, e);
+            }
+        }
+#endregion
+
+        #region Songs
+        /// <summary>
         /// This retrieves the song with the given title.
         /// </summary>
         /// <param name="title"></param>
@@ -296,18 +431,26 @@ namespace BardMusicPlayer.Coffer
             }
 
             var songCol = this.GetSongCollection();
-
             try
             {
                 if (song.Id == null)
                 {
+                    //TODO: Fix this if more than one song with the name exists
+                    var results = songCol.Find(x => x.Title.Equals(song.Title));
+                    if (results.Count() > 0)
+                    {
+                        //Get the ID from the found song and update the data
+                        song.Id = results.First().Id;
+                        songCol.Update(song);
+                        return;
+                    }
+
+                    //TODO: Fix this to get a real unique idendifier
                     song.Id = ObjectId.NewObjectId();
                     songCol.Insert(song);
                 }
                 else
-                {
                     songCol.Update(song);
-                }
             }
             catch (LiteException e)
             {
@@ -316,31 +459,26 @@ namespace BardMusicPlayer.Coffer
         }
 
         /// <summary>
-        /// This saves a playlist.
+        /// This deletes a song. TODO: Make sure all data is erased
         /// </summary>
-        /// <param name="songList"></param>
+        /// <param name="song"></param>
         /// <exception cref="BmpCofferException">This is thrown if a name conflict occurs on save.</exception>
-        public void SavePlaylist(IPlaylist songList)
+        public void DeleteSong(BmpSong song)
         {
-            if (songList.GetType() != typeof(BmpPlaylistDecorator))
-            {
-                throw new Exception("Unsupported implementation of IPlaylist");
-            }
 
-            var playlists = this.GetPlaylistCollection();
+            if (song == null) throw new ArgumentNullException();
 
-            var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
-
+            var songCol = this.GetSongCollection();
             try
             {
-                if (dbList.Id == null)
+                if (song.Id != null)
                 {
-                    dbList.Id = ObjectId.NewObjectId();
-                    playlists.Insert(dbList);
-                }
-                else
-                {
-                    playlists.Update(dbList);
+                    var results = songCol.Find(x => x.Title.Equals(song.Title));
+                    if (results.Count() > 0)
+                    {
+                        songCol.Delete(song.Id);
+                        return;
+                    }
                 }
             }
             catch (LiteException e)
@@ -348,6 +486,7 @@ namespace BardMusicPlayer.Coffer
                 throw new BmpCofferException(e.Message, e);
             }
         }
+#endregion
 
         /// <summary>
         /// Generated by VS2019.
@@ -466,7 +605,7 @@ namespace BardMusicPlayer.Coffer
 
             // Create the song collection and add indicies
             var songs = dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
-            songs.EnsureIndex(x => x.Title, unique: true);
+            songs.EnsureIndex(x => x.Title);
             songs.EnsureIndex(x => x.Tags);
 
             // Create the custom playlist collection and add indicies

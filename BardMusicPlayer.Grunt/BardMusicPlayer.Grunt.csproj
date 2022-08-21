@@ -12,11 +12,13 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Pipes" Version="1.14.8" />
-    <PackageReference Include="H.Pipes.AccessControl" Version="1.14.8" />
+    <PackageReference Include="H.Pipes" Version="2.0.37" />
+    <PackageReference Include="H.Pipes.AccessControl" Version="2.0.37" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,109 @@
+﻿<Window x:Class="BardMusicPlayer.Ui.Skinned.BardsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:control = "clr-namespace:BardMusicPlayer.Ui.Controls" 
+        xmlns:local="clr-namespace:BardMusicPlayer.Ui.Skinned"
+        mc:Ignorable="d"
+        Background="Transparent"
+        WindowStyle="None"  ResizeMode="NoResize" 
+        Title="BardsWindow" Height="450" Width="500">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/ImageButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8"/>
+        </Grid.RowDefinitions>
+        <!-- Top -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle PreviewMouseDown="TitleBar_MouseDown" Grid.Column="0" x:Name="BARDS_TOP_LEFT" HorizontalAlignment="Left"         Width="75"  Height="23" VerticalAlignment="Top">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle PreviewMouseDown="TitleBar_MouseDown" Grid.Column="1" x:Name="BARDS_TOP_TILE" HorizontalAlignment="Stretch"                  Height="23" VerticalAlignment="Top">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle PreviewMouseDown="TitleBar_MouseDown" Grid.Column="3" x:Name="BARDS_TOP_RIGHT" HorizontalAlignment="Right" Width="24" Height="23" VerticalAlignment="Top" >
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid Grid.Column="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7"/>
+                    <ColumnDefinition Width="13"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Style="{StaticResource ImageButton}" x:Name="Close_Button" 
+                                        HorizontalAlignment="Left" Margin="0,5,0,0" VerticalAlignment="Top" Width="13" Height="13" Content="" 
+                                        Click="Close_Button_Click" PreviewMouseUp="Close_Button_Up" PreviewMouseDown="Close_Button_Down"  BorderThickness="0" />
+
+            </Grid>
+        </Grid>
+
+        <!-- Mid -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="0" x:Name="BARDS_LEFT_TILE"  VerticalAlignment="Stretch" HorizontalAlignment="Left"  Width="10" Margin="0,0,0,0">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid Grid.Column="1">
+                <control:BardView/>
+            </Grid>
+            <Rectangle Grid.Column="2" x:Name="BARDS_RIGHT_TILE" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="10" Margin="0,0,0,0">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+
+        <!-- Bottom -->
+        <Grid Grid.Row="2" x:Name="BottomGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="0" x:Name="BARDS_BOTTOM_LEFT_CORNER" HorizontalAlignment="Left" Width="75" Height="8" VerticalAlignment="Bottom">
+                <Rectangle.Fill>
+                    <ImageBrush />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Column="1" x:Name="BARDS_BOTTOM_TILE" HorizontalAlignment="Stretch" Height="8" VerticalAlignment="Bottom">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Column="2" x:Name="BARDS_BOTTOM_RIGHT_CORNER" HorizontalAlignment="Right" Width="24" Height="8" VerticalAlignment="Bottom">
+                <Rectangle.Fill>
+                    <ImageBrush/>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
+    </Grid>
+</Window>

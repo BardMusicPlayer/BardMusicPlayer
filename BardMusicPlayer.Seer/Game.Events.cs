@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+ * Copyright(c) 2022 MoogleTroupe, trotlinebeercan, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -30,7 +30,10 @@ namespace BardMusicPlayer.Seer
                 // deduplicate if needed
                 if (seerEvent.DedupeThreshold > 0)
                 {
-                    if (_eventDedupeHistory.ContainsKey(seerEvent.EventType) && _eventDedupeHistory[seerEvent.EventType] + seerEvent.DedupeThreshold >= seerEvent.TimeStamp) return;
+                    if (_eventDedupeHistory.ContainsKey(seerEvent.EventType) &&
+                        _eventDedupeHistory[seerEvent.EventType] + seerEvent.DedupeThreshold >=
+                        seerEvent.TimeStamp) return;
+
                     _eventDedupeHistory[seerEvent.EventType] = seerEvent.TimeStamp;
                 }
 
@@ -42,10 +45,11 @@ namespace BardMusicPlayer.Seer
                             ActorId = actorId.ActorId;
                             BmpSeer.Instance.PublishEvent(actorId);
                         }
+
                         break;
 
                     case ChatLog chatLogEvent:
-                        // Currently unused.
+                        BmpSeer.Instance.PublishEvent(chatLogEvent);
                         break;
 
                     case ChatStatusChanged chatStatus:
@@ -62,6 +66,7 @@ namespace BardMusicPlayer.Seer
                             ConfigId = configId.ConfigId;
                             BmpSeer.Instance.PublishEvent(configId);
                         }
+
                         break;
 
                     case EnsembleRejected ensembleRejected:
@@ -76,10 +81,9 @@ namespace BardMusicPlayer.Seer
                         BmpSeer.Instance.PublishEvent(ensembleStarted);
                         break;
 
-                    // Currently unused. Currently unavailable from Machina backend.
-                    // case EnsembleStopped ensembleStopped:
-                    //    Seer.Instance.PublishEvent(ensembleStopped);
-                    //    break;
+                    case EnsembleStopped ensembleStopped:
+                        BmpSeer.Instance.PublishEvent(ensembleStopped);
+                        break;
 
                     case InstrumentHeldChanged instrumentHeld:
                         if (!InstrumentHeld.Equals(instrumentHeld.InstrumentHeld))
@@ -87,14 +91,22 @@ namespace BardMusicPlayer.Seer
                             InstrumentHeld = instrumentHeld.InstrumentHeld;
                             BmpSeer.Instance.PublishEvent(instrumentHeld);
                         }
-                        break;
 
+                        break;
+                    case IsLoggedInChanged isLoggedIn:
+                        if (IsLoggedIn != isLoggedIn.IsLoggedIn)
+                        {
+                            IsLoggedIn = isLoggedIn.IsLoggedIn;
+                            BmpSeer.Instance.PublishEvent(isLoggedIn);
+                        }
+                        break;
                     case IsBardChanged isBard:
                         if (IsBard != isBard.IsBard)
                         {
                             IsBard = isBard.IsBard;
                             BmpSeer.Instance.PublishEvent(isBard);
                         }
+
                         break;
 
                     case KeyMapChanged keyMap:
@@ -104,13 +116,23 @@ namespace BardMusicPlayer.Seer
                             !InstrumentToneKeys.Equals(keyMap.InstrumentToneKeys) ||
                             !NoteKeys.Equals(keyMap.NoteKeys))
                         {
-                            NavigationMenuKeys = keyMap.NavigationMenuKeys;
+                            NavigationMenuKeys     = keyMap.NavigationMenuKeys;
                             InstrumentToneMenuKeys = keyMap.InstrumentToneMenuKeys;
-                            InstrumentKeys = keyMap.InstrumentKeys;
-                            InstrumentToneKeys = keyMap.InstrumentToneKeys;
-                            NoteKeys = keyMap.NoteKeys;
+                            InstrumentKeys         = keyMap.InstrumentKeys;
+                            InstrumentToneKeys     = keyMap.InstrumentToneKeys;
+                            NoteKeys               = keyMap.NoteKeys;
                             BmpSeer.Instance.PublishEvent(keyMap);
                         }
+
+                        break;
+
+                    case LatencyUpdate latencyUpdate:
+                        ServerLatency = latencyUpdate.LatencyMilis;
+                        break;
+
+                    //Midibard things
+                    case MidibardPlaylistEvent midibardPlaylistEvent:
+                        BmpSeer.Instance.PublishEvent(midibardPlaylistEvent);
                         break;
 
                     case PartyMembersChanged partyMembers:
@@ -119,6 +141,7 @@ namespace BardMusicPlayer.Seer
                             PartyMembers = partyMembers.PartyMembers;
                             BmpSeer.Instance.PublishEvent(partyMembers);
                         }
+
                         break;
 
                     case PlayerNameChanged playerName:
@@ -127,6 +150,7 @@ namespace BardMusicPlayer.Seer
                             PlayerName = playerName.PlayerName;
                             BmpSeer.Instance.PublishEvent(playerName);
                         }
+
                         break;
 
                     case HomeWorldChanged homeWorld:
@@ -135,6 +159,7 @@ namespace BardMusicPlayer.Seer
                             HomeWorld = homeWorld.HomeWorld;
                             BmpSeer.Instance.PublishEvent(homeWorld);
                         }
+
                         break;
                 }
             }

@@ -1,52 +1,75 @@
-﻿/*
- * Copyright(c) 2021 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
- */
 
-using System;
-using System.IO;
-using System.Reflection;
 using System.Windows;
+using BardMusicPlayer.Coffer;
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Seer;
+using BardMusicPlayer.Maestro;
+using System.Diagnostics;
+using BardMusicPlayer.Siren;
+using BardMusicPlayer.Jamboree;
+using BardMusicPlayer.Script;
 
-namespace BardMusicPlayer
+namespace BardMusicPlayer.Ui
 {
+    /// <summary>
+    /// Interaktionslogik für "App.xaml"
+    /// </summary>
     public partial class App : Application
     {
-        private static readonly string ExePath = Assembly.GetExecutingAssembly().Location;
 
-#if DEBUG
-        private static readonly bool Debug = true;
-        private static readonly string DataPath = Directory.GetCurrentDirectory() + @"\Data\";
-        private static readonly string ResourcePath = Directory.GetCurrentDirectory() + @"\";
-#else
-        private static readonly bool Debug = false;
-        private static readonly string DataPath = @Environment.GetFolderPath(@Environment.SpecialFolder.LocalApplicationData) + @"\BardMusicPlayer\";
-        private static readonly string ResourcePath = DataPath + @"Resources\";
-
-#endif
-
-#pragma warning disable CS1998
-        protected override async void OnStartup(StartupEventArgs eventArgs)
-#pragma warning restore CS1998
+        protected override void OnStartup(StartupEventArgs e)
         {
-            try
-            {
-                Directory.CreateDirectory(DataPath);
-                Directory.CreateDirectory(ResourcePath);
+            Globals.Globals.DataPath = @"data\";
 
-                Ui.Bootstrapper.Instance.StartUp(Debug, 2, "2", ExePath, ResourcePath, DataPath, eventArgs.Args);
+            //init pigeon at first
+            BmpPigeonhole.Initialize(Globals.Globals.DataPath + @"\Configuration.json");
 
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Uh oh, something went wrong and BardMusicPlayer is shutting down.\nPlease ask for support in the Discord Server and provide a picture of this error message:\n\n" + exception.Message,
-                    "BardMusicPlayer Launcher Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                Environment.Exit(0);
-            }
+            // var view = (MainView)View;
+            // LogManager.Initialize(new(view.Log));
 
-            base.OnStartup(eventArgs);
+            //Load the last used catalog
+            string CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
+            if (System.IO.File.Exists(CatalogFile))
+                BmpCoffer.Initialize(CatalogFile);
+            else
+                BmpCoffer.Initialize(Globals.Globals.DataPath + @"\MusicCatalog.db");
+
+            //Setup seer
+            BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
+            //Start meastro before seer, else we'll not get all the players
+            BmpMaestro.Instance.Start();
+            //Start seer
+            BmpSeer.Instance.Start();
+
+            DalamudBridge.DalamudBridge.Instance.Start();
+
+            //Start the scripting
+            BmpScript.Instance.Start();
+
+            BmpSiren.Instance.Setup();
+            //BmpJamboree.Instance.Start();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            //LogManager.Shutdown();
+            BmpJamboree.Instance.Stop();
+            if (BmpSiren.Instance.IsReadyForPlayback)
+                BmpSiren.Instance.Stop();
+            BmpSiren.Instance.ShutDown();
+            BmpMaestro.Instance.Stop();
+
+            BmpScript.Instance.Stop();
+
+            DalamudBridge.DalamudBridge.Instance.Stop();
+            BmpSeer.Instance.Stop();
+            BmpSeer.Instance.DestroyFirewall("BardMusicPlayer");
+            BmpCoffer.Instance.Dispose();
+            BmpPigeonhole.Instance.Dispose();
+
+            //Wasabi hangs kill it with fire
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

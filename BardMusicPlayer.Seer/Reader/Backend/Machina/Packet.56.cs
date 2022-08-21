@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2022 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -14,6 +14,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
     {
         /// <summary>
         /// Handles Ensemble Request, Ensemble Reject, and Instrument Equip/De-Equip.
+        /// Opcode 38
         /// </summary>
         /// <param name="timeStamp"></param>
         /// <param name="otherActorId"></param>
@@ -21,6 +22,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
         /// <param name="message"></param>
         internal void Size56(long timeStamp, uint otherActorId, uint myActorId, byte[] message)
         {
+            //string hexString = BitConverter.ToString(message);
+            //System.Diagnostics.Debug.WriteLine(hexString);
+
             try
             {
                 if (otherActorId != myActorId || BitConverter.ToUInt32(message, 44) != 0) return;
@@ -43,14 +47,17 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                         {
                             var partyLeader = BitConverter.ToUInt32(message, 40);
                             if (!ActorIdTools.RangeOkay(partyLeader)) return;
+
                             _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleRequested(EventSource.Machina));
                         }
                         else
                         {
                             var partyMember = BitConverter.ToUInt32(message, 40);
                             if (!ActorIdTools.RangeOkay(partyMember)) return;
+
                             uint reply = message[48];
-                            if (reply > 2) return;
+                            if (reply > 2) 
+                                return;
 
                             switch (reply)
                             {
@@ -59,7 +66,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                 case 1: // "ready" reply.
                                     break;
                                 case 2: // rejected or timed out replying
-                                    _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleRejected(EventSource.Machina));
+                                    _machinaReader.ReaderHandler.Game.PublishEvent( new EnsembleRejected(EventSource.Machina));
                                     break;
                                 default:
                                     return;
@@ -68,7 +75,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                     }
                     catch (Exception ex)
                     {
-                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56 (ensemble action): " + ex.Message)));
+                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                            new BmpSeerMachinaException("Exception in Packet.Size56 (ensemble action): " +
+                                                        ex.Message)));
                     }
                 }
                 else
@@ -80,7 +89,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                         {
                             case 2: // instrument equip/dequip is in this category
                                 var param1 = BitConverter.ToUInt32(message, 36); // action.
-                                var param2 = BitConverter.ToUInt32(message, 40);
+                                var param2 = BitConverter.ToUInt32(message, 40); // Instrument
                                 var param3 = BitConverter.ToUInt32(message, 44);
                                 var param4 = BitConverter.ToUInt32(message, 48);
                                 if (param3 == 0 && param4 == 0)
@@ -91,22 +100,28 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                             _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
                                             break;
                                         case 1: // de-equip instrument
-                                            if (param2 == 0) _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                            if (param2 == 0)
+                                            {
+                                                _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                            }
                                             break;
                                     }
                                 }
+
                                 break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56 (equip action): " + ex.Message)));
+                        _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                            new BmpSeerMachinaException("Exception in Packet.Size56 (equip action): " + ex.Message)));
                     }
                 }
             }
             catch (Exception ex)
             {
-                _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina, new BmpSeerMachinaException("Exception in Packet.Size56: " + ex.Message)));
+                _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                    new BmpSeerMachinaException("Exception in Packet.Size56: " + ex.Message)));
             }
         }
     }

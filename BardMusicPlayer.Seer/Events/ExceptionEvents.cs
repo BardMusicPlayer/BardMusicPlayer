@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2022 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -25,8 +25,8 @@ namespace BardMusicPlayer.Seer.Events
         internal GameExceptionEvent(Game game, int pid, Exception exception) : base(exception, EventSource.Game)
         {
             EventType = GetType();
-            Game = game;
-            Pid = pid;
+            Game      = game;
+            Pid       = pid;
         }
 
         public int Pid { get; }
@@ -36,7 +36,8 @@ namespace BardMusicPlayer.Seer.Events
 
     public sealed class BackendExceptionEvent : SeerExceptionEvent
     {
-        internal BackendExceptionEvent(EventSource readerBackendType, Exception exception) : base(exception, readerBackendType)
+        internal BackendExceptionEvent(EventSource readerBackendType, Exception exception) : base(exception,
+            readerBackendType)
         {
             EventType = GetType();
         }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2022 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -12,16 +12,22 @@ namespace BardMusicPlayer.Seer.Events
     {
         internal SeerEvent(EventSource eventSource, byte dedupeThreshold = 0, bool highPriority = false)
         {
-            EventSource = eventSource;
+            EventSource     = eventSource;
             DedupeThreshold = dedupeThreshold;
-            HighPriority = highPriority;
-            TimeStamp = Clock.Time.Now;
+            HighPriority    = highPriority;
+            TimeStamp       = Clock.Time.Now;
         }
+
         public long TimeStamp { get; }
+
         public EventSource EventSource { get; }
+
         internal byte DedupeThreshold { get; }
+
         internal bool HighPriority { get; }
+
         public Type EventType { get; protected set; }
+
         public Game Game { get; internal set; }
 
         /// <summary>

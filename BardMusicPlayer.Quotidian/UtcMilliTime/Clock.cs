@@ -68,8 +68,22 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
                 if (ntpServerHostName == Constants.fallback_server && !string.IsNullOrEmpty(DefaultServer)) ntpServerHostName = DefaultServer;
                 ntpCall.serverResolved = ntpServerHostName;
                 var addresses = await Dns.GetHostAddressesAsync(ntpServerHostName);
-                var ipEndPoint = new IPEndPoint(addresses[0], Constants.udp_port_number);
-                ntpCall.socket.BeginConnect(ipEndPoint, new AsyncCallback(PartB), null);
+
+                //Try all adresses and give up
+                int idx = 0;
+                while (idx != addresses.Length)
+                {
+                    try
+                    {
+                        var ipEndPoint = new IPEndPoint(addresses[idx], Constants.udp_port_number);
+                        ntpCall.socket.BeginConnect(ipEndPoint, new AsyncCallback(PartB), null);
+                        break;
+                    }
+                    catch (System.Net.Sockets.SocketException)
+                    {
+                        idx++;
+                    }
+                }
                 ntpCall.methodsCompleted += 1;
             }
             catch (Exception)

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, sammhill, 2018-2020 parulina
+ * Copyright(c) 2022 MoogleTroupe, sammhill, 2018-2020 parulina
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -11,8 +11,10 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile {
-    internal class HotbarDatFile : IDisposable {
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
+{
+    internal class HotbarDatFile : IDisposable
+    {
 
         internal bool Fresh = true;
         private string _filePath;

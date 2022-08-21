@@ -1,0 +1,230 @@
+﻿<UserControl x:Class="BardMusicPlayer.Ui.Skinned.Skinned_MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BardMusicPlayer.Ui.Skinned"
+             mc:Ignorable="d"
+             MinWidth="412"
+             Width="412"
+             MaxWidth="412"
+             d:DesignHeight="200" d:DesignWidth="412" Loaded="Window_Loaded">
+    <UserControl.Background>
+        <ImageBrush />
+    </UserControl.Background>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/PlayBarStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/TrackBarStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/OctaveBarStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/ImageButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- 0 Titlebar height-->
+            <RowDefinition Height="26"/>
+            <!-- 1 Spacer -->
+            <RowDefinition Height="13"/>
+            <!-- 2 Time Digit and Song Title -->
+            <RowDefinition Height="20"/>
+            <!-- 3 Spacer -->
+            <RowDefinition Height="7"/>
+            <!-- 4 Instrument and Track -->
+            <RowDefinition Height="14"/>
+            <!-- 5 Spacer -->
+            <RowDefinition Height="8"/>
+            <!-- 6 TrackSelector -->
+            <RowDefinition Height="16"/>
+            <!-- 7 Spacer -->
+            <RowDefinition Height="2"/>
+            <!-- 8 Positionbar -->
+            <RowDefinition Height="18"/>
+            <!-- 9 Spacer -->
+            <RowDefinition Height="8"/>
+            <!-- 10 PlayControlbuttons -->
+            <RowDefinition Height="27"/>
+            <!-- 11 Spacer -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Titlebar -->
+        <Rectangle Grid.Row="0" x:Name="TitleBar" HorizontalAlignment="Stretch" Width="412" Height="21" VerticalAlignment="Top" PreviewMouseDown="TitleBar_MouseDown">
+            <Rectangle.Fill>
+                <ImageBrush />
+            </Rectangle.Fill>
+        </Rectangle>
+        <!-- Titlebar Buttons -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="16"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource ImageButton}" x:Name="Settings_Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="13" Height="13" Margin="9,5,0,0" Content="" Click="Settings_Button_Click" PreviewMouseUp="Settings_Button_Up" PreviewMouseDown="Settings_Button_Down"  BorderThickness="0">
+                <Button.ContextMenu>
+                    <ContextMenu >
+                        <MenuItem Header="Show Songbrowser Window" Click="ShowSongBrowserWindow_Click"/>
+                        <MenuItem Header="Show Bards Window" Click="ShowBardsWindow_Click"/>
+                        <MenuItem Header="Show Networkplay Window" Click="ShowNetworkWindow_Click"/>
+                        <MenuItem Header="Show Playlist Window" Click="ShowPlaylistWindow_Click"/>
+                        <MenuItem Header="ExtendedView(for some skins)" Click="ShowExtendedView_Click"/>
+                        <MenuItem Header="Reset window positions" Click="ResethWindowPositions_Click"/>
+                        <MenuItem Header="Info" Click="MenuItem_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+            <Button Grid.Column="4" Style="{StaticResource ImageButton}" x:Name="Close_Button" HorizontalAlignment="Left" Margin="0,4.5,0,0"   VerticalAlignment="Top" Width="13" Height="13" Content="" Click="Close_Button_Click" PreviewMouseUp="Close_Button_Up" PreviewMouseDown="Close_Button_Down"  BorderThickness="0" />
+
+        </Grid>
+
+        <!-- Time Digit and Song Title -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="72"/>
+                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- The Time -->
+            <Grid Grid.Column="1" PreviewMouseLeftButtonDown="Time_Display_Clicked">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="19"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="3" x:Name="Second_First" HorizontalAlignment="Left" Width="13.5" Height="19.5" VerticalAlignment="Top">
+                    <Rectangle.Fill>
+                        <ImageBrush/>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <Rectangle Grid.Column="4" x:Name="Second_Last" HorizontalAlignment="Left" Width="13.5" Height="19.5" VerticalAlignment="Top">
+                    <Rectangle.Fill>
+                        <ImageBrush />
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <Rectangle Grid.Column="0" x:Name="Minutes_First" HorizontalAlignment="Left" Width="13.5" Height="19.5" VerticalAlignment="Top">
+                    <Rectangle.Fill>
+                        <ImageBrush />
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <Rectangle Grid.Column="1" x:Name="Minutes_Last" HorizontalAlignment="Left" Width="13.5" Height="19.5" VerticalAlignment="Top">
+                    <Rectangle.Fill>
+                        <ImageBrush/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+
+            <Image Grid.Column="2" x:Name="SongDigit" HorizontalAlignment="Left" Height="16" Width="230" />
+        </Grid>
+
+        <!-- Instrument and Track -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="72"/>
+                <ColumnDefinition Width="96"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Column="1" x:Name="InstrumentDigit" Margin="-35,0,0,0" HorizontalAlignment="Left" Height="12" Width="112" />
+            <Image Grid.Column="2" x:Name="SmallTrackDigit" Margin="0,-5,0,0" HorizontalAlignment="Left" Height="11" Width="30" />
+            <Image Grid.Column="3" x:Name="SmallOctaveDigit" Margin="0,-5,0,0" HorizontalAlignment="Left" Height="11" Width="30" />
+        </Grid>
+
+        <!-- TrackSelector and buttons-->
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="161"/>
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="57"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="15"/>
+            </Grid.ColumnDefinitions>
+            <!-- Track selection -->
+            <Rectangle Grid.Column="1" x:Name="Trackbar_Background" HorizontalAlignment="Left" Width="102" Height="20" VerticalAlignment="Top" Margin="0,-2,0,0">
+                <Rectangle.Fill>
+                    <ImageBrush  />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Slider Grid.Column="1" Style="{StaticResource Volumebar_Slider}" x:Name="Trackbar_Slider"  HorizontalAlignment="left" Margin="0,-2,0,0"
+                VerticalAlignment="Stretch" Width="102" Height="16" Maximum="200" IsSnapToTickEnabled="True" TickFrequency="1"
+                ValueChanged="Trackbar_Slider_ValueChanged" 
+                Thumb.DragStarted="Trackbar_Slider_DragStarted" 
+                Thumb.DragCompleted="Trackbar_Slider_DragCompleted"/>
+            <!-- Octave selection -->
+            <Rectangle Grid.Column="3" x:Name="Octavebar_Background" HorizontalAlignment="Left" Width="57" Height="20" VerticalAlignment="Top" Margin="0,-2,0,0">
+                <Rectangle.Fill>
+                    <ImageBrush  />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Slider Grid.Column="3" Style="{StaticResource Balancebar_Slider}" x:Name="Octavebar_Slider"  HorizontalAlignment="left" Margin="0,-2,0,0"
+                VerticalAlignment="Stretch" Width="57" Height="16" Maximum="200" IsSnapToTickEnabled="True" TickFrequency="1"
+                ValueChanged="Octavebar_Slider_ValueChanged" 
+                Thumb.DragStarted="Octavebar_Slider_DragStarted" 
+                Thumb.DragCompleted="Octavebar_Slider_DragCompleted"/>
+            <!-- Right buttons -->
+            <Button Grid.Column="5" Style="{StaticResource ImageButton}" x:Name="Playlist_Button" Margin="0,-1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="34.5"
+                Height="18" Click="Playlist_Button_Click"  PreviewMouseUp="Playlist_Button_Up"  PreviewMouseDown="Playlist_Button_Down"   BorderThickness="0"/>
+        </Grid>
+
+        <!-- Playbar -->
+        <Grid Grid.Row="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="1" x:Name="PlayBar_Background" HorizontalAlignment="Left" Width="370" Height="16" VerticalAlignment="Top">
+                <Rectangle.Fill>
+                    <ImageBrush  />
+                </Rectangle.Fill>
+            </Rectangle>
+            <Slider Grid.Column="1" Style="{StaticResource Playbar_Slider}" x:Name="Playbar_Slider"  HorizontalAlignment="left" 
+                VerticalAlignment="Stretch" Width="370" Height="16" Maximum="200" ValueChanged="Playbar_Slider_ValueChanged" Thumb.DragStarted="Playbar_Slider_DragStarted" 
+                Thumb.DragCompleted="Playbar_Slider_DragCompleted"/>
+        </Grid>
+
+        <!-- PlayControlbuttons -->
+        <Grid Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="34.5"/>
+                <ColumnDefinition Width="7"/>
+                <ColumnDefinition Width="33"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="68"/>
+                <ColumnDefinition Width="42"/>
+
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Style="{StaticResource ImageButton}" x:Name="Prev_Button"  HorizontalAlignment="Left" Click="Prev_Button_Click"  PreviewMouseUp="Prev_Button_Up"  PreviewMouseDown="Prev_Button_Down"   BorderThickness="0" Width="34.5" Height="27" />
+            <Button Grid.Column="2" Style="{StaticResource ImageButton}" x:Name="Play_Button"  HorizontalAlignment="Left" Click="Play_Button_Click"  PreviewMouseUp="Play_Button_Up"  PreviewMouseDown="Play_Button_Down"   BorderThickness="0" Width="34.5" Height="27"/>
+            <Button Grid.Column="3" Style="{StaticResource ImageButton}" x:Name="Pause_Button" HorizontalAlignment="Left" Click="Pause_Button_Click" PreviewMouseUp="Pause_Button_Up" PreviewMouseDown="Pause_Button_Down"  BorderThickness="0" Width="34.5" Height="27"/>
+            <Button Grid.Column="4" Style="{StaticResource ImageButton}" x:Name="Stop_Button"  HorizontalAlignment="Left" Click="Stop_Button_Click"  PreviewMouseUp="Stop_Button_Up"  PreviewMouseDown="Stop_Button_Down"   BorderThickness="0" Width="34.5" Height="27"/>
+            <Button Grid.Column="5" Style="{StaticResource ImageButton}" x:Name="Next_Button"  HorizontalAlignment="Left" Click="Next_Button_Click"  PreviewMouseUp="Next_Button_Up"  PreviewMouseDown="Next_Button_Down"   BorderThickness="0" Width="34.5" Height="27"/>
+            <Button Grid.Column="7" Style="{StaticResource ImageButton}" x:Name="Load_Button"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,1.5,0,0" Width="33" Height="24" Content="" Click="Load_Button_Click"  PreviewMouseUp="Load_Button_Up"  PreviewMouseDown="Load_Button_Down"   BorderThickness="0" />
+
+            <Button Grid.Column="9" Style="{StaticResource ImageButton}" x:Name="Random_Button"  HorizontalAlignment="Left" Click="Random_Button_Click"  PreviewMouseUp="Random_Button_Up"  PreviewMouseDown="Random_Button_Down"   BorderThickness="0" Width="71" Height="22" Margin="0,-2,0,0"/>
+            <Button Grid.Column="10" Style="{StaticResource ImageButton}" x:Name="Loop_Button"  HorizontalAlignment="Left" Click="Loop_Button_Click"  PreviewMouseUp="Loop_Button_Up"  PreviewMouseDown="Loop_Button_Down"   BorderThickness="0" Width="42" Height="22" Margin="0,-2,0,0"/>
+        </Grid>
+    </Grid>
+</UserControl>

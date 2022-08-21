@@ -9,26 +9,27 @@ using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 {
-	internal static class Signatures
-	{
+    internal static class Signatures
+    {
         public static string CharacterMapKey { get; } = "CHARMAP";
 
-		public static string ChatLogKey { get; } = "CHATLOG";
-		
-		public static string PartyCountKey { get; } = "PARTYCOUNT";
+        public static string ChatLogKey { get; } = "CHATLOG";
 
-		public static string PartyMapKey { get; } = "PARTYMAP";
+        public static string PartyCountKey { get; } = "PARTYCOUNT";
 
-		public static string PlayerInformationKey { get; } = "PLAYERINFO";
+        public static string PartyMapKey { get; } = "PARTYMAP";
 
-		public static string PerformanceStatusKey { get; } = "PERFSTATUS";
+        public static string PlayerInformationKey { get; } = "PLAYERINFO";
 
-		public static string CharacterIdKey { get; } = "CHARID";
+        public static string PerformanceStatusKey { get; } = "PERFSTATUS";
 
-		public static string ChatInputKey { get; } = "CHATINPUT";
+        public static string CharacterIdKey { get; } = "CHARID";
 
-		public static string WorldKey { get; } = "WORLD";
+        public static string ChatInputKey { get; } = "CHATINPUT";
 
-		public static IEnumerable<Signature> Resolve(MemoryHandler memoryHandler) => new APIHelper(memoryHandler).GetSignatures();
+        public static string WorldKey { get; } = "WORLD";
+
+        public static IEnumerable<Signature> Resolve(MemoryHandler memoryHandler) =>
+            new APIHelper(memoryHandler).GetSignatures();
     }
 }

@@ -10,16 +10,22 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
     internal partial class Reader
     {
         public bool CanGetChatInput() => Scanner.Locations.ContainsKey(Signatures.ChatInputKey);
-        public bool IsChatInputOpen() {
-            if(!CanGetChatInput() || !MemoryHandler.IsAttached) return false;
-            
-            try {
+
+        public bool IsChatInputOpen()
+        {
+            if (!CanGetChatInput() || !MemoryHandler.IsAttached) return false;
+
+            try
+            {
                 var chatInputMap = (IntPtr) Scanner.Locations[Signatures.ChatInputKey];
-                var pointer = ((IntPtr) MemoryHandler.GetInt32(chatInputMap)) != IntPtr.Zero;
+                var pointer = (IntPtr) MemoryHandler.GetInt32(chatInputMap) != IntPtr.Zero;
                 return pointer;
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MemoryHandler?.RaiseException(ex);
             }
+
             return false;
         }
     }

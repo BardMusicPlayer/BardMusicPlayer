@@ -10,15 +10,17 @@ using Newtonsoft.Json;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models
 {
-    internal class Signature {
+    internal class Signature
+    {
         private Regex _regularExpress;
 
-        public Signature() {
-            Key = string.Empty;
-            Value = string.Empty;
+        public Signature()
+        {
+            Key            = string.Empty;
+            Value          = string.Empty;
             RegularExpress = null;
             SigScanAddress = IntPtr.Zero;
-            PointerPath = null;
+            PointerPath    = null;
         }
 
         internal MemoryHandler MemoryHandler { get; set; }
@@ -27,47 +29,44 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models
 
         public string Key { get; set; }
 
-        [JsonIgnore]
-        public int Offset => Value.Length / 2;
+        [JsonIgnore] public int Offset => Value.Length / 2;
 
         public List<long> PointerPath { get; set; }
 
-        public Regex RegularExpress {
+        public Regex RegularExpress
+        {
             get => _regularExpress;
-            set {
+            set
+            {
                 if (value != null) _regularExpress = value;
             }
         }
 
-        [JsonIgnore]
-        public IntPtr SigScanAddress { get; set; }
+        [JsonIgnore] public IntPtr SigScanAddress { get; set; }
 
         public string Value { get; set; }
 
-        public static implicit operator IntPtr(Signature signature) {
-            return signature.GetAddress();
-        }
+        public static implicit operator IntPtr(Signature signature) => signature.GetAddress();
 
-        public IntPtr GetAddress() {
+        public IntPtr GetAddress()
+        {
             IntPtr baseAddress;
             var IsASMSignature = false;
-            if (SigScanAddress != IntPtr.Zero) {
+            if (SigScanAddress != IntPtr.Zero)
+            {
                 baseAddress = SigScanAddress; // Scanner should have already applied the base offset
                 if (ASMSignature) IsASMSignature = true;
             }
-            else {
-                if (PointerPath == null || PointerPath.Count == 0) {
-                    return IntPtr.Zero;
-                }
+            else
+            {
+                if (PointerPath == null || PointerPath.Count == 0) return IntPtr.Zero;
 
                 baseAddress = MemoryHandler.GetStaticAddress(0);
             }
 
-            if (PointerPath == null || PointerPath.Count == 0) {
-                return baseAddress;
-            }
+            if (PointerPath == null || PointerPath.Count == 0) return baseAddress;
 
             return MemoryHandler.ResolvePointerPath(PointerPath, baseAddress, IsASMSignature);
         }
-	}
+    }
 }

@@ -24,7 +24,12 @@ namespace BardMusicPlayer.Grunt
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
 
-            if (!OctaveRange.C3toC6.ValidateNoteRange(note)) throw new BmpGruntException("Note is not in C3toC6 range.");
+            if (!OctaveRange.C3toC6.ValidateNoteRange(note))
+#if DEBUG
+                throw new BmpGruntException("Note is not in C3toC6 range.");
+#else
+                return false;
+#endif
 
             if (game.InstrumentHeld.Equals(Instrument.None) || game.ChatStatus || !game.IsBard) return false;
 
@@ -46,7 +51,12 @@ namespace BardMusicPlayer.Grunt
         {
             if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
 
-            if (!OctaveRange.C3toC6.ValidateNoteRange(note)) throw new BmpGruntException("Note is not in C3toC6 range.");
+            if (!OctaveRange.C3toC6.ValidateNoteRange(note))
+#if DEBUG
+                throw new BmpGruntException("Note is not in C3toC6 range.");
+#else
+                return false;
+#endif
 
             if (game.InstrumentHeld.Equals(Instrument.None) || game.ChatStatus || !game.IsBard) return false;
 

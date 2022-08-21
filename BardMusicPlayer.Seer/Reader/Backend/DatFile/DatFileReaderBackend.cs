@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, sammhill, 2018-2020 parulina
+ * Copyright(c) 2022 MoogleTroupe, sammhill, 2018-2020 parulina
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -130,7 +130,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
             {
                 ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.DatFile, ex));
             }
-            
+
             _fileSystemWatcher = new FileSystemWatcher(ReaderHandler.Game.ConfigPath + _configId, "*.dat")
             {
                 NotifyFilter = NotifyFilters.LastWrite,
@@ -154,7 +154,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
         private void OnChanged(object sender, FileSystemEventArgs eventArgs)
         {
             if (eventArgs.ChangeType != WatcherChangeTypes.Changed) return;
-            
+
             if (eventArgs.Name.ToLower().StartsWith("hotbar") && eventArgs.Name.ToLower().EndsWith(".dat")) ParseHotbar(eventArgs.FullPath);
             else if (eventArgs.Name.ToLower().StartsWith("keybind") && eventArgs.Name.ToLower().EndsWith(".dat")) ParseKeybind(eventArgs.FullPath);
         }

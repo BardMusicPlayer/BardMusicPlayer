@@ -35,7 +35,7 @@ namespace BardMusicPlayer.Grunt
                     for (var i = 0; i < 5; i++)
                     {
                         if ((key & Keys.Control) == Keys.Control) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) Keys.ControlKey, (IntPtr) 0);
-                        if ((key & Keys.Alt) == Keys.Alt) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYDOWN, (IntPtr) Keys.Menu, (IntPtr) 0);
+                        if ((key & Keys.Alt) == Keys.Alt) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYDOWN, (IntPtr) Keys.AltKey, (IntPtr) 0);
                         if ((key & Keys.Shift) == Keys.Shift) NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_KEYDOWN, (IntPtr) Keys.ShiftKey, (IntPtr) 0);
                         await Task.Delay(5);
                     }
@@ -85,7 +85,7 @@ namespace BardMusicPlayer.Grunt
                     if ((key & Keys.Alt) == Keys.Alt)
                     {
                         await Task.Delay(5);
-                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYUP, (IntPtr) Keys.Menu, (IntPtr) 0);
+                        NativeMethods.SendMessage(game.Process.MainWindowHandle, NativeMethods.WM_SYSKEYUP, (IntPtr) Keys.AltKey, (IntPtr) 0);
                     }
 
                     if ((key & Keys.Control) == Keys.Control)

@@ -111,6 +111,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     for (var i = 0; i < _midiEventCounts[x]; i++)
                     {
                         var m = _midiEventQueue.RemoveLast();
+                        if (m == null)
+                            continue;
                         ProcessMidiMessage(m.Event);
                     }
                 }

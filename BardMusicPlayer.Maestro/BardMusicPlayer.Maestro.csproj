@@ -12,14 +12,21 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj" />
+    <PackageReference Include="Melanchall.DryWetMidi" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BardMusicPlayer.DalamudBridge\BardMusicPlayer.DalamudBridge.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
+    <ProjectReference Include="..\Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj" />
   </ItemGroup>
 
 </Project>

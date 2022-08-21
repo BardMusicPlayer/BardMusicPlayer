@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2022 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -14,10 +14,11 @@ namespace BardMusicPlayer.Seer.Events
         internal GameStopped(int pid) : base(EventSource.Game)
         {
             EventType = GetType();
-            Pid = pid;
+            Pid       = pid;
         }
 
         public int Pid { get; }
+
         public override bool IsValid() => true;
     }
 }

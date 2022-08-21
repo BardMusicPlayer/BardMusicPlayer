@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
+ * Copyright(c) 2022 MoogleTroupe, trotlinebeercan, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -19,16 +19,13 @@ namespace BardMusicPlayer.Seer.Reader
 
         internal ReaderHandler(Game game, IReaderBackend readerBackend)
         {
-            Game = game;
-            _readerBackend = readerBackend;
+            Game                         = game;
+            _readerBackend               = readerBackend;
             _readerBackend.ReaderHandler = this;
             StartBackend();
         }
 
-        ~ReaderHandler()
-        {
-            Dispose();
-        }
+        ~ReaderHandler() { Dispose(); }
 
         public void Dispose()
         {
@@ -36,15 +33,16 @@ namespace BardMusicPlayer.Seer.Reader
             _readerBackend.Dispose();
             GC.SuppressFinalize(this);
         }
-        
+
         /// <summary>
         /// Starts the internal IBackend thread.
         /// </summary>
         internal void StartBackend()
         {
-            if (_task != null) throw new BmpSeerBackendAlreadyRunningException(Game.Process.Id, _readerBackend.ReaderBackendType);
+            if (_task != null)
+                throw new BmpSeerBackendAlreadyRunningException(Game.Process.Id, _readerBackend.ReaderBackendType);
 
-            _cts = new CancellationTokenSource();
+            _cts  = new CancellationTokenSource();
             _task = Task.Factory.StartNew(() => _readerBackend.Loop(_cts.Token), TaskCreationOptions.LongRunning);
         }
 

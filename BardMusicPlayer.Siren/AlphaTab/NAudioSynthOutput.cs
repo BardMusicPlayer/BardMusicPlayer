@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 Daniel Kuschny
+ * Copyright(c) 2022 GiR-Zippo, 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
@@ -38,6 +38,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
             : base(PreferredSampleRate, 2)
         {
             _device = device;
+            _context = new WasapiOut(device, AudioClientShareMode.Shared, true, _latency);
             _latency = latency;
             _bufferCount = bufferCount;
             _bufferCountSize = _bufferCount / 2 * BufferSize;
@@ -53,8 +54,6 @@ namespace BardMusicPlayer.Siren.AlphaTab
         {
             _finished = false;
             _circularBuffer = new CircularSampleBuffer(BufferSize * _bufferCount);
-
-            _context = new WasapiOut(_device, AudioClientShareMode.Shared, true, _latency);
             _context.Init(this);
 
             Ready();
@@ -89,6 +88,14 @@ namespace BardMusicPlayer.Siren.AlphaTab
         public void Pause()
         {
             _context.Pause();
+        }
+
+        /// <inheritdoc />
+        public void Stop()
+        {
+            _finished = true;
+            _context.Stop();
+            _circularBuffer.Clear();
         }
 
         /// <inheritdoc />

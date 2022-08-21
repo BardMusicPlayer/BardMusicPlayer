@@ -55,7 +55,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
 
             var groups = trackName.Split('|');
 
-            var modifier = new Regex(@"^([A-Za-z0-9]+)([-+]\d)?");
+            var modifier = new Regex(@"^([A-Za-z0-9:]+)([-+]\d)?");
 
             for(var groupCounter = 0; groupCounter < groups.Length; groupCounter++)
             {

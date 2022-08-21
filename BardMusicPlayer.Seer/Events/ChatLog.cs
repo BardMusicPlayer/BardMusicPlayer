@@ -1,21 +1,28 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Copyright(c) 2022 GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
+
+using System;
 
 namespace BardMusicPlayer.Seer.Events
 {
     public sealed class ChatLog : SeerEvent
     {
-        internal ChatLog(EventSource readerBackendType) : base(readerBackendType)
+        internal ChatLog(EventSource readerBackendType, Game game, Reader.Backend.Sharlayan.Core.ChatLogItem item) : base(readerBackendType, 0, false)
         {
             EventType = GetType();
-            throw new System.NotImplementedException();
+            ChatLogGame = game;
+            ChatLogTimeStamp = item.TimeStamp;
+            ChatLogCode = item.Code;
+            ChatLogLine = item.Line;
         }
 
-        public override bool IsValid()
-        {
-            throw new System.NotImplementedException();
-        }
+        public Game ChatLogGame { get; }
+        public DateTime ChatLogTimeStamp { get; }
+        public string ChatLogCode { get; }
+        public string ChatLogLine { get; }
+
+        public override bool IsValid() => true;
     }
 }
