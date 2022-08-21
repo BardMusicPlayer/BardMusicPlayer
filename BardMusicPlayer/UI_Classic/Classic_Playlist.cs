@@ -142,6 +142,9 @@ namespace BardMusicPlayer.Ui.Classic
             if (_currentPlaylist == null)
                 return;
 
+            if (_showingPlaylists)
+                return;
+
             foreach (string s in PlaylistContainer.SelectedItems)
             {
                 BmpSong song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, s);
@@ -163,6 +166,21 @@ namespace BardMusicPlayer.Ui.Classic
         /// <param name="e"></param>
         private void Playlist_Delete_Button_Click(object sender, RoutedEventArgs e)
         {
+            //Showing the playlists?
+            if (_showingPlaylists)
+            {
+                if ((string)PlaylistContainer.SelectedItem == null)
+                    return;
+
+                var pls = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
+                if (pls == null)
+                    return;
+
+                BmpCoffer.Instance.DeletePlaylist(pls);
+                PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
+                return;
+            }
+
             if (_currentPlaylist == null)
                 return;
 
