@@ -141,7 +141,7 @@ namespace BardMusicPlayer.Maestro
 
                 if (helper.legacy)  //legacy mode
                 {
-                    string songName = $"{helper.channelType.ChannelCode} {helper.prefix} {song.Title} {helper.prefix}";
+                    string songName = $"{helper.channelType.ChannelShortCut} {helper.prefix} {song.Title} {helper.prefix}";
                     _song_Title_Parsing_Performer.Value.SendText(songName);
                 }
                 else //dalamud plugin
