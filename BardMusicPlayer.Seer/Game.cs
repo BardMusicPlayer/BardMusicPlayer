@@ -218,6 +218,8 @@ namespace BardMusicPlayer.Seer
 
         public void SetAffinity(long AffinityMask)
         {
+            if (AffinityMask == 0)
+                return;
             this.Process.ProcessorAffinity = (IntPtr)AffinityMask;
         }
     }
