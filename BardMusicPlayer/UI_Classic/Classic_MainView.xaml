@@ -246,20 +246,22 @@
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="60*"/>
                             </Grid.ColumnDefinitions>
+                            <!--
                             <Label Grid.Row="1" Grid.Column="0" Content="Beats per minute" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="Statistics_BPM_Label" />
+-->
+                            <Label Grid.Row="1" Grid.Column="0" Content="Total tracks" />
+                            <Label Grid.Row="1" Grid.Column="1" x:Name="Statistics_Total_Tracks_Label" />
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="Total tracks" />
-                            <Label Grid.Row="2" Grid.Column="1" x:Name="Statistics_Total_Tracks_Label" />
+                            <Label Grid.Row="2" Grid.Column="0" Content="Total note count" />
+                            <Label Grid.Row="2" Grid.Column="1" x:Name="Statistics_Total_Note_Count_Label" />
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Total note count" />
-                            <Label Grid.Row="3" Grid.Column="1" x:Name="Statistics_Total_Note_Count_Label" />
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Track note count" />
-                            <Label Grid.Row="4" Grid.Column="1" x:Name="Statistics_Track_Note_Count_Label" />
-
+                            <Label Grid.Row="3" Grid.Column="0" Content="Track note count" />
+                            <Label Grid.Row="3" Grid.Column="1" x:Name="Statistics_Track_Note_Count_Label" />
+                            <!--
                             <Label Grid.Row="5" Grid.Column="0" Content="Note per second" />
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
+-->
                         </Grid>
                     </TabItem>
                     <TabItem Header="Song Preview">
