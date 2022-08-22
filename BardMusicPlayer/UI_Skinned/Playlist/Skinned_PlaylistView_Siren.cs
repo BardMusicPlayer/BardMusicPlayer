@@ -28,6 +28,10 @@ namespace BardMusicPlayer.Ui.Skinned
         /// </summary>
         private void Instance_SynthTimePositionChanged(string songTitle, double currentTime, double endTime, int activeVoices)
         {
+            //if we are finished, stop the playback
+            if (currentTime >= endTime)
+                BmpSiren.Instance.Stop();
+
             //Scrolling
             if (lasttime + 500 < currentTime)
             {

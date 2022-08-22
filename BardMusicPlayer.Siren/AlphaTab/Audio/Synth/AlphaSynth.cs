@@ -145,8 +145,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             };
             Output.Finished += () =>
             {
-                // stop everything
-                Stop();
+                //The Ui will trigger Stop() to reduce the CPU load
+                //If stop is triggered here, there's no playback possible anymore
+                {
+                    State = PlayerState.Paused;
+                    OnStateChanged(new PlayerStateChangedEventArgs(State, false));
+                    _sequencer.Stop();
+                    _synthesizer.NoteOffAll(true);
+                    TickPosition = _sequencer.PlaybackRange != null ? _sequencer.PlaybackRange.StartTick : 0;
+                }
+
                 Logger.Debug("AlphaSynth", "Finished playback");
                 OnFinished();
                 if (_sequencer.IsLooping)
@@ -182,7 +190,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             {
                 return false;
             }
-
             Output.Activate();
 
             Logger.Debug("AlphaSynth", "Starting playback");
