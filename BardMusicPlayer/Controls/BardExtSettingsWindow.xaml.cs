@@ -198,7 +198,15 @@ namespace BardMusicPlayer.Ui.Controls
                     mask += 0b0 << idx;
                 idx++;
             }
-            _performer.game.SetAffinity(mask);
+            //If mask == 0 show an error
+            if (mask == 0)
+            {
+                var result = MessageBox.Show("No CPU was selected", "Error Affinity", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (result == MessageBoxResult.OK)
+                    return;
+            }
+            else
+                _performer.game.SetAffinity(mask);
         }
 
         private void Clear_CPU_Click(object sender, RoutedEventArgs e)
@@ -217,7 +225,5 @@ namespace BardMusicPlayer.Ui.Controls
             }
         }
         #endregion
-
-
     }
 }

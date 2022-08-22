@@ -118,11 +118,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" x:Name="Save_CPU" Content="Set" Click="Save_CPU_Click"/>
                         <Button Grid.Column="1" x:Name="Clear_CPU" Content="Clear" Click="Clear_CPU_Click"/>
-                        <Button Grid.Column="2" x:Name="Reset_CPU" Content="Reset" Click="Reset_CPU_Click"/>
+                        <Button Grid.Column="2" x:Name="Reset_CPU" Content="All Processors" Click="Reset_CPU_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>

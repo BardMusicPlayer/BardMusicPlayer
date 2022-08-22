@@ -106,6 +106,10 @@ namespace BardMusicPlayer.Ui.Classic
         /// <param name="endTime"></param>
         private void Siren_PlaybackTimeChanged(double currentTime, double endTime)
         {
+            //if we are finished, stop the playback
+            if (currentTime >= endTime)
+                BmpSiren.Instance.Stop();
+
             TimeSpan t;
             if (Siren_Position.Maximum != endTime)
             {
