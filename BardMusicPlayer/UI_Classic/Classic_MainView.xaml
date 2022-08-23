@@ -65,8 +65,8 @@
                                 <MenuItem Header="Export MusicCatalog"           Click="Playlist_Export_Cat_Button"  ToolTip="{StaticResource PLAYLIST_EXPORT}"/>
                                 <MenuItem Header="Cleanup MusicCatalog"          Click="Playlist_Cleanup_Cat_Button" ToolTip="{StaticResource PLAYLIST_CLEANUP}"/>
                                 <MenuItem Header=""/>
-                                <MenuItem Header="Import Playlist from Json"     Click="Playlist_Import_JSon_Button" />
-                                <MenuItem Header="Export Playlist as Json"       Click="Playlist_Export_JSon_Button" />
+                                <MenuItem Header="Import Playlist"               Click="Playlist_Import_JSon_Button" />
+                                <MenuItem Header="Export Playlist"               Click="Playlist_Export_JSon_Button" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
