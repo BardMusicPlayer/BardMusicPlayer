@@ -148,6 +148,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
                 //The Ui will trigger Stop() to reduce the CPU load
                 //If stop is triggered here, there's no playback possible anymore
                 {
+                    Output.Pause();
                     State = PlayerState.Paused;
                     OnStateChanged(new PlayerStateChangedEventArgs(State, false));
                     _sequencer.Stop();
