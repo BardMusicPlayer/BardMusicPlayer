@@ -60,7 +60,7 @@
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="Songtitle_Chat_Prefix" Text="♪" Width="30"  HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
                         <Button Grid.Row="1" Grid.Column="4" Content="Post Songtitle" Click="PostSongTitle_Click"/>
                         <Label Grid.Row="1" Grid.Column="6" Content="Autopost"  HorizontalAlignment="Left" VerticalAlignment="Top" />
-                        <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="Autopost via" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="95" SelectionChanged="Songtitle_Post_Type_SelectionChanged">
+                        <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="Autopost via" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="90" SelectionChanged="Songtitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>off</ComboBoxItem>
                             <ComboBoxItem>Legacy</ComboBoxItem>
                             <ComboBoxItem>Dalamud</ComboBoxItem>
