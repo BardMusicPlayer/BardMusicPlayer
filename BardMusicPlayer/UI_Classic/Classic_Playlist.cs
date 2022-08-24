@@ -29,6 +29,9 @@ namespace BardMusicPlayer.Ui.Classic
         /// </summary>
         private void playNextSong()
         {
+            if (_currentPlaylist == null)
+                return;
+
             if (PlaylistContainer.Items.Count == 0)
                 return;
 
@@ -191,6 +194,7 @@ namespace BardMusicPlayer.Ui.Classic
             BmpCoffer.Instance.DeletePlaylist(_currentPlaylist);
             PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
             Playlist_Header.Header = "Playlists";
+            _currentPlaylist = null;
         }
         #endregion
 
@@ -208,6 +212,7 @@ namespace BardMusicPlayer.Ui.Classic
                 _showingPlaylists = true;
                 PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
                 Playlist_Header.Header = "Playlists";
+                _currentPlaylist = null;
             }
         }
 
@@ -239,6 +244,7 @@ namespace BardMusicPlayer.Ui.Classic
                     _showingPlaylists = true;
                     PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
                     Playlist_Header.Header = "Playlists";
+                    _currentPlaylist = null;
                     return;
                 }
             }
@@ -474,9 +480,6 @@ namespace BardMusicPlayer.Ui.Classic
         /// </summary>
         private void Playlist_Import_JSon_Button(object sender, RoutedEventArgs e)
         {
-            if (_currentPlaylist == null)
-                return;
-
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "Playlist file | *.plz",
@@ -484,6 +487,15 @@ namespace BardMusicPlayer.Ui.Classic
             };
 
             if (openFileDialog.ShowDialog() != true)
+                return;
+
+            if (!openFileDialog.FileName.ToLower().EndsWith(".plz"))
+                return;
+
+            if (_currentPlaylist == null)
+                Playlist_New_Button_Click(null, null);
+
+            if (_currentPlaylist == null)
                 return;
 
             var list = JsonPlaylist.Load(openFileDialog.FileName);
