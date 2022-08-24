@@ -188,7 +188,7 @@
                                     <Label Margin="10,0,0,0"     Grid.Row="3" Content="MIDI Input device" HorizontalAlignment="Left"/>
                                     <ComboBox Margin="120,0,0,0" Grid.Row="3" x:Name="MIDI_Input_DeviceBox" ItemsSource="{Binding}"
                                         DisplayMemberPath="Value"
-                                        SelectionChanged="MIDI_Input_Device_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="200" ToolTip="{StaticResource PL_MIDIINPUT}">
+                                        SelectionChanged="MIDI_Input_Device_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="100" ToolTip="{StaticResource PL_MIDIINPUT}">
                                         <ComboBoxItem>None</ComboBoxItem>
                                     </ComboBox>
                                     <CheckBox Margin="10,0,0,0"  Grid.Row="4" x:Name="LiveMidiDelay" Content="Enable note delay for live playing" Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked" ToolTip="{StaticResource PL_LIVE}"/>

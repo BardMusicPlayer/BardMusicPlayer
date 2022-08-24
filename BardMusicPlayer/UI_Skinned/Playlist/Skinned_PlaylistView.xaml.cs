@@ -334,7 +334,7 @@ namespace BardMusicPlayer.Ui.Skinned
         /// <param name="e"></param>
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            var inputbox = new UI.Resources.TextInputWindow("Search for...");
+            var inputbox = new UI.Resources.TextInputWindow("Search for...", 80);
             inputbox.Focus();
             if (inputbox.ShowDialog() == true)
             {

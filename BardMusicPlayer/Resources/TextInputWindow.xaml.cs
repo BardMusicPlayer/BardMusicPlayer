@@ -7,11 +7,12 @@ namespace UI.Resources
     /// </summary>
     public partial class TextInputWindow : Window
     {
-        public TextInputWindow(string infotext)
+        public TextInputWindow(string infotext, int maxinputlength = 42)
         {
             InitializeComponent();
             this.InfoText.Text = infotext;
             this.ResponseTextBox.Focus();
+            this.ResponseTextBox.MaxLength = maxinputlength;
         }
 
         public string ResponseText
