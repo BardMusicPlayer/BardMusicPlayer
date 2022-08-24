@@ -147,6 +147,25 @@ namespace FFBardMusicPlayer.FFXIV
 
         public Process Process { get; private set; }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, IntPtr windowTitle);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        private static IntPtr TryFindGameWindow(Process process)
+        {
+            IntPtr hwnd = IntPtr.Zero;
+            while (IntPtr.Zero != (hwnd = FindWindowEx(IntPtr.Zero, hwnd, "FFXIVGAME", IntPtr.Zero)))
+            {
+                GetWindowThreadProcessId(hwnd, out uint pid);
+
+                if (pid == process.Id && IsWindowVisible(hwnd))
+                    break;
+            }
+            return hwnd;
+        }
+
         public bool Hook(Process process, bool useCallback = true)
         {
             if (process == null)
@@ -160,7 +179,7 @@ namespace FFBardMusicPlayer.FFXIV
             }
 
             Process = process;
-            mainWindowHandle = process.MainWindowHandle;
+            mainWindowHandle = TryFindGameWindow(process);
 
             if (useCallback)
             {
