@@ -58,7 +58,9 @@ namespace FFBardMusicPlayer
 
             var nonInvariantCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
-            Application.CurrentInputLanguage    = InputLanguage.FromCulture(new CultureInfo("en"));
+
+            if (!IsWine())
+                Application.CurrentInputLanguage    = InputLanguage.FromCulture(new CultureInfo("en"));
 
             if (GetConsoleWindow() != IntPtr.Zero)
             {
@@ -83,5 +85,26 @@ namespace FFBardMusicPlayer
             var app = new BmpMain();
             Application.Run(app);
         }
+
+        private static bool IsWine()
+        {
+            IntPtr hModule = LoadLibrary("ntdll.dll");
+            IntPtr proc = GetProcAddress(hModule, "wine_get_version");
+            bool exists = proc != IntPtr.Zero;
+            
+            FreeLibrary(hModule);
+
+            return exists;
+        }
+
+        [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
+        static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool FreeLibrary(IntPtr hModule);
     }
 }
