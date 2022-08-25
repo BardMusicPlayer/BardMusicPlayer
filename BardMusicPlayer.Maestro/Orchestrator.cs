@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -702,7 +703,9 @@ namespace BardMusicPlayer.Maestro
 
         private void Instance_EnsembleStarted(Seer.Events.EnsembleStarted seerEvent)
         {
-            if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            Debug.WriteLine(seerEvent.Game.PlayerName);
+
+            /*if (BmpPigeonhole.Instance.AutostartMethod != 2)
                 return;
 
             //predelay calc
@@ -731,7 +734,7 @@ namespace BardMusicPlayer.Maestro
                     start(delayvalue - rdelay, seerEvent.Game.Pid);
                 return;
             }
-
+            */
 
             /* Set this to a task
             var result = _performers.Where(perf => perf.Value.IsSinger == true);
@@ -754,7 +757,7 @@ namespace BardMusicPlayer.Maestro
 
             //local orchestra, each bard started indiviual
             //- start and exit
-            if (BmpPigeonhole.Instance.EnsembleStartIndividual)
+            /*if (BmpPigeonhole.Instance.EnsembleStartIndividual)
             {
                 start(delayvalue - rdelay, seerEvent.Game.Pid);
                 return;
@@ -771,6 +774,9 @@ namespace BardMusicPlayer.Maestro
                 start(delayvalue, perfo.Value.game.Pid);
             });
             sw.Stop();
+            */
+
+            start(0, seerEvent.Game.Pid);
         }
 
         /// <summary>
