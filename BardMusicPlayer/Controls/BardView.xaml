@@ -30,7 +30,6 @@
             </Grid.Background>
             <Button Grid.Column="1" Content="Open" ToolTip="Open Instruments" Click="OpenInstrumentButton_Click"/>
             <Button Grid.Column="2" Content="Close" ToolTip="Close Instruments" Click="CloseInstrumentButton_Click"/>
-            <CheckBox Grid.Column="5" Content="StartDelay" x:Name="StartDelay_CheckBox" VerticalAlignment="Center" HorizontalAlignment="Center" Unchecked="StartDelay_Checked" Checked="StartDelay_Checked"/>
             <Button Grid.Column="6" Content="..." x:Name="More_Options"  Width="25" Click="MenuButton_PreviewMouseLeftButtonDown"
                 ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True" >
                 <Button.ContextMenu>
