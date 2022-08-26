@@ -689,7 +689,7 @@ namespace BardMusicPlayer.Maestro
             Performer perf = _performers.Where(perf => perf.Value.HostProcess).FirstOrDefault().Value;
             if (perf != null)
             {
-                if (BmpPigeonhole.Instance.SoloBardAutoEquip)
+                if (BmpPigeonhole.Instance.EnsembleAutoEquip)
                     _ = perf.ReplaceInstrument().Result;
 
                 perf.Sequencer.PlayEnded += Sequencer_PlayEnded;

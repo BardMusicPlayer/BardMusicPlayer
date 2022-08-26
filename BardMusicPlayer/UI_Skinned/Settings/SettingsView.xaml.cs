@@ -57,7 +57,6 @@ namespace BardMusicPlayer.Ui.Skinned
             this.MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
             AutoPlayBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
             LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
-            this.AutoequipSoloBard.IsChecked = BmpPigeonhole.Instance.SoloBardAutoEquip;
 
             //Local Orchestra Tab
             this.LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
@@ -222,10 +221,6 @@ namespace BardMusicPlayer.Ui.Skinned
             BmpPigeonhole.Instance.LiveMidiPlayDelay = (LiveMidiDelay.IsChecked ?? false);
         }
 
-        private void AutoequipSoloBard_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.SoloBardAutoEquip = AutoequipSoloBard.IsChecked ?? false;
-        }
         #endregion
 
         #region Local orchestra controls
