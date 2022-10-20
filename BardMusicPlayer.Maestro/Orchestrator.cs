@@ -703,78 +703,8 @@ namespace BardMusicPlayer.Maestro
 
         private void Instance_EnsembleStarted(Seer.Events.EnsembleStarted seerEvent)
         {
-            Debug.WriteLine(seerEvent.Game.PlayerName);
-
-            /*if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            if (BmpPigeonhole.Instance.AutostartMethod != 2)
                 return;
-
-            //predelay calc
-            int delayvalue = 100;
-            if (!BmpPigeonhole.Instance.EnsemblePlayDelay)
-                delayvalue = 100;
-            else
-            {
-                if (BmpPigeonhole.Instance.MidiBardCompatMode)
-                    delayvalue = 6250;
-                else
-                    delayvalue = 2490;
-            }
-
-            //main delay
-            int rdelay = (int)(Quotidian.UtcMilliTime.Clock.Time.Now - seerEvent.TimeStamp);
-
-            //if we are a single bard
-            //- start and exit
-            if (!BmpPigeonhole.Instance.LocalOrchestra)
-            {
-                Performer perf = _performers.Where(perf => perf.Value.HostProcess).FirstOrDefault().Value;
-                if (perf == null)
-                    return;
-                if (seerEvent.Game.Pid == perf.game.Pid)
-                    start(delayvalue - rdelay, seerEvent.Game.Pid);
-                return;
-            }
-            */
-
-            /* Set this to a task
-            var result = _performers.Where(perf => perf.Value.IsSinger == true);
-            if (result != null)
-            {
-                if (result.Count() > 0)
-                {
-                    System.Diagnostics.Stopwatch w = new System.Diagnostics.Stopwatch();
-                    w.Start();
-                    foreach (var perfo in result)
-                    {
-                        delayvalue = (delayvalue + 5500) - (int)w.ElapsedMilliseconds;
-                        if (delayvalue < 0)
-                            delayvalue = 0;
-                        start(delayvalue, perfo.Value.game.Pid);
-                    };
-                    w.Stop();
-                }
-            }*/
-
-            //local orchestra, each bard started indiviual
-            //- start and exit
-            /*if (BmpPigeonhole.Instance.EnsembleStartIndividual)
-            {
-                start(delayvalue - rdelay, seerEvent.Game.Pid);
-                return;
-            }
-
-            //all bards at one tick
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            Parallel.ForEach(_performers, perfo =>
-            {
-                delayvalue = delayvalue - (int)sw.ElapsedMilliseconds;
-                if (delayvalue < 0)
-                    delayvalue = 0;
-                start(delayvalue, perfo.Value.game.Pid);
-            });
-            sw.Stop();
-            */
 
             start(0, seerEvent.Game.Pid);
         }

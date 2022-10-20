@@ -33,30 +33,33 @@ namespace BardMusicPlayer.Transmogrify.Song
         public ObjectId Id { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// the internal title / showed in playlist
         /// </summary>
         public string Title { get; set; } = "";
 
         /// <summary>
-        /// 
+        /// The displayed title in chat
         /// </summary>
         public string DisplayedTitle { get; set; } = "";
 
         /// <summary>
-        /// 
+        /// currently not in use
         /// </summary>
         public List<string> Tags { get; set; } = new();
 
         /// <summary>
-        /// 
+        /// TempoMap
         /// </summary>
         public TempoMap SourceTempoMap { get; set; } = TempoMap.Default;
 
         /// <summary>
-        /// 
+        /// TrackContainers
         /// </summary>
         public Dictionary<long, TrackContainer> TrackContainers { get; set; } = new();
 
+        /// <summary>
+        /// Song duration
+        /// </summary>
         public TimeSpan Duration { get; set; } = new();
 
 
