@@ -103,6 +103,7 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
         {
+            BmpMaestro.Instance.StopLocalPerformer();
             BmpMaestro.Instance.UnEquipInstruments();
         }
 
