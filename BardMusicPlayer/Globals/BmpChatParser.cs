@@ -60,8 +60,6 @@ namespace BardMusicPlayer.Ui {
 				case "0015":
 				case "0016":
 				case "0017": { // LS
-					int ls = int.Parse(item.ChatLogLine.Substring(3)) + 1;
-					format = string.Format("[{0}] {1}", ls, format);
 					break;
 				}
 				default: {
