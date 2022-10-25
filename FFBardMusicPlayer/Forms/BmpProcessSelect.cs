@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Sharlayan;
@@ -123,6 +124,27 @@ namespace FFBardMusicPlayer.Forms
 
         public void RefreshList() { RefreshList(this, EventArgs.Empty); }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, IntPtr windowTitle);
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        private static IntPtr TryFindGameWindow(Process process)
+        {
+            IntPtr hwnd = IntPtr.Zero;
+            while (IntPtr.Zero != (hwnd = FindWindowEx(IntPtr.Zero, hwnd, "FFXIVGAME", IntPtr.Zero)))
+            {
+                GetWindowThreadProcessId(hwnd, out uint pid);
+
+                if (pid == process.Id && IsWindowVisible(hwnd))
+                    break;
+            }
+            return hwnd;
+        }
+
         public void RefreshList(object o, EventArgs a)
         {
             ProcessList.Controls.Clear();
@@ -134,7 +156,7 @@ namespace FFBardMusicPlayer.Forms
                 HeaderText.Text = "Select process:";
                 foreach (var process in Process.GetProcesses())
                 {
-                    if (process.MainWindowHandle == IntPtr.Zero)
+                    if (TryFindGameWindow(process) == IntPtr.Zero)
                     {
                         continue;
                     }

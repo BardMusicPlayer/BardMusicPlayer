@@ -55,8 +55,8 @@ namespace Sharlayan {
 					//byte unknown1 = performanceData[offset + 13]; // No clue
 					//byte variant = performanceData[offset + 14]; // Animation (hand to left or right)
 					byte type = performanceData[offset + 15];
-					byte status = performanceData[offset + 21];
-					byte instrument = performanceData[offset + 22];
+					byte status = performanceData[offset + 19];
+					byte instrument = performanceData[offset + 20];
 					//int unknown2 = BitConverter.TryToInt16(performanceData, offset + 10);
 
 					/*if (instrument == 5)
