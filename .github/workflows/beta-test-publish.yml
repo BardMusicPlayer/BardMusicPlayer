@@ -7,22 +7,22 @@ on:
 jobs:
 
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     env:
       Solution_Name: BardMusicPlayer
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
 
     - name: Build with dotnet
-      run: dotnet build --configuration ReleasePublish
+      run: dotnet build --configuration Release
 
     # Unit tests go here.
 
@@ -30,18 +30,18 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: BardMusicPlayer
-        path: BardMusicPlayer.Updater\bin\ReleasePublish\net48\*.dll
+        path: BardMusicPlayer.Updater\bin\Release\net48\*.dll
         if-no-files-found: error
         retention-days: 1
 
   deploy:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     steps:
     
       - name: Checkout Downloads
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: BardMusicPlayer/Downloads
           ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
