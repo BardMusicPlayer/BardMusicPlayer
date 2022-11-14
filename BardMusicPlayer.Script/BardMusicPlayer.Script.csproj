@@ -5,12 +5,12 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>9</LangVersion>
-    <PackageProjectUrl>https://github.com/GiR-Zippo/LightAmp</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</PackageProjectUrl>
     <Version>2.0.0.0</Version>
     <Authors>MoogleTroupe</Authors>
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/GiR-Zippo/LightAmp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release</Configurations>

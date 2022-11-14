@@ -36,7 +36,7 @@ namespace BardMusicPlayer.DalamudBridge.Helper.Dalamud
         internal DalamudServer()
         {
             _clients = new ConcurrentDictionary<int, string>();
-            _pipe = new PipeServer<Message>("LightAmp-DalamudBridge", formatter: new NewtonsoftJsonFormatter());
+            _pipe = new PipeServer<Message>("BMP-DalamudBridge", formatter: new NewtonsoftJsonFormatter());
             _pipe.ClientConnected += OnConnected;
             _pipe.ClientDisconnected += OnDisconnected;
             _pipe.MessageReceived += OnMessage;
