@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer", "BardMusicPlayer\BardMusicPlayer.csproj", "{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer", "BardMusicPlayer\BardMusicPlayer.csproj", "{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1249F5D0-0C18-4D50-B584-B03E69768211} = {1249F5D0-0C18-4D50-B584-B03E69768211}
 	EndProjectSection
@@ -29,7 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Siren", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Transmogrify", "BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj", "{AFB55E52-C439-481E-99F4-0B56C42A6D4B}"
 EndProject
-
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sanford.Multimedia.Midi", "Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj", "{4269C72A-8D3A-4737-8F89-72EAA33EA9E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Script", "BardMusicPlayer.Script\BardMusicPlayer.Script.csproj", "{11429258-48CD-4230-9801-E1788C318704}"
@@ -48,6 +47,22 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|Any CPU.Build.0 = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|x64.ActiveCfg = Debug|x64
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|x64.Build.0 = Debug|x64
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|Any CPU.Build.0 = Debug|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|x64.ActiveCfg = Release|x64
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|x64.Build.0 = Release|x64
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|x64.Build.0 = Release|Any CPU
 		{82A7597F-9957-4A47-A14E-504D3E0ECAF7}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
 		{82A7597F-9957-4A47-A14E-504D3E0ECAF7}.Coverage|Any CPU.Build.0 = Debug|Any CPU
 		{82A7597F-9957-4A47-A14E-504D3E0ECAF7}.Coverage|x64.ActiveCfg = Release|x64
@@ -192,22 +207,6 @@ Global
 		{AFB55E52-C439-481E-99F4-0B56C42A6D4B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFB55E52-C439-481E-99F4-0B56C42A6D4B}.Release|x64.ActiveCfg = Release|x64
 		{AFB55E52-C439-481E-99F4-0B56C42A6D4B}.Release|x64.Build.0 = Release|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|Any CPU.Build.0 = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|x64.ActiveCfg = Debug|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Coverage|x64.Build.0 = Debug|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|x64.ActiveCfg = Debug|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Debug|x64.Build.0 = Debug|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|Any CPU.Build.0 = Debug|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|x64.ActiveCfg = Release|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Publish|x64.Build.0 = Release|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|x64.ActiveCfg = Release|x64
-		{E8DAFE06-97DF-4B94-BE4A-EE29033495F8}.Release|x64.Build.0 = Release|x64
 		{4269C72A-8D3A-4737-8F89-72EAA33EA9E1}.Coverage|Any CPU.ActiveCfg = Debug_WithSiren|Any CPU
 		{4269C72A-8D3A-4737-8F89-72EAA33EA9E1}.Coverage|Any CPU.Build.0 = Debug_WithSiren|Any CPU
 		{4269C72A-8D3A-4737-8F89-72EAA33EA9E1}.Coverage|x64.ActiveCfg = Debug|Any CPU
