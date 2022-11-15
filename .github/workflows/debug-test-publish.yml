@@ -27,7 +27,7 @@ jobs:
     # Unit tests go here.
 
     - name: Store artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: BardMusicPlayer
         path: BardMusicPlayer\bin\Debug\net48\*.exe
@@ -52,7 +52,7 @@ jobs:
           rm -f bmp/updater/debug/1/*
       
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: BardMusicPlayer
           path: bmp/debug/beta/
