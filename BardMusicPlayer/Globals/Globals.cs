@@ -8,6 +8,7 @@ namespace BardMusicPlayer.Ui.Globals
 {
     public static class Globals
     {
+        public static string DirectoryPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         public static string FileFilters = "MIDI file|*.mid;*.midi;*.mmsong;*.mml";
         public static string MusicCatalogFilters = "Amp Catalog file|*.db";
         public static string DataPath;
