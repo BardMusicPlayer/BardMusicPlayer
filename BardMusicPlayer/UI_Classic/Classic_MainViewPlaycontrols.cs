@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Ui.Classic
         private bool _Siren_Playbar_dragStarted = false;
 
         /* Playbuttonstate */
-        private void Play_Button_State(bool playing = false)
+        public void Play_Button_State(bool playing = false)
         {
             if (!playing)
                 Play_Button.Content = @"▶";
