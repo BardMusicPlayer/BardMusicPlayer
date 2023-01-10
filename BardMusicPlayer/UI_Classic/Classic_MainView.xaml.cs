@@ -259,6 +259,22 @@ namespace BardMusicPlayer.Ui.Classic
                 BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
             }
         }
+
+        private void track_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+           switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    track_cmdUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    track_cmdDown_Click(sender, e);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion
 
         #region Octave UP/Down
@@ -294,6 +310,20 @@ namespace BardMusicPlayer.Ui.Classic
             {
                 octave_txtNum.Text = @"ø" + _octavenumValue.ToString();
                 BmpMaestro.Instance.SetOctaveshiftOnHost(_octavenumValue);
+            }
+        }
+        private void octave_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    octave_cmdUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    octave_cmdDown_Click(sender, e);
+                    break;
+                default:
+                    break;
             }
         }
         #endregion

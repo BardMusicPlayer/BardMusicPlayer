@@ -335,7 +335,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="track_txtNum" x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
+                    <TextBox Grid.Column="0" x:Name="track_txtNum" x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged" KeyUp="track_txtNum_KeyUp" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12"/>
@@ -351,7 +351,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="octave_txtNum" x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
+                    <TextBox Grid.Column="0" x:Name="octave_txtNum" x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged" KeyUp="octave_txtNum_KeyUp" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12"/>
