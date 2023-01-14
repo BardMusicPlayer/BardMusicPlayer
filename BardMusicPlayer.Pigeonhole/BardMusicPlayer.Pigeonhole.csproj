@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <TargetFramework>net481</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
@@ -12,14 +12,14 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
   <ItemGroup>
