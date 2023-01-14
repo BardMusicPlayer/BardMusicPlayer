@@ -192,11 +192,11 @@ namespace BardMusicPlayer.Ui.Classic
 
         public void AppendChatLog(Seer.Events.ChatLog ev)
         {
-            if (BmpMaestro.Instance.GetHostPid() == ev.ChatLogGame.Pid)
+            /*if (BmpMaestro.Instance.GetHostPid() == ev.ChatLogGame.Pid)
             {
                 BmpChatParser.AppendText(ChatBox, ev);
                 this.ChatBox.ScrollToEnd();
-            }
+            }*/
 
             if (ev.ChatLogCode == "0039")
             {
