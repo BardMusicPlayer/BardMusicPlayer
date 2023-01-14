@@ -60,7 +60,7 @@ jobs:
       
       - name: Update Directory Listing
         run: |
-          echo -e "<br/>- <a href=\"https://dl.bardmusicplayer.com/bmp/2/BardMusicPlayer-${{ github.sha }}.exe\">BMP 2.X-${{ github.sha }}</a> (<a href=\"https://github.com/BardMusicPlayer/BardMusicPlayer/commit/${{ github.sha }}\">ChangeLog</a>)" >> bmp/2/index.html
+          echo -e "<br/>- <a href=\"https://dl.bardmusicplayer.com/bmp/2/BardMusicPlayer-${{ github.sha }}.exe\">BMP 2.X-${{ github.sha }}</a> (<a href=\"https://github.com/BardMusicPlayer/BardMusicPlayer/commit/${{ github.sha }}\">ChangeLog</a>) `date`" >> bmp/2/index.html
       
       - name: Commit Downloads
         run: |
@@ -69,3 +69,11 @@ jobs:
           git add bmp/2/*
           git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
           git push origin HEAD
+          
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+        with:
+          args: 'A new beta release is available at https://dl.bardmusicplayer.com/bmp/2'
+
