@@ -26,7 +26,6 @@ namespace BardMusicPlayer.Ui.Controls
         public BardView()
         {
             InitializeComponent();
-            StartDelay_CheckBox.IsChecked = BmpPigeonhole.Instance.EnsemblePlayDelay;
 
             this.DataContext = this;
             Bards = new ObservableCollection<Performer>();
@@ -168,11 +167,6 @@ namespace BardMusicPlayer.Ui.Controls
             CheckBox ctl = sender as CheckBox;
             var game = (sender as CheckBox).DataContext as Performer;
             game.PerformerEnabled = ctl.IsChecked ?? false;
-        }
-
-        private void StartDelay_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.EnsemblePlayDelay = StartDelay_CheckBox.IsChecked ?? true;
         }
 
         private void Bard_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
