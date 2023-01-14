@@ -29,7 +29,7 @@ namespace BardMusicPlayer.Seer.Utilities
             {
                 MonitorType = NetworkMonitorType.RawSocket,
                 OodlePath = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
-                OodleImplementation = Machina.FFXIV.Oodle.OodleImplementation.Ffxiv
+                OodleImplementation = Machina.FFXIV.Oodle.OodleImplementation.FfxivUdp
             };
             _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
         }
