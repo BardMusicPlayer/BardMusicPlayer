@@ -1,0 +1,71 @@
+name: Publish merge against develop
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+
+    env:
+      Solution_Name: BardMusicPlayer
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Set Version
+      run: (Get-Content .\BardMusicPlayer\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer\MainWindow.xaml.cs
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    # Unit tests go here.
+
+    - name: Rename artifact
+      run: Move-Item -Path .\BardMusicPlayer\bin\Release\net48\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+
+    - name: Store artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: BardMusicPlayer
+        path: .\BardMusicPlayer-*.exe
+        if-no-files-found: error
+        retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - name: Checkout Downloads
+        uses: actions/checkout@v3
+        with:
+          repository: BardMusicPlayer/Downloads
+          ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: BardMusicPlayer
+          path: bmp/2/
+      
+      - name: Update Directory Listing
+        run: |
+          echo -e "<br/>- <a href=\"https://dl.bardmusicplayer.com/bmp/2/BardMusicPlayer-${{ github.sha }}.exe\">BMP 2.X-${{ github.sha }}</a> (<a href=\"https://github.com/BardMusicPlayer/BardMusicPlayer/commit/${{ github.sha }}\">ChangeLog</a>)" >> bmp/2/index.html
+      
+      - name: Commit Downloads
+        run: |
+          git config --global user.email "doot@bardmusicplayer.com"
+          git config --global user.name "Bard Build Bot"
+          git add bmp/2/*
+          git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
+          git push origin HEAD
