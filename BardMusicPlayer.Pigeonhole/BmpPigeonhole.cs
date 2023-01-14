@@ -150,14 +150,9 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int EnsembleReadyDelay { get; set; } = 500;
 
         /// <summary>
-        /// playback delay enabled
-        /// </summary>
-        public virtual bool EnsemblePlayDelay { get; set; } = true;
-
-        /// <summary>
         /// autoequip after song load in ensemble mode delay enabled
         /// </summary>
-        public virtual bool EnsembleAutoEquip { get; set; } = false;
+        public virtual bool AutoEquipBards { get; set; } = false;
 
         /// <summary>
         /// keep the ensmble track settings
@@ -168,16 +163,6 @@ namespace BardMusicPlayer.Pigeonhole
         /// ignores the progchange
         /// </summary>
         public virtual bool IgnoreProgChange { get; set; } = false;
-
-        /// <summary>
-        /// start the performer by it's own ready signal
-        /// </summary>
-        public virtual bool EnsembleStartIndividual { get; set; } = true;
-
-        /// <summary>
-        /// Autoequip the solo bard
-        /// </summary>
-        public virtual bool SoloBardAutoEquip { get; set; } = false;
 
         /// <summary>
         /// milliseconds between game process scans / seer scanner startups.
@@ -198,12 +183,6 @@ namespace BardMusicPlayer.Pigeonhole
         /// Contains the delay used for tone pressing. This should be no less then 1 and no greater then 25.
         /// </summary>
         public virtual int ToneKeyDelay { get; set; } = 3;
-
-        /// <summary>
-        /// Compatmode for MidiBard
-        /// </summary>
-        public virtual bool MidiBardCompatMode { get; set; } = false;
-
 
         /// <summary>
         /// Defaults to log level Info

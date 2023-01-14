@@ -57,17 +57,14 @@ namespace BardMusicPlayer.Ui.Skinned
             this.MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
             AutoPlayBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
             LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
-            this.AutoequipSoloBard.IsChecked = BmpPigeonhole.Instance.SoloBardAutoEquip;
 
             //Local Orchestra Tab
             this.LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
-            this.AutoEquipBox.IsChecked = BmpPigeonhole.Instance.EnsembleAutoEquip;
+            this.AutoEquipBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
             this.KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
-            this.StartBardIndividuallyBox.IsChecked = BmpPigeonhole.Instance.EnsembleStartIndividual;
 
             //Syncsettings Tab
             Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-            this.MidiBardComp.IsChecked = BmpPigeonhole.Instance.MidiBardCompatMode;
 
             //Misc Tab
             SirenVolume.Value = BmpSiren.Instance.GetVolume();
@@ -221,11 +218,6 @@ namespace BardMusicPlayer.Ui.Skinned
         {
             BmpPigeonhole.Instance.LiveMidiPlayDelay = (LiveMidiDelay.IsChecked ?? false);
         }
-
-        private void AutoequipSoloBard_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.SoloBardAutoEquip = AutoequipSoloBard.IsChecked ?? false;
-        }
         #endregion
 
         #region Local orchestra controls
@@ -236,17 +228,12 @@ namespace BardMusicPlayer.Ui.Skinned
 
         private void AutoEquipBox_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.EnsembleAutoEquip = AutoEquipBox.IsChecked ?? false;
+            BmpPigeonhole.Instance.AutoEquipBards = AutoEquipBox.IsChecked ?? false;
         }
 
         private void KeepTrackSettingsBox_Checked(object sender, RoutedEventArgs e)
         {
             BmpPigeonhole.Instance.EnsembleKeepTrackSetting = KeepTrackSettingsBox.IsChecked ?? false;
-        }
-
-        private void StartBardIndividually_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.EnsembleStartIndividual = StartBardIndividuallyBox.IsChecked ?? false;
         }
         #endregion
 
@@ -255,10 +242,6 @@ namespace BardMusicPlayer.Ui.Skinned
         {
             int d = Autostart_source.SelectedIndex;
             BmpPigeonhole.Instance.AutostartMethod = (int)d;
-        }
-        private void MidiBard_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.MidiBardCompatMode = MidiBardComp.IsChecked ?? false;
         }
         #endregion
 

@@ -22,13 +22,12 @@
     <!-- Settings: Misc-->
     <sys:String x:Key="MISC_AUTOSTART"   xml:space="preserve">Select the autostart trigger [Metronome is prefered]</sys:String>
     <sys:String x:Key="MISC_MIDIBARD"    xml:space="preserve">Enables the MidiBard sync start</sys:String>
-    <sys:String x:Key="MISC_AUTOEQSOLO"  xml:space="preserve">Enables autoequip the solo bard on song load</sys:String>
     <sys:String x:Key="MISC_SKINNEDUI"   xml:space="preserve">Enables the Skinned Ui (needs a restart)</sys:String>
     <sys:String x:Key="MISC_CLASSICUI"   xml:space="preserve">Enables the BMP Ui (needs a restart)</sys:String>
 
     <!-- Settings: LocalOchestra-->
     <sys:String x:Key="LO_ENABLE"        xml:space="preserve">Enables the local orchestra</sys:String>
-    <sys:String x:Key="LO_AUTOEQ"        xml:space="preserve">Autoequip the ochestra at song loading</sys:String>
+    <sys:String x:Key="LO_AUTOEQ"        xml:space="preserve">Autoequip the bard(s) at song loading</sys:String>
     <sys:String x:Key="LO_KEEPTRACKS"    xml:space="preserve">Keep the performer settings</sys:String>
     <sys:String x:Key="LO_INGOREPROG"    xml:space="preserve">Only for City-Wok &#13;(doesn't let you play like City-Wok)</sys:String>
     <sys:String x:Key="LO_ISTART"        xml:space="preserve">Start each performer by it's own metronome signal &#13; Only for up to 8 bards</sys:String>
