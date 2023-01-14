@@ -23,7 +23,7 @@ namespace BardMusicPlayer.Ui
 
         public void SwitchClassicStyle()
         {
-            this.Title = "BardMusicPlayer BETA Version: " + Assembly.GetExecutingAssembly().GetName().Version;
+            this.Title = "BardMusicPlayer BETA Version: 2.X-CUSTOM";
             this.DataContext = new Classic_MainView();
             this.AllowsTransparency = false;
             this.WindowStyle = WindowStyle.SingleBorderWindow;
