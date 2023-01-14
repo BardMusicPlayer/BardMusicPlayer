@@ -208,7 +208,6 @@
                                         <ComboBoxItem>Chat</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="1" x:Name="MidiBardComp"      Content="Enable MidiBard sync"             Unchecked="MidiBard_Checked"          Checked="MidiBard_Checked"          ToolTip="{StaticResource MISC_MIDIBARD}"/>
                                     <CheckBox Margin="10,0,0,0"  Grid.Row="3" x:Name="SkinUiBox"         Content="Use skinned Ui"                   Unchecked="SkinUiBox_Checked"         Checked="SkinUiBox_Checked"         ToolTip="{StaticResource MISC_SKINNEDUI}" IsEnabled="False"/>
                                 </Grid>
                             </GroupBox>
@@ -225,7 +224,6 @@
                                     <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="AutoEquipBox"             Content="Auto Equip Bards"             Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}"/>
                                     <CheckBox Margin="10,0,0,0" Grid.Row="2" x:Name="KeepTrackSettingsBox"     Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"  Checked="KeepTrackSettingsBox_Checked"  ToolTip="{StaticResource LO_KEEPTRACKS}"/>
                                     <CheckBox Margin="10,0,0,0" Grid.Row="3" x:Name="IgnoreProgchangeBox"      Content="Ignore Non Guitar Program Changes"                    Unchecked="IgnoreProgchangeBox_Checked"   Checked="IgnoreProgchangeBox_Checked"   ToolTip=""/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="4" x:Name="StartBardIndividuallyBox" Content="Individual start"                 Unchecked="StartBardIndividually_Checked" Checked="StartBardIndividually_Checked" ToolTip="{StaticResource LO_ISTART}"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>

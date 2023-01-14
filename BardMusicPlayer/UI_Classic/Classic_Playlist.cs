@@ -70,7 +70,7 @@ namespace BardMusicPlayer.Ui.Classic
         private void SelectSongByIndex(int idx)
         {
             //are we at MB compat?
-            if (!BmpPigeonhole.Instance.MidiBardCompatMode)
+            /*if (!BmpPigeonhole.Instance.MidiBardCompatMode)
                 return;
 
             if (PlaylistContainer.Items.Count == 0)
@@ -80,7 +80,7 @@ namespace BardMusicPlayer.Ui.Classic
 
             PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
             this.SongName.Text = PlaybackFunctions.GetSongName();
-            this.InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+            this.InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();*/
         }
 
         #region upper playlist button functions

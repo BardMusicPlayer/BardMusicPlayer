@@ -720,9 +720,6 @@ namespace BardMusicPlayer.Maestro
             if (BmpPigeonhole.Instance.AutostartMethod != 2)
                 return;
 
-            if (!BmpPigeonhole.Instance.MidiBardCompatMode)
-                return;
-
             if (_performers.Count() == 0)
                 return;
 
