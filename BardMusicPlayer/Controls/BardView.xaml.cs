@@ -13,6 +13,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using BardMusicPlayer.Ui.Classic;
+using BardMusicPlayer.Ui.Functions;
 
 namespace BardMusicPlayer.Ui.Controls
 {
@@ -104,6 +106,13 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
         {
+            if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+            {
+                PlaybackFunctions.PauseSong();
+                Classic_MainView.CurrentInstance.Play_Button_State(false);
+            }
+
+            BmpMaestro.Instance.StopLocalPerformer();
             BmpMaestro.Instance.UnEquipInstruments();
         }
 
