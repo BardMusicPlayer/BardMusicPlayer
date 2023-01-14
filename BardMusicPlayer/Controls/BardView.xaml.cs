@@ -44,7 +44,7 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void Globals_OnConfigReload(object sender, EventArgs e)
         {
-            Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.EnsembleAutoEquip;
+            Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
         }
 
         public ObservableCollection<Performer> Bards { get; private set; }
@@ -185,7 +185,7 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void Autoequip_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.EnsembleAutoEquip = Autoequip_CheckBox.IsChecked ?? false;
+            BmpPigeonhole.Instance.AutoEquipBards = Autoequip_CheckBox.IsChecked ?? false;
             Globals.Globals.ReloadConfig();
         }
 

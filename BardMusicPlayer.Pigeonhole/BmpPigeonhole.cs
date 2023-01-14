@@ -152,7 +152,7 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// autoequip after song load in ensemble mode delay enabled
         /// </summary>
-        public virtual bool EnsembleAutoEquip { get; set; } = false;
+        public virtual bool AutoEquipBards { get; set; } = false;
 
         /// <summary>
         /// keep the ensmble track settings
@@ -168,11 +168,6 @@ namespace BardMusicPlayer.Pigeonhole
         /// start the performer by it's own ready signal
         /// </summary>
         public virtual bool EnsembleStartIndividual { get; set; } = true;
-
-        /// <summary>
-        /// Autoequip the solo bard
-        /// </summary>
-        public virtual bool SoloBardAutoEquip { get; set; } = false;
 
         /// <summary>
         /// milliseconds between game process scans / seer scanner startups.
