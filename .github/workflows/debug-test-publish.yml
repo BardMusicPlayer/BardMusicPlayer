@@ -30,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: BardMusicPlayer
-        path: BardMusicPlayer\bin\Debug\net48\*.exe
+        path: BardMusicPlayer\bin\Debug\net481\*.exe
         if-no-files-found: error
         retention-days: 1
 
