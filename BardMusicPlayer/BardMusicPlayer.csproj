@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <Compile Include="Controls\BardExtSettingsWindow.xaml.cs" DependentUpon="BardExtSettingsWindow.xaml" />
+    <Compile Include="Controls\MacroEditWindow.xaml.cs" DependentUpon="MacroEditWindow.xaml" />
     <Compile Include="Controls\NetworkWindow.xaml.cs" DependentUpon="NetworkWindow.xaml" />
     <Compile Include="Controls\NumericUpDown.xaml.cs" DependentUpon="NumericUpDown.xaml"/>
     <Compile Include="Controls\SongBrowser.xaml.cs" DependentUpon="SongBrowser.xaml " />
@@ -66,6 +67,7 @@
     <Compile Include="UI_Classic\Classic_Settings.cs" />
     <Compile Include="UI_Classic\Classic_Siren.cs" />
     <Compile Include="UI_Classic\Classic_Statistics.cs" />
+    <Compile Include="UI_Classic\MacroLaunchpad.xaml.cs" DependentUpon="MacroLaunchpad.xaml" />
     <Compile Include="UI_Classic\NetworkPlayWindow.xaml.cs" DependentUpon="NetworkPlayWindow.xaml" />
     <Compile Include="UI_Skinned\BardWindow\BardsWindow.xaml.cs" DependentUpon="BardsWindow.xaml" />
     <Compile Include="UI_Skinned\MainView\Skinned_MainView_Ex.xaml.cs" DependentUpon="Skinned_MainView_Ex.xaml" />
@@ -93,6 +95,7 @@
     <Compile Include="Properties\Settings.Designer.cs" AutoGen="True" DependentUpon="Settings.settings" DesignTimeSharedInput="True" />
 
     <Page Include="Controls\BardExtSettingsWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="Controls\MacroEditWindow.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
     <Page Include="Controls\NetworkWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" />
     <Page Include="Controls\NumericUpDown.xaml" Generator="MSBuild:Compile" SubType="Designer"/>
     <Page Include="Controls\SongBrowser.xaml" Generator="MSBuild:Compile" SubType="Designer" />
@@ -110,6 +113,7 @@
     <Page Include="Controls\BardView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Controls\KeyboardHeatMap.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Classic\Classic_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
     <Page Include="UI_Classic\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Skinned\BardWindow\BardsWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Skinned\MainView\Skinned_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
