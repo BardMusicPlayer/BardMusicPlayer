@@ -83,6 +83,12 @@ namespace BardMusicPlayer.Ui.Classic
             BmpPigeonhole.Instance.AutostartMethod = (int)d;
         }
 
+        private void AutoequipDalamud_Checked(object sender, RoutedEventArgs e)
+        {
+            BmpPigeonhole.Instance.UsePluginForInstrumentOpen = AutoequipDalamud.IsChecked ?? false;
+        }
+        #endregion
+
         #region Local orchestra
         private void LocalOrchestraBox_Checked(object sender, RoutedEventArgs e)
         {
