@@ -91,6 +91,15 @@ namespace BardMusicPlayer.Ui.Classic
         private void Loop_Button_Click(object sender, RoutedEventArgs e)
         {
             _directLoaded = !_directLoaded;
+
+            if (_directLoaded)
+            {
+                Loop_Button.Background = Brushes.LightSteelBlue;
+            }
+            else
+            {
+                Loop_Button.ClearValue(Button.BackgroundProperty);
+            }
         }
 
         private void Playbar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
