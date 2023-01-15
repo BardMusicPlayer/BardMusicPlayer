@@ -42,8 +42,6 @@ namespace BardMusicPlayer.Ui.Classic
             BmpSiren.Instance.SynthTimePositionChanged  += Instance_SynthTimePositionChanged;
             SongBrowser.OnLoadSongFromBrowser           += Instance_SongBrowserLoadedSong;
 
-            BmpSeer.Instance.MidibardPlaylistEvent    += Instance_MidibardPlaylistEvent;
-
             Globals.Globals.OnConfigReload              += Globals_OnConfigReload;
             LoadConfig();
         }
@@ -97,11 +95,6 @@ namespace BardMusicPlayer.Ui.Classic
         private void Instance_ChatLog(Seer.Events.ChatLog seerEvent)
         {
             this.Dispatcher.BeginInvoke(new Action(() => this.AppendChatLog(seerEvent)));
-        }
-
-        private void Instance_MidibardPlaylistEvent(Seer.Events.MidibardPlaylistEvent seerEvent)
-        {
-            this.Dispatcher.BeginInvoke(new Action(() => this.SelectSongByIndex(seerEvent.Song)));
         }
 
         private void Instance_SynthTimePositionChanged(string songTitle, double currentTime, double endTime, int activeVoices)

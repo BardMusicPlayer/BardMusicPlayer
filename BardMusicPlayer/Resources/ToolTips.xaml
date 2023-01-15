@@ -24,7 +24,6 @@
 
     <!-- Settings: Misc-->
     <sys:String x:Key="MISC_AUTOSTART"   xml:space="preserve">Select the autostart trigger [Metronome is prefered]</sys:String>
-    <sys:String x:Key="MISC_MIDIBARD"    xml:space="preserve">Enables the MidiBard sync start</sys:String>
     <sys:String x:Key="MISC_AUTOEQPLGN"  xml:space="preserve">Enables auto-equip / ensemble accept via Hypnotoad dalamud plugin</sys:String>
     <sys:String x:Key="MISC_SKINNEDUI"   xml:space="preserve">Enables the Skinned Ui (needs a restart)</sys:String>
     <sys:String x:Key="MISC_CLASSICUI"   xml:space="preserve">Enables the BMP Ui (needs a restart)</sys:String>

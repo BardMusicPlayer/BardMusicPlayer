@@ -726,7 +726,6 @@ namespace BardMusicPlayer.Maestro
 
         /// <summary>
         /// Stops the Ensemble if the metronome stopped
-        /// Only works with MidiBard compat for now
         /// </summary>
         /// <param name="seerEvent"></param>
         private void Instance_EnsembleStopped(Seer.Events.EnsembleStopped seerEvent)
