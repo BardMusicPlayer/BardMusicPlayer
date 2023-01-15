@@ -1,12 +1,15 @@
-﻿using BardMusicPlayer.Seer;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using BardMusicPlayer.Ui.Functions;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian;
+using BardMusicPlayer.Seer;
+using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Siren;
+using BardMusicPlayer.Ui.Functions;
 
 namespace BardMusicPlayer.Ui.Classic
 {
@@ -334,26 +337,6 @@ namespace BardMusicPlayer.Ui.Classic
         {
             InfoBox _infoBox = new InfoBox();
             _infoBox.Show();
-        }
-
-        private void Info_Button_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Filter = "BASIC file|*.bas",
-                Multiselect = false
-            };
-
-            if (openFileDialog.ShowDialog() != true)
-                return;
-
-            if (!openFileDialog.CheckFileExists)
-                return;
-
-            Script.BmpScript.Instance.LoadAndRun(openFileDialog.FileName);
-            /*if (_networkWindow == null)
-                _networkWindow = new NetworkPlayWindow();
-            _networkWindow.Visibility = Visibility.Visible;*/
         }
 
         /// <summary>
