@@ -254,6 +254,20 @@ namespace BardMusicPlayer.Maestro
         }
 
         /// <summary>
+        /// Start the ensemble check
+        /// </summary>
+        public void StartEnsCheck()
+        {
+            if (_orchestrator == null)
+                return;
+            
+            var perf = _orchestrator.GetAllPerformers();
+            foreach (var p in perf)
+                if (p.HostProcess)
+                    p.DoReadyCheck();
+        }
+
+        /// <summary>
         /// Equip the bard with it's instrument
         /// </summary>
         public void EquipInstruments()
