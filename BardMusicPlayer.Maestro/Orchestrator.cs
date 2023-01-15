@@ -24,7 +24,6 @@ namespace BardMusicPlayer.Maestro
     public struct TitleParsingHelper
     {
         public ChatMessageChannelType channelType { get; set; }
-        public bool legacy { get; set; }
         public string prefix { get; set; }
     }
 
@@ -59,6 +58,7 @@ namespace BardMusicPlayer.Maestro
             _performers = new List<KeyValuePair<int, Performer>>();
             _foundGames = new Dictionary<Game, bool>();
             _sequencer = new Sequencer();
+            _song_Title_Parsing_Performer = new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
             BmpSeer.Instance.GameStarted += delegate (Seer.Events.GameStarted e) { Instance_OnGameStarted(e.Game); };
             BmpSeer.Instance.GameStopped += delegate (Seer.Events.GameStopped e) { Instance_OnGameStopped(e); };
             BmpSeer.Instance.EnsembleRequested += delegate (Seer.Events.EnsembleRequested e) { Instance_EnsembleRequested(e); };
@@ -140,16 +140,18 @@ namespace BardMusicPlayer.Maestro
             {
                 TitleParsingHelper helper = _song_Title_Parsing_Performer.Key;
 
-                if (helper.legacy)  //legacy mode
+                if (BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(_song_Title_Parsing_Performer.Value.game.Pid))
+                {
+                    //dalamud
+                    string songName = $"{helper.prefix} {song.Title} {helper.prefix}";
+                    GameExtensions.SendText(_song_Title_Parsing_Performer.Value.game, helper.channelType, songName);
+                }
+                else
                 {
                     string songName = $"{helper.channelType.ChannelShortCut} {helper.prefix} {song.Title} {helper.prefix}";
                     _song_Title_Parsing_Performer.Value.SendText(songName);
                 }
-                else //dalamud plugin
-                {
-                    string songName = $"{helper.prefix} {song.Title} {helper.prefix}";
-                    GameExtensions.SendText(_song_Title_Parsing_Performer.Value.game, helper.channelType, songName);
-                }
+            }
             }
 
             foreach (var perf in _performers)
@@ -298,7 +300,7 @@ namespace BardMusicPlayer.Maestro
         /// Sets the song title parsing bard
         /// </summary>
         /// <param name="p"></param>
-        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer p, bool legacy)
+        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer p)
         {
             if (p == null)
             {
@@ -310,7 +312,6 @@ namespace BardMusicPlayer.Maestro
             { 
                 channelType = channel,
                 prefix = prefix,
-                legacy = legacy
             }, p);
         }
 

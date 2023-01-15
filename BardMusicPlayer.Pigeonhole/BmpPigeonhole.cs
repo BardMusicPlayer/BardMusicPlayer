@@ -185,6 +185,11 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int ToneKeyDelay { get; set; } = 3;
 
         /// <summary>
+        ///     Use the Hypnotoad for instruemtn eq
+        /// </summary>
+        public virtual bool UsePluginForInstrumentOpen { get; set; }
+
+        /// <summary>
         /// Defaults to log level Info
         /// </summary>
         public virtual BmpLog.Verbosity DefaultLogLevel { get; set; } = BmpLog.Verbosity.Info;

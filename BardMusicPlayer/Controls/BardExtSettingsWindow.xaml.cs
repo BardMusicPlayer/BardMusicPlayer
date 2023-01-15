@@ -25,6 +25,10 @@ namespace BardMusicPlayer.Ui.Controls
             InitializeComponent();
             Title = "Settings for: " + _performer.PlayerName;
 
+            Songtitle_Post_Type.SelectedIndex = 0;
+            Songtitle_Chat_Type.SelectedIndex = 0;
+            Chat_Type.SelectedIndex = 0;
+
             //Get the values for the song parsing bard
             var tpBard = BmpMaestro.Instance.GetSongTitleParsingBard();
             if (tpBard.Value != null)
@@ -40,10 +44,10 @@ namespace BardMusicPlayer.Ui.Controls
                     else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Shout.ChannelCode)
                         Songtitle_Chat_Type.SelectedIndex = 2;
 
-                    if (tpBard.Key.legacy)
-                        Songtitle_Post_Type.SelectedIndex = 1;
+                    if (tpBard.Key.channelType.Equals(ChatMessageChannelType.None))
+                        Songtitle_Post_Type.SelectedIndex = 0;
                     else
-                        Songtitle_Post_Type.SelectedIndex = 2;
+                        Songtitle_Post_Type.SelectedIndex = 1;
                 }
 
             }
@@ -60,9 +64,6 @@ namespace BardMusicPlayer.Ui.Controls
             ChatMessageChannelType chanType = ChatMessageChannelType.None;
             switch (Songtitle_Chat_Type.SelectedIndex)
             {
-                case -1:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
                 case 0:
                     chanType = ChatMessageChannelType.Say;
                     break;
@@ -76,17 +77,11 @@ namespace BardMusicPlayer.Ui.Controls
 
             switch (Songtitle_Post_Type.SelectedIndex)
             {
-                case -1:
-                    BmpMaestro.Instance.SetSongTitleParsingBard(ChatMessageChannelType.None, "", null);
-                    break;
                 case 0:
                     BmpMaestro.Instance.SetSongTitleParsingBard(ChatMessageChannelType.None, "", null);
                     break;
                 case 1:
                     BmpMaestro.Instance.SetSongTitleParsingBard(chanType, Songtitle_Chat_Prefix.Text, _performer);
-                    break;
-                case 2:
-                    BmpMaestro.Instance.SetSongTitleParsingBard(chanType, Songtitle_Chat_Prefix.Text, _performer, false);
                     break;
             }
         }
@@ -99,9 +94,6 @@ namespace BardMusicPlayer.Ui.Controls
             ChatMessageChannelType chanType = ChatMessageChannelType.None;
             switch (Songtitle_Chat_Type.SelectedIndex)
             {
-                case -1:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
                 case 0:
                     chanType = ChatMessageChannelType.Say;
                     break;
@@ -120,9 +112,6 @@ namespace BardMusicPlayer.Ui.Controls
                 ChatMessageChannelType chanType = ChatMessageChannelType.None;
                 switch (Chat_Type.SelectedIndex)
                 {
-                    case -1:
-                        chanType = ChatMessageChannelType.Say;
-                        break;
                     case 0:
                         chanType = ChatMessageChannelType.Say;
                         break;

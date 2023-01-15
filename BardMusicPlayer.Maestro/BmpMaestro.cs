@@ -102,10 +102,10 @@ namespace BardMusicPlayer.Maestro
         /// Sets the song title parsing bard and the prefix like /yell
         /// </summary>
         /// <param name="performer"></param>
-        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer performer, bool legacy = true)
+        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer performer)
         {
             if (_orchestrator != null)
-                _orchestrator.SetSongTitleParsingBard(channel, prefix, performer, legacy);
+                _orchestrator.SetSongTitleParsingBard(channel, prefix, performer);
         }
 
         /// <summary>

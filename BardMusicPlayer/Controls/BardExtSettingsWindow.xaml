@@ -62,8 +62,7 @@
                         <Label Grid.Row="1" Grid.Column="6" Content="Autopost"  HorizontalAlignment="Left" VerticalAlignment="Top" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="Autopost via" HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="90" SelectionChanged="Songtitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>off</ComboBoxItem>
-                            <ComboBoxItem>Legacy</ComboBoxItem>
-                            <ComboBoxItem>Dalamud</ComboBoxItem>
+                            <ComboBoxItem>on</ComboBoxItem>
                         </ComboBox>
                         <Separator Grid.Row="3" Grid.ColumnSpan="10" />
                     </Grid>
