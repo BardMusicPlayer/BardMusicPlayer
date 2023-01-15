@@ -22,6 +22,7 @@ namespace BardMusicPlayer.Siren
     public class BmpSiren
     {
         public string CurrentSongTitle { get; private set; } = "";
+        public BmpSong CurrentSong { get; private set; }
         private IAlphaSynth _player;
         private Dictionary<int, Dictionary<long, string>> _lyrics;
         private double _lyricIndex;
@@ -130,6 +131,7 @@ namespace BardMusicPlayer.Siren
             _lyricIndex = 0;
             _player.LoadMidiFile(midiFile);
             CurrentSongTitle = song.Title;
+            CurrentSong = song;
             return this;
         }
 
