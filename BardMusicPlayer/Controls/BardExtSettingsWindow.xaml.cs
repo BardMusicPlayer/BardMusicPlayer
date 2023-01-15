@@ -14,7 +14,7 @@ namespace BardMusicPlayer.Ui.Controls
     /// <summary>
     /// Interaktionslogik für BardExtSettingsWindow.xaml
     /// </summary>
-    public partial class BardExtSettingsWindow : Window
+    public sealed partial class BardExtSettingsWindow : Window
     {
         private Performer _performer = null;
         private List<CheckBox> _cpuBoxes = new List<CheckBox>();
@@ -24,6 +24,10 @@ namespace BardMusicPlayer.Ui.Controls
             _performer = performer;
             InitializeComponent();
             Title = "Settings for: " + _performer.PlayerName;
+
+            Songtitle_Post_Type.SelectedIndex = 0;
+            Songtitle_Chat_Type.SelectedIndex = 0;
+            Chat_Type.SelectedIndex = 0;
 
             //Get the values for the song parsing bard
             var tpBard = BmpMaestro.Instance.GetSongTitleParsingBard();
@@ -40,19 +44,13 @@ namespace BardMusicPlayer.Ui.Controls
                     else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Shout.ChannelCode)
                         Songtitle_Chat_Type.SelectedIndex = 2;
 
-                    if (tpBard.Key.legacy)
-                        Songtitle_Post_Type.SelectedIndex = 1;
-                    else
-                        Songtitle_Post_Type.SelectedIndex = 2;
+                    Songtitle_Post_Type.SelectedIndex = tpBard.Key.channelType.Equals(ChatMessageChannelType.None) ? 0 : 1;
                 }
-
             }
 
-
-            this.Singer.IsChecked = performer.IsSinger;
-
+            this.Lyrics_TrackNr.Value = performer.SingerTrackNr.ToString();
+            GfxTest.IsChecked = _performer.game.GfxSettingsLow;
             PopulateCPUTab();
-
         }
 
         private void Songtitle_Post_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -60,9 +58,6 @@ namespace BardMusicPlayer.Ui.Controls
             ChatMessageChannelType chanType = ChatMessageChannelType.None;
             switch (Songtitle_Chat_Type.SelectedIndex)
             {
-                case -1:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
                 case 0:
                     chanType = ChatMessageChannelType.Say;
                     break;
@@ -76,17 +71,11 @@ namespace BardMusicPlayer.Ui.Controls
 
             switch (Songtitle_Post_Type.SelectedIndex)
             {
-                case -1:
-                    BmpMaestro.Instance.SetSongTitleParsingBard(ChatMessageChannelType.None, "", null);
-                    break;
                 case 0:
                     BmpMaestro.Instance.SetSongTitleParsingBard(ChatMessageChannelType.None, "", null);
                     break;
                 case 1:
                     BmpMaestro.Instance.SetSongTitleParsingBard(chanType, Songtitle_Chat_Prefix.Text, _performer);
-                    break;
-                case 2:
-                    BmpMaestro.Instance.SetSongTitleParsingBard(chanType, Songtitle_Chat_Prefix.Text, _performer, false);
                     break;
             }
         }
@@ -99,9 +88,6 @@ namespace BardMusicPlayer.Ui.Controls
             ChatMessageChannelType chanType = ChatMessageChannelType.None;
             switch (Songtitle_Chat_Type.SelectedIndex)
             {
-                case -1:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
                 case 0:
                     chanType = ChatMessageChannelType.Say;
                     break;
@@ -120,9 +106,6 @@ namespace BardMusicPlayer.Ui.Controls
                 ChatMessageChannelType chanType = ChatMessageChannelType.None;
                 switch (Chat_Type.SelectedIndex)
                 {
-                    case -1:
-                        chanType = ChatMessageChannelType.Say;
-                        break;
                     case 0:
                         chanType = ChatMessageChannelType.Say;
                         break;
@@ -145,12 +128,20 @@ namespace BardMusicPlayer.Ui.Controls
             }
         }
 
-        private void Singer_Checked(object sender, RoutedEventArgs e)
+        private void Lyrics_TrackNr_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            _performer.IsSinger = (bool)Singer.IsChecked;
+            NumericUpDown ctl = sender as NumericUpDown;
+            ctl.OnValueChanged += Lyrics_TrackNr_OnValueChanged;
         }
 
-        #region CPU-Tab
+        private void Lyrics_TrackNr_OnValueChanged(object sender, int s)
+        {
+            _performer.SingerTrackNr = s;
+            NumericUpDown ctl = sender as NumericUpDown;
+            ctl.OnValueChanged -= Lyrics_TrackNr_OnValueChanged;
+        }
+
+    #region CPU-Tab
         private void PopulateCPUTab()
         {
             //Get the our application's process.
@@ -172,9 +163,11 @@ namespace BardMusicPlayer.Ui.Controls
                         break;
                     if (CPUDisplay.RowDefinitions.Count < res +1)
                         CPUDisplay.RowDefinitions.Add(new RowDefinition());
-                    var uc = new CheckBox();
-                    uc.Name = "CPU" + idx;
-                    uc.Content = "CPU" + idx;
+                    var uc = new CheckBox
+                    {
+                        Name = "CPU" + idx,
+                        Content = "CPU" + idx
+                    };
                     if ((AffinityMask & (1 << idx-1)) > 0) //-1 since we count at 1
                         uc.IsChecked = true;
                     _cpuBoxes.Add(uc);
@@ -224,6 +217,25 @@ namespace BardMusicPlayer.Ui.Controls
                 box.IsChecked = true;
             }
         }
+
         #endregion
+
+        private void GfxTest_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)GfxTest.IsChecked)
+            {
+                if (_performer.game.GfxSettingsLow)
+                    return;
+                GameExtensions.GfxSetLow(_performer.game, true);
+                _performer.game.GfxSettingsLow = true;
+            }
+            else
+            {
+                if (!_performer.game.GfxSettingsLow)
+                    return;
+                GameExtensions.GfxSetLow(_performer.game, false);
+                _performer.game.GfxSettingsLow = false;
+            }
+        }
     }
 }

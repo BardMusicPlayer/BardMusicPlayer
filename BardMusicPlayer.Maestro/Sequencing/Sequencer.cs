@@ -157,6 +157,16 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 return loadedTrack;
             }
         }
+
+        int _lyricStartTrackIndex = 0;
+        public int LyricStartTrack
+        {
+            get
+            {
+                return _lyricStartTrackIndex;
+            }
+        }
+
         public int MaxTrack
         {
             get

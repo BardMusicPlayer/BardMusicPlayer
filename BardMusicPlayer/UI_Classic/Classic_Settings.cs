@@ -32,7 +32,7 @@ namespace BardMusicPlayer.Ui.Classic
 
             //Misc
             this.Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-            this.SkinUiBox.IsChecked = !BmpPigeonhole.Instance.ClassicUi;
+            this.AutoequipDalamud.IsChecked = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
             //Local orchestra
             this.LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
@@ -83,9 +83,9 @@ namespace BardMusicPlayer.Ui.Classic
             BmpPigeonhole.Instance.AutostartMethod = (int)d;
         }
 
-        private void SkinUiBox_Checked(object sender, RoutedEventArgs e)
+        private void AutoequipDalamud_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.ClassicUi = !(SkinUiBox.IsChecked ?? true);
+            BmpPigeonhole.Instance.UsePluginForInstrumentOpen = AutoequipDalamud.IsChecked ?? false;
         }
         #endregion
 

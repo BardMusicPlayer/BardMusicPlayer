@@ -13,6 +13,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Ui.Classic;
 using BardMusicPlayer.Ui.Functions;
 
@@ -96,6 +97,11 @@ namespace BardMusicPlayer.Ui.Controls
         {
             this.Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
             this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.ItemsSource = Bards));
+        }
+
+        private void RdyCheck_Click(object sender, RoutedEventArgs e)
+        {
+            BmpMaestro.Instance.StartEnsCheck();
         }
 
         private void OpenInstrumentButton_Click(object sender, RoutedEventArgs e)
@@ -256,6 +262,15 @@ namespace BardMusicPlayer.Ui.Controls
             FileStream fileStream = File.Create(openFileDialog.FileName);
             fileStream.Write(content, 0, content.Length);
             fileStream.Close();
+        }
+
+        private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLow_CheckBox.IsChecked))
+            {
+                p.game.GfxSettingsLow = GfxLow_CheckBox.IsChecked ?? false;
+                p.game.GfxSetLow(GfxLow_CheckBox.IsChecked ?? false);
+            }
         }
 
         /// <summary>

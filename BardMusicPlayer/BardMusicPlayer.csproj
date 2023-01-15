@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Controls\BardExtSettingsWindow.xaml.cs" DependentUpon="BardExtSettingsWindow.xaml" />
     <Compile Include="Controls\NetworkWindow.xaml.cs" DependentUpon="NetworkWindow.xaml" />
+    <Compile Include="Controls\NumericUpDown.xaml.cs" DependentUpon="NumericUpDown.xaml"/>
     <Compile Include="Controls\SongBrowser.xaml.cs" DependentUpon="SongBrowser.xaml " />
     <Compile Include="Controls\BardView.xaml.cs" DependentUpon="BardView.xaml" />
     <Compile Include="Controls\OctaveNumericUpDown.xaml.cs" DependentUpon="OctaveNumericUpDown.xaml" />
@@ -93,6 +94,7 @@
 
     <Page Include="Controls\BardExtSettingsWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Controls\NetworkWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+    <Page Include="Controls\NumericUpDown.xaml" Generator="MSBuild:Compile" SubType="Designer"/>
     <Page Include="Controls\SongBrowser.xaml" Generator="MSBuild:Compile" SubType="Designer" />
     <Page Include="Controls\OctaveNumericUpDown.xaml" Generator="MSBuild:Compile" SubType="Designer" />
     <Page Include="Controls\SongEditWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
