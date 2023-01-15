@@ -1,14 +1,18 @@
-﻿using BardMusicPlayer.Quotidian;
+﻿#region
 
-namespace BardMusicPlayer.DalamudBridge
+using BardMusicPlayer.Quotidian;
+
+#endregion
+
+namespace BardMusicPlayer.DalamudBridge;
+
+public sealed class DalamudBridgeException : BmpException
 {
-    public class DalamudBridgeException : BmpException
+    internal DalamudBridgeException()
     {
-        internal DalamudBridgeException() : base()
-        {
-        }
-        internal DalamudBridgeException(string message) : base(message)
-        {
-        }
+    }
+
+    internal DalamudBridgeException(string message) : base(message)
+    {
     }
 }
