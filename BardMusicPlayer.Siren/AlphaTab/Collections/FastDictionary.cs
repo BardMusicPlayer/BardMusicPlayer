@@ -3,23 +3,27 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Collections
 {
     /// <summary>
-    /// Represents a collection of key-value pairs. 
+    ///     Represents a collection of key-value pairs.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    internal class FastDictionary<TKey, TValue> : IEnumerable<TKey>
+    internal sealed class FastDictionary<TKey, TValue> : IEnumerable<TKey>
     {
         private readonly Dictionary<TKey, TValue> _dictionary;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FastDictionary{TKey, TValue}"/> class.
+        ///     Initializes a new instance of the <see cref="FastDictionary{TKey, TValue}" /> class.
         /// </summary>
         public FastDictionary()
         {
@@ -27,7 +31,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Gets or sets the value at the specified index.
+        ///     Gets or sets the value at the specified index.
         /// </summary>
         /// <param name="index">The key to access the item.</param>
         /// <returns>The value stored at the specified index.</returns>
@@ -39,7 +43,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Gets the number of elements stored in this dictionary
+        ///     Gets the number of elements stored in this dictionary
         /// </summary>
         public int Count => _dictionary.Count;
 
@@ -49,8 +53,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
             return _dictionary.Keys.GetEnumerator();
         }
 
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         /// <summary>
-        /// Removes the value with the specified key.
+        ///     Removes the value with the specified key.
         /// </summary>
         /// <param name="key">The key to remove from the dictionary. </param>
         public void Remove(TKey key)
@@ -59,21 +69,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Determines whether the dictionary container contains the specified key.
+        ///     Determines whether the dictionary container contains the specified key.
         /// </summary>
         /// <param name="key">The key to check the existence for.</param>
         /// <returns>
-        ///   <c>true</c> if the specified key is contained; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified key is contained; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsKey(TKey key)
         {
             return _dictionary.ContainsKey(key);
-        }
-
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

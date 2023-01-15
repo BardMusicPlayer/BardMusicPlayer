@@ -1,19 +1,23 @@
-﻿/*
+/*
  * Copyright(c) 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Model;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
 {
     /// <summary>
-    /// A handler is responsible for writing midi events to a custom structure
+    ///     A handler is responsible for writing midi events to a custom structure
     /// </summary>
     internal interface IMidiFileHandler
     {
         /// <summary>
-        /// Adds a time signature to the generated midi file
+        ///     Adds a time signature to the generated midi file
         /// </summary>
         /// <param name="tick">The midi ticks when this event should be happening. </param>
         /// <param name="timeSignatureNumerator">The time signature numerator</param>
@@ -21,7 +25,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddTimeSignature(int tick, int timeSignatureNumerator, int timeSignatureDenominator);
 
         /// <summary>
-        /// Adds a rest to the generated midi file. 
+        ///     Adds a rest to the generated midi file.
         /// </summary>
         /// <param name="track">The midi track on which the rest should be "played".</param>
         /// <param name="tick">The midi ticks when the rest is "playing". </param>
@@ -29,7 +33,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddRest(int track, int tick, int channel);
 
         /// <summary>
-        /// Adds a note to the generated midi file
+        ///     Adds a note to the generated midi file
         /// </summary>
         /// <param name="track">The midi track on which the note should be played.</param>
         /// <param name="start">The midi ticks when the note should start playing. </param>
@@ -40,7 +44,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddNote(int track, int start, int length, byte key, DynamicValue dynamicValue, byte channel);
 
         /// <summary>
-        /// Adds a control change to the generated midi file. 
+        ///     Adds a control change to the generated midi file.
         /// </summary>
         /// <param name="track">The midi track on which the controller should change.</param>
         /// <param name="tick">The midi ticks when the controller should change.</param>
@@ -50,7 +54,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddControlChange(int track, int tick, byte channel, byte controller, byte value);
 
         /// <summary>
-        /// Add a program change to the generated midi file
+        ///     Add a program change to the generated midi file
         /// </summary>
         /// <param name="track">The midi track on which the program should change.</param>
         /// <param name="tick">The midi ticks when the program should change.</param>
@@ -59,14 +63,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddProgramChange(int track, int tick, byte channel, byte program);
 
         /// <summary>
-        /// Add a tempo change to the generated midi file. 
+        ///     Add a tempo change to the generated midi file.
         /// </summary>
         /// <param name="tick">The midi ticks when the tempo should change change.</param>
         /// <param name="tempo">The tempo as BPM</param>
         void AddTempo(int tick, int tempo);
 
         /// <summary>
-        /// Add a bend to the generated midi file. 
+        ///     Add a bend to the generated midi file.
         /// </summary>
         /// <param name="track">The midi track on which the bend should change.</param>
         /// <param name="tick">The midi ticks when the bend should change.</param>
@@ -75,7 +79,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         void AddBend(int track, int tick, byte channel, int value);
 
         /// <summary>
-        /// Indicates that the track is finished on the given ticks.
+        ///     Indicates that the track is finished on the given ticks.
         /// </summary>
         /// <param name="track">The track that was finished. </param>
         /// <param name="tick">The end tick for this track.</param>

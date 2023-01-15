@@ -3,96 +3,25 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// The score is the root node of the complete 
-    /// model. It stores the basic information of 
-    /// a song and stores the sub components. 
+    ///     The score is the root node of the complete
+    ///     model. It stores the basic information of
+    ///     a song and stores the sub components.
     /// </summary>
     internal class Score
     {
         private RepeatGroup _currentRepeatGroup;
 
         /// <summary>
-        /// The album of this song. 
-        /// </summary>
-        public string Album { get; set; }
-
-        /// <summary>
-        /// The artist who performs this song.
-        /// </summary>
-        public string Artist { get; set; }
-
-        /// <summary>
-        /// The owner of the copyright of this song. 
-        /// </summary>
-        public string Copyright { get; set; }
-
-        /// <summary>
-        /// Additional instructions
-        /// </summary>
-        public string Instructions { get; set; }
-
-        /// <summary>
-        /// The author of the music. 
-        /// </summary>
-        public string Music { get; set; }
-
-        /// <summary>
-        /// Some additional notes about the song. 
-        /// </summary>
-        public string Notices { get; set; }
-
-        /// <summary>
-        /// The subtitle of the song. 
-        /// </summary>
-        public string SubTitle { get; set; }
-
-        /// <summary>
-        /// The title of the song. 
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// The author of the song lyrics
-        /// </summary>
-        public string Words { get; set; }
-
-        /// <summary>
-        /// The author of this tablature.
-        /// </summary>
-        public string Tab { get; set; }
-
-        /// <summary>
-        /// Gets or sets the global tempo of the song in BPM. The tempo might change via <see cref="MasterBar.TempoAutomation"/>.
-        /// </summary>
-        public int Tempo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name/label of the tempo. 
-        /// </summary>
-        public string TempoLabel { get; set; }
-
-        /// <summary>
-        /// Gets or sets a list of all masterbars contained in this song. 
-        /// </summary>
-        public FastList<MasterBar> MasterBars { get; set; }
-
-        /// <summary>
-        /// Gets or sets a list of all tracks contained in this song. 
-        /// </summary>
-        public FastList<Track> Tracks { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rendering stylesheet for this song.
-        /// </summary>
-        public RenderStylesheet Stylesheet { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Score"/> class.
+        ///     Initializes a new instance of the <see cref="Score" /> class.
         /// </summary>
         public Score()
         {
@@ -104,6 +33,85 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             Tempo = 120;
             Stylesheet = new RenderStylesheet();
         }
+
+        /// <summary>
+        ///     The album of this song.
+        /// </summary>
+        public string Album { get; set; }
+
+        /// <summary>
+        ///     The artist who performs this song.
+        /// </summary>
+        public string Artist { get; set; }
+
+        /// <summary>
+        ///     The owner of the copyright of this song.
+        /// </summary>
+        public string Copyright { get; set; }
+
+        /// <summary>
+        ///     Additional instructions
+        /// </summary>
+        public string Instructions { get; set; }
+
+        /// <summary>
+        ///     The author of the music.
+        /// </summary>
+        public string Music { get; set; }
+
+        /// <summary>
+        ///     Some additional notes about the song.
+        /// </summary>
+        public string Notices { get; set; }
+
+        /// <summary>
+        ///     The subtitle of the song.
+        /// </summary>
+        public string SubTitle { get; set; }
+
+        /// <summary>
+        ///     The title of the song.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        ///     The author of the song lyrics
+        /// </summary>
+        public string Words { get; set; }
+
+        /// <summary>
+        ///     The author of this tablature.
+        /// </summary>
+        public string Tab { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the global tempo of the song in BPM. The tempo might change via
+        ///     <see>
+        ///         <cref>MasterBar.TempoAutomation</cref>
+        ///     </see>
+        ///     .
+        /// </summary>
+        public int Tempo { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the name/label of the tempo.
+        /// </summary>
+        public string TempoLabel { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a list of all masterbars contained in this song.
+        /// </summary>
+        public FastList<MasterBar> MasterBars { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a list of all tracks contained in this song.
+        /// </summary>
+        public FastList<Track> Tracks { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the rendering stylesheet for this song.
+        /// </summary>
+        public RenderStylesheet Stylesheet { get; set; }
 
         internal static void CopyTo(Score src, Score dst)
         {
@@ -127,12 +135,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             foreach (var bar in MasterBars)
             {
                 // if the group is closed only the next upcoming header can
-                // reopen the group in case of a repeat alternative, so we 
-                // remove the current group 
-                if (bar.IsRepeatStart || _currentRepeatGroup.IsClosed && bar.AlternateEndings <= 0)
-                {
+                // reopen the group in case of a repeat alternative, so we
+                // remove the current group
+                if (bar.IsRepeatStart || (_currentRepeatGroup.IsClosed && bar.AlternateEndings <= 0))
                     currentGroup = new RepeatGroup();
-                }
 
                 currentGroup.AddMasterBar(bar);
             }
@@ -150,12 +156,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             }
 
             // if the group is closed only the next upcoming header can
-            // reopen the group in case of a repeat alternative, so we 
-            // remove the current group 
-            if (bar.IsRepeatStart || _currentRepeatGroup.IsClosed && bar.AlternateEndings <= 0)
-            {
+            // reopen the group in case of a repeat alternative, so we
+            // remove the current group
+            if (bar.IsRepeatStart || (_currentRepeatGroup.IsClosed && bar.AlternateEndings <= 0))
                 _currentRepeatGroup = new RepeatGroup();
-            }
 
             _currentRepeatGroup.AddMasterBar(bar);
             MasterBars.Add(bar);
@@ -170,10 +174,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal void Finish()
         {
-            for (int i = 0, j = Tracks.Count; i < j; i++)
-            {
-                Tracks[i].Finish();
-            }
+            for (int i = 0, j = Tracks.Count; i < j; i++) Tracks[i].Finish();
         }
     }
 }

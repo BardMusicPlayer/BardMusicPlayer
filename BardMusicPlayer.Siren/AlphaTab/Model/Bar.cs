@@ -3,92 +3,28 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// A bar is a single block within a track, also known as Measure.
+    ///     A bar is a single block within a track, also known as Measure.
     /// </summary>
     internal class Bar
     {
         /// <summary>
-        /// This is a global counter for all beats. We use it
-        /// at several locations for lookup tables.
+        ///     This is a global counter for all beats. We use it
+        ///     at several locations for lookup tables.
         /// </summary>
         private static int _globalBarId;
 
         /// <summary>
-        /// Gets or sets the unique id of this bar.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the zero-based index of this bar within the staff.
-        /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
-        /// Gets or sets the next bar that comes after this bar.
-        /// </summary>
-        public Bar NextBar { get; set; }
-
-        /// <summary>
-        /// Gets or sets the previous bar that comes before this bar.
-        /// </summary>
-        public Bar PreviousBar { get; set; }
-
-        /// <summary>
-        /// Gets or sets the clef on this bar.
-        /// </summary>
-        public Clef Clef { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ottava applied to the clef.
-        /// </summary>
-        public Ottavia ClefOttava { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference to the parent staff.
-        /// </summary>
-        public Staff Staff { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of voices contained in this bar.
-        /// </summary>
-        public FastList<Voice> Voices { get; set; }
-
-        /// <summary>
-        /// Gets or sets the simile mark on this bar.
-        /// </summary>
-        public SimileMark SimileMark { get; set; }
-
-        /// <summary>
-        /// Gets the masterbar for this bar.
-        /// </summary>
-        public MasterBar MasterBar => Staff.Track.Score.MasterBars[Index];
-
-        /// <summary>
-        /// Gets a value indicating whether all voices in this bar are empty and therefore the whole bar is empty.
-        /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                for (int i = 0, j = Voices.Count; i < j; i++)
-                {
-                    if (!Voices[i].IsEmpty)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Bar"/> class.
+        ///     Initializes a new instance of the <see cref="Bar" /> class.
         /// </summary>
         public Bar()
         {
@@ -97,6 +33,71 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             Clef = Clef.G2;
             ClefOttava = Ottavia.Regular;
             SimileMark = SimileMark.None;
+        }
+
+        /// <summary>
+        ///     Gets or sets the unique id of this bar.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the zero-based index of this bar within the staff.
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the next bar that comes after this bar.
+        /// </summary>
+        public Bar NextBar { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the previous bar that comes before this bar.
+        /// </summary>
+        public Bar PreviousBar { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the clef on this bar.
+        /// </summary>
+        public Clef Clef { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the ottava applied to the clef.
+        /// </summary>
+        public Ottavia ClefOttava { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the reference to the parent staff.
+        /// </summary>
+        public Staff Staff { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the list of voices contained in this bar.
+        /// </summary>
+        public FastList<Voice> Voices { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the simile mark on this bar.
+        /// </summary>
+        public SimileMark SimileMark { get; set; }
+
+        /// <summary>
+        ///     Gets the masterbar for this bar.
+        /// </summary>
+        public MasterBar MasterBar => Staff.Track.Score.MasterBars[Index];
+
+        /// <summary>
+        ///     Gets a value indicating whether all voices in this bar are empty and therefore the whole bar is empty.
+        /// </summary>
+        public bool IsEmpty
+        {
+            get
+            {
+                for (int i = 0, j = Voices.Count; i < j; i++)
+                    if (!Voices[i].IsEmpty)
+                        return false;
+
+                return true;
+            }
         }
 
         internal static void CopyTo(Bar src, Bar dst)
@@ -126,17 +127,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal int CalculateDuration()
         {
-            var duration = 0;
-            foreach (var voice in Voices)
-            {
-                var voiceDuration = voice.CalculateDuration();
-                if (voiceDuration > duration)
-                {
-                    duration = voiceDuration;
-                }
-            }
-
-            return duration;
+            return Voices.Select(static voice => voice.CalculateDuration()).Prepend(0).Max();
         }
     }
 }

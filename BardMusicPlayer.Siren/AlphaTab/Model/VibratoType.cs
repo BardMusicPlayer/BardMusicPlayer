@@ -6,22 +6,22 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// This public enum lists all vibrato types that can be performed.
+    ///     This public enum lists all vibrato types that can be performed.
     /// </summary>
     internal enum VibratoType
     {
         /// <summary>
-        /// No vibrato.
+        ///     No vibrato.
         /// </summary>
         None,
 
         /// <summary>
-        /// A slight vibrato. 
+        ///     A slight vibrato.
         /// </summary>
         Slight,
 
         /// <summary>
-        /// A wide vibrato.
+        ///     A wide vibrato.
         /// </summary>
         Wide
     }

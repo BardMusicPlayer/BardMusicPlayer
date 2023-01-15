@@ -6,18 +6,18 @@
 namespace BardMusicPlayer.Siren.AlphaTab.IO
 {
     /// <summary>
-    /// Represents a writer where binary data can be written to. 
+    ///     Represents a writer where binary data can be written to.
     /// </summary>
     internal interface IWriteable
     {
         /// <summary>
-        /// Write a single byte to the stream. 
+        ///     Write a single byte to the stream.
         /// </summary>
         /// <param name="value">The value to write.</param>
         void WriteByte(byte value);
 
         /// <summary>
-        /// Write data from the given buffer. 
+        ///     Write data from the given buffer.
         /// </summary>
         /// <param name="buffer">The buffer to get the data from. </param>
         /// <param name="offset">The offset where to start reading the data.</param>

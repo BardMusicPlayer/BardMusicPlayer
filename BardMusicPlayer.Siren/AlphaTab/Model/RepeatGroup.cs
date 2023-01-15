@@ -3,42 +3,21 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// This public class can store the information about a group of measures which are repeated
+    ///     This public class can store the information about a group of measures which are repeated
     /// </summary>
-    internal class RepeatGroup
+    internal sealed class RepeatGroup
     {
         /// <summary>
-        /// All masterbars repeated within this group
-        /// </summary>
-        public FastList<MasterBar> MasterBars { get; set; }
-
-        /// <summary>
-        /// a list of masterbars which open the group. 
-        /// </summary>
-        public FastList<MasterBar> Openings { get; set; }
-
-        /// <summary>
-        /// a list of masterbars which close the group. 
-        /// </summary>
-        public FastList<MasterBar> Closings { get; set; }
-
-        /// <summary>
-        ///  true if the repeat group was opened well
-        /// </summary>
-        public bool IsOpened { get; set; }
-
-        /// <summary>
-        ///  true if the repeat group was closed well
-        /// </summary>
-        public bool IsClosed { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepeatGroup"/> class.
+        ///     Initializes a new instance of the <see cref="RepeatGroup" /> class.
         /// </summary>
         public RepeatGroup()
         {
@@ -48,12 +27,34 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             IsClosed = false;
         }
 
+        /// <summary>
+        ///     All masterbars repeated within this group
+        /// </summary>
+        public FastList<MasterBar> MasterBars { get; set; }
+
+        /// <summary>
+        ///     a list of masterbars which open the group.
+        /// </summary>
+        public FastList<MasterBar> Openings { get; set; }
+
+        /// <summary>
+        ///     a list of masterbars which close the group.
+        /// </summary>
+        public FastList<MasterBar> Closings { get; set; }
+
+        /// <summary>
+        ///     true if the repeat group was opened well
+        /// </summary>
+        public bool IsOpened { get; set; }
+
+        /// <summary>
+        ///     true if the repeat group was closed well
+        /// </summary>
+        public bool IsClosed { get; set; }
+
         internal void AddMasterBar(MasterBar masterBar)
         {
-            if (Openings.Count == 0)
-            {
-                Openings.Add(masterBar);
-            }
+            if (Openings.Count == 0) Openings.Add(masterBar);
 
             MasterBars.Add(masterBar);
             masterBar.RepeatGroup = this;
@@ -62,11 +63,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             {
                 Closings.Add(masterBar);
                 IsClosed = true;
-                if (!IsOpened)
-                {
-                    MasterBars[0].IsRepeatStart = true;
-                    IsOpened = true;
-                }
+                if (IsOpened) return;
+
+                MasterBars[0].IsRepeatStart = true;
+                IsOpened = true;
             }
             // a new item after the header was closed? -> repeat alternative reopens the group
             else if (IsClosed)

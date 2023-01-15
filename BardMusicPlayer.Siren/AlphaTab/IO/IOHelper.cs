@@ -3,13 +3,16 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.IO
 {
     internal static class IOHelper
     {
-
         public static uint ReadUInt32LE(this IReadable input)
         {
             var ch1 = input.ReadByte();
@@ -37,7 +40,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
         }
 
 
-
         public static string Read8BitStringLength(this IReadable input, int length)
         {
             var s = new StringBuilder();
@@ -45,23 +47,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             for (var i = 0; i < length; i++)
             {
                 var c = input.ReadByte();
-                if (c == 0 && z == -1)
-                {
-                    z = i;
-                }
+                if (c == 0 && z == -1) z = i;
 
                 s.AppendChar(c);
             }
 
             var t = s.ToString();
-            if (z >= 0)
-            {
-                return t.Substring(0, z);
-            }
-
-            return t;
+            return z >= 0 ? t.Substring(0, z) : t;
         }
-
-
     }
 }

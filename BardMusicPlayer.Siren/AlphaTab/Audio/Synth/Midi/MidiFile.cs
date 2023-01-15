@@ -3,30 +3,24 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Siren.AlphaTab.IO;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
 {
     /// <summary>
-    /// Represents a midi file with a single track that can be played via <see cref="AlphaSynth"/>
+    ///     Represents a midi file with a single track that can be played via <see cref="AlphaSynth" />
     /// </summary>
-    internal class MidiFile
+    internal sealed class MidiFile
     {
         /// <summary>
-        /// Gets or sets the division per quarter notes.
-        /// </summary>
-        public int Division { get; set; }
-
-        /// <summary>
-        /// Gets a list of midi events sorted by time.
-        /// </summary>
-        public List<MidiEvent> Events { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MidiFile"/> class.
+        ///     Initializes a new instance of the <see cref="MidiFile" /> class.
         /// </summary>
         public MidiFile()
         {
@@ -35,21 +29,36 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
         }
 
         /// <summary>
-        /// Adds the given midi event a the correct time position into the file.
+        ///     Gets or sets the division per quarter notes.
+        /// </summary>
+        public int Division { get; set; }
+
+        /// <summary>
+        ///     Gets a list of midi events sorted by time.
+        /// </summary>
+        public List<MidiEvent> Events { get; private set; }
+
+        /// <summary>
+        ///     Adds the given midi event a the correct time position into the file.
         /// </summary>
         /// <param name="e"></param>
-        public void AddEvent(MidiEvent e) => Events.Add(e);
+        public void AddEvent(MidiEvent e)
+        {
+            Events.Add(e);
+        }
 
         /// <summary>
-        /// Sort the event list by event tick.
+        ///     Sort the event list by event tick.
         /// </summary>
-        public void Sort() => Events = Events.OrderBy(x=>x.Tick).ToList();
+        public void Sort()
+        {
+            Events = Events.OrderBy(static x => x.Tick).ToList();
+        }
 
         /// <summary>
-        /// Writes the midi file into a binary format.
+        ///     Writes the midi file into a binary format.
         /// </summary>
         /// <returns>The binary midi file.</returns>
-        // ReSharper disable once UnusedMember.Global
         public byte[] ToBinary()
         {
             var data = ByteBuffer.Empty();
@@ -58,7 +67,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
         }
 
         /// <summary>
-        /// Writes the midi file as binary into the given stream.
+        ///     Writes the midi file as binary into the given stream.
         /// </summary>
         /// <returns>The stream to write to.</returns>
         public void WriteTo(IWriteable s)
@@ -145,13 +154,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi
             {
                 n--;
                 if (n > 0)
-                {
                     s.WriteByte((byte)(array[n] | 0x80));
-                }
                 else
-                {
                     s.WriteByte(array[n]);
-                }
             }
         }
     }

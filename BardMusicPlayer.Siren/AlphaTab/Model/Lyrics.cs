@@ -3,12 +3,16 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// Represents the lyrics of a song. 
+    ///     Represents the lyrics of a song.
     /// </summary>
     internal class Lyrics
     {
@@ -21,18 +25,18 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         private const int CharCodeDash = '-';
 
         /// <summary>
-        /// Gets or sets he start bar on which the lyrics should begin. 
+        ///     Gets or sets he start bar on which the lyrics should begin.
         /// </summary>
         public int StartBar { get; set; }
 
         /// <summary>
-        /// Gets or sets the raw lyrics text in Guitar Pro format.
-        /// (spaces split word syllables, plus merge syllables, [..] are comments) 
+        ///     Gets or sets the raw lyrics text in Guitar Pro format.
+        ///     (spaces split word syllables, plus merge syllables, [..] are comments)
         /// </summary>
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the prepared chunks of the lyrics to apply to beats. 
+        ///     Gets or sets the prepared chunks of the lyrics to apply to beats.
         /// </summary>
         public string[] Chunks { get; set; }
 
@@ -43,12 +47,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             Chunks = chunks.ToArray();
         }
 
-        private void Parse(string str, int p, FastList<string> chunks)
+        private static void Parse(string str, int p, FastList<string> chunks)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(str)) return;
 
             var state = LyricsState.Begin;
             var next = LyricsState.Begin;
@@ -96,12 +97,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
                         break;
                     case LyricsState.Comment:
-                        switch (c)
+                        state = c switch
                         {
-                            case CharCodeBrackedClose:
-                                state = LyricsState.Begin;
-                                break;
-                        }
+                            CharCodeBrackedClose => LyricsState.Begin,
+                            _ => state
+                        };
 
                         break;
 
@@ -145,16 +145,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 p++;
             }
 
-            if (state == LyricsState.Text)
-            {
-                if (p != start)
-                {
-                    chunks.Add(str.Substring(start, p - start));
-                }
-            }
+            if (state != LyricsState.Text) return;
+
+            if (p != start)
+                chunks.Add(str.Substring(start, p - start));
         }
 
-        private string PrepareChunk(string txt)
+        private static string PrepareChunk(string txt)
         {
             return txt.Replace("+", " ");
         }

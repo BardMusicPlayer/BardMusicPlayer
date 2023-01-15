@@ -32,14 +32,19 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.IO;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 {
-    internal class HydraGenAmount
+    internal sealed class HydraGenAmount
     {
         public ushort WordAmount { get; set; }
         public short ShortAmount => (short)WordAmount;
+
         public byte LowByteAmount
         {
             get => (byte)(WordAmount & 0x00FF);
@@ -54,8 +59,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraGenAmount Load(IReadable reader)
         {
-            var genAmount = new HydraGenAmount();
-            genAmount.WordAmount = reader.ReadUInt16LE();
+            var genAmount = new HydraGenAmount
+            {
+                WordAmount = reader.ReadUInt16LE()
+            };
             return genAmount;
         }
     }

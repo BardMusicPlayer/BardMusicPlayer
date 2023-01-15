@@ -1,24 +1,29 @@
-﻿/*
+/*
  * Copyright(c) 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
+using System;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Siren.AlphaTab.Model;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
 {
     /// <summary>
-    /// This implementation of the <see cref="IMidiFileHandler"/> generates a <see cref="MidiFile"/>
-    /// object which can be used in AlphaSynth for playback. 
+    ///     This implementation of the <see cref="IMidiFileHandler" /> generates a <see cref="MidiFile" />
+    ///     object which can be used in AlphaSynth for playback.
     /// </summary>
-    internal class AlphaSynthMidiFileHandler : IMidiFileHandler
+    internal sealed class AlphaSynthMidiFileHandler : IMidiFileHandler
     {
         private readonly MidiFile _midiFile;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlphaSynthMidiFileHandler"/> class.
+        ///     Initializes a new instance of the <see cref="AlphaSynthMidiFileHandler" /> class.
         /// </summary>
         /// <param name="midiFile">The midi file.</param>
         public AlphaSynthMidiFileHandler(MidiFile midiFile)
@@ -30,10 +35,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         public void AddTimeSignature(int tick, int timeSignatureNumerator, int timeSignatureDenominator)
         {
             var denominatorIndex = 0;
-            while ((timeSignatureDenominator = timeSignatureDenominator >> 1) > 0)
-            {
-                denominatorIndex++;
-            }
+            while ((timeSignatureDenominator >>= 1) > 0) denominatorIndex++;
 
             var message = new MetaDataEvent(tick,
                 0xFF,
@@ -78,26 +80,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
                 true,
                 channel);
             _midiFile.AddEvent(noteOff);
-        }
-
-        private byte MakeCommand(byte command, byte channel)
-        {
-            return (byte)((command & 0xF0) | (channel & 0x0F));
-        }
-
-        private static byte FixValue(int value)
-        {
-            if (value > 127)
-            {
-                return 127;
-            }
-
-            if (value < 0)
-            {
-                return 0;
-            }
-
-            return (byte)value;
         }
 
         /// <inheritdoc />
@@ -148,9 +130,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
             var message = new MetaDataEvent(tick,
                 0xFF,
                 (byte)MetaEventTypeEnum.EndOfTrack,
-                new byte[0]);
+                Array.Empty<byte>());
             _midiFile.AddEvent(message);
             _midiFile.Sort();
+        }
+
+        private static byte MakeCommand(byte command, byte channel)
+        {
+            return (byte)((command & 0xF0) | (channel & 0x0F));
+        }
+
+        private static byte FixValue(int value)
+        {
+            return value switch
+            {
+                > 127 => 127,
+                < 0 => 0,
+                _ => (byte)value
+            };
         }
     }
 }

@@ -3,50 +3,24 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// This public class describes a single track or instrument of score.
-    /// It is bascially a list of staffs containing individual music notation kinds.
+    ///     This public class describes a single track or instrument of score.
+    ///     It is bascially a list of staffs containing individual music notation kinds.
     /// </summary>
     internal class Track
     {
         private const int ShortNameMaxLength = 10;
 
         /// <summary>
-        /// Gets or sets the zero-based index of this track. 
-        /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference this track belongs to. 
-        /// </summary>
-        public Score Score { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of staffs that are defined for this track. 
-        /// </summary>
-        public FastList<Staff> Staves { get; set; }
-
-        /// <summary>
-        /// Gets or sets the playback information for this track. 
-        /// </summary>
-        public PlaybackInformation PlaybackInfo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the long name of this track. 
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the short name of this track. 
-        /// </summary>
-        public string ShortName { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Track"/> class.
+        ///     Initializes a new instance of the <see cref="Track" /> class.
         /// </summary>
         /// <param name="staveCount">The stave count.</param>
         public Track(int staveCount)
@@ -58,12 +32,39 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             ShortName = "";
         }
 
+        /// <summary>
+        ///     Gets or sets the zero-based index of this track.
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the reference this track belongs to.
+        /// </summary>
+        public Score Score { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the list of staffs that are defined for this track.
+        /// </summary>
+        public FastList<Staff> Staves { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the playback information for this track.
+        /// </summary>
+        public PlaybackInformation PlaybackInfo { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the long name of this track.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the short name of this track.
+        /// </summary>
+        public string ShortName { get; set; }
+
         internal void EnsureStaveCount(int staveCount)
         {
-            while (Staves.Count < staveCount)
-            {
-                AddStaff(new Staff());
-            }
+            while (Staves.Count < staveCount) AddStaff(new Staff());
         }
 
         internal void AddStaff(Staff staff)
@@ -85,55 +86,37 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (string.IsNullOrEmpty(ShortName))
             {
                 ShortName = Name;
-                if (ShortName.Length > ShortNameMaxLength)
-                {
-                    ShortName = ShortName.Substring(0, ShortNameMaxLength);
-                }
+                if (ShortName.Length > ShortNameMaxLength) ShortName = ShortName.Substring(0, ShortNameMaxLength);
             }
 
-            for (int i = 0, j = Staves.Count; i < j; i++)
-            {
-                Staves[i].Finish();
-            }
+            for (int i = 0, j = Staves.Count; i < j; i++) Staves[i].Finish();
         }
 
         internal void ApplyLyrics(FastList<Lyrics> lyrics)
         {
-            foreach (var lyric in lyrics)
-            {
-                lyric.Finish();
-            }
+            foreach (var lyric in lyrics) lyric.Finish();
 
             var staff = Staves[0];
 
             for (var li = 0; li < lyrics.Count; li++)
             {
                 var lyric = lyrics[li];
-                if (lyric.StartBar >= 0)
+                if (lyric.StartBar < 0) continue;
+
+                var beat = staff.Bars[lyric.StartBar].Voices[0].Beats[0];
+                for (var ci = 0; ci < lyric.Chunks.Length && beat != null; ci++)
                 {
-                    var beat = staff.Bars[lyric.StartBar].Voices[0].Beats[0];
-                    for (var ci = 0; ci < lyric.Chunks.Length && beat != null; ci++)
-                    {
-                        // skip rests and empty beats
-                        while (beat != null && (beat.IsEmpty || beat.IsRest))
-                        {
-                            beat = beat.NextBeat;
-                        }
+                    // skip rests and empty beats
+                    while (beat != null && (beat.IsEmpty || beat.IsRest)) beat = beat.NextBeat;
 
-                        // mismatch between chunks and beats might lead to missing beats
-                        if (beat != null)
-                        {
-                            // initialize lyrics list for beat if required
-                            if (beat.Lyrics == null)
-                            {
-                                beat.Lyrics = new string[lyrics.Count];
-                            }
+                    // mismatch between chunks and beats might lead to missing beats
+                    if (beat == null) continue;
+                    // initialize lyrics list for beat if required
+                    beat.Lyrics ??= new string[lyrics.Count];
 
-                            // assign chunk
-                            beat.Lyrics[li] = lyric.Chunks[ci];
-                            beat = beat.NextBeat;
-                        }
-                    }
+                    // assign chunk
+                    beat.Lyrics[li] = lyric.Chunks[ci];
+                    beat = beat.NextBeat;
                 }
             }
         }

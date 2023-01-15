@@ -6,53 +6,13 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// This public class stores the midi specific information of a track needed
-    /// for playback.
+    ///     This public class stores the midi specific information of a track needed
+    ///     for playback.
     /// </summary>
-    internal class PlaybackInformation
+    internal sealed class PlaybackInformation
     {
         /// <summary>
-        /// Gets or sets the volume (0-16)
-        /// </summary>
-        public int Volume { get; set; }
-
-        /// <summary>
-        /// Gets or sets the balance (0-16; 8=center)
-        /// </summary>
-        public int Balance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the midi port to use.
-        /// </summary>
-        public int Port { get; set; }
-
-        /// <summary>
-        /// Gets or sets the midi program to use. 
-        /// </summary>
-        public int Program { get; set; }
-
-        /// <summary>
-        /// Gets or sets the primary channel for all normal midi events. 
-        /// </summary>
-        public int PrimaryChannel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the secondary channel for special midi events. 
-        /// </summary>
-        public int SecondaryChannel { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether the track is muted.
-        /// </summary>
-        public bool IsMute { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether the track is playing alone. 
-        /// </summary>
-        public bool IsSolo { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlaybackInformation"/> class.
+        ///     Initializes a new instance of the <see cref="PlaybackInformation" /> class.
         /// </summary>
         public PlaybackInformation()
         {
@@ -60,6 +20,46 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             Balance = 8;
             Port = 1;
         }
+
+        /// <summary>
+        ///     Gets or sets the volume (0-16)
+        /// </summary>
+        public int Volume { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the balance (0-16; 8=center)
+        /// </summary>
+        public int Balance { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the midi port to use.
+        /// </summary>
+        public int Port { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the midi program to use.
+        /// </summary>
+        public int Program { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the primary channel for all normal midi events.
+        /// </summary>
+        public int PrimaryChannel { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the secondary channel for special midi events.
+        /// </summary>
+        public int SecondaryChannel { get; set; }
+
+        /// <summary>
+        ///     Gets or sets whether the track is muted.
+        /// </summary>
+        public bool IsMute { get; set; }
+
+        /// <summary>
+        ///     Gets or sets whether the track is playing alone.
+        /// </summary>
+        public bool IsSolo { get; set; }
 
         internal static void CopyTo(PlaybackInformation src, PlaybackInformation dst)
         {

@@ -5,24 +5,29 @@
 
 // This file contains alphaTab specific extensions to the TinySoundFont audio synthesis
 
+#region
+
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 using BardMusicPlayer.Siren.AlphaTab.Util;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal partial class TinySoundFont
+    internal sealed partial class TinySoundFont
     {
         public const int MicroBufferCount = 32; // 4069 samples in total
         public const int MicroBufferSize = 64; // 64 stereo samples
-
-        private readonly LinkedList<SynthEvent> _midiEventQueue = new LinkedList<SynthEvent>();
         private readonly int[] _midiEventCounts = new int[MicroBufferCount];
-        private FastDictionary<int, bool> _mutedChannels = new FastDictionary<int, bool>();
-        private FastDictionary<int, bool> _soloChannels = new FastDictionary<int, bool>();
+
+        private readonly LinkedList<SynthEvent> _midiEventQueue = new();
         private bool _isAnySolo;
+        private FastDictionary<int, bool> _mutedChannels = new();
+        private FastDictionary<int, bool> _soloChannels = new();
 
         public float[] Synthesize()
         {
@@ -36,21 +41,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
         public float ChannelGetMixVolume(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].MixVolume
-                : 1.0f);
+                : 1.0f;
         }
 
         public void ChannelSetMixVolume(int channel, float volume)
         {
             var c = ChannelInit(channel);
-            foreach (var v in _voices)
-            {
-                if (v.PlayingChannel == channel && v.PlayingPreset != -1)
-                {
-                    v.MixVolume = volume;
-                }
-            }
+            foreach (var v in _voices.Where(v => v.PlayingChannel == channel && v.PlayingPreset != -1))
+                v.MixVolume = volume;
 
             c.MixVolume = volume;
         }
@@ -58,25 +58,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         public void ChannelSetMute(int channel, bool mute)
         {
             if (mute)
-            {
                 _mutedChannels[channel] = true;
-            }
             else
-            {
                 _mutedChannels.Remove(channel);
-            }
         }
 
         public void ChannelSetSolo(int channel, bool solo)
         {
             if (solo)
-            {
                 _soloChannels[channel] = true;
-            }
             else
-            {
                 _soloChannels.Remove(channel);
-            }
 
             _isAnySolo = _soloChannels.Count > 0;
         }
@@ -107,36 +99,29 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             {
                 // process events for first microbuffer
                 if (_midiEventQueue.Length > 0)
-                {
                     for (var i = 0; i < _midiEventCounts[x]; i++)
                     {
                         var m = _midiEventQueue.RemoveLast();
                         if (m == null)
                             continue;
+
                         ProcessMidiMessage(m.Event);
                     }
-                }
 
                 // voice processing loop
                 foreach (var voice in _voices)
-                {
                     if (voice.PlayingPreset != -1)
                     {
                         var channel = voice.PlayingChannel;
                         // channel is muted if it is either explicitley muted, or another channel is set to solo but not this one.
                         var isChannelMuted = _mutedChannels.ContainsKey(channel) ||
-                                             anySolo && !_soloChannels.ContainsKey(channel);
+                                             (anySolo && !_soloChannels.ContainsKey(channel));
 
                         if (silent)
-                        {
                             voice.Kill();
-                        }
                         else
-                        {
                             voice.Render(this, buffer, bufferPos, MicroBufferSize, isChannelMuted);
-                        }
                     }
-                }
 
                 bufferPos += MicroBufferSize * SynthConstants.AudioChannels;
             }
@@ -177,35 +162,30 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         }
 
         /// <summary>
-        /// Stop all playing notes immediatly and reset all channel parameters but keeps user
-        /// defined settings
+        ///     Stop all playing notes immediatly and reset all channel parameters but keeps user
+        ///     defined settings
         /// </summary>
         public void ResetSoft()
         {
             _noteCounter = 0;
-            foreach (var v in _voices)
-            {
-                if (v.PlayingPreset != -1 &&
-                    (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release != 0))
-                {
-                    v.EndQuick(OutSampleRate);
-                }
-            }
+            foreach (var v in _voices.Where(static v => v.PlayingPreset != -1 &&
+                                                        (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release ||
+                                                         v.AmpEnv.Parameters.Release != 0)))
+                v.EndQuick(OutSampleRate);
 
-            if (_channels != null)
+            if (_channels == null) return;
+
+            foreach (var c in _channels.ChannelList)
             {
-                foreach (var c in _channels.ChannelList)
-                {
-                    c.PresetIndex = c.Bank = 0;
-                    c.PitchWheel = c.MidiPan = 8192;
-                    c.MidiVolume = c.MidiExpression = 16383;
-                    c.MidiRpn = 0xFFFF;
-                    c.MidiData = 0;
-                    c.PanOffset = 0.0f;
-                    c.GainDb = 0.0f;
-                    c.PitchRange = 2.0f;
-                    c.Tuning = 0.0f;
-                }
+                c.PresetIndex = c.Bank = 0;
+                c.PitchWheel = c.MidiPan = 8192;
+                c.MidiVolume = c.MidiExpression = 16383;
+                c.MidiRpn = 0xFFFF;
+                c.MidiData = 0;
+                c.PanOffset = 0.0f;
+                c.GainDb = 0.0f;
+                c.PitchRange = 2.0f;
+                c.Tuning = 0.0f;
             }
         }
     }

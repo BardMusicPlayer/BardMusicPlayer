@@ -6,23 +6,23 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// This class represents the rendering stylesheet.
-    /// It contains settings which control the display of the score when rendered. 
+    ///     This class represents the rendering stylesheet.
+    ///     It contains settings which control the display of the score when rendered.
     /// </summary>
-    internal class RenderStylesheet
+    internal sealed class RenderStylesheet
     {
         /// <summary>
-        /// Gets or sets whether dynamics are hidden.
-        /// </summary>
-        public bool HideDynamics { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RenderStylesheet"/> class.
+        ///     Initializes a new instance of the <see cref="RenderStylesheet" /> class.
         /// </summary>
         public RenderStylesheet()
         {
             HideDynamics = false;
         }
+
+        /// <summary>
+        ///     Gets or sets whether dynamics are hidden.
+        /// </summary>
+        public bool HideDynamics { get; set; }
 
         internal static void CopyTo(RenderStylesheet src, RenderStylesheet dst)
         {

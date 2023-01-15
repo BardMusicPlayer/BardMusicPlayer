@@ -3,49 +3,20 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// Represents a list of beats that are grouped within the same tuplet.
+    ///     Represents a list of beats that are grouped within the same tuplet.
     /// </summary>
-    internal class TupletGroup
+    internal sealed class TupletGroup
     {
-        public int _totalDuration;
-        private bool _isEqualLengthTuplet = true;
-
-        /// <summary>
-        /// Gets or sets the list of beats contained in this group.
-        /// </summary>
-        public FastList<Beat> Beats { get; set; }
-
-        /// <summary>
-        /// Gets or sets the voice this group belongs to.
-        /// </summary>
-        public Voice Voice { get; set; }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TupletGroup"/> class.
-        /// </summary>
-        /// <param name="voice">The voice this group belongs to.</param>
-        public TupletGroup(Voice voice)
-        {
-            Voice = voice;
-            Beats = new FastList<Beat>();
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the tuplet group is fully filled.
-        /// </summary>
-        public bool IsFull
-        {
-            get;
-            private set;
-        }
-
-
         private const int HalfTicks = 1920;
         private const int QuarterTicks = 960;
         private const int EighthTicks = 480;
@@ -62,6 +33,35 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             OneHundredTwentyEighthTicks, TwoHundredFiftySixthTicks
         };
 
+        private bool _isEqualLengthTuplet = true;
+        public int _totalDuration;
+
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="TupletGroup" /> class.
+        /// </summary>
+        /// <param name="voice">The voice this group belongs to.</param>
+        public TupletGroup(Voice voice)
+        {
+            Voice = voice;
+            Beats = new FastList<Beat>();
+        }
+
+        /// <summary>
+        ///     Gets or sets the list of beats contained in this group.
+        /// </summary>
+        public FastList<Beat> Beats { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the voice this group belongs to.
+        /// </summary>
+        public Voice Voice { get; set; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the tuplet group is fully filled.
+        /// </summary>
+        public bool IsFull { get; private set; }
+
         internal bool Check(Beat beat)
         {
             if (Beats.Count == 0)
@@ -73,19 +73,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             }
 
             if (beat.GraceType != GraceType.None)
-            {
                 // grace notes do not break tuplet group, but also do not contribute to them.
                 return true;
-            }
 
             if (beat.Voice != Voice
                 || IsFull
                 || beat.TupletNumerator != Beats[0].TupletNumerator
                 || beat.TupletDenominator != Beats[0].TupletDenominator)
-            {
                 // only same tuplets are potentially accepted
                 return false;
-            }
 
             // TBH: I do not really know how the 100% tuplet grouping of Guitar Pro might work
             // it sometimes has really strange rules where notes filling 3 quarters, are considered a full 3:2 tuplet
@@ -98,31 +94,23 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             // this logic is very likely not 100% correct but for most cases the tuplets
             // appeared correct.
 
-            if (beat.PlaybackDuration != Beats[0].PlaybackDuration)
-            {
-                _isEqualLengthTuplet = false;
-            }
+            if (beat.PlaybackDuration != Beats[0].PlaybackDuration) _isEqualLengthTuplet = false;
 
             Beats.Add(beat);
             _totalDuration += beat.PlaybackDuration;
 
             if (_isEqualLengthTuplet)
             {
-                if (Beats.Count == Beats[0].TupletNumerator)
-                {
-                    IsFull = true;
-                }
+                if (Beats.Count == Beats[0].TupletNumerator) IsFull = true;
             }
             else
             {
                 var factor = Beats[0].TupletNumerator / Beats[0].TupletDenominator;
-                foreach (var potentialMatch in AllTicks)
+                foreach (var potentialMatch in AllTicks.Where(potentialMatch =>
+                             _totalDuration == potentialMatch * factor))
                 {
-                    if (_totalDuration == potentialMatch * factor)
-                    {
-                        IsFull = true;
-                        break;
-                    }
+                    IsFull = true;
+                    break;
                 }
             }
 

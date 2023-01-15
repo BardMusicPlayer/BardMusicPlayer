@@ -6,17 +6,17 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
 {
     /// <summary>
-    /// Lists the different states of the player
+    ///     Lists the different states of the player
     /// </summary>
     internal enum PlayerState
     {
         /// <summary>
-        /// Player is paused
+        ///     Player is paused
         /// </summary>
         Paused,
 
         /// <summary>
-        /// Player is playing
+        ///     Player is playing
         /// </summary>
         Playing
     }

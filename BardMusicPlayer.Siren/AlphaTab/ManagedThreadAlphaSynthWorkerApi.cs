@@ -3,21 +3,25 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
 using BardMusicPlayer.Siren.AlphaTab.Util;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab
 {
-    internal class ManagedThreadAlphaSynthWorkerApi : AlphaSynthWorkerApiBase
+    internal sealed class ManagedThreadAlphaSynthWorkerApi : AlphaSynthWorkerApiBase
     {
-        private readonly Action<Action> _uiInvoke;
-        private readonly Thread _workerThread;
-        private BlockingCollection<Action> _workerQueue;
-        private CancellationTokenSource _workerCancellationToken;
         private readonly ManualResetEventSlim _threadStartedEvent;
+        private readonly Action<Action> _uiInvoke;
+        private readonly CancellationTokenSource _workerCancellationToken;
+        private readonly BlockingCollection<Action> _workerQueue;
+        private readonly Thread _workerThread;
 
         public ManagedThreadAlphaSynthWorkerApi(ISynthOutput output, LogLevel logLevel, Action<Action> uiInvoke)
             : base(output, logLevel)
@@ -28,8 +32,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
             _workerQueue = new BlockingCollection<Action>();
             _workerCancellationToken = new CancellationTokenSource();
 
-            _workerThread = new Thread(DoWork);
-            _workerThread.IsBackground = true;
+            _workerThread = new Thread(DoWork)
+            {
+                IsBackground = true
+            };
             _workerThread.Start();
 
             _threadStartedEvent.Wait();
@@ -57,13 +63,9 @@ namespace BardMusicPlayer.Siren.AlphaTab
         protected override void DispatchOnWorkerThread(Action action)
         {
             if (CheckAccess())
-            {
                 action();
-            }
             else
-            {
                 _workerQueue.Add(action);
-            }
         }
 
         private void DoWork()
@@ -73,10 +75,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
                 _threadStartedEvent.Set();
                 while (_workerQueue.TryTake(out var action, Timeout.Infinite, _workerCancellationToken.Token))
                 {
-                    if (_workerCancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
+                    if (_workerCancellationToken.IsCancellationRequested) break;
 
                     action();
                 }

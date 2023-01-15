@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright(c) 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
@@ -29,15 +29,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
 
     internal abstract class MetaEvent : MidiEvent
     {
+        protected MetaEvent(int delta, byte status, byte data1, byte data2)
+            : base(delta, status, data1, data2)
+        {
+        }
+
         public override int Channel => -1;
 
         public override MidiEventType Command => (MidiEventType)(Message & 0x00000FF);
 
         public int MetaStatus => Data1;
-
-        protected MetaEvent(int delta, byte status, byte data1, byte data2)
-            : base(delta, status, data1, data2)
-        {
-        }
     }
 }

@@ -31,23 +31,26 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
     /// <summary>
-    /// Supported output modes by the render methods
+    ///     Supported output modes by the render methods
     /// </summary>
     internal enum OutputMode
     {
         /// <summary>
-        /// Two channels with single left/right samples one after another
+        ///     Two channels with single left/right samples one after another
         /// </summary>
         StereoInterleaved,
+
         /// <summary>
-        /// Two channels with all samples for the left channel first then right
+        ///     Two channels with all samples for the left channel first then right
         /// </summary>
         StereoUnweaved,
+
         /// <summary>
-        /// A single channel (stereo instruments are mixed into center)
+        ///     A single channel (stereo instruments are mixed into center)
         /// </summary>
         Mono
     }

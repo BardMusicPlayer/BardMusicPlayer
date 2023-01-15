@@ -3,6 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,13 +16,16 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using MidiFile = BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.MidiFile;
 
+#endregion
+
 namespace BardMusicPlayer.Siren
 {
     internal static class Utils
     {
-        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(this BmpSong song)
+        internal static async Task<(MidiFile, Dictionary<int, Dictionary<long, string>>)> GetSynthMidi(
+            this BmpSong song)
         {
-            var file = new MidiFile {Division = 600};
+            var file = new MidiFile { Division = 600 };
             var events = new AlphaSynthMidiFileHandler(file);
             events.AddTempo(0, 100);
 
@@ -30,7 +35,7 @@ namespace BardMusicPlayer.Siren
             var midiFile = await song.GetProcessedMidiFile();
 
             var trackChunks = midiFile.GetTrackChunks().ToList();
-            
+
             var lyrics = new Dictionary<int, Dictionary<long, string>>();
             var lyricNum = 0;
 
@@ -41,10 +46,12 @@ namespace BardMusicPlayer.Siren
                 {
                     case "lyric":
                     {
-                        if (!lyrics.ContainsKey(lyricNum)) lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
+                        if (!lyrics.ContainsKey(lyricNum))
+                            lyrics.Add(lyricNum, new Dictionary<long, string>(int.Parse(options[1])));
 
-                        foreach (var lyric in trackChunk.GetTimedEvents().Where(x => x.Event.EventType == MidiEventType.Lyric))
-                            lyrics[lyricNum].Add(lyric.Time, ((LyricEvent) lyric.Event).Text);
+                        foreach (var lyric in trackChunk.GetTimedEvents()
+                                     .Where(static x => x.Event.EventType == MidiEventType.Lyric))
+                            lyrics[lyricNum].Add(lyric.Time, ((LyricEvent)lyric.Event).Text);
 
                         lyricNum++;
 
@@ -58,12 +65,16 @@ namespace BardMusicPlayer.Siren
                         {
                             var instrument = tone.GetInstrumentFromChannel(note.Channel);
                             var noteNum = note.NoteNumber;
-                            var dur = (int) MinimumLength(instrument, noteNum-48, note.Length);
-                            var time = (int) note.Time;
-                            events.AddProgramChange(trackCounter, time, trackCounter, (byte) instrument.MidiProgramChangeCode);
-                            events.AddNote(trackCounter, time, dur,noteNum, DynamicValue.FFF, trackCounter);
-                            if (trackCounter == byte.MaxValue) trackCounter = byte.MinValue;
-                            else trackCounter++;
+                            var dur = (int)MinimumLength(instrument, noteNum - 48, note.Length);
+                            var time = (int)note.Time;
+                            events.AddProgramChange(trackCounter, time, trackCounter,
+                                (byte)instrument.MidiProgramChangeCode);
+                            events.AddNote(trackCounter, time, dur, noteNum, DynamicValue.FFF, trackCounter);
+                            if (trackCounter == byte.MaxValue)
+                                trackCounter = byte.MinValue;
+                            else
+                                trackCounter++;
+
                             if (time + dur > veryLast) veryLast = time + dur;
                         }
 
@@ -71,66 +82,87 @@ namespace BardMusicPlayer.Siren
                     }
                 }
             }
-            events.FinishTrack(byte.MaxValue, (byte) veryLast);
+
+            events.FinishTrack(byte.MaxValue, (byte)veryLast);
             return (file, lyrics);
         }
-        
+
         private static long MinimumLength(Instrument instrument, int note, long duration)
         {
             switch (instrument.Index)
             {
                 case 1: // Harp
-                    if (note <= 9) return 1338;
-                    else if (note <= 19) return 1338;
-                    else if (note <= 28) return 1334;
-                    else return 1136;
+                    return note switch
+                    {
+                        <= 9 => 1338,
+                        <= 19 => 1338,
+                        <= 28 => 1334,
+                        _ => 1136
+                    };
 
                 case 2: // Piano
-                    if (note <= 11) return 1531;
-                    else if (note <= 18) return 1531;
-                    else if (note <= 25) return 1530;
-                    else if (note <= 28) return 1332;
-                    else return 1531;
+                    return note switch
+                    {
+                        <= 11 => 1531,
+                        <= 18 => 1531,
+                        <= 25 => 1530,
+                        <= 28 => 1332,
+                        _ => 1531
+                    };
 
                 case 3: // Lute
-                    if (note <= 14) return 1728;
-                    else if (note <= 21) return 1727;
-                    else if (note <= 28) return 1727;
-                    else return 1528;
+                    return note switch
+                    {
+                        <= 14 => 1728,
+                        <= 21 => 1727,
+                        <= 28 => 1727,
+                        _ => 1528
+                    };
 
                 case 4: // Fiddle
-                    if (note <= 3) return 634;
-                    else if (note <= 6) return 632;
-                    else if (note <= 11) return 633;
-                    else if (note <= 15) return 634;
-                    else if (note <= 18) return 633;
-                    else if (note <= 23) return 635;
-                    else if (note <= 30) return 635;
-                    else return 635;
+                    return note switch
+                    {
+                        <= 3 => 634,
+                        <= 6 => 632,
+                        <= 11 => 633,
+                        <= 15 => 634,
+                        <= 18 => 633,
+                        <= 23 => 635,
+                        <= 30 => 635,
+                        _ => 635
+                    };
 
                 case 5: // Flute
                 case 6: // Oboe
                 case 7: // Clarinet
                 case 8: // Fife
                 case 9: // Panpipes
-                    if (duration > 4500) return 4500;
-                    return duration < 500 ? 500 : duration;
+                    return duration > 4500 ? 4500 : duration < 500 ? 500 : duration;
 
                 case 10: // Timpani
-                    if (note <= 15) return 1193;
-                    else if (note <= 23) return 1355;
-                    else return 1309;
+                    return note switch
+                    {
+                        <= 15 => 1193,
+                        <= 23 => 1355,
+                        _ => 1309
+                    };
 
                 case 11: // Bongo
-                    if (note <= 7) return 720;
-                    else if (note <= 21) return 544;
-                    else return 275;
+                    return note switch
+                    {
+                        <= 7 => 720,
+                        <= 21 => 544,
+                        _ => 275
+                    };
 
                 case 12: // BassDrum
-                    if (note <= 6) return 448;
-                    else if (note <= 11) return 335;
-                    else if (note <= 23) return 343;
-                    else return 254;
+                    return note switch
+                    {
+                        <= 6 => 448,
+                        <= 11 => 335,
+                        <= 23 => 343,
+                        _ => 254
+                    };
 
                 case 13: // SnareDrum
                     return 260;
@@ -150,8 +182,7 @@ namespace BardMusicPlayer.Siren
                 case 24: // ElectricGuitarOverdriven
                 case 25: // ElectricGuitarClean
                 case 27: // ElectricGuitarPowerChords
-                    if (duration > 4500) return 4500;
-                    return duration < 300 ? 300 : duration;
+                    return duration > 4500 ? 4500 : duration < 300 ? 300 : duration;
 
                 case 26: // ElectricGuitarMuted
                     return 400;

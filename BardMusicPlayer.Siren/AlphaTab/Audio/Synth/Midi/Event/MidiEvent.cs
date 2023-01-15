@@ -1,70 +1,74 @@
-﻿/*
+/*
  * Copyright(c) 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.IO;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
 {
     /// <summary>
-    /// Lists all midi events.
+    ///     Lists all midi events.
     /// </summary>
     internal enum MidiEventType
     {
         /// <summary>
-        /// A note is released.
+        ///     A note is released.
         /// </summary>
         NoteOff = 0x80,
 
         /// <summary>
-        /// A note is started.
+        ///     A note is started.
         /// </summary>
         NoteOn = 0x90,
 
         /// <summary>
-        /// The pressure that was used to play the note.
+        ///     The pressure that was used to play the note.
         /// </summary>
         NoteAftertouch = 0xA0,
 
         /// <summary>
-        /// Change of a midi controller
+        ///     Change of a midi controller
         /// </summary>
         Controller = 0xB0,
 
         /// <summary>
-        /// Change of a midi program
+        ///     Change of a midi program
         /// </summary>
         ProgramChange = 0xC0,
 
         /// <summary>
-        /// The pressure that should be applied to the whole channel.
+        ///     The pressure that should be applied to the whole channel.
         /// </summary>
         ChannelAftertouch = 0xD0,
 
         /// <summary>
-        /// A change of the audio pitch.
+        ///     A change of the audio pitch.
         /// </summary>
         PitchBend = 0xE0,
 
         /// <summary>
-        /// A meta event. See <see cref="MetaEventTypeEnum"/> for details.
+        ///     A meta event. See <see cref="MetaEventTypeEnum" /> for details.
         /// </summary>
         Meta = 0xFF
     }
 
     /// <summary>
-    /// Lists all midi controllers.
+    ///     Lists all midi controllers.
     /// </summary>
     internal enum ControllerType
     {
         /// <summary>
-        /// Bank Select. MSB
+        ///     Bank Select. MSB
         /// </summary>
         BankSelectCoarse = 0x00,
 
         /// <summary>
-        /// Modulation wheel or lever MSB
+        ///     Modulation wheel or lever MSB
         /// </summary>
         ModulationCoarse = 0x01,
 
@@ -72,23 +76,23 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         //FootControllerCoarse = 0x04,
         //PortamentoTimeCoarse = 0x05,
         /// <summary>
-        /// Data entry MSB
+        ///     Data entry MSB
         /// </summary>
         DataEntryCoarse = 0x06,
 
         /// <summary>
-        /// Channel Volume MSB
+        ///     Channel Volume MSB
         /// </summary>
         VolumeCoarse = 0x07,
 
         //BalanceCoarse = 0x08,
         /// <summary>
-        /// Pan MSB
+        ///     Pan MSB
         /// </summary>
         PanCoarse = 0x0A,
 
         /// <summary>
-        /// Expression Controller MSB
+        ///     Expression Controller MSB
         /// </summary>
         ExpressionControllerCoarse = 0x0B,
 
@@ -100,7 +104,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         //GeneralPurposeSlider4 = 0x13,
         //BankSelectFine = 0x20,
         /// <summary>
-        /// Modulation wheel or level LSB
+        ///     Modulation wheel or level LSB
         /// </summary>
         ModulationFine = 0x21,
 
@@ -108,30 +112,30 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         //FootControllerFine = 0x24,
         //PortamentoTimeFine = 0x25,
         /// <summary>
-        /// Data Entry LSB
+        ///     Data Entry LSB
         /// </summary>
         DataEntryFine = 0x26,
 
         /// <summary>
-        /// Channel Volume LSB
+        ///     Channel Volume LSB
         /// </summary>
         VolumeFine = 0x27,
 
         //BalanceFine = 0x28,
         /// <summary>
-        /// Pan LSB
+        ///     Pan LSB
         /// </summary>
         PanFine = 0x2A,
 
         /// <summary>
-        /// Expression controller LSB
+        ///     Expression controller LSB
         /// </summary>
         ExpressionControllerFine = 0x2B,
 
         //EffectControl1Fine = 0x2C,
         //EffectControl2Fine = 0x2D,
         /// <summary>
-        /// Damper pedal (sustain)
+        ///     Damper pedal (sustain)
         /// </summary>
         HoldPedal = 0x40,
 
@@ -139,7 +143,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         //SostenutoPedal = 0x42,
         //SoftPedal = 0x43,
         /// <summary>
-        /// Legato Footswitch
+        ///     Legato Footswitch
         /// </summary>
         LegatoPedal = 0x44,
 
@@ -166,34 +170,34 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         //DataButtonIncrement = 0x60,
         //DataButtonDecrement = 0x61,
         /// <summary>
-        /// Non-Registered Parameter Number LSB
+        ///     Non-Registered Parameter Number LSB
         /// </summary>
         NonRegisteredParameterFine = 0x62,
 
         /// <summary>
-        /// Non-Registered Parameter Number MSB
+        ///     Non-Registered Parameter Number MSB
         /// </summary>
         NonRegisteredParameterCourse = 0x63,
 
         /// <summary>
-        /// Registered Parameter Number LSB
+        ///     Registered Parameter Number LSB
         /// </summary>
         RegisteredParameterFine = 0x64,
 
         /// <summary>
-        /// Registered Parameter Number MSB
+        ///     Registered Parameter Number MSB
         /// </summary>
         RegisteredParameterCourse = 0x65,
 
         //AllSoundOff = 0x78,
         /// <summary>
-        /// Reset all controllers
+        ///     Reset all controllers
         /// </summary>
         ResetControllers = 0x79,
 
         //LocalKeyboard = 0x7A,
         /// <summary>
-        /// All notes of.
+        ///     All notes of.
         /// </summary>
         AllNotesOff = 0x7B
 
@@ -204,35 +208,53 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
     }
 
     /// <summary>
-    /// Represents a midi event.
+    ///     Represents a midi event.
     /// </summary>
     internal class MidiEvent
     {
-        /// <summary>
-        /// Gets or sets the raw midi message.
-        /// </summary>
-        public int Message { get; set; }
-
-        /// <summary>
-        /// Gets or sets the absolute tick of this midi event.
-        /// </summary>
-        public int Tick { get; set; }
-
-        /// <summary>
-        /// Gets or sets the channel of this midi event.
-        /// </summary>
-        public virtual int Channel => _customChannel ? _customChannelValue : Message & 0x000000F;
-
         private readonly bool _customChannel;
         private readonly int _customChannelValue;
 
         /// <summary>
-        /// Gets or sets the command of this midi event.
+        ///     Initializes a new instance of the <see cref="MidiEvent" /> class.
+        /// </summary>
+        /// <param name="tick">The absolute midi ticks of this event..</param>
+        /// <param name="status">The status information of this event.</param>
+        /// <param name="data1">The first data component of this midi event.</param>
+        /// <param name="data2">The second data component of this midi event.</param>
+        /// <param name="customChannel"></param>
+        /// <param name="customChannelValue"></param>
+        public MidiEvent(int tick, int status, byte data1, byte data2, bool customChannel = false,
+            byte customChannelValue = 0)
+        {
+            Tick = tick;
+            Message = status | (data1 << 8) | (data2 << 16);
+            _customChannel = customChannel;
+            _customChannelValue = customChannelValue;
+        }
+
+        /// <summary>
+        ///     Gets or sets the raw midi message.
+        /// </summary>
+        public int Message { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the absolute tick of this midi event.
+        /// </summary>
+        public int Tick { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the channel of this midi event.
+        /// </summary>
+        public virtual int Channel => _customChannel ? _customChannelValue : Message & 0x000000F;
+
+        /// <summary>
+        ///     Gets or sets the command of this midi event.
         /// </summary>
         public virtual MidiEventType Command => (MidiEventType)(Message & 0x00000F0);
 
         /// <summary>
-        /// Gets or sets the first data component of this midi event.
+        ///     Gets or sets the first data component of this midi event.
         /// </summary>
         public int Data1
         {
@@ -245,7 +267,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         }
 
         /// <summary>
-        /// Gets or sets the second data component of this midi event.
+        ///     Gets or sets the second data component of this midi event.
         /// </summary>
         public int Data2
         {
@@ -258,22 +280,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MidiEvent"/> class.
-        /// </summary>
-        /// <param name="tick">The absolute midi ticks of this event..</param>
-        /// <param name="status">The status information of this event.</param>
-        /// <param name="data1">The first data component of this midi event.</param>
-        /// <param name="data2">The second data component of this midi event.</param>
-        public MidiEvent(int tick, int status, byte data1, byte data2, bool customChannel = false, byte customChannelValue = 0)
-        {
-            Tick = tick;
-            Message = status | (data1 << 8) | (data2 << 16);
-            _customChannel = customChannel;
-            _customChannelValue = customChannelValue;
-        }
-
-        /// <summary>
-        /// Writes the midi event as binary into the given stream.
+        ///     Writes the midi event as binary into the given stream.
         /// </summary>
         /// <param name="s">The stream to write to.</param>
         public virtual void WriteTo(IWriteable s)

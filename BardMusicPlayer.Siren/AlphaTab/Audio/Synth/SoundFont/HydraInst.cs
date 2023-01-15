@@ -32,11 +32,15 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.IO;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 {
-    internal class HydraInst
+    internal sealed class HydraInst
     {
         public const int SizeInFile = 22;
 
@@ -45,9 +49,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraInst Load(IReadable reader)
         {
-            var inst = new HydraInst();
-            inst.InstName = reader.Read8BitStringLength(20);
-            inst.InstBagNdx = reader.ReadUInt16LE();
+            var inst = new HydraInst
+            {
+                InstName = reader.Read8BitStringLength(20),
+                InstBagNdx = reader.ReadUInt16LE()
+            };
             return inst;
         }
     }

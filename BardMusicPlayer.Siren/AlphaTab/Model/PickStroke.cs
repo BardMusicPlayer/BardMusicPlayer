@@ -6,22 +6,22 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// Lists all types of pick strokes.
+    ///     Lists all types of pick strokes.
     /// </summary>
     internal enum PickStroke
     {
         /// <summary>
-        /// No pickstroke used. 
+        ///     No pickstroke used.
         /// </summary>
         None,
 
         /// <summary>
-        /// Pickstroke up. 
+        ///     Pickstroke up.
         /// </summary>
         Up,
 
         /// <summary>
-        /// Pickstroke down
+        ///     Pickstroke down
         /// </summary>
         Down
     }

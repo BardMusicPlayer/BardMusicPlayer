@@ -32,11 +32,15 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal class VoiceLfo
+    internal sealed class VoiceLfo
     {
         public int SamplesUntil { get; set; }
         public float Level { get; set; }
@@ -45,7 +49,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         public void Setup(float delay, int freqCents, float outSampleRate)
         {
             SamplesUntil = (int)(delay * outSampleRate);
-            Delta = (4.0f * SynthHelper.Cents2Hertz(freqCents) / outSampleRate);
+            Delta = 4.0f * SynthHelper.Cents2Hertz(freqCents) / outSampleRate;
             Level = 0;
         }
 
@@ -56,16 +60,18 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 SamplesUntil -= blockSamples;
                 return;
             }
+
             Level += Delta * blockSamples;
-            if (Level > 1.0f)
+            switch (Level)
             {
-                Delta = -Delta;
-                Level = 2.0f - Level;
-            }
-            else if (Level < -1.0f)
-            {
-                Delta = -Delta;
-                Level = -2.0f - Level;
+                case > 1.0f:
+                    Delta = -Delta;
+                    Level = 2.0f - Level;
+                    break;
+                case < -1.0f:
+                    Delta = -Delta;
+                    Level = -2.0f - Level;
+                    break;
             }
         }
     }

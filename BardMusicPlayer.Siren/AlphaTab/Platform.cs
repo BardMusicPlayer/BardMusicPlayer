@@ -3,6 +3,8 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,16 +12,15 @@ using System.Text;
 using BardMusicPlayer.Siren.AlphaTab.IO;
 using BardMusicPlayer.Siren.AlphaTab.Util;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab
 {
     internal static class Platform
     {
         public static bool IsStringNumber(string s, bool allowSign = true)
         {
-            if (s.Length == 0)
-            {
-                return false;
-            }
+            if (s.Length == 0) return false;
 
             var c = s[0];
             return IsCharNumber(c, allowSign);
@@ -27,12 +28,12 @@ namespace BardMusicPlayer.Siren.AlphaTab
 
         public static bool IsCharNumber(int c, bool allowSign = true)
         {
-            return allowSign && c == 0x2D || c >= 0x30 && c <= 0x39;
+            return (allowSign && c == 0x2D) || c is >= 0x30 and <= 0x39;
         }
 
         public static bool IsWhiteSpace(int c)
         {
-            return c == 0x20 || c == 0x0B || c == 0x0D || c == 0x0A || c == 0x09;
+            return c is 0x20 or 0x0B or 0x0D or 0x0A or 0x09;
         }
 
         public static bool IsAlmostEqualTo(this float a, float b)
@@ -46,14 +47,11 @@ namespace BardMusicPlayer.Siren.AlphaTab
             const string hexChars = "0123456789ABCDEF";
             do
             {
-                s = StringFromCharCode((int)hexChars[n & 15]) + s;
+                s = StringFromCharCode(hexChars[n & 15]) + s;
                 n >>= 4;
             } while (n > 0);
 
-            while (s.Length < digits)
-            {
-                s = "0" + s;
-            }
+            while (s.Length < digits) s = "0" + s;
 
             return s;
         }
@@ -80,27 +78,14 @@ namespace BardMusicPlayer.Siren.AlphaTab
 
         internal static string DetectEncoding(byte[] data)
         {
-            if (data.Length > 2 && data[0] == 0xFE && data[1] == 0xFF)
+            return data.Length switch
             {
-                return "utf-16be";
-            }
-
-            if (data.Length > 2 && data[0] == 0xFF && data[1] == 0xFE)
-            {
-                return "utf-16le";
-            }
-
-            if (data.Length > 4 && data[0] == 0x00 && data[1] == 0x00 && data[2] == 0xFE && data[3] == 0xFF)
-            {
-                return "utf-32be";
-            }
-
-            if (data.Length > 4 && data[0] == 0xFF && data[1] == 0xFE && data[2] == 0x00 && data[3] == 0x00)
-            {
-                return "utf-32le";
-            }
-
-            return null;
+                > 2 when data[0] == 0xFE && data[1] == 0xFF => "utf-16be",
+                > 2 when data[0] == 0xFF && data[1] == 0xFE => "utf-16le",
+                > 4 when data[0] == 0x00 && data[1] == 0x00 && data[2] == 0xFE && data[3] == 0xFF => "utf-32be",
+                > 4 when data[0] == 0xFF && data[1] == 0xFE && data[2] == 0x00 && data[3] == 0x00 => "utf-32le",
+                _ => null
+            };
         }
 
         public static void Log(LogLevel logLevel, string category, string msg, object details = null)
@@ -115,11 +100,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
 
         public static int ParseInt(string s)
         {
-            float f;
-            if (!float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out f))
-            {
-                return int.MinValue;
-            }
+            if (!float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var f)) return int.MinValue;
 
             return (int)f;
         }
@@ -138,7 +119,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
         {
             return ((char)c).ToString();
         }
-        
+
         public static sbyte ReadSignedByte(this IReadable readable)
         {
             return unchecked((sbyte)(byte)readable.ReadByte());
@@ -146,16 +127,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
 
         public static string ToString(byte[] data, string encoding)
         {
-            var detectedEncoding = Platform.DetectEncoding(data);
-            if (detectedEncoding != null)
-            {
-                encoding = detectedEncoding;
-            }
+            var detectedEncoding = DetectEncoding(data);
+            if (detectedEncoding != null) encoding = detectedEncoding;
 
-            if (encoding == null)
-            {
-                encoding = "utf-8";
-            }
+            encoding ??= "utf-8";
 
             Encoding enc;
             try
@@ -169,17 +144,17 @@ namespace BardMusicPlayer.Siren.AlphaTab
 
             return enc.GetString(data, 0, data.Length);
         }
-        
+
         public static void ClearIntArray(int[] array)
         {
             Array.Clear(array, 0, array.Length);
         }
-        
+
         public static void ArrayCopy<T>(T[] src, int srcOffset, T[] dst, int dstOffset, int count)
         {
             Array.Copy(src, srcOffset, dst, dstOffset, count);
         }
-        
+
         public static long GetCurrentMilliseconds()
         {
             return Stopwatch.GetTimestamp();

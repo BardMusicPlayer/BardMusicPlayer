@@ -6,42 +6,42 @@
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
-    /// Lists all harmonic types.
+    ///     Lists all harmonic types.
     /// </summary>
     internal enum HarmonicType
     {
         /// <summary>
-        /// No harmonics. 
+        ///     No harmonics.
         /// </summary>
         None,
 
         /// <summary>
-        /// Natural harmonic
+        ///     Natural harmonic
         /// </summary>
         Natural,
 
         /// <summary>
-        /// Artificial harmonic
+        ///     Artificial harmonic
         /// </summary>
         Artificial,
 
         /// <summary>
-        /// Pinch harmonics
+        ///     Pinch harmonics
         /// </summary>
         Pinch,
 
         /// <summary>
-        /// Tap harmonics
+        ///     Tap harmonics
         /// </summary>
         Tap,
 
         /// <summary>
-        /// Semi harmonics
+        ///     Semi harmonics
         /// </summary>
         Semi,
 
         /// <summary>
-        /// Feedback harmonics
+        ///     Feedback harmonics
         /// </summary>
         Feedback
     }

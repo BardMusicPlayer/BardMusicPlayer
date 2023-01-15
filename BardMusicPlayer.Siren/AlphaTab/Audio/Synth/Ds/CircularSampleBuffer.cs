@@ -1,23 +1,27 @@
-﻿/*
+/*
  * Copyright(c) 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 {
     /// <summary>
-    /// Represents a fixed size circular sample buffer that can be written to and read from.
+    ///     Represents a fixed size circular sample buffer that can be written to and read from.
     /// </summary>
-    internal class CircularSampleBuffer
+    internal sealed class CircularSampleBuffer
     {
         private float[] _buffer;
-        private int _writePosition;
         private int _readPosition;
+        private int _writePosition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CircularSampleBuffer"/> class.
+        ///     Initializes a new instance of the <see cref="CircularSampleBuffer" /> class.
         /// </summary>
         /// <param name="size">The size.</param>
         public CircularSampleBuffer(int size)
@@ -29,12 +33,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         }
 
         /// <summary>
-        /// Gets the number of samples written to the buffer.
+        ///     Gets the number of samples written to the buffer.
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Clears all samples written to this buffer.
+        ///     Clears all samples written to this buffer.
         /// </summary>
         public void Clear()
         {
@@ -45,7 +49,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         }
 
         /// <summary>
-        /// Writes the given samples to this buffer.
+        ///     Writes the given samples to this buffer.
         /// </summary>
         /// <param name="data">The sample array to read from. </param>
         /// <param name="offset"></param>
@@ -54,10 +58,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         public int Write(float[] data, int offset, int count)
         {
             var samplesWritten = 0;
-            if (count > _buffer.Length - Count)
-            {
-                count = _buffer.Length - Count;
-            }
+            if (count > _buffer.Length - Count) count = _buffer.Length - Count;
 
             var writeToEnd = Math.Min(_buffer.Length - _writePosition, count);
             Platform.ArrayCopy(data, offset, _buffer, _writePosition, writeToEnd);
@@ -76,7 +77,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         }
 
         /// <summary>
-        /// Reads the requested amount of samples from the buffer.
+        ///     Reads the requested amount of samples from the buffer.
         /// </summary>
         /// <param name="data">The sample array to store the read elements.</param>
         /// <param name="offset">The offset within the destination buffer to put the items at.</param>
@@ -84,10 +85,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
         /// <returns>The number of items actually read from the buffer.</returns>
         public int Read(float[] data, int offset, int count)
         {
-            if (count > Count)
-            {
-                count = Count;
-            }
+            if (count > Count) count = Count;
 
             var samplesRead = 0;
             var readToEnd = Math.Min(_buffer.Length - _readPosition, count);

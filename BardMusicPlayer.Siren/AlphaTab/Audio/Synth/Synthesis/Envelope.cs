@@ -32,21 +32,16 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#region
+
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
+
+#endregion
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal class Envelope
+    internal sealed class Envelope
     {
-        public float Delay { get; set; }
-        public float Attack { get; set; }
-        public float Hold { get; set; }
-        public float Decay { get; set; }
-        public float Sustain { get; set; }
-        public float Release { get; set; }
-        public float KeynumToHold { get; set; }
-        public float KeynumToDecay { get; set; }
-
         public Envelope()
         {
         }
@@ -62,6 +57,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             KeynumToHold = other.KeynumToHold;
             KeynumToDecay = other.KeynumToDecay;
         }
+
+        public float Delay { get; set; }
+        public float Attack { get; set; }
+        public float Hold { get; set; }
+        public float Decay { get; set; }
+        public float Sustain { get; set; }
+        public float Release { get; set; }
+        public float KeynumToHold { get; set; }
+        public float KeynumToDecay { get; set; }
 
         public void Clear()
         {
@@ -80,34 +84,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             // EG times need to be converted from timecents to seconds.
             // Pin very short EG segments.  Timecents don't get to zero, and our EG is
             // happier with zero values.
-            Delay = (Delay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Delay));
-            Attack = (Attack < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Attack));
-            Release = (Release < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Release));
+            Delay = Delay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Delay);
+            Attack = Attack < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Attack);
+            Release = Release < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Release);
 
             // If we have dynamic hold or decay times depending on key number we need
             // to keep the values in timecents so we can calculate it during startNote
-            if (KeynumToHold == 0)
-            {
-                Hold = (Hold < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Hold));
-            }
+            if (KeynumToHold == 0) Hold = Hold < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Hold);
 
-            if (KeynumToDecay == 0)
-            {
-                Decay = (Decay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Decay));
-            }
+            if (KeynumToDecay == 0) Decay = Decay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Decay);
 
             if (Sustain < 0.0f)
-            {
                 Sustain = 0.0f;
-            }
             else if (sustainIsGain)
-            {
                 Sustain = SynthHelper.DecibelsToGain(-Sustain / 10.0f);
-            }
             else
-            {
-                Sustain = 1.0f - (Sustain / 1000.0f);
-            }
+                Sustain = 1.0f - Sustain / 1000.0f;
         }
     }
 }

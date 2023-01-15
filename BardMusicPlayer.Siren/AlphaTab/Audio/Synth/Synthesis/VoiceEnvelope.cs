@@ -32,12 +32,16 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#region
+
 using System;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal class VoiceEnvelope
+    internal sealed class VoiceEnvelope
     {
         private const float FastReleaseTime = 0.01f;
         public float Level { get; set; }
@@ -56,7 +60,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         public void NextSegment(VoiceEnvelopeSegment activeSegment, float outSampleRate)
         {
             while (true) // if segment is handled, method will return
-            {
                 switch (activeSegment)
                 {
                     case VoiceEnvelopeSegment.None:
@@ -69,6 +72,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                             Slope = 0.0f;
                             return;
                         }
+
                         activeSegment = VoiceEnvelopeSegment.Delay;
                         break;
 
@@ -76,12 +80,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         SamplesUntilNextSegment = (int)(Parameters.Attack * outSampleRate);
                         if (SamplesUntilNextSegment > 0)
                         {
-                            if (!this.IsAmpEnv)
-                            {
+                            if (!IsAmpEnv)
                                 //mod env attack duration scales with velocity (velocity of 1 is full duration, max velocity is 0.125 times duration)
                                 SamplesUntilNextSegment =
-                                    (int)(Parameters.Attack * ((145 - this.MidiVelocity) / 144.0f) * outSampleRate);
-                            }
+                                    (int)(Parameters.Attack * ((145 - MidiVelocity) / 144.0f) * outSampleRate);
 
                             Segment = VoiceEnvelopeSegment.Attack;
                             SegmentIsExponential = false;
@@ -113,21 +115,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         {
                             Segment = VoiceEnvelopeSegment.Decay;
                             Level = 1.0f;
-                            if (this.IsAmpEnv)
+                            if (IsAmpEnv)
                             {
                                 // I don't truly understand this; just following what LinuxSampler does.
                                 var mysterySlope = (float)(-9.226 / SamplesUntilNextSegment);
                                 Slope = (float)Math.Exp(mysterySlope);
                                 SegmentIsExponential = true;
                                 if (Parameters.Sustain > 0.0f)
-                                {
                                     // Again, this is following LinuxSampler's example, which is similar to
                                     // SF2-style decay, where "decay" specifies the time it would take to
                                     // get to zero, not to the sustain level.  The SFZ spec is not that
                                     // specific about what "decay" means, so perhaps it's really supposed
                                     // to specify the time to reach the sustain level.
                                     SamplesUntilNextSegment = (int)(Math.Log(Parameters.Sustain) / mysterySlope);
-                                }
                             }
                             else
                             {
@@ -154,7 +154,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         Segment = VoiceEnvelopeSegment.Release;
                         SamplesUntilNextSegment =
                             (int)((Parameters.Release <= 0 ? FastReleaseTime : Parameters.Release) * outSampleRate);
-                        if (this.IsAmpEnv)
+                        if (IsAmpEnv)
                         {
                             // I don't truly understand this; just following what LinuxSampler does.
                             var mysterySlope = (float)(-9.226 / SamplesUntilNextSegment);
@@ -168,7 +168,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         }
 
                         return;
-                    case VoiceEnvelopeSegment.Release:
                     default:
                         Segment = VoiceEnvelopeSegment.Done;
                         SegmentIsExponential = false;
@@ -176,7 +175,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         SamplesUntilNextSegment = 0x7FFFFFF;
                         return;
                 }
-            }
         }
 
         public void Setup(
@@ -208,14 +206,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         {
             if (Slope > 0)
             {
-                if (SegmentIsExponential) Level *= (float)Math.Pow(Slope, numSamples);
-                else Level += (Slope * numSamples);
+                if (SegmentIsExponential)
+                    Level *= (float)Math.Pow(Slope, numSamples);
+                else
+                    Level += Slope * numSamples;
             }
 
-            if ((SamplesUntilNextSegment -= numSamples) <= 0)
-            {
-                NextSegment(Segment, outSampleRate);
-            }
+            if ((SamplesUntilNextSegment -= numSamples) <= 0) NextSegment(Segment, outSampleRate);
         }
     }
 }

@@ -31,11 +31,11 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal class Preset
+    internal sealed class Preset
     {
-
         public string Name { get; set; }
         public ushort PresetNumber { get; set; }
         public ushort Bank { get; set; }

@@ -3,24 +3,28 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Collections
 {
     /// <summary>
-    /// Represents a strongly typed list of elements. 
+    ///     Represents a strongly typed list of elements.
     /// </summary>
     /// <typeparam name="T">The type fo the elements</typeparam>
     /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
-    internal class FastList<T> : IEnumerable<T>
+    internal sealed class FastList<T> : IEnumerable<T>
     {
         private readonly List<T> _list;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FastList{T}" /> class.
+        ///     Initializes a new instance of the <see cref="FastList{T}" /> class.
         /// </summary>
         public FastList()
         {
@@ -33,12 +37,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the list.
+        ///     Gets the number of elements contained in the list.
         /// </summary>
         public int Count => _list.Count;
 
         /// <summary>
-        /// Gets or sets the value at the specified index.
+        ///     Gets or sets the value at the specified index.
         /// </summary>
         /// <param name="index">The index of which item to access.</param>
         /// <returns>The item located at the specified index. </returns>
@@ -49,8 +53,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
             set => _list[index] = value;
         }
 
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         /// <summary>
-        /// Adds the specified item to the list. 
+        ///     Adds the specified item to the list.
         /// </summary>
         /// <param name="item">The item to be added.</param>
         public void Add(T item)
@@ -59,7 +74,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Sorts the elements in the list using the specified comparison.
+        ///     Sorts the elements in the list using the specified comparison.
         /// </summary>
         /// <param name="comparison">The comparison to use when comparing elements for sorting.</param>
         public void Sort(Comparison<T> comparison)
@@ -68,7 +83,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Clones this instance.
+        ///     Clones this instance.
         /// </summary>
         /// <returns></returns>
         public FastList<T> Clone()
@@ -77,7 +92,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Removes the item at the specified index. 
+        ///     Removes the item at the specified index.
         /// </summary>
         /// <param name="index">The index to remove.</param>
         public void RemoveAt(int index)
@@ -86,7 +101,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Converts the current list into an array of all elements. 
+        ///     Converts the current list into an array of all elements.
         /// </summary>
         /// <returns>An array containing all elements. </returns>
         public T[] ToArray()
@@ -94,14 +109,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
             return _list.ToArray();
         }
 
-        /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
-
         /// <summary>
-        /// Searches for the given item in the list and returns the index. 
+        ///     Searches for the given item in the list and returns the index.
         /// </summary>
         /// <param name="item">The item to search</param>
         /// <returns>The index at which the specified item was found, or -1 if the item is not contained in the list.</returns>
@@ -111,20 +120,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Reverses the items in the list
+        ///     Reverses the items in the list
         /// </summary>
         public void Reverse()
         {
             _list.Reverse();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         /// <summary>
-        /// Inserts an element at the specified index. 
+        ///     Inserts an element at the specified index.
         /// </summary>
         /// <param name="insertPos">The index at which the item should be inserted</param>
         /// <param name="item">The item to insert.</param>
@@ -134,7 +138,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Collections
         }
 
         /// <summary>
-        /// Remove all elements from the list.
+        ///     Remove all elements from the list.
         /// </summary>
         public void Clear()
         {

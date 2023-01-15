@@ -5,49 +5,48 @@
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
-    // ReSharper disable InconsistentNaming
     /// <summary>
-    /// Lists all dynamics.
+    ///     Lists all dynamics.
     /// </summary>
     internal enum DynamicValue
     {
         /// <summary>
-        /// pianississimo (very very soft)
+        ///     pianississimo (very very soft)
         /// </summary>
         PPP,
 
         /// <summary>
-        /// pianissimo (very soft)
+        ///     pianissimo (very soft)
         /// </summary>
         PP,
 
         /// <summary>
-        /// piano (soft)
+        ///     piano (soft)
         /// </summary>
         P,
 
         /// <summary>
-        /// mezzo-piano (half soft)
+        ///     mezzo-piano (half soft)
         /// </summary>
         MP,
 
         /// <summary>
-        /// mezzo-forte (half loud)
+        ///     mezzo-forte (half loud)
         /// </summary>
         MF,
 
         /// <summary>
-        /// forte (loud)
+        ///     forte (loud)
         /// </summary>
         F,
 
         /// <summary>
-        /// fortissimo (very loud)
+        ///     fortissimo (very loud)
         /// </summary>
         FF,
 
         /// <summary>
-        /// fortississimo (very very loud)
+        ///     fortississimo (very very loud)
         /// </summary>
         FFF
     }

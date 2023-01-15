@@ -1,7 +1,9 @@
-﻿/*
+/*
  * Copyright(c) 2022 GiR-Zippo, 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
+
+#region
 
 using System;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
@@ -11,24 +13,81 @@ using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
 using BardMusicPlayer.Siren.AlphaTab.IO;
 using BardMusicPlayer.Siren.AlphaTab.Util;
 
+#endregion
+
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
 {
     /// <summary>
-    /// This is the main synthesizer component which can be used to
-    /// play a <see cref="MidiFile"/> via a <see cref="ISynthOutput"/>.
+    ///     This is the main synthesizer component which can be used to
+    ///     play a <see cref="MidiFile" /> via a <see cref="ISynthOutput" />.
     /// </summary>
-    internal class AlphaSynth : IAlphaSynth
+    internal sealed class AlphaSynth : IAlphaSynth
     {
         private readonly MidiFileSequencer _sequencer;
         private readonly TinySoundFont _synthesizer;
+        private bool _isMidiLoaded;
 
         private bool _isSoundFontLoaded;
-        private bool _isMidiLoaded;
         private int _tickPosition;
         private double _timePosition;
 
         /// <summary>
-        /// Gets the <see cref="ISynthOutput"/> used for playing the generated samples.
+        ///     Initializes a new instance of the <see cref="AlphaSynth" /> class.
+        /// </summary>
+        /// <param name="output">The output to use for playing the generated samples.</param>
+        public AlphaSynth(ISynthOutput output)
+        {
+            Logger.Debug("AlphaSynth", "Initializing player");
+            State = PlayerState.Paused;
+
+            Logger.Debug("AlphaSynth", "Creating output");
+            Output = output;
+            Output.Ready += () =>
+            {
+                IsReady = true;
+                OnReady();
+                CheckReadyForPlayback();
+            };
+            Output.Finished += () =>
+            {
+                //The Ui will trigger Stop() to reduce the CPU load
+                //If stop is triggered here, there's no playback possible anymore
+                {
+                    Output.Pause();
+                    State = PlayerState.Paused;
+                    OnStateChanged(new PlayerStateChangedEventArgs(State, false));
+                    _sequencer.Stop();
+                    _synthesizer.NoteOffAll(true);
+                    TickPosition = _sequencer.PlaybackRange?.StartTick ?? 0;
+                }
+
+                Logger.Debug("AlphaSynth", "Finished playback");
+                OnFinished();
+                if (_sequencer.IsLooping) Play();
+            };
+            Output.SampleRequest += () =>
+            {
+                // synthesize buffer
+                _sequencer.FillMidiEventQueue();
+                var samples = _synthesizer.Synthesize();
+                // send it to output
+                Output.AddSamples(samples);
+                // tell sequencer to check whether its work is done
+                _sequencer.CheckForStop();
+            };
+            Output.SamplesPlayed += OnSamplesPlayed;
+
+            Logger.Debug("AlphaSynth", "Creating synthesizer");
+            _synthesizer = new TinySoundFont(Output.SampleRate);
+            _sequencer = new MidiFileSequencer(_synthesizer);
+            _sequencer.Finished += Output.SequencerFinished;
+
+            Logger.Debug("AlphaSynth", "Opening output");
+            Output.Open();
+        }
+
+        /// <summary>
+        ///     Gets the <see cref="ISynthOutput" /> used for playing the generated samples.
         /// </summary>
         public ISynthOutput Output { get; }
 
@@ -105,10 +164,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             set
             {
                 _sequencer.PlaybackRange = value;
-                if (value != null)
-                {
-                    TickPosition = value.StartTick;
-                }
+                if (value != null) TickPosition = value.StartTick;
             }
         }
 
@@ -126,71 +182,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             Stop();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlphaSynth"/> class.
-        /// </summary>
-        /// <param name="output">The output to use for playing the generated samples.</param>
-        public AlphaSynth(ISynthOutput output)
-        {
-            Logger.Debug("AlphaSynth", "Initializing player");
-            State = PlayerState.Paused;
-
-            Logger.Debug("AlphaSynth", "Creating output");
-            Output = output;
-            Output.Ready += () =>
-            {
-                IsReady = true;
-                OnReady();
-                CheckReadyForPlayback();
-            };
-            Output.Finished += () =>
-            {
-                //The Ui will trigger Stop() to reduce the CPU load
-                //If stop is triggered here, there's no playback possible anymore
-                {
-                    Output.Pause();
-                    State = PlayerState.Paused;
-                    OnStateChanged(new PlayerStateChangedEventArgs(State, false));
-                    _sequencer.Stop();
-                    _synthesizer.NoteOffAll(true);
-                    TickPosition = _sequencer.PlaybackRange != null ? _sequencer.PlaybackRange.StartTick : 0;
-                }
-
-                Logger.Debug("AlphaSynth", "Finished playback");
-                OnFinished();
-                if (_sequencer.IsLooping)
-                {
-                    Play();
-                }
-            };
-            Output.SampleRequest += () =>
-            {
-                // synthesize buffer
-                _sequencer.FillMidiEventQueue();
-                var samples = _synthesizer.Synthesize();
-                // send it to output
-                Output.AddSamples(samples);
-                // tell sequencer to check whether its work is done
-                _sequencer.CheckForStop();
-            };
-            Output.SamplesPlayed += OnSamplesPlayed;
-
-            Logger.Debug("AlphaSynth", "Creating synthesizer");
-            _synthesizer = new TinySoundFont(Output.SampleRate);
-            _sequencer = new MidiFileSequencer(_synthesizer);
-            _sequencer.Finished += Output.SequencerFinished;
-
-            Logger.Debug("AlphaSynth", "Opening output");
-            Output.Open();
-        }
-
         /// <inheritdoc />
         public bool Play()
         {
-            if (State == PlayerState.Playing || !IsReadyForPlayback)
-            {
-                return false;
-            }
+            if (State == PlayerState.Playing || !IsReadyForPlayback) return false;
 
             Output.Activate();
 
@@ -204,10 +199,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         /// <inheritdoc />
         public void Pause()
         {
-            if (State == PlayerState.Paused || !IsReadyForPlayback)
-            {
-                return;
-            }
+            if (State == PlayerState.Paused || !IsReadyForPlayback) return;
 
             Logger.Debug("AlphaSynth", "Pausing playback");
             State = PlayerState.Paused;
@@ -220,29 +212,22 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         public void PlayPause()
         {
             if (State == PlayerState.Playing || !IsReadyForPlayback)
-            {
                 Pause();
-            }
             else
-            {
                 Play();
-            }
         }
 
         /// <inheritdoc />
         public void Stop()
         {
-            if (!IsReadyForPlayback)
-            {
-                return;
-            }
+            if (!IsReadyForPlayback) return;
 
             Logger.Debug("AlphaSynth", "Stopping playback");
             State = PlayerState.Paused;
             Output.Stop();
             _sequencer.Stop();
             _synthesizer.NoteOffAll(true);
-            TickPosition = _sequencer.PlaybackRange != null ? _sequencer.PlaybackRange.StartTick : 0;
+            TickPosition = _sequencer.PlaybackRange?.StartTick ?? 0;
             OnStateChanged(new PlayerStateChangedEventArgs(State, true));
         }
 
@@ -271,19 +256,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             }
         }
 
-        private void CheckReadyForPlayback()
-        {
-            if (IsReadyForPlayback)
-            {
-                OnReadyForPlayback();
-            }
-        }
-
         /// <summary>
-        /// Loads the given midi file for playback.
+        ///     Loads the given midi file for playback.
         /// </summary>
         /// <param name="midiFile">The midi file to load</param>
-        // ReSharper disable once UnusedMember.Global
         public void LoadMidiFile(MidiFile midiFile)
         {
             Stop();
@@ -340,6 +316,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             _synthesizer.ChannelSetPresetNumber(channel, program);
         }
 
+        private void CheckReadyForPlayback()
+        {
+            if (IsReadyForPlayback) OnReadyForPlayback();
+        }
+
         private void OnSamplesPlayed(int sampleCount)
         {
             var playedMillis = sampleCount / (double)_synthesizer.OutSampleRate * 1000;
@@ -358,7 +339,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             Logger.Debug("AlphaSynth",
                 "Position changed: (time: " + currentTime + "/" + endTime + ", tick: " + currentTick + "/" + endTime +
                 ", Active Voices: " + _synthesizer.ActiveVoiceCount);
-            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick, _synthesizer.ActiveVoiceCount));
+            OnPositionChanged(new PositionChangedEventArgs(currentTime, endTime, currentTick, endTick,
+                _synthesizer.ActiveVoiceCount));
         }
 
         #region Events
@@ -369,190 +351,145 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnReady()
         {
             var handler = Ready;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
-        /// Occurs when the playback of the whole midi file finished.
+        ///     Occurs when the playback of the whole midi file finished.
         /// </summary>
         public event Action Finished;
 
         private void OnFinished()
         {
             var handler = Finished;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
-        /// Occurs when the playback state changes.
+        ///     Occurs when the playback state changes.
         /// </summary>
         public event Action<PlayerStateChangedEventArgs> StateChanged;
 
         private void OnStateChanged(PlayerStateChangedEventArgs e)
         {
             var handler = StateChanged;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
-        /// Occurs when the soundfont was successfully loaded.
+        ///     Occurs when the soundfont was successfully loaded.
         /// </summary>
         public event Action SoundFontLoaded;
 
         private void OnSoundFontLoaded()
         {
             var handler = SoundFontLoaded;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
-        /// Occurs when AlphaSynth is ready to start the playback.
-        /// This is the case once the <see cref="ISynthOutput"/> is ready, a SoundFont was loaded and also a MidiFle is loaded.
+        ///     Occurs when AlphaSynth is ready to start the playback.
+        ///     This is the case once the <see cref="ISynthOutput" /> is ready, a SoundFont was loaded and also a MidiFle is
+        ///     loaded.
         /// </summary>
         public event Action ReadyForPlayback;
 
         private void OnReadyForPlayback()
         {
             var handler = ReadyForPlayback;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
-        /// Occurs when the soundfont failed to be loaded.
+        ///     Occurs when the soundfont failed to be loaded.
         /// </summary>
         public event Action<Exception> SoundFontLoadFailed;
 
         private void OnSoundFontLoadFailed(Exception e)
         {
             var handler = SoundFontLoadFailed;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
-        /// Occurs when the midi file was successfully loaded.
+        ///     Occurs when the midi file was successfully loaded.
         /// </summary>
         public event Action MidiLoaded;
 
         private void OnMidiLoaded()
         {
             var handler = MidiLoaded;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
-        /// Occurs when the midi failed to be loaded.
+        ///     Occurs when the midi failed to be loaded.
         /// </summary>
         public event Action<Exception> MidiLoadFailed;
 
         private void OnMidiLoadFailed(Exception e)
         {
             var handler = MidiLoadFailed;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
-        /// Occurs whenever the current time of the played audio changes.
+        ///     Occurs whenever the current time of the played audio changes.
         /// </summary>
         public event Action<PositionChangedEventArgs> PositionChanged;
 
         private void OnPositionChanged(PositionChangedEventArgs e)
         {
             var handler = PositionChanged;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         #endregion
     }
 
     /// <summary>
-    /// Represents the info when the player state changes.
+    ///     Represents the info when the player state changes.
     /// </summary>
-    internal class PlayerStateChangedEventArgs
+    internal sealed class PlayerStateChangedEventArgs
     {
         /// <summary>
-        /// The new state of the player.
-        /// </summary>
-        public PlayerState State { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the playback was stopped or only paused.
-        /// </summary>
-        /// <returns>true if the playback was stopped, false if the playback was started or paused</returns>
-        public bool Stopped { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlayerStateChangedEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="PlayerStateChangedEventArgs" /> class.
         /// </summary>
         /// <param name="state">The state.</param>
+        /// <param name="stopped"></param>
         public PlayerStateChangedEventArgs(PlayerState state, bool stopped)
         {
             State = state;
             Stopped = stopped;
         }
+
+        /// <summary>
+        ///     The new state of the player.
+        /// </summary>
+        public PlayerState State { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the playback was stopped or only paused.
+        /// </summary>
+        /// <returns>true if the playback was stopped, false if the playback was started or paused</returns>
+        public bool Stopped { get; }
     }
 
     /// <summary>
-    /// Represents the info when the time in the synthesizer changes.
+    ///     Represents the info when the time in the synthesizer changes.
     /// </summary>
-    internal class PositionChangedEventArgs
+    internal sealed class PositionChangedEventArgs
     {
         /// <summary>
-        /// Gets the current time in milliseconds.
-        /// </summary>
-        public double CurrentTime { get; }
-
-        /// <summary>
-        /// Gets the length of the played song in milliseconds.
-        /// </summary>
-        public double EndTime { get; }
-
-        /// <summary>
-        /// Gets the current time in midi ticks.
-        /// </summary>
-        public int CurrentTick { get; }
-
-        /// <summary>
-        /// Gets the length of the played song in midi ticks.
-        /// </summary>
-        public int EndTick { get; }
-
-        public int ActiveVoices { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PositionChangedEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="PositionChangedEventArgs" /> class.
         /// </summary>
         /// <param name="currentTime">The current time.</param>
         /// <param name="endTime">The end time.</param>
         /// <param name="currentTick">The current tick.</param>
         /// <param name="endTick">The end tick.</param>
-        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick, int activeVoices)
+        /// <param name="activeVoices"></param>
+        public PositionChangedEventArgs(double currentTime, double endTime, int currentTick, int endTick,
+            int activeVoices)
         {
             CurrentTime = currentTime;
             EndTime = endTime;
@@ -560,5 +497,27 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             EndTick = endTick;
             ActiveVoices = activeVoices;
         }
+
+        /// <summary>
+        ///     Gets the current time in milliseconds.
+        /// </summary>
+        public double CurrentTime { get; }
+
+        /// <summary>
+        ///     Gets the length of the played song in milliseconds.
+        /// </summary>
+        public double EndTime { get; }
+
+        /// <summary>
+        ///     Gets the current time in midi ticks.
+        /// </summary>
+        public int CurrentTick { get; }
+
+        /// <summary>
+        ///     Gets the length of the played song in midi ticks.
+        /// </summary>
+        public int EndTick { get; }
+
+        public int ActiveVoices { get; }
     }
 }
