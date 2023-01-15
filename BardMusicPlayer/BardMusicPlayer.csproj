@@ -69,27 +69,15 @@
     <Compile Include="UI_Classic\Classic_Statistics.cs" />
     <Compile Include="UI_Classic\MacroLaunchpad.xaml.cs" DependentUpon="MacroLaunchpad.xaml" />
     <Compile Include="UI_Classic\NetworkPlayWindow.xaml.cs" DependentUpon="NetworkPlayWindow.xaml" />
-    <Compile Include="UI_Skinned\BardWindow\BardsWindow.xaml.cs" DependentUpon="BardsWindow.xaml" />
-    <Compile Include="UI_Skinned\MainView\Skinned_MainView_Ex.xaml.cs" DependentUpon="Skinned_MainView_Ex.xaml" />
-    <Compile Include="UI_Skinned\NetworkPlayWindow\NetworkPlayWindow.xaml.cs" DependentUpon="NetworkPlayWindow.xaml" />
-    <Compile Include="UI_Skinned\Playlist\MediaBrowser.xaml.cs" DependentUpon="MediaBrowser.xaml" />
-    <Compile Include="UI_Skinned\Playlist\Skinned_PlaylistView_Siren.cs" />
-    <Compile Include="UI_Skinned\Playlist\Skinned_PlaylistView.xaml.cs" />
-    <Compile Include="UI_Skinned\SongBrowserWindow\SongbrowserWindow.xaml.cs" DependentUpon="SongbrowserWindow.xaml" />
     <Compile Include="App.xaml.cs" DependentUpon="App.xaml" SubType="Code" />
     <Compile Include="Functions\PlaybackFunctions.cs" />
     <Compile Include="Functions\PlaylistFunctions.cs" />
     <Compile Include="Resources\TextInputWindow.xaml.cs" DependentUpon="TextInputWindow.xaml" />
     <Compile Include="UI_Classic\Classic_MainViewPlaycontrols.cs" />
     <Compile Include="UI_Classic\Classic_Playlist.cs" />
-    <Compile Include="UI_Skinned\BitmapText.cs" />
     <Compile Include="Globals\Globals.cs" />
     <Compile Include="Globals\SkinContainer.cs" />
-    <Compile Include="UI_Skinned\MainView\Skinned_MainViewControls.xaml.cs" />
     <Compile Include="UI_Classic\Classic_MainView.xaml.cs" DependentUpon="Classic_MainView.xaml" />
-    <Compile Include="UI_Skinned\MainView\Skinned_MainView.xaml.cs" DependentUpon="Skinned_MainView.xaml" />
-    <Compile Include="UI_Skinned\Settings\SettingsView.xaml.cs" DependentUpon="SettingsView.xaml" />
-    <Compile Include="UI_Skinned\Skinloader.cs" />
     <Compile Include="MainWindow.xaml.cs" DependentUpon="MainWindow.xaml" SubType="Code" />
     <Compile Include="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx" DesignTime="True" />
     <Compile Include="Properties\Settings.Designer.cs" AutoGen="True" DependentUpon="Settings.settings" DesignTimeSharedInput="True" />
@@ -115,15 +103,7 @@
     <Page Include="UI_Classic\Classic_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
     <Page Include="UI_Classic\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\BardWindow\BardsWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\MainView\Skinned_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\PlayBarStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\MainView\Skinned_MainView_Ex.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\NetworkPlayWindow\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\Playlist\MediaBrowser.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\Settings\SettingsView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\Playlist\Skinned_PlaylistView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Skinned\SongBrowserWindow\SongbrowserWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
 
     <None Include="App.config" />
     <None Include="Properties\Settings.settings" Generator="SettingsSingleFileGenerator" LastGenOutput="Settings.Designer.cs" />
@@ -144,19 +124,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Skin\mb.bmp" />
-    <Resource Include="Resources\Skin\avs.bmp" />
-    <Resource Include="Resources\Skin\main.bmp" />
-    <Resource Include="Resources\Skin\titlebar.bmp" />
-    <Resource Include="Resources\Skin\cbuttons.bmp" />
-    <Resource Include="Resources\Skin\nums_ex.bmp" />
-    <Resource Include="Resources\Skin\text.bmp" />
-    <Resource Include="Resources\Skin\pledit.bmp" />
-    <Resource Include="Resources\Skin\posbar.bmp" />
-    <Resource Include="Resources\Skin\volume.bmp" />
-    <Resource Include="Resources\Skin\shufrep.bmp" />
-    <Resource Include="Resources\Skin\balance.bmp" />
-    <Resource Include="Resources\Skin\eqmain.bmp" />
     <Resource Include="Resources\Images\ClassicPause.png" />
     <Resource Include="Resources\Images\ClassicPlay.png" />
     <Resource Include="Resources\Images\ClassicLoop.png" />

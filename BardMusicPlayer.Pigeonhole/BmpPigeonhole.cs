@@ -120,21 +120,6 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual global::System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
 
         /// <summary>
-        /// The Ui version which should be used
-        /// </summary>
-        public virtual bool ClassicUi { get; set; } = true;
-
-        /// <summary>
-        /// Sets/Gets last used skin
-        /// </summary>
-        public virtual string LastSkin { get; set; } = "";
-
-        /// <summary>
-        /// Sets/Gets skin directory
-        /// </summary>
-        public virtual string SkinDirectory { get; set; } = "";
-
-        /// <summary>
         /// open local orchestra after hooking new proc
         /// </summary>
         public virtual bool LocalOrchestra { get; set; } = false;
@@ -193,7 +178,5 @@ namespace BardMusicPlayer.Pigeonhole
         /// Defaults to log level Info
         /// </summary>
         public virtual BmpLog.Verbosity DefaultLogLevel { get; set; } = BmpLog.Verbosity.Info;
-
-        public virtual bool SkinnedUi_UseExtendedView { get; set; } = false;
     }
 }
