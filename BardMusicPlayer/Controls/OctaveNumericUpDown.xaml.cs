@@ -64,6 +64,21 @@ namespace BardMusicPlayer.Ui.Controls
             NumValue--;
         }
 
+        private void OctaveNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    NumUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    NumDown_Click(sender, e);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
             if (Text == null)

@@ -54,6 +54,7 @@ namespace BardMusicPlayer.Ui.Controls
                 return;
             }
         }
+
         private void NumUp_Click(object sender, RoutedEventArgs e)
         {
             if (PlaybackFunctions.CurrentSong == null)
@@ -70,6 +71,19 @@ namespace BardMusicPlayer.Ui.Controls
             NumValue--;
         }
 
+        private void TrackNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    NumUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    NumDown_Click(sender, e);
+                    break;
+            }
+        }
+        
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
             if (Text == null)
