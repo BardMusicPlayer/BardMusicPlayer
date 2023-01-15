@@ -266,8 +266,7 @@ namespace BardMusicPlayer.Maestro
             
             var perf = _orchestrator.GetAllPerformers();
             foreach (var p in perf)
-                if (p.HostProcess)
-                    p.DoReadyCheck();
+                p.DoReadyCheck();
         }
 
         /// <summary>
