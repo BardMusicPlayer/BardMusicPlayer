@@ -103,6 +103,11 @@ namespace BardMusicPlayer.Seer
         public long ServerLatency { get; private set; } = 0;
 
         /// <summary>
+        ///     Indicates if gfx set to low
+        /// </summary>
+        public bool GfxSettingsLow { get; set; }
+
+        /// <summary>
         /// Contains nearby partymember list. Updated by Sharlayan & Machina. Currently only Sharlayan updates during logoff.
         /// Fields: uint ActorId, string PlayerName
         /// This dictionary is sorted on ActorId and can be compared to another Game's PartyMembers with .Equals() extension method.
