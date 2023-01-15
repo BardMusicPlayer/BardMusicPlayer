@@ -328,6 +328,15 @@ namespace BardMusicPlayer.Ui.Classic
         }
         #endregion
 
+
+        private void Macro_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var macroLaunchpad = new MacroLaunchpad
+            {
+            Visibility = Visibility.Visible
+            };
+        }
+
         private void Info_Button_Click(object sender, RoutedEventArgs e)
         {
             InfoBox _infoBox = new InfoBox();
