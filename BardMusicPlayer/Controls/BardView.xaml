@@ -37,6 +37,8 @@
                         <CheckBox Content="Autoequip" x:Name="Autoequip_CheckBox" Unchecked="Autoequip_CheckBox_Checked" Checked="Autoequip_CheckBox_Checked"/>
                         <MenuItem Header="Load Performer Settings"       Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings"       Click="Save_Performer_Settings" />
+                        <MenuItem Header=""/>
+                        <CheckBox Content="Set all Gfx to low" x:Name="GfxLow_CheckBox" Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked"/>
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
