@@ -13,6 +13,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Ui.Classic;
 using BardMusicPlayer.Ui.Functions;
 
@@ -96,6 +97,11 @@ namespace BardMusicPlayer.Ui.Controls
         {
             this.Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
             this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.ItemsSource = Bards));
+        }
+
+        private void RdyCheck_Click(object sender, RoutedEventArgs e)
+        {
+            BmpMaestro.Instance.StartEnsCheck();
         }
 
         private void OpenInstrumentButton_Click(object sender, RoutedEventArgs e)
