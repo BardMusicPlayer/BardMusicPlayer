@@ -31,7 +31,7 @@
 
     <!-- Settings: LocalOchestra-->
     <sys:String x:Key="LO_ENABLE"        xml:space="preserve">Enables the local orchestra</sys:String>
-    <sys:String x:Key="LO_AUTOEQ"        xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String></sys:String>
+    <sys:String x:Key="LO_AUTOEQ"        xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
     <sys:String x:Key="LO_KEEPTRACKS"    xml:space="preserve">Keep the performer settings</sys:String>
     <sys:String x:Key="LO_INGOREPROG"    xml:space="preserve">Ignores guitar program change events</sys:String>
     <sys:String x:Key="LO_ISTART"        xml:space="preserve">Start each performer by it's own metronome signal &#13; Only for up to 8 bards</sys:String>
