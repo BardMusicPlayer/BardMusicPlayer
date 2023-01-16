@@ -44,10 +44,10 @@ namespace BardMusicPlayer.Transmogrify.Processor
                         continue;
 
                     int number = (int)Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).InstrumentToneMenuKey;
-                    using (NotesManager manager = trackChunks.Merge().ManageNotes())
+                    using (TimedObjectsManager<Note> manager = trackChunks.Merge().ManageNotes())
                     {
                         Note note = new Note((Melanchall.DryWetMidi.Common.SevenBitNumber)number);
-                        NotesCollection timedEvents = manager.Objects;
+                        TimedObjectsCollection<Note> timedEvents = manager.Objects;
                         note.Time = timedEvent.Time;
                         timedEvents.Add(note);
                     }
