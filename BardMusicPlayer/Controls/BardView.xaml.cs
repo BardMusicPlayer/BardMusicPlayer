@@ -230,6 +230,12 @@ namespace BardMusicPlayer.Ui.Controls
                 if (pconfig.AffinityMask != 0)
                     p.First().game.SetAffinity(pconfig.AffinityMask);
             }
+
+            if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
+            {
+                BmpPigeonhole.Instance.EnsembleKeepTrackSetting = true;
+                Globals.Globals.ReloadConfig();
+            }
         }
 
         /// <summary>

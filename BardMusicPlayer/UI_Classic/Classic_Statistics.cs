@@ -1,6 +1,10 @@
 ﻿using BardMusicPlayer.Ui.Functions;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using BardMusicPlayer.Transmogrify.Song;
+using Microsoft.Win32;
 
 namespace BardMusicPlayer.Ui.Classic
 {
@@ -40,5 +44,25 @@ namespace BardMusicPlayer.Ui.Classic
             this.Statistics_Track_Note_Count_Label.Content = _notesCountForTracks[NumValue];
         }
 
+        private void ExportAsMidi(object sender, RoutedEventArgs routedEventArgs)
+        {
+            BmpSong song = PlaybackFunctions.CurrentSong;
+            Stream myStream;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "MIDI file (*.mid)|*.mid";
+            saveFileDialog.FilterIndex = 2;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.OverwritePrompt = true;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    song.GetExportMidi().WriteTo(myStream);
+                    myStream.Close();
+                }
+            }
+        }
     }
 }

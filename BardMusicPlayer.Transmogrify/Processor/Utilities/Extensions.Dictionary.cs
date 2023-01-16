@@ -178,7 +178,7 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
             using var loadBalancer = new LoadBalancer(playerCount);
             using var timedEventsManager = trackChunk.ManageTimedEvents();
 
-            foreach (var trackEvent in timedEventsManager.Events)
+            foreach (var trackEvent in timedEventsManager.Objects)
             {
                 switch (trackEvent.Event.EventType)
                 {

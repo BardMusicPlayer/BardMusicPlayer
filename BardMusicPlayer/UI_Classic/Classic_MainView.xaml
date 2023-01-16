@@ -239,6 +239,7 @@
                                 <RowDefinition Height="25"/>
                                 <RowDefinition Height="25"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="25"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
@@ -260,6 +261,8 @@
                             <Label Grid.Row="5" Grid.Column="0" Content="Note per second" />
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
 -->
+                            <Label Grid.Row="7" Grid.Column="0" Content="Song functions:" />
+                            <Button Grid.Row="7" Grid.Column="1" Content="Export current song as Midi"  Click="ExportAsMidi"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Song Preview">
@@ -398,7 +401,7 @@
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <!-- Controls -->
-                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="75" Click="Play_Button_Click"/>
+                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="75" Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown"/>
                 <Button Grid.Row="1" x:Name="Loop_Button" Content="Loop" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="Loop_Button_Click"/>
                 <Button Grid.Row="2" x:Name="Macro_Button" Content="Macro" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Macro_Button_Click" />
             </Grid>
