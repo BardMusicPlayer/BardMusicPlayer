@@ -19,7 +19,7 @@ namespace BardMusicPlayer.Ui.Classic
         private bool _Siren_Playbar_dragStarted = false;
 
         /* Playbuttonstate */
-        private void Play_Button_State(bool playing = false)
+        public void Play_Button_State(bool playing = false)
         {
             if (!playing)
                 Play_Button.Content = @"▶";
@@ -91,6 +91,15 @@ namespace BardMusicPlayer.Ui.Classic
         private void Loop_Button_Click(object sender, RoutedEventArgs e)
         {
             _directLoaded = !_directLoaded;
+
+            if (_directLoaded)
+            {
+                Loop_Button.Background = Brushes.LightSteelBlue;
+            }
+            else
+            {
+                Loop_Button.ClearValue(Button.BackgroundProperty);
+            }
         }
 
         private void Playbar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

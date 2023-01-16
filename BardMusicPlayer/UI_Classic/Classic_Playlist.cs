@@ -67,22 +67,6 @@ namespace BardMusicPlayer.Ui.Classic
             this.InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         }
 
-        private void SelectSongByIndex(int idx)
-        {
-            //are we at MB compat?
-            if (!BmpPigeonhole.Instance.MidiBardCompatMode)
-                return;
-
-            if (PlaylistContainer.Items.Count == 0)
-                return;
-
-            PlaylistContainer.SelectedIndex = idx;
-
-            PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-            this.SongName.Text = PlaybackFunctions.GetSongName();
-            this.InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-        }
-
         #region upper playlist button functions
         /// <summary>
         /// Create a new playlist but don't save it

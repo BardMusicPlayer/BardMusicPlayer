@@ -1,6 +1,6 @@
 /*
  * Copyright(c) 2022 Parulina, trotlinebeercan, GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
@@ -157,6 +157,16 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 return loadedTrack;
             }
         }
+
+        int _lyricStartTrackIndex = 0;
+        public int LyricStartTrack
+        {
+            get
+            {
+                return _lyricStartTrackIndex;
+            }
+        }
+
         public int MaxTrack
         {
             get

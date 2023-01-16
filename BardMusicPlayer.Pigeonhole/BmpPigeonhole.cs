@@ -120,21 +120,6 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual global::System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
 
         /// <summary>
-        /// The Ui version which should be used
-        /// </summary>
-        public virtual bool ClassicUi { get; set; } = true;
-
-        /// <summary>
-        /// Sets/Gets last used skin
-        /// </summary>
-        public virtual string LastSkin { get; set; } = "";
-
-        /// <summary>
-        /// Sets/Gets skin directory
-        /// </summary>
-        public virtual string SkinDirectory { get; set; } = "";
-
-        /// <summary>
         /// open local orchestra after hooking new proc
         /// </summary>
         public virtual bool LocalOrchestra { get; set; } = false;
@@ -150,14 +135,9 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int EnsembleReadyDelay { get; set; } = 500;
 
         /// <summary>
-        /// playback delay enabled
-        /// </summary>
-        public virtual bool EnsemblePlayDelay { get; set; } = true;
-
-        /// <summary>
         /// autoequip after song load in ensemble mode delay enabled
         /// </summary>
-        public virtual bool EnsembleAutoEquip { get; set; } = false;
+        public virtual bool AutoEquipBards { get; set; } = false;
 
         /// <summary>
         /// keep the ensmble track settings
@@ -168,16 +148,6 @@ namespace BardMusicPlayer.Pigeonhole
         /// ignores the progchange
         /// </summary>
         public virtual bool IgnoreProgChange { get; set; } = false;
-
-        /// <summary>
-        /// start the performer by it's own ready signal
-        /// </summary>
-        public virtual bool EnsembleStartIndividual { get; set; } = true;
-
-        /// <summary>
-        /// Autoequip the solo bard
-        /// </summary>
-        public virtual bool SoloBardAutoEquip { get; set; } = false;
 
         /// <summary>
         /// milliseconds between game process scans / seer scanner startups.
@@ -200,16 +170,13 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int ToneKeyDelay { get; set; } = 3;
 
         /// <summary>
-        /// Compatmode for MidiBard
+        ///     Use the Hypnotoad for instruemtn eq
         /// </summary>
-        public virtual bool MidiBardCompatMode { get; set; } = false;
-
+        public virtual bool UsePluginForInstrumentOpen { get; set; }
 
         /// <summary>
         /// Defaults to log level Info
         /// </summary>
         public virtual BmpLog.Verbosity DefaultLogLevel { get; set; } = BmpLog.Verbosity.Info;
-
-        public virtual bool SkinnedUi_UseExtendedView { get; set; } = false;
     }
 }

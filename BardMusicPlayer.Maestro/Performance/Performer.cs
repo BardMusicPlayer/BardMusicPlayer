@@ -1,8 +1,10 @@
 /*
  * Copyright(c) 2022 GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.DalamudBridge.Helper.Dalamud;
 using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Maestro.FFXIV;
 using BardMusicPlayer.Maestro.Sequencing;
@@ -12,7 +14,7 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Maestro.Performance
@@ -28,7 +30,7 @@ namespace BardMusicPlayer.Maestro.Performance
         private int _trackNumber { get; set; } = 1;
         private long _lastNoteTimestamp = 0;
         private bool _livePlayDelay { get; set; } = false;
-        public bool IsSinger { get; set; } = false;
+        public int SingerTrackNr { get; set; } = 0;
         public Instrument ChosenInstrument { get; set; } = Instrument.Piano;
         public int OctaveShift { get; set; } = 0;
         public int TrackNumber { get { return _trackNumber; }
@@ -60,16 +62,28 @@ namespace BardMusicPlayer.Maestro.Performance
         }
 
         public bool PerformerEnabled { get; set; } = true;
-        public EventHandler onUpdate;
+        public bool UsesDalamud {  get { return BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(PId); } }
         public bool HostProcess { get; set; } = false;
         public int PId = 0;
         public Game game;
         public string PlayerName { get { return game.PlayerName ?? "Unknown"; } }
         public string HomeWorld { get { return game.HomeWorld ?? "Unknown"; } }
-        public string SongName { get { 
-            return _sequencer.LoadedBmpSong == null ? "" : 
-                  (_sequencer.LoadedBmpSong.DisplayedTitle.Length < 2 ? _sequencer.LoadedBmpSong.Title : _sequencer.LoadedBmpSong.DisplayedTitle); 
-            } }
+        public string SongName 
+        { 
+            get
+            {
+                if (_sequencer.LoadedBmpSong == null) //no song, no title
+                    return "";
+                
+                if (_sequencer.LoadedBmpSong.DisplayedTitle == null) //no displayed title, pretent the normal title
+                    return _sequencer.LoadedBmpSong.Title;
+
+                if (_sequencer.LoadedBmpSong.DisplayedTitle.Length < 2) //title with 1 char makes no sence for me
+                    return _sequencer.LoadedBmpSong.Title;
+
+                return _sequencer.LoadedBmpSong.DisplayedTitle; //finally, display the title
+            } 
+        }
         public string TrackInstrument 
         { 
             get {
@@ -80,12 +94,6 @@ namespace BardMusicPlayer.Maestro.Performance
                     if (this._trackNumber >= _sequencer.Sequence.Count)
                         return "None";
 
-                    var t = _sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].SourceTrackChunk.Events.OfType<Melanchall.DryWetMidi.Core.SequenceTrackNameEvent>().FirstOrDefault()?.Text;
-                    if (t != null)
-                    {
-                        if (t.StartsWith("Lyric:"))
-                            return t;
-                    }
                     Transmogrify.Song.Config.ClassicProcessorConfig classicConfig = (Transmogrify.Song.Config.ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
                     return classicConfig.Instrument.Name;
                 }
@@ -323,25 +331,33 @@ namespace BardMusicPlayer.Maestro.Performance
             }
         }
 
+        /// <summary>
+        /// Open an instrument
+        /// </summary>
         public void OpenInstrument()
         {
-            if (IsSinger)
-                return;
-
             if (!game.InstrumentHeld.Equals(Instrument.None))
                 return;
 
             if (!trackAndChannelOk())
                 return;
 
-            _hook.SendSyncKeybind(game.InstrumentKeys[Instrument.Parse(TrackInstrument)]);
+            if (UsesDalamud)
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
+            else
+            {
+                var key = game.InstrumentKeys[Instrument.Parse(TrackInstrument)];
+                if (key != Quotidian.Enums.Keys.None)
+                    _hook.SendSyncKeybind(key);
+            }
         }
 
+        /// <summary>
+        /// Replace the instrument
+        /// </summary>
+        /// <returns></returns>
         public async Task<int> ReplaceInstrument()
         {
-            if (IsSinger)
-                return 0;
-
             if (!trackAndChannelOk())
                 return 0;
 
@@ -352,12 +368,24 @@ namespace BardMusicPlayer.Maestro.Performance
                 else
                 {
                     _hook.ClearLastPerformanceKeybinds();
-                    _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
+
+                    if (UsesDalamud)
+                        DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
+                    else
+                        _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
                     await Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).ConfigureAwait(false);
                 }
             }
 
-            _hook.SendSyncKeybind(game.InstrumentKeys[Instrument.Parse(TrackInstrument)]);
+            if (UsesDalamud)
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
+            else
+            {
+                var key = game.InstrumentKeys[Instrument.Parse(TrackInstrument)];
+                if (key != Quotidian.Enums.Keys.None)
+                    _hook.SendSyncKeybind(key);
+            }
+
             return 0;
         }
 
@@ -370,17 +398,18 @@ namespace BardMusicPlayer.Maestro.Performance
                 return;
 
             _hook.ClearLastPerformanceKeybinds();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
+
+            if (UsesDalamud)
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
+            else
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
         }
 
         /// <summary>
-        /// Accept the ready check
+        /// do the ready check
         /// </summary>
-        public void EnsembleAccept()
+        public void DoReadyCheck()
         {
-            if (IsSinger)
-                return;
-
             if (!_forcePlayback)
             {
                 if (!this.PerformerEnabled)
@@ -390,11 +419,52 @@ namespace BardMusicPlayer.Maestro.Performance
                     return;
             }
 
+            if (UsesDalamud)
+            {
+                GameExtensions.StartEnsemble(game);
+                return;
+            }
+
+            Task task = Task.Run(() =>
+            {
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.VIRTUAL_PAD_SELECT]);
+                Task.Delay(100).Wait();
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.LEFT]);
+                Task.Delay(100).Wait();
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+                Task.Delay(400).Wait();
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+            });
+        }
+
+        /// <summary>
+        /// Accept the ready check
+        /// </summary>
+        public void EnsembleAccept()
+        {
+            if (!_forcePlayback)
+            {
+                if (!this.PerformerEnabled)
+                    return;
+
+                if (game.InstrumentHeld.Equals(Instrument.None))
+                    return;
+            }
+
+            if (UsesDalamud)
+            {
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.AcceptReply, game = game, BoolData = true});
+                return;
+            }
+
             _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
             Task.Delay(200);
             _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
         }
 
+        /// <summary>
+        /// Close the input device
+        /// </summary>
         public void Close()
         {
             if (_sequencer is Sequencer)
@@ -432,6 +502,31 @@ namespace BardMusicPlayer.Maestro.Performance
             Task.Delay((text.Length * 8) + 20).Wait();
             _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
         }
+
+        public void SendText(ChatMessageChannelType type, string text)
+        {
+            GameExtensions.SendText(game, type, text);
+        }
+
+        public void TapKey(string modifier, string character)
+        {
+            try
+            {
+                Quotidian.Enums.Keys key = Quotidian.Enums.KeyTranslation.ASCIIToGame[character];
+
+                if (modifier.ToLower().Contains("shift"))
+                    key = (int)Quotidian.Enums.Keys.Shift + key;
+                else if (modifier.ToLower().Contains("ctrl"))
+                    key = (int)Quotidian.Enums.Keys.Control + key;
+                else if (modifier.ToLower().Contains("alt"))
+                    key = (int)Quotidian.Enums.Keys.Alt + key;
+                _hook.SendSyncKeybind(key);
+            }
+            catch
+            {
+
+            }
+        }
         #endregion
 
         #region private
@@ -462,9 +557,6 @@ namespace BardMusicPlayer.Maestro.Performance
 
         private void InternalNote(Object o, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
         {
-            if (IsSinger)
-                return;
-
             Sanford.Multimedia.Midi.ChannelMessageBuilder builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
 
             NoteEvent noteEvent = new NoteEvent
@@ -497,9 +589,6 @@ namespace BardMusicPlayer.Maestro.Performance
 
         private void InternalProg(object sender, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
         {
-            if (IsSinger)
-                return;
-
             if (!_forcePlayback)
             {
                 if (!this.PerformerEnabled)
@@ -575,13 +664,17 @@ namespace BardMusicPlayer.Maestro.Performance
 
         private void IntenalLyrics(object sender, Sanford.Multimedia.Midi.MetaMessageEventArgs e)
         {
-            if (!IsSinger)
+            if (SingerTrackNr <= 0) //0 mean no singer
+                return;
+
+            if (!UsesDalamud)
                 return;
 
             Sanford.Multimedia.Midi.MetaTextBuilder builder = new Sanford.Multimedia.Midi.MetaTextBuilder(e.Message);
             string text = builder.Text;
-            if (_sequencer.GetTrackNum(e.MidiTrack) == _trackNumber)
-                SendText(text);
+            var t = mainSequencer.MaxTrack;
+            if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ mainSequencer.LyricStartTrack-1)
+                GameExtensions.SendText(game, ChatMessageChannelType.Say, text);
         }
 #endregion
     }

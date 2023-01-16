@@ -13,6 +13,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Ui.Classic;
+using BardMusicPlayer.Ui.Functions;
 
 namespace BardMusicPlayer.Ui.Controls
 {
@@ -24,7 +27,6 @@ namespace BardMusicPlayer.Ui.Controls
         public BardView()
         {
             InitializeComponent();
-            StartDelay_CheckBox.IsChecked = BmpPigeonhole.Instance.EnsemblePlayDelay;
 
             this.DataContext = this;
             Bards = new ObservableCollection<Performer>();
@@ -43,7 +45,7 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void Globals_OnConfigReload(object sender, EventArgs e)
         {
-            Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.EnsembleAutoEquip;
+            Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
         }
 
         public ObservableCollection<Performer> Bards { get; private set; }
@@ -97,6 +99,11 @@ namespace BardMusicPlayer.Ui.Controls
             this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.ItemsSource = Bards));
         }
 
+        private void RdyCheck_Click(object sender, RoutedEventArgs e)
+        {
+            BmpMaestro.Instance.StartEnsCheck();
+        }
+
         private void OpenInstrumentButton_Click(object sender, RoutedEventArgs e)
         {
             BmpMaestro.Instance.EquipInstruments();
@@ -104,6 +111,13 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
         {
+            if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+            {
+                PlaybackFunctions.PauseSong();
+                Classic_MainView.CurrentInstance.Play_Button_State(false);
+            }
+
+            BmpMaestro.Instance.StopLocalPerformer();
             BmpMaestro.Instance.UnEquipInstruments();
         }
 
@@ -161,11 +175,6 @@ namespace BardMusicPlayer.Ui.Controls
             game.PerformerEnabled = ctl.IsChecked ?? false;
         }
 
-        private void StartDelay_Checked(object sender, RoutedEventArgs e)
-        {
-            BmpPigeonhole.Instance.EnsemblePlayDelay = StartDelay_CheckBox.IsChecked ?? true;
-        }
-
         private void Bard_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -182,7 +191,7 @@ namespace BardMusicPlayer.Ui.Controls
 
         private void Autoequip_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.EnsembleAutoEquip = Autoequip_CheckBox.IsChecked ?? false;
+            BmpPigeonhole.Instance.AutoEquipBards = Autoequip_CheckBox.IsChecked ?? false;
             Globals.Globals.ReloadConfig();
         }
 
@@ -253,6 +262,15 @@ namespace BardMusicPlayer.Ui.Controls
             FileStream fileStream = File.Create(openFileDialog.FileName);
             fileStream.Write(content, 0, content.Length);
             fileStream.Close();
+        }
+
+        private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLow_CheckBox.IsChecked))
+            {
+                p.game.GfxSettingsLow = GfxLow_CheckBox.IsChecked ?? false;
+                p.game.GfxSetLow(GfxLow_CheckBox.IsChecked ?? false);
+            }
         }
 
         /// <summary>

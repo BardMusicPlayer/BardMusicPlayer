@@ -106,26 +106,21 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking
                 BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Error Ip not in list\r\n"));
                 return false;
             }
-            else
+
+            NetworkSocket sockets = FoundClients.Instance.FindSocket(remoteIpEndPoint.Address.ToString());
+            if (sockets != null)
             {
-                NetworkSocket sockets = FoundClients.Instance.FindSocket(remoteIpEndPoint.Address.ToString());
-                if (sockets != null)
+                BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Session added\r\n"));
+                sockets.ListenSocket = handler;
+                lock (sessions)
                 {
-                    BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Session added\r\n"));
-                    sockets.ListenSocket = handler;
-                    lock (sessions)
-                    {
-                        sessions.Add(sockets);
-                    }
-                    return true;
+                    sessions.Add(sockets);
                 }
-                else
-                {
-                    BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Error handshake sock null\r\n"));
-                    return false;
-                }
+                return true;
             }
-            return true;
+
+            BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Error handshake sock null\r\n"));
+            return false;
         }
 
         public void Start(object sender, DoWorkEventArgs e)

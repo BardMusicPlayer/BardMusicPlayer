@@ -246,7 +246,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
 
             GetEnsembleEvents(cancellationToken, readResult);
-            GetPlaylistEvents(cancellationToken, readResult);
         }
 
         private void GetEnsembleEvents(CancellationToken cancellationToken, ChatLogResult result)
@@ -279,27 +278,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        private void GetPlaylistEvents(CancellationToken cancellationToken, ChatLogResult readResult)
-        {
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
-            foreach (ChatLogItem item in readResult.ChatLogItems)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-
-                if (item.Code.Equals("000E"))
-                {
-                    if (item.Line.Split(':')[1].StartsWith("switchto"))
-                    {
-                        int id = Convert.ToInt32((string)item.Line.Split(' ')[2]);
-                        ReaderHandler.Game.PublishEvent(new MidibardPlaylistEvent(EventSource.Sharlayan, ReaderHandler.Game, id));
-                    }
                 }
             }
         }

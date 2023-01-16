@@ -397,9 +397,9 @@ namespace BardMusicPlayer.Transmogrify.Song
                             long lastOn = notesToFix[k].GetTimedNoteOnEvent().Time;
                             if (lastOn < lowestParent) lowestParent = lastOn;
                         }
-                        if (lowestParent <= time + 30)
+                        if (lowestParent <= time + 50)
                         {
-                            time = lowestParent - 30;
+                            time = lowestParent - 50;
                             if (time < 0) continue;
                             notesToFix[i].Time = time;
                             dur = 25;
@@ -425,10 +425,18 @@ namespace BardMusicPlayer.Transmogrify.Song
 
                         if (j + 1 < notesToFix.Count())
                         {
-                            if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
+                            // BACON MEOWCHESTRA
+                            // Bandaid fix: If sustained note is 100ms or greater, ensure 60ms between the end of that note and the beginning of the next note.
+                            // Otherwise, leave the behavior as it was before.
+                            if (notesToFix[j].Length >= 100 && notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 60)
+                            {
+                                dur = notesToFix[j + 1].Time - notesToFix[j].Time - 60;
+                                dur = dur < 60 ? 60 : dur;
+                            }
+                            else if (notesToFix[j].Length < 100 && notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
                             {
                                 dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
-                                dur = dur < 25 ? 1 : dur;
+                                dur = dur < 25 ? 25 : dur;
                             }
                         }
                         fixedNotes.Add(new Note(noteNum, dur, time)
@@ -797,10 +805,18 @@ namespace BardMusicPlayer.Transmogrify.Song
 
                         if (j + 1 < notesToFix.Count())
                         {
-                            if (notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
+                            // BACON MEOWCHESTRA
+                            // Bandaid fix: If sustained note is 100ms or greater, ensure 60ms between the end of that note and the beginning of the next note.
+                            // Otherwise, leave the behavior as it was before.
+                            if (notesToFix[j].Length >= 100 && notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 60)
+                            {
+                                dur = notesToFix[j + 1].Time - notesToFix[j].Time - 60;
+                                dur = dur < 60 ? 60 : dur;
+                            }
+                            else if (notesToFix[j].Length < 100 && notesToFix[j + 1].Time <= notesToFix[j].Time + notesToFix[j].Length + 25)
                             {
                                 dur = notesToFix[j + 1].Time - notesToFix[j].Time - 25;
-                                dur = dur < 25 ? 1 : dur;
+                                dur = dur < 25 ? 25 : dur;
                             }
                         }
                         fixedNotes.Add(new Note(noteNum, dur, time)

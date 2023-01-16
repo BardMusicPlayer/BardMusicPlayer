@@ -202,14 +202,6 @@ namespace BardMusicPlayer.Seer
 
         private void OnPlayerNameChanged(PlayerNameChanged seerEvent) => PlayerNameChanged?.Invoke(seerEvent);
 
-        //Midibard things
-        public delegate void MidibardPlaylistEventHandler(MidibardPlaylistEvent seerEvent);
-        /// <summary>
-        /// Called when something happened in the chat.
-        /// </summary>
-        public event MidibardPlaylistEventHandler MidibardPlaylistEvent;
-        private void OnMidibardPlaylistEvent(MidibardPlaylistEvent seerEvent) => MidibardPlaylistEvent?.Invoke(seerEvent);
-
         private async Task RunEventsHandler(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
@@ -283,10 +275,6 @@ namespace BardMusicPlayer.Seer
                             break;
                         case PlayerNameChanged playerNameChanged:
                             OnPlayerNameChanged(playerNameChanged);
-                            break;
-                        //Midibard things
-                        case MidibardPlaylistEvent midibardPlaylistEvent:
-                            OnMidibardPlaylistEvent(midibardPlaylistEvent);
                             break;
                     }
                 }

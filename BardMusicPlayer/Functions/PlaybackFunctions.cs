@@ -36,6 +36,7 @@ namespace BardMusicPlayer.Ui.Functions
         {
             var openFileDialog = new OpenFileDialog
             {
+                InitialDirectory = Globals.Globals.DirectoryPath,
                 Filter = Globals.Globals.FileFilters,
                 Multiselect = true
             };
@@ -47,7 +48,9 @@ namespace BardMusicPlayer.Ui.Functions
                 return false;
 
             PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
-            
+
+			Globals.Globals.DirectoryPath = Path.GetDirectoryName(openFileDialog.FileName);
+
             CurrentSong = BmpSong.OpenFile(openFileDialog.FileName).Result;
             BmpMaestro.Instance.SetSong(CurrentSong);
             return true;

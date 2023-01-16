@@ -130,11 +130,6 @@ namespace BardMusicPlayer.Seer
                         ServerLatency = latencyUpdate.LatencyMilis;
                         break;
 
-                    //Midibard things
-                    case MidibardPlaylistEvent midibardPlaylistEvent:
-                        BmpSeer.Instance.PublishEvent(midibardPlaylistEvent);
-                        break;
-
                     case PartyMembersChanged partyMembers:
                         if (!PartyMembers.KeysEquals(partyMembers.PartyMembers))
                         {

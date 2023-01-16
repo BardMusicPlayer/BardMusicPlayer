@@ -18,9 +18,11 @@ namespace BardMusicPlayer.Ui.Classic
         private int MaxTracks = 1;
         private bool _directLoaded { get; set; } = false; //indicates if a song was loaded directly or from playlist
         //private NetworkPlayWindow _networkWindow = null;
+        public static Classic_MainView CurrentInstance { get; private set; }
         public Classic_MainView()
         {
             InitializeComponent();
+            CurrentInstance = this;
             //Always start with the playlists
             _showingPlaylists = true;
             //Fill the list
@@ -39,8 +41,6 @@ namespace BardMusicPlayer.Ui.Classic
             Siren_Volume.Value = BmpSiren.Instance.GetVolume();
             BmpSiren.Instance.SynthTimePositionChanged  += Instance_SynthTimePositionChanged;
             SongBrowser.OnLoadSongFromBrowser           += Instance_SongBrowserLoadedSong;
-
-            BmpSeer.Instance.MidibardPlaylistEvent    += Instance_MidibardPlaylistEvent;
 
             Globals.Globals.OnConfigReload              += Globals_OnConfigReload;
             LoadConfig();
@@ -95,11 +95,6 @@ namespace BardMusicPlayer.Ui.Classic
         private void Instance_ChatLog(Seer.Events.ChatLog seerEvent)
         {
             this.Dispatcher.BeginInvoke(new Action(() => this.AppendChatLog(seerEvent)));
-        }
-
-        private void Instance_MidibardPlaylistEvent(Seer.Events.MidibardPlaylistEvent seerEvent)
-        {
-            this.Dispatcher.BeginInvoke(new Action(() => this.SelectSongByIndex(seerEvent.Song)));
         }
 
         private void Instance_SynthTimePositionChanged(string songTitle, double currentTime, double endTime, int activeVoices)
@@ -190,11 +185,11 @@ namespace BardMusicPlayer.Ui.Classic
 
         public void AppendChatLog(Seer.Events.ChatLog ev)
         {
-            if (BmpMaestro.Instance.GetHostPid() == ev.ChatLogGame.Pid)
+            /*if (BmpMaestro.Instance.GetHostPid() == ev.ChatLogGame.Pid)
             {
                 BmpChatParser.AppendText(ChatBox, ev);
                 this.ChatBox.ScrollToEnd();
-            }
+            }*/
 
             if (ev.ChatLogCode == "0039")
             {
@@ -257,6 +252,22 @@ namespace BardMusicPlayer.Ui.Classic
                 BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
             }
         }
+
+        private void track_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+           switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    track_cmdUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    track_cmdDown_Click(sender, e);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion
 
         #region Octave UP/Down
@@ -294,7 +305,30 @@ namespace BardMusicPlayer.Ui.Classic
                 BmpMaestro.Instance.SetOctaveshiftOnHost(_octavenumValue);
             }
         }
+        private void octave_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    octave_cmdUp_Click(sender, e);
+                    break;
+                case System.Windows.Input.Key.Down:
+                    octave_cmdDown_Click(sender, e);
+                    break;
+                default:
+                    break;
+            }
+        }
         #endregion
+
+
+        private void Macro_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var macroLaunchpad = new MacroLaunchpad
+            {
+            Visibility = Visibility.Visible
+            };
+        }
 
         private void Info_Button_Click(object sender, RoutedEventArgs e)
         {

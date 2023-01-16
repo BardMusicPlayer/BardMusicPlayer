@@ -1,11 +1,13 @@
 ﻿/*
  * Copyright(c) 2022 GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using BardMusicPlayer.Maestro.Performance;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
@@ -102,10 +104,10 @@ namespace BardMusicPlayer.Maestro
         /// Sets the song title parsing bard and the prefix like /yell
         /// </summary>
         /// <param name="performer"></param>
-        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer performer, bool legacy = true)
+        public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer performer)
         {
             if (_orchestrator != null)
-                _orchestrator.SetSongTitleParsingBard(channel, prefix, performer, legacy);
+                _orchestrator.SetSongTitleParsingBard(channel, prefix, performer);
         }
 
         /// <summary>
@@ -127,6 +129,7 @@ namespace BardMusicPlayer.Maestro
             if (_orchestrator != null)
                 _orchestrator.SetOctaveshiftOnHost(octave);
         }
+        
 
         /// <summary>
         /// Sets the playback at position (timeindex in ticks)
@@ -254,6 +257,19 @@ namespace BardMusicPlayer.Maestro
         }
 
         /// <summary>
+        /// Start the ensemble check
+        /// </summary>
+        public void StartEnsCheck()
+        {
+            if (_orchestrator == null)
+                return;
+            
+            var perf = _orchestrator.GetAllPerformers();
+            foreach (var p in perf)
+                p.DoReadyCheck();
+        }
+
+        /// <summary>
         /// Equip the bard with it's instrument
         /// </summary>
         public void EquipInstruments()
@@ -274,40 +290,28 @@ namespace BardMusicPlayer.Maestro
 
         #region Routines for Scripting
         /// <summary>
-        /// Send a chat text; 0 for all or number in list
-        /// </summary>
-        public void SendText(int num, string text)
-        {
-            var perf = _orchestrator.GetAllPerformers();
-            if (num == 0)
-            {
-                System.Threading.Tasks.Parallel.ForEach(perf, p =>
-                {
-                    p.SendText(text);
-                });
-            }
-            else
-            {
-                try
-                {
-                    Performer performer = perf.ElementAt(num - 1);
-                    performer.SendText(text);
-                }
-                catch {}
-            }
-        }
-
-        /// <summary>
         /// Send a chat text; "All" or specific bard name
         /// </summary>
-        public void SendText(string BardName, string text)
+        public void SendText(string BardName, ChatMessageChannelType type, string text, List<string> unselected_bards = null)
         {
+            if (_orchestrator == null)
+                return;
+
+            if (BardName == "")
+                return;
+
             var perf = _orchestrator.GetAllPerformers();
-            if (BardName.Equals("All"))
+            if (BardName.ToLower().Equals("all"))
             {
-                System.Threading.Tasks.Parallel.ForEach(perf, p =>
+                Parallel.ForEach(perf, p =>
                 {
-                    p.SendText(text);
+                    if (unselected_bards == null || unselected_bards.Count() <= 0)
+                        p.SendText(type, text);
+                    else
+                    {
+                        if (!unselected_bards.Contains(p.game.PlayerName))
+                            p.SendText(type, text);
+                    }
                 });
             }
             else
@@ -315,9 +319,42 @@ namespace BardMusicPlayer.Maestro
                 try
                 {
                     Performer performer = perf.AsParallel().Where(p => p.game.PlayerName.Equals(BardName)).First();
-                    performer.SendText(text);
+                    performer.SendText(type, text);
                 }
                 catch {}
+            }
+        }
+
+        public void TapKey(string BardName, string modifier, string character, List<string> unselected_bards = null)
+        {
+            if (_orchestrator == null)
+                return;
+
+            if (BardName == "")
+                return;
+
+            var perf = _orchestrator.GetAllPerformers();
+            if (BardName.ToLower().Equals("all"))
+            {
+                System.Threading.Tasks.Parallel.ForEach(perf, p =>
+                {
+                    if (unselected_bards == null || unselected_bards.Count() <= 0)
+                        p.TapKey(modifier, character);
+                    else
+                    {
+                        if (!unselected_bards.Contains(p.game.PlayerName))
+                            p.TapKey(modifier, character);
+                    }
+                });
+            }
+            else
+            {
+                try
+                {
+                    Performer performer = perf.AsParallel().Where(p => p.game.PlayerName.Equals(BardName)).First();
+                    performer.TapKey(modifier, character);
+                }
+                catch { }
             }
         }
         #endregion

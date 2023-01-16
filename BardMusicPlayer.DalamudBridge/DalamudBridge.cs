@@ -3,58 +3,78 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+#region
+
 using System;
 using BardMusicPlayer.DalamudBridge.Helper.Dalamud;
-using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 
-namespace BardMusicPlayer.DalamudBridge
+#endregion
+
+namespace BardMusicPlayer.DalamudBridge;
+
+public sealed partial class DalamudBridge
 {
-    public class DalamudBridge
+    private static readonly Lazy<DalamudBridge> LazyInstance = new(static () => new DalamudBridge());
+
+    internal DalamudServer DalamudServer;
+
+    private DalamudBridge()
     {
-        private static readonly Lazy<DalamudBridge> LazyInstance = new(() => new DalamudBridge());
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Started { get; private set; }
+    /// <summary>
+    /// </summary>
+    public bool Started { get; private set; }
 
-        internal DalamudServer DalamudServer;
+    public static DalamudBridge Instance => LazyInstance.Value;
 
-        private DalamudBridge()
-        {
-        }
+    /// <summary>
+    ///     Start Grunt.
+    /// </summary>
+    public void Start()
+    {
+        if (Started)
+            return;
 
-        public static DalamudBridge Instance => LazyInstance.Value;
+        if (!BmpSeer.Instance.Started)
+            throw new DalamudBridgeException("DalamudBridge requires Seer to be running.");
 
-        /// <summary>
-        /// Start Grunt.
-        /// </summary>
-        public void Start()
-        {
-            if (Started) 
-                return;
-            if (!BmpSeer.Instance.Started) throw new DalamudBridgeException("DalamudBridge requires Seer to be running.");
-            DalamudServer = new DalamudServer();
-            Started = true;
-        }
+        DalamudServer = new DalamudServer();
+        StartEventsHandler();
+        Started = true;
+    }
 
-        /// <summary>
-        /// Stop Grunt.
-        /// </summary>
-        public void Stop()
-        {
-            if (!Started) return;
-            DalamudServer?.Dispose();
-            DalamudServer = null;
-            Started = false;
-        }
+    /// <summary>
+    ///     Stop Grunt.
+    /// </summary>
+    public void Stop()
+    {
+        if (!Started) return;
 
-        ~DalamudBridge() => Dispose();
-        public void Dispose()
-        {
-            Stop();
-            GC.SuppressFinalize(this);
-        }
+        StopEventsHandler();
+        DalamudServer?.Dispose();
+        DalamudServer = null;
+        Started = false;
+    }
+
+
+    public void ActionToQueue(DalamudBridgeCommandStruct data)
+    {
+        if (!Started) return;
+
+        PublishEvent(data);
+    }
+
+
+    ~DalamudBridge()
+    {
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        Stop();
+        GC.SuppressFinalize(this);
     }
 }

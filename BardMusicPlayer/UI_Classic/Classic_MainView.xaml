@@ -106,12 +106,12 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="PlaylistRepeat_Button" Grid.Column="1" Click="PlaylistRepeat_Button_Click" Opacity="0.5">
+                        <Button x:Name="PlaylistRepeat_Button" Grid.Column="1" Click="PlaylistRepeat_Button_Click" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_REPEAT}">
                             <Button.Background>
                                 <ImageBrush ImageSource="/BardMusicPlayer;component/Resources/Images/ClassicLoop.png"/>
                             </Button.Background>
                         </Button>
-                        <Button x:Name="PlaylistShuffle_Button" Grid.Column="3" Click="PlaylistShuffle_Button_Click" Opacity="0.5">
+                        <Button x:Name="PlaylistShuffle_Button" Grid.Column="3" Click="PlaylistShuffle_Button_Click" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_SHUFFLE}">
                             <Button.Background>
                                 <ImageBrush ImageSource="/BardMusicPlayer;component/Resources/Images/ClassicShuffle.png"/>
                             </Button.Background>
@@ -119,7 +119,7 @@
                         <Button Grid.Column="5" x:Name="SkipSong_Button" VerticalAlignment="Center" Content="Skip" Click="SkipSong_Button_Click" ToolTip="{StaticResource PLAYLIST_SKIP}"/>
 
                         <CheckBox Grid.Column="7" x:Name="AutoPlay_CheckBox" Checked="AutoPlay_Checked" Unchecked="AutoPlay_Checked" VerticalAlignment="Center" ToolTip="{StaticResource PLAYLIST_AUTO}"/>
-                        <Label Content="Auto-play" Grid.Column="9" VerticalAlignment="Center"/>
+                        <Label Content="Auto-play" Grid.Column="9" VerticalAlignment="Center" ToolTip="{StaticResource PLAYLIST_AUTO}"/>
 
                     </Grid>
                 </Grid>
@@ -131,7 +131,7 @@
                     <ColumnDefinition Width="275*"/>
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
-                    <TabItem Header="[Chat] All">
+                    <!-- <TabItem Header="[Chat] All">
                         <RichTextBox x:Name="ChatBox" IsReadOnly="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsDeferredScrollingEnabled="True" Background="Gray">
                             <RichTextBox.Style>
                                 <Style TargetType="RichTextBox">
@@ -146,7 +146,7 @@
                                 </Style>
                             </RichTextBox.Style>
                         </RichTextBox>
-                    </TabItem>
+                    </TabItem> -->
                     <TabItem Header="Performers">
                         <Grid Background="WhiteSmoke">
                             <control:BardView x:Name="BardsList"/>
@@ -169,9 +169,9 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" Content="Bring FFXIV to front"/>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="1" Content="Bring BMP to front" x:Name="AMPInFrontBox" Checked="AMPInFrontBox_Checked" Unchecked="AMPInFrontBox_Checked" ToolTip="{StaticResource GAME_AMPFRONT}"/>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="2" Content="Pause song on unequip"/>
+                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" Content="Bring FFXIV to front" IsEnabled="False"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="1" Content="Bring BMP to front" x:Name="AMPInFrontBox" Unchecked="AMPInFrontBox_Checked" Checked="AMPInFrontBox_Checked" ToolTip="{StaticResource GAME_AMPFRONT}"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="2" Content="Pause song on unequip" IsEnabled="False"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="0" Grid.Column="1" Header="Playback">
@@ -182,16 +182,18 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="HoldNotesBox" Content="Hold notes"          Unchecked="Hold_Notes_Checked"        Checked="Hold_Notes_Checked"       ToolTip="{StaticResource PL_HOLDNOTES}"/>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="2" x:Name="ForcePlaybackBox" Content="Force playback"   Unchecked="Force_Playback_Checked"    Checked="Force_Playback_Checked"   ToolTip="{StaticResource PL_FORCE}"/>
-                                    <Label Margin="10,0,0,0"     Grid.Row="3" Content="MIDI Input device" HorizontalAlignment="Left"/>
-                                    <ComboBox Margin="120,0,0,0" Grid.Row="3" x:Name="MIDI_Input_DeviceBox" ItemsSource="{Binding}"
+                                    <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="HoldNotesBox" Content="Hold Notes"          Unchecked="Hold_Notes_Checked"        Checked="Hold_Notes_Checked"       ToolTip="{StaticResource PL_HOLDNOTES}"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="2" x:Name="ForcePlaybackBox" Content="Force Playback"   Unchecked="Force_Playback_Checked"    Checked="Force_Playback_Checked"   ToolTip="{StaticResource PL_FORCE}"/>
+                                    <CheckBox Margin="10,0,0,0" Grid.Row="3" x:Name="IgnoreProgchangeBox"      Content="Ignore Guitar Program Changes"                    Unchecked="IgnoreProgchangeBox_Checked"   Checked="IgnoreProgchangeBox_Checked"   ToolTip="{StaticResource LO_INGOREPROG}"/>
+                                    <Label Margin="10,0,0,0"     Grid.Row="4" Content="MIDI Input device" HorizontalAlignment="Left"/>
+                                    <ComboBox Margin="120,0,0,0" Grid.Row="4" x:Name="MIDI_Input_DeviceBox" ItemsSource="{Binding}"
                                         DisplayMemberPath="Value"
-                                        SelectionChanged="MIDI_Input_Device_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="100" ToolTip="{StaticResource PL_MIDIINPUT}">
+                                        SelectionChanged="MIDI_Input_Device_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" ToolTip="{StaticResource PL_MIDIINPUT}">
                                         <ComboBoxItem>None</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="4" x:Name="LiveMidiDelay" Content="Enable note delay for live playing" Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked" ToolTip="{StaticResource PL_LIVE}"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="5" x:Name="LiveMidiDelay" Content="Enable note delay for live playing" Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked" ToolTip="{StaticResource PL_LIVE}"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" Header="Misc">
@@ -208,9 +210,7 @@
                                         <ComboBoxItem>Chat</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="1" x:Name="MidiBardComp"      Content="Enable MidiBard sync"             Unchecked="MidiBard_Checked"          Checked="MidiBard_Checked"          ToolTip="{StaticResource MISC_MIDIBARD}"/>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="2" x:Name="AutoequipSoloBard" Content="Auto Equip solo Bard"    Unchecked="AutoequipSoloBard_Checked" Checked="AutoequipSoloBard_Checked" ToolTip="{StaticResource MISC_AUTOEQSOLO}"/>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="3" x:Name="SkinUiBox"         Content="Use skinned Ui"                   Unchecked="SkinUiBox_Checked"         Checked="SkinUiBox_Checked"         ToolTip="{StaticResource MISC_SKINNEDUI}" IsEnabled="False"/>
+                                    <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="1" Grid.Column="1" Header="Local Ochestra">
@@ -222,11 +222,9 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="LocalOrchestraBox"       Content="Local Orchestra enabled"          Unchecked="LocalOrchestraBox_Checked"     Checked="LocalOrchestraBox_Checked"     ToolTip="{StaticResource LO_ENABLE}"/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="AutoEquipBox"             Content="Auto Equip Orchestra"             Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}"/>
+                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="LocalOrchestraBox"       Content="Local Orchestra"          Unchecked="LocalOrchestraBox_Checked"     Checked="LocalOrchestraBox_Checked"     ToolTip="{StaticResource LO_ENABLE}"/>
+                                    <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="AutoEquipBox"             Content="Auto-Equip Performer(s)"          Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}" IsChecked="False"/>
                                     <CheckBox Margin="10,0,0,0" Grid.Row="2" x:Name="KeepTrackSettingsBox"     Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"  Checked="KeepTrackSettingsBox_Checked"  ToolTip="{StaticResource LO_KEEPTRACKS}"/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="3" x:Name="IgnoreProgchangeBox"      Content="Ignore Non Guitar Program Changes"                    Unchecked="IgnoreProgchangeBox_Checked"   Checked="IgnoreProgchangeBox_Checked"   ToolTip=""/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="4" x:Name="StartBardIndividuallyBox" Content="Individual start"                 Unchecked="StartBardIndividually_Checked" Checked="StartBardIndividually_Checked" ToolTip="{StaticResource LO_ISTART}"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -310,7 +308,7 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="SongBrowser">
+                    <TabItem Header="Song Browser">
                         <Grid Background="WhiteSmoke">
                             <control:SongBrowser x:Name="SongBrowser"/>
                         </Grid>
@@ -335,7 +333,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="track_txtNum" x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
+                    <TextBox Grid.Column="0" x:Name="track_txtNum" x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged" KeyUp="track_txtNum_KeyUp" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12"/>
@@ -351,7 +349,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="octave_txtNum" x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
+                    <TextBox Grid.Column="0" x:Name="octave_txtNum" x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged" KeyUp="octave_txtNum_KeyUp" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12"/>
@@ -402,7 +400,7 @@
                 <!-- Controls -->
                 <Button Grid.Row="0" x:Name="Play_Button" Content="▶" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="75" Click="Play_Button_Click"/>
                 <Button Grid.Row="1" x:Name="Loop_Button" Content="Loop" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="Loop_Button_Click"/>
-                <Button Grid.Row="2" x:Name="Info_Button" Content="Info" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Info_Button_Click" PreviewMouseRightButtonDown="Info_Button_PreviewMouseRightButtonDown" IsEnabled="False"/>
+                <Button Grid.Row="2" x:Name="Macro_Button" Content="Macro" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Macro_Button_Click" />
             </Grid>
             <!-- Instrumentinfo Row -->
             <Grid Grid.Row="4" Grid.Column="0">
