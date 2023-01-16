@@ -40,7 +40,6 @@ namespace BardMusicPlayer.Ui.Classic
             BmpMaestro.Instance.OnPlaybackStopped       += Instance_PlaybackStopped;
             BmpMaestro.Instance.OnTrackNumberChanged    += Instance_TrackNumberChanged;
             BmpMaestro.Instance.OnOctaveShiftChanged    += Instance_OctaveShiftChanged;
-            BmpSeer.Instance.ChatLog                    += Instance_ChatLog;
             Siren_Volume.Value = BmpSiren.Instance.GetVolume();
             BmpSiren.Instance.SynthTimePositionChanged  += Instance_SynthTimePositionChanged;
             SongBrowser.OnLoadSongFromBrowser           += Instance_SongBrowserLoadedSong;
@@ -95,14 +94,9 @@ namespace BardMusicPlayer.Ui.Classic
             this.Dispatcher.BeginInvoke(new Action(() => this.OctaveShiftChanged(e)));
         }
 
-        private void Instance_ChatLog(Seer.Events.ChatLog seerEvent)
-        {
-            this.Dispatcher.BeginInvoke(new Action(() => this.AppendChatLog(seerEvent)));
-        }
-
         private void Instance_SynthTimePositionChanged(string songTitle, double currentTime, double endTime, int activeVoices)
         {
-            this.Dispatcher.BeginInvoke(new Action(() => this.Siren_PlaybackTimeChanged(currentTime, endTime)));
+            this.Dispatcher.BeginInvoke(new Action(() => this.Siren_PlaybackTimeChanged(currentTime, endTime, activeVoices)));
         }
 
         private void PlaybackTimeChanged(Maestro.Events.CurrentPlayPositionEvent e)
@@ -184,30 +178,6 @@ namespace BardMusicPlayer.Ui.Classic
         {
             if (e.IsHost)
                 OctaveNumValue = e.OctaveShift;
-        }
-
-        public void AppendChatLog(Seer.Events.ChatLog ev)
-        {
-            /*if (BmpMaestro.Instance.GetHostPid() == ev.ChatLogGame.Pid)
-            {
-                BmpChatParser.AppendText(ChatBox, ev);
-                this.ChatBox.ScrollToEnd();
-            }*/
-
-            if (ev.ChatLogCode == "0039")
-            {
-                if (ev.ChatLogLine.Contains(@"Anzählen beginnt") ||
-                    ev.ChatLogLine.Contains("The count-in will now commence.") ||
-                    ev.ChatLogLine.Contains("orchestre est pr"))
-                {
-                    if (BmpPigeonhole.Instance.AutostartMethod != (int)Globals.Globals.Autostart_Types.VIA_CHAT)
-                        return;
-                    if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
-                        return;
-                    PlaybackFunctions.PlaySong(3000);
-                    Play_Button_State(true);
-                }
-            }
         }
         #endregion
 

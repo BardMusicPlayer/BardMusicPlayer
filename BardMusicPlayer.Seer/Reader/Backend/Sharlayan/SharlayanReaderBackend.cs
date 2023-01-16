@@ -238,13 +238,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             ChatLogResult readResult = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
             _lastScan.PreviousArrayIndex = readResult.PreviousArrayIndex;
             _lastScan.PreviousOffset = readResult.PreviousOffset;
-            foreach (ChatLogItem item in readResult.ChatLogItems)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-                ReaderHandler.Game.PublishEvent(new ChatLog(EventSource.Sharlayan, ReaderHandler.Game, item));
-            }
-
             GetEnsembleEvents(cancellationToken, readResult);
         }
 
