@@ -1,2 +1,21 @@
-# Bard Music Player
-Bard Music Player is an automated music player for playing MIDI songs in FFXIV using the in-game Bard's Performance mode.
+# BardMusicPlayer
+BardMusicPlayer is an automated music player for playing MIDI songs in FFXIV using the in-game bard performance mode.
+
+For further information or a quick start, visit the [official page](https://bardmusicplayer.com/).
+
+**Join the ✅ [Discord Server](https://discord.gg/bmp) for support!**
+
+# Hypnotoad Plugin
+
+BardMusicPlayer can be used in conjunction with the [Hypnotoad](https://github.com/BardMusicPlayer/Hypnotoad-Plugin) dalamud companion plugin for enhanced functionality.
+
+* Output lyrics.
+* Chat while playing.
+* Direct instrument & ensemble ready / accept.
+* Set graphics toggle.
+
+## How to Install
+
+Copy this url to your dalamud settings experimental custom plugin repositories and search for the hypnotoad plugin.
+
+`https://dl.bardmusicplayer.com/hypnotoad/`
