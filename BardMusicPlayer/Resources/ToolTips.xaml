@@ -23,7 +23,7 @@
     <sys:String x:Key="GAME_AMPFRONT"    xml:space="preserve">Brings the amp in front after a new song was loaded from the playlist</sys:String>
 
     <!-- Settings: Misc-->
-    <sys:String x:Key="MISC_AUTOSTART"   xml:space="preserve">Select the autostart trigger [Metronome is prefrered]</sys:String>
+    <sys:String x:Key="MISC_AUTOSTART"   xml:space="preserve">Select the autostart trigger [Metronome is preferred]</sys:String>
     <sys:String x:Key="MISC_AUTOEQPLGN"  xml:space="preserve">Enables auto-equip / ensemble accept via Hypnotoad dalamud plugin</sys:String>
 
     <!-- Settings: LocalOchestra-->
