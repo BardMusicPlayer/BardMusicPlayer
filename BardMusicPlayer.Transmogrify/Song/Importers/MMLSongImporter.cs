@@ -267,16 +267,16 @@ public static class MMLSongImporter
 
     private static void SetNoteOn(TrackChunk track, double duration, SevenBitNumber noteNumber)
     {
-        using var manager = new TimedEventsManager(track.Events);
-        var timedEvents = manager.Events;
+        using var manager = new TimedObjectsManager<TimedEvent>(track.Events);
+        var timedEvents = manager.Objects;
         timedEvents.Add(new TimedEvent(new NoteOnEvent(noteNumber, (SevenBitNumber)127),
             (long)duration / 1000));
     }
 
     private static void SetNoteOff(TrackChunk track, double duration, SevenBitNumber noteNumber)
     {
-        using var manager = new TimedEventsManager(track.Events);
-        var timedEvents = manager.Events;
+        using var manager = new TimedObjectsManager<TimedEvent>(track.Events);
+        var timedEvents = manager.Objects;
         timedEvents.Add(
             new TimedEvent(new NoteOffEvent(noteNumber, (SevenBitNumber)127), (long)duration / 1000));
     }

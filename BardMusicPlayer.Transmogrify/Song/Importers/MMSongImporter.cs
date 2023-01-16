@@ -62,10 +62,10 @@ public static class MMSongImporter
                 {
                     var thisTrack =
                         new TrackChunk(new SequenceTrackNameEvent(Instrument.Parse(bard.instrument).Name));
-                    using (var manager = new TimedEventsManager(thisTrack.Events))
+                    using (var manager = new TimedObjectsManager<TimedEvent>(thisTrack.Events))
                     {
-                        var timedEvents = manager.Events;
-                        var last = 0;
+                        TimedObjectsCollection<TimedEvent> timedEvents = manager.Objects;
+                        int last = 0;
                         foreach (var note in bard.sequence)
                             if (note.Value == 254)
                             {
@@ -88,9 +88,9 @@ public static class MMSongImporter
                 foreach (var lyrics in msong.lyrics)
                 {
                     var thisTrack = new TrackChunk(new SequenceTrackNameEvent("Lyrics: " + lyrics.description));
-                    using (var manager = new TimedEventsManager(thisTrack.Events))
+                    using (var manager = new TimedObjectsManager<TimedEvent>(thisTrack.Events))
                     {
-                        var timedEvents = manager.Events;
+                        TimedObjectsCollection<TimedEvent> timedEvents = manager.Objects;
                         foreach (var seqData in lyrics.sequence)
                         {
                             var f = lyrics.lines[seqData.Value];

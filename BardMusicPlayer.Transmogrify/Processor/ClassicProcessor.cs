@@ -47,7 +47,7 @@ namespace BardMusicPlayer.Transmogrify.Processor
                     using (NotesManager manager = trackChunks.Merge().ManageNotes())
                     {
                         Note note = new Note((Melanchall.DryWetMidi.Common.SevenBitNumber)number);
-                        NotesCollection timedEvents = manager.Notes;
+                        NotesCollection timedEvents = manager.Objects;
                         note.Time = timedEvent.Time;
                         timedEvents.Add(note);
                     }
