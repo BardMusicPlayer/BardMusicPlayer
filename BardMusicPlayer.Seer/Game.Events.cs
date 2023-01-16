@@ -48,10 +48,6 @@ namespace BardMusicPlayer.Seer
 
                         break;
 
-                    case ChatLog chatLogEvent:
-                        BmpSeer.Instance.PublishEvent(chatLogEvent);
-                        break;
-
                     case ChatStatusChanged chatStatus:
                         if (ChatStatus != chatStatus.ChatStatus)
                         {

@@ -74,7 +74,6 @@
     <Compile Include="Resources\FolderPicker.cs" />
     <Compile Include="Resources\TextInputWindow.xaml.cs" DependentUpon="TextInputWindow.xaml" />
     <Compile Include="Globals\Globals.cs" />
-    <Compile Include="Globals\BmpChatParser.cs" />
     <Compile Include="Globals\InfoBox.xaml.cs" DependentUpon="InfoBox.xaml" />
     <Compile Include="MainWindow.xaml.cs" DependentUpon="MainWindow.xaml" SubType="Code" />
     <Compile Include="App.xaml.cs" DependentUpon="App.xaml" SubType="Code" />

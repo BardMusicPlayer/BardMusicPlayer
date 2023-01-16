@@ -87,13 +87,6 @@ namespace BardMusicPlayer.Seer
         public event ChatStatusChangedHandler ChatStatusChanged;
         private void OnChatStatusChanged(ChatStatusChanged seerEvent) => ChatStatusChanged?.Invoke(seerEvent);
 
-        public delegate void ChatLogHandler(ChatLog seerEvent);
-        /// <summary>
-        /// Called when something happened in the chat.
-        /// </summary>
-        public event ChatLogHandler ChatLog;
-        private void OnChatLog(ChatLog seerEvent) => ChatLog?.Invoke(seerEvent);
-
         public delegate void ConfigIdChangedHandler(ConfigIdChanged seerEvent);
 
         /// <summary>
@@ -239,9 +232,6 @@ namespace BardMusicPlayer.Seer
                             break;
                         case ChatStatusChanged chatStatusChanged:
                             OnChatStatusChanged(chatStatusChanged);
-                            break;
-                        case ChatLog chatLog:
-                            OnChatLog(chatLog);
                             break;
                         case ConfigIdChanged configIdChanged:
                             OnConfigIdChanged(configIdChanged);
