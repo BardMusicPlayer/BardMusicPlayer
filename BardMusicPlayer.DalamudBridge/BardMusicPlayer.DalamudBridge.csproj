@@ -18,16 +18,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="H.Formatters.Newtonsoft.Json" Version="13.0.43"/>
-        <PackageReference Include="H.Pipes" Version="2.0.43"/>
-        <PackageReference Include="H.Pipes.AccessControl" Version="2.0.43"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
+        <PackageReference Include="H.Formatters.Newtonsoft.Json" Version="13.0.44" />
+        <PackageReference Include="H.Pipes" Version="2.0.44" />
+        <PackageReference Include="H.Pipes.AccessControl" Version="2.0.44" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj"/>
-        <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj"/>
-        <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj"/>
+        <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
+        <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
+        <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     </ItemGroup>
 
 </Project>
