@@ -92,7 +92,7 @@
     <Page Include="Controls\TrackNumericUpDown.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Controls\KeyboardHeatMap.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Classic\Classic_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
+    <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="UI_Classic\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\ImageButtonStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\OctaveBarStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
