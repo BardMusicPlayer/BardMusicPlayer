@@ -60,25 +60,24 @@
     <Compile Include="Controls\SongEditWindow.xaml.cs" DependentUpon="SongEditWindow.xaml" />
     <Compile Include="Controls\TrackNumericUpDown.xaml.cs" DependentUpon="TrackNumericUpDown.xaml" />
     <Compile Include="Controls\KeyboardHeatMap.xaml.cs" DependentUpon="KeyboardHeatMap.xaml" />
-    <Compile Include="Functions\PlaylistImporter.cs" />
-    <Compile Include="Globals\BmpChatParser.cs" />
-    <Compile Include="Globals\InfoBox.xaml.cs" DependentUpon="InfoBox.xaml" />
-    <Compile Include="Resources\FolderPicker.cs" />
+    <Compile Include="UI_Classic\Classic_MainView.xaml.cs" DependentUpon="Classic_MainView.xaml" />
+    <Compile Include="UI_Classic\Classic_MainViewPlaycontrols.cs" />
+    <Compile Include="UI_Classic\Classic_Playlist.cs" />
     <Compile Include="UI_Classic\Classic_Settings.cs" />
     <Compile Include="UI_Classic\Classic_Siren.cs" />
     <Compile Include="UI_Classic\Classic_Statistics.cs" />
     <Compile Include="UI_Classic\MacroLaunchpad.xaml.cs" DependentUpon="MacroLaunchpad.xaml" />
     <Compile Include="UI_Classic\NetworkPlayWindow.xaml.cs" DependentUpon="NetworkPlayWindow.xaml" />
-    <Compile Include="App.xaml.cs" DependentUpon="App.xaml" SubType="Code" />
+    <Compile Include="Functions\PlaylistImporter.cs" />
     <Compile Include="Functions\PlaybackFunctions.cs" />
     <Compile Include="Functions\PlaylistFunctions.cs" />
+    <Compile Include="Resources\FolderPicker.cs" />
     <Compile Include="Resources\TextInputWindow.xaml.cs" DependentUpon="TextInputWindow.xaml" />
-    <Compile Include="UI_Classic\Classic_MainViewPlaycontrols.cs" />
-    <Compile Include="UI_Classic\Classic_Playlist.cs" />
     <Compile Include="Globals\Globals.cs" />
-    <Compile Include="Globals\SkinContainer.cs" />
-    <Compile Include="UI_Classic\Classic_MainView.xaml.cs" DependentUpon="Classic_MainView.xaml" />
+    <Compile Include="Globals\BmpChatParser.cs" />
+    <Compile Include="Globals\InfoBox.xaml.cs" DependentUpon="InfoBox.xaml" />
     <Compile Include="MainWindow.xaml.cs" DependentUpon="MainWindow.xaml" SubType="Code" />
+    <Compile Include="App.xaml.cs" DependentUpon="App.xaml" SubType="Code" />
     <Compile Include="Properties\Resources.Designer.cs" AutoGen="True" DependentUpon="Resources.resx" DesignTime="True" />
     <Compile Include="Properties\Settings.Designer.cs" AutoGen="True" DependentUpon="Settings.settings" DesignTimeSharedInput="True" />
 
@@ -87,27 +86,37 @@
     <Page Include="Controls\NetworkWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" />
     <Page Include="Controls\NumericUpDown.xaml" Generator="MSBuild:Compile" SubType="Designer"/>
     <Page Include="Controls\SongBrowser.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+    <Page Include="Controls\BardView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Controls\OctaveNumericUpDown.xaml" Generator="MSBuild:Compile" SubType="Designer" />
     <Page Include="Controls\SongEditWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Controls\TrackNumericUpDown.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="Globals\InfoBox.xaml" Generator="MSBuild:Compile" SubType="Designer" />
-    <Page Include="MainWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+    <Page Include="Controls\KeyboardHeatMap.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="UI_Classic\Classic_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
+    <Page Include="UI_Classic\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\ImageButtonStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\OctaveBarStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\ToolTips.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\TrackBarStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\PlayListViewStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\TextInputWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="Controls\BardView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="Controls\KeyboardHeatMap.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Classic\Classic_MainView.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Page Include="UI_Classic\MacroLaunchpad.xaml" SubType="Designer" Generator="MSBuild:Compile"/>
-    <Page Include="UI_Classic\NetworkPlayWindow.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Page Include="Resources\PlayBarStyle.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="Globals\InfoBox.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+    <Page Include="MainWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" />
 
     <None Include="App.config" />
     <None Include="Properties\Settings.settings" Generator="SettingsSingleFileGenerator" LastGenOutput="Settings.Designer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\ClassicPause.png" />
+    <Resource Include="Resources\Images\ClassicPlay.png" />
+    <Resource Include="Resources\Images\ClassicLoop.png" />
+    <Resource Include="Resources\Images\ClassicRefresh.png" />
+    <Resource Include="Resources\Images\ClassicShuffle.png" />
+    <Resource Include="Resources\Images\group.png" />
+    <Resource Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -121,16 +130,6 @@
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" Project="{fae02d19-1da3-4697-8040-565c5fd8dd8a}" Name="BardMusicPlayer.Seer" />
     <ProjectReference Include="..\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" Project="{03d848f1-f319-43da-b0f8-e83a19ef3108}" Name="BardMusicPlayer.Siren" />
     <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" Project="{afb55e52-c439-481e-99f4-0b56c42a6d4b}" Name="BardMusicPlayer.Transmogrify" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\Images\ClassicPause.png" />
-    <Resource Include="Resources\Images\ClassicPlay.png" />
-    <Resource Include="Resources\Images\ClassicLoop.png" />
-    <Resource Include="Resources\Images\ClassicRefresh.png" />
-    <Resource Include="Resources\Images\ClassicShuffle.png" />
-    <Resource Include="Resources\Images\group.png" />
-    <Resource Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
