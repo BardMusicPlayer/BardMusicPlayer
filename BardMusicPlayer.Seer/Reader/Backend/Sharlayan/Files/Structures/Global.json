@@ -1,12 +1,4 @@
 {
-    "ChatLogPointers": {
-        "OffsetArrayStart": 52,
-        "OffsetArrayPos": 60,
-        "OffsetArrayEnd": 68,
-        "LogStart": 76,
-        "LogNext": 84,
-        "LogEnd": 92
-    },
     "CurrentPlayer": {
         "SourceSize": 650,
         "JobID": 110,

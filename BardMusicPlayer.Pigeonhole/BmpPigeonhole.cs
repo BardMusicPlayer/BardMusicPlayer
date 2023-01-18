@@ -63,14 +63,9 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual bool HoldNotes { get; set; } = true;
 
         /// <summary>
-        /// save the chatlog
-        /// </summary>
-        public virtual bool SaveChatLog { get; set; } = false;
-
-        /// <summary>
         /// Sets the autostart method
         /// </summary>
-        public virtual int AutostartMethod { get; set; } = 2;
+        public virtual int AutostartMethod { get; set; } = 1;
 
         /// <summary>
         /// Sets UnequipPause

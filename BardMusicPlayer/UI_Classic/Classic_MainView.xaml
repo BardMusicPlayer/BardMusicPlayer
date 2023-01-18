@@ -207,7 +207,6 @@
                                     <Label Margin="10,0,0,0"    Grid.Row="0" Content="Autostart" HorizontalAlignment="Left" ToolTip="{StaticResource MISC_AUTOSTART}"/>
                                     <ComboBox Margin="90,0,0,0" Grid.Row="0" x:Name="Autostart_source" SelectionChanged="Autostart_source_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" ToolTip="{StaticResource MISC_AUTOSTART}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
-                                        <ComboBoxItem>Chat</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
                                     <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>

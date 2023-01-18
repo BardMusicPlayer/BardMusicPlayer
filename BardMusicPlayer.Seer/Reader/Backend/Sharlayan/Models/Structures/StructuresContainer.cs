@@ -7,8 +7,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures
 {
     internal class StructuresContainer
     {
-        public ChatLogPointers ChatLogPointers { get; set; } = new();
-
         public CurrentPlayer CurrentPlayer { get; set; } = new();
 
         public PartyMember PartyMember { get; set; } = new();

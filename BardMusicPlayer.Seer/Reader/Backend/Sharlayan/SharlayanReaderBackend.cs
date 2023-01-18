@@ -11,11 +11,8 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Events;
-using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
-using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.ReadResults;
-using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 {
@@ -108,11 +105,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 
         private void SignaturesFound(object sender, SignaturesFoundEvent signaturesFoundEvent)
         {
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATLOG"))
-            {
-                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
-                    new BmpSeerSharlayanSigException("CHATLOG")));
-            }
 
             if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATINPUT"))
             {
@@ -207,7 +199,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     GetInstrument(token);
                     GetPartyMembers(token);
                     GetChatInputOpen(token);
-                    GetChatLog(token);
 
                     _lastScan.FirstScan = false;
                 }
@@ -226,53 +217,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
         {
             DestroySharlayan();
             GC.SuppressFinalize(this);
-        }
-
-        private void GetChatLog(CancellationToken cancellationToken)
-        {
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
-            if (!_reader.CanGetChatLog()) return;
-
-            ChatLogResult readResult = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
-            _lastScan.PreviousArrayIndex = readResult.PreviousArrayIndex;
-            _lastScan.PreviousOffset = readResult.PreviousOffset;
-            GetEnsembleEvents(cancellationToken, readResult);
-        }
-
-        private void GetEnsembleEvents(CancellationToken cancellationToken, ChatLogResult result)
-        {
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
-            foreach (var ensembleFlag in from item in result.ChatLogItems
-                where item.Code.Equals("0039") || item.Code.Equals("003C")
-                select EnsembleMessageLookup.GetEnsembleFlag(item.Line))
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-
-                switch (ensembleFlag)
-                {
-                    case EnsembleMessageLookup.EnsembleFlag.Request:
-                        ReaderHandler.Game.PublishEvent(new EnsembleRequested(EventSource.Sharlayan));
-                        break;
-                    case EnsembleMessageLookup.EnsembleFlag.Start:
-                        ReaderHandler.Game.PublishEvent(new EnsembleStarted(EventSource.Sharlayan));
-                        break;
-                    case EnsembleMessageLookup.EnsembleFlag.Stop:
-                        ReaderHandler.Game.PublishEvent(new EnsembleStopped(EventSource.Sharlayan));
-                        break;
-                    case EnsembleMessageLookup.EnsembleFlag.Reject:
-                        ReaderHandler.Game.PublishEvent(new EnsembleRejected(EventSource.Sharlayan));
-                        break;
-                    case EnsembleMessageLookup.EnsembleFlag.None:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
         }
 
         private void GetPlayerInfo(CancellationToken cancellationToken)

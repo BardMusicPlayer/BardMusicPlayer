@@ -12,7 +12,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
             Scanner              = memoryHandler.Scanner;
             MemoryHandler        = memoryHandler;
             MemoryHandler.Reader = this;
-            _chatLogReader       = new ChatLogReader(memoryHandler);
         }
 
         public Scanner Scanner { get; set; }

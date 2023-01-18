@@ -718,7 +718,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="seerEvent"></param>
         private void Instance_EnsembleStarted(Seer.Events.EnsembleStarted seerEvent)
         {
-            if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            if (BmpPigeonhole.Instance.AutostartMethod != 1)
                 return;
 
             start(0, seerEvent.Game.Pid);
@@ -730,7 +730,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="seerEvent"></param>
         private void Instance_EnsembleStopped(Seer.Events.EnsembleStopped seerEvent)
         {
-            if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            if (BmpPigeonhole.Instance.AutostartMethod != 1)
                 return;
 
             if (_performers.Count() == 0)
