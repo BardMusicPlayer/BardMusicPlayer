@@ -131,22 +131,6 @@
                     <ColumnDefinition Width="275*"/>
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
-                    <!-- <TabItem Header="[Chat] All">
-                        <RichTextBox x:Name="ChatBox" IsReadOnly="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsDeferredScrollingEnabled="True" Background="Gray">
-                            <RichTextBox.Style>
-                                <Style TargetType="RichTextBox">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Cursor" Value="Arrow" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Cursor" Value="Arrow" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RichTextBox.Style>
-                        </RichTextBox>
-                    </TabItem> -->
                     <TabItem Header="Performers">
                         <Grid Background="WhiteSmoke">
                             <control:BardView x:Name="BardsList"/>
