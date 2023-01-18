@@ -3,21 +3,17 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-#region
-
 using BardMusicPlayer.Quotidian;
 
-#endregion
-
-namespace BardMusicPlayer.Script;
-
-public sealed class BmpScriptException : BmpException
+namespace BardMusicPlayer.Script
 {
-    internal BmpScriptException()
+    public sealed class BmpScriptException : BmpException
     {
-    }
-
-    internal BmpScriptException(string message) : base(message)
-    {
+        internal BmpScriptException() : base()
+        {
+        }
+        internal BmpScriptException(string message) : base(message)
+        {
+        }
     }
 }

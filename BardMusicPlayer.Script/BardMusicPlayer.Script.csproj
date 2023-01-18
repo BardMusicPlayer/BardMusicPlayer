@@ -28,4 +28,8 @@
         <Folder Include="BasicSharp\"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Reference Include="PresentationFramework"/>
+    </ItemGroup>
+
 </Project>
