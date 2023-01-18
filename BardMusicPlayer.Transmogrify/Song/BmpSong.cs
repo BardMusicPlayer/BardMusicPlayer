@@ -16,7 +16,6 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Importers;
-using BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
 using Melanchall.DryWetMidi.Common;
@@ -57,11 +56,6 @@ namespace BardMusicPlayer.Transmogrify.Song
         /// TrackContainer
         /// </summary>
         public Dictionary<long, TrackContainer> TrackContainers { get; set; } = new();
-
-        /// <summary>
-        /// Lyrics
-        /// </summary>
-        public Dictionary<DateTime, string> LyricsContainer { get; set; } = new();
 
         /// <summary>
         /// Song duration
@@ -171,20 +165,6 @@ namespace BardMusicPlayer.Transmogrify.Song
                 TrackContainers = new Dictionary<long, TrackContainer>(),
                 Duration = midiFileDuration
             };
-
-            //Get the lrc file for the midi, if there's any
-            if (path.Substring(path.Length - 4).Equals(".mid"))
-            {
-                string fn = path.Substring(0, path.Length - 3);
-                if (File.Exists(fn + "lrc"))
-                {
-                    var t = Lyrics.Parse(File.ReadAllText(fn + "lrc"));
-                    song.DisplayedTitle = t.Lyrics.MetaData.Title;
-
-                    foreach (var line in t.Lyrics.Lines)
-                        song.LyricsContainer.Add(line.Timestamp, line.Content);
-                }
-            }
 
             var trackChunkArray = midiFile.GetTrackChunks().ToArray();
 
@@ -683,21 +663,6 @@ namespace BardMusicPlayer.Transmogrify.Song
 
                     }
                 });
-
-                //Append the lyrics from the lrc
-                var lrcTrack = new TrackChunk(new SequenceTrackNameEvent("Lyrics: "));
-                using (var manager = new TimedObjectsManager(lrcTrack.Events, ObjectType.TimedEvent | ObjectType.Note))
-                {
-                    TimedObjectsCollection<ITimedObject> timedEvents = manager.Objects;
-                    foreach (var line in LyricsContainer)
-                    {
-                        var timedEvent = new TimedEvent(new LyricEvent(line.Value)) as ITimedObject;
-                        timedEvent.SetTime(new MetricTimeSpan(line.Key.Hour, line.Key.Minute, line.Key.Second, line.Key.Millisecond), tempoMap);
-                        timedEvents.Add(timedEvent);
-                    }
-                }
-                newMidiFile.Chunks.Add(lrcTrack);
-
 
                 var stream = new MemoryStream();
 
