@@ -66,7 +66,7 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// Sets the autostart method
         /// </summary>
-        public virtual AutostartMethod AutostartMethod { get; set; } = AutostartMethod.EnsembleMetronome;
+        public virtual int AutostartMethod { get; set; } = 1;
 
         /// <summary>
         /// Sets UnequipPause
