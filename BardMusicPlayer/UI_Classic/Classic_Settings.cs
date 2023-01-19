@@ -32,8 +32,8 @@ namespace BardMusicPlayer.Ui.Classic
             LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
             //Misc
-            this.Autostart_source.SelectedIndex = (int)BmpPigeonhole.Instance.AutostartMethod;
-            this.AutoequipDalamud.IsChecked = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
+            this.Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
+            this.AutoequipDalamud.IsChecked     = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
             //Local orchestra
             this.LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
@@ -81,7 +81,7 @@ namespace BardMusicPlayer.Ui.Classic
         private void Autostart_source_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int d = Autostart_source.SelectedIndex;
-            BmpPigeonhole.Instance.AutostartMethod = (AutostartMethod)d;
+            BmpPigeonhole.Instance.AutostartMethod = (int)d;
         }
 
         private void AutoequipDalamud_Checked(object sender, RoutedEventArgs e)
