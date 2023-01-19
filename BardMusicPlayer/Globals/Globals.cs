@@ -15,9 +15,7 @@ namespace BardMusicPlayer.Ui.Globals
         public enum Autostart_Types
         {
             NONE = 0,
-            VIA_CHAT,
             VIA_METRONOME,
-            UNUSED
         }
 
         public static event EventHandler OnConfigReload;

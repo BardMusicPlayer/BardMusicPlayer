@@ -5,6 +5,7 @@
 
 using BardMusicPlayer.Pigeonhole.JsonSettings.Autosave;
 using BardMusicPlayer.Quotidian;
+using BardMusicPlayer.Quotidian.Enums;
 
 namespace BardMusicPlayer.Pigeonhole
 {
@@ -63,14 +64,9 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual bool HoldNotes { get; set; } = true;
 
         /// <summary>
-        /// save the chatlog
-        /// </summary>
-        public virtual bool SaveChatLog { get; set; } = false;
-
-        /// <summary>
         /// Sets the autostart method
         /// </summary>
-        public virtual int AutostartMethod { get; set; } = 2;
+        public virtual AutostartMethod AutostartMethod { get; set; } = AutostartMethod.EnsembleMetronome;
 
         /// <summary>
         /// Sets UnequipPause

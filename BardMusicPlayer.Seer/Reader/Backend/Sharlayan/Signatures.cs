@@ -13,8 +13,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
     {
         public static string CharacterMapKey { get; } = "CHARMAP";
 
-        public static string ChatLogKey { get; } = "CHATLOG";
-
         public static string PartyCountKey { get; } = "PARTYCOUNT";
 
         public static string PartyMapKey { get; } = "PARTYMAP";

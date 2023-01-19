@@ -131,22 +131,6 @@
                     <ColumnDefinition Width="275*"/>
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
-                    <!-- <TabItem Header="[Chat] All">
-                        <RichTextBox x:Name="ChatBox" IsReadOnly="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsDeferredScrollingEnabled="True" Background="Gray">
-                            <RichTextBox.Style>
-                                <Style TargetType="RichTextBox">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Cursor" Value="Arrow" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="False">
-                                            <Setter Property="Cursor" Value="Arrow" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RichTextBox.Style>
-                        </RichTextBox>
-                    </TabItem> -->
                     <TabItem Header="Performers">
                         <Grid Background="WhiteSmoke">
                             <control:BardView x:Name="BardsList"/>
@@ -207,7 +191,6 @@
                                     <Label Margin="10,0,0,0"    Grid.Row="0" Content="Autostart" HorizontalAlignment="Left" ToolTip="{StaticResource MISC_AUTOSTART}"/>
                                     <ComboBox Margin="90,0,0,0" Grid.Row="0" x:Name="Autostart_source" SelectionChanged="Autostart_source_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" ToolTip="{StaticResource MISC_AUTOSTART}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
-                                        <ComboBoxItem>Chat</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
                                     <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>

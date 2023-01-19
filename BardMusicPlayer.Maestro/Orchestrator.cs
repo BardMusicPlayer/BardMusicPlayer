@@ -16,6 +16,7 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song;
+using BardMusicPlayer.Quotidian.Enums;
 
 namespace BardMusicPlayer.Maestro
 {
@@ -718,7 +719,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="seerEvent"></param>
         private void Instance_EnsembleStarted(Seer.Events.EnsembleStarted seerEvent)
         {
-            if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            if (BmpPigeonhole.Instance.AutostartMethod != AutostartMethod.EnsembleMetronome)
                 return;
 
             start(0, seerEvent.Game.Pid);
@@ -730,7 +731,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="seerEvent"></param>
         private void Instance_EnsembleStopped(Seer.Events.EnsembleStopped seerEvent)
         {
-            if (BmpPigeonhole.Instance.AutostartMethod != 2)
+            if (BmpPigeonhole.Instance.AutostartMethod != AutostartMethod.EnsembleMetronome)
                 return;
 
             if (_performers.Count() == 0)

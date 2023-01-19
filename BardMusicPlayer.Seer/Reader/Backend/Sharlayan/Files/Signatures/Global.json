@@ -1,12 +1,6 @@
 [
     // Upstream
     {
-        "Key": "CHATLOG",
-        "Value": "488941104488492C4C8949244C89491C4584C07412488B4218488905********48890D",
-        "ASMSignature": true,
-        "PointerPath": [ 0, 0, 64, 908 ]
-    },
-    {
         "Key": "CHARMAP",
         "Value": "48c1ea0381faa9010000****8bc2488d0d",
         "ASMSignature": true,
