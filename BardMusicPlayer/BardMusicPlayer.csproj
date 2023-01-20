@@ -13,7 +13,7 @@
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
     <LangVersion>latest</LangVersion>
     <Configurations>Debug;Release</Configurations>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>bmp.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
@@ -115,7 +115,6 @@
     <Resource Include="Resources\Images\ClassicRefresh.png" />
     <Resource Include="Resources\Images\ClassicShuffle.png" />
     <Resource Include="Resources\Images\group.png" />
-    <Resource Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
