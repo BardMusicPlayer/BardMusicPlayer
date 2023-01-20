@@ -277,9 +277,15 @@
                                 <Label Grid.Column="3"  x:Name="Siren_VoiceCount" Content="0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             </Grid>
 
-                            <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-
-                            </Grid>
+                            <DataGrid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding}"
+                                      RowEditEnding="Siren_Lyrics_RowEditEnding"
+                                      PreviewMouseDown="Siren_Lyrics_PreviewMouseRightButtonDown"
+                                      AutoGenerateColumns="False" x:Name="Siren_Lyrics">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Timestamp" Binding="{Binding time, Mode=TwoWay, StringFormat ={}{0:HH:mm:ss.fff} }"/>
+                                    <DataGridTextColumn Header="Text" Binding="{Binding line, Mode=TwoWay}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
 
                             <Grid Grid.Row="2" Grid.Column="3">
                                 <Grid.RowDefinitions>
@@ -315,6 +321,7 @@
                                 <Button Grid.Column="1" x:Name="Siren_Play" Content="Play" Click="Siren_Play_Click" Height="20" Width="30" />
                                 <Button Grid.Column="2" x:Name="Siren_Pause" Content="Pause" Click="Siren_Pause_Click" PreviewMouseDown="Siren_Pause_PreviewMouseDown" Height="20" Width="35" />
                                 <Button Grid.Column="3" x:Name="Siren_Stop" Content="Stop" Click="Siren_Stop_Click" Height="20" Width="30" />
+                                <Button Grid.Column="6" x:Name="Siren_SaveLRC" Content="Save Lrc" Click="Siren_Save_LRC_Click" Height="20" Width="50" />
                             </Grid>
                         </Grid>
                     </TabItem>
