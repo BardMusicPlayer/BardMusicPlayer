@@ -22,7 +22,7 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Set Version
-      run: (Get-Content .\BardMusicPlayer\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer\MainWindow.xaml.cs
+      run: (Get-Content .\BardMusicPlayer.Ui\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer.Ui\MainWindow.xaml.cs
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
@@ -30,7 +30,7 @@ jobs:
     # Unit tests go here.
 
     - name: Rename artifact
-      run: Move-Item -Path .\BardMusicPlayer\bin\Release\net481\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+      run: Move-Item -Path .\BardMusicPlayer.Ui\bin\Release\net481\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
 
     - name: Store artifacts
       uses: actions/upload-artifact@v3
