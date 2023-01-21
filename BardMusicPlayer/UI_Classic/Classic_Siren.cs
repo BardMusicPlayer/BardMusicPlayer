@@ -15,13 +15,13 @@ using System.Windows.Input;
 
 namespace BardMusicPlayer.Ui.Classic
 {
-    public class LyricsContainer
+    public sealed class LyricsContainer
     {
         public LyricsContainer(DateTime t, string l) { time = t; line = l; }
         public DateTime time { get; set; }
         public string line { get; set; }
     }
-    
+
     /// <summary>
     /// Interaktionslogik für Classic_MainView.xaml
     /// </summary>
@@ -37,7 +37,6 @@ namespace BardMusicPlayer.Ui.Classic
         private void Siren_Load_Click(object sender, RoutedEventArgs e)
         {
             Siren_VoiceCount.Content = 0;
-
             BmpSong CurrentSong = null;
             string song = PlaylistContainer.SelectedItem as String;
             if (song == null)
@@ -60,7 +59,7 @@ namespace BardMusicPlayer.Ui.Classic
 
             _ = BmpSiren.Instance.Load(CurrentSong);
             this.Siren_SongName.Content = BmpSiren.Instance.CurrentSongTitle;
-            
+
             //Fill the lyrics editor
             lyricsData.Clear();
             foreach (var line in CurrentSong.LyricsContainer)
@@ -271,7 +270,7 @@ namespace BardMusicPlayer.Ui.Classic
         {
             var openFileDialog = new Microsoft.Win32.SaveFileDialog
             {
-                Filter = "Performerconfig | *.lrc"
+                Filter = "Lyrics File | *.lrc"
             };
 
             if (openFileDialog.ShowDialog() != true)
