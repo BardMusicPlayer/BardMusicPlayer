@@ -1,12 +1,12 @@
-﻿using BardMusicPlayer.Ui.Functions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using BardMusicPlayer.Functions;
 using BardMusicPlayer.Transmogrify.Song;
 using Microsoft.Win32;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
     /// only here cuz someone would like to have it back

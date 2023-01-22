@@ -1,18 +1,17 @@
-﻿using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Transmogrify.Song;
-using BardMusicPlayer.Ui.Controls;
-using BardMusicPlayer.Ui.Functions;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using UI.Resources;
+using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Controls;
+using BardMusicPlayer.Functions;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Resources;
+using BardMusicPlayer.Transmogrify.Song;
+using Microsoft.Win32;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
     /// Interaktionslogik für Classic_MainView.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UI.Resources
+namespace BardMusicPlayer.Resources
 {
     /// <summary>
     /// Interaktionslogik für TextInputWindow.xaml

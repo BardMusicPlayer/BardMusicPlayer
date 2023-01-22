@@ -1,10 +1,10 @@
-﻿using BardMusicPlayer.Ui.Functions;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using BardMusicPlayer.Functions;
 
-namespace BardMusicPlayer.Ui.Controls
+namespace BardMusicPlayer.Controls
 {
     /// <summary>
     /// Interaktionslogik für TrackNumericUpDown.xaml

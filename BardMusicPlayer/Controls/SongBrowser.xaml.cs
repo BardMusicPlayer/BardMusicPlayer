@@ -1,13 +1,13 @@
-﻿using BardMusicPlayer.Pigeonhole;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using UI.Resources;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Resources;
 
-namespace BardMusicPlayer.Ui.Controls
+namespace BardMusicPlayer.Controls
 {
     /// <summary>
     /// The songbrowser but much faster than the BMP 1.x had

@@ -1,12 +1,11 @@
-﻿using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Transmogrify.Song;
-using BardMusicPlayer.Ui.Functions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Resources;
+using BardMusicPlayer.Transmogrify.Song;
 
-namespace BardMusicPlayer.Ui.Functions
+namespace BardMusicPlayer.Functions
 {
     /// <summary>
     /// simplyfied functions both Ui are using
@@ -49,7 +48,7 @@ namespace BardMusicPlayer.Ui.Functions
         /// <returns>true if success</returns>
         public static bool AddFolderToPlaylist(IPlaylist currentPlaylist)
         {
-            var dlg = new UI.Resources.FolderPicker();
+            var dlg = new FolderPicker();
 
             if (System.IO.Directory.Exists(Pigeonhole.BmpPigeonhole.Instance.SongDirectory))
                 dlg.InputPath = System.IO.Path.GetFullPath(Pigeonhole.BmpPigeonhole.Instance.SongDirectory);

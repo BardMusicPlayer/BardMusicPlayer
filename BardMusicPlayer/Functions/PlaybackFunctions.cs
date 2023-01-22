@@ -7,7 +7,7 @@ using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Microsoft.Win32;
 
-namespace BardMusicPlayer.Ui.Functions
+namespace BardMusicPlayer.Functions
 {
     public static class PlaybackFunctions
     {

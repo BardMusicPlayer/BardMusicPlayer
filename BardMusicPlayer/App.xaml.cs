@@ -1,16 +1,14 @@
-
+using System.Diagnostics;
 using System.Windows;
 using BardMusicPlayer.Coffer;
-using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Seer;
-using BardMusicPlayer.Maestro;
-using System.Diagnostics;
-using BardMusicPlayer.Siren;
 using BardMusicPlayer.Jamboree;
+using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Script;
+using BardMusicPlayer.Seer;
+using BardMusicPlayer.Siren;
 
-namespace BardMusicPlayer.Ui
+namespace BardMusicPlayer
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

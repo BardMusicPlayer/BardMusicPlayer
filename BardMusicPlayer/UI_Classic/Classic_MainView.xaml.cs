@@ -2,16 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Functions;
+using BardMusicPlayer.Globals;
 using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Quotidian;
-using BardMusicPlayer.Seer;
-using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Siren;
-using BardMusicPlayer.Ui.Functions;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
     /// Interaktionslogik für Classic_MainView.xaml

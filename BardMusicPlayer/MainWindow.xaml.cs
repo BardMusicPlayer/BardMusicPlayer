@@ -1,8 +1,7 @@
-﻿using BardMusicPlayer.Ui.Classic;
-using System.Windows;
-using BardMusicPlayer.Pigeonhole;
+﻿using System.Windows;
+using BardMusicPlayer.UI_Classic;
 
-namespace BardMusicPlayer.Ui
+namespace BardMusicPlayer
 {
     /// <summary>
     /// Interaction Logic for MainWindow.xaml

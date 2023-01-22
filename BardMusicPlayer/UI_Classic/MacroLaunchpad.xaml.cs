@@ -7,14 +7,14 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using BardMusicPlayer.Controls;
 using BardMusicPlayer.Script;
-using BardMusicPlayer.Ui.Controls;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
 #endregion
 
-namespace BardMusicPlayer.Ui.Classic;
+namespace BardMusicPlayer.UI_Classic;
 
 public sealed class Macro
 {

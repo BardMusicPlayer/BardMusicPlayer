@@ -1,23 +1,23 @@
-﻿using BardMusicPlayer.Maestro;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Functions;
+using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Maestro.Performance;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
+using BardMusicPlayer.UI_Classic;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Linq;
-using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.Ui.Classic;
-using BardMusicPlayer.Ui.Functions;
 
-namespace BardMusicPlayer.Ui.Controls
+namespace BardMusicPlayer.Controls
 {
     /// <summary>
     /// Interaktionslogik für BardView.xaml

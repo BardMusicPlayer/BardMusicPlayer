@@ -1,15 +1,12 @@
-﻿using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Transmogrify.Song;
-using BardMusicPlayer.Ui.Functions;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Text;
+using Newtonsoft.Json;
 
-namespace BardMusicPlayer.Ui.Functions
+namespace BardMusicPlayer.Functions
 {
     public class SongContainer
     {

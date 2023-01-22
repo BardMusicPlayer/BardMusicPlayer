@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace UI.Resources
+namespace BardMusicPlayer.Resources
 {
     public class FolderPicker
     {

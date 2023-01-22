@@ -1,15 +1,15 @@
-﻿using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Maestro.Performance;
-using BardMusicPlayer.DalamudBridge;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Performance;
 using BardMusicPlayer.Quotidian.Structs;
 
-namespace BardMusicPlayer.Ui.Controls
+namespace BardMusicPlayer.Controls
 {
     /// <summary>
     /// Interaktionslogik für BardExtSettingsWindow.xaml

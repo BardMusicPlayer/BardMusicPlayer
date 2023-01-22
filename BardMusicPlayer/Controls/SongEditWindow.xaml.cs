@@ -1,8 +1,8 @@
-﻿using BardMusicPlayer.Coffer;
+﻿using System.Windows;
+using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Transmogrify.Song;
-using System.Windows;
 
-namespace BardMusicPlayer.Ui.Controls
+namespace BardMusicPlayer.Controls
 {
     /// <summary>
     /// Interaktionslogik für SongEditWindow.xaml

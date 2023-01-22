@@ -1,9 +1,9 @@
-<UserControl x:Class="BardMusicPlayer.Ui.Classic.Classic_MainView"
+<UserControl x:Class="BardMusicPlayer.UI_Classic.Classic_MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:control = "clr-namespace:BardMusicPlayer.Ui.Controls"
+             xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
             Width="Auto" Height="Auto" Loaded="Window_Loaded"
@@ -133,7 +133,7 @@
                 <TabControl Grid.ColumnSpan="2">
                     <TabItem Header="Performers">
                         <Grid Background="WhiteSmoke">
-                            <control:BardView x:Name="BardsList"/>
+                            <controls:BardView x:Name="BardsList"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Settings">
@@ -327,7 +327,7 @@
                     </TabItem>
                     <TabItem Header="Song Browser">
                         <Grid Background="WhiteSmoke">
-                            <control:SongBrowser x:Name="SongBrowser"/>
+                            <controls:SongBrowser x:Name="SongBrowser"/>
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -403,7 +403,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <control:KeyboardHeatMap x:Name="KeyHeat" Grid.Column="1" Height="Auto" Width="Auto"/>
+                <controls:KeyboardHeatMap x:Name="KeyHeat" Grid.Column="1" Height="Auto" Width="Auto"/>
             </Grid>
 
 

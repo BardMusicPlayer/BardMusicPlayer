@@ -1,11 +1,10 @@
-﻿using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Quotidian.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Pigeonhole;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     public partial class Classic_MainView : UserControl
     {

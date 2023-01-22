@@ -1,15 +1,14 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Threading;
-using System.Threading.Tasks;
-using BardMusicPlayer.Ui.Functions;
+using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Pigeonhole;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
     /// Interaktionslogik für Classic_MainView.xaml

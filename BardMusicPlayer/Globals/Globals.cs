@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BardMusicPlayer.Ui.Globals
+namespace BardMusicPlayer.Globals
 {
     public static class Globals
     {

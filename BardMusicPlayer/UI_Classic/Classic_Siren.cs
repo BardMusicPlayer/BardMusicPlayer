@@ -1,8 +1,4 @@
-﻿using BardMusicPlayer.Siren;
-using BardMusicPlayer.Transmogrify.Song;
-using BardMusicPlayer.Ui.Functions;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -12,8 +8,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using BardMusicPlayer.Functions;
+using BardMusicPlayer.Siren;
+using BardMusicPlayer.Transmogrify.Song;
+using Microsoft.Win32;
 
-namespace BardMusicPlayer.Ui.Classic
+namespace BardMusicPlayer.UI_Classic
 {
     public sealed class LyricsContainer
     {
