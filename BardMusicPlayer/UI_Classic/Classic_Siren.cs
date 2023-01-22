@@ -285,7 +285,7 @@ namespace BardMusicPlayer.UI_Classic
                 file.WriteLine("[ti:" + BmpSiren.Instance.CurrentSong.DisplayedTitle + "]");
             else
                 file.WriteLine("[ti:" + BmpSiren.Instance.CurrentSong.Title + "]");
-            file.WriteLine("[re:LightAmp]");
+            file.WriteLine("[re:BardMusicPlayer]");
             file.WriteLine("[ve:" + Assembly.GetExecutingAssembly().GetName().Version + "]");
 
             foreach (var l in lyricsData)

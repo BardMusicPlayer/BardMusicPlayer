@@ -33,8 +33,9 @@
 #endregion
 
 using System;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders
 {
     /// <summary>
     /// Provides functionality for building tempo messages.

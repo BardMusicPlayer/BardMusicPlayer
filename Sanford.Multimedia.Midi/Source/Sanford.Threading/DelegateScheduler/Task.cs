@@ -33,10 +33,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading.DelegateScheduler
 {
     public class Task : IComparable
     {

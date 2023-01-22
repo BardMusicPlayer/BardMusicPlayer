@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks
 {
 	/// <summary>
 	/// Represents functionality for generating events for driving Sequence playback.

@@ -37,8 +37,9 @@ using System.Collections;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi.UI
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.UI
 {
     public partial class PianoControl : Control
     {

@@ -34,10 +34,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using Sanford.Multimedia;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes
 {
 	/// <summary>
 	/// The base class for all MIDI devices.

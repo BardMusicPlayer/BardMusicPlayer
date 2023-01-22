@@ -7,15 +7,6 @@
              Background="WhiteSmoke"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/LightAmp;component/Resources/ImageButtonStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
-    </UserControl.Resources>
-
     <Grid>
                 <TabControl TabStripPlacement="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <TabItem Header="Network Party" >

@@ -33,9 +33,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages
 {
     /// <summary>
     /// Dispatches IMidiMessages to their corresponding sink.

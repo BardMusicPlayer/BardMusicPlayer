@@ -34,9 +34,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes
 {
     public sealed partial class Track
     {

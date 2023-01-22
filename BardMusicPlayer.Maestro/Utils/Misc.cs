@@ -5,6 +5,7 @@
 
 using Sanford.Multimedia.Midi;
 using System.Collections.Generic;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
 
 namespace BardMusicPlayer.Maestro.Utils
 {

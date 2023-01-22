@@ -37,7 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.Deque
 {
 	/// <summary>
 	/// Represents a simple double-ended-queue collection of objects.

@@ -34,8 +34,10 @@
 
 using System;
 using System.Collections;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing
 {
     public class ChannelStopper
     {

@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.UndoableList
 {
     internal interface ICommand
     {

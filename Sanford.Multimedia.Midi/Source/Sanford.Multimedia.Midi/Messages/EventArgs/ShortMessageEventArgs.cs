@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs
 {
     /// <summary>
     /// Raw short message as int or byte array, useful when working with VST.
     /// </summary>
-    public class ShortMessageEventArgs : EventArgs
+    public class ShortMessageEventArgs : System.EventArgs
     {
         ShortMessage message;
 

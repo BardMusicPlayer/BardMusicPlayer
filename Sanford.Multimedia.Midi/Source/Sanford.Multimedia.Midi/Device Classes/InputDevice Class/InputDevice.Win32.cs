@@ -35,7 +35,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
    {
    public partial class InputDevice
       {

@@ -33,13 +33,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi.UI
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.UI
 {
     public partial class PianoControlDialog : Form
     {

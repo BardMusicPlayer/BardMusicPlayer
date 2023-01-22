@@ -36,7 +36,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace Sanford.Collections
+namespace Sanford.Multimedia.Midi.Sanford.Collections
 {
 	/// <summary>
 	/// Represents the priority queue data structure.

@@ -35,7 +35,7 @@
 using System;
 using System.Threading;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading
 {
     /// <summary>
     /// Provides basic implementation of the IAsyncResult interface.

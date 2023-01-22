@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia
 {
     public abstract class DeviceException : ApplicationException
     {

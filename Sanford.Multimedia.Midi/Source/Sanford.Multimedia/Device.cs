@@ -33,10 +33,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
-namespace Sanford.Multimedia
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia
 {
     public abstract class Device : IDisposable
     {

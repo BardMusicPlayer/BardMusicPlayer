@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs
 {
-    public class SysRealtimeMessageEventArgs : EventArgs
+    public class SysRealtimeMessageEventArgs : System.EventArgs
     {
         public static readonly SysRealtimeMessageEventArgs Start = new SysRealtimeMessageEventArgs(SysRealtimeMessage.StartMessage);
 

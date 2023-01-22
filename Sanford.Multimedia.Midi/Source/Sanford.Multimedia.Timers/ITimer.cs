@@ -26,7 +26,7 @@
 using System;
 using System.ComponentModel;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     public interface ITimer : IComponent
     {

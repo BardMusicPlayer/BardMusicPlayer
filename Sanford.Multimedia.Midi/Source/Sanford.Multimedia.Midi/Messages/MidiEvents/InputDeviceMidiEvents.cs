@@ -1,7 +1,9 @@
 ﻿
 using System;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.MidiEvents
 {
 	/// <summary>
 	/// MidiSignal provides all midi events from an input device

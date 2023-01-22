@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages
 {
     public abstract class MidiMessageBase
     {

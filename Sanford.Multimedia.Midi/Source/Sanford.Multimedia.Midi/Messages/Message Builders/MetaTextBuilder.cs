@@ -35,7 +35,7 @@
 using System;
 using System.Text;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders
 {
 	/// <summary>
 	/// Provides functionality for building meta text messages.

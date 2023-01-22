@@ -10,8 +10,9 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using Sanford.Multimedia.Midi.Sanford.Collections.Immutable.RAL_Helper_Classes;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable
 {
 	/// <summary>
 	/// Implements Chris Okasaki's random access list.

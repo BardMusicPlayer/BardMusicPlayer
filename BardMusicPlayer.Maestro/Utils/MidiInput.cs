@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class;
 
 namespace BardMusicPlayer.Maestro.Utils
 {

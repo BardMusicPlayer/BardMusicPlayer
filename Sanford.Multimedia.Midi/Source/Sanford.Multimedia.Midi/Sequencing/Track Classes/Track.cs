@@ -34,8 +34,9 @@
 
 using System;
 using System.Diagnostics;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes
 {
     /// <summary>
     /// Represents a collection of MidiEvents and a MIDI track within a 

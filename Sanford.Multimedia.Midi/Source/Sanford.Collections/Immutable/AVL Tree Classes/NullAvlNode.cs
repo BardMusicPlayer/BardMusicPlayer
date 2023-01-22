@@ -6,10 +6,9 @@
  * Contact: jabberdabber@hotmail.com
  */
 
-using System;
 using System.ComponentModel;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable.AVL_Tree_Classes
 {
 	/// <summary>
 	/// Represents a null AVL node.

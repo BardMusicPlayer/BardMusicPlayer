@@ -36,7 +36,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.UndoableList
 {
     public partial class UndoableList<T> : IList<T>
     {

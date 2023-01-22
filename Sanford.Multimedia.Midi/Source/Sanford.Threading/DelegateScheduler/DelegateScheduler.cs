@@ -36,11 +36,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Timers;
-using Sanford.Collections;
+using Sanford.Multimedia.Midi.Sanford.Collections;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading.DelegateScheduler
 {
 	/// <summary>
 	/// Provides functionality for timestamped delegate invocation.

@@ -33,12 +33,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.OutputDevice_Classes;
 
-namespace Sanford.Multimedia.Midi.UI
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.UI
 {
     public partial class OutputDeviceDialog : Form
     {

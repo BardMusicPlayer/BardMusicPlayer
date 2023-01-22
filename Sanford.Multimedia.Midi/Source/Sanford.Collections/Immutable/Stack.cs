@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable
 {
 	/// <summary>
     /// Represents a simple last-in-first-out collection of objects.

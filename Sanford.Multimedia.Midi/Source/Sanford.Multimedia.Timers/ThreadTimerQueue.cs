@@ -26,10 +26,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     /// <summary>
     /// Queues and executes timer events in an internal worker thread.

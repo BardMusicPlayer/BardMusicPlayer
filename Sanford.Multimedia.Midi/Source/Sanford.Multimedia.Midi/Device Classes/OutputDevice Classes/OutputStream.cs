@@ -34,12 +34,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Sanford.Multimedia.Timers;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Timers;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.OutputDevice_Classes
 {
     public sealed class OutputStream : OutputDeviceBase
     {

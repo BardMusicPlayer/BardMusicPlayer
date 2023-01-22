@@ -34,8 +34,9 @@
 
 using System;
 using System.Collections;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing
 {
     public class ChannelChaser
     {

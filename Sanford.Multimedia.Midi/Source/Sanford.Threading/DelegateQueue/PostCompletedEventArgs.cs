@@ -36,7 +36,7 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading.DelegateQueue
 {
     public class PostCompletedEventArgs : AsyncCompletedEventArgs
     {

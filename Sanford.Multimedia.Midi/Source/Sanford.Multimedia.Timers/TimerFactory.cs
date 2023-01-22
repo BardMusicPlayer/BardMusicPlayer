@@ -23,12 +23,9 @@
 
 #endregion
 
-using Sanford.Multimedia.Timers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     /// <summary>
     /// Use this factory to create ITimer instances.

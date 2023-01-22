@@ -1,4 +1,4 @@
-namespace Sanford.Multimedia.Midi.UI
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.UI
 {
     partial class InputDeviceDialog
     {

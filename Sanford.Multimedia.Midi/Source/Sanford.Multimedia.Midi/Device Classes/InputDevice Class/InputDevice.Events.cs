@@ -1,6 +1,8 @@
 using System;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
 {
     public delegate void MidiMessageEventHandler(IMidiMessage message);
 

@@ -33,13 +33,13 @@
 #endregion
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Sanford.Threading;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Threading.DelegateQueue;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.OutputDevice_Classes
 {
     public abstract class OutputDeviceBase : MidiDevice
     {

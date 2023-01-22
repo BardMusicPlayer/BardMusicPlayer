@@ -33,13 +33,12 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
-using Sanford.Collections.Generic;
+using Sanford.Multimedia.Midi.Sanford.Collections.Generic.Deque;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading.DelegateQueue
 {
     /// <summary>
     /// Represents an asynchronous queue of delegates.

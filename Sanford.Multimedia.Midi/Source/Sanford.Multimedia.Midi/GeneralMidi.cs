@@ -32,7 +32,7 @@
 
 #endregion
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi
 {
     /// <summary>
     /// Defines constants representing the General MIDI instrument set.

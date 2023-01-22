@@ -6,9 +6,7 @@
  * Contact: jabberdabber@hotmail.com
  */
 
-using System;
-
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable.AVL_Tree_Classes
 {
 	/// <summary>
 	/// Represents the functionality and properties of AVL nodes.

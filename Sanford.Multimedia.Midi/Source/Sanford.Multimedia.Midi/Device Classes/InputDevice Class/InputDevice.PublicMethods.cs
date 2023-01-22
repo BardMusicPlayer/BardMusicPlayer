@@ -33,10 +33,9 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Threading;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
 {
     public partial class InputDevice
     {

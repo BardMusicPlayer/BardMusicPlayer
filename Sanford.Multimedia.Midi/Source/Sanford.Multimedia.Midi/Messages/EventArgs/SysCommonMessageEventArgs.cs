@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs
 {
-    public class SysCommonMessageEventArgs : EventArgs
+    public class SysCommonMessageEventArgs : System.EventArgs
     {
         private SysCommonMessage message;
 

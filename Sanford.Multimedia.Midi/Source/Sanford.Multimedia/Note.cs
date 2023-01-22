@@ -32,7 +32,7 @@
 
 #endregion
 
-namespace Sanford.Multimedia
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia
 {
     /// <summary>
     /// Defines constants representing the 12 Note of the chromatic scale.

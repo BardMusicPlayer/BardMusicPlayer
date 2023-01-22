@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing
 {
     public class Sequencer : IComponent
     {

@@ -34,11 +34,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
-using Sanford.Threading;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
+using Sanford.Multimedia.Midi.Sanford.Threading.DelegateQueue;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
 {
     public partial class InputDevice
     {

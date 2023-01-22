@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia.Midi.UI
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.UI
 {
     public class PianoKeyEventArgs : EventArgs
     {

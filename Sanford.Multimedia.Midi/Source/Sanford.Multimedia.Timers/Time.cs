@@ -32,10 +32,9 @@
 
 #endregion
 
-using System;
 using System.Runtime.InteropServices;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     /// <summary>
     /// Defines constants representing the timing format used by the Time struct.

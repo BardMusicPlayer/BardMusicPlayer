@@ -10,8 +10,9 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using Sanford.Multimedia.Midi.Sanford.Collections.Immutable.AVL_Tree_Classes;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable
 {
 	/// <summary>
 	/// Represents a collection of elements accessible by index and supports

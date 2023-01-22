@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 /// <summary>
 ///     Result of parsing.

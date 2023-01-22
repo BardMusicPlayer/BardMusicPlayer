@@ -3,13 +3,13 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Jamboree.PartyManagement;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
 using ZeroTier.Core;
 
 namespace BardMusicPlayer.Jamboree

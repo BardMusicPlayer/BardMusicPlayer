@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 internal static class Helper
 {

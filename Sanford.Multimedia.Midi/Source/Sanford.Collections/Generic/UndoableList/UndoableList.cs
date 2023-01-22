@@ -34,9 +34,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.UndoableList
 {
     /// <summary>
     /// Represents a list with undo/redo functionality.

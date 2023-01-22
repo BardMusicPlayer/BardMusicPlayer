@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using System.Text;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing
 {
     public class ChasedEventArgs : EventArgs
     {

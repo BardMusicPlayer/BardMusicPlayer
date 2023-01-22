@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes
 {
     public sealed partial class Track
     {

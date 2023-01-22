@@ -1,13 +1,10 @@
-using BardMusicPlayer.Jamboree.Events;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ZeroTier.Sockets;
+using BardMusicPlayer.Jamboree.Events;
+using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 {
     /// <summary>
     /// The autodiscover, to get the client IP and version

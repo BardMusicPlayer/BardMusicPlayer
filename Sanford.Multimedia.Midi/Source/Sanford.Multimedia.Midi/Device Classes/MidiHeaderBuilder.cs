@@ -35,8 +35,9 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes
 {
 	/// <summary>
 	/// Builds a pointer to a MidiHeader structure.

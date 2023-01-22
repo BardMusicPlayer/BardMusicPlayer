@@ -6,11 +6,10 @@
  * Contact: jabberdabber@hotmail.com
  */
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable.RAL_Helper_Classes
 {
     /// <summary>
     /// Represents subtree nodes within random access lists.

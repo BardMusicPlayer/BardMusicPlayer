@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable.RAL_Helper_Classes
 {
     /// <summary>
     /// Provides functionality for enumerating a RandomAccessList.

@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks
 {
 	/// <summary>
 	/// Provides basic functionality for generating tick events with pulses per 

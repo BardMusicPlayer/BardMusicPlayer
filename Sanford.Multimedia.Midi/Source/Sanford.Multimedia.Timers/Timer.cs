@@ -37,7 +37,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     /// <summary>
     /// Defines constants for the multimedia Timer's event types.

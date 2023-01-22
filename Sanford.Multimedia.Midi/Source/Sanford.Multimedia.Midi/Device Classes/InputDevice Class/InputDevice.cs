@@ -32,12 +32,10 @@
 
 #endregion
 
-using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
 {
     /// <summary>
     /// Represents a MIDI device capable of receiving MIDI events.

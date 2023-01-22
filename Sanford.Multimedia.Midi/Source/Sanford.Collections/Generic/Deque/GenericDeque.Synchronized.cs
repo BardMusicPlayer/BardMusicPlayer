@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.Deque
 {
 	public partial class Deque<T>
 	{

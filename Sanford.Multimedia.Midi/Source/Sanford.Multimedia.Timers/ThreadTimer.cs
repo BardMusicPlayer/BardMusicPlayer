@@ -24,13 +24,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
-using System.Threading;
 
-namespace Sanford.Multimedia.Timers
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Timers
 {
     /// <summary>
     /// Replacement for the Windows multimedia timer that also runs on Mono

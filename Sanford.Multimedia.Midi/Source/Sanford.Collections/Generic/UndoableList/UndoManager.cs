@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace Sanford.Collections.Generic
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Generic.UndoableList
 {
     internal class UndoManager
     {

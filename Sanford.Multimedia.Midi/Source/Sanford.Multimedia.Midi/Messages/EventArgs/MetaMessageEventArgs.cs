@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs
 {
-    public class MetaMessageEventArgs : EventArgs
+    public class MetaMessageEventArgs : System.EventArgs
     {
         private MetaMessage message;
 		private Track track;

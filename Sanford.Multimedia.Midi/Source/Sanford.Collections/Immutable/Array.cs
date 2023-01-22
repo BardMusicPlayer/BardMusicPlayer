@@ -9,8 +9,9 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using Sanford.Multimedia.Midi.Sanford.Collections.Immutable.RAL_Helper_Classes;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable
 {
 	/// <summary>
 	/// Represents an array data structure.

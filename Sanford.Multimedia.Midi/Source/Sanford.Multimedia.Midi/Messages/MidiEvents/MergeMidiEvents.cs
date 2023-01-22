@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.MidiEvents
 {
     /// <summary>
     /// Takes a number of MidiEvents and merges them into a new single MidiEvent source

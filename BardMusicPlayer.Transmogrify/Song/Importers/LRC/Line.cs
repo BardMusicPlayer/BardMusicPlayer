@@ -6,7 +6,7 @@ using System.Text;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 /// <summary>
 ///     Represents single line of lyrics.

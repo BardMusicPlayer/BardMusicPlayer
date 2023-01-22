@@ -36,7 +36,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages
 {
     #region System Common Message Types
 

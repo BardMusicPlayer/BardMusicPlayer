@@ -32,7 +32,7 @@
 
 #endregion
 
-namespace Sanford.Multimedia
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia
 {
     /// <summary>
     /// Defines constants for all major and minor keys.

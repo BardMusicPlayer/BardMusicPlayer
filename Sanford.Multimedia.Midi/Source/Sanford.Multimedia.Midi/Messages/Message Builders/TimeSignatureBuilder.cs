@@ -34,7 +34,7 @@
 
 using System;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders
 {
     /// <summary>
     /// Provides easy to use functionality for time signature MetaMessages.

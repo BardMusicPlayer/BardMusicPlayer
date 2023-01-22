@@ -34,9 +34,8 @@
 
 using System;
 using System.ComponentModel;
-using System.Reflection;
 
-namespace Sanford.Threading
+namespace Sanford.Multimedia.Midi.Sanford.Threading
 {
     /// <summary>
     /// Represents information about the InvokeCompleted event.

@@ -33,8 +33,9 @@
 #endregion
 
 using System;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing
 {
     public class MidiEvent
     {

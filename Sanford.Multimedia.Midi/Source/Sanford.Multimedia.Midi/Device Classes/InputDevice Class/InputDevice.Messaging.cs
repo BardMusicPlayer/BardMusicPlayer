@@ -31,13 +31,15 @@
  */
 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Sanford.Multimedia;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class
 {
     internal struct MidiInParams
     {

@@ -15,9 +15,15 @@ using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Maestro.Utils;
-using BardMusicPlayer.Maestro.Sequencing.Internal;
 using BardMusicPlayer.Transmogrify.Song;
 using Melanchall.DryWetMidi.Interaction;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.InputDevice_Class;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Processing;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
 
 namespace BardMusicPlayer.Maestro.Sequencing
 {

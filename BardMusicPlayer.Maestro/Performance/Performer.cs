@@ -4,10 +4,8 @@
  */
 
 using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.DalamudBridge.Helper.Dalamud;
 using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Maestro.FFXIV;
-using BardMusicPlayer.Maestro.Sequencing;
 using BardMusicPlayer.Maestro.Utils;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
@@ -16,6 +14,13 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes;
+using MessageType = BardMusicPlayer.DalamudBridge.Helper.Dalamud.MessageType;
+using Sequencer = BardMusicPlayer.Maestro.Sequencing.Sequencer;
 
 namespace BardMusicPlayer.Maestro.Performance
 {
@@ -300,23 +305,23 @@ namespace BardMusicPlayer.Maestro.Performance
                 return;
             }
 
-            Sanford.Multimedia.Midi.Sequence seq = bmpSeq.Sequence;
-            if (!(seq is Sanford.Multimedia.Midi.Sequence))
+            Sequence seq = bmpSeq.Sequence;
+            if (!(seq is Sequence))
             {
                 return;
             }
 
-            if ((tn >= 0 && tn < seq.Count) && seq[tn] is Sanford.Multimedia.Midi.Track track)
+            if ((tn >= 0 && tn < seq.Count) && seq[tn] is Track track)
             {
                 // OctaveNum now holds the track octave and the selected octave together
                 Console.WriteLine(String.Format("Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track)));
                 List<int> notes = new List<int>();
-                foreach (Sanford.Multimedia.Midi.MidiEvent ev in track.Iterator())
+                foreach (MidiEvent ev in track.Iterator())
                 {
-                    if (ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.MessageType.Channel)
+                    if (ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.MessageType.Channel)
                     {
-                        Sanford.Multimedia.Midi.ChannelMessage msg = (ev.MidiMessage as Sanford.Multimedia.Midi.ChannelMessage);
-                        if (msg.Command == Sanford.Multimedia.Midi.ChannelCommand.NoteOn)
+                        ChannelMessage msg = (ev.MidiMessage as ChannelMessage);
+                        if (msg.Command == ChannelCommand.NoteOn)
                         {
                             int note = msg.Data1;
                             int vel = msg.Data2;
@@ -555,9 +560,9 @@ namespace BardMusicPlayer.Maestro.Performance
             }
         }
 
-        private void InternalNote(Object o, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+        private void InternalNote(Object o, ChannelMessageEventArgs args)
         {
-            Sanford.Multimedia.Midi.ChannelMessageBuilder builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
+            ChannelMessageBuilder builder = new ChannelMessageBuilder(args.Message);
 
             NoteEvent noteEvent = new NoteEvent
             {
@@ -571,13 +576,13 @@ namespace BardMusicPlayer.Maestro.Performance
             {
                 noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, this.OctaveShift);
 
-                Sanford.Multimedia.Midi.ChannelCommand cmd = args.Message.Command;
+                ChannelCommand cmd = args.Message.Command;
                 int vel = builder.Data2;
-                if ((cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOff) || (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel == 0))
+                if ((cmd == ChannelCommand.NoteOff) || (cmd == ChannelCommand.NoteOn && vel == 0))
                 {
                     this.ProcessOffNote(noteEvent);
                 }
-                if ((cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn) && vel > 0)
+                if ((cmd == ChannelCommand.NoteOn) && vel > 0)
                 {
                     if (_livePlayDelay)
                         this.ProcessOnNoteLive(noteEvent);
@@ -587,7 +592,7 @@ namespace BardMusicPlayer.Maestro.Performance
             }
         }
 
-        private void InternalProg(object sender, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+        private void InternalProg(object sender, ChannelMessageEventArgs args)
         {
             if (!_forcePlayback)
             {
@@ -637,7 +642,7 @@ namespace BardMusicPlayer.Maestro.Performance
             }
         }
 
-        private void InternalAT(object sender, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+        private void InternalAT(object sender, ChannelMessageEventArgs args)
         {
             /*var builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
             var atevent = new ChannelAfterTouchEvent
@@ -662,7 +667,7 @@ namespace BardMusicPlayer.Maestro.Performance
 
         }
 
-        private void IntenalLyrics(object sender, Sanford.Multimedia.Midi.MetaMessageEventArgs e)
+        private void IntenalLyrics(object sender, MetaMessageEventArgs e)
         {
             if (SingerTrackNr <= 0) //0 mean no singer
                 return;
@@ -670,7 +675,7 @@ namespace BardMusicPlayer.Maestro.Performance
             if (!UsesDalamud)
                 return;
 
-            Sanford.Multimedia.Midi.MetaTextBuilder builder = new Sanford.Multimedia.Midi.MetaTextBuilder(e.Message);
+            MetaTextBuilder builder = new MetaTextBuilder(e.Message);
             string text = builder.Text;
             var t = mainSequencer.MaxTrack;
             if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ mainSequencer.LyricStartTrack-1)

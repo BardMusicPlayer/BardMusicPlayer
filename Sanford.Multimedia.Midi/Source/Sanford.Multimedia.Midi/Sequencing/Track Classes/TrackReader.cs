@@ -34,8 +34,10 @@
 
 using System;
 using System.IO;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes
 {
 	/// <summary>
 	/// Reads a track from a stream.

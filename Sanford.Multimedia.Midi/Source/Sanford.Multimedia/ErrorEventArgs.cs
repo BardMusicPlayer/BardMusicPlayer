@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sanford.Multimedia
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia
 {
     public class ErrorEventArgs : EventArgs
     {

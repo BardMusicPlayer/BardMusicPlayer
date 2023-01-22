@@ -1,6 +1,8 @@
 ﻿using System;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.OutputDevice_Classes;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.MidiEvents
 {
     /// <summary>
     /// Event sink that sends midi messages to an output device

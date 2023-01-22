@@ -32,7 +32,7 @@
 
 #endregion
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.Message_Builders
 {
 	/// <summary>
 	/// Represents functionality for building MIDI messages.

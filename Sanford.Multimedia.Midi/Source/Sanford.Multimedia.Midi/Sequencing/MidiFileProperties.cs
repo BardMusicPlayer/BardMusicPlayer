@@ -35,8 +35,9 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Clocks;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing
 {
     /// <summary>
     /// Defintes constants representing SMPTE frame rates.

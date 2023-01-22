@@ -10,7 +10,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Sanford.Collections.Immutable
+namespace Sanford.Multimedia.Midi.Sanford.Collections.Immutable.AVL_Tree_Classes
 {
 	/// <summary>
 	/// Represents a node in an AVL tree.

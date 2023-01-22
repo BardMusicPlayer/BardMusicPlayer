@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
-using System.Text;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages.EventArgs
 {
-    public class InvalidSysExMessageEventArgs : EventArgs
+    public class InvalidSysExMessageEventArgs : System.EventArgs
     {
         private byte[] messageData;
 

@@ -20,7 +20,7 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public class NetworkPacket : IDisposable
     {

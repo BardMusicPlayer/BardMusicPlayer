@@ -35,7 +35,7 @@
 using System;
 using System.Collections;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages
 { 
     /// <summary>
     /// Defines constants representing various system exclusive message types.

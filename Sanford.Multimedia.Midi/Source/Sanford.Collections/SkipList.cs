@@ -35,8 +35,7 @@
 using System;
 using System.Collections;
 
-
-namespace Sanford.Collections
+namespace Sanford.Multimedia.Midi.Sanford.Collections
 {
 	/// <summary>
     /// Represents a collection of key-and-value pairs.

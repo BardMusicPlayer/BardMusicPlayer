@@ -35,8 +35,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Sequencing.Track_Classes
 {
 	/// <summary>
 	/// Writes a Track to a Stream.

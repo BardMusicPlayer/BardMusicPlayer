@@ -33,12 +33,11 @@
 #endregion
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Messages;
 
-namespace Sanford.Multimedia.Midi
+namespace Sanford.Multimedia.Midi.Sanford.Multimedia.Midi.Device_Classes.OutputDevice_Classes
 {
 	/// <summary>
 	/// Represents a device capable of sending MIDI messages.
