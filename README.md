@@ -20,7 +20,6 @@
     <img src="https://img.shields.io/github/v/tag/BardMusicPlayer/BardMusicPlayer?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
 </p>
 
-#
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -35,22 +34,22 @@
   </ol>
 </details>
 
-# About BardMusicPlayer
 <section id="about">
+
+# About BardMusicPlayer
   <p> BardMusicPlayer is an automated music player for playing MIDI songs in FFXIV using the in-game bard performance mode. 
 For further information or a quick start, visit the <a href="https://bardmusicplayer.com/">official page</a>.</p>
-</section>
 
 **Join the ✅ [Discord Server](https://discord.gg/bmp) for support!**
-
-# Hypnotoad Plugin
-<section id="plugin">
-
-BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer/Hypnotoad-Plugin">Hypnotoad</a> companion plugin for enhanced functionality.
-
 </section>
 
-<details><summary>Enhanced Features</summary>
+<section id="plugin">
+
+# Hypnotoad Plugin
+BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer/Hypnotoad-Plugin">Hypnotoad</a> companion plugin for enhanced functionality.
+
+<details>
+<summary>Enhanced Features</summary>
 
     * Output lyrics.
     * Chat while performing.
@@ -60,22 +59,21 @@ BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer
     * Set graphics toggle.
     
     And much more!
-
 </details>
-
-### Prerequisites
+</section>
 
 <section id="prerequisites">
+
+### Prerequisites
 
 * Install <a href="https://www.finalfantasyxiv.com/" alt="Final Fantasy XIV">Final Fantasy XIV</a>
 * Install <a href="https://github.com/goatcorp/FFXIVQuickLauncher#how-to-install-the-launcher" alt="XIVLauncher">XIVLauncher</a>
 * Add the custom <a href="#installation" alt="repository">repository</a>
-
 </section>
 
-### Installation
 <section id="installation">
 
+### Installation
 * Copy the following repository link: <br>
   `https://dl.bardmusicplayer.com/hypnotoad/` <br><br>
 * Type `/xlsettings` in the game chat window to open the Dalamud Settings.
@@ -88,19 +86,20 @@ BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer
 * Navigate to the "All Plugins" tab inside the `/xlplugins` plugin browser and search for `HypnotoadPlugin`.
 * Click on "HypnotoadPlugin" and select "Install".
 * The companion plugin is now ready to be used.
-
 </section>
 
+
+<section id="usage">
+
 ### Using Hypnotoad
-<p id="usage">
 To enable all enhanced functionality, simply checkmark the "Hypnotoad Compatibility" option inside BardMusicPlayer's Settings tab.
   <br><br><a><img src="https://i.imgur.com/j9HWfZV.png" alt="Settings"/></a><br>
+</section>
 
-# Contributing
 <section id="contributing">
 
+# Contributing
 Contributions to the project are more than welcome - please feel free to submit a [pull request](https://github.com/BardMusicPlayer/BardMusicPlayer/pulls) here on GitHub and reach out on the [Discord Server](https://discord.gg/bmp) so we can communicate any necessary changes and review your submission!
-
 </section>
 
 #
