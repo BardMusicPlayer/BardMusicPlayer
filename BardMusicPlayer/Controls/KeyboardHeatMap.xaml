@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="BardMusicPlayer.Controls.KeyboardHeatMap"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             x:Name="NumbericUpDown"
+             mc:Ignorable="d" Height="25" Width="40">
+
+    <Grid Name="tgrd">
+        <Grid Name="grd">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+            </Grid.ColumnDefinitions>
+            <Rectangle x:Name="C" Grid.Column="0" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="D" Grid.Column="1" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="E" Grid.Column="2" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="F" Grid.Column="3" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="G" Grid.Column="4" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="A" Grid.Column="5" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="H" Grid.Column="6" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="COne" Grid.Column="7" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="DOne" Grid.Column="8" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="EOne" Grid.Column="9" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="FOne" Grid.Column="10" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="GOne" Grid.Column="11" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="AOne" Grid.Column="12" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="HOne" Grid.Column="13" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="CTwo" Grid.Column="14" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="DTwo" Grid.Column="15" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="ETwo" Grid.Column="16" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="FTwo" Grid.Column="17" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="GTwo" Grid.Column="18" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="ATwo" Grid.Column="19" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+            <Rectangle x:Name="HTwo" Grid.Column="20" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="CThree" Grid.Column="21" Fill="White" Stroke="Black" StrokeThickness="0.5"/>
+
+        </Grid>
+        <Grid Name="blk_grd">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.5*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Rectangle x:Name="CSharp" Grid.Row="0" Grid.Column="1" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="DSharp" Grid.Row="0" Grid.Column="2" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="FSharp" Grid.Row="0" Grid.Column="4" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="GSharp" Grid.Row="0" Grid.Column="5" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="ASharp" Grid.Row="0" Grid.Column="6" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+
+            <Rectangle x:Name="CSharpOne" Grid.Row="0" Grid.Column="8" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="DSharpOne" Grid.Row="0" Grid.Column="9" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="FSharpOne" Grid.Row="0" Grid.Column="11" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="GSharpOne" Grid.Row="0" Grid.Column="12" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="ASharpOne" Grid.Row="0" Grid.Column="13" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+
+            <Rectangle x:Name="CSharpTwo" Grid.Row="0" Grid.Column="15" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="DSharpTwo" Grid.Row="0" Grid.Column="16" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+            <Rectangle x:Name="FSharpTwo" Grid.Row="0" Grid.Column="18" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="GSharpTwo" Grid.Row="0" Grid.Column="19" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+            <Rectangle x:Name="ASharpTwo" Grid.Row="0" Grid.Column="20" Fill="Black" Stroke="White" StrokeThickness="0.5"/>
+
+        </Grid>
+    </Grid>
+
+</UserControl>
