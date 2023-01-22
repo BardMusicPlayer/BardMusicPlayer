@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using BardMusicPlayer.Jamboree.Events;
-using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
+using ZeroTier.Sockets;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 {

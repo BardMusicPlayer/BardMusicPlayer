@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using ZeroTier;
 using ZeroTier.Core;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
+namespace ZeroTier
 {
     public class ZeroTierConnector
     {

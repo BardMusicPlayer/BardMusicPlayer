@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using ZeroTier;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
+namespace ZeroTier.Sockets
 {
     public class ZeroTierExtendedSocket
     {
@@ -83,7 +83,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if ((_fd = zts_bsd_socket(family, type, protocol)) < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)_fd);
+                throw new ZeroTier.Sockets.SocketException((int)_fd);
             }
             _socketFamily = addressFamily;
             _socketType = socketType;
@@ -117,7 +117,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             if (_fd < 0)
             {
                 // Invalid file descriptor
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             if (remoteEndPoint == null)
             {
@@ -126,7 +126,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             int err = zts_connect(_fd, remoteEndPoint.Address.ToString(), (ushort)remoteEndPoint.Port, _connectTimeout);
             if (err < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException(err, global::ZeroTier.Core.Node.ErrNo);
+                throw new ZeroTier.Sockets.SocketException(err, ZeroTier.Core.Node.ErrNo);
             }
             _remoteEndPoint = remoteEndPoint;
             _isConnected = true;
@@ -141,7 +141,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             if (_fd < 0)
             {
                 // Invalid file descriptor
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             if (localEndPoint == null)
             {
@@ -159,7 +159,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if (err < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)err);
+                throw new ZeroTier.Sockets.SocketException((int)err);
             }
             _localEndPoint = localEndPoint;
             _isBound = true;
@@ -181,7 +181,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             if (_fd < 0)
             {
                 // Invalid file descriptor
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             if (localEndPoint == null)
             {
@@ -201,7 +201,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             {
                 int t = ErrNo;
                 Console.WriteLine(t);
-                throw new global::ZeroTier.Sockets.SocketException((int)err);
+                throw new ZeroTier.Sockets.SocketException((int)err);
             }
             _localEndPoint = localEndPoint;
             _isBound = true;
@@ -217,13 +217,13 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             if (_fd < 0)
             {
                 // Invalid file descriptor
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             int err = Constants.ERR_OK;
             if ((err = zts_bsd_listen(_fd, backlog)) < 0)
             {
                 // Invalid backlog value perhaps?
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             _isListening = true;
         }
@@ -237,15 +237,15 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             if (_fd < 0)
             {
                 // Invalid file descriptor
-                throw new global::ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)Constants.ERR_SOCKET);
             }
             if (_isListening == false)
             {
                 throw new InvalidOperationException("Socket is not in a listening state. Call Listen() first");
             }
-            IntPtr lpBuffer = Marshal.AllocHGlobal(global::ZeroTier.Constants.INET6_ADDRSTRLEN);
+            IntPtr lpBuffer = Marshal.AllocHGlobal(ZeroTier.Constants.INET6_ADDRSTRLEN);
             int port = 0;
-            int accepted_fd = zts_accept(_fd, lpBuffer, global::ZeroTier.Constants.INET6_ADDRSTRLEN, ref port);
+            int accepted_fd = zts_accept(_fd, lpBuffer, ZeroTier.Constants.INET6_ADDRSTRLEN, ref port);
             // Convert buffer to managed string
             string str = Marshal.PtrToStringAnsi(lpBuffer);
             Marshal.FreeHGlobal(lpBuffer);
@@ -329,15 +329,15 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             poll_set.fd = _fd;
             if (mode == SelectMode.SelectRead)
             {
-                poll_set.events = (short)((byte)global::ZeroTier.Constants.POLLIN);
+                poll_set.events = (short)((byte)ZeroTier.Constants.POLLIN);
             }
             if (mode == SelectMode.SelectWrite)
             {
-                poll_set.events = (short)((byte)global::ZeroTier.Constants.POLLOUT);
+                poll_set.events = (short)((byte)ZeroTier.Constants.POLLOUT);
             }
             if (mode == SelectMode.SelectError)
             {
-                poll_set.events = (short)((byte)global::ZeroTier.Constants.POLLERR | (byte)global::ZeroTier.Constants.POLLNVAL);
+                poll_set.events = (short)((byte)ZeroTier.Constants.POLLERR | (byte)ZeroTier.Constants.POLLNVAL);
             }
             IntPtr poll_fd_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(zts_pollfd)));
             Marshal.StructureToPtr(poll_set, poll_fd_ptr, false);
@@ -346,24 +346,24 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             uint numfds = 1;
             if ((result = zts_bsd_poll(poll_fd_ptr, numfds, timeout_ms)) < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException(result, global::ZeroTier.Core.Node.ErrNo);
+                throw new ZeroTier.Sockets.SocketException(result, ZeroTier.Core.Node.ErrNo);
             }
             poll_set = (zts_pollfd)Marshal.PtrToStructure(poll_fd_ptr, typeof(zts_pollfd));
             if (result != 0)
             {
                 if (mode == SelectMode.SelectRead)
                 {
-                    result = Convert.ToInt32(((byte)poll_set.revents & (byte)global::ZeroTier.Constants.POLLIN) != 0);
+                    result = Convert.ToInt32(((byte)poll_set.revents & (byte)ZeroTier.Constants.POLLIN) != 0);
                 }
                 if (mode == SelectMode.SelectWrite)
                 {
-                    result = Convert.ToInt32(((byte)poll_set.revents & (byte)global::ZeroTier.Constants.POLLOUT) != 0);
+                    result = Convert.ToInt32(((byte)poll_set.revents & (byte)ZeroTier.Constants.POLLOUT) != 0);
                 }
                 if (mode == SelectMode.SelectError)
                 {
                     result = Convert.ToInt32(
-                        ((poll_set.revents & (byte)global::ZeroTier.Constants.POLLERR) != 0)
-                        || ((poll_set.revents & (byte)global::ZeroTier.Constants.POLLNVAL) != 0));
+                        ((poll_set.revents & (byte)ZeroTier.Constants.POLLERR) != 0)
+                        || ((poll_set.revents & (byte)ZeroTier.Constants.POLLNVAL) != 0));
                 }
             }
             Marshal.FreeHGlobal(poll_fd_ptr);
@@ -383,7 +383,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if (_fd < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)global::ZeroTier.Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
             if (buffer == null)
             {
@@ -434,7 +434,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if (_fd < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)global::ZeroTier.Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
             if (buffer == null)
             {
@@ -484,7 +484,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if (_fd < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)global::ZeroTier.Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
             if (buffer == null)
             {
@@ -517,7 +517,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
             }
             if (_fd < 0)
             {
-                throw new global::ZeroTier.Sockets.SocketException((int)global::ZeroTier.Constants.ERR_SOCKET);
+                throw new ZeroTier.Sockets.SocketException((int)ZeroTier.Constants.ERR_SOCKET);
             }
             if (buffer == null)
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
-using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
+using ZeroTier.Sockets;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
