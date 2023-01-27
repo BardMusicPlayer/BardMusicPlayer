@@ -8,7 +8,7 @@ using System.Globalization;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 /// <summary>
 ///     Type of metadata.

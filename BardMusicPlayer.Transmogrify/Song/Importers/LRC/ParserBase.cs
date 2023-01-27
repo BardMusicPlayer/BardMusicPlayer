@@ -5,7 +5,7 @@ using System.Threading;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 internal abstract class ParserBase<TLine> : IParseResult<TLine>
     where TLine : Line

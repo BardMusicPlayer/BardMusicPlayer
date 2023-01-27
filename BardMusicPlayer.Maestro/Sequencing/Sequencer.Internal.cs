@@ -6,10 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using Sanford.Multimedia.Midi;
 
-namespace BardMusicPlayer.Maestro.Sequencing.Internal
+namespace BardMusicPlayer.Maestro.Sequencing
 {
     public class Sequencer_Internal : IComponent
     {

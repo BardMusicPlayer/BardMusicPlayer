@@ -1,9 +1,10 @@
-﻿using BardMusicPlayer.Jamboree.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BardMusicPlayer.Jamboree.Events;
+using BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 {
 
     public class ClientInfo

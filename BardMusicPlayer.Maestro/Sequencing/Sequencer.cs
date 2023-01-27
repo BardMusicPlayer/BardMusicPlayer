@@ -15,7 +15,6 @@ using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Maestro.Utils;
-using BardMusicPlayer.Maestro.Sequencing.Internal;
 using BardMusicPlayer.Transmogrify.Song;
 using Melanchall.DryWetMidi.Interaction;
 

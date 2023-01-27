@@ -1,11 +1,11 @@
 ﻿#region
 
 using System;
-using static BardMusicPlayer.Transmogrify.Song.Importers.LrcParser.DateTimeExtension;
+using static BardMusicPlayer.Transmogrify.Song.Importers.LRC.DateTimeExtension;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 /// <summary>
 ///     Factory for timestamps.

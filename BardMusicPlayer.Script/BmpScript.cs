@@ -13,8 +13,8 @@ using System.Windows;
 using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Maestro.Performance;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Script.BasicSharp;
 using BardMusicPlayer.Seer;
-using BasicSharp;
 
 namespace BardMusicPlayer.Script
 {

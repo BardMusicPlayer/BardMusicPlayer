@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace BardMusicPlayer.Transmogrify.Song.Importers.LrcParser;
+namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 
 internal sealed class Parser<TLine> : ParserBase<TLine>
     where TLine : Line, new()

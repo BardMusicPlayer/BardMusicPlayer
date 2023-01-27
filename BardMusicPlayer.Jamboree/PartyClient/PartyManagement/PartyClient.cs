@@ -1,7 +1,8 @@
-﻿using BardMusicPlayer.Jamboree.PartyNetworking;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BardMusicPlayer.Jamboree.PartyNetworking;
+using BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
 
-namespace BardMusicPlayer.Jamboree.PartyManagement
+namespace BardMusicPlayer.Jamboree.PartyClient.PartyManagement
 {
     public class PartyClientInfo
     {

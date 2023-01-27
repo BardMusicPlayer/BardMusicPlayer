@@ -3,19 +3,16 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Jamboree.Events;
-using BardMusicPlayer.Jamboree.PartyManagement;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using BardMusicPlayer.Jamboree.Events;
+using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
+using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using ZeroTier.Sockets;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public class NetworkSocket
     {
