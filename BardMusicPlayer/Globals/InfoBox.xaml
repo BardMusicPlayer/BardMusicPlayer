@@ -15,7 +15,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="LightAmp" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="26" Foreground="#FFFFD200" FontFamily="Comic Sans MS"/>
             <Grid Grid.Column="0" Grid.Row="2">
                 <Border Width="500" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" ClipToBounds="True" BorderThickness="1.5" BorderBrush="Transparent">
                     <Border x:Name="moving_border">
@@ -45,7 +44,6 @@
                     </Border>
                 </Border>
             </Grid>
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="Special thanks to the BoL crew." VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="#FFFFD200" FontFamily="Comic Sans MS"/>
         </Grid>
     </Grid>
 </Window>
