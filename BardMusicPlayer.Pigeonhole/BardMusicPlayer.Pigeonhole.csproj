@@ -3,18 +3,18 @@
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
-    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
-    <Version>2.0.0.0</Version>
-    <Authors>MoogleTroupe</Authors>
-    <Copyright>Copyright © MoogleTroupe 2021</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Platforms>x64</Platforms>
-    <Configurations>Debug;Release</Configurations>
     <PlatformTarget>x64</PlatformTarget>
+    <Configurations>Debug;Release</Configurations>
+
+    <Authors>MoogleTroupe</Authors>
+    <Copyright>Copyright © MoogleTroupe 2023</Copyright>
+    <Version>2.0.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
