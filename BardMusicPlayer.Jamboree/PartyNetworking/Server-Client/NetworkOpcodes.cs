@@ -1,8 +1,6 @@
-﻿using BardMusicPlayer.Jamboree.PartyManagement;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public static class NetworkOpcodes
     {

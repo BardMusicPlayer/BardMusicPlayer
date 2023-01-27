@@ -10,6 +10,8 @@ using System.Text;
 
 #endregion
 
+namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
+
 /// <summary>
 ///     Unzip helper class.
 /// </summary>

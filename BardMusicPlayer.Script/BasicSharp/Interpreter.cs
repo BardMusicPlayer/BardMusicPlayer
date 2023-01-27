@@ -1,11 +1,8 @@
-using BardMusicPlayer.Quotidian.Structs;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BardMusicPlayer.Script.BasicSharp;
-using ValueType = BardMusicPlayer.Script.BasicSharp.ValueType;
+using BardMusicPlayer.Quotidian.Structs;
 
-namespace BasicSharp
+namespace BardMusicPlayer.Script.BasicSharp
 {
     public sealed class Interpreter
     {

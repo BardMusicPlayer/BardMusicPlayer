@@ -1,13 +1,14 @@
-﻿using BardMusicPlayer.Jamboree.Events;
-using BardMusicPlayer.Jamboree.PartyManagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
+using BardMusicPlayer.Jamboree.Events;
+using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
+using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using ZeroTier.Sockets;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public class NetworkPartyServer : IDisposable
     {
