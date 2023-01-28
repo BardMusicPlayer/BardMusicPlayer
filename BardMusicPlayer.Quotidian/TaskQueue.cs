@@ -6,31 +6,30 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BardMusicPlayer.Quotidian
+namespace BardMusicPlayer.Quotidian;
+
+public class TaskQueue
 {
-    public class TaskQueue
+    private Task previous = Task.FromResult(false);
+    private readonly object key = new();
+
+    public Task<T> Enqueue<T>(Func<Task<T>> taskGenerator)
     {
-        private Task previous = Task.FromResult(false);
-        private readonly object key = new();
-
-        public Task<T> Enqueue<T>(Func<Task<T>> taskGenerator)
+        lock (key)
         {
-            lock (key)
-            {
-                var next = previous.ContinueWith(t => taskGenerator()).Unwrap();
-                previous = next;
-                return next;
-            }
+            var next = previous.ContinueWith(_ => taskGenerator()).Unwrap();
+            previous = next;
+            return next;
         }
+    }
 
-        public Task Enqueue(Func<Task> taskGenerator)
+    public Task Enqueue(Func<Task> taskGenerator)
+    {
+        lock (key)
         {
-            lock (key)
-            {
-                var next = previous.ContinueWith(t => taskGenerator()).Unwrap();
-                previous = next;
-                return next;
-            }
+            var next = previous.ContinueWith(_ => taskGenerator()).Unwrap();
+            previous = next;
+            return next;
         }
     }
 }
