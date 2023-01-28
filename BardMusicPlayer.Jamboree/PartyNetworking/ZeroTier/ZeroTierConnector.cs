@@ -71,17 +71,17 @@ public class ZeroTierConnector
             ipAddress = addr.ToString();
         }
 #if DEBUG
-            foreach (IPAddress addr in node.GetNetworkAddresses(networkId))
+            foreach (var addr in node.GetNetworkAddresses(networkId))
             {
                 Console.WriteLine(" - Address: " + addr);
             }
 
             Console.WriteLine("Num of routes             : " + node.GetNetworkRoutes(networkId).Count);
-            foreach (RouteInfo route in node.GetNetworkRoutes(networkId))
+            foreach (var route in node.GetNetworkRoutes(networkId))
             {
                 Console.WriteLine(" -   Route: target={0} via={1} flags={2} metric={3}",
-                    route.Target.ToString(),
-                    route.Via.ToString(),
+                    route.Target,
+                    route.Via,
                     route.Flags,
                     route.Metric);
             }
