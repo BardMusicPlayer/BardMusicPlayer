@@ -5,19 +5,18 @@
 
 using BardMusicPlayer.Seer;
 
-namespace BardMusicPlayer.Grunt
+namespace BardMusicPlayer.Grunt;
+
+public static partial class GameExtensions
 {
-    public static partial class GameExtensions
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="game"></param>
+    /// <returns></returns>
+    public static bool IsDalamudHooked(this Game game)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="game"></param>
-        /// <returns></returns>
-        public static bool IsDalamudHooked(this Game game)
-        {
-            if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
-            return BmpGrunt.Instance.DalamudServer.IsConnected(game.Pid);
-        }
+        if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
+        return BmpGrunt.Instance.DalamudServer.IsConnected(game.Pid);
     }
 }

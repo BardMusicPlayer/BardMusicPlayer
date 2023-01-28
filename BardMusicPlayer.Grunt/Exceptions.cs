@@ -5,15 +5,14 @@
 
 using BardMusicPlayer.Quotidian;
 
-namespace BardMusicPlayer.Grunt
+namespace BardMusicPlayer.Grunt;
+
+public class BmpGruntException : BmpException
 {
-    public class BmpGruntException : BmpException
+    internal BmpGruntException()
     {
-        internal BmpGruntException() : base()
-        {
-        }
-        internal BmpGruntException(string message) : base(message)
-        {
-        }
+    }
+    internal BmpGruntException(string message) : base(message)
+    {
     }
 }
