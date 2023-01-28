@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BardMusicPlayer.Jamboree.Events
+﻿namespace BardMusicPlayer.Jamboree.Events
 {
     /// <summary>
     /// if the connection 
     /// </summary>
     public sealed class PartyConnectionChangedEvent : JamboreeEvent
     {
-        public enum ResponseCode : int
+        public enum ResponseCode
         {
             ERROR =-1,
             OK,
             MESSAGE
         }
 
-        internal PartyConnectionChangedEvent(ResponseCode code, string message) : base(0, false)
+        internal PartyConnectionChangedEvent(ResponseCode code, string message)
         {
             EventType = GetType();
             Code = code;

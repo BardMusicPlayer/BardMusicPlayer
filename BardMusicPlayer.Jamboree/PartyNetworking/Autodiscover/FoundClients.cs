@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
         }
         public string IPAddress { get; set; } = "";
         public string Version { get; set; } = "";
-        public NetworkSocket Sockets { get; set; } = null;
+        public NetworkSocket Sockets { get; set; }
     }
 
     internal class FoundClients
@@ -98,7 +98,10 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
         /// <returns></returns>
         public bool IsIpInList(string IP)
         {
-            return _knownIP.Contains(IP);
+            lock (_knownIP)
+            {
+                return _knownIP.Contains(IP);
+            }
         }
 
         /// <summary>
@@ -121,7 +124,10 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
         public void Clear()
         {
             _partyClients.Clear();
-            _knownIP.Clear();
+            lock (_knownIP)
+            {
+                _knownIP.Clear();
+            }
         }
     }
 }

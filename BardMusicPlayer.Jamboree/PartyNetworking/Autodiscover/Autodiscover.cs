@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using BardMusicPlayer.Jamboree.Events;
-using ZeroTier.Sockets;
+using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 {
@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
             //GC.SuppressFinalize(this);
         }
 
-        private SocketRx svcRx { get; set; } = null;
+        private SocketRx svcRx { get; set; }
 
         public void StartAutodiscover(string address, string version)
         {
@@ -41,8 +41,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 
             svcRx = new SocketRx(ref objWorkerServerDiscoveryRx, address, version);
 
-            objWorkerServerDiscoveryRx.DoWork += new DoWorkEventHandler(svcRx.Start);
-            objWorkerServerDiscoveryRx.ProgressChanged += new ProgressChangedEventHandler(logWorkers_ProgressChanged);
+            objWorkerServerDiscoveryRx.DoWork          += svcRx.Start;
+            objWorkerServerDiscoveryRx.ProgressChanged += logWorkers_ProgressChanged;
             objWorkerServerDiscoveryRx.RunWorkerAsync();
         }
 
@@ -60,7 +60,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
 
     public class SocketRx
     {
-        public bool disposing = false;
+        public bool disposing;
         public System.Net.IPEndPoint iPEndPoint;
         public string BCAddress = "";
         public string Address = "";
@@ -68,15 +68,12 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
         public int ServerPort = 0;
         byte[] bytes = new byte[255];
 
-        private BackgroundWorker worker = null;
-
         public SocketRx(ref BackgroundWorker w, string address, string ver)
         {
             Address = address;
             BCAddress = address.Split('.')[0] + "." + address.Split('.')[1] + "." + address.Split('.')[2] + ".255";
             version = ver;
-            worker = w;
-            worker.ReportProgress(1, "Server");
+            w.ReportProgress(1, "Server");
         }
 
         public void Start(object sender, DoWorkEventArgs e)
@@ -90,7 +87,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
             listener.BSD_Bind(iPEndPoint);
             BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[Autodiscover]: Started\r\n"));
             
-            while (this.disposing == false)
+            while (disposing == false)
             {
                 int bytesRec = listener.ReceiveFrom(bytes);
                 if (bytesRec > 0)
@@ -105,7 +102,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
                         FoundClients.Instance.Add(ip, version);
                     }
                 }
-                if (!this.disposing)
+                if (!disposing)
                 {
                     string t = "XIVAmp " + Address + " " + version; //Send the init ip and version
                     int p = transmitter.SendTo(iPEndPoint, Encoding.ASCII.GetBytes(t));
@@ -118,12 +115,11 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
             try { listener.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
             finally { listener.Close(); }
             BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[Autodiscover]: Stopped\r\n"));
-            return;
         }
 
         public void Stop()
         {
-            this.disposing = true;
+            disposing = true;
         }
     }
 }

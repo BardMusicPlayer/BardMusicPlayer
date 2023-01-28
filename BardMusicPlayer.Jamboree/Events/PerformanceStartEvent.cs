@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BardMusicPlayer.Jamboree.Events
+﻿namespace BardMusicPlayer.Jamboree.Events
 {
     public sealed class PerformanceStartEvent : JamboreeEvent
     {
@@ -12,7 +6,7 @@ namespace BardMusicPlayer.Jamboree.Events
         /// Start the performance received
         /// </summary>
         /// <param name="timestampinMillis">in milliseconds</param>
-        internal PerformanceStartEvent(long timestampinMillis, bool start) : base(0, false)
+        internal PerformanceStartEvent(long timestampinMillis, bool start)
         {
             EventType = GetType();
             SenderTimestamp_in_millis = timestampinMillis;

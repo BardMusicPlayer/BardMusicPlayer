@@ -9,7 +9,7 @@
         /// on host, when a party and token was created
         /// </summary>
         /// <param name="token"></param>
-        internal PartyDebugLogEvent(string logstring) : base(0, false)
+        internal PartyDebugLogEvent(string logstring)
         {
             EventType = GetType();
             LogString = logstring;

@@ -1,14 +1,8 @@
 using BardMusicPlayer.Jamboree.Events;
-using BardMusicPlayer.Jamboree.PartyNetworking;
-using ZeroTier;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
+using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 
 namespace BardMusicPlayer.Jamboree
 {
@@ -25,9 +19,9 @@ namespace BardMusicPlayer.Jamboree
     /// - handshake complete
     public class Pydna
     {
-        private bool _online { get; set; } = false;
+        private bool _online { get; set; }
 
-        private ZeroTierConnector zeroTierConnector = null;
+        private ZeroTierConnector zeroTierConnector;
 
         public void JoinParty(string networkId, byte type, string name)
         {
@@ -43,7 +37,6 @@ namespace BardMusicPlayer.Jamboree
             NetworkPartyServer.Instance.StartServer(new IPEndPoint(IPAddress.Parse(data), 12345), type, name);
             _online = true;
             BmpJamboree.Instance.PublishEvent(new PartyCreatedEvent("Connected...\r\n"));
-            return;
         }
 
         public void LeaveParty()

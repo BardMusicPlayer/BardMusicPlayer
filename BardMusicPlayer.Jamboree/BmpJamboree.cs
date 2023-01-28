@@ -5,18 +5,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
-using ZeroTier.Core;
 
 namespace BardMusicPlayer.Jamboree
 {
     public partial class BmpJamboree : IDisposable
     {
-        private Pydna _pydna = null;
+        private Pydna _pydna;
 
 #region Instance Constructor/Destructor
         private static readonly Lazy<BmpJamboree> LazyInstance = new(() => new BmpJamboree());

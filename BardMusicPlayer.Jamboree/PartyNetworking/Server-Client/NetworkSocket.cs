@@ -10,23 +10,24 @@ using System.Timers;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
+using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 using ZeroTier.Sockets;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public class NetworkSocket
     {
-        private bool _close = false;
+        private bool _close;
         private PartyClientInfo _clientInfo = new PartyClientInfo();
 
         public PartyClientInfo PartyClient { get { return _clientInfo; } }
 
-        public ZeroTierExtendedSocket ListenSocket { get; set; } = null;
-        public ZeroTierExtendedSocket ConnectorSocket { get; set; } = null;
+        public ZeroTierExtendedSocket ListenSocket { get; set; }
+        public ZeroTierExtendedSocket ConnectorSocket { get; set; }
         private string _remoteIP = "";
 
         Timer _timer;
-        bool _await_pong = false;
+        bool _await_pong;
 
         public NetworkSocket(string IP)
         {
@@ -168,9 +169,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
                 case NetworkOpcodes.OpcodeEnum.MSG_SONG_DATA:
                     System.Diagnostics.Debug.WriteLine("");
                     break;
-                default:
-                    break;
-            };
+            }
         }
 
         public void CloseConnection()

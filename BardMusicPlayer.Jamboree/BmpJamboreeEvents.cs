@@ -61,10 +61,12 @@ namespace BardMusicPlayer.Jamboree
                                     break;
                                 OnPerformanceStart(this, performanceStart);
                                 break;
-                        };
+                        }
                     }
                     catch
-                    { }
+                    {
+                        // ignored
+                    }
                 }
                 await Task.Delay(25, token).ContinueWith(tsk => { });
             }

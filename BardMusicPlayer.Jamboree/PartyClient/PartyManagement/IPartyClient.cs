@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using BardMusicPlayer.Jamboree.PartyNetworking;
 using BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.PartyManagement

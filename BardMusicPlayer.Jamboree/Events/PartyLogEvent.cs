@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BardMusicPlayer.Jamboree.Events
+﻿namespace BardMusicPlayer.Jamboree.Events
 {
     /// <summary>
     /// Called only on host side
@@ -15,7 +9,7 @@ namespace BardMusicPlayer.Jamboree.Events
         /// on host, when a party and token was created
         /// </summary>
         /// <param name="token"></param>
-        internal PartyLogEvent(string logstring) : base(0, false)
+        internal PartyLogEvent(string logstring)
         {
             EventType = GetType();
             LogString = logstring;

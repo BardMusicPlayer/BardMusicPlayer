@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
-using ZeroTier.Sockets;
+using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             //GC.SuppressFinalize(this);
         }
 
-        private SocketServer svcWorker { get; set; } = null;
+        private SocketServer svcWorker { get; set; }
 
         public void StartServer(IPEndPoint iPEndPoint, byte type, string name)
         {
@@ -40,8 +40,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             objWorkerServerDiscovery.WorkerSupportsCancellation = true;
 
             svcWorker = new SocketServer(ref objWorkerServerDiscovery, iPEndPoint, type, name);
-            objWorkerServerDiscovery.DoWork += new DoWorkEventHandler(svcWorker.Start);
-            objWorkerServerDiscovery.ProgressChanged += new ProgressChangedEventHandler(logWorkers_ProgressChanged);
+            objWorkerServerDiscovery.DoWork += svcWorker.Start;
+            objWorkerServerDiscovery.ProgressChanged += logWorkers_ProgressChanged;
             objWorkerServerDiscovery.RunWorkerAsync();
         }
 
@@ -58,11 +58,10 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
     public class SocketServer
     {
-        public bool disposing = false;
+        public bool disposing;
         public IPEndPoint iPEndPoint;
         public int ServerPort = 0;
-        ZeroTierExtendedSocket listener = null;
-        private BackgroundWorker worker = null;
+        ZeroTierExtendedSocket listener;
         private Dictionary<string, KeyValuePair<long, ZeroTierExtendedSocket> > _pushBacklist = new Dictionary<string, KeyValuePair<long, ZeroTierExtendedSocket> >();
 
         private List<NetworkSocket> sessions = new List<NetworkSocket>();
@@ -74,9 +73,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
         public SocketServer(ref BackgroundWorker w, IPEndPoint localEndPoint, byte type, string name)
         {
-            worker = w;
             iPEndPoint = localEndPoint;
-            worker.ReportProgress(1, "Server");
+            w.ReportProgress(1, "Server");
 
             _clientInfo.Performer_Type = type;
             _clientInfo.Performer_Name = name;
@@ -94,21 +92,19 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             if (AddClient(handler))
             {
                 _pushBacklist.Remove(ip);
-                return;
             }
-            
         }
 
         private bool AddClient(ZeroTierExtendedSocket handler)
         {
             IPEndPoint remoteIpEndPoint = handler.RemoteEndPoint as IPEndPoint;
-            if (!FoundClients.Instance.IsIpInList(remoteIpEndPoint.Address.ToString()))
+            if (!FoundClients.Instance.IsIpInList(remoteIpEndPoint?.Address.ToString()))
             {
                 BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Error Ip not in list\r\n"));
                 return false;
             }
 
-            NetworkSocket sockets = FoundClients.Instance.FindSocket(remoteIpEndPoint.Address.ToString());
+            NetworkSocket sockets = FoundClients.Instance.FindSocket(remoteIpEndPoint?.Address.ToString());
             if (sockets != null)
             {
                 BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Session added\r\n"));
@@ -132,7 +128,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             listener.Listen(10);
             BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Started\r\n"));
 
-            while (this.disposing == false)
+            while (disposing == false)
             {
                 long da = DateTimeOffset.Now.ToUnixTimeSeconds();
 
@@ -142,11 +138,14 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
                     //Incomming connection
                     ZeroTierExtendedSocket handler = listener.Accept();
                     bool isInList = false;
-                    Parallel.ForEach(sessions, session =>
+                    lock (sessions)
                     {
-                        if (session.ListenSocket == handler)
-                            isInList = true;
-                    });
+                        Parallel.ForEach(sessions, session =>
+                        {
+                            if (session.ListenSocket == handler)
+                                isInList = true;
+                        });
+                    }
                     if (!isInList)
                     {
                         IPEndPoint remoteIpEndPoint = handler.RemoteEndPoint as IPEndPoint;
@@ -199,14 +198,20 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
                 try{
                     Task.Delay((int)(10 - (db - da)));
                 }
-                catch{ }
+                catch
+                {
+                    // ignored
+                }
             }
 
             //Finished serving - close all
-            foreach (NetworkSocket s in sessions)
+            lock (sessions)
             {
-                // Release the socket.
-                s.CloseConnection();
+                foreach (NetworkSocket s in sessions)
+                {
+                    // Release the socket.
+                    s.CloseConnection();
+                }
             }
 
             listener.KeepAlive = false;
@@ -217,18 +222,20 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             }
             
             BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Stopped\r\n"));
-            return;
         }
 
         public void SendToAll(byte[] pck)
         {
-            foreach (NetworkSocket session in sessions)
-                session.SendPacket(pck);
+            lock (sessions)
+            {
+                foreach (NetworkSocket session in sessions)
+                    session.SendPacket(pck);
+            }
         }
 
         public void Stop()
         {
-            this.disposing = true;
+            disposing = true;
         }
     }
 }
