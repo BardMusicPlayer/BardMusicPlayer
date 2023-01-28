@@ -13,174 +13,173 @@ using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 using ZeroTier.Sockets;
 
-namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
+namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
+
+public class NetworkSocket
 {
-    public class NetworkSocket
+    private bool _close;
+
+    public PartyClientInfo PartyClient { get; } = new();
+
+    public ZeroTierExtendedSocket ListenSocket { get; set; }
+    public ZeroTierExtendedSocket ConnectorSocket { get; set; }
+    private string _remoteIP = "";
+    private Timer _timer;
+    private bool _await_pong;
+
+    public NetworkSocket(string IP)
     {
-        private bool _close;
+        _ = ConnectTo(IP).ConfigureAwait(false);
+    }
 
-        public PartyClientInfo PartyClient { get; } = new();
+    public async Task<bool> ConnectTo(string IP)
+    {
+        _remoteIP = IP;
+        var localEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12345);
+        var bytes = new byte[1024];
+        ConnectorSocket = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+        //Connect to the server
+        ConnectorSocket.Connect(localEndPoint);
+        //Wait til connected
+        while (!ConnectorSocket.Connected)
+        { await Task.Delay(1); }
+        //Inform we are connected
+        BmpJamboree.Instance.PublishEvent(new PartyConnectionChangedEvent(PartyConnectionChangedEvent.ResponseCode.OK, "Connected"));
 
-        public ZeroTierExtendedSocket ListenSocket { get; set; }
-        public ZeroTierExtendedSocket ConnectorSocket { get; set; }
-        private string _remoteIP = "";
-        private Timer _timer;
-        private bool _await_pong;
+        BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[NetworkSocket]: Send handshake\r\n"));
+        SendPacket(ZeroTierPacketBuilder.MSG_JOIN_PARTY(FoundClients.Instance.Type, FoundClients.Instance.OwnName));
 
-        public NetworkSocket(string IP)
+        _timer           =  new Timer();
+        _timer.Interval  =  10000;
+        _timer.Elapsed   += _timer_Elapsed;
+        _timer.AutoReset =  true;
+        _timer.Enabled   =  true;
+
+        return false;
+    }
+
+    internal NetworkSocket(ZeroTierExtendedSocket socket)
+    {
+        ListenSocket = socket;
+        PartyManager.Instance.Add(PartyClient);
+    }
+
+    private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+        if (_await_pong)
         {
-            _ = ConnectTo(IP).ConfigureAwait(false);
+            _close         = true;
+            _timer.Enabled = false;
+            return;
         }
+        var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.PING);
+        SendPacket(buffer.GetData());
+        _await_pong     = true;
+        _timer.Interval = 3000;
+    }
 
-        public async Task<bool> ConnectTo(string IP)
+    public bool Update()
+    {
+        var bytes = new byte[60000];
+        if (_close)
         {
-            _remoteIP = IP;
-            var localEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12345);
-            var bytes = new byte[1024];
-            ConnectorSocket = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
-            //Connect to the server
-            ConnectorSocket.Connect(localEndPoint);
-            //Wait til connected
-            while (!ConnectorSocket.Connected)
-            { await Task.Delay(1); }
-            //Inform we are connected
-            BmpJamboree.Instance.PublishEvent(new PartyConnectionChangedEvent(PartyConnectionChangedEvent.ResponseCode.OK, "Connected"));
-
-            BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[NetworkSocket]: Send handshake\r\n"));
-            SendPacket(ZeroTierPacketBuilder.MSG_JOIN_PARTY(FoundClients.Instance.Type, FoundClients.Instance.OwnName));
-
-            _timer = new Timer();
-            _timer.Interval = 10000;
-            _timer.Elapsed += _timer_Elapsed;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
-
+            CloseConnection();
+            return false;
+        }
+        if (ListenSocket.Poll(0, System.Net.Sockets.SelectMode.SelectError))
+        {
+            CloseConnection();
             return false;
         }
 
-        internal NetworkSocket(ZeroTierExtendedSocket socket)
+        if (ListenSocket.Available == -1)
+            return false;
+
+        if (ListenSocket.Poll(100, System.Net.Sockets.SelectMode.SelectRead))
         {
-            ListenSocket = socket;
-            PartyManager.Instance.Add(PartyClient);
-        }
-
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (_await_pong)
+            try
             {
-                _close = true;
-                _timer.Enabled = false;
-                return;
-            }
-            var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.PING);
-            SendPacket(buffer.GetData());
-            _await_pong = true;
-            _timer.Interval = 3000;
-        }
-
-        public bool Update()
-        {
-            var bytes = new byte[60000];
-            if (_close)
-            {
-                CloseConnection();
-                return false;
-            }
-            if (ListenSocket.Poll(0, System.Net.Sockets.SelectMode.SelectError))
-            {
-                CloseConnection();
-                return false;
-            }
-
-            if (ListenSocket.Available == -1)
-                return false;
-
-            if (ListenSocket.Poll(100, System.Net.Sockets.SelectMode.SelectRead))
-            {
-                try
+                var bytesRec = ListenSocket.Receive(bytes);
+                if (bytesRec == -1)
                 {
-                    var bytesRec = ListenSocket.Receive(bytes);
-                    if (bytesRec == -1)
-                    {
-                        CloseConnection();
-                        return false;
-                    }
-
-                    OpcodeHandling(bytes, bytesRec);
-                }
-                catch (SocketException err)
-                {
-                    Console.WriteLine(
-                            "ServiceErrorCode={0} SocketErrorCode={1}",
-                            err.ServiceErrorCode,
-                            err.SocketErrorCode);
+                    CloseConnection();
                     return false;
                 }
+
+                OpcodeHandling(bytes, bytesRec);
             }
-
-            return true;
-        }
-
-        public void SendPacket(byte[] pck)
-        {
-            if (ConnectorSocket.Available == -1)
-                _close = true;
-
-            if (!ConnectorSocket.Connected)
-                _close = true;
-
-            try 
-            { 
-                if(ConnectorSocket.Send(pck) == -1 )
-                    _close = true;
-            }
-            catch { _close = true; }
-            _close = false;
-        }
-
-        private void OpcodeHandling(byte[] bytes, int bytesRec)
-        {
-            var packet = new NetworkPacket(bytes);
-            switch (packet.Opcode)
+            catch (SocketException err)
             {
-                case NetworkOpcodes.OpcodeEnum.PING:
-                    BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Ping \r\n"));
-                    var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.PONG);
-                    SendPacket(buffer.GetData());
-                    break;
-                case NetworkOpcodes.OpcodeEnum.PONG:
-                    _await_pong = false;
-                    _timer.Interval = 30000;
-                    break;
-                case NetworkOpcodes.OpcodeEnum.MSG_JOIN_PARTY:
-                    PartyClient.Performer_Type = packet.ReadUInt8();
-                    PartyClient.Performer_Name = packet.ReadCString();
-                    BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Received handshake from "+PartyClient.Performer_Name+"\r\n"));
-                    break;
-                case NetworkOpcodes.OpcodeEnum.MSG_PLAY:
-                    BmpJamboree.Instance.PublishEvent(new PerformanceStartEvent(packet.ReadInt64(), true));
-                    break;
-                case NetworkOpcodes.OpcodeEnum.MSG_STOP:
-                    BmpJamboree.Instance.PublishEvent(new PerformanceStartEvent(packet.ReadInt64(), false));
-                    break;
-                case NetworkOpcodes.OpcodeEnum.MSG_SONG_DATA:
-                    System.Diagnostics.Debug.WriteLine("");
-                    break;
+                Console.WriteLine(
+                    "ServiceErrorCode={0} SocketErrorCode={1}",
+                    err.ServiceErrorCode,
+                    err.SocketErrorCode);
+                return false;
             }
         }
 
-        public void CloseConnection()
-        {
-            _await_pong = false;
-            _timer.Enabled = false;
-            ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
-            try { ListenSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
-            finally { ListenSocket.Close(); }
+        return true;
+    }
 
-            ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
-            try { ConnectorSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
-            finally { ConnectorSocket.Close(); }
-            FoundClients.Instance.Remove(_remoteIP);
+    public void SendPacket(byte[] pck)
+    {
+        if (ConnectorSocket.Available == -1)
+            _close = true;
+
+        if (!ConnectorSocket.Connected)
+            _close = true;
+
+        try 
+        { 
+            if(ConnectorSocket.Send(pck) == -1 )
+                _close = true;
         }
+        catch { _close = true; }
+        _close = false;
+    }
+
+    private void OpcodeHandling(byte[] bytes, int bytesRec)
+    {
+        var packet = new NetworkPacket(bytes);
+        switch (packet.Opcode)
+        {
+            case NetworkOpcodes.OpcodeEnum.PING:
+                BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Ping \r\n"));
+                var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.PONG);
+                SendPacket(buffer.GetData());
+                break;
+            case NetworkOpcodes.OpcodeEnum.PONG:
+                _await_pong     = false;
+                _timer.Interval = 30000;
+                break;
+            case NetworkOpcodes.OpcodeEnum.MSG_JOIN_PARTY:
+                PartyClient.Performer_Type = packet.ReadUInt8();
+                PartyClient.Performer_Name = packet.ReadCString();
+                BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Received handshake from "+PartyClient.Performer_Name+"\r\n"));
+                break;
+            case NetworkOpcodes.OpcodeEnum.MSG_PLAY:
+                BmpJamboree.Instance.PublishEvent(new PerformanceStartEvent(packet.ReadInt64(), true));
+                break;
+            case NetworkOpcodes.OpcodeEnum.MSG_STOP:
+                BmpJamboree.Instance.PublishEvent(new PerformanceStartEvent(packet.ReadInt64(), false));
+                break;
+            case NetworkOpcodes.OpcodeEnum.MSG_SONG_DATA:
+                System.Diagnostics.Debug.WriteLine("");
+                break;
+        }
+    }
+
+    public void CloseConnection()
+    {
+        _await_pong              = false;
+        _timer.Enabled           = false;
+        ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
+        try { ListenSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        finally { ListenSocket.Close(); }
+
+        ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
+        try { ConnectorSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        finally { ConnectorSocket.Close(); }
+        FoundClients.Instance.Remove(_remoteIP);
     }
 }
