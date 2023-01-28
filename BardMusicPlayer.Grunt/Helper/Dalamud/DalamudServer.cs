@@ -70,7 +70,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
         {
             if (string.IsNullOrEmpty(e.Message)) return;
 
-            var fields = e.Message?.Split(':') ?? new string[0];
+            var fields = e.Message?.Split(':') ?? Array.Empty<string>();
 
             if (fields.Length != 3) return;
 
@@ -94,7 +94,7 @@ namespace BardMusicPlayer.Grunt.Helper.Dalamud
             Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} disconnected");
         }
 
-        private void OnConnected(object sender, ConnectionEventArgs<string> e)
+        private static void OnConnected(object sender, ConnectionEventArgs<string> e)
         {
             Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} connected");
         }

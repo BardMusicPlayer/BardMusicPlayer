@@ -14,7 +14,7 @@ namespace BardMusicPlayer.Grunt
     public static partial class GameExtensions
     {
         /// <summary>
-        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffixv game.
+        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffxiv game.
         /// Note that in addition to the delay value, using any modifier key will add an mandatory 25ms delay loop to allow the game to capture said modifier input.
         /// </summary>
         /// <param name="game"></param>
@@ -55,7 +55,7 @@ namespace BardMusicPlayer.Grunt
         }
 
         /// <summary>
-        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffixv game.
+        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffxiv game.
         /// Note that in addition to the delay value, using any modifier key will add a mandatory 5ms delay per modifier allow the game to capture said modifier input.
         /// </summary>
         /// <param name="game"></param>
@@ -108,7 +108,7 @@ namespace BardMusicPlayer.Grunt
         }
 
         /// <summary>
-        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffixv game.
+        /// Named opposite of behavior, this runs async in this thread, sync to sendmessage the ffxiv game.
         /// Note that in addition to the delay values, using modifier keys will add 30-45ms extra delay depending on how many modifier keys are used.
         /// </summary>
         /// <param name="game"></param>
@@ -119,7 +119,7 @@ namespace BardMusicPlayer.Grunt
         public static async Task<bool> SyncTapKey(this Game game, Keys key, int downDelay = 25, int upDelay = 25) => await SyncPushKey(game, key, downDelay) && await SyncReleaseKey(game, key, upDelay);
         
         /// <summary>
-        /// Named opposite of behavior, this runs synced in this thread, async to postmessage the ffixv game.
+        /// Named opposite of behavior, this runs synced in this thread, async to postmessage the ffxiv game.
         /// </summary>
         /// <param name="game"></param>
         /// <param name="key"></param>
@@ -147,7 +147,7 @@ namespace BardMusicPlayer.Grunt
         }
 
         /// <summary>
-        /// Named opposite of behavior, this runs synced in this thread, async to postmessage the ffixv game.
+        /// Named opposite of behavior, this runs synced in this thread, async to postmessage the ffxiv game.
         /// </summary>
         /// <param name="game"></param>
         /// <param name="key"></param>
