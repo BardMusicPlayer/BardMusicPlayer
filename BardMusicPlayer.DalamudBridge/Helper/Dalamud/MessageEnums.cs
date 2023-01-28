@@ -8,5 +8,8 @@ public enum MessageType
     Instrument,
     AcceptReply,
     SetGfx,
-    StartEnsemble
+    StartEnsemble,
+    NoteOn,
+    NoteOff,
+    ProgramChange
 }

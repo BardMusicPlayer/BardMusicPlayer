@@ -102,4 +102,36 @@ public static partial class GameExtensions
         return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendStartEnsemble(game.Pid));
     }
+    
+    
+    /// <summary>
+    /// Send the note and if it's pressed or released
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="noteNum"></param>
+    /// <param name="pressed"></param>
+    /// <returns></returns>
+    /// <exception cref="DalamudBridgeException"></exception>
+    public static Task<bool> SendNote(this Game game, int noteNum, bool pressed)
+    {
+        if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
+
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+                               DalamudBridge.Instance.DalamudServer.SendNote(game.Pid, noteNum, pressed));
+    }
+
+    /// <summary>
+    /// Send the program change
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="ProgNumber"></param>
+    /// <returns></returns>
+    /// <exception cref="DalamudBridgeException"></exception>
+    public static Task<bool> SendProgchange(this Game game, int ProgNumber)
+    {
+        if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
+
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+                               DalamudBridge.Instance.DalamudServer.SendProgchange(game.Pid, ProgNumber));
+    }
 }

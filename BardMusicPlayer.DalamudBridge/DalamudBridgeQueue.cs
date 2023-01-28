@@ -39,6 +39,13 @@ public sealed partial class DalamudBridge
                         case MessageType.AcceptReply:
                             await d_event.game.AcceptEnsemble(d_event.BoolData);
                             break;
+                        case MessageType.NoteOn:
+                        case MessageType.NoteOff:
+                            _ = GameExtensions.SendNote(d_event.game, d_event.IntData, d_event.BoolData);
+                            break;
+                        case MessageType.ProgramChange:
+                            _ = GameExtensions.SendProgchange(d_event.game, d_event.IntData);
+                            break;
                     }
                 }
                 catch
@@ -47,7 +54,7 @@ public sealed partial class DalamudBridge
                 }
             }
 
-            await Task.Delay(25, token).ContinueWith(static tsk => { }, token);
+            await Task.Delay(1, token).ContinueWith(static tsk => { }, token);
         }
     }
 
