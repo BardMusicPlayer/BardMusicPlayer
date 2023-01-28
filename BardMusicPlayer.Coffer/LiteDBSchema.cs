@@ -6,6 +6,7 @@
 using LiteDB;
 
 namespace BardMusicPlayer.Coffer
+
 {
     public sealed class LiteDBSchema
     {

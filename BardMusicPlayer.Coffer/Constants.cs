@@ -4,6 +4,7 @@
  */
 
 namespace BardMusicPlayer.Coffer
+
 {
     internal static class Constants
     {

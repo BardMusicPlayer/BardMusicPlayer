@@ -26,6 +26,7 @@ namespace BardMusicPlayer.Coffer
         public static void Initialize(string filename)
         {
             if (Initialized) return;
+
             _instance = CreateInstance(filename);
         }
 
@@ -37,7 +38,8 @@ namespace BardMusicPlayer.Coffer
         /// <summary>
         /// Gets the default coffer instance
         /// </summary>
-        public static BmpCoffer Instance => _instance ?? throw new BmpCofferException("This coffer must be initialized first.");
+        public static BmpCoffer Instance =>
+            _instance ?? throw new BmpCofferException("This coffer must be initialized first.");
 
         private readonly LiteDatabase dbi;
         private bool disposedValue;
@@ -48,8 +50,8 @@ namespace BardMusicPlayer.Coffer
         /// <param name="dbi"></param>
         private BmpCoffer(LiteDatabase dbi)
         {
-            this.dbi = dbi;
-            this.disposedValue = false;
+            this.dbi      = dbi;
+            disposedValue = false;
         }
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace BardMusicPlayer.Coffer
                 bson => DeserializeTrackChunk(bson.AsBinary)
             );
 
-            var dbi = new LiteDatabase(@"filename="+dbPath+"; journal = false", mapper);
+            var dbi = new LiteDatabase(@"filename=" + dbPath + "; journal = false", mapper);
             MigrateDatabase(dbi);
 
             return new BmpCoffer(dbi);
@@ -126,27 +128,31 @@ namespace BardMusicPlayer.Coffer
                 bson => DeserializeTrackChunk(bson.AsBinary)
             );
 
-            var dbi = new LiteDatabase(@"filename=" + file + "; journal = false", mapper); //turn journal off, for big containers
+            var dbi = new LiteDatabase(@"filename=" + file + "; journal = false",
+                mapper); //turn journal off, for big containers
             MigrateDatabase(dbi);
 
             _instance = new BmpCoffer(dbi);
-            return;
         }
 
         public void Export(string filename)
         {
             var t = new LiteDatabase(filename);
-            var names = this.dbi.GetCollectionNames();
+            var names = dbi.GetCollectionNames();
             foreach (var name in names)
             {
-                var col2 = this.dbi.GetCollection(name);
+                var col2 = dbi.GetCollection(name);
                 var col = t.GetCollection(name);
                 try
                 {
                     col.InsertBulk(col2.FindAll());
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
+
             t.Dispose();
         }
 
@@ -155,10 +161,13 @@ namespace BardMusicPlayer.Coffer
             //Try it and catch if the log file can't be removed
             try
             {
-                this.dbi.Checkpoint();
-                this.dbi.Rebuild();
+                dbi.Checkpoint();
+                dbi.Rebuild();
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
 
         /// <summary>
@@ -196,7 +205,7 @@ namespace BardMusicPlayer.Coffer
         /// </summary>
         /// <param name="trackChunk"></param>
         /// <returns></returns>
-        private static byte[] SerializeTrackChunk(TrackChunk trackChunk)
+        private static byte[] SerializeTrackChunk(MidiChunk trackChunk)
         {
             var midiFile = new MidiFile(trackChunk);
             using var memoryStream = new MemoryStream();
@@ -216,14 +225,16 @@ namespace BardMusicPlayer.Coffer
             using var memoryStream = new MemoryStream(bson);
             var midiFile = MidiFile.Read(memoryStream);
             //In case we have more than 1 chunk per track, combine them
-            if (midiFile.GetTrackChunks().Count() <= 0)
+            if (!midiFile.GetTrackChunks().Any())
                 return new TrackChunk();
-            TrackChunk trackChunk = Melanchall.DryWetMidi.Core.TrackChunkUtilities.Merge(midiFile.GetTrackChunks());
+
+            var trackChunk = midiFile.GetTrackChunks().Merge();
             memoryStream.Dispose();
             return trackChunk;
         }
 
         #region Playlist
+
         /// <summary>
         /// This creates a playlist containing songs that match the given tag.
         /// </summary>
@@ -236,31 +247,23 @@ namespace BardMusicPlayer.Coffer
                 throw new ArgumentNullException();
             }
 
-            var songCol = this.GetSongCollection();
+            var songCol = GetSongCollection();
 
             // TODO: This is brute force and not memory efficient; there has to be a better
             // way to do this, but my knowledge of LINQ and BsonExpressions isn't there yet.
             var allSongs = songCol.FindAll();
-            var songList = new List<BmpSong>();
-
-            foreach (var entry in allSongs)
-            {
-                if (TagMatches(tag, entry))
-                {
-                    songList.Add(entry);
-                }
-            }
+            var songList = allSongs.Where(entry => TagMatches(tag, entry)).ToList();
 
             if (songList.Count == 0)
             {
                 return null;
             }
 
-            var dbList = new BmpPlaylist()
+            var dbList = new BmpPlaylist
             {
-                Name = tag,
+                Name  = tag,
                 Songs = songList,
-                Id = null
+                Id    = null
             };
 
             return new BmpPlaylistDecorator(dbList);
@@ -271,18 +274,18 @@ namespace BardMusicPlayer.Coffer
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IPlaylist CreatePlaylist(string name)
+        public static IPlaylist CreatePlaylist(string name)
         {
             if (name == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var dbList = new BmpPlaylist()
+            var dbList = new BmpPlaylist
             {
                 Songs = new List<BmpSong>(),
-                Name = name,
-                Id = null
+                Name  = name,
+                Id    = null
             };
 
             return new BmpPlaylistDecorator(dbList);
@@ -300,7 +303,7 @@ namespace BardMusicPlayer.Coffer
                 throw new ArgumentNullException();
             }
 
-            var playlists = this.GetPlaylistCollection();
+            var playlists = GetPlaylistCollection();
 
             // We guarantee uniqueness in index and code, therefore
             // there should be one and only one list.
@@ -309,7 +312,7 @@ namespace BardMusicPlayer.Coffer
                 .Where(x => x.Name == name)
                 .Single();
 
-            return (dbList != null) ? new BmpPlaylistDecorator(dbList) : null;
+            return dbList != null ? new BmpPlaylistDecorator(dbList) : null;
         }
 
         /// <summary>
@@ -318,11 +321,11 @@ namespace BardMusicPlayer.Coffer
         /// <returns></returns>
         public IList<string> GetPlaylistNames()
         {
-            var playlists = this.GetPlaylistCollection();
+            var playlists = GetPlaylistCollection();
 
             // Want to ensure we don't pull in the trackchunk data.
             return playlists.Query()
-                .Select<string>(x => x.Name)
+                .Select(x => x.Name)
                 .ToList();
         }
 
@@ -338,7 +341,7 @@ namespace BardMusicPlayer.Coffer
                 throw new Exception("Unsupported implementation of IPlaylist");
             }
 
-            var playlists = this.GetPlaylistCollection();
+            var playlists = GetPlaylistCollection();
 
             var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
 
@@ -371,7 +374,7 @@ namespace BardMusicPlayer.Coffer
                 throw new Exception("Unsupported implementation of IPlaylist");
             }
 
-            var playlists = this.GetPlaylistCollection();
+            var playlists = GetPlaylistCollection();
 
             var dbList = ((BmpPlaylistDecorator)songList).GetBmpPlaylist();
 
@@ -387,9 +390,11 @@ namespace BardMusicPlayer.Coffer
                 throw new BmpCofferException(e.Message, e);
             }
         }
-#endregion
+
+        #endregion
 
         #region Songs
+
         /// <summary>
         /// This retrieves the song with the given title.
         /// </summary>
@@ -402,7 +407,7 @@ namespace BardMusicPlayer.Coffer
                 throw new ArgumentNullException();
             }
 
-            var songCol = this.GetSongCollection();
+            var songCol = GetSongCollection();
 
             return songCol.FindOne(x => x.Title == title);
         }
@@ -413,10 +418,10 @@ namespace BardMusicPlayer.Coffer
         /// <returns></returns>
         public IList<string> GetSongTitles()
         {
-            var songCol = this.GetSongCollection();
+            var songCol = GetSongCollection();
 
             return songCol.Query()
-                .Select<string>(x => x.Title)
+                .Select(x => x.Title)
                 .ToList();
         }
 
@@ -432,22 +437,23 @@ namespace BardMusicPlayer.Coffer
                 throw new ArgumentNullException();
             }
 
-            var songCol = this.GetSongCollection();
+            var songCol = GetSongCollection();
             try
             {
                 if (song.Id == null)
                 {
                     //TODO: Fix this if more than one song with the name exists
                     var results = songCol.Find(x => x.Title.Equals(song.Title));
-                    if (results.Count() > 0)
+                    var bmpSongs = results as BmpSong[] ?? results.ToArray();
+                    if (bmpSongs.Any())
                     {
                         //Get the ID from the found song and update the data
-                        song.Id = results.First().Id;
+                        song.Id = bmpSongs.First().Id;
                         songCol.Update(song);
                         return;
                     }
 
-                    //TODO: Fix this to get a real unique idendifier
+                    //TODO: Fix this to get a real unique identifier
                     song.Id = ObjectId.NewObjectId();
                     songCol.Insert(song);
                 }
@@ -470,16 +476,15 @@ namespace BardMusicPlayer.Coffer
 
             if (song == null) throw new ArgumentNullException();
 
-            var songCol = this.GetSongCollection();
+            var songCol = GetSongCollection();
             try
             {
                 if (song.Id != null)
                 {
                     var results = songCol.Find(x => x.Title.Equals(song.Title));
-                    if (results.Count() > 0)
+                    if (results.Any())
                     {
                         songCol.Delete(song.Id);
-                        return;
                     }
                 }
             }
@@ -488,7 +493,8 @@ namespace BardMusicPlayer.Coffer
                 throw new BmpCofferException(e.Message, e);
             }
         }
-#endregion
+
+        #endregion
 
         /// <summary>
         /// Generated by VS2019.
@@ -510,7 +516,7 @@ namespace BardMusicPlayer.Coffer
             {
                 if (disposing)
                 {
-                    this.dbi.Dispose();
+                    dbi.Dispose();
                 }
 
                 disposedValue = true;
@@ -523,7 +529,7 @@ namespace BardMusicPlayer.Coffer
         /// <returns></returns>
         private ILiteCollection<BmpPlaylist> GetPlaylistCollection()
         {
-            return this.dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
+            return dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
         }
 
         /// <summary>
@@ -532,7 +538,7 @@ namespace BardMusicPlayer.Coffer
         /// <returns></returns>
         private ILiteCollection<BmpSong> GetSongCollection()
         {
-            return this.dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
+            return dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
         }
 
         /// <summary>
@@ -543,18 +549,14 @@ namespace BardMusicPlayer.Coffer
         /// <returns></returns>
         private static bool TagMatches(string search, BmpSong song)
         {
-            bool ret = false;
+            var ret = false;
             var tags = song.Tags;
 
-            if (tags != null && tags.Count > 0)
+            if (tags is { Count: > 0 })
             {
-                for (int i = 0; i < tags.Count; ++i)
+                if (tags.Any(t => string.Equals(search, t, StringComparison.OrdinalIgnoreCase)))
                 {
-                    if (string.Equals(search, tags[i], StringComparison.OrdinalIgnoreCase))
-                    {
-                        ret = true;
-                        break;
-                    }
+                    ret = true;
                 }
             }
 
@@ -573,7 +575,7 @@ namespace BardMusicPlayer.Coffer
 
             // Currently, we are version 1, so the only thing to do is to inject the requisite metadata.
             var schemaData = dbi.GetCollection<LiteDBSchema>(Constants.SCHEMA_COL_NAME);
-            int dataCount = schemaData.Count();
+            var dataCount = schemaData.Count();
 
             if (dataCount > 1)
             {
@@ -605,12 +607,12 @@ namespace BardMusicPlayer.Coffer
                 schemaData.Insert(schema);
             }
 
-            // Create the song collection and add indicies
+            // Create the song collection and add indices
             var songs = dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
             songs.EnsureIndex(x => x.Title);
             songs.EnsureIndex(x => x.Tags);
 
-            // Create the custom playlist collection and add indicies
+            // Create the custom playlist collection and add indices
             var playlists = dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
             playlists.EnsureIndex(x => x.Name, unique: true);
         }

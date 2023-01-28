@@ -7,6 +7,7 @@ using System;
 using BardMusicPlayer.Quotidian;
 
 namespace BardMusicPlayer.Coffer
+
 {
     public class BmpCofferException : BmpException
     {

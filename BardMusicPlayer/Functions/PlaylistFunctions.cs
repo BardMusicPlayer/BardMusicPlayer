@@ -95,7 +95,7 @@ namespace BardMusicPlayer.Functions
         {
             if (BmpCoffer.Instance.GetPlaylistNames().Contains(playlistname))
                 return BmpCoffer.Instance.GetPlaylist(playlistname);
-            return BmpCoffer.Instance.CreatePlaylist(playlistname);
+            return BmpCoffer.CreatePlaylist(playlistname);
         }
 
         /// <summary>
