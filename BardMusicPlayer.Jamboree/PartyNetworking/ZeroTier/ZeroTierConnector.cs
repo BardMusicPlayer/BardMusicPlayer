@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using ZeroTier;
 using ZeroTier.Core;
@@ -8,7 +7,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
 {
     public class ZeroTierConnector
     {
-        Node node;
+        private Node node;
         private volatile bool nodeOnline;
 
         /// <summary>
@@ -19,8 +18,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
         public Task<string> ZeroTierConnect(string network)
         {
             node = new Node();
-            string ipAddress = "";
-            ulong networkId = (ulong)Int64.Parse(network, System.Globalization.NumberStyles.HexNumber);
+            var ipAddress = "";
+            var networkId = (ulong)long.Parse(network, System.Globalization.NumberStyles.HexNumber);
 #if DEBUG
             Console.WriteLine("Connecting to network...");
 #endif
@@ -68,7 +67,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier
 #endif
             if (node.GetNetworkAddresses(networkId).Count == 1)
             {
-                IPAddress addr = node.GetNetworkAddresses(networkId)[0];
+                var addr = node.GetNetworkAddresses(networkId)[0];
                 ipAddress = addr.ToString();
             }
 #if DEBUG

@@ -23,8 +23,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
     internal class FoundClients
     {
         public Dictionary<string, ClientInfo> GetClients() { return _partyClients; }
-        private Dictionary<string, ClientInfo> _partyClients = new Dictionary<string, ClientInfo>();
-        private List<string> _knownIP = new List<string>();
+        private Dictionary<string, ClientInfo> _partyClients = new();
+        private List<string> _knownIP = new();
         public string OwnName { get; set; } = "";
         public byte Type { get; set; } = 255;
 
@@ -60,7 +60,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
                     _knownIP.Add(IP);
                 }
 
-                ClientInfo client = new ClientInfo(IP, version);
+                var client = new ClientInfo(IP, version);
                 lock (_partyClients)
                 {
                     _partyClients.Add(client.IPAddress, client);
@@ -85,10 +85,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover
         /// <returns>null or NetworkSocket</returns>
         public NetworkSocket FindSocket(string ip)
         {
-            ClientInfo info;
-            if (_partyClients.TryGetValue(ip, out info))
-                return info.Sockets;
-            return null;
+            return _partyClients.TryGetValue(ip, out var info) ? info.Sockets : null;
         }
 
         /// <summary>

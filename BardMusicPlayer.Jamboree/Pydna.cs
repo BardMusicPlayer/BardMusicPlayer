@@ -31,7 +31,7 @@ namespace BardMusicPlayer.Jamboree
             FoundClients.Instance.Type = type;
             
             zeroTierConnector = new ZeroTierConnector();
-            string data = zeroTierConnector.ZeroTierConnect(networkId).Result;
+            var data = zeroTierConnector.ZeroTierConnect(networkId).Result;
 
             Autodiscover.Instance.StartAutodiscover(data, "0.1.0");
             NetworkPartyServer.Instance.StartServer(new IPEndPoint(IPAddress.Parse(data), 12345), type, name);
@@ -51,7 +51,7 @@ namespace BardMusicPlayer.Jamboree
         }
 
 #region NetworkSendFunctions
-        public void SendPerformanceStart()
+        public static void SendPerformanceStart()
         {
             FoundClients.Instance.SendToAll(ZeroTierPacketBuilder.PerformanceStart());
         }

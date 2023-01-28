@@ -29,7 +29,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
         /// <returns>data as byte[]</returns>
         public static byte[] MSG_JOIN_PARTY(byte type, string performer_name)
         {
-            NetworkPacket buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.MSG_JOIN_PARTY);
+            var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.MSG_JOIN_PARTY);
             buffer.WriteUInt8(type);
             buffer.WriteCString(performer_name);
             return buffer.GetData();
@@ -41,7 +41,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
         /// <returns>data as byte[]</returns>
         public static byte[] PerformanceStart()
         {
-            NetworkPacket buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.MSG_PLAY);
+            var buffer = new NetworkPacket(NetworkOpcodes.OpcodeEnum.MSG_PLAY);
             buffer.WriteInt64(DateTimeOffset.Now.ToUnixTimeMilliseconds());
             return buffer.GetData();
         }

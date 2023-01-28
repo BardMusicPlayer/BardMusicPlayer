@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Jamboree.PartyClient.PartyManagement
         public string Performer_Name { get; set; } = "Unknown";
 
 
-        private Queue<NetworkPacket> _inPackets = new Queue<NetworkPacket>();
+        private Queue<NetworkPacket> _inPackets = new();
 
         public void AddPacket(NetworkPacket packet)
         {

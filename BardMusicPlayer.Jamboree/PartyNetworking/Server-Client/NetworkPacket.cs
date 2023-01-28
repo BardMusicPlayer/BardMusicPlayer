@@ -24,8 +24,6 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 {
     public class NetworkPacket : IDisposable
     {
-        private NetworkOpcodes.OpcodeEnum _opcode = NetworkOpcodes.OpcodeEnum.NULL_OPCODE;
-
         public NetworkPacket()
         {
             writeStream = new BinaryWriter(new MemoryStream());
@@ -40,21 +38,16 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
         public NetworkPacket(byte[] data)
         {
             readStream = new BinaryReader(new MemoryStream(data));
-            _opcode = (NetworkOpcodes.OpcodeEnum)readStream.ReadByte();
+            Opcode = (NetworkOpcodes.OpcodeEnum)readStream.ReadByte();
         }
 
-        public NetworkOpcodes.OpcodeEnum Opcode
-        {
-            get { return _opcode; }
-        }
+        public NetworkOpcodes.OpcodeEnum Opcode { get; } = NetworkOpcodes.OpcodeEnum.NULL_OPCODE;
 
         public void Dispose()
         {
-            if (writeStream != null)
-                writeStream.Dispose();
+            writeStream?.Dispose();
 
-            if (readStream != null)
-                readStream.Dispose();
+            readStream?.Dispose();
         }
 
         #region Read Methods
@@ -127,8 +120,8 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
         {
             ResetBitPos();
             StringBuilder tmpString = new();
-            char tmpChar = readStream.ReadChar();
-            char tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { 0 }));
+            var tmpChar = readStream.ReadChar();
+            var tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { 0 }));
 
             while (tmpChar != tmpEndChar)
             {
@@ -204,11 +197,11 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
         public T ReadBits<T>(int bitCount)
         {
-            int value = 0;
+            var value = 0;
 
             for (var i = bitCount - 1; i >= 0; --i)
                 if (HasBit())
-                    value |= (1 << i);
+                    value |= 1 << i;
 
             return (T)Convert.ChangeType(value, typeof(T));
         }
@@ -301,7 +294,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             if (str.Length < 1)
                 return;
 
-            byte[] sBytes = Encoding.UTF8.GetBytes(str);
+            var sBytes = Encoding.UTF8.GetBytes(str);
             WriteBytes(sBytes);
         }
 
@@ -346,7 +339,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
         public void WritePackXYZ(Vector3 pos)
         {
             uint packed = 0;
-            packed |= ((uint)(pos.X / 0.25f) & 0x7FF);
+            packed |= (uint)(pos.X / 0.25f) & 0x7FF;
             packed |= ((uint)(pos.Y / 0.25f) & 0x7FF) << 11;
             packed |= ((uint)(pos.Z / 0.25f) & 0x3FF) << 22;
             WriteUInt32(packed);
@@ -371,7 +364,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
         public void WriteBits(object bit, int count)
         {
-            for (int i = count - 1; i >= 0; --i)
+            for (var i = count - 1; i >= 0; --i)
                 WriteBit(((Convert.ToUInt32(bit) >> i) & 1) != 0);
         }
         #endregion
@@ -402,13 +395,13 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
         public byte[] GetData()
         {
-            Stream stream = GetCurrentStream();
+            var stream = GetCurrentStream();
 
             var data = new byte[stream.Length];
 
-            long pos = stream.Position;
+            var pos = stream.Position;
             stream.Seek(0, SeekOrigin.Begin);
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
                 data[i] = (byte)stream.ReadByte();
 
             stream.Seek(pos, SeekOrigin.Begin);
@@ -422,10 +415,7 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
 
         public Stream GetCurrentStream()
         {
-            if (writeStream != null)
-                return writeStream.BaseStream;
-            else
-                return readStream.BaseStream;
+            return writeStream != null ? writeStream.BaseStream : readStream.BaseStream;
         }
 
         public void Clear()
@@ -435,9 +425,9 @@ namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client
             writeStream = new BinaryWriter(new MemoryStream());
         }
 
-        byte _bitPosition = 8;
-        byte BitValue;
-        BinaryWriter writeStream;
-        BinaryReader readStream;
+        private byte _bitPosition = 8;
+        private byte BitValue;
+        private BinaryWriter writeStream;
+        private BinaryReader readStream;
     }
 }

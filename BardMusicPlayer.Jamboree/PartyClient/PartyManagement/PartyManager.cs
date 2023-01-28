@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BardMusicPlayer.Jamboree.PartyClient.PartyManagement
 {
-    class PartyManager
+    internal class PartyManager
     {
         public List<PartyClientInfo> GetPartyMembers() { return _partyClients; }
-        private List<PartyClientInfo> _partyClients = new List<PartyClientInfo>();
+        private List<PartyClientInfo> _partyClients = new();
 
 #region Instance Constructor/Destructor
         private static readonly Lazy<PartyManager> LazyInstance = new(() => new PartyManager());
@@ -27,9 +28,11 @@ namespace BardMusicPlayer.Jamboree.PartyClient.PartyManagement
 
         public void Add(PartyClientInfo client)
         {
-            foreach(PartyClientInfo info in _partyClients)
-                if (info.Performer_Name == client.Performer_Name)
-                    return;
+            if (_partyClients.Any(info => info.Performer_Name == client.Performer_Name))
+            {
+                return;
+            }
+
             _partyClients.Add(client);
         }
 

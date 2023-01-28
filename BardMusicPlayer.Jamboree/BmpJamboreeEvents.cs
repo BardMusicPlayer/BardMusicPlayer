@@ -32,34 +32,22 @@ namespace BardMusicPlayer.Jamboree
                         switch (meastroEvent)
                         {
                             case PartyCreatedEvent partyCreated:
-                                if (OnPartyCreated == null)
-                                    break;
-                                OnPartyCreated(this, partyCreated);
+                                OnPartyCreated?.Invoke(this, partyCreated);
                                 break;
                             case PartyLogEvent partyLog:
-                                if (OnPartyLog == null)
-                                    break;
-                                OnPartyLog(this, partyLog);
+                                OnPartyLog?.Invoke(this, partyLog);
                                 break;
                             case PartyDebugLogEvent partyDebugLog:
-                                if (OnPartyDebugLog == null)
-                                    break;
-                                OnPartyDebugLog(this, partyDebugLog);
+                                OnPartyDebugLog?.Invoke(this, partyDebugLog);
                                 break;
                             case PartyConnectionChangedEvent connectionChanged:
-                                if (OnPartyConnectionChanged == null)
-                                    break;
-                                OnPartyConnectionChanged(this, connectionChanged);
+                                OnPartyConnectionChanged?.Invoke(this, connectionChanged);
                                 break;
                             case PartyChangedEvent partyChanged:
-                                if (OnPartyChanged == null)
-                                    break;
-                                OnPartyChanged(this, partyChanged);
+                                OnPartyChanged?.Invoke(this, partyChanged);
                                 break;
                             case PerformanceStartEvent performanceStart:
-                                if (OnPerformanceStart == null)
-                                    break;
-                                OnPerformanceStart(this, performanceStart);
+                                OnPerformanceStart?.Invoke(this, performanceStart);
                                 break;
                         }
                     }
@@ -68,7 +56,7 @@ namespace BardMusicPlayer.Jamboree
                         // ignored
                     }
                 }
-                await Task.Delay(25, token).ContinueWith(tsk => { });
+                await Task.Delay(25, token).ContinueWith(tsk => { }, token);
             }
         }
 
@@ -91,12 +79,12 @@ namespace BardMusicPlayer.Jamboree
             }
         }
 
-        internal void PublishEvent(JamboreeEvent meastroEvent)
+        internal void PublishEvent(JamboreeEvent maestroEvent)
         {
             if (!_eventQueueOpen)
                 return;
 
-            _eventQueue.Enqueue(meastroEvent);
+            _eventQueue.Enqueue(maestroEvent);
         }
     }
 }
