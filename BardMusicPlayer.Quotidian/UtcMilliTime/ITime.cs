@@ -6,21 +6,20 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BardMusicPlayer.Quotidian.UtcMilliTime
+namespace BardMusicPlayer.Quotidian.UtcMilliTime;
+
+public interface ITime
 {
-    public interface ITime
-    {
-        string DefaultServer { get; set; }
-        long DeviceBootTime { get; }
-        long DeviceUpTime { get; }
-        long DeviceUtcNow { get; }
-        bool Initialized { get; }
-        long Now { get; }
-        long Skew { get; }
-        bool Synchronized { get; }
+    string DefaultServer { get; set; }
+    long DeviceBootTime { get; }
+    long DeviceUpTime { get; }
+    long DeviceUtcNow { get; }
+    bool Initialized { get; }
+    long Now { get; }
+    long Skew { get; }
+    bool Synchronized { get; }
 
-        event EventHandler<NTPEventArgs> NetworkTimeAcquired;
+    event EventHandler<NTPEventArgs> NetworkTimeAcquired;
 
-        Task SelfUpdateAsync(string ntpServerHostName = Constants.fallback_server);
-    }
+    Task SelfUpdateAsync(string ntpServerHostName = Constants.fallback_server);
 }

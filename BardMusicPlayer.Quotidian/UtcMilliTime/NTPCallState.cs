@@ -6,37 +6,36 @@
 using System.Diagnostics;
 using System.Net.Sockets;
 
-namespace BardMusicPlayer.Quotidian.UtcMilliTime
+namespace BardMusicPlayer.Quotidian.UtcMilliTime;
+
+public class NTPCallState
 {
-    public class NTPCallState
+    public bool priorSyncState;
+    public byte[] buffer = new byte[Constants.bytes_per_buffer];
+    public short methodsCompleted;
+    public Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+    public Stopwatch latency;
+    public Stopwatch timer;
+    public string serverResolved;
+    public NTPCallState()
     {
-        public bool priorSyncState;
-        public byte[] buffer = new byte[Constants.bytes_per_buffer];
-        public short methodsCompleted;
-        public Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        public Stopwatch latency;
-        public Stopwatch timer;
-        public string serverResolved;
-        public NTPCallState()
+        latency   = Stopwatch.StartNew();
+        buffer[0] = 0x1B;
+    }
+    public void OrderlyShutdown()
+    {
+        if (timer != null)
         {
-            latency = Stopwatch.StartNew();
-            buffer[0] = 0x1B;
+            if (timer.IsRunning) timer.Stop();
+            timer = null;
         }
-        public void OrderlyShutdown()
+        socket.Shutdown(SocketShutdown.Both);
+        socket.Close();
+        socket = null;
+        if (latency != null)
         {
-            if (timer != null)
-            {
-                if (timer.IsRunning) timer.Stop();
-                timer = null;
-            }
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
-            socket = null;
-            if (latency != null)
-            {
-                if (latency.IsRunning) latency.Stop();
-                latency = null;
-            }
+            if (latency.IsRunning) latency.Stop();
+            latency = null;
         }
     }
 }

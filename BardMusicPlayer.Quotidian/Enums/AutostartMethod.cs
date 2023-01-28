@@ -3,11 +3,10 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Quotidian.Enums
+namespace BardMusicPlayer.Quotidian.Enums;
+
+public enum AutostartMethod
 {
-    public enum AutostartMethod
-    {
-        Disabled = 1,
-        EnsembleMetronome = 2
-    }
+    Disabled = 1,
+    EnsembleMetronome = 2
 }
