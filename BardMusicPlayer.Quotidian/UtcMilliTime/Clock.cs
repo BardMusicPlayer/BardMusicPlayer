@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
         private static readonly Lazy<Clock> instance = new(() => new Clock());
         public static Clock Time => instance.Value;
         [System.Runtime.InteropServices.DllImport("kernel32")]
-        static extern ulong GetTickCount64();
+        private static extern ulong GetTickCount64();
         private static bool successfully_synced;
         private static bool Indicated => !successfully_synced && NetworkInterface.GetIsNetworkAvailable();
         private static long device_uptime => (long)GetTickCount64();
@@ -69,14 +69,14 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
                 ntpCall.serverResolved = ntpServerHostName;
                 var addresses = await Dns.GetHostAddressesAsync(ntpServerHostName);
 
-                //Try all adresses and give up
-                int idx = 0;
+                //Try all addresses and give up
+                var idx = 0;
                 while (idx != addresses.Length)
                 {
                     try
                     {
                         var ipEndPoint = new IPEndPoint(addresses[idx], Constants.udp_port_number);
-                        ntpCall.socket.BeginConnect(ipEndPoint, new AsyncCallback(PartB), null);
+                        ntpCall.socket.BeginConnect(ipEndPoint, PartB, null);
                         break;
                     }
                     catch (System.Net.Sockets.SocketException)
@@ -88,7 +88,7 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
             }
             catch (Exception)
             {
-                ntpCall.OrderlyShutdown();
+                ntpCall?.OrderlyShutdown();
                 ntpCall = null;
             }
         }
@@ -99,7 +99,7 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
                 ntpCall.socket.EndConnect(ar);
                 ntpCall.socket.ReceiveTimeout = Constants.three_seconds;
                 ntpCall.timer = Stopwatch.StartNew();
-                ntpCall.socket.BeginSend(ntpCall.buffer, 0, Constants.bytes_per_buffer, 0, new AsyncCallback(PartC), null);
+                ntpCall.socket.BeginSend(ntpCall.buffer, 0, Constants.bytes_per_buffer, 0, PartC, null);
                 ntpCall.methodsCompleted += 1;
             }
             catch (Exception)
@@ -113,7 +113,7 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
             try
             {
                 ntpCall.socket.EndSend(ar);
-                ntpCall.socket.BeginReceive(ntpCall.buffer, 0, Constants.bytes_per_buffer, 0, new AsyncCallback(PartD), null);
+                ntpCall.socket.BeginReceive(ntpCall.buffer, 0, Constants.bytes_per_buffer, 0, PartD, null);
                 ntpCall.methodsCompleted += 1;
             }
             catch (Exception)
@@ -128,14 +128,14 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
             {
                 ntpCall.socket.EndReceive(ar);
                 ntpCall.timer.Stop();
-                long halfRoundTrip = ntpCall.timer.ElapsedMilliseconds / 2;
+                var halfRoundTrip = ntpCall.timer.ElapsedMilliseconds / 2;
                 const byte serverReplyTime = 40;
                 ulong intPart = BitConverter.ToUInt32(ntpCall.buffer, serverReplyTime);
                 ulong fractPart = BitConverter.ToUInt32(ntpCall.buffer, serverReplyTime + 4);
                 intPart = SwapEndianness(intPart);
                 fractPart = SwapEndianness(fractPart);
                 var milliseconds = intPart * 1000 + fractPart * 1000 / 0x100000000L;
-                long timeNow = (long)milliseconds - Constants.ntp_to_unix_milliseconds + halfRoundTrip;
+                var timeNow = (long)milliseconds - Constants.ntp_to_unix_milliseconds + halfRoundTrip;
                 if (timeNow <= 0) return;
                 device_boot_time = timeNow - device_uptime;
                 instance.Value.Skew = timeNow - GetDeviceTime();
@@ -144,11 +144,14 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
                 ntpCall.latency.Stop();
                 if (successfully_synced && !ntpCall.priorSyncState && instance.Value.NetworkTimeAcquired != null)
                 {
-                    NTPEventArgs args = new NTPEventArgs(ntpCall.serverResolved, ntpCall.latency.ElapsedMilliseconds, instance.Value.Skew);
+                    var args = new NTPEventArgs(ntpCall.serverResolved, ntpCall.latency.ElapsedMilliseconds, instance.Value.Skew);
                     instance.Value.NetworkTimeAcquired.Invoke(new object(), args);
                 }
             }
-            catch (Exception) { } // blank intentionally; documentation says "fail silently. Check the Time.Synchronized boolean property for the outcome."
+            catch (Exception)
+            {
+                // ignored
+            } // blank intentionally; documentation says "fail silently. Check the Time.Synchronized boolean property for the outcome."
             finally
             {
                 ntpCall?.OrderlyShutdown();

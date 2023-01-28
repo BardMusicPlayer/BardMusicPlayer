@@ -18,15 +18,14 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
         /// <returns>string like 2019-08-10T22:08:14.102Z</returns>
         public static string ToIso8601String(this long timestamp, bool suppressMilliseconds = false)
         {
-            if (suppressMilliseconds) return timestamp.ToUtcDateTime().ToString(Constants.iso_8601_without_milliseconds);
-            return timestamp.ToUtcDateTime().ToString(Constants.iso_8601_with_milliseconds);
+            return timestamp.ToUtcDateTime().ToString(suppressMilliseconds ? Constants.iso_8601_without_milliseconds : Constants.iso_8601_with_milliseconds);
         }
         /// <summary>
         /// Transform a DateTime to UtcMilliTime. Fractional milliseconds are truncated
         /// </summary>
         /// <param name="given">DateTime</param>
         /// <returns>long</returns>
-        public static long ToUtcMilliTime(this DateTime given) => (given.ToUniversalTime().Ticks / Constants.dotnet_ticks_per_millisecond) - Constants.dotnet_to_unix_milliseconds;
+        public static long ToUtcMilliTime(this DateTime given) => given.ToUniversalTime().Ticks / Constants.dotnet_ticks_per_millisecond - Constants.dotnet_to_unix_milliseconds;
         /// <summary>
         /// Transform a DateTimeOffset to UtcMilliTime. Fractional milliseconds are truncated
         /// </summary>
@@ -98,13 +97,13 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
         /// </summary>
         /// <param name="timestamp">UtcMilliTime</param>
         /// <returns>DateTimeOffset</returns>
-        public static DateTimeOffset ToDateTimeOffset(this long timestamp) => new DateTimeOffset(timestamp.ToUtcDateTime());
+        public static DateTimeOffset ToDateTimeOffset(this long timestamp) => new(timestamp.ToUtcDateTime());
         /// <summary>
         /// Transform an interval from UtcMilliTime Int64 to a .NET TimeSpan. If interval is an absolute date, TimeSpan will be from 1970 to then
         /// </summary>
         /// <param name="interval">UtcMilliTime</param>
         /// <returns>TimeSpan</returns>
-        public static TimeSpan ToTimeSpan(this long interval) => new TimeSpan(interval * Constants.dotnet_ticks_per_millisecond);
+        public static TimeSpan ToTimeSpan(this long interval) => new(interval * Constants.dotnet_ticks_per_millisecond);
         /// <summary>
         /// Extension to fire and forget an asynchronous task
         /// </summary>

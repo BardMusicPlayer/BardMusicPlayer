@@ -23,7 +23,7 @@ namespace BardMusicPlayer.Quotidian.Enums
         UP,
 
         /// <summary>
-        /// move cursor down/cycle down through partylist
+        /// move cursor down/cycle down through party list
         /// </summary>
         DOWN,
 

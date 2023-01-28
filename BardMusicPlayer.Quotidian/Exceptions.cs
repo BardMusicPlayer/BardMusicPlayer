@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Quotidian
 {
     public class BmpException : Exception
     {
-        public BmpException() : base()
+        public BmpException()
         {
         }
 

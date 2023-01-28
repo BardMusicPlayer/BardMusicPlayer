@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Quotidian.Structs
     /// </summary>
     public readonly struct Instrument : IComparable, IConvertible, IComparable<Instrument>, IEquatable<Instrument>
     {
-        public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 50, 0, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { }));
+        public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 50, 0, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
 
         public static readonly Instrument Harp = new("Harp", 1, 46, OctaveRange.C3toC6, false, 0, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "OrchestralHarp", "orchestralharps", "harps" }));
         public static readonly Instrument Piano = new("Piano", 2, 0, OctaveRange.C4toC7, false, 0, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "AcousticGrandPiano", "acousticgrandpianos", "pianos" }));
@@ -45,9 +45,9 @@ namespace BardMusicPlayer.Quotidian.Structs
         public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Sax", "AltoSaxophone", "AltoSax" }));
         public static readonly IReadOnlyList<Instrument> Brass = new ReadOnlyCollection<Instrument>(new List<Instrument> { Trumpet, Trombone, Tuba, Horn, Saxophone });
 
-        public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { }));
-        public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { }));
-        public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { }));
+        public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
+        public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>()));
+        public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>()));
         public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "bass" }));
         public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
 
@@ -170,8 +170,8 @@ namespace BardMusicPlayer.Quotidian.Structs
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
-            if (!(obj is Instrument)) throw new ArgumentException("This is not an Instrument");
-            return Index - ((Instrument)obj).Index;
+            if (obj is not Instrument instrument) throw new ArgumentException("This is not an Instrument");
+            return Index - instrument.Index;
         }
 
         public int CompareTo(Instrument other) => Index - other.Index;
@@ -298,7 +298,7 @@ namespace BardMusicPlayer.Quotidian.Structs
         }
 
         /// <summary>
-        /// Gets the per note sound sample offset for a given instrument. Should be combined with the SampleOffest.
+        /// Gets the per note sound sample offset for a given instrument. Should be combined with the SampleOffset.
         /// </summary>
         /// <param name="note">The in game note in this Instrument's default range</param>
         /// <returns>The millisecond offset</returns>
@@ -306,9 +306,9 @@ namespace BardMusicPlayer.Quotidian.Structs
         {
             if (Equals(Clarinet) && note < 3) return -100;
 
-            if (Equals(Clarinet) && note > 2 && note < 8) return -50;
+            if (Equals(Clarinet) && note is > 2 and < 8) return -50;
 
-            if (Equals(Clarinet) && note > 7 && note < 11) return 0;
+            if (Equals(Clarinet) && note is > 7 and < 11) return 0;
 
             if (Equals(Panpipes) && note < 6) return 0;
 
@@ -332,7 +332,7 @@ namespace BardMusicPlayer.Quotidian.Structs
 
             if (Equals(Lute) && note < 3) return -50;
 
-            if (Equals(Lute) && note >= 3 && note < 8) return 0;
+            if (Equals(Lute) && note is >= 3 and < 8) return 0;
 
             if (Equals(Lute) && note == 36) return 100;
 

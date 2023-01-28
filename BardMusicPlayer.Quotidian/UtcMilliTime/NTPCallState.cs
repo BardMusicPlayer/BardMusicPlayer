@@ -13,7 +13,7 @@ namespace BardMusicPlayer.Quotidian.UtcMilliTime
         public bool priorSyncState;
         public byte[] buffer = new byte[Constants.bytes_per_buffer];
         public short methodsCompleted;
-        public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        public Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         public Stopwatch latency;
         public Stopwatch timer;
         public string serverResolved;

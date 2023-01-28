@@ -4,7 +4,7 @@ namespace BardMusicPlayer.Quotidian.Enums
 {
     public class KeyTranslation
     {
-        public static Dictionary<string, Keys> ASCIIToGame = new Dictionary<string, Keys>
+        public static Dictionary<string, Keys> ASCIIToGame = new()
         {
             { "1", Keys.D1 },
             { "2", Keys.D2 },

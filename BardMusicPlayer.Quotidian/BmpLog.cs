@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Quotidian
             Info,
             Warning,
             Error
-        };
+        }
 
         public enum Source
         {

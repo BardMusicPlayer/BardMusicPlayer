@@ -72,9 +72,9 @@ namespace BardMusicPlayer.Quotidian
         }
         public static int Clear<T>(this BlockingCollection<T> blockingCollection)
         {
-            if (blockingCollection == null) throw new ArgumentNullException("BlockingCollection");
+            if (blockingCollection == null) throw new ArgumentNullException(nameof(blockingCollection));
             var count = 0;
-            T _; while (blockingCollection.TryTake(out _)){ count++; }
+            while (blockingCollection.TryTake(out _)){ count++; }
             return count;
         }
         public static List<string> Split(this string myString, char separator, char escapeCharacter = '\\')
@@ -96,9 +96,9 @@ namespace BardMusicPlayer.Quotidian
             foreach (var element in source) d.TryAdd(keySelector(element), elementSelector(element));
             return d;
         }
-        public static ConcurrentDictionary<TKey, TSource> ToConcurrentDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) => ToConcurrentDictionary<TSource, TKey, TSource>(source, keySelector, IdentityFunction<TSource>.Instance, null);
-        public static ConcurrentDictionary<TKey, TSource> ToConcurrentDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) => ToConcurrentDictionary<TSource, TKey, TSource>(source, keySelector, IdentityFunction<TSource>.Instance, comparer);
-        public static ConcurrentDictionary<TKey, TElement> ToConcurrentDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) => ToConcurrentDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, null);
+        public static ConcurrentDictionary<TKey, TSource> ToConcurrentDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) => ToConcurrentDictionary(source, keySelector, IdentityFunction<TSource>.Instance, null);
+        public static ConcurrentDictionary<TKey, TSource> ToConcurrentDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) => ToConcurrentDictionary(source, keySelector, IdentityFunction<TSource>.Instance, comparer);
+        public static ConcurrentDictionary<TKey, TElement> ToConcurrentDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) => ToConcurrentDictionary(source, keySelector, elementSelector, null);
         internal class IdentityFunction<TElement> {
             public static Func<TElement, TElement> Instance
             {

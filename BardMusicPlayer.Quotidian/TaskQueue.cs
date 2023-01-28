@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Quotidian
         {
             lock (key)
             {
-                var next = previous.ContinueWith(t => taskGenerator()).Unwrap();
+                var next = previous.ContinueWith(_ => taskGenerator()).Unwrap();
                 previous = next;
                 return next;
             }
@@ -27,7 +27,7 @@ namespace BardMusicPlayer.Quotidian
         {
             lock (key)
             {
-                var next = previous.ContinueWith(t => taskGenerator()).Unwrap();
+                var next = previous.ContinueWith(_ => taskGenerator()).Unwrap();
                 previous = next;
                 return next;
             }

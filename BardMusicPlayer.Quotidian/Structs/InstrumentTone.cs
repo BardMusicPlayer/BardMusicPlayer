@@ -118,8 +118,8 @@ namespace BardMusicPlayer.Quotidian.Structs
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
-            if (!(obj is Instrument)) throw new ArgumentException("This is not an InstrumentTone");
-            return Index - ((Instrument) obj).Index;
+            if (obj is not Instrument instrument) throw new ArgumentException("This is not an InstrumentTone");
+            return Index - instrument.Index;
         }
 
         public int CompareTo(InstrumentTone other) => Index - other.Index;

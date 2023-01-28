@@ -202,6 +202,6 @@ namespace BardMusicPlayer.Quotidian.Enums
         OemClear      = 0xFE,
         Shift   = 0x00010000,
         Control = 0x00020000,
-        Alt     = 0x00040000,
+        Alt     = 0x00040000
     }
 }
