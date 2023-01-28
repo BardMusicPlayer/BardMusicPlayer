@@ -127,11 +127,11 @@ public static partial class GameExtensions
     /// <param name="ProgNumber"></param>
     /// <returns></returns>
     /// <exception cref="DalamudBridgeException"></exception>
-    public static Task<bool> SendProgchange(this Game game, int ProgNumber)
+    public static Task<bool> SendProgChange(this Game game, int ProgNumber)
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
         return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
-                               DalamudBridge.Instance.DalamudServer.SendProgchange(game.Pid, ProgNumber));
+                               DalamudBridge.Instance.DalamudServer.SendProgChange(game.Pid, ProgNumber));
     }
 }

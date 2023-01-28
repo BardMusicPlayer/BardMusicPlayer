@@ -41,10 +41,10 @@ public sealed partial class DalamudBridge
                             break;
                         case MessageType.NoteOn:
                         case MessageType.NoteOff:
-                            _ = GameExtensions.SendNote(d_event.game, d_event.IntData, d_event.BoolData);
+                            _ = d_event.game.SendNote(d_event.IntData, d_event.BoolData);
                             break;
                         case MessageType.ProgramChange:
-                            _ = GameExtensions.SendProgchange(d_event.game, d_event.IntData);
+                            _ = d_event.game.SendProgChange(d_event.IntData);
                             break;
                     }
                 }
@@ -75,11 +75,11 @@ public sealed partial class DalamudBridge
         }
     }
 
-    internal void PublishEvent(DalamudBridgeCommandStruct meastroEvent)
+    internal void PublishEvent(DalamudBridgeCommandStruct maestroEvent)
     {
         if (!_eventQueueOpen)
             return;
 
-        _eventQueue.Enqueue(meastroEvent);
+        _eventQueue.Enqueue(maestroEvent);
     }
 }
