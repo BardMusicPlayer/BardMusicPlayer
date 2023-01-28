@@ -6,13 +6,11 @@
 using System;
 using BardMusicPlayer.Quotidian;
 
-namespace BardMusicPlayer.Coffer
+namespace BardMusicPlayer.Coffer;
 
+public class BmpCofferException : BmpException
 {
-    public class BmpCofferException : BmpException
-    {
-        public BmpCofferException(string message) : base(message) { }
+    public BmpCofferException(string message) : base(message) { }
 
-        public BmpCofferException(string message, Exception inner) : base(message, inner) { }
-    }
+    public BmpCofferException(string message, Exception inner) : base(message, inner) { }
 }
