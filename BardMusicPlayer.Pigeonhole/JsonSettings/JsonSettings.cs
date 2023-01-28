@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
     public abstract class JsonSettings : ISavable, IDisposable
     {
         /// <summary>
-        ///     The encoding inwhich the text will be written, by default Encoding.UTF8.
+        ///     The encoding in which the text will be written, by default Encoding.UTF8.
         /// </summary>
         protected static Encoding Encoding { get; set; } = Encoding.UTF8;
 
@@ -37,7 +37,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
         ///     If this property is set, this will be used instead of the static <see cref="SerializationSettings"/>.<br></br>
         ///     Note: this property must be set during construction or as property's default value.
         /// </summary>
-        protected virtual JsonSerializerSettings OverrideSerializerSettings { get; set; }
+        private JsonSerializerSettings OverrideSerializerSettings { get; set; }
 
         /// <summary>
         ///     Defines how should <see cref="Load()"/> handle empty .json files, by default - false - do not throw.
@@ -54,7 +54,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
         ///     The filename that was originally loaded from. saving to other file does not change this field!
         /// </summary>
         /// <param name="filename">the name of the file, <DEFAULT> is the default.</param>
-        protected virtual void Save(string filename)
+        private void Save(string filename)
         {
             Save(_childtype, this, filename);
         }
@@ -82,7 +82,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
                 lock (o)
                 {
 
-                    stream = Files.AttemptOpenFile(filename, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                    stream = Files.AttemptOpenFile(filename, FileMode.OpenOrCreate, FileAccess.Write);
                     o.FileName = filename;
 
                     var json = JsonConvert.SerializeObject(o, intype, o.OverrideSerializerSettings ?? SerializationSettings ?? JsonConvert.DefaultSettings?.Invoke());
@@ -126,7 +126,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
         /// <summary>
         ///     Loads a settings file or creates a new settings file.
         /// </summary>
-        /// <param name="instance">The instance inwhich to load into</param>
+        /// <param name="instance">The instance in which to load into</param>
         /// <param name="configure">Configurate the settings instance prior to loading - called after OnConfigure</param>
         /// <param name="filename">File name, for example "settings.jsn". no path required, just a file name.<br></br>Without path the file will be located at the executing directory</param>
         /// <returns>The loaded or freshly new saved object</returns>
@@ -135,7 +135,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
         /// <summary>
         ///     Loads a settings file or creates a new settings file.
         /// </summary>
-        /// <param name="instance">The instance inwhich to load into</param>
+        /// <param name="instance">The instance in which to load into</param>
         /// <param name="configure">Configurate the settings instance prior to loading - called after OnConfigure</param>
         /// <param name="filename">File name, for example "settings.jsn". no path required, just a file name.<br></br>Without path the file will be located at the executing directory</param>
         /// <returns>The loaded or freshly new saved object</returns>
@@ -154,7 +154,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
 
-            JsonSettings o = (JsonSettings)(ISavable)instance;
+            var o = (JsonSettings)(ISavable)instance;
             filename = ResolvePath(filename);
             configure?.Invoke();
             
@@ -167,7 +167,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
                         bytes = ReadAllBytes(fs);
                     
                     var fc = Encoding.GetString(bytes);
-                    if (string.IsNullOrEmpty((fc ?? "").Replace("\r", "").Replace("\n", "").Trim()))
+                    if (string.IsNullOrEmpty(fc.Replace("\r", "").Replace("\n", "").Trim()))
                         if (o.ThrowOnEmptyFile)
                             throw new BmpPigeonholeException("The settings file is empty!");
                         else
@@ -204,7 +204,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
                 throw new BmpPigeonholeException("Could not resolve path because 'FileName' is null or empty.");
 
             if (filename.Contains("/") || filename.Contains("\\"))
-                filename = Path.Combine(Paths.NormalizePath(Path.GetDirectoryName(filename), false), Path.GetFileName(filename));
+                filename = Path.Combine(Paths.NormalizePath(Path.GetDirectoryName(filename)), Path.GetFileName(filename));
             else
                 filename = Paths.CombineToExecutingBase(filename).FullName;
 
@@ -216,13 +216,13 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings
             protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
             {
                 var prop = base.CreateProperty(member, memberSerialization);
-                if (prop.PropertyName.Equals("FileName", StringComparison.OrdinalIgnoreCase))
+                if (prop.PropertyName != null && prop.PropertyName.Equals("FileName", StringComparison.OrdinalIgnoreCase))
                     prop.Ignored = true;
                 return prop;
             }
         }
 
-        private bool _isdisposed = false;
+        private bool _isdisposed;
 
         public void Dispose()
         {

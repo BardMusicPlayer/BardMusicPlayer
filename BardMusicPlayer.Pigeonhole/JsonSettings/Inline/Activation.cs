@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Inline
         public static object CreateInstance(this Type t)
         {
             var ctrs = t.GetAllConstructors().Where(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.IsOptional)).ToArray();
-            if (ReflectionHelpers.IsValueType(t) || ctrs.Any(c => c.IsPublic)) //is valuetype or has public constractor.
+            if (ReflectionHelpers.IsValueType(t) || ctrs.Any(c => c.IsPublic)) //is value-type or has public constructor.
                 return Activator.CreateInstance(t);
             var prv = ctrs.FirstOrDefault(c => c.IsAssembly || c.IsFamily || c.IsPrivate); //check protected/internal/private constructor
             if (prv == null)

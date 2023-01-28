@@ -28,7 +28,7 @@ namespace BardMusicPlayer.Pigeonhole.JsonSettings.Inline
                 return null;
 
             //ensure if theres a parent folder - to create it.
-            string parent = Path.GetDirectoryName(file);
+            var parent = Path.GetDirectoryName(file);
 
             try
             {

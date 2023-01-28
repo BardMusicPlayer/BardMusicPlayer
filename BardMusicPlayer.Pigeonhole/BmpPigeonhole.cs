@@ -5,7 +5,6 @@
 
 using BardMusicPlayer.Pigeonhole.JsonSettings.Autosave;
 using BardMusicPlayer.Quotidian;
-using BardMusicPlayer.Quotidian.Enums;
 
 namespace BardMusicPlayer.Pigeonhole
 {
@@ -36,7 +35,7 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// Sets PlayAllTracks
         /// </summary>
-        public virtual bool PlayAllTracks { get; set; } = false;
+        public virtual bool PlayAllTracks { get; set; }
 
         /// <summary>
         /// Sets PlaylistDelay
@@ -81,12 +80,12 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// brings the bmp to front
         /// </summary>
-        public virtual bool LiveMidiPlayDelay { get; set; } = false;
+        public virtual bool LiveMidiPlayDelay { get; set; }
 
         /// <summary>
         /// force the playback
         /// </summary>
-        public virtual bool ForcePlayback { get; set; } = false;
+        public virtual bool ForcePlayback { get; set; }
 
         /// <summary>
         /// brings the game to front
@@ -99,7 +98,7 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual bool BringBMPtoFront { get; set; } = true;
 
         /// <summary>
-        /// unkown but used
+        /// unknown but used
         /// </summary>
         public virtual bool SigIgnore { get; set; } = false;
 
@@ -111,14 +110,14 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// BMP window location
         /// </summary>
-        public virtual global::System.Drawing.Point BmpLocation { get; set; } = System.Drawing.Point.Empty;
+        public virtual System.Drawing.Point BmpLocation { get; set; } = System.Drawing.Point.Empty;
 
-        public virtual global::System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
+        public virtual System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
 
         /// <summary>
         /// open local orchestra after hooking new proc
         /// </summary>
-        public virtual bool LocalOrchestra { get; set; } = false;
+        public virtual bool LocalOrchestra { get; set; }
 
         /// <summary>
         /// Enable the 16 voice limit in Synthesizer
@@ -133,17 +132,17 @@ namespace BardMusicPlayer.Pigeonhole
         /// <summary>
         /// autoequip bards after song loaded
         /// </summary>
-        public virtual bool AutoEquipBards { get; set; } = false;
+        public virtual bool AutoEquipBards { get; set; }
 
         /// <summary>
-        /// keep the ensmble track settings
+        /// keep the ensemble track settings
         /// </summary>
-        public virtual bool EnsembleKeepTrackSetting { get; set; } = false;
+        public virtual bool EnsembleKeepTrackSetting { get; set; }
 
         /// <summary>
         /// ignores the progchange
         /// </summary>
-        public virtual bool IgnoreProgChange { get; set; } = false;
+        public virtual bool IgnoreProgChange { get; set; }
 
         /// <summary>
         /// milliseconds between game process scans / seer scanner startups.
@@ -166,7 +165,7 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int ToneKeyDelay { get; set; } = 3;
 
         /// <summary>
-        ///     Use the Hypnotoad for instruemtn eq
+        ///     Use the Hypnotoad for instrument eq
         /// </summary>
         public virtual bool UsePluginForInstrumentOpen { get; set; }
 
