@@ -12,42 +12,24 @@ namespace BardMusicPlayer.Maestro.Sequencing
 {
     public class Sequencer_Internal : IComponent
     {
-        private Sequence sequence = null;
+        private Sequence sequence;
 
-        private List<IEnumerator<int>> enumerators = new List<IEnumerator<int>>();
+        private List<IEnumerator<int>> enumerators = new();
 
-        private MessageDispatcher dispatcher = new MessageDispatcher();
+        private MessageDispatcher dispatcher = new();
 
-        private ChannelChaser chaser = new ChannelChaser();
+        private ChannelChaser chaser = new();
 
-        private ChannelStopper stopper = new ChannelStopper();
-
-        private MidiInternalClock clock = new MidiInternalClock();
-
+        private ChannelStopper stopper = new();
         private int tracksPlayingCount;
 
-        private readonly object lockObject = new object();
+        private readonly object lockObject = new();
 
-        private bool playing = false;
-        public bool IsPlaying
-        {
-            get
-            {
-                return playing;
-            }
-        }
+        public bool IsPlaying { get; private set; }
 
-        public MidiInternalClock InternalClock
-        {
-            get
-            {
-                return clock;
-            }
-        }
+        public MidiInternalClock InternalClock { get; } = new();
 
-        private bool disposed = false;
-
-        private ISite site = null;
+        private bool disposed;
 
         #region Events
 
@@ -56,62 +38,32 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
         public event EventHandler<ChannelMessageEventArgs> ChannelMessagePlayed
         {
-            add
-            {
-                dispatcher.ChannelMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.ChannelMessageDispatched -= value;
-            }
+            add => dispatcher.ChannelMessageDispatched += value;
+            remove => dispatcher.ChannelMessageDispatched -= value;
         }
 
         public event EventHandler<SysExMessageEventArgs> SysExMessagePlayed
         {
-            add
-            {
-                dispatcher.SysExMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.SysExMessageDispatched -= value;
-            }
+            add => dispatcher.SysExMessageDispatched += value;
+            remove => dispatcher.SysExMessageDispatched -= value;
         }
 
         public event EventHandler<MetaMessageEventArgs> MetaMessagePlayed
         {
-            add
-            {
-                dispatcher.MetaMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.MetaMessageDispatched -= value;
-            }
+            add => dispatcher.MetaMessageDispatched += value;
+            remove => dispatcher.MetaMessageDispatched -= value;
         }
 
         public event EventHandler<ChasedEventArgs> Chased
         {
-            add
-            {
-                chaser.Chased += value;
-            }
-            remove
-            {
-                chaser.Chased -= value;
-            }
+            add => chaser.Chased += value;
+            remove => chaser.Chased -= value;
         }
 
         public event EventHandler<StoppedEventArgs> Stopped
         {
-            add
-            {
-                stopper.Stopped += value;
-            }
-            remove
-            {
-                stopper.Stopped -= value;
-            }
+            add => stopper.Stopped += value;
+            remove => stopper.Stopped -= value;
         }
 
         #endregion
@@ -131,7 +83,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 }
                 else
                 {
-                    clock.Process(e.Message);
+                    InternalClock.Process(e.Message);
                 }
             };
 
@@ -140,16 +92,16 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 stopper.Process(e.Message);
             };
 
-            clock.Tick += delegate (object sender, EventArgs e)
+            InternalClock.Tick += delegate
             {
                 lock (lockObject)
                 {
-                    if (!playing)
+                    if (!IsPlaying)
                     {
                         return;
                     }
 
-                    foreach (IEnumerator<int> enumerator in enumerators)
+                    foreach (var enumerator in enumerators)
                     {
                         enumerator.MoveNext();
                     }
@@ -166,7 +118,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
             Dispose(false);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -174,7 +126,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 {
                     Stop();
 
-                    clock.Dispose();
+                    InternalClock.Dispose();
                     disposed = true;
 
                     GC.SuppressFinalize(this);
@@ -188,7 +140,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
             if (disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -208,7 +160,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
             if (disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -228,16 +180,16 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
                 enumerators.Clear();
 
-                foreach (Track t in Sequence)
+                foreach (var t in Sequence)
                 {
                     enumerators.Add(t.TickIterator(Position, chaser, dispatcher).GetEnumerator());
                 }
 
                 tracksPlayingCount = Sequence.Count;
 
-                playing = true;
-                clock.Ppqn = sequence.Division;
-                clock.Continue();
+                IsPlaying = true;
+                InternalClock.Ppqn = sequence.Division;
+                InternalClock.Continue();
 
                 OnPlayStatusChange(EventArgs.Empty);
             }
@@ -249,7 +201,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
             if (disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -258,52 +210,40 @@ namespace BardMusicPlayer.Maestro.Sequencing
             {
                 #region Guard
 
-                if (!playing)
+                if (!IsPlaying)
                 {
                     return;
                 }
 
                 #endregion
 
-                playing = false;
+                IsPlaying = false;
 
-                clock.Stop();
+                InternalClock.Stop();
                 stopper.AllSoundOff();
 
                 OnPlayStatusChange(EventArgs.Empty);
             }
         }
 
-        protected virtual void OnPlayStatusChange(EventArgs e)
+        protected void OnPlayStatusChange(EventArgs e)
         {
-            EventHandler handler = PlayStatusChange;
+            var handler = PlayStatusChange;
 
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
-        protected virtual void OnDisposed(EventArgs e)
+        protected void OnDisposed(EventArgs e)
         {
-            EventHandler handler = Disposed;
+            var handler = Disposed;
 
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         public float Speed
         {
-            get
-            {
-                return clock.TempoSpeed;
-            }
-            set
-            {
-                clock.TempoSpeed = value;
-            }
+            get => InternalClock.TempoSpeed;
+            set => InternalClock.TempoSpeed = value;
         }
 
         public int Length
@@ -314,7 +254,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
                 if (disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
 
                 #endregion
@@ -331,12 +271,12 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
                 if (disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
 
                 #endregion
 
-                return clock.Ticks;
+                return InternalClock.Ticks;
             }
             set
             {
@@ -344,9 +284,10 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
                 if (disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
-                else if (value < 0)
+
+                if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
@@ -357,11 +298,11 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
                 lock (lockObject)
                 {
-                    wasPlaying = playing;
+                    wasPlaying = IsPlaying;
 
                     Pause();
 
-                    clock.SetTicks(value);
+                    InternalClock.SetTicks(value);
                 }
 
                 lock (lockObject)
@@ -388,7 +329,8 @@ namespace BardMusicPlayer.Maestro.Sequencing
                 {
                     throw new ArgumentNullException();
                 }
-                else if (value.SequenceType == SequenceType.Smpte)
+
+                if (value.SequenceType == SequenceType.Smpte)
                 {
                     throw new NotSupportedException();
                 }
@@ -407,17 +349,7 @@ namespace BardMusicPlayer.Maestro.Sequencing
 
         public event EventHandler Disposed;
 
-        public ISite Site
-        {
-            get
-            {
-                return site;
-            }
-            set
-            {
-                site = value;
-            }
-        }
+        public ISite Site { get; set; }
 
         #endregion
 

@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Maestro.Performance;
@@ -39,9 +38,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public IEnumerable<Performer> GetAllPerformers()
         {
-            if (_orchestrator != null)
-                return _orchestrator.GetAllPerformers();
-            return new List<Performer>();
+            return _orchestrator != null ? _orchestrator.GetAllPerformers() : new List<Performer>();
         }
 
         /// <summary>
@@ -50,9 +47,7 @@ namespace BardMusicPlayer.Maestro
         /// <returns>tracknumber</returns>
         public int GetHostBardTrack()
         {
-            if (_orchestrator != null)
-                return _orchestrator.GetHostBardTrack();
-            return 1;
+            return _orchestrator?.GetHostBardTrack() ?? 1;
         }
 
         /// <summary>
@@ -72,10 +67,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="performer"></param>
         public KeyValuePair<TitleParsingHelper, Performer> GetSongTitleParsingBard()
         {
-            if (_orchestrator != null)
-                return _orchestrator.GetSongTitleParsingBard();
-            
-            return new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper{}, null);
+            return _orchestrator?.GetSongTitleParsingBard() ?? new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper(), null);
         }
         #endregion
 
@@ -86,8 +78,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="game"></param>
         public void SetHostBard(Game game)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetHostBard(game);
+            _orchestrator?.SetHostBard(game);
         }
 
         /// <summary>
@@ -96,8 +87,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="performer"></param>
         public void SetHostBard(Performer performer)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetHostBard(performer);
+            _orchestrator?.SetHostBard(performer);
         }
 
         /// <summary>
@@ -106,8 +96,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="performer"></param>
         public void SetSongTitleParsingBard(ChatMessageChannelType channel, string prefix, Performer performer)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetSongTitleParsingBard(channel, prefix, performer);
+            _orchestrator?.SetSongTitleParsingBard(channel, prefix, performer);
         }
 
         /// <summary>
@@ -116,8 +105,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="octave"></param>
         public void SetOctaveshift(Performer p, int octave)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetOctaveshift(p, octave);
+            _orchestrator?.SetOctaveshift(p, octave);
         }
 
         /// <summary>
@@ -126,8 +114,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="octave"></param>
         public void SetOctaveshiftOnHost(int octave)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetOctaveshiftOnHost(octave);
+            _orchestrator?.SetOctaveshiftOnHost(octave);
         }
         
 
@@ -137,8 +124,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="ticks">time ticks</param>
         public void SetPlaybackStart(int ticks)
         {
-            if (_orchestrator != null)
-                _orchestrator.Seek(ticks);
+            _orchestrator?.Seek(ticks);
         }
 
         /// <summary>
@@ -147,8 +133,7 @@ namespace BardMusicPlayer.Maestro
         /// <param double="miliseconds"></param>
         public void SetPlaybackStart(double miliseconds)
         {
-            if (_orchestrator != null)
-                _orchestrator.Seek(miliseconds);
+            _orchestrator?.Seek(miliseconds);
         }
 
         /// <summary>
@@ -171,8 +156,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="tracknumber"></param>
         public void SetTracknumber(Performer p, int tracknumber)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetTracknumber(p, tracknumber);
+            _orchestrator?.SetTracknumber(p, tracknumber);
         }
 
         /// <summary>
@@ -182,8 +166,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="tracknumber">track</param>
         public void SetTracknumber(Game game, int tracknumber)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetTracknumber(game, tracknumber);
+            _orchestrator?.SetTracknumber(game, tracknumber);
         }
 
         /// <summary>
@@ -192,8 +175,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="tracknumber"></param>
         public void SetTracknumberOnHost(int tracknumber)
         {
-            if (_orchestrator != null)
-                _orchestrator.SetTracknumberOnHost(tracknumber);
+            _orchestrator?.SetTracknumberOnHost(tracknumber);
         }
         #endregion
 
@@ -204,8 +186,7 @@ namespace BardMusicPlayer.Maestro
         /// <param int="device"></param>
         public void OpenInputDevice(int device)
         {
-            if (_orchestrator == null)
-                _orchestrator = new Orchestrator();
+            _orchestrator ??= new Orchestrator();
             _orchestrator.OpenInputDevice(device);
         }
 
@@ -215,8 +196,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void CloseInputDevice()
         {
-            if (_orchestrator == null)
-                _orchestrator = new Orchestrator();
+            _orchestrator ??= new Orchestrator();
             _orchestrator.CloseInputDevice();
         }
         #endregion
@@ -228,10 +208,7 @@ namespace BardMusicPlayer.Maestro
         /// <param name="delay">delay in ms</param>
         public void StartLocalPerformer(int delay)
         {
-            if (_orchestrator != null)
-            {
-                _orchestrator.Start(delay);
-            }
+            _orchestrator?.Start(delay);
         }
 
         /// <summary>
@@ -239,10 +216,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void PauseLocalPerformer()
         {
-            if (_orchestrator != null)
-            {
-                _orchestrator.Pause();
-            }
+            _orchestrator?.Pause();
         }
 
         /// <summary>
@@ -250,10 +224,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void StopLocalPerformer()
         {
-            if (_orchestrator != null)
-            {
-                _orchestrator.Stop();
-            }
+            _orchestrator?.Stop();
         }
 
         /// <summary>
@@ -274,8 +245,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void EquipInstruments()
         {
-            if (_orchestrator != null)
-                _orchestrator.EquipInstruments();
+            _orchestrator?.EquipInstruments();
         }
 
         /// <summary>
@@ -283,8 +253,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void UnEquipInstruments()
         {
-            if (_orchestrator != null)
-                _orchestrator.UnEquipInstruments();
+            _orchestrator?.UnEquipInstruments();
         }
         #endregion
 
@@ -305,7 +274,7 @@ namespace BardMusicPlayer.Maestro
             {
                 Parallel.ForEach(perf, p =>
                 {
-                    if (unselected_bards == null || unselected_bards.Count() <= 0)
+                    if (unselected_bards is not { Count: > 0 })
                         p.SendText(type, text);
                     else
                     {
@@ -318,10 +287,13 @@ namespace BardMusicPlayer.Maestro
             {
                 try
                 {
-                    Performer performer = perf.AsParallel().Where(p => p.game.PlayerName.Equals(BardName)).First();
+                    var performer = perf.AsParallel().First(p => p.game.PlayerName.Equals(BardName));
                     performer.SendText(type, text);
                 }
-                catch {}
+                catch
+                {
+                    // ignored
+                }
             }
         }
 
@@ -336,9 +308,9 @@ namespace BardMusicPlayer.Maestro
             var perf = _orchestrator.GetAllPerformers();
             if (BardName.ToLower().Equals("all"))
             {
-                System.Threading.Tasks.Parallel.ForEach(perf, p =>
+                Parallel.ForEach(perf, p =>
                 {
-                    if (unselected_bards == null || unselected_bards.Count() <= 0)
+                    if (unselected_bards is not { Count: > 0 })
                         p.TapKey(modifier, character);
                     else
                     {
@@ -351,10 +323,13 @@ namespace BardMusicPlayer.Maestro
             {
                 try
                 {
-                    Performer performer = perf.AsParallel().Where(p => p.game.PlayerName.Equals(BardName)).First();
+                    var performer = perf.AsParallel().First(p => p.game.PlayerName.Equals(BardName));
                     performer.TapKey(modifier, character);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
         }
         #endregion
@@ -364,8 +339,7 @@ namespace BardMusicPlayer.Maestro
         /// </summary>
         public void DestroySongFromLocalPerformer()
         {
-            if (_orchestrator != null)
-                _orchestrator.Dispose();
+            _orchestrator?.Dispose();
         }
 
         /// <summary>

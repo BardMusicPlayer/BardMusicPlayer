@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Maestro.Events
 {
     public sealed class MaxPlayTimeEvent : MaestroEvent
     {
-        internal MaxPlayTimeEvent(TimeSpan inTimeSpan, int inTick) : base(0, false)
+        internal MaxPlayTimeEvent(TimeSpan inTimeSpan, int inTick)
         {
             EventType = GetType();
             timeSpan = inTimeSpan;

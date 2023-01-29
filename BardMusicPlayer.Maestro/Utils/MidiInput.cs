@@ -4,11 +4,7 @@
  */
 
 using Sanford.Multimedia.Midi;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Maestro.Utils
 {
@@ -27,11 +23,10 @@ namespace BardMusicPlayer.Maestro.Utils
 
         public static Dictionary<int, string> ReloadMidiInputDevices()
         {
-            Dictionary<int, string> midiInputs = new Dictionary<int, string>();
-            midiInputs.Add(-1, "None");
-            for (int i = 0; i < InputDevice.DeviceCount; i++)
+            var midiInputs = new Dictionary<int, string> { { -1, "None" } };
+            for (var i = 0; i < InputDevice.DeviceCount; i++)
             {
-                MidiInCaps cap = InputDevice.GetDeviceCapabilities(i);
+                var cap = InputDevice.GetDeviceCapabilities(i);
                 midiInputs.Add(i, cap.name);
             }
             return midiInputs;

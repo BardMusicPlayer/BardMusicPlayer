@@ -4,7 +4,6 @@
  */
 
 using BardMusicPlayer.Maestro.Events;
-using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -46,47 +45,35 @@ namespace BardMusicPlayer.Maestro
                                 OnSongMaxTime(this, maxPlayTime);
                                 break;
                             case SongLoadedEvent songloaded:
-                                if (OnSongLoaded == null)
-                                    break;
-                                OnSongLoaded(this, songloaded);
+                                OnSongLoaded?.Invoke(this, songloaded);
                                 break;
                             case PlaybackStartedEvent playbackStarted:
-                                if (OnPlaybackStarted == null)
-                                    break;
-                                OnPlaybackStarted(this, playbackStarted.Started);
+                                OnPlaybackStarted?.Invoke(this, playbackStarted.Started);
                                 break;
                             case PlaybackStoppedEvent playbackStopped:
-                                if (OnPlaybackStopped == null)
-                                    break;
-                                OnPlaybackStopped(this, playbackStopped.Stopped);
+                                OnPlaybackStopped?.Invoke(this, playbackStopped.Stopped);
                                 break;
                             case PerformersChangedEvent performerChanged:
-                                if (OnPerformerChanged == null)
-                                    break;
-                                OnPerformerChanged(this, performerChanged.Changed);
+                                OnPerformerChanged?.Invoke(this, performerChanged.Changed);
                                 break;
                             case TrackNumberChangedEvent trackNumberChanged:
-                                if (OnTrackNumberChanged == null)
-                                    break;
-                                OnTrackNumberChanged(this, trackNumberChanged);
+                                OnTrackNumberChanged?.Invoke(this, trackNumberChanged);
                                 break;
                             case OctaveShiftChangedEvent octaveShiftChanged:
-                                if (OnOctaveShiftChanged == null)
-                                    break;
-                                OnOctaveShiftChanged(this, octaveShiftChanged);
+                                OnOctaveShiftChanged?.Invoke(this, octaveShiftChanged);
                                 break;
                             case PerformerUpdate performerUpdate:
-                                if (OnPerformerUpdate == null)
-                                    break;
-                                OnPerformerUpdate(this, performerUpdate);
+                                OnPerformerUpdate?.Invoke(this, performerUpdate);
                                 break;
 
-                        };
+                        }
                     }
                     catch
-                    { }
+                    {
+                        // ignored
+                    }
                 }
-                await Task.Delay(25, token).ContinueWith(tsk=> { });
+                await Task.Delay(25, token).ContinueWith(tsk=> { }, token);
             }
         }
 
@@ -109,12 +96,12 @@ namespace BardMusicPlayer.Maestro
             }
         }
 
-        internal void PublishEvent(MaestroEvent meastroEvent)
+        internal void PublishEvent(MaestroEvent maestroEvent)
         {
             if (!_eventQueueOpen)
                 return;
 
-            _eventQueue.Enqueue(meastroEvent);
+            _eventQueue.Enqueue(maestroEvent);
         }
     }
 }

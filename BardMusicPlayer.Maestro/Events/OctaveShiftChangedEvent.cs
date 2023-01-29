@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Maestro.Events
 {
     public sealed class OctaveShiftChangedEvent : MaestroEvent
     {
-        internal OctaveShiftChangedEvent(Game g, int octaveShift, bool isHost=false) : base(0, false)
+        internal OctaveShiftChangedEvent(Game g, int octaveShift, bool isHost=false)
         {
             EventType = GetType();
             OctaveShift = octaveShift;

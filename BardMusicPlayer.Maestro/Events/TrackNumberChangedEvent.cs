@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Maestro.Events
 {
     public sealed class TrackNumberChangedEvent : MaestroEvent
     {
-        internal TrackNumberChangedEvent(Game g, int trackNumber, bool isHost=false) : base(0, false)
+        internal TrackNumberChangedEvent(Game g, int trackNumber, bool isHost=false)
         {
             EventType = GetType();
             TrackNumber = trackNumber;

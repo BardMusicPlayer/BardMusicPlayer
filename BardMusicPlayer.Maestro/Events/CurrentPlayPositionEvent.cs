@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Maestro.Events
 {
     public sealed class CurrentPlayPositionEvent : MaestroEvent
     {
-        internal CurrentPlayPositionEvent(TimeSpan inTimeSpan, int inTick) : base(0, false)
+        internal CurrentPlayPositionEvent(TimeSpan inTimeSpan, int inTick)
         {
             EventType = GetType();
             timeSpan = inTimeSpan;

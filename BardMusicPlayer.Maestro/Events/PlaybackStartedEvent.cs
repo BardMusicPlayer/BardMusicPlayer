@@ -8,7 +8,7 @@ namespace BardMusicPlayer.Maestro.Events
     public sealed class PlaybackStartedEvent : MaestroEvent
     {
 
-        internal PlaybackStartedEvent() : base(0, false)
+        internal PlaybackStartedEvent()
         {
             EventType = GetType();
             Started = true;

@@ -8,7 +8,7 @@ namespace BardMusicPlayer.Maestro.Events
     public sealed class PerformersChangedEvent : MaestroEvent
     {
 
-        internal PerformersChangedEvent() : base(0, false)
+        internal PerformersChangedEvent()
         {
             EventType = GetType();
             Changed = true;

@@ -13,32 +13,31 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Maestro.Performance
 {
     public class Performer
     {
-        private FFXIVHook _hook = new FFXIVHook();
-        private System.Timers.Timer _startDelayTimer { get; set; } = new System.Timers.Timer();
+        private FFXIVHook _hook = new();
+        private System.Timers.Timer _startDelayTimer { get; set; } = new();
         private bool _holdNotes { get; set; } = true;
-        private bool _forcePlayback { get; set; } = false;
-        private Sequencer _sequencer { get; set; } = null;
-        private Sequencer mainSequencer { get; set; } = null;
+        private bool _forcePlayback { get; set; }
+        private Sequencer _sequencer { get; set; }
+        private Sequencer mainSequencer { get; set; }
         private int _trackNumber { get; set; } = 1;
-        private long _lastNoteTimestamp = 0;
-        private bool _livePlayDelay { get; set; } = false;
-        public int SingerTrackNr { get; set; } = 0;
+        private long _lastNoteTimestamp;
+        private bool _livePlayDelay { get; set; }
+        public int SingerTrackNr { get; set; }
         public Instrument ChosenInstrument { get; set; } = Instrument.Piano;
-        public int OctaveShift { get; set; } = 0;
-        public int TrackNumber { get { return _trackNumber; }
+        public int OctaveShift { get; set; }
+        public int TrackNumber { get => _trackNumber;
             set {
                 if (value == _trackNumber)
                     return;
 
-                if ((_sequencer == null) || (_sequencer.LoadedTrack == null))
+                if (_sequencer?.LoadedTrack == null)
                 {
                     BmpMaestro.Instance.PublishEvent(new TrackNumberChangedEvent(game, _trackNumber, HostProcess));
                     return;
@@ -52,7 +51,7 @@ namespace BardMusicPlayer.Maestro.Performance
 
                 _trackNumber = value;
                 BmpMaestro.Instance.PublishEvent(new TrackNumberChangedEvent(game, _trackNumber, HostProcess));
-                var tOctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[this._trackNumber]);
+                var tOctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[_trackNumber]);
                 if (tOctaveShift != OctaveShift)
                 {
                     OctaveShift = tOctaveShift;
@@ -62,12 +61,15 @@ namespace BardMusicPlayer.Maestro.Performance
         }
 
         public bool PerformerEnabled { get; set; } = true;
-        public bool UsesDalamud {  get { return BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(PId); } }
-        public bool HostProcess { get; set; } = false;
-        public int PId = 0;
+        public bool UsesDalamud => BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(PId);
+
+        public bool HostProcess { get; set; }
+        public int PId;
         public Game game;
-        public string PlayerName { get { return game.PlayerName ?? "Unknown"; } }
-        public string HomeWorld { get { return game.HomeWorld ?? "Unknown"; } }
+        public string PlayerName => game.PlayerName ?? "Unknown";
+
+        public string HomeWorld => game.HomeWorld ?? "Unknown";
+
         public string SongName 
         { 
             get
@@ -75,52 +77,49 @@ namespace BardMusicPlayer.Maestro.Performance
                 if (_sequencer.LoadedBmpSong == null) //no song, no title
                     return "";
                 
-                if (_sequencer.LoadedBmpSong.DisplayedTitle == null) //no displayed title, pretent the normal title
+                if (_sequencer.LoadedBmpSong.DisplayedTitle == null) //no displayed title, pretend the normal title
                     return _sequencer.LoadedBmpSong.Title;
 
-                if (_sequencer.LoadedBmpSong.DisplayedTitle.Length < 2) //title with 1 char makes no sence for me
-                    return _sequencer.LoadedBmpSong.Title;
-
-                return _sequencer.LoadedBmpSong.DisplayedTitle; //finally, display the title
+                return _sequencer.LoadedBmpSong.DisplayedTitle.Length < 2 ?                   //title with 1 char makes no sense for me
+                    _sequencer.LoadedBmpSong.Title : _sequencer.LoadedBmpSong.DisplayedTitle; //finally, display the title
             } 
         }
         public string TrackInstrument 
         { 
             get {
-                    if (_sequencer == null || _sequencer.LoadedBmpSong == null)
+                    if (_sequencer?.LoadedBmpSong == null)
                         return "Unknown";
                     if (TrackNumber == 0)
                         return "None";
-                    if (this._trackNumber >= _sequencer.Sequence.Count)
+                    if (_trackNumber >= _sequencer.Sequence.Count)
                         return "None";
 
-                    Transmogrify.Song.Config.ClassicProcessorConfig classicConfig = (Transmogrify.Song.Config.ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
+                    var classicConfig = (Transmogrify.Song.Config.ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
                     return classicConfig.Instrument.Name;
                 }
         }
 
         public Sequencer Sequencer
         {
-            get{ return _sequencer; }
+            get => _sequencer;
             set
             {
                 if (value != null)
                 {
-                    if ((value.LoadedFileType == Sequencer.FILETYPES.None) && !HostProcess)
+                    if (value.LoadedFileType == Sequencer.FILETYPES.None && !HostProcess)
                         return;
                     
                     //Close the input else it will hang
-                    if (_sequencer is Sequencer)
-                        _sequencer.CloseInputDevice();
+                    _sequencer?.CloseInputDevice();
 
-                    this._startDelayTimer.Enabled = false;
-                    this.mainSequencer = value;
+                    _startDelayTimer.Enabled = false;
+                    mainSequencer = value;
 
-                    this._sequencer = new Sequencer();
+                    _sequencer = new Sequencer();
                     if (value.LoadedFileType == Sequencer.FILETYPES.BmpSong)
                     {
-                        this._sequencer.Sequence = mainSequencer.Sequence;
-                        this.OctaveShift = 0;
+                        _sequencer.Sequence = mainSequencer.Sequence;
+                        OctaveShift = 0;
                     }
 
                     if (HostProcess)
@@ -129,11 +128,11 @@ namespace BardMusicPlayer.Maestro.Performance
                             _sequencer.OpenInputDevice(BmpPigeonhole.Instance.MidiInputDev);
                     }
 
-                    this._sequencer.OnNote += InternalNote;
-                    this._sequencer.OffNote += InternalNote;
-                    this._sequencer.ProgChange += InternalProg;
-                    this._sequencer.OnLyric += IntenalLyrics;
-                    this._sequencer.ChannelAfterTouch += InternalAT;
+                    _sequencer.OnNote += InternalNote;
+                    _sequencer.OffNote += InternalNote;
+                    _sequencer.ProgChange += InternalProg;
+                    _sequencer.OnLyric += InternalLyrics;
+                    _sequencer.ChannelAfterTouch += InternalAT;
 
                     _holdNotes = BmpPigeonhole.Instance.HoldNotes;
                     _lastNoteTimestamp = 0;
@@ -143,12 +142,12 @@ namespace BardMusicPlayer.Maestro.Performance
                         _forcePlayback = true;
 
                     // set the initial octave shift here, if we have a track to play
-                    if (this._trackNumber < _sequencer.Sequence.Count)
+                    if (_trackNumber < _sequencer.Sequence.Count)
                     {
-                        this.OctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[this._trackNumber]);
+                        OctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[_trackNumber]);
                         BmpMaestro.Instance.PublishEvent(new OctaveShiftChangedEvent(game, OctaveShift, HostProcess));
                     }
-                    this.Update(value);
+                    Update(value);
                 }
             }
         }
@@ -156,7 +155,7 @@ namespace BardMusicPlayer.Maestro.Performance
 #region public
         public Performer(Game arg)
         {
-            this.ChosenInstrument = this.ChosenInstrument;
+            ChosenInstrument = ChosenInstrument;
 
             if (arg != null)
             {
@@ -171,17 +170,17 @@ namespace BardMusicPlayer.Maestro.Performance
         {
             if (!_forcePlayback)
             {
-                if (!this.PerformerEnabled)
+                if (!PerformerEnabled)
                     return;
 
                 if (game.InstrumentHeld.Equals(Instrument.None))
                     return;
             }
 
-            if (note.note < 0 || note.note > 36)
+            if (note.note is < 0 or > 36)
                 return;
 
-            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is Quotidian.Enums.Keys keybind)
+            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
             {
                 if (game.ChatStatus && !_forcePlayback)
                     return;
@@ -197,23 +196,23 @@ namespace BardMusicPlayer.Maestro.Performance
         {
             if (!_forcePlayback)
             {
-                if (!this.PerformerEnabled)
+                if (!PerformerEnabled)
                     return;
 
                 if (game.InstrumentHeld.Equals(Instrument.None))
                     return;
             }
 
-            if (note.note < 0 || note.note > 36)
+            if (note.note is < 0 or > 36)
                 return;
 
-            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is Quotidian.Enums.Keys keybind)
+            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
             {
 
-                long diff = System.Diagnostics.Stopwatch.GetTimestamp() / 10000 - _lastNoteTimestamp;
+                var diff = System.Diagnostics.Stopwatch.GetTimestamp() / 10000 - _lastNoteTimestamp;
                 if (diff < 15)
                 {
-                    int sleepDuration = (int)(15 - diff);
+                    var sleepDuration = (int)(15 - diff);
                     Task.Delay(sleepDuration).Wait();
                 }
 
@@ -231,13 +230,13 @@ namespace BardMusicPlayer.Maestro.Performance
 
         public void ProcessOffNote(NoteEvent note)
         {
-            if (!this.PerformerEnabled)
+            if (!PerformerEnabled)
                 return;
 
-            if (note.note < 0 || note.note > 36)
+            if (note.note is < 0 or > 36)
                 return;
 
-            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is Quotidian.Enums.Keys keybind)
+            if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
             {
                 if (game.ChatStatus && !_forcePlayback)
                     return;
@@ -249,7 +248,7 @@ namespace BardMusicPlayer.Maestro.Performance
 
         public void SetProgress(int progress)
         {
-            if (_sequencer is Sequencer)
+            if (_sequencer is not null)
             {
                 _sequencer.Position = progress;
             }
@@ -257,7 +256,7 @@ namespace BardMusicPlayer.Maestro.Performance
 
         public void Play(bool play, int delay = 0)
         {
-            if (_sequencer is Sequencer)
+            if (_sequencer is not null)
             {
                 if (play)
                 {
@@ -284,7 +283,7 @@ namespace BardMusicPlayer.Maestro.Performance
             if (_startDelayTimer.Enabled)
                 _startDelayTimer.Enabled = false;
 
-            if (_sequencer is Sequencer)
+            if (_sequencer is not null)
             {
                 _sequencer.Stop();
                 _hook.ClearLastPerformanceKeybinds();
@@ -293,40 +292,19 @@ namespace BardMusicPlayer.Maestro.Performance
 
         public void Update(Sequencer bmpSeq)
         {
-            int tn = _trackNumber;
+            var tn = _trackNumber;
 
-            if (!(bmpSeq is Sequencer))
+            var seq = bmpSeq?.Sequence;
+            if (seq is null)
             {
                 return;
             }
 
-            Sanford.Multimedia.Midi.Sequence seq = bmpSeq.Sequence;
-            if (!(seq is Sanford.Multimedia.Midi.Sequence))
-            {
-                return;
-            }
-
-            if ((tn >= 0 && tn < seq.Count) && seq[tn] is Sanford.Multimedia.Midi.Track track)
+            if (tn >= 0 && tn < seq.Count && seq[tn] is { } track)
             {
                 // OctaveNum now holds the track octave and the selected octave together
-                Console.WriteLine(String.Format("Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track)));
-                List<int> notes = new List<int>();
-                foreach (Sanford.Multimedia.Midi.MidiEvent ev in track.Iterator())
-                {
-                    if (ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.MessageType.Channel)
-                    {
-                        Sanford.Multimedia.Midi.ChannelMessage msg = (ev.MidiMessage as Sanford.Multimedia.Midi.ChannelMessage);
-                        if (msg.Command == Sanford.Multimedia.Midi.ChannelCommand.NoteOn)
-                        {
-                            int note = msg.Data1;
-                            int vel = msg.Data2;
-                            if (vel > 0)
-                            {
-                                notes.Add(NoteHelper.ApplyOctaveShift(note, this.OctaveShift));
-                            }
-                        }
-                    }
-                }
+                Console.WriteLine(@"Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track));
+                var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.MessageType.Channel select ev.MidiMessage as Sanford.Multimedia.Midi.ChannelMessage into msg where msg.Command == Sanford.Multimedia.Midi.ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
                 ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
             }
         }
@@ -365,16 +343,14 @@ namespace BardMusicPlayer.Maestro.Performance
             {
                 if (game.InstrumentHeld.Equals(Instrument.Parse(TrackInstrument)))
                     return 0;
-                else
-                {
-                    _hook.ClearLastPerformanceKeybinds();
 
-                    if (UsesDalamud)
-                        DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
-                    else
-                        _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
-                    await Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).ConfigureAwait(false);
-                }
+                _hook.ClearLastPerformanceKeybinds();
+
+                if (UsesDalamud)
+                    DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
+                else
+                    _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
+                await Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).ConfigureAwait(false);
             }
 
             if (UsesDalamud)
@@ -412,7 +388,7 @@ namespace BardMusicPlayer.Maestro.Performance
         {
             if (!_forcePlayback)
             {
-                if (!this.PerformerEnabled)
+                if (!PerformerEnabled)
                     return;
 
                 if (game.InstrumentHeld.Equals(Instrument.None))
@@ -421,11 +397,11 @@ namespace BardMusicPlayer.Maestro.Performance
 
             if (UsesDalamud)
             {
-                GameExtensions.StartEnsemble(game);
+                game.StartEnsemble();
                 return;
             }
 
-            Task task = Task.Run(() =>
+            var task = Task.Run(() =>
             {
                 _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.VIRTUAL_PAD_SELECT]);
                 Task.Delay(100).Wait();
@@ -444,7 +420,7 @@ namespace BardMusicPlayer.Maestro.Performance
         {
             if (!_forcePlayback)
             {
-                if (!this.PerformerEnabled)
+                if (!PerformerEnabled)
                     return;
 
                 if (game.InstrumentHeld.Equals(Instrument.None))
@@ -467,7 +443,7 @@ namespace BardMusicPlayer.Maestro.Performance
         /// </summary>
         public void Close()
         {
-            if (_sequencer is Sequencer)
+            if (_sequencer is not null)
             {
                 _sequencer.CloseInputDevice();
                 _sequencer.Dispose();
@@ -499,20 +475,20 @@ namespace BardMusicPlayer.Maestro.Performance
                 Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).Wait();
             }
             _hook.SendString(text);
-            Task.Delay((text.Length * 8) + 20).Wait();
+            Task.Delay(text.Length * 8 + 20).Wait();
             _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
         }
 
         public void SendText(ChatMessageChannelType type, string text)
         {
-            GameExtensions.SendText(game, type, text);
+            game.SendText(type, text);
         }
 
         public void TapKey(string modifier, string character)
         {
             try
             {
-                Quotidian.Enums.Keys key = Quotidian.Enums.KeyTranslation.ASCIIToGame[character];
+                var key = Quotidian.Enums.KeyTranslation.ASCIIToGame[character];
 
                 if (modifier.ToLower().Contains("shift"))
                     key = (int)Quotidian.Enums.Keys.Shift + key;
@@ -524,7 +500,7 @@ namespace BardMusicPlayer.Maestro.Performance
             }
             catch
             {
-
+                // ignored
             }
         }
         #endregion
@@ -537,52 +513,50 @@ namespace BardMusicPlayer.Maestro.Performance
         private bool trackAndChannelOk()
         {
             // don't open instrument if we don't have anything loaded
-            if (_sequencer == null || _sequencer.Sequence == null)
+            if (_sequencer?.Sequence == null)
                 return false;
 
             // don't open instrument if we're not on a valid track
-            if (_trackNumber == 0 || _trackNumber >= _sequencer.Sequence.Count)
-                return false;
-            return true;
+            return _trackNumber != 0 && _trackNumber < _sequencer.Sequence.Count;
         }
 
         private void startDelayTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (_sequencer is Sequencer)
+            if (_sequencer is not null)
             {
                 _sequencer.Play();
                 _startDelayTimer.Enabled = false;
             }
         }
 
-        private void InternalNote(Object o, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+        private void InternalNote(object o, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
         {
-            Sanford.Multimedia.Midi.ChannelMessageBuilder builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
+            var builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
 
-            NoteEvent noteEvent = new NoteEvent
+            var noteEvent = new NoteEvent
             {
                 note = builder.Data1,
                 origNote = builder.Data1,
                 trackNum = _sequencer.GetTrackNum(args.MidiTrack),
-                track = args.MidiTrack,
+                track = args.MidiTrack
             };
 
-            if ((_sequencer.GetTrackNum(noteEvent.track) == this._trackNumber) || !_sequencer.IsPlaying)
+            if (_sequencer.GetTrackNum(noteEvent.track) == _trackNumber || !_sequencer.IsPlaying)
             {
-                noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, this.OctaveShift);
+                noteEvent.note = NoteHelper.ApplyOctaveShift(noteEvent.note, OctaveShift);
 
-                Sanford.Multimedia.Midi.ChannelCommand cmd = args.Message.Command;
-                int vel = builder.Data2;
-                if ((cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOff) || (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel == 0))
+                var cmd = args.Message.Command;
+                var vel = builder.Data2;
+                if (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOff || cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel == 0)
                 {
-                    this.ProcessOffNote(noteEvent);
+                    ProcessOffNote(noteEvent);
                 }
-                if ((cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn) && vel > 0)
+                if (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel > 0)
                 {
                     if (_livePlayDelay)
-                        this.ProcessOnNoteLive(noteEvent);
+                        ProcessOnNoteLive(noteEvent);
                     else
-                        this.ProcessOnNote(noteEvent);
+                        ProcessOnNote(noteEvent);
                 }
             }
         }
@@ -591,7 +565,7 @@ namespace BardMusicPlayer.Maestro.Performance
         {
             if (!_forcePlayback)
             {
-                if (!this.PerformerEnabled)
+                if (!PerformerEnabled)
                     return;
 
                 if (game.InstrumentHeld.Equals(Instrument.None))
@@ -602,37 +576,32 @@ namespace BardMusicPlayer.Maestro.Performance
             {
                 track = args.MidiTrack,
                 trackNum = _sequencer.GetTrackNum(args.MidiTrack),
-                voice = args.Message.Data1,
+                voice = args.Message.Data1
             };
-            if (programEvent.voice < 27 || programEvent.voice > 31)
+            if (programEvent.voice is < 27 or > 31)
                 return;
 
-            if (_sequencer.GetTrackNum(programEvent.track) == this._trackNumber)
+            if (_sequencer.GetTrackNum(programEvent.track) == _trackNumber)
             {
                 if (game.ChatStatus && !_forcePlayback)
                     return;
 
-                int tone = -1;
-                switch (programEvent.voice)
+                var tone = programEvent.voice switch
                 {
-                    case 29: // overdriven guitar
-                        tone = 0;
-                        break;
-                    case 27: // clean guitar
-                        tone = 1;
-                        break;
-                    case 28: // muted guitar
-                        tone = 2;
-                        break;
-                    case 30: // power chords
-                        tone = 3;
-                        break;
-                    case 31: // special guitar
-                        tone = 4;
-                        break;
-                }
+                    29 => // overdriven guitar
+                        0,
+                    27 => // clean guitar
+                        1,
+                    28 => // muted guitar
+                        2,
+                    30 => // power chords
+                        3,
+                    31 => // special guitar
+                        4,
+                    _ => -1
+                };
 
-                if (tone > -1 && tone < 5 && game.InstrumentToneMenuKeys[(Quotidian.Enums.InstrumentToneMenuKey)tone] is Quotidian.Enums.Keys keybind)
+                if (tone is > -1 and < 5 && game.InstrumentToneMenuKeys[(Quotidian.Enums.InstrumentToneMenuKey)tone] is var keybind)
                     _hook.SendSyncKey(keybind);
             }
         }
@@ -662,7 +631,7 @@ namespace BardMusicPlayer.Maestro.Performance
 
         }
 
-        private void IntenalLyrics(object sender, Sanford.Multimedia.Midi.MetaMessageEventArgs e)
+        private void InternalLyrics(object sender, Sanford.Multimedia.Midi.MetaMessageEventArgs e)
         {
             if (SingerTrackNr <= 0) //0 mean no singer
                 return;
@@ -670,11 +639,11 @@ namespace BardMusicPlayer.Maestro.Performance
             if (!UsesDalamud)
                 return;
 
-            Sanford.Multimedia.Midi.MetaTextBuilder builder = new Sanford.Multimedia.Midi.MetaTextBuilder(e.Message);
-            string text = builder.Text;
+            var builder = new Sanford.Multimedia.Midi.MetaTextBuilder(e.Message);
+            var text = builder.Text;
             var t = mainSequencer.MaxTrack;
-            if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ mainSequencer.LyricStartTrack-1)
-                GameExtensions.SendText(game, ChatMessageChannelType.Say, text);
+            if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ Sequencer.LyricStartTrack-1)
+                game.SendText(ChatMessageChannelType.Say, text);
         }
 #endregion
     }
