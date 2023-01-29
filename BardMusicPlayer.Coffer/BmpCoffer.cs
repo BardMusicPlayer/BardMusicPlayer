@@ -274,7 +274,7 @@ public sealed class BmpCoffer : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public static IPlaylist CreatePlaylist(string name)
+    public IPlaylist CreatePlaylist(string name)
     {
         if (name == null)
         {
