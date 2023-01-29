@@ -5,18 +5,17 @@
 
 using BardMusicPlayer.Seer.Utilities;
 
-namespace BardMusicPlayer.Seer.Events
+namespace BardMusicPlayer.Seer.Events;
+
+public sealed class ActorIdChanged : SeerEvent
 {
-    public sealed class ActorIdChanged : SeerEvent
+    internal ActorIdChanged(EventSource readerBackendType, uint actorId) : base(readerBackendType)
     {
-        internal ActorIdChanged(EventSource readerBackendType, uint actorId) : base(readerBackendType)
-        {
-            EventType = GetType();
-            ActorId   = actorId;
-        }
-
-        public uint ActorId { get; }
-
-        public override bool IsValid() => ActorIdTools.RangeOkay(ActorId);
+        EventType = GetType();
+        ActorId   = actorId;
     }
+
+    public uint ActorId { get; }
+
+    public override bool IsValid() => ActorIdTools.RangeOkay(ActorId);
 }

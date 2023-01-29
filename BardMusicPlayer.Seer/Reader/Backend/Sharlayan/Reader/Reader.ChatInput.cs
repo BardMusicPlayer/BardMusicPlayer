@@ -5,28 +5,27 @@
 
 using System;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+
+internal partial class Reader
 {
-    internal partial class Reader
+    public bool CanGetChatInput() => Scanner.Locations.ContainsKey(Signatures.ChatInputKey);
+
+    public bool IsChatInputOpen()
     {
-        public bool CanGetChatInput() => Scanner.Locations.ContainsKey(Signatures.ChatInputKey);
+        if (!CanGetChatInput() || !MemoryHandler.IsAttached) return false;
 
-        public bool IsChatInputOpen()
+        try
         {
-            if (!CanGetChatInput() || !MemoryHandler.IsAttached) return false;
-
-            try
-            {
-                var chatInputMap = (IntPtr) Scanner.Locations[Signatures.ChatInputKey];
-                var pointer = (IntPtr) MemoryHandler.GetInt32(chatInputMap) != IntPtr.Zero;
-                return pointer;
-            }
-            catch (Exception ex)
-            {
-                MemoryHandler?.RaiseException(ex);
-            }
-
-            return false;
+            var chatInputMap = (IntPtr) Scanner.Locations[Signatures.ChatInputKey];
+            var pointer = (IntPtr) MemoryHandler.GetInt32(chatInputMap) != IntPtr.Zero;
+            return pointer;
         }
+        catch (Exception ex)
+        {
+            MemoryHandler?.RaiseException(ex);
+        }
+
+        return false;
     }
 }

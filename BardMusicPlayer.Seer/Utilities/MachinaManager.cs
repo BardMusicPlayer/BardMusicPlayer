@@ -10,95 +10,94 @@ using System.Linq;
 using Machina.FFXIV;
 using Machina.Infrastructure;
 
-namespace BardMusicPlayer.Seer.Utilities
+namespace BardMusicPlayer.Seer.Utilities;
+
+internal class MachinaManager : IDisposable
 {
-    internal class MachinaManager : IDisposable
+    internal static MachinaManager Instance => LazyInstance.Value;
+
+    private static readonly Lazy<MachinaManager> LazyInstance = new(() => new MachinaManager());
+
+    private MachinaManager()
     {
-        internal static MachinaManager Instance => LazyInstance.Value;
+        _lock = new object();
 
-        private static readonly Lazy<MachinaManager> LazyInstance = new(() => new MachinaManager());
+        Trace.UseGlobalLock = false;
+        Trace.Listeners.Add(new MachinaLogger());
 
-        private MachinaManager()
+        _monitor = new FFXIVNetworkMonitor
         {
-            _lock = new object();
+            MonitorType         = NetworkMonitorType.RawSocket,
+            OodlePath           = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
+            OodleImplementation = Machina.FFXIV.Oodle.OodleImplementation.FfxivUdp
+        };
+        _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
+    }
 
-            Trace.UseGlobalLock = false;
-            Trace.Listeners.Add(new MachinaLogger());
+    private static readonly List<int> Lengths = new() {48, 56, 88, 656, 664, 928, 3576 };
+    private readonly FFXIVNetworkMonitor _monitor;
+    private readonly object _lock;
+    private bool _monitorRunning;
 
-            _monitor = new FFXIVNetworkMonitor
-            {
-                MonitorType = NetworkMonitorType.RawSocket,
-                OodlePath = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
-                OodleImplementation = Machina.FFXIV.Oodle.OodleImplementation.FfxivUdp
-            };
-            _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
-        }
+    internal delegate void MessageReceivedHandler(int processId, byte[] message);
 
-        private static readonly List<int> Lengths = new() {48, 56, 88, 656, 664, 928, 3576 };
-        private readonly FFXIVNetworkMonitor _monitor;
-        private readonly object _lock;
-        private bool _monitorRunning;
+    internal event MessageReceivedHandler MessageReceived;
 
-        internal delegate void MessageReceivedHandler(int processId, byte[] message);
-
-        internal event MessageReceivedHandler MessageReceived;
-
-        internal void AddGame(int pid)
+    internal void AddGame(int pid)
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (_monitorRunning)
             {
-                if (_monitorRunning)
-                {
-                    _monitor.Stop();
-                    _monitorRunning = false;
-                }
-
-                _monitor.ProcessIDList.Add((uint) pid);
-                _monitor.Start();
-                _monitorRunning = true;
+                _monitor.Stop();
+                _monitorRunning = false;
             }
-        }
 
-        internal void RemoveGame(int pid)
+            _monitor.ProcessIDList.Add((uint) pid);
+            _monitor.Start();
+            _monitorRunning = true;
+        }
+    }
+
+    internal void RemoveGame(int pid)
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (_monitorRunning)
             {
-                if (_monitorRunning)
-                {
-                    _monitor.Stop();
-                    _monitorRunning = false;
-                }
-
-                _monitor.ProcessIDList.Remove((uint) pid);
-                if (_monitor.ProcessIDList.Count <= 0) return;
-
-                _monitor.Start();
-                _monitorRunning = true;
+                _monitor.Stop();
+                _monitorRunning = false;
             }
-        }
 
-        private void MessageReceivedEventHandler(TCPConnection connection, long epoch, byte[] message)
-        {
-            if (Lengths.Contains(message.Length)) 
+            _monitor.ProcessIDList.Remove((uint) pid);
+            if (_monitor.ProcessIDList.Count <= 0) return;
+
+            _monitor.Start();
+            _monitorRunning = true;
+        }
+    }
+
+    private void MessageReceivedEventHandler(TCPConnection connection, long epoch, byte[] message)
+    {
+        if (Lengths.Contains(message.Length)) 
             //if (message.Length > 28)
-                MessageReceived?.Invoke((int) connection.ProcessId, message);
-        }
+            MessageReceived?.Invoke((int) connection.ProcessId, message);
+    }
 
-        ~MachinaManager() { Dispose(); }
+    ~MachinaManager() { Dispose(); }
 
-        public void Dispose()
+    public void Dispose()
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (_monitorRunning)
             {
-                if (_monitorRunning)
-                {
-                    _monitor.Stop();
-                    _monitorRunning = false;
-                }
-
-                _monitor.ProcessIDList.Clear();
-                _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
+                _monitor.Stop();
+                _monitorRunning = false;
             }
+
+            _monitor.ProcessIDList.Clear();
+            _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
         }
     }
 }

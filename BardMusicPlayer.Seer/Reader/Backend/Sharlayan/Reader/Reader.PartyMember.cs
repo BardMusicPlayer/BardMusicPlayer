@@ -8,51 +8,50 @@ using System.Collections.Generic;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 using BardMusicPlayer.Seer.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+
+internal partial class Reader
 {
-    internal partial class Reader
+    public bool CanGetPartyMembers() => Scanner.Locations.ContainsKey(Signatures.CharacterMapKey) &&
+                                        Scanner.Locations.ContainsKey(Signatures.PartyMapKey) &&
+                                        Scanner.Locations.ContainsKey(Signatures.PartyCountKey);
+
+    public SortedDictionary<uint, string> GetPartyMembers()
     {
-        public bool CanGetPartyMembers() => Scanner.Locations.ContainsKey(Signatures.CharacterMapKey) &&
-                                            Scanner.Locations.ContainsKey(Signatures.PartyMapKey) &&
-                                            Scanner.Locations.ContainsKey(Signatures.PartyCountKey);
+        var result = new SortedDictionary<uint, string>();
 
-        public SortedDictionary<uint, string> GetPartyMembers()
+        if (!CanGetPartyMembers() || !MemoryHandler.IsAttached) return result;
+
+        var partyInfoMap = (IntPtr) Scanner.Locations[Signatures.PartyMapKey];
+        var partyCountMap = Scanner.Locations[Signatures.PartyCountKey];
+
+        try
         {
-            var result = new SortedDictionary<uint, string>();
+            var partyCount = MemoryHandler.GetByte(partyCountMap);
+            var sourceSize = MemoryHandler.Structures.PartyMember.SourceSize;
 
-            if (!CanGetPartyMembers() || !MemoryHandler.IsAttached) return result;
-
-            var partyInfoMap = (IntPtr) Scanner.Locations[Signatures.PartyMapKey];
-            var partyCountMap = Scanner.Locations[Signatures.PartyCountKey];
-
-            try
+            if (partyCount is > 1 and < 9)
             {
-                var partyCount = MemoryHandler.GetByte(partyCountMap);
-                var sourceSize = MemoryHandler.Structures.PartyMember.SourceSize;
-
-                if (partyCount > 1 && partyCount < 9)
+                for (uint i = 0; i < partyCount; i++)
                 {
-                    for (uint i = 0; i < partyCount; i++)
-                    {
-                        var address = partyInfoMap.ToInt64() + i * (uint) sourceSize;
-                        var source = MemoryHandler.GetByteArray(new IntPtr(address), sourceSize);
+                    var address = partyInfoMap.ToInt64() + i * (uint) sourceSize;
+                    var source = MemoryHandler.GetByteArray(new IntPtr(address), sourceSize);
 
-                        var actorId = SBitConverter.TryToUInt32(source, MemoryHandler.Structures.PartyMember.ID);
-                        var playerName =
-                            MemoryHandler.GetStringFromBytes(source, MemoryHandler.Structures.PartyMember.Name);
-                        if (ActorIdTools.RangeOkay(actorId) && !string.IsNullOrEmpty(playerName))
-                            result[actorId] = playerName;
-                    }
+                    var actorId = SBitConverter.TryToUInt32(source, MemoryHandler.Structures.PartyMember.ID);
+                    var playerName =
+                        MemoryHandler.GetStringFromBytes(source, MemoryHandler.Structures.PartyMember.Name);
+                    if (ActorIdTools.RangeOkay(actorId) && !string.IsNullOrEmpty(playerName))
+                        result[actorId] = playerName;
                 }
-
-                if (result.Count == 1) result.Clear();
-            }
-            catch (Exception ex)
-            {
-                MemoryHandler?.RaiseException(ex);
             }
 
-            return result;
+            if (result.Count == 1) result.Clear();
         }
+        catch (Exception ex)
+        {
+            MemoryHandler?.RaiseException(ex);
+        }
+
+        return result;
     }
 }

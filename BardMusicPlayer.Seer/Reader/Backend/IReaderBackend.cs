@@ -8,16 +8,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 
-namespace BardMusicPlayer.Seer.Reader.Backend
+namespace BardMusicPlayer.Seer.Reader.Backend;
+
+internal interface IReaderBackend : IDisposable
 {
-    internal interface IReaderBackend : IDisposable
-    {
-        EventSource ReaderBackendType { get; }
+    EventSource ReaderBackendType { get; }
 
-        ReaderHandler ReaderHandler { get; set; }
+    ReaderHandler ReaderHandler { get; set; }
 
-        int SleepTimeInMs { get; set; }
+    int SleepTimeInMs { get; set; }
 
-        Task Loop(CancellationToken token);
-    }
+    Task Loop(CancellationToken token);
 }

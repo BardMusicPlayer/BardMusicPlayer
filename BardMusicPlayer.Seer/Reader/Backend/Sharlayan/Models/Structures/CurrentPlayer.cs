@@ -3,16 +3,15 @@
  * Licensed under the MIT license. See https://github.com/FFXIVAPP/sharlayan/blob/master/LICENSE.md for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;
+
+internal class CurrentPlayer
 {
-    internal class CurrentPlayer
-    {
-        public int SourceSize { get; set; }
+    public int SourceSize { get; set; }
 
-        public int ID { get; set; }
+    public int ID { get; set; }
 
-        public int Name { get; set; }
+    public int Name { get; set; }
 
-        public int JobID { get; set; }
-    }
+    public int JobID { get; set; }
 }

@@ -5,18 +5,17 @@
 
 using System.Text.RegularExpressions;
 
-namespace BardMusicPlayer.Seer.Events
+namespace BardMusicPlayer.Seer.Events;
+
+public sealed class HomeWorldChanged : SeerEvent
 {
-    public sealed class HomeWorldChanged : SeerEvent
+    internal HomeWorldChanged(EventSource readerBackendType, string homeWorld) : base(readerBackendType)
     {
-        internal HomeWorldChanged(EventSource readerBackendType, string homeWorld) : base(readerBackendType)
-        {
-            EventType = GetType();
-            HomeWorld = homeWorld;
-        }
-
-        public string HomeWorld { get; }
-
-        public override bool IsValid() => !string.IsNullOrEmpty(HomeWorld) && Regex.IsMatch(HomeWorld, @"^[a-zA-Z]+$");
+        EventType = GetType();
+        HomeWorld = homeWorld;
     }
+
+    public string HomeWorld { get; }
+
+    public override bool IsValid() => !string.IsNullOrEmpty(HomeWorld) && Regex.IsMatch(HomeWorld, @"^[a-zA-Z]+$");
 }

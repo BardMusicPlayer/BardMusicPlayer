@@ -6,34 +6,33 @@
 using System;
 using System.Collections.Generic;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
+
+internal class HotbarJobSlot : IDisposable
 {
-    internal class HotbarJobSlot : IDisposable
+    public Dictionary<int, HotbarSlot> JobSlots = new();
+
+    public HotbarSlot this[int i]
     {
-        public Dictionary<int, HotbarSlot> JobSlots = new();
-
-        public HotbarSlot this[int i]
+        get
         {
-            get
-            {
-                if (!JobSlots.ContainsKey(i)) JobSlots[i] = new HotbarSlot();
-                return JobSlots[i];
-            }
-            set => JobSlots[i] = value;
+            if (!JobSlots.ContainsKey(i)) JobSlots[i] = new HotbarSlot();
+            return JobSlots[i];
+        }
+        set => JobSlots[i] = value;
+    }
+
+    ~HotbarJobSlot() { Dispose(); }
+
+    public void Dispose()
+    {
+        if (JobSlots == null) return;
+
+        foreach (var slot in JobSlots.Values)
+        {
+            slot?.Dispose();
         }
 
-        ~HotbarJobSlot() { Dispose(); }
-
-        public void Dispose()
-        {
-            if (JobSlots == null) return;
-
-            foreach (var slot in JobSlots.Values)
-            {
-                slot?.Dispose();
-            }
-
-            JobSlots.Clear();
-        }
+        JobSlots.Clear();
     }
 }

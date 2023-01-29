@@ -5,19 +5,18 @@
 
 using BardMusicPlayer.Quotidian.Structs;
 
-namespace BardMusicPlayer.Seer.Events
+namespace BardMusicPlayer.Seer.Events;
+
+public sealed class InstrumentHeldChanged : SeerEvent
 {
-    public sealed class InstrumentHeldChanged : SeerEvent
+    internal InstrumentHeldChanged(EventSource readerBackendType, Instrument instrumentHeld) : base(
+        readerBackendType)
     {
-        internal InstrumentHeldChanged(EventSource readerBackendType, Instrument instrumentHeld) : base(
-            readerBackendType)
-        {
-            EventType      = GetType();
-            InstrumentHeld = instrumentHeld;
-        }
-
-        public Instrument InstrumentHeld { get; }
-
-        public override bool IsValid() => true;
+        EventType      = GetType();
+        InstrumentHeld = instrumentHeld;
     }
+
+    public Instrument InstrumentHeld { get; }
+
+    public override bool IsValid() => true;
 }

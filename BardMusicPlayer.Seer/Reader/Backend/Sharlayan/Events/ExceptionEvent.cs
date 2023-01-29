@@ -5,18 +5,17 @@
 
 using System;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
+
+internal class ExceptionEvent : EventArgs
 {
-    internal class ExceptionEvent : EventArgs
+    public Exception Exception { get; set; }
+
+    public object Sender { get; set; }
+
+    public ExceptionEvent(object sender, Exception exception)
     {
-        public Exception Exception { get; set; }
-
-        public object Sender { get; set; }
-
-        public ExceptionEvent(object sender, Exception exception)
-        {
-            Sender    = sender;
-            Exception = exception;
-        }
+        Sender    = sender;
+        Exception = exception;
     }
 }

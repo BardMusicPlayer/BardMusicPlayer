@@ -11,136 +11,135 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile;
+
+internal class HotbarDatFile : IDisposable
 {
-    internal class HotbarDatFile : IDisposable
+
+    internal bool Fresh = true;
+    private string _filePath;
+
+    internal HotbarDatFile(string filePath)
     {
+        _filePath = filePath;
+    }
 
-        internal bool Fresh = true;
-        private string _filePath;
+    internal bool Load()
+    {
+        if (string.IsNullOrEmpty(_filePath)) throw new FileFormatException("No path to HOTBAR.DAT file provided.");
+        if (!File.Exists(_filePath)) throw new FileFormatException("Missing HOTBAR.DAT file.");
 
-        internal HotbarDatFile(string filePath)
+        using var fileStream = File.Open(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var memStream = new MemoryStream();
+        if (fileStream.CanRead && fileStream.CanSeek)
         {
-            _filePath = filePath;
+            fileStream.CopyTo(memStream);
         }
 
-        internal bool Load()
+        fileStream.Dispose();
+        if (memStream.Length == 0)
         {
-            if (string.IsNullOrEmpty(_filePath)) throw new FileFormatException("No path to HOTBAR.DAT file provided.");
-            if (!File.Exists(_filePath)) throw new FileFormatException("Missing HOTBAR.DAT file.");
+            memStream.Dispose();
+            return false;
+        }
 
-            using var fileStream = File.Open(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using var memStream = new MemoryStream();
-            if (fileStream.CanRead && fileStream.CanSeek)
+        using var reader = new BinaryReader(memStream);
+        reader.BaseStream.Seek(0x04, SeekOrigin.Begin);
+
+        var fileSize = XorTools.ReadXorInt32(reader);
+        var dataSize = XorTools.ReadXorInt32(reader) + 16;
+
+        var sourceSize = reader.BaseStream.Length;
+
+        if (sourceSize - fileSize != 32)
+        {
+            reader.Dispose();
+            memStream.Dispose();
+            throw new FileFormatException("Invalid HOTBAR.DAT size.");
+        }
+
+        reader.BaseStream.Seek(0x60, SeekOrigin.Begin);
+        try
+        {
+            reader.BaseStream.Seek(0x10, SeekOrigin.Begin);
+            while (reader.BaseStream.Position < dataSize)
             {
-                fileStream.CopyTo(memStream);
-            }
-
-            fileStream.Dispose();
-            if (memStream.Length == 0)
-            {
-                memStream.Dispose();
-                return false;
-            }
-
-            using var reader = new BinaryReader(memStream);
-            reader.BaseStream.Seek(0x04, SeekOrigin.Begin);
-
-            var fileSize = XorTools.ReadXorInt32(reader);
-            var dataSize = XorTools.ReadXorInt32(reader) + 16;
-
-            var sourceSize = reader.BaseStream.Length;
-
-            if (sourceSize - fileSize != 32)
-            {
-                reader.Dispose();
-                memStream.Dispose();
-                throw new FileFormatException("Invalid HOTBAR.DAT size.");
-            }
-
-            reader.BaseStream.Seek(0x60, SeekOrigin.Begin);
-            try
-            {
-                reader.BaseStream.Seek(0x10, SeekOrigin.Begin);
-                while (reader.BaseStream.Position < dataSize)
+                var ac = ParseSection(reader);
+                if (ac.Job is 0x17 or 0)
                 {
-                    var ac = ParseSection(reader);
-                    if (ac.Job == 0x17 || ac.Job == 0)
+                    if (ac.Type == 0x1D)
                     {
-                        if (ac.Type == 0x1D)
-                        {
-                            _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
-                        }
+                        _hotbarData[ac.Hotbar][ac.Slot][ac.Job] = ac;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw new FileFormatException("Invalid HOTBAR.DAT format: " + ex.Message);
-            }
-            finally
-            {
-                reader.Dispose();
-                memStream.Dispose();
-            }
-            return true;
         }
-
-        private readonly HotbarData _hotbarData = new();
-
-        public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int)type);
-        public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
-
-        public List<HotbarSlot> GetBRDSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0x17 select slot).ToList();
-        public List<HotbarSlot> GetGlobalSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0 select slot).ToList();
-
-        internal enum SlotType
+        catch (Exception ex)
         {
-            Unknown,
-            Instrument = 0x1D,
-            InstrumentTone = Unknown // Leaving this as unknown as we can just use 'Instrument' for now, they have the same id in hex.
+            throw new FileFormatException("Invalid HOTBAR.DAT format: " + ex.Message);
         }
+        finally
+        {
+            reader.Dispose();
+            memStream.Dispose();
+        }
+        return true;
+    }
 
-        public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone)
-        {
-            var slots = GetSlotsFromType(SlotType.InstrumentTone);
-            foreach (var slot in slots.Where(slot => slot.Action == instrumentTone))
-            {
-                return slot.ToString();
-            }
-            return string.Empty;
-        }
+    private readonly HotbarData _hotbarData = new();
 
-        public string GetInstrumentKeyMap(Instrument instrument)
-        {
-            var slots = GetSlotsFromType(SlotType.Instrument);
-            foreach (var slot in slots.Where(slot => slot.Action == instrument && slot.Job == 0x17 || slot.Action == instrument && slot.Job == 0))
-            {
-                return slot.ToString();
-            }
-            return string.Empty;
-        }
+    public IEnumerable<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int)type);
+    public IEnumerable<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
 
-        private static HotbarSlot ParseSection(BinaryReader stream)
+    public List<HotbarSlot> GetBRDSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0x17 select slot).ToList();
+    public List<HotbarSlot> GetGlobalSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0 select slot).ToList();
+
+    internal enum SlotType
+    {
+        Unknown,
+        Instrument = 0x1D,
+        InstrumentTone = Unknown // Leaving this as unknown as we can just use 'Instrument' for now, they have the same id in hex.
+    }
+
+    public string GetInstrumentToneKeyMap(InstrumentTone instrumentTone)
+    {
+        var slots = GetSlotsFromType(SlotType.InstrumentTone);
+        foreach (var slot in slots.Where(slot => slot.Action == instrumentTone))
         {
-            const byte xor = 0x31;
-            var ac = new HotbarSlot
-            {
-                Action = XorTools.ReadXorByte(stream, xor),
-                Flag = XorTools.ReadXorByte(stream, xor),
-                Unk1 = XorTools.ReadXorByte(stream, xor),
-                Unk2 = XorTools.ReadXorByte(stream, xor),
-                Job = XorTools.ReadXorByte(stream, xor),
-                Hotbar = XorTools.ReadXorByte(stream, xor),
-                Slot = XorTools.ReadXorByte(stream, xor),
-                Type = XorTools.ReadXorByte(stream, xor),
-            };
-            return ac;
+            return slot.ToString();
         }
-        ~HotbarDatFile() => Dispose();
-        public void Dispose()
+        return string.Empty;
+    }
+
+    public string GetInstrumentKeyMap(Instrument instrument)
+    {
+        var slots = GetSlotsFromType(SlotType.Instrument);
+        foreach (var slot in slots.Where(slot => slot.Action == instrument && slot.Job == 0x17 || slot.Action == instrument && slot.Job == 0))
         {
-            _hotbarData?.Dispose();
+            return slot.ToString();
         }
+        return string.Empty;
+    }
+
+    private static HotbarSlot ParseSection(BinaryReader stream)
+    {
+        const byte xor = 0x31;
+        var ac = new HotbarSlot
+        {
+            Action = XorTools.ReadXorByte(stream, xor),
+            Flag   = XorTools.ReadXorByte(stream, xor),
+            Unk1   = XorTools.ReadXorByte(stream, xor),
+            Unk2   = XorTools.ReadXorByte(stream, xor),
+            Job    = XorTools.ReadXorByte(stream, xor),
+            Hotbar = XorTools.ReadXorByte(stream, xor),
+            Slot   = XorTools.ReadXorByte(stream, xor),
+            Type   = XorTools.ReadXorByte(stream, xor)
+        };
+        return ac;
+    }
+    ~HotbarDatFile() => Dispose();
+    public void Dispose()
+    {
+        _hotbarData?.Dispose();
     }
 }

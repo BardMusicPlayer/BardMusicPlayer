@@ -5,30 +5,29 @@
 
 using System;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+
+internal partial class Reader
 {
-    internal partial class Reader
+    public bool CanGetCharacterId() => Scanner.Locations.ContainsKey(Signatures.CharacterIdKey);
+
+    public string GetCharacterId()
     {
-        public bool CanGetCharacterId() => Scanner.Locations.ContainsKey(Signatures.CharacterIdKey);
+        var id = "";
+        if (!CanGetCharacterId() || !MemoryHandler.IsAttached) return id;
 
-        public string GetCharacterId()
+        var characterIdMap = (IntPtr) Scanner.Locations[Signatures.CharacterIdKey];
+
+        try
         {
-            var id = "";
-            if (!CanGetCharacterId() || !MemoryHandler.IsAttached) return id;
-
-            var characterIdMap = (IntPtr) Scanner.Locations[Signatures.CharacterIdKey];
-
-            try
-            {
-                id = MemoryHandler.GetString(characterIdMap, MemoryHandler.Structures.CharacterId.Offset,
-                    MemoryHandler.Structures.CharacterId.SourceSize);
-            }
-            catch (Exception ex)
-            {
-                MemoryHandler?.RaiseException(ex);
-            }
-
-            return id;
+            id = MemoryHandler.GetString(characterIdMap, MemoryHandler.Structures.CharacterId.Offset,
+                MemoryHandler.Structures.CharacterId.SourceSize);
         }
+        catch (Exception ex)
+        {
+            MemoryHandler?.RaiseException(ex);
+        }
+
+        return id;
     }
 }

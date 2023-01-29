@@ -15,212 +15,210 @@ using BardMusicPlayer.Seer.Reader.Backend.DatFile;
 using BardMusicPlayer.Seer.Reader.Backend.Machina;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan;
 
-namespace BardMusicPlayer.Seer
+namespace BardMusicPlayer.Seer;
+
+public partial class Game : IDisposable, IEquatable<Game>
 {
-    public partial class Game : IDisposable, IEquatable<Game>
+    private readonly string _uuid;
+
+    // readers
+    internal ReaderHandler DatReader;
+    internal ReaderHandler MemoryReader;
+    internal ReaderHandler NetworkReader;
+
+    // reader events
+    private Dictionary<Type, long> _eventDedupeHistory;
+    private ConcurrentQueue<SeerEvent> _eventQueueHighPriority;
+    private ConcurrentQueue<SeerEvent> _eventQueueLowPriority;
+    private bool _eventQueueOpen;
+
+    // reader events processor
+    private CancellationTokenSource _eventTokenSource;
+
+    internal Game(Process process)
     {
-        private readonly string _uuid;
+        _uuid   = Guid.NewGuid().ToString();
+        Process = process;
+    }
 
-        // readers
-        internal ReaderHandler DatReader;
-        internal ReaderHandler MemoryReader;
-        internal ReaderHandler NetworkReader;
-
-        // reader events
-        private Dictionary<Type, long> _eventDedupeHistory;
-        private ConcurrentQueue<SeerEvent> _eventQueueHighPriority;
-        private ConcurrentQueue<SeerEvent> _eventQueueLowPriority;
-        private bool _eventQueueOpen;
-
-        // reader events processor
-        private CancellationTokenSource _eventTokenSource;
-
-        internal Game(Process process)
+    internal bool Initialize()
+    {
+        try
         {
-            _uuid   = Guid.NewGuid().ToString();
-            Process = process;
-        }
-
-        internal bool Initialize()
-        {
-            try
+            if (Process is null || Process.Id < 1 || Pid != 0)
             {
-                if (Process is null || Process.Id < 1 || Pid != 0)
-                {
-                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid,
-                        new BmpSeerException("Game process is null or already initialized.")));
-                    return false;
-                }
-
-                Pid = Process.Id;
-                InitInformation();
-
-                _eventDedupeHistory     = new Dictionary<Type, long>();
-                _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
-                _eventQueueOpen         = true;
-
-                DatReader     = new ReaderHandler(this, new DatFileReaderBackend(1));
-                MemoryReader  = new ReaderHandler(this, new SharlayanReaderBackend(1));
-                NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
-                GfxSettingsLow = CheckIfGfxIsLow();
-                _eventTokenSource = new CancellationTokenSource();
-                Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
-
-                BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid,
+                    new BmpSeerException("Game process is null or already initialized.")));
                 return false;
             }
 
-            return true;
+            Pid = Process.Id;
+            InitInformation();
+
+            _eventDedupeHistory     = new Dictionary<Type, long>();
+            _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
+            _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
+            _eventQueueOpen         = true;
+
+            DatReader         = new ReaderHandler(this, new DatFileReaderBackend(1));
+            MemoryReader      = new ReaderHandler(this, new SharlayanReaderBackend(1));
+            NetworkReader     = new ReaderHandler(this, new MachinaReaderBackend(1));
+            GfxSettingsLow    = CheckIfGfxIsLow();
+            _eventTokenSource = new CancellationTokenSource();
+            Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
+
+            BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+            return false;
         }
 
-        internal void PublishEvent(SeerEvent seerEvent)
-        {
-            if (!_eventQueueOpen) return;
+        return true;
+    }
 
-            if (seerEvent.HighPriority) _eventQueueHighPriority.Enqueue(seerEvent);
-            else _eventQueueLowPriority.Enqueue(seerEvent);
-        }
+    internal void PublishEvent(SeerEvent seerEvent)
+    {
+        if (!_eventQueueOpen) return;
 
-        private async Task RunEventQueue(CancellationToken token)
+        if (seerEvent.HighPriority) _eventQueueHighPriority.Enqueue(seerEvent);
+        else _eventQueueLowPriority.Enqueue(seerEvent);
+    }
+
+    private async Task RunEventQueue(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
         {
-            while (!token.IsCancellationRequested)
+            while (_eventQueueHighPriority.TryDequeue(out var high))
             {
-                while (_eventQueueHighPriority.TryDequeue(out var high))
+                try
                 {
-                    try
-                    {
-                        OnEventReceived(high);
-                    }
-                    catch (Exception ex)
-                    {
-                        BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-                    }
+                    OnEventReceived(high);
                 }
-
-                if (_eventQueueLowPriority.TryDequeue(out var low))
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        OnEventReceived(low);
-                    }
-                    catch (Exception ex)
-                    {
-                        BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-                    }
+                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                 }
-
-                await Task.Delay(1, token);
-            }
-        }
-
-        ~Game() { Dispose(); }
-
-        public void Dispose()
-        {
-            if ((_eventQueueHighPriority != null) && (_eventQueueHighPriority != null) && (_eventDedupeHistory != null))
-                BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
-
-            _eventQueueOpen = false;
-            try
-            { 
-                if (_eventTokenSource != null)
-                    _eventTokenSource.Cancel();
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
 
-            try
+            if (_eventQueueLowPriority.TryDequeue(out var low))
             {
-                DatReader?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-            }
-
-            try
-            {
-                MemoryReader?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-            }
-
-            try
-            {
-                NetworkReader?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
-            }
-
-            try
-            {
-                if (_eventQueueHighPriority != null)
+                try
                 {
-                    while (_eventQueueHighPriority.TryDequeue(out _))
-                    {
-                    }
+                    OnEventReceived(low);
                 }
-
-                if (_eventQueueHighPriority != null)
+                catch (Exception ex)
                 {
-                    while (_eventQueueLowPriority.TryDequeue(out _))
-                    {
-                    }
+                    BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                 }
-                if (_eventDedupeHistory != null)
-                    _eventDedupeHistory.Clear();
             }
-            catch (Exception ex)
+
+            await Task.Delay(1, token);
+        }
+    }
+
+    ~Game() { Dispose(); }
+
+    public void Dispose()
+    {
+        if (_eventQueueHighPriority is { } && _eventDedupeHistory != null)
+            BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
+
+        _eventQueueOpen = false;
+        try
+        {
+            _eventTokenSource?.Cancel();
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+        }
+
+        try
+        {
+            DatReader?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+        }
+
+        try
+        {
+            MemoryReader?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+        }
+
+        try
+        {
+            NetworkReader?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+        }
+
+        try
+        {
+            if (_eventQueueHighPriority != null)
             {
-                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+                while (_eventQueueHighPriority.TryDequeue(out _))
+                {
+                }
             }
 
-            GC.SuppressFinalize(this);
-        }
+            if (_eventQueueHighPriority != null)
+            {
+                while (_eventQueueLowPriority.TryDequeue(out _))
+                {
+                }
+            }
 
-        public override bool Equals(object obj)
+            _eventDedupeHistory?.Clear();
+        }
+        catch (Exception ex)
         {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-
-            return obj.GetType() == GetType() && Equals((Game) obj);
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
         }
 
-        public bool Equals(Game other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
+        GC.SuppressFinalize(this);
+    }
 
-            return _uuid == other._uuid;
-        }
+    public override bool Equals(object obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
 
-        public override int GetHashCode() => _uuid != null ? _uuid.GetHashCode() : 0;
+        return obj.GetType() == GetType() && Equals((Game) obj);
+    }
 
-        public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
+    public bool Equals(Game other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
 
-        public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
+        return _uuid == other._uuid;
+    }
 
-        public IntPtr GetAffinity()
-        {
-            return this.Process.ProcessorAffinity;
-        }
+    public override int GetHashCode() => _uuid != null ? _uuid.GetHashCode() : 0;
 
-        public void SetAffinity(long AffinityMask)
-        {
-            if (AffinityMask == 0)
-                return;
-            this.Process.ProcessorAffinity = (IntPtr)AffinityMask;
-        }
+    public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
+
+    public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
+
+    public IntPtr GetAffinity()
+    {
+        return Process.ProcessorAffinity;
+    }
+
+    public void SetAffinity(long AffinityMask)
+    {
+        if (AffinityMask == 0)
+            return;
+        Process.ProcessorAffinity = (IntPtr)AffinityMask;
     }
 }

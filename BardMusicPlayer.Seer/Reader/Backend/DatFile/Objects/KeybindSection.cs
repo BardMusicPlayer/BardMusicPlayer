@@ -5,18 +5,17 @@
 
 using System;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
+
+internal class KeybindSection : IDisposable
 {
-    internal class KeybindSection : IDisposable
-    {
-        public byte Type { get; set; }
+    public byte Type { get; set; }
 
-        public int Size { get; set; }
+    public int Size { get; set; }
 
-        public byte[] Data { get; set; }
+    public byte[] Data { get; set; }
 
-        ~KeybindSection() { Dispose(); }
+    ~KeybindSection() { Dispose(); }
 
-        public void Dispose() { Data = null; }
-    }
+    public void Dispose() { Data = null; }
 }
