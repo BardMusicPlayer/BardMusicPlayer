@@ -6,18 +6,17 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 
-namespace BardMusicPlayer.Transmogrify.Song
-{
-    public sealed class TrackContainer
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public TrackChunk SourceTrackChunk { get; set; } = new();
+namespace BardMusicPlayer.Transmogrify.Song;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Dictionary<long, ConfigContainer> ConfigContainers { get; set; } = new();
-    }
+public sealed class TrackContainer
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public TrackChunk SourceTrackChunk { get; set; } = new();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Dictionary<long, ConfigContainer> ConfigContainers { get; set; } = new();
 }

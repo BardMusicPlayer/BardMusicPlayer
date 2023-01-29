@@ -1,6 +1,5 @@
 #region
 
-using System.Diagnostics;
 using System.IO;
 using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro.Native;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
@@ -66,9 +65,6 @@ public static class ImportGuitarPro
                 }
 
                 break;
-            default:
-                Debug.WriteLine("Unknown File Format");
-                return null;
         }
 
         var song = new NativeFormat(gpfile);

@@ -9,23 +9,22 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Transmogrify.Song;
 using Melanchall.DryWetMidi.Core;
 
-namespace BardMusicPlayer.Transmogrify.Processor
+namespace BardMusicPlayer.Transmogrify.Processor;
+
+internal abstract class BaseProcessor : IDisposable
 {
-    internal abstract class BaseProcessor : IDisposable
+    protected BaseProcessor(BmpSong song)
     {
-        protected BaseProcessor(BmpSong song)
-        {
-            Song = song;
-        }
+        Song = song;
+    }
 
-        protected BmpSong Song { get; set; }
+    protected BmpSong Song { get; set; }
 
-        public abstract Task<List<TrackChunk>> Process();
+    public abstract Task<List<TrackChunk>> Process();
 
-        ~BaseProcessor() => Dispose();
-        public virtual void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
+    ~BaseProcessor() => Dispose();
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize(this);
     }
 }

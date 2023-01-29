@@ -34,7 +34,7 @@ public struct MMLCommand
     public static MMLCommand Parse(string token)
     {
         var cmd = new MMLCommand();
-        var t = MMLCommandType.Unknown;
+        MMLCommandType t;
         var args = new List<string>();
 
         switch (token.ToLowerInvariant()[0])

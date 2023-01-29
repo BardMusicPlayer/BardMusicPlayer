@@ -14,7 +14,7 @@ public interface IParseResult<TLine>
     where TLine : Line
 {
     /// <summary>
-    ///     Lyrcis of parsing result.
+    ///     Lyrics of parsing result.
     /// </summary>
     Lyrics<TLine> Lyrics { get; }
 

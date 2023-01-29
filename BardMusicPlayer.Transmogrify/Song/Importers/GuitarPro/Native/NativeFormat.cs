@@ -420,7 +420,7 @@ public sealed class NativeFormat
 
 
                         //Triplet Feel
-                        if (!barMaster[measureIndex].tripletFeel.Equals("none"))
+                        if (!false)
                         {
                             var trip = barMaster[measureIndex].tripletFeel;
                             //Check if at regular 8th or 16th beat position
@@ -672,8 +672,6 @@ public sealed class NativeFormat
                         for (var x = notes.Count - notesCnt; x < notes.Count; x++)
                             notes[x] = temp[temp.Length - (x - (notes.Count - notesCnt)) - 1];
                     }
-
-                    hasBrush = false;
                 }
 
                 break; //Consider only the first voice
@@ -769,7 +767,7 @@ public sealed class NativeFormat
         {
             var pos = 0;
 
-            //Get inital tempo from file header
+            //Get initial tempo from file header
             var init = new Tempo
             {
                 position = 0,
@@ -1257,7 +1255,7 @@ public sealed class Track
             index++;
             var skipWrite = false;
 
-            if ((n.slideInFromBelow && n.str > 1) || n.slideInFromAbove)
+            if (n.slideInFromBelow && n.str > 1 || n.slideInFromAbove)
             {
                 var myFret = n.fret;
                 var start = n.slideInFromAbove ? myFret + 4 : Math.Max(1, myFret - 4);
@@ -1275,7 +1273,7 @@ public sealed class Track
                 }
             }
 
-            if ((n.slideOutDownwards && n.str > 1) || n.slideOutUpwards)
+            if (n.slideOutDownwards && n.str > 1 || n.slideOutUpwards)
             {
                 var myFret = n.fret;
                 var end = n.slideOutUpwards ? myFret + 4 : Math.Max(1, myFret - 4);
@@ -1402,9 +1400,9 @@ public sealed class Track
 
     public static int getHarmonic(int baseTone, int fret, int capo, float harmonicFret, HarmonicType type)
     {
-        var val = 0;
-        //Capo, base tone and fret (if not natural harmonic) shift the harmonics simply
-        val = baseTone + capo;
+        var val =
+            //Capo, base tone and fret (if not natural harmonic) shift the harmonics simply
+            baseTone + capo;
         if (type != HarmonicType.natural) val += (int)Math.Round(harmonicFret);
 
         val += fret;

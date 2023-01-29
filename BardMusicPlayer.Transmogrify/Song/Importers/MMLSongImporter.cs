@@ -26,9 +26,7 @@ public static class MMLSongImporter
 {
     private static readonly Dictionary<int, List<MMLCommand>> musicData = new();
     private static readonly Dictionary<int, string> musicInstrument = new();
-
-    private static readonly string mmlPatterns =
-        @"[tT]\d{1,3}|[lL](16|2|4|8|1|32|64)\.?|[vV]\d+|[oO]\d|<|>|[a-gA-G](\+|#|-)?(16|2|4|8|1|32|64)?\.?|[rR](16|2|4|8|1|32|64)?\.?|[nN]\d+\.?|&";
+    private const string mmlPatterns = @"[tT]\d{1,3}|[lL](16|2|4|8|1|32|64)\.?|[vV]\d+|[oO]\d|<|>|[a-gA-G](\+|#|-)?(16|2|4|8|1|32|64)?\.?|[rR](16|2|4|8|1|32|64)?\.?|[nN]\d+\.?|&";
 
     private static readonly Dictionary<string, int> noteNumbers = new()
     {
@@ -47,7 +45,7 @@ public static class MMLSongImporter
     private static int CurrentChannel { get; set; }
 
     /// <summary>
-    ///     Opens and process a mmslong file
+    /// Opens and process a mmlsong file
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
@@ -60,9 +58,9 @@ public static class MMLSongImporter
         while (rfile.Peek() >= 0)
         {
             var line = rfile.ReadLine();
-            if (line.Contains("[Settings]")) _chap = Chap.SETTINGS;
+            if (line != null && line.Contains("[Settings]")) _chap = Chap.SETTINGS;
 
-            if (line.StartsWith("[Channel", StringComparison.Ordinal))
+            if (line != null && line.StartsWith("[Channel", StringComparison.Ordinal))
             {
                 if (musicdata.Length > 0)
                 {
@@ -247,7 +245,7 @@ public static class MMLSongImporter
     private static int GetNote(MMLCommand cmd)
     {
         var noteType = cmd.Args[0].ToLower();
-        var noteNum = 0;
+        int noteNum;
         switch (cmd.Args[1])
         {
             case "#":

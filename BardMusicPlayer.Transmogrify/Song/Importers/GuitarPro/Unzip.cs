@@ -15,7 +15,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 /// <summary>
 ///     Unzip helper class.
 /// </summary>
-internal class Unzip : IDisposable
+internal sealed class Unzip : IDisposable
 {
     private const int EntrySignature = 0x02014B50;
     private const int FileSignature = 0x04034b50;
@@ -229,7 +229,7 @@ internal class Unzip : IDisposable
         return DateTime.Now;
     }
 
-    protected virtual void OnExtractProgress(FileProgressEventArgs e)
+    private void OnExtractProgress(FileProgressEventArgs e)
     {
         ExtractProgress?.Invoke(this, e);
     }

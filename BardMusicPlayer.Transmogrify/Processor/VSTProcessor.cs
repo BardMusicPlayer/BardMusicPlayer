@@ -10,22 +10,21 @@ using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Melanchall.DryWetMidi.Core;
 
-namespace BardMusicPlayer.Transmogrify.Processor
+namespace BardMusicPlayer.Transmogrify.Processor;
+
+internal class VSTProcessor : BaseProcessor
 {
-    internal class VSTProcessor : BaseProcessor
+    public VSTProcessorConfig ProcessorConfig { get; set; }
+
+    internal VSTProcessor(VSTProcessorConfig processorConfig, BmpSong song) : base(song)
     {
-        public VSTProcessorConfig ProcessorConfig { get; set; }
+        ProcessorConfig = processorConfig;
+    }
 
-        internal VSTProcessor(VSTProcessorConfig processorConfig, BmpSong song) : base(song)
-        {
-            ProcessorConfig = processorConfig;
-        }
+    public override Task<List<TrackChunk>> Process()
+    {
+        var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
 
-        public override Task<List<TrackChunk>> Process()
-        {
-            var trackChunks = new List<TrackChunk> { Song.TrackContainers[ProcessorConfig.Track].SourceTrackChunk }.Concat(ProcessorConfig.IncludedTracks.Select(track => Song.TrackContainers[track].SourceTrackChunk)).ToList();
-
-            return Task.FromResult(new List<TrackChunk>());
-        }
+        return Task.FromResult(new List<TrackChunk>());
     }
 }

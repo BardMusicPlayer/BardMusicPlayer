@@ -6,17 +6,16 @@
 using System.Collections.Generic;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
 
-namespace BardMusicPlayer.Transmogrify.Song.Config
+namespace BardMusicPlayer.Transmogrify.Song.Config;
+
+public class LyricProcessorConfig : IProcessorConfig
 {
-    public class LyricProcessorConfig : IProcessorConfig
-    {
-        ///<inheritdoc/>
-        public int Track { get; set; } = 0;
+    ///<inheritdoc/>
+    public int Track { get; set; }
 
-        ///<inheritdoc/>
-        public List<long> IncludedTracks { get; set; } = new();
+    ///<inheritdoc/>
+    public List<long> IncludedTracks { get; set; } = new();
 
-        ///<inheritdoc/>
-        public int PlayerCount { get; set; } = 1;
-    }
+    ///<inheritdoc/>
+    public int PlayerCount { get; set; } = 1;
 }
