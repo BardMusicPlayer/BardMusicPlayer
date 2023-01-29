@@ -4,97 +4,86 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BardMusicPlayer.Jamboree
+namespace BardMusicPlayer.Jamboree;
+
+public partial class BmpJamboree
 {
-    public partial class BmpJamboree
+    public EventHandler<PartyCreatedEvent> OnPartyCreated;
+    public EventHandler<PartyLogEvent> OnPartyLog;
+    public EventHandler<PartyDebugLogEvent> OnPartyDebugLog;
+    public EventHandler<PartyConnectionChangedEvent> OnPartyConnectionChanged;
+    public EventHandler<PartyChangedEvent> OnPartyChanged;
+    public EventHandler<PerformanceStartEvent> OnPerformanceStart;
+
+    private ConcurrentQueue<JamboreeEvent> _eventQueue;
+    private bool _eventQueueOpen;
+
+    private async Task RunEventsHandler(CancellationToken token)
     {
-        public EventHandler<PartyCreatedEvent> OnPartyCreated;
-        public EventHandler<PartyLogEvent> OnPartyLog;
-        public EventHandler<PartyDebugLogEvent> OnPartyDebugLog;
-        public EventHandler<PartyConnectionChangedEvent> OnPartyConnectionChanged;
-        public EventHandler<PartyChangedEvent> OnPartyChanged;
-        public EventHandler<PerformanceStartEvent> OnPerformanceStart;
-
-        private ConcurrentQueue<JamboreeEvent> _eventQueue;
-        private bool _eventQueueOpen;
-
-        private async Task RunEventsHandler(CancellationToken token)
+        while (!token.IsCancellationRequested)
         {
-            while (!token.IsCancellationRequested)
+            while (_eventQueue.TryDequeue(out var meastroEvent))
             {
-                while (_eventQueue.TryDequeue(out var meastroEvent))
+                if (token.IsCancellationRequested)
+                    break;
+
+                try
                 {
-                    if (token.IsCancellationRequested)
-                        break;
-
-                    try
+                    switch (meastroEvent)
                     {
-                        switch (meastroEvent)
-                        {
-                            case PartyCreatedEvent partyCreated:
-                                if (OnPartyCreated == null)
-                                    break;
-                                OnPartyCreated(this, partyCreated);
-                                break;
-                            case PartyLogEvent partyLog:
-                                if (OnPartyLog == null)
-                                    break;
-                                OnPartyLog(this, partyLog);
-                                break;
-                            case PartyDebugLogEvent partyDebugLog:
-                                if (OnPartyDebugLog == null)
-                                    break;
-                                OnPartyDebugLog(this, partyDebugLog);
-                                break;
-                            case PartyConnectionChangedEvent connectionChanged:
-                                if (OnPartyConnectionChanged == null)
-                                    break;
-                                OnPartyConnectionChanged(this, connectionChanged);
-                                break;
-                            case PartyChangedEvent partyChanged:
-                                if (OnPartyChanged == null)
-                                    break;
-                                OnPartyChanged(this, partyChanged);
-                                break;
-                            case PerformanceStartEvent performanceStart:
-                                if (OnPerformanceStart == null)
-                                    break;
-                                OnPerformanceStart(this, performanceStart);
-                                break;
-                        };
+                        case PartyCreatedEvent partyCreated:
+                            OnPartyCreated?.Invoke(this, partyCreated);
+                            break;
+                        case PartyLogEvent partyLog:
+                            OnPartyLog?.Invoke(this, partyLog);
+                            break;
+                        case PartyDebugLogEvent partyDebugLog:
+                            OnPartyDebugLog?.Invoke(this, partyDebugLog);
+                            break;
+                        case PartyConnectionChangedEvent connectionChanged:
+                            OnPartyConnectionChanged?.Invoke(this, connectionChanged);
+                            break;
+                        case PartyChangedEvent partyChanged:
+                            OnPartyChanged?.Invoke(this, partyChanged);
+                            break;
+                        case PerformanceStartEvent performanceStart:
+                            OnPerformanceStart?.Invoke(this, performanceStart);
+                            break;
                     }
-                    catch
-                    { }
                 }
-                await Task.Delay(25, token).ContinueWith(tsk => { });
+                catch
+                {
+                    // ignored
+                }
             }
+            await Task.Delay(25, token).ContinueWith(tsk => { }, token);
         }
+    }
 
-        private CancellationTokenSource _eventsTokenSource;
+    private CancellationTokenSource _eventsTokenSource;
 
-        private void StartEventsHandler()
+    private void StartEventsHandler()
+    {
+        _eventQueue        = new ConcurrentQueue<JamboreeEvent>();
+        _eventsTokenSource = new CancellationTokenSource();
+        Task.Factory.StartNew(() => RunEventsHandler(_eventsTokenSource.Token), TaskCreationOptions.LongRunning);
+        _eventQueueOpen = true;
+    }
+
+    private void StopEventsHandler()
+    {
+        _eventQueueOpen = false;
+        _eventsTokenSource.Cancel();
+        while (_eventQueue.TryDequeue(out _))
         {
-            _eventQueue = new ConcurrentQueue<JamboreeEvent>();
-            _eventsTokenSource = new CancellationTokenSource();
-            Task.Factory.StartNew(() => RunEventsHandler(_eventsTokenSource.Token), TaskCreationOptions.LongRunning);
-            _eventQueueOpen = true;
         }
+    }
 
-        private void StopEventsHandler()
-        {
-            _eventQueueOpen = false;
-            _eventsTokenSource.Cancel();
-            while (_eventQueue.TryDequeue(out _))
-            {
-            }
-        }
+    internal void PublishEvent(JamboreeEvent maestroEvent)
+    {
+        if (!_eventQueueOpen)
+            return;
 
-        internal void PublishEvent(JamboreeEvent meastroEvent)
-        {
-            if (!_eventQueueOpen)
-                return;
-
-            _eventQueue.Enqueue(meastroEvent);
-        }
+        _eventQueue.Enqueue(maestroEvent);
     }
 }

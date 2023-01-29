@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace BardMusicPlayer.Jamboree.Events;
 
-namespace BardMusicPlayer.Jamboree.Events
+/// <summary>
+/// Called only on host side
+/// </summary>
+public sealed class PartyCreatedEvent : JamboreeEvent
 {
     /// <summary>
-    /// Called only on host side
+    /// on host, when a party and token was created
     /// </summary>
-    public sealed class PartyCreatedEvent : JamboreeEvent
+    /// <param name="token"></param>
+    internal PartyCreatedEvent(string token)
     {
-        /// <summary>
-        /// on host, when a party and token was created
-        /// </summary>
-        /// <param name="token"></param>
-        internal PartyCreatedEvent(string token) : base(0, false)
-        {
-            EventType = GetType();
-            Token = token;
-        }
-
-        /// <summary>
-        /// the base64 token for the clients to join
-        /// </summary>
-        public string Token { get; }
-
-        public override bool IsValid() => true;
+        EventType = GetType();
+        Token     = token;
     }
 
+    /// <summary>
+    /// the base64 token for the clients to join
+    /// </summary>
+    public string Token { get; }
+
+    public override bool IsValid() => true;
 }

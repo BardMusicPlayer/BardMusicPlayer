@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace BardMusicPlayer.Jamboree.Events;
 
-namespace BardMusicPlayer.Jamboree.Events
+/// <summary>
+/// if the connection 
+/// </summary>
+public sealed class PartyChangedEvent : JamboreeEvent
 {
-    /// <summary>
-    /// if the connection 
-    /// </summary>
-    public sealed class PartyChangedEvent : JamboreeEvent
+    internal PartyChangedEvent()
     {
-        internal PartyChangedEvent() : base(0, false)
-        {
-            EventType = GetType();
-        }
-
-        public override bool IsValid() => true;
+        EventType = GetType();
     }
+
+    public override bool IsValid() => true;
 }
