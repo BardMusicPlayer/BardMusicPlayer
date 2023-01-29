@@ -3,67 +3,66 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Siren.AlphaTab.Model
+namespace BardMusicPlayer.Siren.AlphaTab.Model;
+
+/// <summary>
+/// This public enum lists all different types of finger slide-ins on a string.
+/// </summary>
+internal enum SlideInType
 {
     /// <summary>
-    /// This public enum lists all different types of finger slide-ins on a string.
+    /// No slide.
     /// </summary>
-    internal enum SlideInType
-    {
-        /// <summary>
-        /// No slide.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// Slide into the note from below on the same string.
-        /// </summary>
-        IntoFromBelow,
-
-        /// <summary>
-        /// Slide into the note from above on the same string.
-        /// </summary>
-        IntoFromAbove
-    }
+    None,
 
     /// <summary>
-    /// This public enum lists all different types of finger slide-outs on a string.
+    /// Slide into the note from below on the same string.
     /// </summary>
-    internal enum SlideOutType
-    {
-        /// <summary>
-        /// No slide.
-        /// </summary>
-        None,
+    IntoFromBelow,
 
-        /// <summary>
-        /// Shift slide to next note on same string
-        /// </summary>
-        Shift,
+    /// <summary>
+    /// Slide into the note from above on the same string.
+    /// </summary>
+    IntoFromAbove
+}
 
-        /// <summary>
-        /// Legato slide to next note on same string.
-        /// </summary>
-        Legato,
+/// <summary>
+/// This public enum lists all different types of finger slide-outs on a string.
+/// </summary>
+internal enum SlideOutType
+{
+    /// <summary>
+    /// No slide.
+    /// </summary>
+    None,
 
-        /// <summary>
-        /// Slide out from the note from upwards on the same string.
-        /// </summary>
-        OutUp,
+    /// <summary>
+    /// Shift slide to next note on same string
+    /// </summary>
+    Shift,
 
-        /// <summary>
-        /// Slide out from the note from downwards on the same string.
-        /// </summary>
-        OutDown,
+    /// <summary>
+    /// Legato slide to next note on same string.
+    /// </summary>
+    Legato,
 
-        /// <summary>
-        /// Pickslide down on this note
-        /// </summary>
-        PickSlideDown,
+    /// <summary>
+    /// Slide out from the note from upwards on the same string.
+    /// </summary>
+    OutUp,
 
-        /// <summary>
-        /// Pickslide up on this note
-        /// </summary>
-        PickSlideUp
-    }
+    /// <summary>
+    /// Slide out from the note from downwards on the same string.
+    /// </summary>
+    OutDown,
+
+    /// <summary>
+    /// Pickslide down on this note
+    /// </summary>
+    PickSlideDown,
+
+    /// <summary>
+    /// Pickslide up on this note
+    /// </summary>
+    PickSlideUp
 }

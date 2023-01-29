@@ -34,23 +34,22 @@
 
 using BardMusicPlayer.Siren.AlphaTab.IO;
 
-namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
+namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont;
+
+internal class HydraIbag
 {
-    internal class HydraIbag
+    public const int SizeInFile = 4;
+
+    public ushort InstGenNdx { get; set; }
+    public ushort InstModNdx { get; set; }
+
+    public static HydraIbag Load(IReadable reader)
     {
-        public const int SizeInFile = 4;
-
-        public ushort InstGenNdx { get; set; }
-        public ushort InstModNdx { get; set; }
-
-        public static HydraIbag Load(IReadable reader)
+        var ibag = new HydraIbag
         {
-            var ibag = new HydraIbag
-            {
-                InstGenNdx = reader.ReadUInt16LE(),
-                InstModNdx = reader.ReadUInt16LE()
-            };
-            return ibag;
-        }
+            InstGenNdx = reader.ReadUInt16LE(),
+            InstModNdx = reader.ReadUInt16LE()
+        };
+        return ibag;
     }
 }

@@ -5,36 +5,35 @@
 
 // ReSharper disable InconsistentNaming
 
-namespace BardMusicPlayer.Siren.AlphaTab.Model
+namespace BardMusicPlayer.Siren.AlphaTab.Model;
+
+/// <summary>
+/// Lists all ottavia.  
+/// </summary>
+internal enum Ottavia
 {
     /// <summary>
-    /// Lists all ottavia.  
+    /// 2 octaves higher 
     /// </summary>
-    internal enum Ottavia
-    {
-        /// <summary>
-        /// 2 octaves higher 
-        /// </summary>
-        _15ma,
+    _15ma,
 
-        /// <summary>
-        /// 1 octave higher
-        /// </summary>
-        _8va,
+    /// <summary>
+    /// 1 octave higher
+    /// </summary>
+    _8va,
 
-        /// <summary>
-        /// Normal
-        /// </summary>
-        Regular,
+    /// <summary>
+    /// Normal
+    /// </summary>
+    Regular,
 
-        /// <summary>
-        /// 1 octave lower
-        /// </summary>
-        _8vb,
+    /// <summary>
+    /// 1 octave lower
+    /// </summary>
+    _8vb,
 
-        /// <summary>
-        /// 2 octaves lower. 
-        /// </summary>
-        _15mb
-    }
+    /// <summary>
+    /// 2 octaves lower. 
+    /// </summary>
+    _15mb
 }

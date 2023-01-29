@@ -31,15 +31,14 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
-{
-    internal class Preset
-    {
+namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis;
 
-        public string Name { get; set; }
-        public ushort PresetNumber { get; set; }
-        public ushort Bank { get; set; }
-        public Region[] Regions { get; set; }
-        public float[] FontSamples { get; set; }
-    }
+internal class Preset
+{
+
+    public string Name { get; set; }
+    public ushort PresetNumber { get; set; }
+    public ushort Bank { get; set; }
+    public Region[] Regions { get; set; }
+    public float[] FontSamples { get; set; }
 }

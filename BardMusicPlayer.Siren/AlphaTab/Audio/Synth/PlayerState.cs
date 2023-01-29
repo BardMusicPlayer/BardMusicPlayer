@@ -3,21 +3,20 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
+namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
+
+/// <summary>
+/// Lists the different states of the player
+/// </summary>
+internal enum PlayerState
 {
     /// <summary>
-    /// Lists the different states of the player
+    /// Player is paused
     /// </summary>
-    internal enum PlayerState
-    {
-        /// <summary>
-        /// Player is paused
-        /// </summary>
-        Paused,
+    Paused,
 
-        /// <summary>
-        /// Player is playing
-        /// </summary>
-        Playing
-    }
+    /// <summary>
+    /// Player is playing
+    /// </summary>
+    Playing
 }

@@ -5,75 +5,74 @@
 
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 
-namespace BardMusicPlayer.Siren.AlphaTab.Model
+namespace BardMusicPlayer.Siren.AlphaTab.Model;
+
+/// <summary>
+/// This public class can store the information about a group of measures which are repeated
+/// </summary>
+internal class RepeatGroup
 {
     /// <summary>
-    /// This public class can store the information about a group of measures which are repeated
+    /// All masterbars repeated within this group
     /// </summary>
-    internal class RepeatGroup
+    public FastList<MasterBar> MasterBars { get; set; }
+
+    /// <summary>
+    /// a list of masterbars which open the group. 
+    /// </summary>
+    public FastList<MasterBar> Openings { get; set; }
+
+    /// <summary>
+    /// a list of masterbars which close the group. 
+    /// </summary>
+    public FastList<MasterBar> Closings { get; set; }
+
+    /// <summary>
+    ///  true if the repeat group was opened well
+    /// </summary>
+    public bool IsOpened { get; set; }
+
+    /// <summary>
+    ///  true if the repeat group was closed well
+    /// </summary>
+    public bool IsClosed { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepeatGroup"/> class.
+    /// </summary>
+    public RepeatGroup()
     {
-        /// <summary>
-        /// All masterbars repeated within this group
-        /// </summary>
-        public FastList<MasterBar> MasterBars { get; set; }
+        MasterBars = new FastList<MasterBar>();
+        Openings   = new FastList<MasterBar>();
+        Closings   = new FastList<MasterBar>();
+        IsClosed   = false;
+    }
 
-        /// <summary>
-        /// a list of masterbars which open the group. 
-        /// </summary>
-        public FastList<MasterBar> Openings { get; set; }
-
-        /// <summary>
-        /// a list of masterbars which close the group. 
-        /// </summary>
-        public FastList<MasterBar> Closings { get; set; }
-
-        /// <summary>
-        ///  true if the repeat group was opened well
-        /// </summary>
-        public bool IsOpened { get; set; }
-
-        /// <summary>
-        ///  true if the repeat group was closed well
-        /// </summary>
-        public bool IsClosed { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepeatGroup"/> class.
-        /// </summary>
-        public RepeatGroup()
+    internal void AddMasterBar(MasterBar masterBar)
+    {
+        if (Openings.Count == 0)
         {
-            MasterBars = new FastList<MasterBar>();
-            Openings = new FastList<MasterBar>();
-            Closings = new FastList<MasterBar>();
-            IsClosed = false;
+            Openings.Add(masterBar);
         }
 
-        internal void AddMasterBar(MasterBar masterBar)
+        MasterBars.Add(masterBar);
+        masterBar.RepeatGroup = this;
+
+        if (masterBar.IsRepeatEnd)
         {
-            if (Openings.Count == 0)
+            Closings.Add(masterBar);
+            IsClosed = true;
+            if (!IsOpened)
             {
-                Openings.Add(masterBar);
+                MasterBars[0].IsRepeatStart = true;
+                IsOpened                    = true;
             }
-
-            MasterBars.Add(masterBar);
-            masterBar.RepeatGroup = this;
-
-            if (masterBar.IsRepeatEnd)
-            {
-                Closings.Add(masterBar);
-                IsClosed = true;
-                if (!IsOpened)
-                {
-                    MasterBars[0].IsRepeatStart = true;
-                    IsOpened = true;
-                }
-            }
-            // a new item after the header was closed? -> repeat alternative reopens the group
-            else if (IsClosed)
-            {
-                IsClosed = false;
-                Openings.Add(masterBar);
-            }
+        }
+        // a new item after the header was closed? -> repeat alternative reopens the group
+        else if (IsClosed)
+        {
+            IsClosed = false;
+            Openings.Add(masterBar);
         }
     }
 }
