@@ -5,22 +5,20 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Events
+namespace BardMusicPlayer.Maestro.Events;
+
+public sealed class MaxPlayTimeEvent : MaestroEvent
 {
-    public sealed class MaxPlayTimeEvent : MaestroEvent
+    internal MaxPlayTimeEvent(TimeSpan inTimeSpan, int inTick)
     {
-        internal MaxPlayTimeEvent(TimeSpan inTimeSpan, int inTick)
-        {
-            EventType = GetType();
-            timeSpan = inTimeSpan;
-            tick = inTick;
-        }
-
-        public TimeSpan timeSpan { get; }
-
-        public int tick { get; }
-
-        public override bool IsValid() => true;
+        EventType = GetType();
+        timeSpan  = inTimeSpan;
+        tick      = inTick;
     }
 
+    public TimeSpan timeSpan { get; }
+
+    public int tick { get; }
+
+    public override bool IsValid() => true;
 }
