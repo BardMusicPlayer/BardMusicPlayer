@@ -33,7 +33,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="50"/>
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="1" Grid.Column="1" Content="Partytoken"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="Party Token"/>
                             <TextBox Grid.Row="1" Grid.Column="2" x:Name="PartyToken_Text"/>
                             <Button Grid.Row="2" Grid.Column="1" Content="Join" Click="Join_Click" />
                             <Button Grid.Row="2" Grid.Column="2" Content="Leave" Click="Leave_Click" Width="60" HorizontalAlignment="Left" FontSize="12"/>

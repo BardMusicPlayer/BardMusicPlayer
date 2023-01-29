@@ -1,23 +1,22 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace BardMusicPlayer.UI_Classic
+namespace BardMusicPlayer.UI_Classic;
+
+/// <summary>
+/// Interaction logic for NetworkPlayWindow.xaml
+/// </summary>
+public partial class NetworkPlayWindow
 {
-    /// <summary>
-    /// Interaktionslogik für NetworkPlayWindow.xaml
-    /// </summary>
-    public partial class NetworkPlayWindow : Window
+    public NetworkPlayWindow()
     {
-        public NetworkPlayWindow()
-        {
-            InitializeComponent();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            this.Visibility = Visibility.Hidden;
-        }
-
+        InitializeComponent();
     }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        e.Cancel   = true;
+        Visibility = Visibility.Hidden;
+    }
+
 }

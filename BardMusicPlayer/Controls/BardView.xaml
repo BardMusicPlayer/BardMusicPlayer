@@ -40,8 +40,8 @@
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <CheckBox Content="Autoequip" x:Name="Autoequip_CheckBox"
-                                  Unchecked="Autoequip_CheckBox_Checked" Checked="Autoequip_CheckBox_Checked" />
+                        <CheckBox Content="Auto-Equip Performer(s)" x:Name="Autoequip_CheckBox"
+                                  Unchecked="AutoEquip_CheckBox_Checked" Checked="AutoEquip_CheckBox_Checked" />
                         <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
                         <MenuItem Header="" />
@@ -126,8 +126,8 @@
 
                         <TextBlock Grid.Column="10" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
-                        <CheckBox Grid.Column="10" Grid.Row="1" x:Name="PerfomerEnabled" HorizontalAlignment="Center"
-                                  Checked="PerfomerEnabledChecker_Checked"
+                        <CheckBox Grid.Column="10" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
+                                  Checked="PerformerEnabledChecker_Checked"
                                   IsChecked="{Binding PerformerEnabled, Mode=TwoWay}" />
                     </Grid>
                 </DataTemplate>

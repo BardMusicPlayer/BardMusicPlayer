@@ -32,7 +32,7 @@
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Songtitle grid -->
+                    <!-- Song title grid -->
                     <Grid Grid.Row="1" Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -56,7 +56,7 @@
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post song title:" />
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="Songtitle_Chat_Type" HorizontalAlignment="Left"
                                   VerticalAlignment="Stretch" Width="50"
-                                  SelectionChanged="Songtitle_Post_Type_SelectionChanged">
+                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>say</ComboBoxItem>
                             <ComboBoxItem>yell</ComboBoxItem>
                             <ComboBoxItem>shout</ComboBoxItem>
@@ -68,7 +68,7 @@
                                VerticalAlignment="Top" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="AutoPost via"
                                   HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="90"
-                                  SelectionChanged="Songtitle_Post_Type_SelectionChanged">
+                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>off</ComboBoxItem>
                             <ComboBoxItem>on</ComboBoxItem>
                         </ComboBox>

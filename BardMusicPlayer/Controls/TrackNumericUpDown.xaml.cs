@@ -4,106 +4,102 @@ using System.Windows;
 using System.Windows.Controls;
 using BardMusicPlayer.Functions;
 
-namespace BardMusicPlayer.Controls
+namespace BardMusicPlayer.Controls;
+
+/// <summary>
+/// Interaction logic for TrackNumericUpDown.xaml
+/// </summary>
+public sealed partial class TrackNumericUpDown
 {
-    /// <summary>
-    /// Interaktionslogik für TrackNumericUpDown.xaml
-    /// </summary>
-    public partial class TrackNumericUpDown : UserControl
+    public EventHandler<int> OnValueChanged;
+    public TrackNumericUpDown()
     {
-        public EventHandler<int> OnValueChanged;
-        public TrackNumericUpDown()
+        InitializeComponent();
+    }
+
+    public static readonly DependencyProperty ValueProperty =
+        DependencyProperty.Register(nameof(Value), typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+
+    public string Value
+    {
+        get => (string)GetValue(ValueProperty);
+        set => SetValue(ValueProperty, value);
+    }
+
+    private static void OnValueChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is TrackNumericUpDown c)
         {
-            InitializeComponent();
+            c.OnValueChangedC(c.Value);
         }
+    }
 
-        public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+    private void OnValueChangedC(string c)
+    {
+        NumValue = Convert.ToInt32(c);
+    }
 
-        public string Value
+
+    /* Track UP/Down */
+    private int _numValue = 1;
+    public int NumValue
+    {
+        get => _numValue;
+        set
         {
-            get { return (string)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            _numValue = value;
+            Text.Text = "T" + NumValue;
+            OnValueChanged?.Invoke(this, _numValue);
         }
+    }
 
-        private static void OnValueChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    private void NumUp_Click(object sender, RoutedEventArgs e)
+    {
+        if (PlaybackFunctions.CurrentSong == null)
+            return;
+        if (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
+            return;
+        NumValue++;
+    }
+
+    private void NumDown_Click(object sender, RoutedEventArgs e)
+    {
+        if (NumValue - 1 < 0)
+            return;
+        NumValue--;
+    }
+
+    private void TrackNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        switch (e.Key)
         {
-            TrackNumericUpDown c = sender as TrackNumericUpDown;
-            if (c != null)
-            {
-                c.OnValueChangedC(c.Value);
-            }
+            case System.Windows.Input.Key.Up:
+                NumUp_Click(sender, e);
+                break;
+            case System.Windows.Input.Key.Down:
+                NumDown_Click(sender, e);
+                break;
         }
+    }
+        
+    private void TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (Text == null)
+            return;
 
-        protected virtual void OnValueChangedC(string c)
-        {
-            NumValue = Convert.ToInt32(c);
-        }
-
-
-        /* Track UP/Down */
-        private int _numValue = 1;
-        public int NumValue
-        {
-            get { return _numValue; }
-            set
-            {
-                _numValue = value;
-                this.Text.Text = "T" + NumValue.ToString();
-                OnValueChanged?.Invoke(this, _numValue);
-                return;
-            }
-        }
-
-        private void NumUp_Click(object sender, RoutedEventArgs e)
+        var str = Regex.Replace(Text.Text, "[^0-9]", "");
+        if (int.TryParse(str, out var val))
         {
             if (PlaybackFunctions.CurrentSong == null)
                 return;
-            if (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
-                return;
-            NumValue++;
-        }
 
-        private void NumDown_Click(object sender, RoutedEventArgs e)
-        {
-            if (NumValue - 1 < 0)
-                return;
-            NumValue--;
-        }
-
-        private void TrackNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            switch (e.Key)
+            if (val < 0 || NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
             {
-                case System.Windows.Input.Key.Up:
-                    NumUp_Click(sender, e);
-                    break;
-                case System.Windows.Input.Key.Down:
-                    NumDown_Click(sender, e);
-                    break;
-            }
-        }
-        
-        private void TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (Text == null)
+                NumValue = NumValue;
                 return;
-
-            int val = 0;
-            string str = Regex.Replace(Text.Text, "[^0-9]", "");
-            if (int.TryParse(str, out val))
-            {
-                if (PlaybackFunctions.CurrentSong == null)
-                    return;
-
-                if ((val < 0) || (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count))
-                {
-                    NumValue = NumValue;
-                    return;
-                }
-                NumValue = val;
             }
+            NumValue = val;
         }
-
     }
+
 }

@@ -1,67 +1,65 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using BardMusicPlayer.Functions;
-using BardMusicPlayer.Transmogrify.Song;
 using Microsoft.Win32;
 
-namespace BardMusicPlayer.UI_Classic
+namespace BardMusicPlayer.UI_Classic;
+
+/// <summary>
+/// only here cuz someone would like to have it back
+/// </summary>
+public partial class Classic_MainView
 {
-    /// <summary>
-    /// only here cuz someone would like to have it back
-    /// </summary>
-    public partial class Classic_MainView : UserControl
+    private List<int> _notesCountForTracks = new();
+    private void UpdateStats(Maestro.Events.SongLoadedEvent e)
     {
-        private List<int> _notesCountForTracks = new List<int>();
-        private void UpdateStats(Maestro.Events.SongLoadedEvent e)
+        Statistics_Total_Tracks_Label.Content     = e.MaxTracks.ToString();
+        Statistics_Total_Note_Count_Label.Content = e.TotalNoteCount.ToString();
+
+        _notesCountForTracks.Clear();
+        _notesCountForTracks = e.CurrentNoteCountForTracks;
+
+        if (NumValue >= _notesCountForTracks.Count)
         {
-            this.Statistics_Total_Tracks_Label.Content = e.MaxTracks.ToString();
-            this.Statistics_Total_Note_Count_Label.Content = e.TotalNoteCount.ToString();
+            Statistics_Track_Note_Count_Label.Content = "Invalid track";
+            return;
+        }
+        Statistics_Track_Note_Count_Label.Content = _notesCountForTracks[NumValue];
+    }
 
-            this._notesCountForTracks.Clear();
-            this._notesCountForTracks = e.CurrentNoteCountForTracks;
+    private void UpdateNoteCountForTrack()
+    {
+        if (PlaybackFunctions.CurrentSong == null)
+            return;
 
-            if (NumValue >= _notesCountForTracks.Count)
-            {
-                this.Statistics_Track_Note_Count_Label.Content = "Invalid track";
-                return;
-            }
-            this.Statistics_Track_Note_Count_Label.Content = _notesCountForTracks[NumValue];
+        if (NumValue >= _notesCountForTracks.Count)
+        {
+            Statistics_Track_Note_Count_Label.Content = "Invalid track";
+            return;
         }
 
-        private void UpdateNoteCountForTrack()
+        Statistics_Track_Note_Count_Label.Content = _notesCountForTracks[NumValue];
+    }
+
+    private void ExportAsMidi(object sender, RoutedEventArgs routedEventArgs)
+    {
+        var song = PlaybackFunctions.CurrentSong;
+        var saveFileDialog = new SaveFileDialog
         {
-            if (PlaybackFunctions.CurrentSong == null)
-                return;
+            Filter           = "MIDI file (*.mid)|*.mid",
+            FilterIndex      = 2,
+            RestoreDirectory = true,
+            OverwritePrompt  = true
+        };
 
-            if (NumValue >= _notesCountForTracks.Count)
-            {
-                this.Statistics_Track_Note_Count_Label.Content = "Invalid track";
-                return;
-            }
-
-            this.Statistics_Track_Note_Count_Label.Content = _notesCountForTracks[NumValue];
-        }
-
-        private void ExportAsMidi(object sender, RoutedEventArgs routedEventArgs)
+        if (saveFileDialog.ShowDialog() == true)
         {
-            BmpSong song = PlaybackFunctions.CurrentSong;
             Stream myStream;
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = "MIDI file (*.mid)|*.mid";
-            saveFileDialog.FilterIndex = 2;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.OverwritePrompt = true;
-
-            if (saveFileDialog.ShowDialog() == true)
+            if ((myStream = saveFileDialog.OpenFile()) != null)
             {
-                if ((myStream = saveFileDialog.OpenFile()) != null)
-                {
-                    song.GetExportMidi().WriteTo(myStream);
-                    myStream.Close();
-                }
+                song.GetExportMidi().WriteTo(myStream);
+                myStream.Close();
             }
         }
     }
