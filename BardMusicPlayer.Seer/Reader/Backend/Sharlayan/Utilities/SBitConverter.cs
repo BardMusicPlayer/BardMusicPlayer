@@ -5,164 +5,163 @@
 
 using System;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
+
+internal static class SBitConverter
 {
-    internal static class SBitConverter
+    public static bool TryToBoolean(byte[] value, int index)
     {
-        public static bool TryToBoolean(byte[] value, int index)
+        try
         {
-            try
-            {
-                return BitConverter.ToBoolean(value, index);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return BitConverter.ToBoolean(value, index);
         }
-
-        public static char TryToChar(byte[] value, int index)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.ToChar(value, index);
-            }
-            catch (Exception)
-            {
-                return '\0';
-            }
+            return false;
         }
+    }
 
-        public static double TryToDouble(byte[] value, int index)
+    public static char TryToChar(byte[] value, int index)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToDouble(value, index);
-            }
-            catch (Exception)
-            {
-                return 0.0;
-            }
+            return BitConverter.ToChar(value, index);
         }
-
-        public static long TryToDoubleToInt64Bits(double value)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.DoubleToInt64Bits(value);
-            }
-            catch (Exception)
-            {
-                return 0L;
-            }
+            return '\0';
         }
+    }
 
-        public static short TryToInt16(byte[] value, int index)
+    public static double TryToDouble(byte[] value, int index)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToInt16(value, index);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
+            return BitConverter.ToDouble(value, index);
         }
-
-        public static int TryToInt32(byte[] value, int index)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.ToInt32(value, index);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
+            return 0.0;
         }
+    }
 
-        public static long TryToInt64(byte[] value, int index)
+    public static long TryToDoubleToInt64Bits(double value)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToInt64(value, index);
-            }
-            catch (Exception)
-            {
-                return 0L;
-            }
+            return BitConverter.DoubleToInt64Bits(value);
         }
-
-        public static double TryToInt64BitsToDouble(long value)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.Int64BitsToDouble(value);
-            }
-            catch (Exception)
-            {
-                return 0.0;
-            }
+            return 0L;
         }
+    }
 
-        public static float TryToSingle(byte[] value, int index)
+    public static short TryToInt16(byte[] value, int index)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToSingle(value, index);
-            }
-            catch (Exception)
-            {
-                return 0f;
-            }
+            return BitConverter.ToInt16(value, index);
         }
-
-        public static string TryToString(byte[] value, int index)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.ToString(value, index);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return 0;
         }
+    }
 
-        public static ushort TryToUInt16(byte[] value, int index)
+    public static int TryToInt32(byte[] value, int index)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToUInt16(value, index);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
+            return BitConverter.ToInt32(value, index);
         }
-
-        public static uint TryToUInt32(byte[] value, int index)
+        catch (Exception)
         {
-            try
-            {
-                return BitConverter.ToUInt32(value, index);
-            }
-            catch (Exception)
-            {
-                return 0u;
-            }
+            return 0;
         }
+    }
 
-        public static ulong TryToUInt64(byte[] value, int index)
+    public static long TryToInt64(byte[] value, int index)
+    {
+        try
         {
-            try
-            {
-                return BitConverter.ToUInt64(value, index);
-            }
-            catch (Exception)
-            {
-                return 0uL;
-            }
+            return BitConverter.ToInt64(value, index);
+        }
+        catch (Exception)
+        {
+            return 0L;
+        }
+    }
+
+    public static double TryToInt64BitsToDouble(long value)
+    {
+        try
+        {
+            return BitConverter.Int64BitsToDouble(value);
+        }
+        catch (Exception)
+        {
+            return 0.0;
+        }
+    }
+
+    public static float TryToSingle(byte[] value, int index)
+    {
+        try
+        {
+            return BitConverter.ToSingle(value, index);
+        }
+        catch (Exception)
+        {
+            return 0f;
+        }
+    }
+
+    public static string TryToString(byte[] value, int index)
+    {
+        try
+        {
+            return BitConverter.ToString(value, index);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public static ushort TryToUInt16(byte[] value, int index)
+    {
+        try
+        {
+            return BitConverter.ToUInt16(value, index);
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
+    }
+
+    public static uint TryToUInt32(byte[] value, int index)
+    {
+        try
+        {
+            return BitConverter.ToUInt32(value, index);
+        }
+        catch (Exception)
+        {
+            return 0u;
+        }
+    }
+
+    public static ulong TryToUInt64(byte[] value, int index)
+    {
+        try
+        {
+            return BitConverter.ToUInt64(value, index);
+        }
+        catch (Exception)
+        {
+            return 0uL;
         }
     }
 }

@@ -7,27 +7,26 @@ using System.Collections.Generic;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan;
+
+internal static class Signatures
 {
-    internal static class Signatures
-    {
-        public static string CharacterMapKey => "CHARMAP";
+    public static string CharacterMapKey => "CHARMAP";
 
-        public static string PartyCountKey => "PARTYCOUNT";
+    public static string PartyCountKey => "PARTYCOUNT";
 
-        public static string PartyMapKey => "PARTYMAP";
+    public static string PartyMapKey => "PARTYMAP";
 
-        public static string PlayerInformationKey => "PLAYERINFO";
+    public static string PlayerInformationKey => "PLAYERINFO";
 
-        public static string PerformanceStatusKey => "PERFSTATUS";
+    public static string PerformanceStatusKey => "PERFSTATUS";
 
-        public static string CharacterIdKey => "CHARID";
+    public static string CharacterIdKey => "CHARID";
 
-        public static string ChatInputKey => "CHATINPUT";
+    public static string ChatInputKey => "CHATINPUT";
 
-        public static string WorldKey => "WORLD";
+    public static string WorldKey => "WORLD";
 
-        public static IEnumerable<Signature> Resolve(MemoryHandler memoryHandler) =>
-            new APIHelper(memoryHandler).GetSignatures();
-    }
+    public static IEnumerable<Signature> Resolve(MemoryHandler memoryHandler) =>
+        new APIHelper(memoryHandler).GetSignatures();
 }

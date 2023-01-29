@@ -7,46 +7,45 @@ using System;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core.Enums;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+
+internal partial class Reader
 {
-    internal partial class Reader
+    public bool CanGetPerformance() => Scanner.Locations.ContainsKey(Signatures.PerformanceStatusKey);
+
+    public Instrument GetPerformance()
     {
-        public bool CanGetPerformance() => Scanner.Locations.ContainsKey(Signatures.PerformanceStatusKey);
+        var result = Instrument.None;
+        if (!CanGetPerformance() || !MemoryHandler.IsAttached) return result;
 
-        public Instrument GetPerformance()
+        try
         {
-            var result = Instrument.None;
-            if (!CanGetPerformance() || !MemoryHandler.IsAttached) return result;
+            var performanceData = MemoryHandler.GetByteArray(Scanner.Locations[Signatures.PerformanceStatusKey],
+                MemoryHandler.Structures.PerformanceInfo.SourceSize);
 
-            try
+            var status = (Performance.Status) performanceData[MemoryHandler.Structures.PerformanceInfo.Status];
+            var instrument = Instrument.Parse(performanceData[MemoryHandler.Structures.PerformanceInfo.Instrument]);
+
+            switch (status)
             {
-                var performanceData = MemoryHandler.GetByteArray(Scanner.Locations[Signatures.PerformanceStatusKey],
-                    MemoryHandler.Structures.PerformanceInfo.SourceSize);
+                case Performance.Status.Closed:
+                case Performance.Status.Loading:
+                    return Instrument.None;
 
-                var status = (Performance.Status) performanceData[MemoryHandler.Structures.PerformanceInfo.Status];
-                var instrument = Instrument.Parse(performanceData[MemoryHandler.Structures.PerformanceInfo.Instrument]);
+                case Performance.Status.Opened:
+                case Performance.Status.SwitchingNote:
+                case Performance.Status.HoldingNote:
+                    return instrument > Instrument.None ? instrument : Instrument.None;
 
-                switch (status)
-                {
-                    case Performance.Status.Closed:
-                    case Performance.Status.Loading:
-                        return Instrument.None;
-
-                    case Performance.Status.Opened:
-                    case Performance.Status.SwitchingNote:
-                    case Performance.Status.HoldingNote:
-                        return instrument > Instrument.None ? instrument : Instrument.None;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            catch (Exception ex)
-            {
-                MemoryHandler?.RaiseException(ex);
-            }
-
-            return result;
         }
+        catch (Exception ex)
+        {
+            MemoryHandler?.RaiseException(ex);
+        }
+
+        return result;
     }
 }

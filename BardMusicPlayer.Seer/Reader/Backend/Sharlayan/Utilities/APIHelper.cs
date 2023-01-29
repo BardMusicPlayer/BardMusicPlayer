@@ -10,47 +10,46 @@ using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;
 using Newtonsoft.Json;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
+
+internal class APIHelper
 {
-    internal class APIHelper
+    private MemoryHandler memoryHandler;
+
+    public APIHelper(MemoryHandler memoryHandler) { this.memoryHandler = memoryHandler; }
+
+    public static readonly JsonSerializerSettings SerializerSettings = new()
     {
-        private MemoryHandler memoryHandler;
+        NullValueHandling    = NullValueHandling.Ignore,
+        DefaultValueHandling = DefaultValueHandling.Populate
+    };
 
-        public APIHelper(MemoryHandler memoryHandler) { this.memoryHandler = memoryHandler; }
-
-        public static readonly JsonSerializerSettings SerializerSettings = new()
+    public IEnumerable<Signature> GetSignatures()
+    {
+        var jsonStream =
+            new MemoryStream(
+                (byte[]) Files.Signatures.Signatures.ResourceManager.GetObject(memoryHandler.GameRegion
+                    .ToString()));
+        using var reader = new StreamReader(jsonStream);
+        var json = reader.ReadToEnd();
+        var signatures = JsonConvert.DeserializeObject<IEnumerable<Signature>>(json, SerializerSettings);
+        var enumerable = signatures as Signature[] ?? signatures.ToArray();
+        foreach (var signature in enumerable)
         {
-            NullValueHandling    = NullValueHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Populate
-        };
-
-        public IEnumerable<Signature> GetSignatures()
-        {
-            var jsonStream =
-                new MemoryStream(
-                    (byte[]) Files.Signatures.Signatures.ResourceManager.GetObject(memoryHandler.GameRegion
-                        .ToString()));
-            using var reader = new StreamReader(jsonStream);
-            var json = reader.ReadToEnd();
-            var signatures = JsonConvert.DeserializeObject<IEnumerable<Signature>>(json, SerializerSettings);
-            var enumerable = signatures as Signature[] ?? signatures.ToArray();
-            foreach (var signature in enumerable)
-            {
-                signature.MemoryHandler = memoryHandler;
-            }
-
-            return enumerable;
+            signature.MemoryHandler = memoryHandler;
         }
 
-        public StructuresContainer GetStructures()
-        {
-            var jsonStream =
-                new MemoryStream(
-                    (byte[]) Files.Structures.Structures.ResourceManager.GetObject(memoryHandler.GameRegion
-                        .ToString()));
-            using var reader = new StreamReader(jsonStream);
-            var json = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<StructuresContainer>(json, SerializerSettings);
-        }
+        return enumerable;
+    }
+
+    public StructuresContainer GetStructures()
+    {
+        var jsonStream =
+            new MemoryStream(
+                (byte[]) Files.Structures.Structures.ResourceManager.GetObject(memoryHandler.GameRegion
+                    .ToString()));
+        using var reader = new StreamReader(jsonStream);
+        var json = reader.ReadToEnd();
+        return JsonConvert.DeserializeObject<StructuresContainer>(json, SerializerSettings);
     }
 }
