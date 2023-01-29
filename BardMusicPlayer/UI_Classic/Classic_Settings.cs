@@ -6,39 +6,39 @@ using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic
 {
-    public partial class Classic_MainView : UserControl
+    public partial class Classic_MainView
     {
         /// <summary>
         /// load the settings
         /// </summary>
         private void LoadConfig(bool reload = false)
         {
-            this.AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
+            AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
 
-            this.AMPInFrontBox.IsChecked = BmpPigeonhole.Instance.BringBMPtoFront;
+            AMPInFrontBox.IsChecked = BmpPigeonhole.Instance.BringBMPtoFront;
 
             //Playback
-            this.HoldNotesBox.IsChecked = BmpPigeonhole.Instance.HoldNotes;
-            this.ForcePlaybackBox.IsChecked = BmpPigeonhole.Instance.ForcePlayback;
+            HoldNotesBox.IsChecked = BmpPigeonhole.Instance.HoldNotes;
+            ForcePlaybackBox.IsChecked = BmpPigeonhole.Instance.ForcePlayback;
 
             //Don't call this on reload
             if (!reload)
             {
                 MIDI_Input_DeviceBox.Items.Clear();
                 MIDI_Input_DeviceBox.ItemsSource = Maestro.Utils.MidiInput.ReloadMidiInputDevices();
-                this.MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
+                MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
             }
             LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
             //Misc
-            this.Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-            this.AutoequipDalamud.IsChecked     = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
+            Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
+            AutoequipDalamud.IsChecked     = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
             //Local orchestra
-            this.LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
-            this.AutoEquipBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
-            this.KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
-            this.IgnoreProgchangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
+            LocalOrchestraBox.IsChecked = BmpPigeonhole.Instance.LocalOrchestra;
+            AutoEquipBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
+            KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
+            IgnoreProgChangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
         }
 
         private void AMPInFrontBox_Checked(object sender, RoutedEventArgs e)
@@ -72,15 +72,15 @@ namespace BardMusicPlayer.UI_Classic
 
         private void LiveMidiDelay_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.LiveMidiPlayDelay = (LiveMidiDelay.IsChecked ?? false);
+            BmpPigeonhole.Instance.LiveMidiPlayDelay = LiveMidiDelay.IsChecked ?? false;
         }
         #endregion
 
         #region Misc
         private void Autostart_source_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int d = Autostart_source.SelectedIndex;
-            BmpPigeonhole.Instance.AutostartMethod = (int)d;
+            var d = Autostart_source.SelectedIndex;
+            BmpPigeonhole.Instance.AutostartMethod = d;
         }
 
         private void AutoequipDalamud_Checked(object sender, RoutedEventArgs e)
@@ -106,9 +106,9 @@ namespace BardMusicPlayer.UI_Classic
             BmpPigeonhole.Instance.EnsembleKeepTrackSetting = KeepTrackSettingsBox.IsChecked ?? false;
         }
 
-        private void IgnoreProgchangeBox_Checked(object sender, RoutedEventArgs e)
+        private void IgnoreProgChangeBox_Checked(object sender, RoutedEventArgs e)
         {
-            BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgchangeBox.IsChecked ?? false;
+            BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgChangeBox.IsChecked ?? false;
         }
         #endregion
     }

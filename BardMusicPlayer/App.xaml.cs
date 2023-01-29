@@ -11,9 +11,9 @@ using BardMusicPlayer.Siren;
 namespace BardMusicPlayer
 {
     /// <summary>
-    /// Interaktionslogik für "App.xaml"
+    /// Interaction logic for "App.xaml"
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
 
         protected override void OnStartup(StartupEventArgs e)
@@ -27,7 +27,7 @@ namespace BardMusicPlayer
             // LogManager.Initialize(new(view.Log));
 
             //Load the last used catalog
-            string CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
+            var CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
             if (System.IO.File.Exists(CatalogFile))
                 BmpCoffer.Initialize(CatalogFile);
             else
@@ -35,7 +35,7 @@ namespace BardMusicPlayer
 
             //Setup seer
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer");
-            //Start meastro before seer, else we'll not get all the players
+            //Start maestro before seer, else we'll not get all the players
             BmpMaestro.Instance.Start();
             //Start seer
             BmpSeer.Instance.Start();

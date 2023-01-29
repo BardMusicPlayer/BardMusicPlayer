@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -23,17 +22,17 @@ namespace BardMusicPlayer.Controls
         public string name;
         public bool black_key;
         public int frequency;
-    };
+    }
 
     /// <summary>
-    /// Interaktionslogik für KeyboardHeatMap.xaml
+    /// Interaction logic for KeyboardHeatMap.xaml
     /// </summary>
-    public partial class KeyboardHeatMap : UserControl
+    public partial class KeyboardHeatMap
     {
         //note frequencies
         private int mOctave = 4;    // default octave (octaves can be from 1 to 7)
 
-        Dictionary<int, NoteRectInfo> noteInfo = new Dictionary<int, NoteRectInfo>
+        Dictionary<int, NoteRectInfo> noteInfo = new()
         {
             {  0, new NoteRectInfo("C", false, 60) },
             {  1, new NoteRectInfo("CSharp", true, 61) },
@@ -102,10 +101,10 @@ namespace BardMusicPlayer.Controls
             var midiFile = song.GetProcessedMidiFile().Result;
             var trackChunks = midiFile.GetTrackChunks().ToList();
             var notedict = new Dictionary<int, int>();
-            int notecount = 0;
+            var notecount = 0;
 
             //If your host has an invalid track, set it to 0
-            if ((tracknumber - 1) <= trackChunks.Count)
+            if (tracknumber - 1 <= trackChunks.Count)
                 tracknumber = 0;
 
             if (tracknumber != 0)
@@ -113,8 +112,8 @@ namespace BardMusicPlayer.Controls
                 foreach (var note in trackChunks[tracknumber - 1].GetNotes())
                 {
                     int noteNum = note.NoteNumber;
-                    noteNum -= 48 - (12*octaveshift);
-                    int count = 1;
+                    noteNum -= 48 - 12*octaveshift;
+                    var count = 1;
                     if (notedict.ContainsKey(noteNum))
                     {
                         notedict.TryGetValue(noteNum, out count);
@@ -128,13 +127,13 @@ namespace BardMusicPlayer.Controls
             }
             else
             {
-                for (int iter = 0; iter != trackChunks.Count; iter++)
+                for (var iter = 0; iter != trackChunks.Count; iter++)
                 {
                     foreach (var note in trackChunks[iter].GetNotes())
                     {
                         int noteNum = note.NoteNumber;
-                        noteNum -= 48 - (12 * octaveshift); ;
-                        int count = 1;
+                        noteNum -= 48 - 12 * octaveshift;
+                        var count = 1;
                         if (notedict.ContainsKey(noteNum))
                         {
                             notedict.TryGetValue(noteNum, out count);
@@ -151,7 +150,7 @@ namespace BardMusicPlayer.Controls
             var result = new Dictionary<int, double>();
             foreach (var note in notedict)
             {
-                double f = ((double)note.Value / (double)notecount) * 100;
+                var f = note.Value / (double)notecount * 100;
                 result.Add(note.Key, (int)f);
             }
             return result;
@@ -164,22 +163,19 @@ namespace BardMusicPlayer.Controls
         {
             ResetFill();
 
-            Dictionary<int, double> noteCountDict = null;
             if (song != null)
             {
-                if ((tracknumber-1) >= song.TrackContainers.Count())
+                if (tracknumber-1 >= song.TrackContainers.Count)
                     return;
 
-                noteCountDict = getNoteCountForKey(song, tracknumber, octaveshift);
+                var noteCountDict = getNoteCountForKey(song, tracknumber, octaveshift);
 
                 foreach (var n in noteCountDict)
                 {
                     if (n.Key >= noteInfo.Count)
                         continue;
-                    object wantedNode = this.FindName(noteInfo[n.Key].name);
-                    Rectangle r = wantedNode as Rectangle;
-                    r.Fill = NoteFill(noteInfo[n.Key].black_key, n.Value);
-
+                    var wantedNode = FindName(noteInfo[n.Key].name);
+                    if (wantedNode is Rectangle r) r.Fill = NoteFill(noteInfo[n.Key].black_key, n.Value);
                 }
             }
         }
@@ -188,23 +184,21 @@ namespace BardMusicPlayer.Controls
         {
             foreach (var n in noteInfo)
             {
-                object wantedNode = this.FindName(n.Value.name);
-                Rectangle r = wantedNode as Rectangle;
-                if (n.Value.black_key)
-                    r.Fill = Brushes.Black;
-                else
-                    r.Fill = Brushes.White;
+                var wantedNode = FindName(n.Value.name);
+                if (wantedNode is Rectangle r) r.Fill = n.Value.black_key ? Brushes.Black : Brushes.White;
             }
         }
 
-        private LinearGradientBrush NoteFill(bool blk, double count)
+        private static LinearGradientBrush NoteFill(bool blk, double count)
         {
-            count = count / 50;
+            count /= 50;
             if (count < 0.02)
                 count = 0.02;
-            LinearGradientBrush brush = new LinearGradientBrush();
-            brush.StartPoint = blk ? new Point(1, 0) : new Point(1, 1);
-            brush.EndPoint =   blk ? new Point(1, 1) :new Point(1, 0);
+            var brush = new LinearGradientBrush
+            {
+                StartPoint = blk ? new Point(1, 0) : new Point(1, 1),
+                EndPoint   = blk ? new Point(1, 1) :new Point(1, 0)
+            };
 
             if (!blk)
             {
@@ -246,7 +240,7 @@ namespace BardMusicPlayer.Controls
         /// <param name="r"></param>
         private void evtLeftButtonDown(Rectangle r)
         {
-            Console.WriteLine("left button down");
+            Console.WriteLine(@"left button down");
         }
 
         /// <summary>
@@ -255,7 +249,7 @@ namespace BardMusicPlayer.Controls
         /// <param name="r"></param>
         private void evtLeftButtonUp(Rectangle r)
         {
-            Console.WriteLine("left button up");
+            Console.WriteLine(@"left button up");
         }
 
         /// <summary>
@@ -265,7 +259,7 @@ namespace BardMusicPlayer.Controls
         /// <param name="e"></param>
         private void evtMouseLeave(Rectangle r, MouseEventArgs e)
         {
-            Console.WriteLine("mouse leave");
+            Console.WriteLine(@"mouse leave");
         }
 
         /// <summary>
@@ -275,7 +269,7 @@ namespace BardMusicPlayer.Controls
         /// <param name="e"></param>
         private void evtMouseEnter(Rectangle r, MouseEventArgs e)
         {
-            Console.WriteLine("mouse enter");
+            Console.WriteLine(@"mouse enter");
         }
 
         #endregion ****************************************************************************************

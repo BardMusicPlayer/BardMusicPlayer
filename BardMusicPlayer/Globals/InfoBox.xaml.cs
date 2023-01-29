@@ -1,11 +1,9 @@
-﻿using System.Windows;
-
-namespace BardMusicPlayer.Globals
+﻿namespace BardMusicPlayer.Globals
 {
     /// <summary>
-    /// Interaktionslogik für InfoBox.xaml
+    /// Interaction logic for InfoBox.xaml
     /// </summary>
-    public partial class InfoBox : Window
+    public partial class InfoBox
     {
         public InfoBox()
         {

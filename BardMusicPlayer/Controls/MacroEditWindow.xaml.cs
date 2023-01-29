@@ -11,7 +11,7 @@ using Microsoft.Win32;
 namespace BardMusicPlayer.Controls;
 
 /// <summary>
-///     Interaktionslogik für MacroEditWindow.xaml
+/// Interaction logic for MacroEditWindow.xaml
 /// </summary>
 public sealed partial class MacroEditWindow
 {

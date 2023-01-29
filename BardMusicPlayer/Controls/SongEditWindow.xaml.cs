@@ -5,9 +5,9 @@ using BardMusicPlayer.Transmogrify.Song;
 namespace BardMusicPlayer.Controls
 {
     /// <summary>
-    /// Interaktionslogik für SongEditWindow.xaml
+    /// Interaction logic for SongEditWindow.xaml
     /// </summary>
-    public partial class SongEditWindow : Window
+    public partial class SongEditWindow
     {
         BmpSong _song;
         public SongEditWindow(BmpSong song)
@@ -15,10 +15,10 @@ namespace BardMusicPlayer.Controls
             InitializeComponent();
             if (song == null)
             {
-                this.Close();
+                Close();
                 return;
             }
-            this.Visibility = Visibility.Visible;
+            Visibility = Visibility.Visible;
 
             _song = song;
             Internal_TrackName.Text = _song.Title;
@@ -38,7 +38,7 @@ namespace BardMusicPlayer.Controls
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

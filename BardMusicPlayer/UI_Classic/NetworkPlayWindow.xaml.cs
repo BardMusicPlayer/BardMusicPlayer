@@ -4,9 +4,9 @@ using System.Windows;
 namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
-    /// Interaktionslogik für NetworkPlayWindow.xaml
+    /// Interaction logic for NetworkPlayWindow.xaml
     /// </summary>
-    public partial class NetworkPlayWindow : Window
+    public partial class NetworkPlayWindow
     {
         public NetworkPlayWindow()
         {
@@ -16,7 +16,7 @@ namespace BardMusicPlayer.UI_Classic
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
         }
 
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,12 +11,12 @@ using BardMusicPlayer.Quotidian.Structs;
 namespace BardMusicPlayer.Controls
 {
     /// <summary>
-    /// Interaktionslogik für BardExtSettingsWindow.xaml
+    /// Interaction logic for BardExtSettingsWindow.xaml
     /// </summary>
-    public sealed partial class BardExtSettingsWindow : Window
+    public sealed partial class BardExtSettingsWindow
     {
-        private Performer _performer = null;
-        private List<CheckBox> _cpuBoxes = new List<CheckBox>();
+        private Performer _performer;
+        private List<CheckBox> _cpuBoxes = new();
 
         public BardExtSettingsWindow(Performer performer)
         {
@@ -48,26 +47,20 @@ namespace BardMusicPlayer.Controls
                 }
             }
 
-            this.Lyrics_TrackNr.Value = performer.SingerTrackNr.ToString();
+            Lyrics_TrackNr.Value = performer.SingerTrackNr.ToString();
             GfxTest.IsChecked = _performer.game.GfxSettingsLow;
             PopulateCPUTab();
         }
 
-        private void Songtitle_Post_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SongTitle_Post_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ChatMessageChannelType chanType = ChatMessageChannelType.None;
-            switch (Songtitle_Chat_Type.SelectedIndex)
+            var chanType = Songtitle_Chat_Type.SelectedIndex switch
             {
-                case 0:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
-                case 1:
-                    chanType = ChatMessageChannelType.Yell;
-                    break;
-                case 2:
-                    chanType = ChatMessageChannelType.Shout;
-                    break;
-            }
+                0 => ChatMessageChannelType.Say,
+                1 => ChatMessageChannelType.Yell,
+                2 => ChatMessageChannelType.Shout,
+                _ => ChatMessageChannelType.None
+            };
 
             switch (Songtitle_Post_Type.SelectedIndex)
             {
@@ -85,79 +78,63 @@ namespace BardMusicPlayer.Controls
             if (_performer.SongName == "")
                 return;
 
-            ChatMessageChannelType chanType = ChatMessageChannelType.None;
-            switch (Songtitle_Chat_Type.SelectedIndex)
+            var chanType = Songtitle_Chat_Type.SelectedIndex switch
             {
-                case 0:
-                    chanType = ChatMessageChannelType.Say;
-                    break;
-                case 1:
-                    chanType = ChatMessageChannelType.Yell;
-                    break;
-            }
-            string songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
-            GameExtensions.SendText(_performer.game, chanType, songName);
+                0 => ChatMessageChannelType.Say,
+                1 => ChatMessageChannelType.Yell,
+                _ => ChatMessageChannelType.None
+            };
+            var songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
+            _performer.game.SendText(chanType, songName);
         }
 
         private void ChatInputText_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                ChatMessageChannelType chanType = ChatMessageChannelType.None;
-                switch (Chat_Type.SelectedIndex)
+                var chanType = Chat_Type.SelectedIndex switch
                 {
-                    case 0:
-                        chanType = ChatMessageChannelType.Say;
-                        break;
-                    case 1:
-                        chanType = ChatMessageChannelType.Yell;
-                        break;
-                    case 2:
-                        chanType = ChatMessageChannelType.Group;
-                        break;
-                    case 3:
-                        chanType = ChatMessageChannelType.FC;
-                        break;
-                    case 4:
-                        chanType = ChatMessageChannelType.None;
-                        break;
-                }
-                string text = new string(ChatInputText.Text.ToCharArray());
-                GameExtensions.SendText(_performer.game, chanType, text);
+                    0 => ChatMessageChannelType.Say,
+                    1 => ChatMessageChannelType.Yell,
+                    2 => ChatMessageChannelType.Group,
+                    3 => ChatMessageChannelType.FC,
+                    4 => ChatMessageChannelType.None,
+                    _ => ChatMessageChannelType.None
+                };
+                var text = new string(ChatInputText.Text.ToCharArray());
+                _performer.game.SendText(chanType, text);
                 ChatInputText.Text = "";
             }
         }
 
         private void Lyrics_TrackNr_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            NumericUpDown ctl = sender as NumericUpDown;
-            ctl.OnValueChanged += Lyrics_TrackNr_OnValueChanged;
+            if (sender is NumericUpDown ctl) ctl.OnValueChanged += Lyrics_TrackNr_OnValueChanged;
         }
 
         private void Lyrics_TrackNr_OnValueChanged(object sender, int s)
         {
             _performer.SingerTrackNr = s;
-            NumericUpDown ctl = sender as NumericUpDown;
-            ctl.OnValueChanged -= Lyrics_TrackNr_OnValueChanged;
+            if (sender is NumericUpDown ctl) ctl.OnValueChanged -= Lyrics_TrackNr_OnValueChanged;
         }
 
     #region CPU-Tab
         private void PopulateCPUTab()
         {
             //Get the our application's process.
-            Process process = _performer.game.Process;
+            var process = _performer.game.Process;
 
             //Get the processor count of our machine.
-            int cpuCount = Environment.ProcessorCount;
-            long AffinityMask = (long)_performer.game.GetAffinity();
+            var cpuCount = Environment.ProcessorCount;
+            var AffinityMask = (long)_performer.game.GetAffinity();
 
-            int res = (int)Math.Ceiling((double)cpuCount / (double)3);
-            int idx = 1;
-            for (int col = 0; col != 3; col++)
+            var res = (int)Math.Ceiling(cpuCount / (double)3);
+            var idx = 1;
+            for (var col = 0; col != 3; col++)
             {
                 CPUDisplay.ColumnDefinitions.Add(new ColumnDefinition());
                 
-                for (int i = 0; i != res + 1; i++)
+                for (var i = 0; i != res + 1; i++)
                 {
                     if (idx == cpuCount+1)
                         break;
@@ -182,10 +159,10 @@ namespace BardMusicPlayer.Controls
         private void Save_CPU_Click(object sender, RoutedEventArgs e)
         {
             long mask = 0;
-            int idx = 0;
-            foreach (CheckBox box in _cpuBoxes)
+            var idx = 0;
+            foreach (var box in _cpuBoxes)
             {
-                if ((bool)box.IsChecked)
+                if (box.IsChecked != null && (bool)box.IsChecked)
                     mask += 0b1 << idx;
                 else
                     mask += 0b0 << idx;
@@ -204,7 +181,7 @@ namespace BardMusicPlayer.Controls
 
         private void Clear_CPU_Click(object sender, RoutedEventArgs e)
         {
-            foreach (CheckBox box in _cpuBoxes)
+            foreach (var box in _cpuBoxes)
             {
                 box.IsChecked = false;
             }
@@ -212,7 +189,7 @@ namespace BardMusicPlayer.Controls
 
         private void Reset_CPU_Click(object sender, RoutedEventArgs e)
         {
-            foreach (CheckBox box in _cpuBoxes)
+            foreach (var box in _cpuBoxes)
             {
                 box.IsChecked = true;
             }
@@ -222,18 +199,18 @@ namespace BardMusicPlayer.Controls
 
         private void GfxTest_Checked(object sender, RoutedEventArgs e)
         {
-            if ((bool)GfxTest.IsChecked)
+            if (GfxTest.IsChecked != null && (bool)GfxTest.IsChecked)
             {
                 if (_performer.game.GfxSettingsLow)
                     return;
-                GameExtensions.GfxSetLow(_performer.game, true);
+                _performer.game.GfxSetLow(true);
                 _performer.game.GfxSettingsLow = true;
             }
             else
             {
                 if (!_performer.game.GfxSettingsLow)
                     return;
-                GameExtensions.GfxSetLow(_performer.game, false);
+                _performer.game.GfxSetLow(false);
                 _performer.game.GfxSettingsLow = false;
             }
         }

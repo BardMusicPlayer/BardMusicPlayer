@@ -20,18 +20,18 @@ using Newtonsoft.Json;
 namespace BardMusicPlayer.Controls
 {
     /// <summary>
-    /// Interaktionslogik für BardView.xaml
+    /// Interaction logic for BardView.xaml
     /// </summary>
-    public partial class BardView : UserControl
+    public partial class BardView
     {
         public BardView()
         {
             InitializeComponent();
 
-            this.DataContext = this;
+            DataContext = this;
             Bards = new ObservableCollection<Performer>();
 
-            BmpMaestro.Instance.OnPerformerChanged      += OnPerfomerChanged;
+            BmpMaestro.Instance.OnPerformerChanged      += OnPerformerChanged;
             BmpMaestro.Instance.OnTrackNumberChanged    += OnTrackNumberChanged;
             BmpMaestro.Instance.OnOctaveShiftChanged    += OnOctaveShiftChanged;
             BmpMaestro.Instance.OnSongLoaded            += OnSongLoaded;
@@ -52,10 +52,10 @@ namespace BardMusicPlayer.Controls
 
         public Performer SelectedBard { get; set; }
 
-        private void OnPerfomerChanged(object sender, bool e)
+        private void OnPerformerChanged(object sender, bool e)
         {
-            this.Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-            this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.ItemsSource = Bards));
+            Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
+            Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
         }
 
         private void OnTrackNumberChanged(object sender, TrackNumberChangedEvent e)
@@ -95,8 +95,8 @@ namespace BardMusicPlayer.Controls
 
         private void UpdateList()
         {
-            this.Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-            this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.ItemsSource = Bards));
+            Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
+            Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
         }
 
         private void RdyCheck_Click(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ namespace BardMusicPlayer.Controls
             if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
             {
                 PlaybackFunctions.PauseSong();
-                Classic_MainView.CurrentInstance.Play_Button_State(false);
+                Classic_MainView.CurrentInstance.Play_Button_State();
             }
 
             BmpMaestro.Instance.StopLocalPerformer();
@@ -123,7 +123,7 @@ namespace BardMusicPlayer.Controls
 
         private void BardsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Console.WriteLine(this.BardsList.SelectedItem);
+            Console.WriteLine(BardsList.SelectedItem);
         }
 
         private void BardsList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -135,44 +135,40 @@ namespace BardMusicPlayer.Controls
         /* Track UP/Down */
         private void TrackNumericUpDown_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            TrackNumericUpDown ctl = sender as TrackNumericUpDown;
-            ctl.OnValueChanged += OnValueChanged;
+            if (sender is TrackNumericUpDown ctl) ctl.OnValueChanged += OnValueChanged;
         }
 
-        private void OnValueChanged(object sender, int s)
+        private static void OnValueChanged(object sender, int s)
         {
-            Performer game = (sender as TrackNumericUpDown).DataContext as Performer;
+            var game = (sender as TrackNumericUpDown)?.DataContext as Performer;
             BmpMaestro.Instance.SetTracknumber(game, s);
         }
 
         /* Octave UP/Down */
         private void OctaveControl_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OctaveNumericUpDown ctl = sender as OctaveNumericUpDown;
-            ctl.OnValueChanged += OnOctaveValueChanged;
+            if (sender is OctaveNumericUpDown ctl) ctl.OnValueChanged += OnOctaveValueChanged;
         }
 
-        private void OnOctaveValueChanged(object sender, int s)
+        private static void OnOctaveValueChanged(object sender, int s)
         {
-            Performer performer = (sender as OctaveNumericUpDown).DataContext as Performer;
+            var performer = (sender as OctaveNumericUpDown)?.DataContext as Performer;
             BmpMaestro.Instance.SetOctaveshift(performer, s);
         }
 
         private void HostChecker_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBox ctl = sender as CheckBox;
-            if (!ctl.IsChecked ?? false)
+            if (sender is CheckBox ctl && (!ctl.IsChecked ?? false))
                 return;
 
-            var game = (sender as CheckBox).DataContext as Performer;
+            var game = (sender as CheckBox)?.DataContext as Performer;
             BmpMaestro.Instance.SetHostBard(game);
         }
 
-        private void PerfomerEnabledChecker_Checked(object sender, RoutedEventArgs e)
+        private void PerformerEnabledChecker_Checked(object sender, RoutedEventArgs e)
         {
-            CheckBox ctl = sender as CheckBox;
-            var game = (sender as CheckBox).DataContext as Performer;
-            game.PerformerEnabled = ctl.IsChecked ?? false;
+            var ctl = sender as CheckBox;
+            if ((sender as CheckBox)?.DataContext is Performer game) game.PerformerEnabled = ctl.IsChecked ?? false;
         }
 
         private void Bard_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -182,14 +178,14 @@ namespace BardMusicPlayer.Controls
                 if (SelectedBard == null)
                     return;
 
-                BardExtSettingsWindow bardExtSettings = new BardExtSettingsWindow(SelectedBard);
+                var bardExtSettings = new BardExtSettingsWindow(SelectedBard);
                 bardExtSettings.Activate();
                 bardExtSettings.Visibility = Visibility.Visible;
             }
         }
 
 
-        private void Autoequip_CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void AutoEquip_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             BmpPigeonhole.Instance.AutoEquipBards = Autoequip_CheckBox.IsChecked ?? false;
             Globals.Globals.ReloadConfig();
@@ -204,16 +200,16 @@ namespace BardMusicPlayer.Controls
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
-                Filter = "Performerconfig | *.cfg",
+                Filter = "Performer Config | *.cfg",
                 Multiselect = true
             };
 
             if (openFileDialog.ShowDialog() != true)
                 return;
 
-            List<PerformerSettingData> pdatalist = new List<PerformerSettingData>();
-            MemoryStream memoryStream = new MemoryStream();
-            FileStream fileStream = File.Open(openFileDialog.FileName, FileMode.Open);
+            List<PerformerSettingData> pdatalist;
+            var memoryStream = new MemoryStream();
+            var fileStream = File.Open(openFileDialog.FileName, FileMode.Open);
             fileStream.CopyTo(memoryStream);
             fileStream.Close();
 
@@ -223,12 +219,13 @@ namespace BardMusicPlayer.Controls
             foreach (var pconfig in pdatalist)
             {
                 var p = Bards.Where(perf => perf.game.PlayerName.Equals(pconfig.Name));
-                if (p.Count() == 0)
+                var performers = p as Performer[] ?? p.ToArray();
+                if (!performers.Any())
                     continue;
 
-                p.First().TrackNumber = pconfig.Track;
+                performers.First().TrackNumber = pconfig.Track;
                 if (pconfig.AffinityMask != 0)
-                    p.First().game.SetAffinity(pconfig.AffinityMask);
+                    performers.First().game.SetAffinity(pconfig.AffinityMask);
             }
 
             if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
@@ -247,25 +244,17 @@ namespace BardMusicPlayer.Controls
         {
             var openFileDialog = new Microsoft.Win32.SaveFileDialog
             {
-                Filter = "Performerconfig | *.cfg"
+                Filter = "Performer Config | *.cfg"
             };
 
             if (openFileDialog.ShowDialog() != true)
                 return;
 
-            List<PerformerSettingData> pdatalist = new List<PerformerSettingData>();
-            foreach (var performer in Bards)
-            {
-                PerformerSettingData pdata = new PerformerSettingData();
-                pdata.Name = performer.game.PlayerName;
-                pdata.Track = performer.TrackNumber;
-                pdata.AffinityMask = (long)performer.game.GetAffinity();
-                pdatalist.Add(pdata);
-            }
+            var pdatalist = Bards.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = (long)performer.game.GetAffinity() }).ToList();
             var t = JsonConvert.SerializeObject(pdatalist);
-            byte[] content = new UTF8Encoding(true).GetBytes(t);
+            var content = new UTF8Encoding(true).GetBytes(t);
 
-            FileStream fileStream = File.Create(openFileDialog.FileName);
+            var fileStream = File.Create(openFileDialog.FileName);
             fileStream.Write(content, 0, content.Length);
             fileStream.Close();
         }
@@ -284,21 +273,26 @@ namespace BardMusicPlayer.Controls
         /// </summary>
         private void MenuButton_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            Button rectangle = sender as Button;
-            ContextMenu contextMenu = rectangle.ContextMenu;
-            contextMenu.PlacementTarget = rectangle;
-            contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            contextMenu.IsOpen = true;
+            if (sender is Button rectangle)
+            {
+                var contextMenu = rectangle.ContextMenu;
+                if (contextMenu != null)
+                {
+                    contextMenu.PlacementTarget = rectangle;
+                    contextMenu.Placement       = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    contextMenu.IsOpen          = true;
+                }
+            }
         }
     }
 
     /// <summary>
-    /// Helperclass
+    /// Helper class
     /// </summary>
     public class PerformerSettingData
     {
         public string Name { get; set; } = "";
-        public int Track { get; set; } = 0;
-        public long AffinityMask { get; set; } = 0;
+        public int Track { get; set; }
+        public long AffinityMask { get; set; }
     }
 }

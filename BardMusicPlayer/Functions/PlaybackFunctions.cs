@@ -20,13 +20,13 @@ namespace BardMusicPlayer.Functions
             PLAYBACK_STATE_PLAYING,
             PLAYBACK_STATE_PAUSE,
             PLAYBACK_STATE_PLAYNEXT //indicates the next song should be played
-        };
+        }
         public static PlaybackState_Enum PlaybackState;
 
         /// <summary>
         /// The currently loaded song
         /// </summary>
-        public static BmpSong CurrentSong { get; set; } = null;
+        public static BmpSong CurrentSong { get; set; }
 
         /// <summary>
         /// Loads a midi file into the sequencer
@@ -117,9 +117,7 @@ namespace BardMusicPlayer.Functions
         /// <returns>song name as string</returns>
         public static string GetSongName()
         {
-            if (CurrentSong == null)
-                return "please load a song";
-            return CurrentSong.Title;
+            return CurrentSong == null ? "please load a song" : CurrentSong.Title;
         }
 
         /// <summary>
@@ -128,24 +126,21 @@ namespace BardMusicPlayer.Functions
         /// <returns>instrument name as string</returns>
         public static string GetInstrumentNameForHostPlayer()
         {
-            int tracknumber = BmpMaestro.Instance.GetHostBardTrack();
+            var tracknumber = BmpMaestro.Instance.GetHostBardTrack();
             if (tracknumber == 0)
                 return "All Tracks";
-            else
+            if (CurrentSong == null)
+                return "No song loaded";
+            if (tracknumber > CurrentSong.TrackContainers.Count)
+                return "None";
+            try
             {
-                if (CurrentSong == null)
-                    return "No song loaded";
-                if (tracknumber > CurrentSong.TrackContainers.Count)
-                    return "None";
-                try
-                {
-                    ClassicProcessorConfig classicConfig = (ClassicProcessorConfig)CurrentSong.TrackContainers[tracknumber -1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
-                    return classicConfig.Instrument.Name;
-                }
-                catch (KeyNotFoundException)
-                {
-                    return "Unknown";
-                }
+                var classicConfig = (ClassicProcessorConfig)CurrentSong.TrackContainers[tracknumber -1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
+                return classicConfig.Instrument.Name;
+            }
+            catch (KeyNotFoundException)
+            {
+                return "Unknown";
             }
         }
 
@@ -159,21 +154,18 @@ namespace BardMusicPlayer.Functions
         {
             if (tracknumber == 0)
                 return "All Tracks";
-            else
+            if (song == null)
+                return "No song loaded";
+            if (tracknumber > CurrentSong.TrackContainers.Count)
+                return "None";
+            try
             {
-                if (song == null)
-                    return "No song loaded";
-                if (tracknumber > CurrentSong.TrackContainers.Count)
-                    return "None";
-                try
-                {
-                    ClassicProcessorConfig classicConfig = (ClassicProcessorConfig)song.TrackContainers[tracknumber-1].ConfigContainers[0].ProcessorConfig;
-                    return classicConfig.Instrument.Name;
-                }
-                catch (KeyNotFoundException)
-                {
-                    return "Unknown";
-                }
+                var classicConfig = (ClassicProcessorConfig)song.TrackContainers[tracknumber-1].ConfigContainers[0].ProcessorConfig;
+                return classicConfig.Instrument.Name;
+            }
+            catch (KeyNotFoundException)
+            {
+                return "Unknown";
             }
         }
 
@@ -186,23 +178,29 @@ namespace BardMusicPlayer.Functions
                 return;
             try
             {
-                System.Windows.Window mainWindow = Application.Current.MainWindow;
-                if (!mainWindow.IsVisible)
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow is { IsVisible: false })
                 {
                     mainWindow.Show();
                 }
 
-                if (mainWindow.WindowState == WindowState.Minimized)
+                if (mainWindow is { WindowState: WindowState.Minimized })
                 {
                     mainWindow.WindowState = WindowState.Normal;
                 }
 
-                mainWindow.Activate();
-                mainWindow.Topmost = true;  // important
-                mainWindow.Topmost = false; // important
-                mainWindow.Focus();         // important
+                mainWindow?.Activate();
+                if (mainWindow != null)
+                {
+                    mainWindow.Topmost = true;  // important
+                    mainWindow.Topmost = false; // important
+                    mainWindow.Focus();         // important
+                }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

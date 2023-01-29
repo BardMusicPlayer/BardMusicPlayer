@@ -7,9 +7,9 @@ using BardMusicPlayer.Functions;
 namespace BardMusicPlayer.Controls
 {
     /// <summary>
-    /// Interaktionslogik für TrackNumericUpDown.xaml
+    /// Interaction logic for TrackNumericUpDown.xaml
     /// </summary>
-    public partial class TrackNumericUpDown : UserControl
+    public sealed partial class TrackNumericUpDown
     {
         public EventHandler<int> OnValueChanged;
         public TrackNumericUpDown()
@@ -18,24 +18,23 @@ namespace BardMusicPlayer.Controls
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+            DependencyProperty.Register(nameof(Value), typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
 
         public string Value
         {
-            get { return (string)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get => (string)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         private static void OnValueChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            TrackNumericUpDown c = sender as TrackNumericUpDown;
-            if (c != null)
+            if (sender is TrackNumericUpDown c)
             {
                 c.OnValueChangedC(c.Value);
             }
         }
 
-        protected virtual void OnValueChangedC(string c)
+        private void OnValueChangedC(string c)
         {
             NumValue = Convert.ToInt32(c);
         }
@@ -45,13 +44,12 @@ namespace BardMusicPlayer.Controls
         private int _numValue = 1;
         public int NumValue
         {
-            get { return _numValue; }
+            get => _numValue;
             set
             {
                 _numValue = value;
-                this.Text.Text = "T" + NumValue.ToString();
+                Text.Text = "T" + NumValue;
                 OnValueChanged?.Invoke(this, _numValue);
-                return;
             }
         }
 
@@ -89,14 +87,13 @@ namespace BardMusicPlayer.Controls
             if (Text == null)
                 return;
 
-            int val = 0;
-            string str = Regex.Replace(Text.Text, "[^0-9]", "");
-            if (int.TryParse(str, out val))
+            var str = Regex.Replace(Text.Text, "[^0-9]", "");
+            if (int.TryParse(str, out var val))
             {
                 if (PlaybackFunctions.CurrentSong == null)
                     return;
 
-                if ((val < 0) || (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count))
+                if (val < 0 || NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
                 {
                     NumValue = NumValue;
                     return;

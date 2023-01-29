@@ -1,24 +1,22 @@
-﻿using System.Windows;
-
-namespace BardMusicPlayer.Resources
+﻿namespace BardMusicPlayer.Resources
 {
     /// <summary>
-    /// Interaktionslogik für TextInputWindow.xaml
+    /// Interaction logic for TextInputWindow.xaml
     /// </summary>
-    public partial class TextInputWindow : Window
+    public partial class TextInputWindow
     {
         public TextInputWindow(string infotext, int maxinputlength = 42)
         {
             InitializeComponent();
-            this.InfoText.Text = infotext;
-            this.ResponseTextBox.Focus();
-            this.ResponseTextBox.MaxLength = maxinputlength;
+            InfoText.Text = infotext;
+            ResponseTextBox.Focus();
+            ResponseTextBox.MaxLength = maxinputlength;
         }
 
         public string ResponseText
         {
-            get { return ResponseTextBox.Text; }
-            set { ResponseTextBox.Text = value; }
+            get => ResponseTextBox.Text;
+            set => ResponseTextBox.Text = value;
         }
 
         private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e)

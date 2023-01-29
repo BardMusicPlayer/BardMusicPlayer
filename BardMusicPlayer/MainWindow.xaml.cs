@@ -6,7 +6,7 @@ namespace BardMusicPlayer
     /// <summary>
     /// Interaction Logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -16,13 +16,13 @@ namespace BardMusicPlayer
 
         public void ClassicStyle()
         {
-            this.Title = "BardMusicPlayer BETA Version: 2.X-CUSTOM";
-            this.DataContext = new Classic_MainView();
-            this.AllowsTransparency = false;
-            this.WindowStyle = WindowStyle.SingleBorderWindow;
-            this.Height = 665;
-            this.Width = 855;
-            this.ResizeMode = ResizeMode.CanResizeWithGrip;
+            Title = "BardMusicPlayer BETA Version: 2.X-CUSTOM";
+            DataContext = new Classic_MainView();
+            AllowsTransparency = false;
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            Height = 665;
+            Width = 855;
+            ResizeMode = ResizeMode.CanResizeWithGrip;
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Windows.Controls;
 namespace BardMusicPlayer.Controls
 {
     /// <summary>
-    /// Interaktionslogik für NumericUpDown.xaml
+    /// Interaction logic for NumericUpDown.xaml
     /// </summary>
-    public sealed partial class NumericUpDown : UserControl
+    public sealed partial class NumericUpDown
     {
         public EventHandler<int> OnValueChanged;
 
@@ -22,13 +22,13 @@ namespace BardMusicPlayer.Controls
 
         public string Value
         {
-            get { return (string)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get => (string)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         private static void OnValueChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            NumericUpDown c = sender as NumericUpDown;
+            var c = sender as NumericUpDown;
             c?.OnValueChangedC(c.Value);
         }
 
@@ -39,16 +39,15 @@ namespace BardMusicPlayer.Controls
 
 
         /* Track UP/Down */
-        private int _numValue = 0;
+        private int _numValue;
         public int NumValue
         {
-            get { return _numValue; }
+            get => _numValue;
             set
             {
                 _numValue = value;
-                this.Text.Text = NumValue.ToString();
+                Text.Text = NumValue.ToString();
                 OnValueChanged?.Invoke(this, _numValue);
-                return;
             }
         }
         private void NumUp_Click(object sender, RoutedEventArgs e)
@@ -66,9 +65,8 @@ namespace BardMusicPlayer.Controls
             if (Text == null)
                 return;
 
-            int val = 0;
-            string str = Regex.Replace(Text.Text, @"[^\d|\.\-]", "");
-            if (int.TryParse(str, out val))
+            var str = Regex.Replace(Text.Text, @"[^\d|\.\-]", "");
+            if (int.TryParse(str, out var val))
             {
                 NumValue = val;
             }

@@ -11,22 +11,16 @@ using BardMusicPlayer.Pigeonhole;
 namespace BardMusicPlayer.UI_Classic
 {
     /// <summary>
-    /// Interaktionslogik für Classic_MainView.xaml
+    /// Interaction logic for Classic_MainView.xaml
     /// </summary>
-    public partial class Classic_MainView : UserControl
+    public partial class Classic_MainView
     {
-        private bool _alltracks = false;
-        private bool _Playbar_dragStarted = false;
-        private bool _Siren_Playbar_dragStarted = false;
+        private bool _alltracks;
+        private bool _Playbar_dragStarted;
+        private bool _Siren_Playbar_dragStarted;
 
-        /* Playbuttonstate */
-        public void Play_Button_State(bool playing = false)
-        {
-            if (!playing)
-                Play_Button.Content = @"▶";
-            else
-                Play_Button.Content = @"⏸";
-        }
+        /* Play button state */
+        public void Play_Button_State(bool playing = false) { Play_Button.Content = !playing ? @"▶" : @"⏸"; }
 
         /* Playback */
         private void Play_Button_Click(object sender, RoutedEventArgs e)
@@ -34,7 +28,7 @@ namespace BardMusicPlayer.UI_Classic
             if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
             {
                 PlaybackFunctions.PauseSong();
-                Play_Button_State(false);
+                Play_Button_State();
             }
             else
             {
@@ -43,7 +37,7 @@ namespace BardMusicPlayer.UI_Classic
             }
         }
 
-        private void Play_Button_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
                 return;
@@ -51,7 +45,7 @@ namespace BardMusicPlayer.UI_Classic
             if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
                 return;
 
-            Task task = Task.Run(() =>
+            var task = Task.Run(() =>
             {
                 BmpMaestro.Instance.EquipInstruments();
                 Task.Delay(2000).Wait();
@@ -95,7 +89,7 @@ namespace BardMusicPlayer.UI_Classic
                 BmpPigeonhole.Instance.PlayAllTracks = false;
                 BmpMaestro.Instance.SetTracknumberOnHost(1);
                 NumValue = BmpMaestro.Instance.GetHostBardTrack();
-                all_tracks_button.ClearValue(Button.BackgroundProperty);
+                all_tracks_button.ClearValue(BackgroundProperty);
             }
         }
 
@@ -115,7 +109,7 @@ namespace BardMusicPlayer.UI_Classic
             }
             else
             {
-                Loop_Button.ClearValue(Button.BackgroundProperty);
+                Loop_Button.ClearValue(BackgroundProperty);
             }
         }
 
@@ -125,13 +119,13 @@ namespace BardMusicPlayer.UI_Classic
 
         private void Playbar_Slider_DragStarted(object sender, DragStartedEventArgs e)
         {
-            this._Playbar_dragStarted = true;
+            _Playbar_dragStarted = true;
         }
 
         private void Playbar_Slider_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             BmpMaestro.Instance.SetPlaybackStart((int)((Slider)sender).Value);
-            this._Playbar_dragStarted = false;
+            _Playbar_dragStarted = false;
         }
 
     }
