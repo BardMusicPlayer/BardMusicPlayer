@@ -3,16 +3,15 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Maestro.Events
+namespace BardMusicPlayer.Maestro.Events;
+
+public sealed class PerformerUpdate : MaestroEvent
 {
-    public sealed class PerformerUpdate : MaestroEvent
+
+    internal PerformerUpdate()
     {
-
-        internal PerformerUpdate() : base(0, false)
-        {
-            EventType = GetType();
-        }
-
-        public override bool IsValid() => true;
+        EventType = GetType();
     }
+
+    public override bool IsValid() => true;
 }

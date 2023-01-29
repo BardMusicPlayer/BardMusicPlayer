@@ -5,41 +5,30 @@
 
 using BardMusicPlayer.Maestro.Sequencing;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace BardMusicPlayer.Maestro.Events
+namespace BardMusicPlayer.Maestro.Events;
+
+public sealed class SongLoadedEvent : MaestroEvent
 {
-    public sealed class SongLoadedEvent : MaestroEvent
+
+    internal SongLoadedEvent(int maxtracks, Sequencer sequencer)
     {
-
-        internal SongLoadedEvent(int maxtracks, Sequencer sequencer) : base(0, false)
-        {
-            EventType = GetType();
-            MaxTracks = maxtracks;
-            _sequencer = sequencer;
-        }
-        private Sequencer _sequencer;
-        public int MaxTracks { get; }
-        public int TotalNoteCount
-        {
-            get
-            {
-                int sum = 0;
-                foreach (int s in _sequencer.notesPlayedCount.Values)
-                    sum += s;
-                return sum;
-            }
-        }
-        public List<int> CurrentNoteCountForTracks
-        {
-            get
-            {
-                List<int> t = new List<int>();
-                foreach (var s in _sequencer.notesPlayedCount)
-                    t.Add(s.Key.Count);
-                return t;
-            }
-        }
-
-        public override bool IsValid() => true;
+        EventType  = GetType();
+        MaxTracks  = maxtracks;
+        _sequencer = sequencer;
     }
+    private Sequencer _sequencer;
+    public int MaxTracks { get; }
+    public int TotalNoteCount => _sequencer.notesPlayedCount.Values.Sum();
+
+    public List<int> CurrentNoteCountForTracks
+    {
+        get
+        {
+            return _sequencer.notesPlayedCount.Select(s => s.Key.Count).ToList();
+        }
+    }
+
+    public override bool IsValid() => true;
 }
