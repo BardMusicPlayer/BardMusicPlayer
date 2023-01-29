@@ -125,8 +125,7 @@ public sealed class MidiTrack
             }
             else
             {
-                var raw = new List<byte>();
-                raw = message.createBytes();
+                var raw = message.createBytes();
 
                 var temp = raw[0];
                 if (statusByteSet && !message.is_meta && raw[0] < 0xf0 && raw[0] == runningStatusByte)

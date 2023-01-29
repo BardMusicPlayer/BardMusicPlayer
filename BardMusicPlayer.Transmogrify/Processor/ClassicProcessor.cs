@@ -35,41 +35,38 @@ namespace BardMusicPlayer.Transmogrify.Processor
 
                 foreach (var timedEvent in trackChunks.GetTimedEvents())
                 {
-                    var programChangeEvent = timedEvent.Event as ProgramChangeEvent;
-                    if (programChangeEvent == null)
+                    if (timedEvent.Event is not ProgramChangeEvent programChangeEvent)
                         continue;
 
                     //Skip all except guitar
-                    if ((programChangeEvent.ProgramNumber < 27) || (programChangeEvent.ProgramNumber > 31))
+                    if (programChangeEvent.ProgramNumber < 27 || programChangeEvent.ProgramNumber > 31)
                         continue;
 
-                    int number = (int)Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).InstrumentToneMenuKey;
-                    using (TimedObjectsManager<Note> manager = trackChunks.Merge().ManageNotes())
-                    {
-                        Note note = new Note((Melanchall.DryWetMidi.Common.SevenBitNumber)number);
-                        TimedObjectsCollection<Note> timedEvents = manager.Objects;
-                        note.Time = timedEvent.Time;
-                        timedEvents.Add(note);
-                    }
+                    var number = (int)Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).InstrumentToneMenuKey;
+                    using var manager = trackChunks.Merge().ManageNotes();
+                    var note = new Note((Melanchall.DryWetMidi.Common.SevenBitNumber)number);
+                    var timedEvents = manager.Objects;
+                    note.Time = timedEvent.Time;
+                    timedEvents.Add(note);
                 }
             }
 
-            var trackChunk = TimedObjectUtilities.ToTrackChunk(await 
+            var trackChunk = (await 
                 trackChunks.GetNoteDictionary(Song.SourceTempoMap, ProcessorConfig.Instrument.InstrumentTone,
                         ProcessorConfig.OctaveRange.LowerNote, 
                         ProcessorConfig.OctaveRange.UpperNote, 
                         (int) ProcessorConfig.Instrument.InstrumentToneMenuKey, 
                         true,
                         -ProcessorConfig.OctaveRange.LowerNote)
-                .MoveNoteDictionaryToDefaultOctave(ProcessorConfig.OctaveRange)
-                .ConcatNoteDictionaryToList());
+                    .MoveNoteDictionaryToDefaultOctave(ProcessorConfig.OctaveRange)
+                    .ConcatNoteDictionaryToList()).ToTrackChunk();
 
             var playerNotesDictionary = await trackChunk.GetPlayerNoteDictionary(ProcessorConfig.PlayerCount, OctaveRange.C3toC6.LowerNote, OctaveRange.C3toC6.UpperNote);
             var concurrentPlayerTrackDictionary = new ConcurrentDictionary<long, TrackChunk>(ProcessorConfig.PlayerCount, ProcessorConfig.PlayerCount);
 
             Parallel.ForEach(playerNotesDictionary.Values, async (notesDictionary, _, iteration) =>
                 {
-                    concurrentPlayerTrackDictionary[iteration] = TimedObjectUtilities.ToTrackChunk(await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing());
+                    concurrentPlayerTrackDictionary[iteration] = (await notesDictionary.ConcatNoteDictionaryToList().FixChords().OffSet50Ms().FixEndSpacing()).ToTrackChunk();
                     concurrentPlayerTrackDictionary[iteration].AddObjects(new List<ITimedObject>{new TimedEvent(new SequenceTrackNameEvent("tone:" + ProcessorConfig.Instrument.InstrumentTone.Name))});
                 }
             );

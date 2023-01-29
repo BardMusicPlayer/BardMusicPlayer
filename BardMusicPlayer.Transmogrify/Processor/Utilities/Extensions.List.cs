@@ -66,17 +66,17 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
             long lastStartTime = 0;
             long lastStopTime = 0;
             long lastDur = 0;
-            int lastNoteNum = 0;
+            var lastNoteNum = 0;
             long last50MsTimeStamp = 0;
-            bool hasNotes = false;
-            int lastChannel = 0;
-            int lastVelocity = 0;
+            var hasNotes = false;
+            var lastChannel = 0;
+            var lastVelocity = 0;
             
             for (var j = 0; j < notes.Count; j++)
             {
-                long startTime = notes[j].GetTimedNoteOnEvent().Time;
+                var startTime = notes[j].GetTimedNoteOnEvent().Time;
                 long stopTime;
-                long dur = notes[j].Length;
+                var dur = notes[j].Length;
                 int noteNum = notes[j].NoteNumber;
                 int channel = notes[j].Channel;
                 int velocity = notes[j].Velocity;
@@ -85,7 +85,7 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
                 {
                     if (startTime % 100 != 0 && startTime % 100 != 50)
                     {
-                        if (startTime % 100 < 25 || (startTime % 100 < 75 && startTime % 100 > 50)) startTime = 50 * ((startTime + 49) / 50);
+                        if (startTime % 100 < 25 || startTime % 100 < 75 && startTime % 100 > 50) startTime = 50 * ((startTime + 49) / 50);
                         else startTime = 50 * (startTime / 50);
                     }
 

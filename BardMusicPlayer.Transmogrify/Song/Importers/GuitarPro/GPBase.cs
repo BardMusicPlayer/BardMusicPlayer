@@ -645,7 +645,7 @@ public sealed class LyricLine
 
 public sealed class Lyrics
 {
-    private static readonly int maxLineCount = 5;
+    private const int maxLineCount = 5;
     public LyricLine[] lines;
     public int trackChoice;
 
@@ -1108,13 +1108,13 @@ public sealed class PitchClass
     {
         string[] _notes_sharp = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         string[] _notes_flat = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
-        var value = 0;
-        var accidental = 0;
+        int value;
+        int accidental;
         this.actualOvertone = actualOvertone; //Make it simpler to use later in internal format
 
         if (arg1i == -1)
         {
-            var str = "";
+            string str;
             if (!arg0s.Equals(""))
             {
                 str = arg0s;
@@ -1122,13 +1122,11 @@ public sealed class PitchClass
                 {
                     if (str.Equals(_notes_sharp[x]))
                     {
-                        value = x;
                         break;
                     }
 
                     if (!str.Equals(_notes_flat[x])) continue;
 
-                    value = x;
                     break;
                 }
             }
@@ -1141,8 +1139,11 @@ public sealed class PitchClass
             }
 
             if (str.EndsWith("b", StringComparison.Ordinal))
-                accidental = -1;
-            else if (str.EndsWith("#", StringComparison.Ordinal)) accidental = 1;
+            {
+            }
+            else if (str.EndsWith("#", StringComparison.Ordinal))
+            {
+            }
         }
         else
         {
@@ -1293,11 +1294,12 @@ public sealed class TrackRSE
     public int humanize = 0;
     public RSEInstrument instrument = null;
 
-    public TrackRSE()
-    {
-        if (equalizer is { knobs: null })
-            equalizer.knobs = new List<float> { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-    }
+    // // Code is heuristically unreachable - Expression is always false
+    // public TrackRSE()
+    // {
+    //     if (equalizer is { knobs: null })
+    //         equalizer.knobs = new List<float> { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+    // }
 }
 
 public sealed class TrackSettings

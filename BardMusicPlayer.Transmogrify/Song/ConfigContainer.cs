@@ -22,7 +22,7 @@ namespace BardMusicPlayer.Transmogrify.Song
         /// <summary>
         /// 
         /// </summary>
-        public List<TrackChunk> ProccesedTrackChunks { get; set; }
+        public List<TrackChunk> ProcessedTrackChunks { get; set; }
 
         public async Task<List<TrackChunk>> RefreshTrackChunks(BmpSong song)
         {
@@ -32,7 +32,7 @@ namespace BardMusicPlayer.Transmogrify.Song
                 ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
                 LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
                 VSTProcessorConfig vstProcessorConfig => await new VSTProcessor(vstProcessorConfig, song).Process(),
-                _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type."),
+                _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type.")
             };
         }
     }

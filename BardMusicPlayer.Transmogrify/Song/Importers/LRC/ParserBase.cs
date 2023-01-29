@@ -10,7 +10,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 internal abstract class ParserBase<TLine> : IParseResult<TLine>
     where TLine : Line
 {
-    protected static readonly char[] LINE_BREAKS = "\r\n\u0085\u2028\u2029".ToCharArray();
+    protected readonly char[] LINE_BREAKS = "\r\n\u0085\u2028\u2029".ToCharArray();
 
     protected readonly string Data;
     public readonly LineCollection<TLine> Lines = new();

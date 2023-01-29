@@ -11,7 +11,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Config
     public class LyricProcessorConfig : IProcessorConfig
     {
         ///<inheritdoc/>
-        public int Track { get; set; } = 0;
+        public int Track { get; set; }
 
         ///<inheritdoc/>
         public List<long> IncludedTracks { get; set; } = new();

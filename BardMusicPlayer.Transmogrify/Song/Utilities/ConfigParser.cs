@@ -98,7 +98,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                                         BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
                                         continue;
                                     }
-                                    if (!int.TryParse(toneIndexAndOctaveRange.Groups[1].Value, out var toneIndex) || toneIndex < 0 || toneIndex > 4)
+                                    if (!int.TryParse(toneIndexAndOctaveRange.Groups[1].Value, out var toneIndex) || toneIndex is < 0 or > 4)
                                     {
                                         BmpLog.W(BmpLog.Source.Transmogrify, "Skipping invalid VST octave setting \"" + shift + "\" on track " + trackNumber + " because \"" + toneIndexAndOctaveRange.Groups[1].Value + "\" is not a valid tone number");
                                         continue;
@@ -168,7 +168,7 @@ namespace BardMusicPlayer.Transmogrify.Song.Utilities
                             processorConfig.IncludedTracks.Add(value);
                     }
                 }
-                else if (fields[fieldCounter].StartsWith("bards=") && int.TryParse(fields[fieldCounter].Remove(0, 6), out var value) && value > 0 && value < 17)
+                else if (fields[fieldCounter].StartsWith("bards=") && int.TryParse(fields[fieldCounter].Remove(0, 6), out var value) && value is > 0 and < 17)
                     processorConfig.PlayerCount = value;
             }
         }

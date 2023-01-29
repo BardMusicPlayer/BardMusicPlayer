@@ -173,7 +173,7 @@ namespace BardMusicPlayer.Transmogrify.Processor.Utilities
                 if (index > 127) index = 0;
             }
 
-            trackChunk = TimedObjectUtilities.ToTrackChunk(notes);
+            trackChunk = notes.ToTrackChunk();
 
             using var loadBalancer = new LoadBalancer(playerCount);
             using var timedEventsManager = trackChunk.ManageTimedEvents();

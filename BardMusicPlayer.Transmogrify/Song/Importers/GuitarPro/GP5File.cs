@@ -49,8 +49,8 @@ public sealed class GP5File : GPFile
     {
         header.song = this;
         measureHeaders.Add(header);
-        if (header.isRepeatOpen || (_currentRepeatGroup.isClosed && header.repeatAlternatives.Count > 0 &&
-                                    header.repeatAlternatives[0] <= 0))
+        if (header.isRepeatOpen || _currentRepeatGroup.isClosed && header.repeatAlternatives.Count > 0 &&
+            header.repeatAlternatives[0] <= 0)
             _currentRepeatGroup = new RepeatGroup();
 
         _currentRepeatGroup.addMeasureHeader(header);
@@ -1622,7 +1622,7 @@ public sealed class GP5File : GPFile
         /*Read lyrics.
         First, read an :ref:`int` that points to the track lyrics are
         bound to. Then it is followed by 5 lyric lines. Each one
-        constists of number of starting measure encoded in :ref:`int`
+        consists of number of starting measure encoded in :ref:`int`
         and :ref:`int-size-string` holding text of the lyric line.*/
 
         var _lyrics = new Lyrics

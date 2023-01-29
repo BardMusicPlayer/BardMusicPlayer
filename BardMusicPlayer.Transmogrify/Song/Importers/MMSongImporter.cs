@@ -52,20 +52,20 @@ public static class MMSongImporter
         }
 
         var midiFile = new MidiFile();
-        foreach (var msong in songContainer.songs)
-            if (!msong.bards.Any())
+        foreach (var mmsong in songContainer.songs)
+            if (!mmsong.bards.Any())
             {
             }
             else
             {
-                foreach (var bard in msong.bards)
+                foreach (var bard in mmsong.bards)
                 {
                     var thisTrack =
                         new TrackChunk(new SequenceTrackNameEvent(Instrument.Parse(bard.instrument).Name));
                     using (var manager = new TimedObjectsManager<TimedEvent>(thisTrack.Events))
                     {
-                        TimedObjectsCollection<TimedEvent> timedEvents = manager.Objects;
-                        int last = 0;
+                        var timedEvents = manager.Objects;
+                        var last = 0;
                         foreach (var note in bard.sequence)
                             if (note.Value == 254)
                             {
@@ -85,12 +85,12 @@ public static class MMSongImporter
                     midiFile.Chunks.Add(thisTrack);
                 }
 
-                foreach (var lyrics in msong.lyrics)
+                foreach (var lyrics in mmsong.lyrics)
                 {
                     var thisTrack = new TrackChunk(new SequenceTrackNameEvent("Lyrics: " + lyrics.description));
                     using (var manager = new TimedObjectsManager<TimedEvent>(thisTrack.Events))
                     {
-                        TimedObjectsCollection<TimedEvent> timedEvents = manager.Objects;
+                        var timedEvents = manager.Objects;
                         foreach (var seqData in lyrics.sequence)
                         {
                             var f = lyrics.lines[seqData.Value];
