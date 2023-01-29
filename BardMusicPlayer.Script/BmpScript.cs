@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Maestro.Performance;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Script.BasicSharp;
 using BardMusicPlayer.Seer;
@@ -34,11 +33,11 @@ namespace BardMusicPlayer.Script
 
         public event EventHandler<bool> OnRunningStateChanged;
 
-        private Thread thread = null;
-        private Interpreter basic = null;
+        private Thread thread;
+        private Interpreter basic;
 
         private string selectedBardName { get; set; } = "";
-        private List<string> unselected_bards { get; set; } = null;
+        private List<string> unselected_bards { get; set; }
 
 #region Routine Handlers
 
@@ -51,17 +50,15 @@ namespace BardMusicPlayer.Script
             }
 
             var plist = BmpMaestro.Instance.GetAllPerformers();
-            if (plist.Count() <= 0)
+            var performers = plist.ToList();
+            if (performers.Count <= 0)
             {
                 selectedBardName = "";
                 return;
             }
 
-            Performer performer = plist.ElementAt(num - 1);
-            if (performer != null)
-                selectedBardName = performer.game.PlayerName;
-            else
-                selectedBardName = "";
+            var performer = performers.ElementAt(num - 1);
+            selectedBardName = performer != null ? performer.game.PlayerName : "";
         }
 
         public void SetSelectedBardName(string name)
@@ -80,7 +77,7 @@ namespace BardMusicPlayer.Script
                     var names = name.Split(',');
                     Parallel.ForEach(names, n =>
                     {
-                        string cname = n.Trim();
+                        var cname = n.Trim();
                         if (cname != "")
                             unselected_bards.Add(cname);
                     });
@@ -120,7 +117,7 @@ namespace BardMusicPlayer.Script
 
         public void LoadAndRun(string basicfile)
         {
-            Task task = Task.Run(() =>
+            var task = Task.Run(() =>
             {
                 thread = Thread.CurrentThread;
                 OnRunningStateChanged?.Invoke(this, true);

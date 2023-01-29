@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using ValueType = BardMusicPlayer.Script.BasicSharp.ValueType;
 
 namespace BardMusicPlayer.Script.BasicSharp
 {
