@@ -5,18 +5,17 @@
 
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 
-namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
-{
-    internal class SynthEvent
-    {
-        public int EventIndex { get; set; }
-        public MidiEvent Event { get; set; }
-        public double Time { get; set; }
+namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
 
-        public SynthEvent(int eventIndex, MidiEvent e)
-        {
-            EventIndex = eventIndex;
-            Event = e;
-        }
+internal class SynthEvent
+{
+    public int EventIndex { get; set; }
+    public MidiEvent Event { get; set; }
+    public double Time { get; set; }
+
+    public SynthEvent(int eventIndex, MidiEvent e)
+    {
+        EventIndex = eventIndex;
+        Event      = e;
     }
 }

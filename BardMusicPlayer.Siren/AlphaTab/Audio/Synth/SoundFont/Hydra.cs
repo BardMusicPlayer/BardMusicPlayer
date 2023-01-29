@@ -36,48 +36,50 @@ using System;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 using BardMusicPlayer.Siren.AlphaTab.IO;
 
-namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
-{
-    internal class Hydra
-    {
-        public FastList<HydraPhdr> Phdrs { get; set; }
-        public FastList<HydraPbag> Pbags { get; set; }
-        public FastList<HydraPmod> Pmods { get; set; }
-        public FastList<HydraPgen> Pgens { get; set; }
-        public FastList<HydraInst> Insts { get; set; }
-        public FastList<HydraIbag> Ibags { get; set; }
-        public FastList<HydraImod> Imods { get; set; }
-        public FastList<HydraIgen> Igens { get; set; }
-        public FastList<HydraShdr> SHdrs { get; set; }
-        public float[] FontSamples { get; set; }
+namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont;
 
-        public Hydra()
+internal class Hydra
+{
+    public FastList<HydraPhdr> Phdrs { get; set; }
+    public FastList<HydraPbag> Pbags { get; set; }
+    public FastList<HydraPmod> Pmods { get; set; }
+    public FastList<HydraPgen> Pgens { get; set; }
+    public FastList<HydraInst> Insts { get; set; }
+    public FastList<HydraIbag> Ibags { get; set; }
+    public FastList<HydraImod> Imods { get; set; }
+    public FastList<HydraIgen> Igens { get; set; }
+    public FastList<HydraShdr> SHdrs { get; set; }
+    public float[] FontSamples { get; set; }
+
+    public Hydra()
+    {
+        Phdrs = new FastList<HydraPhdr>();
+        Pbags = new FastList<HydraPbag>();
+        Pmods = new FastList<HydraPmod>();
+        Pgens = new FastList<HydraPgen>();
+        Insts = new FastList<HydraInst>();
+        Ibags = new FastList<HydraIbag>();
+        Imods = new FastList<HydraImod>();
+        Igens = new FastList<HydraIgen>();
+        SHdrs = new FastList<HydraShdr>();
+    }
+
+    public void Load(IReadable readable)
+    {
+        var chunkHead = new RiffChunk();
+        var chunkFastList = new RiffChunk();
+
+        if (!RiffChunk.Load(null, chunkHead, readable) || chunkHead.Id != "sfbk")
         {
-            Phdrs = new FastList<HydraPhdr>();
-            Pbags = new FastList<HydraPbag>();
-            Pmods = new FastList<HydraPmod>();
-            Pgens = new FastList<HydraPgen>();
-            Insts = new FastList<HydraInst>();
-            Ibags = new FastList<HydraIbag>();
-            Imods = new FastList<HydraImod>();
-            Igens = new FastList<HydraIgen>();
-            SHdrs = new FastList<HydraShdr>();
+            return;
         }
 
-        public void Load(IReadable readable)
+        while (RiffChunk.Load(chunkHead, chunkFastList, readable))
         {
-            var chunkHead = new RiffChunk();
-            var chunkFastList = new RiffChunk();
-
-            if (!RiffChunk.Load(null, chunkHead, readable) || chunkHead.Id != "sfbk")
+            var chunk = new RiffChunk();
+            switch (chunkFastList.Id)
             {
-                return;
-            }
-
-            while (RiffChunk.Load(chunkHead, chunkFastList, readable))
-            {
-                var chunk = new RiffChunk();
-                if (chunkFastList.Id == "pdta")
+                case "pdta":
                 {
                     while (RiffChunk.Load(chunkFastList, chunk, readable))
                     {
@@ -151,8 +153,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
                                 break;
                         }
                     }
+
+                    break;
                 }
-                else if (chunkFastList.Id == "sdta")
+                case "sdta":
                 {
                     while (RiffChunk.Load(chunkFastList, chunk, readable))
                     {
@@ -166,37 +170,38 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
                                 break;
                         }
                     }
+
+                    break;
                 }
-                else
-                {
+                default:
                     readable.Position += (int)chunkFastList.Size;
-                }
+                    break;
             }
         }
+    }
 
-        private static float[] LoadSamples(RiffChunk chunk, IReadable reader)
+    private static float[] LoadSamples(RiffChunk chunk, IReadable reader)
+    {
+        var samplesLeft = (int)(chunk.Size / 2);
+        var samples = new float[samplesLeft];
+        var samplesPos = 0;
+
+        var sampleBuffer = new byte[2048];
+        var testBuffer = new short[sampleBuffer.Length / 2];
+        while (samplesLeft > 0)
         {
-            var samplesLeft = (int)(chunk.Size / 2);
-            var samples = new float[samplesLeft];
-            var samplesPos = 0;
-
-            var sampleBuffer = new byte[2048];
-            var testBuffer = new short[sampleBuffer.Length / 2];
-            while (samplesLeft > 0)
+            var samplesToRead = Math.Min(samplesLeft, sampleBuffer.Length / 2);
+            reader.Read(sampleBuffer, 0, samplesToRead * 2);
+            for (var i = 0; i < samplesToRead; i++)
             {
-                var samplesToRead = (int)Math.Min(samplesLeft, sampleBuffer.Length / 2);
-                reader.Read(sampleBuffer, 0, samplesToRead * 2);
-                for (var i = 0; i < samplesToRead; i++)
-                {
-                    testBuffer[i] = Platform.ToInt16((sampleBuffer[(i * 2) + 1] << 8) | sampleBuffer[(i * 2)]);
-                    samples[samplesPos + i] = testBuffer[i] / 32767f;
-                }
-
-                samplesLeft -= samplesToRead;
-                samplesPos += samplesToRead;
+                testBuffer[i]           = Platform.ToInt16((sampleBuffer[i * 2 + 1] << 8) | sampleBuffer[i * 2]);
+                samples[samplesPos + i] = testBuffer[i] / 32767f;
             }
 
-            return samples;
+            samplesLeft -= samplesToRead;
+            samplesPos  += samplesToRead;
         }
+
+        return samples;
     }
 }

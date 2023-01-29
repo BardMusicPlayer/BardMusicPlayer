@@ -9,82 +9,83 @@ using System.Threading;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
 using BardMusicPlayer.Siren.AlphaTab.Util;
 
-namespace BardMusicPlayer.Siren.AlphaTab
+namespace BardMusicPlayer.Siren.AlphaTab;
+
+internal class ManagedThreadAlphaSynthWorkerApi : AlphaSynthWorkerApiBase
 {
-    internal class ManagedThreadAlphaSynthWorkerApi : AlphaSynthWorkerApiBase
+    private readonly Action<Action> _uiInvoke;
+    private readonly Thread _workerThread;
+    private BlockingCollection<Action> _workerQueue;
+    private CancellationTokenSource _workerCancellationToken;
+    private readonly ManualResetEventSlim _threadStartedEvent;
+
+    public ManagedThreadAlphaSynthWorkerApi(ISynthOutput output, LogLevel logLevel, Action<Action> uiInvoke)
+        : base(output, logLevel)
     {
-        private readonly Action<Action> _uiInvoke;
-        private readonly Thread _workerThread;
-        private BlockingCollection<Action> _workerQueue;
-        private CancellationTokenSource _workerCancellationToken;
-        private readonly ManualResetEventSlim _threadStartedEvent;
+        _uiInvoke = uiInvoke;
 
-        public ManagedThreadAlphaSynthWorkerApi(ISynthOutput output, LogLevel logLevel, Action<Action> uiInvoke)
-            : base(output, logLevel)
+        _threadStartedEvent      = new ManualResetEventSlim(false);
+        _workerQueue             = new BlockingCollection<Action>();
+        _workerCancellationToken = new CancellationTokenSource();
+
+        _workerThread = new Thread(DoWork)
         {
-            _uiInvoke = uiInvoke;
+            IsBackground = true
+        };
+        _workerThread.Start();
 
-            _threadStartedEvent = new ManualResetEventSlim(false);
-            _workerQueue = new BlockingCollection<Action>();
-            _workerCancellationToken = new CancellationTokenSource();
+        _threadStartedEvent.Wait();
+        _workerQueue.Add(Initialize);
+        _threadStartedEvent.Dispose();
+        _threadStartedEvent = null;
+    }
 
-            _workerThread = new Thread(DoWork);
-            _workerThread.IsBackground = true;
-            _workerThread.Start();
+    public override void Destroy()
+    {
+        _workerCancellationToken.Cancel();
+        _workerThread.Join();
+    }
 
-            _threadStartedEvent.Wait();
-            _workerQueue.Add(Initialize);
-            _threadStartedEvent.Dispose();
-            _threadStartedEvent = null;
+    protected override void DispatchOnUiThread(Action action)
+    {
+        _uiInvoke(action);
+    }
+
+    private bool CheckAccess()
+    {
+        return Thread.CurrentThread == _workerThread;
+    }
+
+    protected override void DispatchOnWorkerThread(Action action)
+    {
+        if (CheckAccess())
+        {
+            action();
         }
-
-        public override void Destroy()
+        else
         {
-            _workerCancellationToken.Cancel();
-            _workerThread.Join();
+            _workerQueue.Add(action);
         }
+    }
 
-        protected override void DispatchOnUiThread(Action action)
+    private void DoWork()
+    {
+        try
         {
-            _uiInvoke(action);
-        }
-
-        private bool CheckAccess()
-        {
-            return Thread.CurrentThread == _workerThread;
-        }
-
-        protected override void DispatchOnWorkerThread(Action action)
-        {
-            if (CheckAccess())
+            _threadStartedEvent.Set();
+            while (_workerQueue.TryTake(out var action, Timeout.Infinite, _workerCancellationToken.Token))
             {
+                if (_workerCancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 action();
             }
-            else
-            {
-                _workerQueue.Add(action);
-            }
         }
-
-        private void DoWork()
+        catch (OperationCanceledException)
         {
-            try
-            {
-                _threadStartedEvent.Set();
-                while (_workerQueue.TryTake(out var action, Timeout.Infinite, _workerCancellationToken.Token))
-                {
-                    if (_workerCancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
-                    action();
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                // Ignored
-            }
+            // Ignored
         }
     }
 }
