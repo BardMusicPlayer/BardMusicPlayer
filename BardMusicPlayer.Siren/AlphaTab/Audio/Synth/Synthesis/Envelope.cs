@@ -80,20 +80,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             // EG times need to be converted from timecents to seconds.
             // Pin very short EG segments.  Timecents don't get to zero, and our EG is
             // happier with zero values.
-            Delay = (Delay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Delay));
-            Attack = (Attack < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Attack));
-            Release = (Release < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Release));
+            Delay   = Delay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Delay);
+            Attack  = Attack < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Attack);
+            Release = Release < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Release);
 
             // If we have dynamic hold or decay times depending on key number we need
             // to keep the values in timecents so we can calculate it during startNote
             if (KeynumToHold == 0)
             {
-                Hold = (Hold < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Hold));
+                Hold = Hold < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Hold);
             }
 
             if (KeynumToDecay == 0)
             {
-                Decay = (Decay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Decay));
+                Decay = Decay < -11950.0f ? 0.0f : SynthHelper.Timecents2Secs(Decay);
             }
 
             if (Sustain < 0.0f)
@@ -106,7 +106,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             }
             else
             {
-                Sustain = 1.0f - (Sustain / 1000.0f);
+                Sustain = 1.0f - Sustain / 1000.0f;
             }
         }
     }

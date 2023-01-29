@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Siren.AlphaTab;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
-using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Siren.Properties;
 using BardMusicPlayer.Transmogrify.Song;
 using NAudio.CoreAudioApi;
@@ -22,12 +21,12 @@ namespace BardMusicPlayer.Siren
     public class BmpSiren
     {
         public string CurrentSongTitle { get; private set; } = "";
-        public BmpSong CurrentSong { get; private set; } = null;
+        public BmpSong CurrentSong { get; private set; }
 
         private IAlphaSynth _player;
         private Dictionary<int, Dictionary<long, string>> _lyrics;
         private double _lyricIndex;
-        private MMDevice _mdev = null;
+        private MMDevice _mdev;
 
         private static readonly Lazy<BmpSiren> LazyInstance = new(() => new BmpSiren());
         public static BmpSiren Instance => LazyInstance.Value;
@@ -85,7 +84,7 @@ namespace BardMusicPlayer.Siren
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReady => _player != null && _player.IsReady;
+        public bool IsReady => _player is { IsReady: true };
 
         /// <summary>
         /// 
@@ -127,8 +126,7 @@ namespace BardMusicPlayer.Siren
         {
             if (!IsReady) throw new BmpException("Siren not initialized.");
             if (_player.State == PlayerState.Playing) _player.Stop();
-            MidiFile midiFile;
-            (midiFile, _lyrics) = await song.GetSynthMidi();
+            (var midiFile, _lyrics) = await song.GetSynthMidi();
             _lyricIndex = 0;
             _player.LoadMidiFile(midiFile);
             CurrentSongTitle = song.Title;

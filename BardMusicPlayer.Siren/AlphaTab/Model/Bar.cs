@@ -3,6 +3,7 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
@@ -126,17 +127,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal int CalculateDuration()
         {
-            var duration = 0;
-            foreach (var voice in Voices)
-            {
-                var voiceDuration = voice.CalculateDuration();
-                if (voiceDuration > duration)
-                {
-                    duration = voiceDuration;
-                }
-            }
-
-            return duration;
+            return Voices.Select(voice => voice.CalculateDuration()).Prepend(0).Max();
         }
     }
 }

@@ -45,9 +45,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraIgen Load(IReadable reader)
         {
-            var igen = new HydraIgen();
-            igen.GenOper = reader.ReadUInt16LE();
-            igen.GenAmount = HydraGenAmount.Load(reader);
+            var igen = new HydraIgen
+            {
+                GenOper   = reader.ReadUInt16LE(),
+                GenAmount = HydraGenAmount.Load(reader)
+            };
             return igen;
         }
     }

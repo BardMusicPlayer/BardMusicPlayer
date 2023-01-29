@@ -96,7 +96,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <summary>
         /// Gets a value indicating whether this beat ends a legato slur.
         /// </summary>
-        public bool IsLegatoDestination => PreviousBeat != null && PreviousBeat.IsLegatoOrigin;
+        public bool IsLegatoDestination => PreviousBeat is { IsLegatoOrigin: true };
 
         /// <summary>
         /// Gets or sets the note with the lowest pitch in this beat. Only visible notes are considered.
@@ -525,24 +525,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal Note GetNoteOnString(int @string)
         {
-            if (NoteStringLookup.ContainsKey(@string))
-            {
-                return NoteStringLookup[@string];
-            }
-
-            return null;
+            return NoteStringLookup.ContainsKey(@string) ? NoteStringLookup[@string] : null;
         }
 
         private int CalculateDuration()
         {
             var ticks = Duration.ToTicks();
-            if (Dots == 2)
+            switch (Dots)
             {
-                ticks = MidiUtils.ApplyDot(ticks, true);
-            }
-            else if (Dots == 1)
-            {
-                ticks = MidiUtils.ApplyDot(ticks, false);
+                case 2:
+                    ticks = MidiUtils.ApplyDot(ticks, true);
+                    break;
+                case 1:
+                    ticks = MidiUtils.ApplyDot(ticks, false);
+                    break;
             }
 
             if (TupletDenominator > 0 && TupletNumerator >= 0)
@@ -584,13 +580,13 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 default:
 
                     var previous = PreviousBeat;
-                    if (previous != null && previous.GraceType == GraceType.BendGrace)
+                    if (previous is { GraceType: GraceType.BendGrace })
                     {
                         PlaybackDuration = previous.PlaybackDuration;
                     }
                     else
                     {
-                        while (previous != null && previous.GraceType == GraceType.OnBeat)
+                        while (previous is { GraceType: GraceType.OnBeat })
                         {
                             // if the previous beat is a on-beat grace it steals the duration from this beat
                             PlaybackDuration -= previous.PlaybackDuration;
@@ -621,7 +617,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         internal void FinishTuplet()
         {
             var previousBeat = PreviousBeat;
-            var currentTupletGroup = previousBeat != null ? previousBeat.TupletGroup : null;
+            var currentTupletGroup = previousBeat?.TupletGroup;
 
             if (HasTuplet || GraceType != GraceType.None && currentTupletGroup != null)
             {
@@ -637,8 +633,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal void Finish()
         {
-
-            var needCopyBeatForBend = false;
+            // // Local variable 'needCopyBeatForBend' is only assigned but its value is never used
+            //var needCopyBeatForBend = false;
             MinNote = null;
             MaxNote = null;
             MinStringNote = null;
@@ -719,7 +715,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (!IsRest && (!IsLetRing || !IsPalmMute))
             {
                 var currentBeat = PreviousBeat;
-                while (currentBeat != null && currentBeat.IsRest)
+                while (currentBeat is { IsRest: true })
                 {
                     if (!IsLetRing)
                     {
@@ -741,7 +737,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
             if (WhammyBarPoints.Count > 0 && WhammyBarType == WhammyType.Custom)
             {
 
-                var isContinuedWhammy = IsContinuedWhammy = PreviousBeat != null && PreviousBeat.HasWhammyBar;
+                var isContinuedWhammy = IsContinuedWhammy = PreviousBeat is { HasWhammyBar: true };
                 if (WhammyBarPoints.Count == 4)
                 {
                     var origin = WhammyBarPoints[0];
@@ -803,7 +799,8 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
             UpdateDurations();
 
-            if (needCopyBeatForBend)
+            // Code is heuristically unreachable - Expression is always false
+            /*if (needCopyBeatForBend)
             {
                 // if this beat is a simple bend convert it to a grace beat
                 // and generate a placeholder beat with tied notes
@@ -826,7 +823,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                     if (note.HasBend && note.IsTieOrigin)
                     {
                         var tieDestination = Note.NextNoteOnSameLine(note);
-                        if (tieDestination != null && tieDestination.HasBend)
+                        if (tieDestination is { HasBend: true })
                         {
                             cloneNote.BendType = BendType.Hold;
                             var lastPoint = note.BendPoints[note.BendPoints.Count - 1];
@@ -843,7 +840,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                 UpdateDurations();
 
                 Voice.InsertBeat(this, cloneBeat);
-            }
+            }*/
 
             Fermata = Voice.Bar.MasterBar.GetFermata(this);
         }
@@ -877,12 +874,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         internal Note GetNoteWithRealValue(int noteRealValue)
         {
-            if (NoteValueLookup.ContainsKey(noteRealValue))
-            {
-                return NoteValueLookup[noteRealValue];
-            }
-
-            return null;
+            return NoteValueLookup.ContainsKey(noteRealValue) ? NoteValueLookup[noteRealValue] : null;
         }
     }
 }

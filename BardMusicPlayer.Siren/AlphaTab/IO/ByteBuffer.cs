@@ -7,7 +7,7 @@ using System;
 
 namespace BardMusicPlayer.Siren.AlphaTab.IO
 {
-    internal class ByteBuffer : IWriteable, IReadable
+    internal sealed class ByteBuffer : IWriteable, IReadable
     {
         private byte[] _buffer;
         private int _capacity;
@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
 
         public int Position { get; set; }
 
-        public virtual byte[] GetBuffer()
+        public byte[] GetBuffer()
         {
             return _buffer;
         }
@@ -24,21 +24,25 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
 
         public static ByteBuffer Empty()
         {
-            return WithCapactiy(0);
+            return WithCapacity(0);
         }
 
-        public static ByteBuffer WithCapactiy(int capacity)
+        public static ByteBuffer WithCapacity(int capacity)
         {
-            var buffer = new ByteBuffer();
-            buffer._buffer = new byte[capacity];
-            buffer._capacity = capacity;
+            var buffer = new ByteBuffer
+            {
+                _buffer   = new byte[capacity],
+                _capacity = capacity
+            };
             return buffer;
         }
 
         public static ByteBuffer FromBuffer(byte[] data)
         {
-            var buffer = new ByteBuffer();
-            buffer._buffer = data;
+            var buffer = new ByteBuffer
+            {
+                _buffer = data
+            };
             buffer._capacity = buffer.Length = data.Length;
             return buffer;
         }
@@ -99,22 +103,23 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
                 n = count;
             }
 
-            if (n <= 0)
+            switch (n)
             {
-                return 0;
-            }
-
-            if (n <= 8)
-            {
-                var byteCount = n;
-                while (--byteCount >= 0)
+                case <= 0:
+                    return 0;
+                case <= 8:
                 {
-                    buffer[offset + byteCount] = _buffer[Position + byteCount];
+                    var byteCount = n;
+                    while (--byteCount >= 0)
+                    {
+                        buffer[offset + byteCount] = _buffer[Position + byteCount];
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                Platform.BlockCopy(_buffer, Position, buffer, offset, n);
+                default:
+                    Platform.BlockCopy(_buffer, Position, buffer, offset, n);
+                    break;
             }
 
             Position += n;
@@ -183,7 +188,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             return ToArray();
         }
 
-        public virtual byte[] ToArray()
+        public byte[] ToArray()
         {
             var copy = new byte[Length];
             Platform.BlockCopy(_buffer, 0, copy, 0, Length);

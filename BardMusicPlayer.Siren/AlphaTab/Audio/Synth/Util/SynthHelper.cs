@@ -26,7 +26,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util
 
         public static float GainToDecibels(float gain)
         {
-            return (gain <= .00001f ? -100f : (float)(20.0 * Math.Log10(gain)));
+            return gain <= .00001f ? -100f : (float)(20.0 * Math.Log10(gain));
         }
 
         public static float Cents2Hertz(float cents)
@@ -41,12 +41,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util
                 return min;
             }
 
-            if (value >= max)
-            {
-                return max;
-            }
-
-            return value;
+            return value >= max ? max : value;
         }
 
         public static double ClampD(double value, double min, double max)
@@ -56,12 +51,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util
                 return min;
             }
 
-            if (value >= max)
-            {
-                return max;
-            }
-
-            return value;
+            return value >= max ? max : value;
         }
 
         public static float ClampF(float value, float min, float max)
@@ -71,12 +61,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util
                 return min;
             }
 
-            if (value >= max)
-            {
-                return max;
-            }
-
-            return value;
+            return value >= max ? max : value;
         }
     }
 }

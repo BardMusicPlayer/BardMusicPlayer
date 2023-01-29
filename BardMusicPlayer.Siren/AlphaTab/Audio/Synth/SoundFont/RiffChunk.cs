@@ -43,7 +43,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static bool Load(RiffChunk parent, RiffChunk chunk, IReadable stream)
         {
-            if (parent != null && RiffChunk.HeaderSize > parent.Size)
+            if (parent is { Size: < HeaderSize })
             {
                 return false;
             }
@@ -73,16 +73,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
             var isRiff = chunk.Id == "RIFF";
             var isList = chunk.Id == "LIST";
 
-            if (isRiff && parent != null)
+            switch (isRiff)
             {
-                // not allowed
-                return false;
-            }
-
-            if (!isRiff && !isList)
-            {
-                // custom type without sub type
-                return true;
+                case true when parent != null:
+                    // not allowed
+                    return false;
+                case false when !isList:
+                    // custom type without sub type
+                    return true;
             }
 
             // for lists unwrap the list type

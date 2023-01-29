@@ -277,7 +277,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 case GenOperators.EndloopAddrsCoarseOffset: LoopEnd += (uint)amount.ShortAmount * 32768; break;
                 case GenOperators.CoarseTune: Transpose += amount.ShortAmount; break;
                 case GenOperators.FineTune: Tune += amount.ShortAmount; break;
-                case GenOperators.SampleModes: LoopMode = ((amount.WordAmount & 3) == 3 ? LoopMode.Sustain : ((amount.WordAmount & 3) == 1 ? LoopMode.Continuous : LoopMode.None)); break;
+                case GenOperators.SampleModes: LoopMode = (amount.WordAmount & 3) == 3 ? LoopMode.Sustain : (amount.WordAmount & 3) == 1 ? LoopMode.Continuous : LoopMode.None; break;
                 case GenOperators.ScaleTuning: PitchKeyTrack = amount.ShortAmount; break;
                 case GenOperators.ExclusiveClass: Group = amount.WordAmount; break;
                 case GenOperators.OverridingRootKey: PitchKeyCenter = amount.ShortAmount; break;

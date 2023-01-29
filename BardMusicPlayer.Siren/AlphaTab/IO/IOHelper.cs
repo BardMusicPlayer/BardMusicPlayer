@@ -54,12 +54,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.IO
             }
 
             var t = s.ToString();
-            if (z >= 0)
-            {
-                return t.Substring(0, z);
-            }
-
-            return t;
+            return z >= 0 ? t.Substring(0, z) : t;
         }
 
 

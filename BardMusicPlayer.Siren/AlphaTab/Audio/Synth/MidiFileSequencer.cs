@@ -16,7 +16,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
     /// This sequencer dispatches midi events to the synthesizer based on the current
     /// synthesize position. The sequencer does not consider the playback speed.
     /// </summary>
-    internal class MidiFileSequencer
+    internal sealed class MidiFileSequencer
     {
         private readonly TinySoundFont _synthesizer;
 
@@ -175,18 +175,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
                 synthData.Time = absTime;
                 previousTick = mEvent.Tick;
 
-                if (mEvent.Command == MidiEventType.Meta && mEvent.Data1 == (int)MetaEventTypeEnum.Tempo)
+                switch (mEvent.Command)
                 {
-                    var meta = (MetaNumberEvent)mEvent;
-                    bpm = MidiHelper.MicroSecondsPerMinute / (double)meta.Value;
-                    _tempoChanges.Add(new MidiFileSequencerTempoChange(bpm, absTick, (int)absTime));
-                }
-                else if (mEvent.Command == MidiEventType.ProgramChange)
-                {
-                    var channel = mEvent.Channel;
-                    if (!_firstProgramEventPerChannel.ContainsKey(channel))
+                    case MidiEventType.Meta when mEvent.Data1 == (int)MetaEventTypeEnum.Tempo:
                     {
-                        _firstProgramEventPerChannel[channel] = synthData;
+                        var meta = (MetaNumberEvent)mEvent;
+                        bpm = MidiHelper.MicroSecondsPerMinute / (double)meta.Value;
+                        _tempoChanges.Add(new MidiFileSequencerTempoChange(bpm, absTick, (int)absTime));
+                        break;
+                    }
+                    case MidiEventType.ProgramChange:
+                    {
+                        var channel = mEvent.Channel;
+                        if (!_firstProgramEventPerChannel.ContainsKey(channel))
+                        {
+                            _firstProgramEventPerChannel[channel] = synthData;
+                        }
+
+                        break;
                     }
                 }
             }
@@ -256,17 +262,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             var lastChange = 0;
 
             // find start and bpm of last tempo change before time
-            for (var i = 0; i < _tempoChanges.Count; i++)
+            foreach (var c in _tempoChanges)
             {
-                var c = _tempoChanges[i];
                 if (tickPosition < c.Ticks)
                 {
                     break;
                 }
 
                 timePosition = c.Time;
-                bpm = c.Bpm;
-                lastChange = c.Ticks;
+                bpm          = c.Bpm;
+                lastChange   = c.Ticks;
             }
 
             // add the missing millis
@@ -285,16 +290,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             var lastChange = 0;
 
             // find start and bpm of last tempo change before time
-            for (var i = 0; i < _tempoChanges.Count; i++)
+            foreach (var c in _tempoChanges)
             {
-                var c = _tempoChanges[i];
                 if (timePosition < c.Time)
                 {
                     break;
                 }
 
-                ticks = c.Ticks;
-                bpm = c.Bpm;
+                ticks      = c.Ticks;
+                bpm        = c.Bpm;
                 lastChange = c.Time;
             }
 
@@ -307,13 +311,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
 
         public event Action Finished;
 
-        protected virtual void OnFinished()
+        private void OnFinished()
         {
             var finished = Finished;
-            if (finished != null)
-            {
-                finished();
-            }
+            finished?.Invoke();
         }
 
 

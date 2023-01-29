@@ -45,9 +45,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraInst Load(IReadable reader)
         {
-            var inst = new HydraInst();
-            inst.InstName = reader.Read8BitStringLength(20);
-            inst.InstBagNdx = reader.ReadUInt16LE();
+            var inst = new HydraInst
+            {
+                InstName   = reader.Read8BitStringLength(20),
+                InstBagNdx = reader.ReadUInt16LE()
+            };
             return inst;
         }
     }

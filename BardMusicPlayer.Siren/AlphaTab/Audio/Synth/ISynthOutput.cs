@@ -51,7 +51,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         void AddSamples(float[] samples);
 
         /// <summary>
-        /// Called when the samples in the output buffer should be reset. This is neeed for instance when seeking to another position.
+        /// Called when the samples in the output buffer should be reset. This is needed for instance when seeking to another position.
         /// </summary>
         void ResetSamples();
 

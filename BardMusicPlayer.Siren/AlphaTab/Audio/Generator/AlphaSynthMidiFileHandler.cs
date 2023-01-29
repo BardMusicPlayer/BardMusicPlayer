@@ -3,6 +3,7 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Siren.AlphaTab.Model;
@@ -30,7 +31,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
         public void AddTimeSignature(int tick, int timeSignatureNumerator, int timeSignatureDenominator)
         {
             var denominatorIndex = 0;
-            while ((timeSignatureDenominator = timeSignatureDenominator >> 1) > 0)
+            while ((timeSignatureDenominator >>= 1) > 0)
             {
                 denominatorIndex++;
             }
@@ -80,24 +81,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
             _midiFile.AddEvent(noteOff);
         }
 
-        private byte MakeCommand(byte command, byte channel)
+        private static byte MakeCommand(byte command, byte channel)
         {
             return (byte)((command & 0xF0) | (channel & 0x0F));
         }
 
         private static byte FixValue(int value)
         {
-            if (value > 127)
+            return value switch
             {
-                return 127;
-            }
-
-            if (value < 0)
-            {
-                return 0;
-            }
-
-            return (byte)value;
+                > 127 => 127,
+                < 0   => 0,
+                _     => (byte)value
+            };
         }
 
         /// <inheritdoc />
@@ -148,7 +144,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Generator
             var message = new MetaDataEvent(tick,
                 0xFF,
                 (byte)MetaEventTypeEnum.EndOfTrack,
-                new byte[0]);
+                Array.Empty<byte>());
             _midiFile.AddEvent(message);
             _midiFile.Sort();
         }

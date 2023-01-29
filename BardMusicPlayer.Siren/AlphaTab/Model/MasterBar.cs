@@ -3,6 +3,7 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Audio;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 
@@ -165,20 +166,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         {
             if (IsAnacrusis)
             {
-                var duration = 0;
-                foreach (var track in Score.Tracks)
-                {
-                    foreach (var staff in track.Staves)
-                    {
-                        var barDuration = staff.Bars[0].CalculateDuration();
-                        if (barDuration > duration)
-                        {
-                            duration = barDuration;
-                        }
-                    }
-                }
-
-                return duration;
+                return Score.Tracks.Aggregate(0, (current, track) => track.Staves.Select(staff => staff.Bars[0].CalculateDuration()).Prepend(current).Max());
             }
 
             return TimeSignatureNumerator * MidiUtils.ValueToTicks(TimeSignatureDenominator);
@@ -201,12 +189,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <returns></returns>
         internal Fermata GetFermata(Beat beat)
         {
-            if (Fermata.ContainsKey(beat.PlaybackStart))
-            {
-                return Fermata[beat.PlaybackStart];
-            }
-
-            return null;
+            return Fermata.ContainsKey(beat.PlaybackStart) ? Fermata[beat.PlaybackStart] : null;
         }
     }
 }

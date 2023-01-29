@@ -151,14 +151,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
                     Output.Pause();
                     State = PlayerState.Paused;
                     OnStateChanged(new PlayerStateChangedEventArgs(State, false));
-                    _sequencer.Stop();
-                    _synthesizer.NoteOffAll(true);
-                    TickPosition = _sequencer.PlaybackRange != null ? _sequencer.PlaybackRange.StartTick : 0;
+                    _sequencer?.Stop();
+                    _synthesizer?.NoteOffAll(true);
+                    TickPosition = _sequencer?.PlaybackRange?.StartTick ?? 0;
                 }
 
                 Logger.Debug("AlphaSynth", "Finished playback");
                 OnFinished();
-                if (_sequencer.IsLooping)
+                if (_sequencer is { IsLooping: true })
                 {
                     Play();
                 }
@@ -166,12 +166,12 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             Output.SampleRequest += () =>
             {
                 // synthesize buffer
-                _sequencer.FillMidiEventQueue();
-                var samples = _synthesizer.Synthesize();
+                _sequencer?.FillMidiEventQueue();
+                var samples = _synthesizer?.Synthesize();
                 // send it to output
                 Output.AddSamples(samples);
                 // tell sequencer to check whether its work is done
-                _sequencer.CheckForStop();
+                _sequencer?.CheckForStop();
             };
             Output.SamplesPlayed += OnSamplesPlayed;
 
@@ -242,7 +242,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
             Output.Stop();
             _sequencer.Stop();
             _synthesizer.NoteOffAll(true);
-            TickPosition = _sequencer.PlaybackRange != null ? _sequencer.PlaybackRange.StartTick : 0;
+            TickPosition = _sequencer.PlaybackRange?.StartTick ?? 0;
             OnStateChanged(new PlayerStateChangedEventArgs(State, true));
         }
 
@@ -369,10 +369,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnReady()
         {
             var handler = Ready;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
@@ -383,10 +380,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnFinished()
         {
             var handler = Finished;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
@@ -397,10 +391,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnStateChanged(PlayerStateChangedEventArgs e)
         {
             var handler = StateChanged;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
@@ -411,10 +402,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnSoundFontLoaded()
         {
             var handler = SoundFontLoaded;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
@@ -426,10 +414,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnReadyForPlayback()
         {
             var handler = ReadyForPlayback;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
@@ -440,10 +425,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnSoundFontLoadFailed(Exception e)
         {
             var handler = SoundFontLoadFailed;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
@@ -454,10 +436,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnMidiLoaded()
         {
             var handler = MidiLoaded;
-            if (handler != null)
-            {
-                handler();
-            }
+            handler?.Invoke();
         }
 
         /// <summary>
@@ -468,10 +447,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnMidiLoadFailed(Exception e)
         {
             var handler = MidiLoadFailed;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         /// <summary>
@@ -482,10 +458,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         private void OnPositionChanged(PositionChangedEventArgs e)
         {
             var handler = PositionChanged;
-            if (handler != null)
-            {
-                handler(e);
-            }
+            handler?.Invoke(e);
         }
 
         #endregion

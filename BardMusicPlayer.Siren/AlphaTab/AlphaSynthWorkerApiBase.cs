@@ -42,10 +42,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
             DispatchOnUiThread(OnReady);
         }
 
-        public bool IsReady => Player != null && Player.IsReady;
-        public bool IsReadyForPlayback => Player != null && Player.IsReadyForPlayback;
+        public bool IsReady => Player is { IsReady: true };
+        public bool IsReadyForPlayback => Player is { IsReadyForPlayback: true };
 
-        public PlayerState State => Player == null ? PlayerState.Paused : Player.State;
+        public PlayerState State => Player?.State ?? PlayerState.Paused;
 
         public LogLevel LogLevel
         {
@@ -163,47 +163,47 @@ namespace BardMusicPlayer.Siren.AlphaTab
         public event Action<PlayerStateChangedEventArgs> StateChanged;
         public event Action<PositionChangedEventArgs> PositionChanged;
 
-        protected virtual void OnReady()
+        private void OnReady()
         {
             DispatchOnUiThread(() => Ready?.Invoke());
         }
 
-        protected virtual void OnReadyForPlayback()
+        private void OnReadyForPlayback()
         {
             DispatchOnUiThread(() => ReadyForPlayback?.Invoke());
         }
 
-        protected virtual void OnFinished()
+        private void OnFinished()
         {
             DispatchOnUiThread(() => Finished?.Invoke());
         }
 
-        protected virtual void OnSoundFontLoaded()
+        private void OnSoundFontLoaded()
         {
             DispatchOnUiThread(() => SoundFontLoaded?.Invoke());
         }
 
-        protected virtual void OnSoundFontLoadFailed(Exception e)
+        private void OnSoundFontLoadFailed(Exception e)
         {
             DispatchOnUiThread(() => SoundFontLoadFailed?.Invoke(e));
         }
 
-        protected virtual void OnMidiLoaded()
+        private void OnMidiLoaded()
         {
             DispatchOnUiThread(() => MidiLoaded?.Invoke());
         }
 
-        protected virtual void OnMidiLoadFailed(Exception e)
+        private void OnMidiLoadFailed(Exception e)
         {
             DispatchOnUiThread(() => MidiLoadFailed?.Invoke(e));
         }
 
-        protected virtual void OnStateChanged(PlayerStateChangedEventArgs obj)
+        private void OnStateChanged(PlayerStateChangedEventArgs obj)
         {
             DispatchOnUiThread(() => StateChanged?.Invoke(obj));
         }
 
-        protected virtual void OnPositionChanged(PositionChangedEventArgs obj)
+        private void OnPositionChanged(PositionChangedEventArgs obj)
         {
             DispatchOnUiThread(() => PositionChanged?.Invoke(obj));
         }

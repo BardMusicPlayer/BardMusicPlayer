@@ -5,6 +5,7 @@
 
 // This file contains alphaTab specific extensions to the TinySoundFont audio synthesis
 
+using System.Linq;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.Event;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
@@ -13,15 +14,15 @@ using BardMusicPlayer.Siren.AlphaTab.Util;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal partial class TinySoundFont
+    internal sealed partial class TinySoundFont
     {
         public const int MicroBufferCount = 32; // 4069 samples in total
         public const int MicroBufferSize = 64; // 64 stereo samples
 
-        private readonly LinkedList<SynthEvent> _midiEventQueue = new LinkedList<SynthEvent>();
+        private readonly LinkedList<SynthEvent> _midiEventQueue = new();
         private readonly int[] _midiEventCounts = new int[MicroBufferCount];
-        private FastDictionary<int, bool> _mutedChannels = new FastDictionary<int, bool>();
-        private FastDictionary<int, bool> _soloChannels = new FastDictionary<int, bool>();
+        private FastDictionary<int, bool> _mutedChannels = new();
+        private FastDictionary<int, bool> _soloChannels = new();
         private bool _isAnySolo;
 
         public float[] Synthesize()
@@ -36,20 +37,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
         public float ChannelGetMixVolume(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].MixVolume
-                : 1.0f);
+                : 1.0f;
         }
 
         public void ChannelSetMixVolume(int channel, float volume)
         {
             var c = ChannelInit(channel);
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingChannel == channel && v.PlayingPreset != -1))
             {
-                if (v.PlayingChannel == channel && v.PlayingPreset != -1)
-                {
-                    v.MixVolume = volume;
-                }
+                v.MixVolume = volume;
             }
 
             c.MixVolume = volume;
@@ -97,7 +95,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         private float[] FillWorkingBuffer(bool silent)
         {
             /*Break the process loop into sections representing the smallest timeframe before the midi controls need to be updated
-            the bigger the timeframe the more efficent the process is, but playback quality will be reduced.*/
+            the bigger the timeframe the more efficient the process is, but playback quality will be reduced.*/
             var buffer = new float[MicroBufferSize * MicroBufferCount * SynthConstants.AudioChannels];
             var bufferPos = 0;
             var anySolo = _isAnySolo;
@@ -123,7 +121,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     if (voice.PlayingPreset != -1)
                     {
                         var channel = voice.PlayingChannel;
-                        // channel is muted if it is either explicitley muted, or another channel is set to solo but not this one.
+                        // channel is muted if it is either explicitly muted, or another channel is set to solo but not this one.
                         var isChannelMuted = _mutedChannels.ContainsKey(channel) ||
                                              anySolo && !_soloChannels.ContainsKey(channel);
 
@@ -177,19 +175,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         }
 
         /// <summary>
-        /// Stop all playing notes immediatly and reset all channel parameters but keeps user
+        /// Stop all playing notes immediately and reset all channel parameters but keeps user
         /// defined settings
         /// </summary>
         public void ResetSoft()
         {
             _noteCounter = 0;
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingPreset != -1 &&
+                                                 (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release != 0)))
             {
-                if (v.PlayingPreset != -1 &&
-                    (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release != 0))
-                {
-                    v.EndQuick(OutSampleRate);
-                }
+                v.EndQuick(OutSampleRate);
             }
 
             if (_channels != null)

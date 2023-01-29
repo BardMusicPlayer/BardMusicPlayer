@@ -56,7 +56,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
             _circularBuffer = new CircularSampleBuffer(BufferSize * _bufferCount);
             _context.Init(this);
 
-            Ready();
+            Ready?.Invoke();
         }
 
         /// <inheritdoc />
@@ -129,7 +129,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
             {
                 if (_finished)
                 {
-                    Finished();
+                    Finished?.Invoke();
                 }
             }
             else
@@ -143,7 +143,7 @@ namespace BardMusicPlayer.Siren.AlphaTab
                 }
 
                 var samples = count / 2;
-                SamplesPlayed(samples);
+                SamplesPlayed?.Invoke(samples);
             }
 
             if (!_finished)

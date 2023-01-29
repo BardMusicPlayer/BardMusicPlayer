@@ -36,7 +36,7 @@ using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 {
-    internal partial class Voice
+    internal class Voice
     {
         /// <summary>
         /// The lower this block size is the more accurate the effects are.
@@ -45,7 +45,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// </summary>
         private const int RenderEffectSampleBLock = 4;
 
-        public bool Stopped { get; set; } = false;
+        public bool Stopped { get; set; }
 
         public int PlayingPreset { get; set; }
         public int PlayingKey { get; set; }
@@ -122,32 +122,32 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             var outR = f.OutputMode == OutputMode.StereoUnweaved ? numSamples : -1;
 
             // Cache some values, to give them at least some chance of ending up in registers.
-            var updateModEnv = (region.ModEnvToPitch != 0 || region.ModEnvToFilterFc != 0);
-            var updateModLFO = (ModLfo.Delta > 0 && (region.ModLfoToPitch != 0 || region.ModLfoToFilterFc != 0 || region.ModLfoToVolume != 0));
-            var updateVibLFO = (VibLfo.Delta > 0 && (region.VibLfoToPitch != 0));
-            var isLooping = (LoopStart < LoopEnd);
+            var updateModEnv = region.ModEnvToPitch != 0 || region.ModEnvToFilterFc != 0;
+            var updateModLFO = ModLfo.Delta > 0 && (region.ModLfoToPitch != 0 || region.ModLfoToFilterFc != 0 || region.ModLfoToVolume != 0);
+            var updateVibLFO = VibLfo.Delta > 0 && region.VibLfoToPitch != 0;
+            var isLooping = LoopStart < LoopEnd;
             int tmpLoopStart = (int)LoopStart, tmpLoopEnd = (int)LoopEnd;
-            double tmpSampleEndDbl = (double)region.End, tmpLoopEndDbl = (double)tmpLoopEnd + 1.0;
+            double tmpSampleEndDbl = region.End, tmpLoopEndDbl = tmpLoopEnd + 1.0;
             var tmpSourceSamplePosition = SourceSamplePosition;
 
             var tmpLowpass = new VoiceLowPass(LowPass);
 
-            var dynamicLowpass = (region.ModLfoToFilterFc != 0 || region.ModEnvToFilterFc != 0);
+            var dynamicLowpass = region.ModLfoToFilterFc != 0 || region.ModEnvToFilterFc != 0;
             float tmpSampleRate, tmpInitialFilterFc, tmpModLfoToFilterFc, tmpModEnvToFilterFc;
 
-            var dynamicPitchRatio = (region.ModLfoToPitch != 0 || region.ModEnvToPitch != 0 || region.VibLfoToPitch != 0);
+            var dynamicPitchRatio = region.ModLfoToPitch != 0 || region.ModEnvToPitch != 0 || region.VibLfoToPitch != 0;
             double pitchRatio;
             float tmpModLfoToPitch, tmpVibLfoToPitch, tmpModEnvToPitch;
 
-            var dynamicGain = (region.ModLfoToVolume != 0);
+            var dynamicGain = region.ModLfoToVolume != 0;
             float noteGain = 0, tmpModLfoToVolume;
 
             if (dynamicLowpass)
             {
-                tmpSampleRate = f.OutSampleRate;
-                tmpInitialFilterFc = (float)region.InitialFilterFc;
-                tmpModLfoToFilterFc = (float)region.ModLfoToFilterFc;
-                tmpModEnvToFilterFc = (float)region.ModEnvToFilterFc;
+                tmpSampleRate       = f.OutSampleRate;
+                tmpInitialFilterFc  = region.InitialFilterFc;
+                tmpModLfoToFilterFc = region.ModLfoToFilterFc;
+                tmpModEnvToFilterFc = region.ModEnvToFilterFc;
             }
             else
             {
@@ -159,10 +159,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
             if (dynamicPitchRatio)
             {
-                pitchRatio = 0;
-                tmpModLfoToPitch = (float)region.ModLfoToPitch;
-                tmpVibLfoToPitch = (float)region.VibLfoToPitch;
-                tmpModEnvToPitch = (float)region.ModEnvToPitch;
+                pitchRatio       = 0;
+                tmpModLfoToPitch = region.ModLfoToPitch;
+                tmpVibLfoToPitch = region.VibLfoToPitch;
+                tmpModEnvToPitch = region.ModEnvToPitch;
             }
             else
             {
@@ -174,7 +174,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
             if (dynamicGain)
             {
-                tmpModLfoToVolume = (float)region.ModLfoToVolume * 0.1f;
+                tmpModLfoToVolume = region.ModLfoToVolume * 0.1f;
             }
             else
             {
@@ -184,14 +184,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
             while (numSamples > 0)
             {
-                float gainMono, gainLeft, gainRight;
-                var blockSamples = (numSamples > RenderEffectSampleBLock ? RenderEffectSampleBLock : numSamples);
+                float gainLeft, gainRight;
+                var blockSamples = numSamples > RenderEffectSampleBLock ? RenderEffectSampleBLock : numSamples;
                 numSamples -= blockSamples;
 
                 if (dynamicLowpass)
                 {
                     var fres = tmpInitialFilterFc + ModLfo.Level * tmpModLfoToFilterFc + ModEnv.Level * tmpModEnvToFilterFc;
-                    tmpLowpass.Active = (fres <= 13500.0f);
+                    tmpLowpass.Active = fres <= 13500.0f;
                     if (tmpLowpass.Active)
                     {
                         tmpLowpass.Setup(SynthHelper.Cents2Hertz(fres) / tmpSampleRate);
@@ -202,9 +202,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     pitchRatio = SynthHelper.Timecents2Secs(PitchInputTimecents + (ModLfo.Level * tmpModLfoToPitch + VibLfo.Level * tmpVibLfoToPitch + ModEnv.Level * tmpModEnvToPitch)) * PitchOutputFactor;
 
                 if (dynamicGain)
-                    noteGain = SynthHelper.DecibelsToGain(NoteGainDb + (ModLfo.Level * tmpModLfoToVolume));
+                    noteGain = SynthHelper.DecibelsToGain(NoteGainDb + ModLfo.Level * tmpModLfoToVolume);
 
-                gainMono = noteGain * AmpEnv.Level;
+                var gainMono = noteGain * AmpEnv.Level;
 
                 if (isMuted)
                 {
@@ -241,11 +241,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         while (blockSamples-- > 0 && tmpSourceSamplePosition < tmpSampleEndDbl)
                         {
                             var pos = (int)tmpSourceSamplePosition;
-                            var nextPos = (pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1);
+                            var nextPos = pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1;
 
                             // Simple linear interpolation.
                             var alpha = (float) tmpSourceSamplePosition - pos;
-                            var val = input[(int)(pos)] * (1 - alpha) + input[(int)(nextPos)] * alpha;
+                            var val = input[pos] * (1 - alpha) + input[nextPos] * alpha;
 
                             // Low-pass filter.
                             if (tmpLowpass.Active) val = tmpLowpass.Process(val);
@@ -257,7 +257,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
                             // Next sample.
                             tmpSourceSamplePosition += pitchRatio;
-                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= (tmpLoopEnd - tmpLoopStart + 1.0);
+                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= tmpLoopEnd - tmpLoopStart + 1.0;
                         }
                         break;
                     case OutputMode.StereoUnweaved:
@@ -266,10 +266,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         while (blockSamples-- > 0 && tmpSourceSamplePosition < tmpSampleEndDbl)
                         {
                             var pos = (int)tmpSourceSamplePosition;
-                            var nextPos = (int)(pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1);
+                            var nextPos = pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1;
 
                             // Simple linear interpolation.
-                            float alpha = (float)(tmpSourceSamplePosition - pos), val = (input[pos] * (1.0f - alpha) + input[nextPos] * alpha);
+                            float alpha = (float)(tmpSourceSamplePosition - pos), val = input[pos] * (1.0f - alpha) + input[nextPos] * alpha;
 
                             // Low-pass filter.
                             if (tmpLowpass.Active) val = tmpLowpass.Process(val);
@@ -281,17 +281,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
                             // Next sample.
                             tmpSourceSamplePosition += pitchRatio;
-                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= (tmpLoopEnd - tmpLoopStart + 1.0);
+                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= tmpLoopEnd - tmpLoopStart + 1.0;
                         }
                         break;
                     case OutputMode.Mono:
                         while (blockSamples-- > 0 && tmpSourceSamplePosition < tmpSampleEndDbl)
                         {
-                            int pos = (int)tmpSourceSamplePosition;
-                            int nextPos = (pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1);
+                            var pos = (int)tmpSourceSamplePosition;
+                            var nextPos = pos >= tmpLoopEnd && isLooping ? tmpLoopStart : pos + 1;
 
                             // Simple linear interpolation.
-                            float alpha = (float)(tmpSourceSamplePosition - pos), val = (input[pos] * (1.0f - alpha) + input[nextPos] * alpha);
+                            float alpha = (float)(tmpSourceSamplePosition - pos), val = input[pos] * (1.0f - alpha) + input[nextPos] * alpha;
 
                             // Low-pass filter.
                             if (tmpLowpass.Active) val = tmpLowpass.Process(val);
@@ -301,7 +301,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
                             // Next sample.
                             tmpSourceSamplePosition += pitchRatio;
-                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= (tmpLoopEnd - tmpLoopStart + 1.0);
+                            if (tmpSourceSamplePosition >= tmpLoopEndDbl && isLooping) tmpSourceSamplePosition -= tmpLoopEnd - tmpLoopStart + 1.0;
                         }
                         break;
                 }

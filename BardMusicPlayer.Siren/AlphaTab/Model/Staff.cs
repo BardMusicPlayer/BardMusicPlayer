@@ -3,6 +3,7 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
+using System;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Model
@@ -87,11 +88,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// </summary>
         public Staff()
         {
-            Bars = new FastList<Bar>();
-            Tuning = new int[0];
-            Chords = new FastDictionary<string, Chord>();
+            Bars                 = new FastList<Bar>();
+            Tuning               = Array.Empty<int>();
+            Chords               = new FastDictionary<string, Chord>();
             ShowStandardNotation = true;
-            ShowTablature = true;
+            ShowTablature        = true;
         }
 
         internal static void CopyTo(Staff src, Staff dst)

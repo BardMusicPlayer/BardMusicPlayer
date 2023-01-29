@@ -53,9 +53,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
     ///    - Better low-pass filter without lowering performance too much
     ///    - Support for modulators
     /// </remarks>
-    internal partial class TinySoundFont
+    internal sealed partial class TinySoundFont
     {
-        private ulong _noteCounter = 0;
+        private ulong _noteCounter;
         private readonly List<Voice> _voices;
         private Channels _channels;
         private uint _voicePlayIndex;
@@ -97,17 +97,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         }
 
         /// <summary>
-        /// Stop all playing notes immediatly and reset all channel parameters
+        /// Stop all playing notes immediately and reset all channel parameters
         /// </summary>
         public void Reset()
         {
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingPreset != -1 &&
+                                                 (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release != 0)))
             {
-                if (v.PlayingPreset != -1 &&
-                    (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release != 0))
-                {
-                    v.EndQuick(OutSampleRate);
-                }
+                v.EndQuick(OutSampleRate);
             }
 
             _channels = null;
@@ -183,12 +180,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 }
                 else
                 {
-                    foreach (var v in _voices)
+                    foreach (var v in _voices.Where(v => v.PlayingPreset == -1))
                     {
-                        if (v.PlayingPreset == -1)
-                        {
-                            voice = v;
-                        }
+                        voice = v;
                     }
                 }
 
@@ -231,9 +225,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 voice.SourceSamplePosition = region.Offset;
 
                 // Loop.
-                var doLoop = (region.LoopMode != LoopMode.None && region.LoopStart < region.LoopEnd);
-                voice.LoopStart = (doLoop ? region.LoopStart : 0);
-                voice.LoopEnd = (doLoop ? region.LoopEnd : 0);
+                var doLoop = region.LoopMode != LoopMode.None && region.LoopStart < region.LoopEnd;
+                voice.LoopStart = doLoop ? region.LoopStart : 0;
+                voice.LoopEnd   = doLoop ? region.LoopEnd : 0;
 
                 // Setup envelopes.
                 voice.AmpEnv.Setup(region.AmpEnv, key, midiVelocity, true, OutSampleRate);
@@ -241,9 +235,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
                 // Setup lowpass filter.
                 var filterQDB = region.InitialFilterQ / 10.0f;
-                voice.LowPass.QInv = 1.0 / Math.Pow(10.0, (filterQDB / 20.0));
-                voice.LowPass.Z1 = voice.LowPass.Z2 = 0;
-                voice.LowPass.Active = (region.InitialFilterFc <= 13500);
+                voice.LowPass.QInv   = 1.0 / Math.Pow(10.0, filterQDB / 20.0);
+                voice.LowPass.Z1     = voice.LowPass.Z2 = 0;
+                voice.LowPass.Active = region.InitialFilterFc <= 13500;
                 if (voice.LowPass.Active)
                 {
                     voice.LowPass.Setup(SynthHelper.Cents2Hertz(region.InitialFilterFc) / OutSampleRate);
@@ -290,7 +284,6 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 if (v.PlayingPreset != presetIndex || v.PlayingKey != key ||
                     v.AmpEnv.Segment >= VoiceEnvelopeSegment.Release)
                 {
-                    continue;
                 }
                 else if (matchFirst == null || v.PlayIndex < matchFirst.PlayIndex)
                 {
@@ -347,18 +340,15 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// </summary>
         public void NoteOffAll(bool immediate)
         {
-            foreach (var voice in _voices)
+            foreach (var voice in _voices.Where(voice => voice.PlayingPreset != -1 && voice.AmpEnv.Segment < VoiceEnvelopeSegment.Release))
             {
-                if (voice.PlayingPreset != -1 && voice.AmpEnv.Segment < VoiceEnvelopeSegment.Release)
+                if (immediate)
                 {
-                    if (immediate)
-                    {
-                        voice.EndQuick(OutSampleRate);
-                    }
-                    else
-                    {
-                        voice.End(OutSampleRate);
-                    }
+                    voice.EndQuick(OutSampleRate);
+                }
+                else
+                {
+                    voice.End(OutSampleRate);
                 }
             }
         }
@@ -381,10 +371,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 return _channels.ChannelList[channel];
             }
 
-            if (_channels == null)
-            {
-                _channels = new Channels();
-            }
+            _channels ??= new Channels();
 
             for (var i = _channels.ChannelList.Count; i <= channel; i++)
             {
@@ -432,7 +419,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns></returns>
         public string GetPresetName(int presetIndex)
         {
-            return (presetIndex < 0 || presetIndex >= Presets.Count ? null : Presets[presetIndex].Name);
+            return presetIndex < 0 || presetIndex >= Presets.Count ? null : Presets[presetIndex].Name;
         }
 
         /// <summary>
@@ -475,15 +462,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
             var matches = new FastList<Voice>();
             Voice matchFirst = null;
             Voice matchLast = null;
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingPreset != -1 && v.PlayingChannel == channel && v.PlayingKey == key &&
+                                                 v.AmpEnv.Segment < VoiceEnvelopeSegment.Release))
             {
-                //Find the first and last entry in the voices list with matching channel, key and look up the smallest play index
-                if (v.PlayingPreset == -1 || v.PlayingChannel != channel || v.PlayingKey != key ||
-                    v.AmpEnv.Segment >= VoiceEnvelopeSegment.Release)
-                {
-                    continue;
-                }
-
                 if (matchFirst == null || v.PlayIndex < matchFirst.PlayIndex)
                 {
                     matchFirst = matchLast = v;
@@ -521,13 +502,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <param name="channel">channel number</param>
         public void ChannelNoteOffAll(int channel)
         {
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingPreset != -1 && v.PlayingChannel == channel &&
+                                                 v.AmpEnv.Segment < VoiceEnvelopeSegment.Release))
             {
-                if (v.PlayingPreset != -1 && v.PlayingChannel == channel &&
-                    v.AmpEnv.Segment < VoiceEnvelopeSegment.Release)
-                {
-                    v.End(OutSampleRate);
-                }
+                v.End(OutSampleRate);
             }
         }
 
@@ -537,13 +515,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <param name="channel">channel number</param>
         public void ChannelSoundsOffAll(int channel)
         {
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingPreset != -1 && v.PlayingChannel == channel &&
+                                                 (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release == 0)))
             {
-                if (v.PlayingPreset != -1 && v.PlayingChannel == channel &&
-                    (v.AmpEnv.Segment < VoiceEnvelopeSegment.Release || v.AmpEnv.Parameters.Release == 0))
-                {
-                    v.EndQuick(OutSampleRate);
-                }
+                v.EndQuick(OutSampleRate);
             }
         }
 
@@ -648,20 +623,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 if (v.PlayingChannel == channel && v.PlayingPreset != -1)
                 {
                     var newPan = v.Region.Pan + pan - 0.5f;
-                    if (newPan <= -0.5f)
+                    switch (newPan)
                     {
-                        v.PanFactorLeft = 1;
-                        v.PanFactorRight = 0;
-                    }
-                    else if (newPan >= 0.5f)
-                    {
-                        v.PanFactorLeft = 0;
-                        v.PanFactorRight = 1;
-                    }
-                    else
-                    {
-                        v.PanFactorLeft = (float)Math.Sqrt(0.5f - newPan);
-                        v.PanFactorRight = (float)Math.Sqrt(0.5f + newPan);
+                        case <= -0.5f:
+                            v.PanFactorLeft  = 1;
+                            v.PanFactorRight = 0;
+                            break;
+                        case >= 0.5f:
+                            v.PanFactorLeft  = 0;
+                            v.PanFactorRight = 1;
+                            break;
+                        default:
+                            v.PanFactorLeft  = (float)Math.Sqrt(0.5f - newPan);
+                            v.PanFactorRight = (float)Math.Sqrt(0.5f + newPan);
+                            break;
                     }
                 }
             }
@@ -684,12 +659,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 return;
             }
 
-            foreach (var v in _voices)
+            foreach (var v in _voices.Where(v => v.PlayingChannel == channel && v.PlayingPreset != -1))
             {
-                if (v.PlayingChannel == channel && v.PlayingPreset != -1)
-                {
-                    v.NoteGainDb += gainDBChange;
-                }
+                v.NoteGainDb += gainDBChange;
             }
 
             c.GainDb = gainDb;
@@ -716,13 +688,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         {
             var pitchShift = c.PitchWheel == 8192
                 ? c.Tuning
-                : ((c.PitchWheel / 16383.0f * c.PitchRange * 2f) - c.PitchRange + c.Tuning);
-            foreach (var v in _voices)
+                : c.PitchWheel / 16383.0f * c.PitchRange * 2f - c.PitchRange + c.Tuning;
+            foreach (var v in _voices.Where(v => v.PlayingChannel == channel && v.PlayingPreset != -1))
             {
-                if (v.PlayingChannel == channel && v.PlayingPreset != -1)
-                {
-                    v.CalcPitchRatio(pitchShift, OutSampleRate);
-                }
+                v.CalcPitchRatio(pitchShift, OutSampleRate);
             }
         }
 
@@ -789,17 +758,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
 
                 case 38 /*DATA_ENTRY_LSB*/:
                     c.MidiData = (ushort)((c.MidiData & 0x3F80) | controlValue);
-                    if (c.MidiRpn == 0)
+                    switch (c.MidiRpn)
                     {
-                        ChannelSetPitchRange(channel, (c.MidiData >> 7) + 0.01f * (c.MidiData & 0x7F));
-                    }
-                    else if (c.MidiRpn == 1)
-                    {
-                        ChannelSetTuning(channel, (int)c.Tuning + (c.MidiData - 8192.0f) / 8192.0f); //fine tune
-                    }
-                    else if (c.MidiRpn == 2 && controller == 6)
-                    {
-                        ChannelSetTuning(channel, (controlValue - 64.0f) + (c.Tuning - (int)c.Tuning)); //coarse tune
+                        case 0:
+                            ChannelSetPitchRange(channel, (c.MidiData >> 7) + 0.01f * (c.MidiData & 0x7F));
+                            break;
+                        case 1:
+                            ChannelSetTuning(channel, (int)c.Tuning + (c.MidiData - 8192.0f) / 8192.0f); //fine tune
+                            break;
+                        case 2:
+                            ChannelSetTuning(channel, controlValue - 64.0f + (c.Tuning - (int)c.Tuning)); //coarse tune
+                            break;
                     }
 
                     return;
@@ -808,25 +777,25 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     c.MidiVolume = (ushort)((c.MidiVolume & 0x7F) | (controlValue << 7));
                     //Raising to the power of 3 seems to result in a decent sounding volume curve for MIDI
                     ChannelSetVolume(channel,
-                        (float)Math.Pow((c.MidiVolume / 16383.0f) * (c.MidiExpression / 16383.0f), 3.0f));
+                        (float)Math.Pow(c.MidiVolume / 16383.0f * (c.MidiExpression / 16383.0f), 3.0f));
                     return;
                 case 39 /*VOLUME_LSB*/:
                     c.MidiVolume = (ushort)((c.MidiVolume & 0x3F80) | controlValue);
                     //Raising to the power of 3 seems to result in a decent sounding volume curve for MIDI
                     ChannelSetVolume(channel,
-                        (float)Math.Pow((c.MidiVolume / 16383.0f) * (c.MidiExpression / 16383.0f), 3.0f));
+                        (float)Math.Pow(c.MidiVolume / 16383.0f * (c.MidiExpression / 16383.0f), 3.0f));
                     return;
                 case 11 /*EXPRESSION_MSB*/:
                     c.MidiExpression = (ushort)((c.MidiExpression & 0x7F) | (controlValue << 7));
                     //Raising to the power of 3 seems to result in a decent sounding volume curve for MIDI
                     ChannelSetVolume(channel,
-                        (float)Math.Pow((c.MidiVolume / 16383.0f) * (c.MidiExpression / 16383.0f), 3.0f));
+                        (float)Math.Pow(c.MidiVolume / 16383.0f * (c.MidiExpression / 16383.0f), 3.0f));
                     return;
                 case 43 /*EXPRESSION_LSB*/:
                     c.MidiExpression = (ushort)((c.MidiExpression & 0x3F80) | controlValue);
                     //Raising to the power of 3 seems to result in a decent sounding volume curve for MIDI
                     ChannelSetVolume(channel,
-                        (float)Math.Pow((c.MidiVolume / 16383.0f) * (c.MidiExpression / 16383.0f), 3.0f));
+                        (float)Math.Pow(c.MidiVolume / 16383.0f * (c.MidiExpression / 16383.0f), 3.0f));
                     return;
                 case 10 /*PAN_MSB*/:
                     c.MidiPan = (ushort)((c.MidiPan & 0x7F) | (controlValue << 7));
@@ -838,17 +807,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     return;
                 case 6 /*DATA_ENTRY_MSB*/:
                     c.MidiData = (ushort)((c.MidiData & 0x7F) | (controlValue << 7));
-                    if (c.MidiRpn == 0)
+                    switch (c.MidiRpn)
                     {
-                        ChannelSetPitchRange(channel, (c.MidiData >> 7) + 0.01f * (c.MidiData & 0x7F));
-                    }
-                    else if (c.MidiRpn == 1)
-                    {
-                        ChannelSetTuning(channel, (int)c.Tuning + (c.MidiData - 8192.0f) / 8192.0f); //fine tune
-                    }
-                    else if (c.MidiRpn == 2 && controller == 6)
-                    {
-                        ChannelSetTuning(channel, (controlValue - 64.0f) + (c.Tuning - (int)c.Tuning)); //coarse tune
+                        case 0:
+                            ChannelSetPitchRange(channel, (c.MidiData >> 7) + 0.01f * (c.MidiData & 0x7F));
+                            break;
+                        case 1:
+                            ChannelSetTuning(channel, (int)c.Tuning + (c.MidiData - 8192.0f) / 8192.0f); //fine tune
+                            break;
+                        case 2:
+                            ChannelSetTuning(channel, controlValue - 64.0f + (c.Tuning - (int)c.Tuning)); //coarse tune
+                            break;
                     }
 
                     return;
@@ -856,7 +825,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                     c.Bank = (ushort)(0x8000 | controlValue);
                     return; //bank select MSB alone acts like LSB
                 case 32 /*BANK_SELECT_LSB*/:
-                    c.Bank = (ushort)(((c.Bank & 0x8000) != 0 ? ((c.Bank & 0x7F) << 7) : 0) | controlValue);
+                    c.Bank = (ushort)(((c.Bank & 0x8000) != 0 ? (c.Bank & 0x7F) << 7 : 0) | controlValue);
                     return;
                 case 101 /*RPN_MSB*/:
                     c.MidiRpn = (ushort)(((c.MidiRpn == 0xFFFF ? 0 : c.MidiRpn) & 0x7F) | (controlValue << 7));
@@ -899,9 +868,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current preset index of the given channel.</returns>
         public int ChannelGetPresetIndex(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].PresetIndex
-                : 0);
+                : 0;
         }
 
         /// <summary>
@@ -911,9 +880,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current bank of the given channel.</returns>
         public int ChannelGetPresetBank(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
-                ? (_channels.ChannelList[channel].Bank & 0x7FFF)
-                : 0);
+            return _channels != null && channel < _channels.ChannelList.Count
+                ? _channels.ChannelList[channel].Bank & 0x7FFF
+                : 0;
         }
 
         /// <summary>
@@ -923,9 +892,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current pan of the given channel.</returns>
         public float ChannelGetPan(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].PanOffset - 0.5f
-                : 0.5f);
+                : 0.5f;
         }
 
         /// <summary>
@@ -935,9 +904,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current volune of the given channel.</returns>
         public float ChannelGetVolume(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? SynthHelper.DecibelsToGain(_channels.ChannelList[channel].GainDb)
-                : 1.0f);
+                : 1.0f;
         }
 
         /// <summary>
@@ -947,9 +916,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current pitch wheel of the given channel.</returns>
         public int ChannelGetPitchWheel(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].PitchWheel
-                : 8192);
+                : 8192;
         }
 
         /// <summary>
@@ -959,9 +928,9 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current pitch range of the given channel.</returns>
         public float ChannelGetPitchRange(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].PitchRange
-                : 2.0f);
+                : 2.0f;
         }
 
         /// <summary>
@@ -971,23 +940,23 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
         /// <returns>The current tuning of the given channel.</returns>
         public float ChannelGetTuning(int channel)
         {
-            return (_channels != null && channel < _channels.ChannelList.Count
+            return _channels != null && channel < _channels.ChannelList.Count
                 ? _channels.ChannelList[channel].Tuning
-                : 0.0f);
+                : 0.0f;
         }
 
         #endregion
 
         #region Loading
 
-        public virtual void LoadPresets(Hydra hydra, bool append)
+        public void LoadPresets(Hydra hydra, bool append)
         {
             List<Preset> newPresets = new (new Preset[hydra.Phdrs.Count - 1]);
             for (double phdrIndex = 0;phdrIndex < hydra.Phdrs.Count - 1;phdrIndex++)
             {
-                HydraPhdr phdr = hydra.Phdrs[(int)(phdrIndex)];
+                var phdr = hydra.Phdrs[(int)phdrIndex];
                 double regionIndex = 0;
-                Preset preset = (newPresets[(int)(phdrIndex)] = new Preset());
+                var preset = newPresets[(int)phdrIndex] = new Preset();
                 preset.Name = phdr.PresetName;
                 preset.Bank = phdr.Bank;
                 preset.PresetNumber = phdr.Preset;
@@ -995,26 +964,26 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                 double regionNum = 0;
                 for (double pbagIndex = phdr.PresetBagNdx;pbagIndex < hydra.Phdrs[(int)(phdrIndex + 1)].PresetBagNdx;pbagIndex++)
                 {
-                    HydraPbag pbag = hydra.Pbags[(int)(pbagIndex)];
+                    var pbag = hydra.Pbags[(int)pbagIndex];
                     double plokey = 0;
                     double phikey = 127;
                     double plovel = 0;
                     double phivel = 127;
                     for (double pgenIndex = pbag.GenNdx;pgenIndex < hydra.Pbags[(int)(pbagIndex + 1)].GenNdx;pgenIndex++)
                     {
-                        HydraPgen pgen = hydra.Pgens[(int)(pgenIndex)];
-                        if (pgen.GenOper == HydraPgen.GenKeyRange)
+                        var pgen = hydra.Pgens[(int)pgenIndex];
+                        switch (pgen.GenOper)
                         {
-                            plokey = pgen.GenAmount.LowByteAmount;
-                            phikey = pgen.GenAmount.HighByteAmount;
-                            continue;
+                            case HydraPgen.GenKeyRange:
+                                plokey = pgen.GenAmount.LowByteAmount;
+                                phikey = pgen.GenAmount.HighByteAmount;
+                                continue;
+                            case HydraPgen.GenVelRange:
+                                plovel = pgen.GenAmount.LowByteAmount;
+                                phivel = pgen.GenAmount.HighByteAmount;
+                                continue;
                         }
-                        if (pgen.GenOper == HydraPgen.GenVelRange)
-                        {
-                            plovel = pgen.GenAmount.LowByteAmount;
-                            phivel = pgen.GenAmount.HighByteAmount;
-                            continue;
-                        }
+
                         if (pgen.GenOper != HydraPgen.GenInstrument)
                         {
                             continue;
@@ -1023,48 +992,46 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                         {
                             continue;
                         }
-                        HydraInst pinst = hydra.Insts[(int)(pgen.GenAmount.WordAmount)];
-                        for (double ibagIndex = pinst.InstBagNdx;ibagIndex < hydra.Insts[(int)(pgen.GenAmount.WordAmount + 1)].InstBagNdx;ibagIndex++)
+                        var pinst = hydra.Insts[pgen.GenAmount.WordAmount];
+                        for (double ibagIndex = pinst.InstBagNdx;ibagIndex < hydra.Insts[pgen.GenAmount.WordAmount + 1].InstBagNdx;ibagIndex++)
                         {
-                            HydraIbag ibag = hydra.Ibags[(int)(ibagIndex)];
+                            var ibag = hydra.Ibags[(int)ibagIndex];
                             double ilokey = 0;
                             double ihikey = 127;
                             double ilovel = 0;
                             double ihivel = 127;
                             for (double igenIndex = ibag.InstGenNdx;igenIndex < hydra.Ibags[(int)(ibagIndex + 1)].InstGenNdx;igenIndex++)
                             {
-                                HydraIgen igen = hydra.Igens[(int)(igenIndex)];
-                                if (igen.GenOper == HydraPgen.GenKeyRange)
+                                var igen = hydra.Igens[(int)igenIndex];
+                                switch (igen.GenOper)
                                 {
-                                    ilokey = igen.GenAmount.LowByteAmount;
-                                    ihikey = igen.GenAmount.HighByteAmount;
-                                    continue;
-                                }
-                                if (igen.GenOper == HydraPgen.GenVelRange)
-                                {
-                                    ilovel = igen.GenAmount.LowByteAmount;
-                                    ihivel = igen.GenAmount.HighByteAmount;
-                                    continue;
-                                }
-                                if (igen.GenOper == 53 && ihikey >= plokey && ilokey <= phikey && ihivel >= plovel && ilovel <= phivel)
-                                {
-                                    regionNum++;
+                                    case HydraPgen.GenKeyRange:
+                                        ilokey = igen.GenAmount.LowByteAmount;
+                                        ihikey = igen.GenAmount.HighByteAmount;
+                                        continue;
+                                    case HydraPgen.GenVelRange:
+                                        ilovel = igen.GenAmount.LowByteAmount;
+                                        ihivel = igen.GenAmount.HighByteAmount;
+                                        continue;
+                                    case 53 when ihikey >= plokey && ilokey <= phikey && ihivel >= plovel && ilovel <= phivel:
+                                        regionNum++;
+                                        break;
                                 }
                             }
                         }
                     }
                 }
                 preset.Regions = new Region[(int)regionNum];
-                Region globalRegion = new Region();
+                var globalRegion = new Region();
                 globalRegion.Clear(true);
                 for (double pbagIndex = phdr.PresetBagNdx;pbagIndex < hydra.Phdrs[(int)(phdrIndex + 1)].PresetBagNdx;pbagIndex++)
                 {
-                    HydraPbag pbag = hydra.Pbags[(int)(pbagIndex)];
-                    Region presetRegion = new Region(globalRegion);
-                    bool hadGenInstrument = false;
+                    var pbag = hydra.Pbags[(int)pbagIndex];
+                    var presetRegion = new Region(globalRegion);
+                    var hadGenInstrument = false;
                     for (double pgenIndex = pbag.GenNdx;pgenIndex < hydra.Pbags[(int)(pbagIndex + 1)].GenNdx;pgenIndex++)
                     {
-                        HydraPgen pgen = hydra.Pgens[(int)(pgenIndex)];
+                        var pgen = hydra.Pgens[(int)pgenIndex];
                         if (pgen.GenOper == HydraPgen.GenInstrument)
                         {
                             double whichInst = pgen.GenAmount.WordAmount;
@@ -1072,17 +1039,17 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                             {
                                 continue;
                             }
-                            Region instRegion = new Region();
+                            var instRegion = new Region();
                             instRegion.Clear(false);
-                            HydraInst inst = hydra.Insts[(int)(whichInst)];
+                            var inst = hydra.Insts[(int)whichInst];
                             for (double ibagIndex = inst.InstBagNdx;ibagIndex < hydra.Insts[(int)(whichInst + 1)].InstBagNdx;ibagIndex++)
                             {
-                                HydraIbag ibag = hydra.Ibags[(int)(ibagIndex)];
-                                Region zoneRegion = new Region(instRegion);
-                                bool hadSampleId = false;
+                                var ibag = hydra.Ibags[(int)ibagIndex];
+                                var zoneRegion = new Region(instRegion);
+                                var hadSampleId = false;
                                 for (double igenIndex = ibag.InstGenNdx;igenIndex < hydra.Ibags[(int)(ibagIndex + 1)].InstGenNdx;igenIndex++)
                                 {
-                                    HydraIgen igen = hydra.Igens[(int)(igenIndex)];
+                                    var igen = hydra.Igens[(int)igenIndex];
                                     if (igen.GenOper == HydraPgen.GenSampleId)
                                     {
                                         if (zoneRegion.HiKey < presetRegion.LoKey || zoneRegion.LoKey > presetRegion.HiKey)
@@ -1154,11 +1121,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                                         {
                                             zoneRegion.Pan = (float) 0.5;
                                         }
-                                        if (zoneRegion.InitialFilterQ < 1500 || zoneRegion.InitialFilterQ > 13500)
+                                        if (zoneRegion.InitialFilterQ is < 1500 or > 13500)
                                         {
                                             zoneRegion.InitialFilterQ = 0;
                                         }
-                                        HydraShdr shdr = hydra.SHdrs[(int)(igen.GenAmount.WordAmount)];
+                                        var shdr = hydra.SHdrs[igen.GenAmount.WordAmount];
                                         zoneRegion.Offset += shdr.Start;
                                         zoneRegion.End += shdr.End;
                                         zoneRegion.LoopStart += shdr.StartLoop;
@@ -1181,7 +1148,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                                         {
                                             zoneRegion.End = (uint) preset.FontSamples.Length;
                                         }
-                                        preset.Regions[(int)(regionIndex)] = new Region(zoneRegion);
+                                        preset.Regions[(int)regionIndex] = new Region(zoneRegion);
                                         regionIndex++;
                                         hadSampleId = true;
                                     }
@@ -1190,7 +1157,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                                         zoneRegion.Operator(igen.GenOper, igen.GenAmount);
                                     }
                                 }
-                                if (ibag == hydra.Ibags[(int)(inst.InstBagNdx)] && !hadSampleId)
+                                if (ibag == hydra.Ibags[inst.InstBagNdx] && !hadSampleId)
                                 {
                                     instRegion = new Region(zoneRegion);
                                 }
@@ -1202,7 +1169,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis
                             presetRegion.Operator(pgen.GenOper, pgen.GenAmount);
                         }
                     }
-                    if (pbag == hydra.Pbags[(int)(phdr.PresetBagNdx)] && !hadGenInstrument)
+                    if (pbag == hydra.Pbags[phdr.PresetBagNdx] && !hadGenInstrument)
                     {
                         globalRegion = presetRegion;
                     }

@@ -18,8 +18,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         public void AddFirst(T value)
         {
-            var node = new LinkedListNode<T>();
-            node.Value = value;
+            var node = new LinkedListNode<T>
+            {
+                Value = value
+            };
             if (First == null)
             {
                 InsertNodeToEmptyList(node);
@@ -33,8 +35,10 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
 
         public void AddLast(T value)
         {
-            var node = new LinkedListNode<T>();
-            node.Value = value;
+            var node = new LinkedListNode<T>
+            {
+                Value = value
+            };
             if (First == null)
             {
                 InsertNodeToEmptyList(node);
@@ -64,7 +68,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Ds
                 return null;
             }
 
-            var v = First.PrevInternal != null ? First.PrevInternal.Value : null;
+            var v = First.PrevInternal?.Value;
             Remove(First.PrevInternal);
             return v;
         }

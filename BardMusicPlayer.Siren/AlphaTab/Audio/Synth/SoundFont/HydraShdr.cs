@@ -53,17 +53,19 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraShdr Load(IReadable reader)
         {
-            var shdr = new HydraShdr();
-            shdr.SampleName = reader.Read8BitStringLength(20);
-            shdr.Start = reader.ReadUInt32LE();
-            shdr.End = reader.ReadUInt32LE();
-            shdr.StartLoop = reader.ReadUInt32LE();
-            shdr.EndLoop = reader.ReadUInt32LE();
-            shdr.SampleRate = reader.ReadUInt32LE();
-            shdr.OriginalPitch = (byte)reader.ReadByte();
-            shdr.PitchCorrection = reader.ReadSignedByte();
-            shdr.SampleLink = reader.ReadUInt16LE();
-            shdr.SampleType = reader.ReadUInt16LE();
+            var shdr = new HydraShdr
+            {
+                SampleName      = reader.Read8BitStringLength(20),
+                Start           = reader.ReadUInt32LE(),
+                End             = reader.ReadUInt32LE(),
+                StartLoop       = reader.ReadUInt32LE(),
+                EndLoop         = reader.ReadUInt32LE(),
+                SampleRate      = reader.ReadUInt32LE(),
+                OriginalPitch   = (byte)reader.ReadByte(),
+                PitchCorrection = reader.ReadSignedByte(),
+                SampleLink      = reader.ReadUInt16LE(),
+                SampleType      = reader.ReadUInt16LE()
+            };
             return shdr;
         }
     }

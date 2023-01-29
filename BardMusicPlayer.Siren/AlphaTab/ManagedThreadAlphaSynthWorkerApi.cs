@@ -28,8 +28,10 @@ namespace BardMusicPlayer.Siren.AlphaTab
             _workerQueue = new BlockingCollection<Action>();
             _workerCancellationToken = new CancellationTokenSource();
 
-            _workerThread = new Thread(DoWork);
-            _workerThread.IsBackground = true;
+            _workerThread              = new Thread(DoWork)
+            {
+                IsBackground = true
+            };
             _workerThread.Start();
 
             _threadStartedEvent.Wait();

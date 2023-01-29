@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 {
     /// <summary>
     /// This public class describes a single track or instrument of score.
-    /// It is bascially a list of staffs containing individual music notation kinds.
+    /// It is basically a list of staffs containing individual music notation kinds.
     /// </summary>
     internal class Track
     {
@@ -124,10 +124,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
                         if (beat != null)
                         {
                             // initialize lyrics list for beat if required
-                            if (beat.Lyrics == null)
-                            {
-                                beat.Lyrics = new string[lyrics.Count];
-                            }
+                            beat.Lyrics ??= new string[lyrics.Count];
 
                             // assign chunk
                             beat.Lyrics[li] = lyric.Chunks[ci];

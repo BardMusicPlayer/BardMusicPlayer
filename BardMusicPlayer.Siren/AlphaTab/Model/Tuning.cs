@@ -42,34 +42,24 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
         /// <returns>The tuning for the given string count or null if the string count is not defined. </returns>
         public static Tuning GetDefaultTuningFor(int stringCount)
         {
-            if (_defaultTunings.ContainsKey(stringCount))
-            {
-                return _defaultTunings[stringCount];
-            }
-
-            return null;
+            return _defaultTunings.ContainsKey(stringCount) ? _defaultTunings[stringCount] : null;
         }
 
         /// <summary>
-        /// Gets a list of all tuning presets for a given stirng count. 
+        /// Gets a list of all tuning presets for a given string count. 
         /// </summary>
         /// <param name="stringCount">The string count. </param>
         /// <returns>The list of known tunings for the given string count or an empty list if the string count is not defined. </returns>
         public static FastList<Tuning> GetPresetsFor(int stringCount)
         {
-            switch (stringCount)
+            return stringCount switch
             {
-                case 7:
-                    return _sevenStrings;
-                case 6:
-                    return _sixStrings;
-                case 5:
-                    return _fiveStrings;
-                case 4:
-                    return _fourStrings;
-            }
-
-            return new FastList<Tuning>();
+                7 => _sevenStrings,
+                6 => _sixStrings,
+                5 => _fiveStrings,
+                4 => _fourStrings,
+                _ => new FastList<Tuning>()
+            };
         }
 
         static Tuning()
@@ -79,18 +69,20 @@ namespace BardMusicPlayer.Siren.AlphaTab.Model
 
         private static void Initialize()
         {
-            _sevenStrings = new FastList<Tuning>();
-            _sixStrings = new FastList<Tuning>();
-            _fiveStrings = new FastList<Tuning>();
-            _fourStrings = new FastList<Tuning>();
-            _defaultTunings = new FastDictionary<int, Tuning>();
+            _sevenStrings   = new FastList<Tuning>();
+            _sixStrings     = new FastList<Tuning>();
+            _fiveStrings    = new FastList<Tuning>();
+            _fourStrings    = new FastList<Tuning>();
+            _defaultTunings = new FastDictionary<int, Tuning>
+            {
+                [7] = new("Guitar 7 strings",
+                    new[]
+                    {
+                        64, 59, 55, 50, 45, 40, 35
+                    },
+                    true)
+            };
 
-            _defaultTunings[7] = new Tuning("Guitar 7 strings",
-                new[]
-                {
-                    64, 59, 55, 50, 45, 40, 35
-                },
-                true);
             _sevenStrings.Add(_defaultTunings[7]);
 
             _defaultTunings[6] = new Tuning("Guitar Standard Tuning",

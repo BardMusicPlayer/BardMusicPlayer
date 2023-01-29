@@ -123,7 +123,7 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth
         void PlayPause();
 
         /// <summary>
-        /// Stopps the playback
+        /// Stops the playback
         /// </summary>
         void Stop();
 

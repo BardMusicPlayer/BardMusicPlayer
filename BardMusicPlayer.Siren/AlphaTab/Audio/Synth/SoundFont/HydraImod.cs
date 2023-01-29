@@ -48,12 +48,14 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraImod Load(IReadable reader)
         {
-            var imod = new HydraImod();
-            imod.ModSrcOper = reader.ReadUInt16LE();
-            imod.ModDestOper = reader.ReadUInt16LE();
-            imod.ModAmount = reader.ReadInt16LE();
-            imod.ModAmtSrcOper = reader.ReadUInt16LE();
-            imod.ModTransOper = reader.ReadUInt16LE();
+            var imod = new HydraImod
+            {
+                ModSrcOper    = reader.ReadUInt16LE(),
+                ModDestOper   = reader.ReadUInt16LE(),
+                ModAmount     = reader.ReadInt16LE(),
+                ModAmtSrcOper = reader.ReadUInt16LE(),
+                ModTransOper  = reader.ReadUInt16LE()
+            };
             return imod;
         }
     }

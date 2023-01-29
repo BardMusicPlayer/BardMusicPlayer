@@ -45,9 +45,11 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraPbag Load(IReadable reader)
         {
-            var pbag = new HydraPbag();
-            pbag.GenNdx = reader.ReadUInt16LE();
-            pbag.ModNdx = reader.ReadUInt16LE();
+            var pbag = new HydraPbag
+            {
+                GenNdx = reader.ReadUInt16LE(),
+                ModNdx = reader.ReadUInt16LE()
+            };
             return pbag;
         }
     }

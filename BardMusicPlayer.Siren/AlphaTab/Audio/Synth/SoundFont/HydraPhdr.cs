@@ -50,15 +50,16 @@ namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont
 
         public static HydraPhdr Load(IReadable reader)
         {
-            HydraPhdr phdr = new HydraPhdr();
-
-            phdr.PresetName = reader.Read8BitStringLength(20);
-            phdr.Preset = reader.ReadUInt16LE();
-            phdr.Bank = reader.ReadUInt16LE();
-            phdr.PresetBagNdx = reader.ReadUInt16LE();
-            phdr.Library = reader.ReadUInt32LE();
-            phdr.Genre = reader.ReadUInt32LE();
-            phdr.Morphology = reader.ReadUInt32LE();
+            var phdr = new HydraPhdr
+            {
+                PresetName   = reader.Read8BitStringLength(20),
+                Preset       = reader.ReadUInt16LE(),
+                Bank         = reader.ReadUInt16LE(),
+                PresetBagNdx = reader.ReadUInt16LE(),
+                Library      = reader.ReadUInt32LE(),
+                Genre        = reader.ReadUInt32LE(),
+                Morphology   = reader.ReadUInt32LE()
+            };
 
             return phdr;
         }

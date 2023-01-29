@@ -80,33 +80,62 @@ namespace BardMusicPlayer.Siren
             switch (instrument.Index)
             {
                 case 1: // Harp
-                    if (note <= 9) return 1338;
-                    else if (note <= 19) return 1338;
-                    else if (note <= 28) return 1334;
-                    else return 1136;
+                    switch (note)
+                    {
+                        case <= 9:
+                        case <= 19:
+                            return 1338;
+                        case <= 28:
+                            return 1334;
+                        default:
+                            return 1136;
+                    }
 
                 case 2: // Piano
-                    if (note <= 11) return 1531;
-                    else if (note <= 18) return 1531;
-                    else if (note <= 25) return 1530;
-                    else if (note <= 28) return 1332;
-                    else return 1531;
+                    switch (note)
+                    {
+                        case <= 11:
+                        case <= 18:
+                            return 1531;
+                        case <= 25:
+                            return 1530;
+                        case <= 28:
+                            return 1332;
+                        default:
+                            return 1531;
+                    }
 
                 case 3: // Lute
-                    if (note <= 14) return 1728;
-                    else if (note <= 21) return 1727;
-                    else if (note <= 28) return 1727;
-                    else return 1528;
+                    switch (note)
+                    {
+                        case <= 14:
+                            return 1728;
+                        case <= 21:
+                        case <= 28:
+                            return 1727;
+                        default:
+                            return 1528;
+                    }
 
                 case 4: // Fiddle
-                    if (note <= 3) return 634;
-                    else if (note <= 6) return 632;
-                    else if (note <= 11) return 633;
-                    else if (note <= 15) return 634;
-                    else if (note <= 18) return 633;
-                    else if (note <= 23) return 635;
-                    else if (note <= 30) return 635;
-                    else return 635;
+                    switch (note)
+                    {
+                        case <= 3:
+                            return 634;
+                        case <= 6:
+                            return 632;
+                        case <= 11:
+                            return 633;
+                        case <= 15:
+                            return 634;
+                        case <= 18:
+                            return 633;
+                        case <= 23:
+                        case <= 30:
+                            return 635;
+                        default:
+                            return 635;
+                    }
 
                 case 5: // Flute
                 case 6: // Oboe
@@ -117,20 +146,29 @@ namespace BardMusicPlayer.Siren
                     return duration < 500 ? 500 : duration;
 
                 case 10: // Timpani
-                    if (note <= 15) return 1193;
-                    else if (note <= 23) return 1355;
-                    else return 1309;
+                    return note switch
+                    {
+                        <= 15 => 1193,
+                        <= 23 => 1355,
+                        _     => 1309
+                    };
 
                 case 11: // Bongo
-                    if (note <= 7) return 720;
-                    else if (note <= 21) return 544;
-                    else return 275;
+                    return note switch
+                    {
+                        <= 7  => 720,
+                        <= 21 => 544,
+                        _     => 275
+                    };
 
                 case 12: // BassDrum
-                    if (note <= 6) return 448;
-                    else if (note <= 11) return 335;
-                    else if (note <= 23) return 343;
-                    else return 254;
+                    return note switch
+                    {
+                        <= 6  => 448,
+                        <= 11 => 335,
+                        <= 23 => 343,
+                        _     => 254
+                    };
 
                 case 13: // SnareDrum
                     return 260;
