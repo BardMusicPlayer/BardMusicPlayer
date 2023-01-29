@@ -115,10 +115,10 @@ internal sealed class DalamudServer : IDisposable
     }
 
     /// <summary>
-    ///     Send intrument open action to the toad
+    ///     Send instrument open action to the toad
     /// </summary>
     /// <param name="pid">proc Id</param>
-    /// <param name="instrumentID">XIV instrument numer</param>
+    /// <param name="instrumentID">XIV instrument number</param>
     /// <returns></returns>
     internal bool SendInstrumentOpen(int pid, int instrumentID)
     {
@@ -219,7 +219,7 @@ internal sealed class DalamudServer : IDisposable
     /// <param name="pid"></param>
     /// <param name="ProgNumber"></param>
     /// <returns></returns>
-    internal bool SendProgchange(int pid, int ProgNumber)
+    internal bool SendProgChange(int pid, int ProgNumber)
     {
         if (!IsConnected(pid))
             return false;
