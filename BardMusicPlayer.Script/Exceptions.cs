@@ -5,15 +5,14 @@
 
 using BardMusicPlayer.Quotidian;
 
-namespace BardMusicPlayer.Script
+namespace BardMusicPlayer.Script;
+
+public sealed class BmpScriptException : BmpException
 {
-    public sealed class BmpScriptException : BmpException
+    internal BmpScriptException()
     {
-        internal BmpScriptException()
-        {
-        }
-        internal BmpScriptException(string message) : base(message)
-        {
-        }
+    }
+    internal BmpScriptException(string message) : base(message)
+    {
     }
 }

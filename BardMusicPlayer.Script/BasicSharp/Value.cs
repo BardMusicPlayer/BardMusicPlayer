@@ -1,119 +1,118 @@
 using System;
 using System.Globalization;
 
-namespace BardMusicPlayer.Script.BasicSharp
+namespace BardMusicPlayer.Script.BasicSharp;
+
+public enum ValueType
 {
-    public enum ValueType
+    Real, // it's double
+    String
+}
+
+public struct Value
+{
+    public static readonly Value Zero = new(0);
+    public ValueType Type { get; set; }
+
+    public double Real { get; set; }
+    public string String { get; set; }
+
+    public Value(double real) : this()
     {
-        Real, // it's double
-        String
+        Type = ValueType.Real;
+        Real = real;
     }
 
-    public struct Value
+    public Value(string str)
+        : this()
     {
-        public static readonly Value Zero = new(0);
-        public ValueType Type { get; set; }
+        Type   = ValueType.String;
+        String = str;
+    }
 
-        public double Real { get; set; }
-        public string String { get; set; }
-
-        public Value(double real) : this()
-        {
-            Type = ValueType.Real;
-            Real = real;
-        }
-
-        public Value(string str)
-            : this()
-        {
-            Type = ValueType.String;
-            String = str;
-        }
-
-        public Value Convert(ValueType type)
-        {
-            if (Type == type) 
-                return this;
-
-            switch (type)
-            {
-                case ValueType.Real:
-                    Real = double.Parse(String);
-                    Type = ValueType.Real;
-                    break;
-                case ValueType.String:
-                    String = Real.ToString(CultureInfo.InvariantCulture);
-                    Type = ValueType.String;
-                    break;
-            }
+    public Value Convert(ValueType type)
+    {
+        if (Type == type) 
             return this;
+
+        switch (type)
+        {
+            case ValueType.Real:
+                Real = double.Parse(String);
+                Type = ValueType.Real;
+                break;
+            case ValueType.String:
+                String = Real.ToString(CultureInfo.InvariantCulture);
+                Type   = ValueType.String;
+                break;
+        }
+        return this;
+    }
+
+    public readonly Value UnaryOp(Token tok)
+    {
+        if (Type != ValueType.Real)
+        {
+            throw new Exception("Can only do unary operations on numbers.");
         }
 
-        public readonly Value UnaryOp(Token tok)
+        return tok switch
         {
-            if (Type != ValueType.Real)
-            {
-                throw new Exception("Can only do unary operations on numbers.");
-            }
+            Token.Plus  => this,
+            Token.Minus => new Value(-Real),
+            Token.Not   => new Value(Real == 0 ? 1 : 0),
+            _           => throw new Exception("Unknown unary operator.")
+        };
+    }
 
-            return tok switch
-            {
-                Token.Plus  => this,
-                Token.Minus => new Value(-Real),
-                Token.Not   => new Value(Real == 0 ? 1 : 0),
-                _           => throw new Exception("Unknown unary operator.")
-            };
+    public readonly Value BinOp(Value b, Token tok)
+    {
+        var a = this;
+        if (a.Type != b.Type)
+        {
+            // promote one value to higher type
+            if (a.Type > b.Type)
+                b = b.Convert(a.Type);
+            else
+                a = a.Convert(b.Type);
         }
 
-        public readonly Value BinOp(Value b, Token tok)
+        switch (tok)
         {
-            var a = this;
-            if (a.Type != b.Type)
+            case Token.Plus:
+                return a.Type == ValueType.Real ? new Value(a.Real + b.Real) : new Value(a.String + b.String);
+            case Token.Equal:
+                return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 1 : 0) : new Value(a.String == b.String ? 1 : 0);
+            case Token.NotEqual:
+                return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 0 : 1) : new Value(a.String == b.String ? 0 : 1);
+            default:
             {
-				// promote one value to higher type
-                if (a.Type > b.Type)
-                    b = b.Convert(a.Type);
-                else
-                    a = a.Convert(b.Type);
-            }
+                if (a.Type == ValueType.String)
+                    throw new Exception("Cannot do binop on strings(except +).");
 
-            switch (tok)
-            {
-                case Token.Plus:
-                    return a.Type == ValueType.Real ? new Value(a.Real + b.Real) : new Value(a.String + b.String);
-                case Token.Equal:
-                    return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 1 : 0) : new Value(a.String == b.String ? 1 : 0);
-                case Token.NotEqual:
-                    return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 0 : 1) : new Value(a.String == b.String ? 0 : 1);
-                default:
+                switch (tok)
                 {
-                    if (a.Type == ValueType.String)
-                        throw new Exception("Cannot do binop on strings(except +).");
-
-                    switch (tok)
-                    {
-                        case Token.Minus:     return new Value(a.Real - b.Real);
-                        case Token.Asterisk:  return new Value(a.Real * b.Real);
-                        case Token.Slash:     return new Value(a.Real / b.Real);
-                        case Token.Caret:     return new Value(Math.Pow(a.Real, b.Real));
-                        case Token.Less:      return new Value(a.Real < b.Real ? 1 : 0);
-                        case Token.More:      return new Value(a.Real > b.Real ? 1 : 0);
-                        case Token.LessEqual: return new Value(a.Real <= b.Real ? 1 : 0);
-                        case Token.MoreEqual: return new Value(a.Real >= b.Real ? 1 : 0);
-                        case Token.And:       return new Value(a.Real != 0 && b.Real != 0 ? 1 : 0);
-                        case Token.Or:        return new Value(a.Real != 0 || b.Real != 0 ? 1 : 0);
-                    }
-
-                    break;
+                    case Token.Minus:     return new Value(a.Real - b.Real);
+                    case Token.Asterisk:  return new Value(a.Real * b.Real);
+                    case Token.Slash:     return new Value(a.Real / b.Real);
+                    case Token.Caret:     return new Value(Math.Pow(a.Real, b.Real));
+                    case Token.Less:      return new Value(a.Real < b.Real ? 1 : 0);
+                    case Token.More:      return new Value(a.Real > b.Real ? 1 : 0);
+                    case Token.LessEqual: return new Value(a.Real <= b.Real ? 1 : 0);
+                    case Token.MoreEqual: return new Value(a.Real >= b.Real ? 1 : 0);
+                    case Token.And:       return new Value(a.Real != 0 && b.Real != 0 ? 1 : 0);
+                    case Token.Or:        return new Value(a.Real != 0 || b.Real != 0 ? 1 : 0);
                 }
+
+                break;
             }
-
-            throw new Exception("Unknown binary operator.");
         }
 
-        public override readonly string ToString()
-        {
-            return Type == ValueType.Real ? Real.ToString(CultureInfo.InvariantCulture) : String;
-        }
+        throw new Exception("Unknown binary operator.");
+    }
+
+    public override readonly string ToString()
+    {
+        return Type == ValueType.Real ? Real.ToString(CultureInfo.InvariantCulture) : String;
     }
 }
