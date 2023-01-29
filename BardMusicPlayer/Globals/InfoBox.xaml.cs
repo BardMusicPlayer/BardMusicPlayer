@@ -1,13 +1,12 @@
-﻿namespace BardMusicPlayer.Globals
+﻿namespace BardMusicPlayer.Globals;
+
+/// <summary>
+/// Interaction logic for InfoBox.xaml
+/// </summary>
+public partial class InfoBox
 {
-    /// <summary>
-    /// Interaction logic for InfoBox.xaml
-    /// </summary>
-    public partial class InfoBox
+    public InfoBox()
     {
-        public InfoBox()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
