@@ -68,8 +68,6 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                                 case 2: // rejected or timed out replying
                                     _machinaReader.ReaderHandler.Game.PublishEvent( new EnsembleRejected(EventSource.Machina));
                                     break;
-                                default:
-                                    return;
                             }
                         }
                     }

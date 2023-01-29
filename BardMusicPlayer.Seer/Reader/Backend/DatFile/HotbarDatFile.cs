@@ -65,7 +65,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
                 while (reader.BaseStream.Position < dataSize)
                 {
                     var ac = ParseSection(reader);
-                    if (ac.Job == 0x17 || ac.Job == 0)
+                    if (ac.Job is 0x17 or 0)
                     {
                         if (ac.Type == 0x1D)
                         {
@@ -88,8 +88,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
         private readonly HotbarData _hotbarData = new();
 
-        public List<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int)type);
-        public List<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
+        public IEnumerable<HotbarSlot> GetSlotsFromType(SlotType type) => GetSlotsFromType((int)type);
+        public IEnumerable<HotbarSlot> GetSlotsFromType(int type) => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Type == type select slot).ToList();
 
         public List<HotbarSlot> GetBRDSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0x17 select slot).ToList();
         public List<HotbarSlot> GetGlobalSlots() => (from row in _hotbarData.Rows.Values from jobSlot in row.Slots.Values from slot in jobSlot.JobSlots.Values where slot.Job == 0 select slot).ToList();
@@ -133,7 +133,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
                 Job = XorTools.ReadXorByte(stream, xor),
                 Hotbar = XorTools.ReadXorByte(stream, xor),
                 Slot = XorTools.ReadXorByte(stream, xor),
-                Type = XorTools.ReadXorByte(stream, xor),
+                Type = XorTools.ReadXorByte(stream, xor)
             };
             return ac;
         }

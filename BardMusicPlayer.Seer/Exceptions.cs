@@ -10,7 +10,7 @@ namespace BardMusicPlayer.Seer
 {
     public class BmpSeerException : BmpException
     {
-        internal BmpSeerException() : base() { }
+        internal BmpSeerException() { }
 
         internal BmpSeerException(string message) : base(message) { }
     }

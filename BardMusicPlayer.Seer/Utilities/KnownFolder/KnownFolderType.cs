@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Reflection;
 
 namespace BardMusicPlayer.Seer.Utilities.KnownFolder
 {
@@ -732,7 +731,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         UserProgramFiles,
 
         /// <summary>
-        /// The per-user common Programs folder. INtroduced in Windows 7.
+        /// The per-user common Programs folder. Introduced in Windows 7.
         /// Defaults to &quot;%LOCALAPPDATA%\Programs\Common&quot;.
         /// </summary>
         [KnownFolderGuid("BCBD3057-CA5C-4622-B42D-BC56DB0AE516")]
@@ -793,7 +792,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
     /// Represents an attribute to decorate the members of the <see cref="KnownFolderType"/> enumeration with their
     /// corresponding <see cref="Guid"/> on the Windows system.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     internal class KnownFolderGuidAttribute : Attribute
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------

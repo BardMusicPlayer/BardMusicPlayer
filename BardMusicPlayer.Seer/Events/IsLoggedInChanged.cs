@@ -3,9 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core.Enums;
-using System;
-
 namespace BardMusicPlayer.Seer.Events
 {
     public sealed class IsLoggedInChanged : SeerEvent

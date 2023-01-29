@@ -122,14 +122,13 @@ namespace BardMusicPlayer.Seer
 
         public void Dispose()
         {
-            if ((_eventQueueHighPriority != null) && (_eventQueueHighPriority != null) && (_eventDedupeHistory != null))
+            if (_eventQueueHighPriority is { } && _eventDedupeHistory != null)
                 BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
 
             _eventQueueOpen = false;
             try
-            { 
-                if (_eventTokenSource != null)
-                    _eventTokenSource.Cancel();
+            {
+                _eventTokenSource?.Cancel();
             }
             catch (Exception ex)
             {
@@ -178,8 +177,8 @@ namespace BardMusicPlayer.Seer
                     {
                     }
                 }
-                if (_eventDedupeHistory != null)
-                    _eventDedupeHistory.Clear();
+
+                _eventDedupeHistory?.Clear();
             }
             catch (Exception ex)
             {
@@ -213,14 +212,14 @@ namespace BardMusicPlayer.Seer
 
         public IntPtr GetAffinity()
         {
-            return this.Process.ProcessorAffinity;
+            return Process.ProcessorAffinity;
         }
 
         public void SetAffinity(long AffinityMask)
         {
             if (AffinityMask == 0)
                 return;
-            this.Process.ProcessorAffinity = (IntPtr)AffinityMask;
+            Process.ProcessorAffinity = (IntPtr)AffinityMask;
         }
     }
 }

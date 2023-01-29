@@ -30,7 +30,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
                 var partyCount = MemoryHandler.GetByte(partyCountMap);
                 var sourceSize = MemoryHandler.Structures.PartyMember.SourceSize;
 
-                if (partyCount > 1 && partyCount < 9)
+                if (partyCount is > 1 and < 9)
                 {
                     for (uint i = 0; i < partyCount; i++)
                     {

@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;
 using Newtonsoft.Json;
@@ -32,12 +33,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities
             using var reader = new StreamReader(jsonStream);
             var json = reader.ReadToEnd();
             var signatures = JsonConvert.DeserializeObject<IEnumerable<Signature>>(json, SerializerSettings);
-            foreach (var signature in signatures)
+            var enumerable = signatures as Signature[] ?? signatures.ToArray();
+            foreach (var signature in enumerable)
             {
                 signature.MemoryHandler = memoryHandler;
             }
 
-            return signatures;
+            return enumerable;
         }
 
         public StructuresContainer GetStructures()

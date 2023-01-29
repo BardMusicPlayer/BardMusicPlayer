@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Seer.Events
 {
     public class MachinaManagerLogEvent : SeerEvent
     {
-        public MachinaManagerLogEvent(string message) : base(EventSource.MachinaManager, 0, false)
+        public MachinaManagerLogEvent(string message) : base(EventSource.MachinaManager)
         {
             EventType = GetType();
             Message   = message;

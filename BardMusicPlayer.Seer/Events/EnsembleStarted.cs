@@ -12,7 +12,7 @@ namespace BardMusicPlayer.Seer.Events
             EventType = GetType();
             NetTimeStamp = timestamp;
         }
-        public long NetTimeStamp { get; } = 0;
+        public long NetTimeStamp { get; }
         public override bool IsValid() => true;
     }
 }

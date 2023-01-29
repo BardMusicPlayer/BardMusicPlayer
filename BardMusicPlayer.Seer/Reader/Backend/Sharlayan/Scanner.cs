@@ -54,10 +54,12 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
         private void FindExtendedSignatures(IEnumerable<Signature> signatures)
         {
             var notFound = new List<Signature>(signatures);
-            var baseAddress = MemoryHandler.ProcessModel.Process.MainModule.BaseAddress;
-            var searchEnd = IntPtr.Add(baseAddress, MemoryHandler.ProcessModel.Process.MainModule.ModuleMemorySize);
-            var searchStart = baseAddress;
-            ResolveLocations(baseAddress, searchStart, searchEnd, ref notFound);
+            if (MemoryHandler.ProcessModel.Process.MainModule != null)
+            {
+                var baseAddress = MemoryHandler.ProcessModel.Process.MainModule.BaseAddress;
+                var searchEnd = IntPtr.Add(baseAddress, MemoryHandler.ProcessModel.Process.MainModule.ModuleMemorySize);
+                ResolveLocations(baseAddress, baseAddress, searchEnd, ref notFound);
+            }
         }
 
         private void ResolveLocations(IntPtr baseAddress, IntPtr searchStart, IntPtr searchEnd,
@@ -74,7 +76,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     if (IntPtr.Add(searchStart, 4608).ToInt64() > searchEnd.ToInt64())
                         regionSize = (IntPtr) (searchEnd.ToInt64() - searchStart.ToInt64());
                     if (UnsafeNativeMethods.ReadProcessMemory(MemoryHandler.ProcessHandle, searchStart, array,
-                        regionSize, out var _))
+                        regionSize, out _))
                     {
                         foreach (var item in notFound)
                         {

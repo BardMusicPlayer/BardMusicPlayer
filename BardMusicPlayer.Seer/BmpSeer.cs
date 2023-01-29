@@ -54,7 +54,7 @@ namespace BardMusicPlayer.Seer
                 }
 
                 var rule = FirewallManager.Instance.CreateApplicationRule(
-                    @appName,
+                    appName,
                     FirewallAction.Allow,
                     Assembly.GetEntryAssembly()?.Location
                 );

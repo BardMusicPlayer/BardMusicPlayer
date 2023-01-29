@@ -11,13 +11,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
 {
     internal class Keybind : IDisposable
     {
-        public int MainKey1 { get; set; } = 0;
+        public int MainKey1 { get; set; }
 
-        public int ModKey1 { get; set; } = 0;
+        public int ModKey1 { get; set; }
 
-        public int MainKey2 { get; set; } = 0;
+        public int MainKey2 { get; set; }
 
-        public int ModKey2 { get; set; } = 0;
+        public int ModKey2 { get; set; }
 
         public Keys GetKey() => GetKey1() != Keys.None ? GetKey1() : GetKey2();
 

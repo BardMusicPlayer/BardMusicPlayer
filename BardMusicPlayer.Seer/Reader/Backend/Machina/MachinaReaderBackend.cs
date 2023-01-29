@@ -58,7 +58,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                         if (myActorId == otherActorId)
                             ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Machina, myActorId));
 
-                        UInt16 Opcode = BitConverter.ToUInt16(message, 18); //implement if needed
+                        var Opcode = BitConverter.ToUInt16(message, 18); //implement if needed
                         switch (message.Length)
                         {
                             case 48:

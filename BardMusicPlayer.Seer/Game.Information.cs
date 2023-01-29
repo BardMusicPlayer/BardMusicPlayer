@@ -33,7 +33,7 @@ namespace BardMusicPlayer.Seer
         public Process Process { get; }
 
         /// <summary>
-        /// Contains the Proccess Id for this Game. Set on creation of this Game.
+        /// Contains the Process Id for this Game. Set on creation of this Game.
         /// </summary>
         public int Pid { get; private set; }
 
@@ -60,7 +60,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Shows the player's actor id. Updated by Sharlayan and Machina.
         /// </summary>
-        public uint ActorId { get; private set; } = 0;
+        public uint ActorId { get; private set; }
 
         /// <summary>
         /// Shows the player's name. Updated by Sharlayan and Machina.
@@ -75,7 +75,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Shows if the player is logged in.
         /// </summary>
-        public bool IsLoggedIn { get; private set; } = false;
+        public bool IsLoggedIn { get; private set; }
 
         /// <summary>
         /// Shows the instrument held. Updated by Sharlayan and Machina.
@@ -90,7 +90,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Shows if the chatbox is open for input. Updated by Sharlayan.
         /// </summary>
-        public bool ChatStatus { get; private set; } = false;
+        public bool ChatStatus { get; private set; }
 
         /// <summary>
         /// Returns false if we know the player is not a bard.
@@ -100,7 +100,7 @@ namespace BardMusicPlayer.Seer
         /// <summary>
         /// Test
         /// </summary>
-        public long ServerLatency { get; private set; } = 0;
+        public long ServerLatency { get; private set; }
 
         /// <summary>
         ///     Indicates if gfx set to low

@@ -14,9 +14,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
 
         internal Packet(MachinaReaderBackend machinaReader) { _machinaReader = machinaReader; }
 
-        private static bool ValidTimeSig(byte timeSig) => timeSig > 1 && timeSig < 8;
+        private static bool ValidTimeSig(byte timeSig) => timeSig is > 1 and < 8;
 
-        private static bool ValidTempo(byte tempo) => tempo > 29 && tempo < 201;
+        private static bool ValidTempo(byte tempo) => tempo is > 29 and < 201;
 
         private Dictionary<ulong, uint> _contentId2ActorId = new();
 

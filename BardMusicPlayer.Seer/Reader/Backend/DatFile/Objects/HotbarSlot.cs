@@ -29,16 +29,16 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
             }
             set => _slot = Convert.ToByte(value + 1);
         }
-        public byte Action { get; set; } = 0; // Higher level? 0D for 60-70 spells
-        public byte Flag { get; set; } = 0;
-        public byte Unk1 { get; set; } = 0;
-        public byte Unk2 { get; set; } = 0;
-        public byte Job { get; set; } = 0;
-        public byte Type { get; set; } = 0;
+        public byte Action { get; set; } // Higher level? 0D for 60-70 spells
+        public byte Flag { get; set; }
+        public byte Unk1 { get; set; }
+        public byte Unk2 { get; set; }
+        public byte Job { get; set; }
+        public byte Type { get; set; }
 
         public bool IsBard => Job == 0x17;
 
-        public override string ToString() => string.Format("HOTBAR_{0}_{1:X}", Hotbar, Slot);
+        public override string ToString() => $"HOTBAR_{Hotbar}_{Slot:X}";
 
         ~HotbarSlot() => Dispose();
         public void Dispose()

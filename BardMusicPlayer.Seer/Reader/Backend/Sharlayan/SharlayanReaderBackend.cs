@@ -64,6 +64,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
             catch
             {
+                // ignored
             }
 
             try
@@ -72,6 +73,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
             catch
             {
+                // ignored
             }
 
             try
@@ -80,6 +82,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
             catch
             {
+                // ignored
             }
 
             try
@@ -88,6 +91,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
             catch
             {
+                // ignored
             }
 
             try
@@ -96,6 +100,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
             }
             catch
             {
+                // ignored
             }
 
             _reader          = null;

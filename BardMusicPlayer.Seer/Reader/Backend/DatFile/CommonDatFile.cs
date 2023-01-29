@@ -17,7 +17,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
         private string _filePath;
         private int startingByte = 1360; // Shared hotbar information starts here
 
-        private List<BarInfo> _hotbarBarInformation = new List<BarInfo>();
+        private List<BarInfo> _hotbarBarInformation = new();
 
         internal CommonDatFile(string filePath)
         {
@@ -47,10 +47,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 
             reader.BaseStream.Seek(startingByte, SeekOrigin.Begin);
 
-            for (int i = 1; i < 11; i++) // 10 hotbars, indexed at 1 to match data file and game
+            for (var i = 1; i < 11; i++) // 10 hotbars, indexed at 1 to match data file and game
             {
                 var currentBarBytes = reader.ReadBytes(0x12); // Hotbar information is in blocks of 18 bytes
-                _hotbarBarInformation.Add(new BarInfo()
+                _hotbarBarInformation.Add(new BarInfo
                 {
                     HotbarNumber = i,
                     IsShared = currentBarBytes[16] == 0x31

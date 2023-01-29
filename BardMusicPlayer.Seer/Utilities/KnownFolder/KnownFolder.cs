@@ -94,11 +94,9 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
                 Marshal.FreeCoTaskMem(outPath);
                 return path;
             }
-            else
-            {
-                throw new ExternalException("Cannot get the known folder path. It may not be available on this system.",
-                    result);
-            }
+
+            throw new ExternalException("Cannot get the known folder path. It may not be available on this system.",
+                result);
         }
 
         private void SetPath(KnownFolderFlags flags, string path)

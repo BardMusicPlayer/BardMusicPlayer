@@ -25,7 +25,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                 if (otherActorId != myActorId) return;
 
                 var partyLeader = BitConverter.ToUInt32(message, 40);
-                if (!ActorIdTools.RangeOkay(partyLeader) || (BitConverter.ToUInt32(message, 44) != 0))
+                if (!ActorIdTools.RangeOkay(partyLeader) || BitConverter.ToUInt32(message, 44) != 0)
                     return;
 
                 _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleStopped(EventSource.Machina));

@@ -668,8 +668,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder
         private static KnownFolder GetInstance(KnownFolderType type)
         {
             // Check if the caching directory exists yet.
-            if (_knownFolderInstances == null)
-                _knownFolderInstances = new Dictionary<KnownFolderType, KnownFolder>();
+            _knownFolderInstances ??= new Dictionary<KnownFolderType, KnownFolder>();
 
             // Get a KnownFolder instance out of the cache dictionary or create it when not cached yet.
             if (!_knownFolderInstances.TryGetValue(type, out var knownFolder))

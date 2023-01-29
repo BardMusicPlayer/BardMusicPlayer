@@ -42,7 +42,7 @@ namespace BardMusicPlayer.Seer
                             processes.All(process => process.Id != game.Pid))
                         {
                             _games.TryRemove(game.Pid, out _);
-                            game?.Dispose();
+                            game.Dispose();
                         }
                     }
 
@@ -77,7 +77,7 @@ namespace BardMusicPlayer.Seer
                     PublishEvent(new SeerExceptionEvent(ex));
                 }
 
-                await Task.Delay(1, token).ContinueWith(tsk => { });
+                await Task.Delay(1, token).ContinueWith(tsk => { }, token);
             }
         }
 
