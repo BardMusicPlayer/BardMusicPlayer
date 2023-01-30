@@ -3,13 +3,13 @@
 
     <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
     <Style x:Key="ImageButton" TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Margin" Value="0"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Margin" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Name="border" 
-                        Background="{TemplateBinding Background}">
+                    <Border Name="border"
+                            Background="{TemplateBinding Background}">
 
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>

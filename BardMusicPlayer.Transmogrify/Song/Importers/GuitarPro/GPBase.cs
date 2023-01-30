@@ -170,8 +170,8 @@ public sealed class Barre
     public Barre(int fret = 0, int start = 0, int end = 0)
     {
         this.start = start;
-        this.fret = fret;
-        this.end = end;
+        this.fret  = fret;
+        this.end   = end;
     }
 
     public int[] range()
@@ -282,7 +282,7 @@ public sealed class BeatStroke
 {
     public BeatStrokeDirection direction = BeatStrokeDirection.none;
     public float startTime; //0 = falls on time, 1 = starts on time
-    public int value; //4 = quarter etc.
+    public int value;       //4 = quarter etc.
 
     public BeatStroke()
     {
@@ -291,7 +291,7 @@ public sealed class BeatStroke
     public BeatStroke(BeatStrokeDirection d, int v, float s)
     {
         direction = d;
-        value = v;
+        value     = v;
         startTime = s;
     }
 
@@ -341,9 +341,9 @@ public sealed class BeatStroke
     {
         direction = direction switch
         {
-            BeatStrokeDirection.up => BeatStrokeDirection.down,
+            BeatStrokeDirection.up   => BeatStrokeDirection.down,
             BeatStrokeDirection.down => BeatStrokeDirection.up,
-            _ => direction
+            _                        => direction
         };
         return new BeatStroke(direction, value, 0.0f);
     }
@@ -380,10 +380,10 @@ public sealed class BendPoint
     public BendPoint(int position = 0, int value = 0, bool vibrato = false)
     {
         this.position = position;
-        this.value = value;
-        this.vibrato = vibrato;
-        GP6position = position * 100.0f / BendEffect.maxPosition;
-        GP6value = value * 25.0f / BendEffect.semitoneLength;
+        this.value    = value;
+        this.vibrato  = vibrato;
+        GP6position   = position * 100.0f / BendEffect.maxPosition;
+        GP6value      = value * 25.0f / BendEffect.semitoneLength;
     }
 
     public BendPoint(float position, float value, bool isGP6Format = true)
@@ -392,16 +392,16 @@ public sealed class BendPoint
         {
             //GP6 Format: position: 0-100, value: 100 = 1 whole tone up
             this.position = (int)(position * BendEffect.maxPosition / 100);
-            this.value = (int)(value * 2 * BendEffect.semitoneLength / 100);
-            GP6position = position;
-            GP6value = value;
+            this.value    = (int)(value * 2 * BendEffect.semitoneLength / 100);
+            GP6position   = position;
+            GP6value      = value;
         }
         else
         {
             this.position = (int)position;
-            this.value = (int)value;
-            GP6position = position * 100.0f / BendEffect.maxPosition;
-            GP6value = value * 50.0f / BendEffect.semitoneLength;
+            this.value    = (int)value;
+            GP6position   = position * 100.0f / BendEffect.maxPosition;
+            GP6value      = value * 50.0f / BendEffect.semitoneLength;
         }
     }
 
@@ -451,7 +451,7 @@ public sealed class DirectionSign
 
     public DirectionSign(string name = "", short measure = 0)
     {
-        this.name = name;
+        this.name    = name;
         this.measure = measure;
     }
 }
@@ -485,49 +485,49 @@ public sealed class Duration
         var substract = 0;
         if (time >= 15)
         {
-            value = hundredTwentyEigth;
+            value     = hundredTwentyEigth;
             substract = 15;
         }
 
         if (time >= 30)
         {
-            value = sixtyFourth;
+            value     = sixtyFourth;
             substract = 30;
         }
 
         if (time >= 60)
         {
-            value = thirtySecond;
+            value     = thirtySecond;
             substract = 60;
         }
 
         if (time >= 120)
         {
-            value = sixteenth;
+            value     = sixteenth;
             substract = 120;
         }
 
         if (time >= 240)
         {
-            value = eigth;
+            value     = eigth;
             substract = 240;
         }
 
         if (time >= 480)
         {
-            value = quarter;
+            value     = quarter;
             substract = 480;
         }
 
         if (time >= 960)
         {
-            value = half;
+            value     = half;
             substract = 960;
         }
 
         if (time >= 1920)
         {
-            value = whole;
+            value     = whole;
             substract = 1920;
         }
 
@@ -536,7 +536,7 @@ public sealed class Duration
 
         if (!(time >= value * 0.75f)) return;
 
-        isDotted = false;
+        isDotted       = false;
         isDoubleDotted = true;
     }
 
@@ -573,7 +573,7 @@ public sealed class GuitarString
     public GuitarString(int number, int value)
     {
         this.number = number;
-        this.value = value;
+        this.value  = value;
     }
 }
 
@@ -598,9 +598,9 @@ public sealed class ArtificialHarmonic : HarmonicEffect
 
     public ArtificialHarmonic(PitchClass pitch = null, Octave octave = 0)
     {
-        this.pitch = pitch;
+        this.pitch  = pitch;
         this.octave = octave;
-        type = 2;
+        type        = 2;
     }
 }
 
@@ -609,7 +609,7 @@ public sealed class TappedHarmonic : HarmonicEffect
     public TappedHarmonic(int fret = 0)
     {
         this.fret = fret;
-        type = 3;
+        type      = 3;
     }
 }
 
@@ -653,7 +653,7 @@ public sealed class Lyrics
     public Lyrics()
     {
         trackChoice = -1;
-        lines = new LyricLine[maxLineCount];
+        lines       = new LyricLine[maxLineCount];
         for (var x = 0; x < maxLineCount; x++) lines[x] = new LyricLine();
     }
 }
@@ -690,7 +690,7 @@ public sealed class Measure
             for (var x = 0; x < maxVoices; x++)
                 voices.Add(new Voice(this));
         this.header = header;
-        this.track = track;
+        this.track  = track;
     }
 
     public bool isEmpty()
@@ -814,16 +814,16 @@ public sealed class MidiChannel
 
     public MidiChannel()
     {
-        channel = 0;
+        channel       = 0;
         effectChannel = 1;
-        instrument = 25;
-        volume = 104;
-        balance = 64;
-        chorus = 0;
-        reverb = 0;
-        phaser = 0;
-        tremolo = 0;
-        bank = 0;
+        instrument    = 25;
+        volume        = 104;
+        balance       = 64;
+        chorus        = 0;
+        reverb        = 0;
+        phaser        = 0;
+        tremolo       = 0;
+        bank          = 0;
     }
 
     public bool isPercussionChannel()
@@ -866,7 +866,7 @@ public sealed class MixTableChange
     {
         this.tempoName = tempoName;
         this.hideTempo = hideTempo;
-        this.useRSE = useRSE;
+        this.useRSE    = useRSE;
     }
 
     public bool isJustWah()
@@ -884,8 +884,8 @@ public sealed class MixTableItem
 
     public MixTableItem(int value = 0, int duration = 0, bool allTracks = false)
     {
-        this.value = value;
-        this.duration = duration;
+        this.value     = value;
+        this.duration  = duration;
         this.allTracks = allTracks;
     }
 }
@@ -984,9 +984,9 @@ public sealed class Padding
 
     public Padding(int right = 0, int top = 0, int left = 0, int bottom = 0)
     {
-        this.right = right;
-        this.top = top;
-        this.left = left;
+        this.right  = right;
+        this.top    = top;
+        this.left   = left;
         this.bottom = bottom;
     }
 }
@@ -1147,10 +1147,10 @@ public sealed class PitchClass
         }
         else
         {
-            accidental = arg1i;
-            just = arg0i % 12;
+            accidental      = arg1i;
+            just            = arg0i % 12;
             this.accidental = accidental;
-            this.value = just + accidental;
+            this.value      = just + accidental;
             this.intonation = intonation ?? "sharp";
         }
     }
@@ -1189,7 +1189,7 @@ public sealed class RSEEqualizer
 
     public RSEEqualizer(List<float> knobs = null, float gain = 0.0f)
     {
-        this.gain = gain;
+        this.gain  = gain;
         this.knobs = knobs;
     }
 }
@@ -1202,8 +1202,8 @@ public sealed class RSEMasterEffect
 
     public RSEMasterEffect(int volume = 0, int reverb = 0, RSEEqualizer equalizer = null)
     {
-        this.volume = volume;
-        this.reverb = reverb;
+        this.volume    = volume;
+        this.reverb    = reverb;
         this.equalizer = equalizer;
         if (equalizer is { knobs: null })
             equalizer.knobs = new List<float> { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -1253,7 +1253,7 @@ public sealed class Track
 
     public Track(GPFile song, int number, List<GuitarString> strings = null, List<Measure> measures = null)
     {
-        this.song = song;
+        this.song   = song;
         this.number = number;
         if (strings != null) this.strings = strings;
 

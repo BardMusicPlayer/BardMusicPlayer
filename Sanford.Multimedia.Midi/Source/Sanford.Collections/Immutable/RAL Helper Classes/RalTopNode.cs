@@ -11,12 +11,12 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents the top nodes in a RandomAccessList.
-	/// </summary>
-	[ImmutableObject(true)]
-	internal class RalTopNode
-	{
+    /// <summary>
+    /// Represents the top nodes in a RandomAccessList.
+    /// </summary>
+    [ImmutableObject(true)]
+    internal class RalTopNode
+    {
         #region RalTopNode Members
 
         #region Instance Fields
@@ -42,13 +42,13 @@ namespace Sanford.Collections.Immutable
         /// <param name="nextNode">
         /// The next top node in the list.
         /// </param>
-		public RalTopNode(RalTreeNode root, RalTopNode nextNode)
-		{
+        public RalTopNode(RalTreeNode root, RalTopNode nextNode)
+        {
             Debug.Assert(root != null);
 
-            this.root = root;
+            this.root     = root;
             this.nextNode = nextNode;
-		}
+        }
 
         #endregion
 
@@ -72,8 +72,8 @@ namespace Sanford.Collections.Immutable
             // Find the top node containing the specified element.
             while(i >= currentNode.Root.Count)
             {
-                i -= currentNode.Root.Count;
-                currentNode = currentNode.NextNode;
+                i           -= currentNode.Root.Count;
+                currentNode =  currentNode.NextNode;
 
                 Debug.Assert(currentNode != null);
             }
@@ -150,5 +150,5 @@ namespace Sanford.Collections.Immutable
         #endregion
 
         #endregion
-	}
+    }
 }

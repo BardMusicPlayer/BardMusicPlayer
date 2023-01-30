@@ -12,12 +12,12 @@ using System.ComponentModel;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
+    /// <summary>
     /// Represents a simple last-in-first-out collection of objects.
-	/// </summary>
-	[ImmutableObject(true)]
-	public class Stack : IEnumerable
-	{
+    /// </summary>
+    [ImmutableObject(true)]
+    public class Stack : IEnumerable
+    {
         #region Stack Members
 
         #region Class Fields
@@ -44,10 +44,10 @@ namespace Sanford.Collections.Immutable
         /// <summary>
         /// Initializes a new instance of the Stack class.
         /// </summary>
-		public Stack()
-		{
+        public Stack()
+        {
             count = 0;
-		}
+        }
 
         /// <summary>
         /// Initializes a new instance of the Stack class with the 
@@ -61,7 +61,7 @@ namespace Sanford.Collections.Immutable
         /// </param>        
         private Stack(Node top, int count)
         {
-            this.top = top;
+            this.top   = top;
             this.count = count;            
         }
 
@@ -168,7 +168,7 @@ namespace Sanford.Collections.Immutable
             public Node(object value, Node next)
             {
                 this.value = value;
-                this.next = next;
+                this.next  = next;
             }
 
             public Node Next
@@ -283,7 +283,7 @@ namespace Sanford.Collections.Immutable
                 }
 
                 current = next;
-                next = next.Next;
+                next    = next.Next;
 
                 return true;
             }

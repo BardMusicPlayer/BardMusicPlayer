@@ -38,7 +38,7 @@ public abstract class MetaDataType : IEquatable<MetaDataType>
         if (!isSafe) tag = checkTag(tag);
 
         DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
-        Tag = tag;
+        Tag      = tag;
     }
 
     /// <summary>
@@ -219,9 +219,9 @@ public abstract class MetaDataType : IEquatable<MetaDataType>
         public DelegateMetaDataType(string tag, Func<string, T> parser, Func<T, string> stringifier, T def)
             : base(tag, typeof(T), true)
         {
-            this.parser = parser;
+            this.parser      = parser;
             this.stringifier = stringifier;
-            this.def = def;
+            this.def         = def;
         }
 
         public override object Default => def;

@@ -41,9 +41,9 @@ using Sanford.Collections;
 
 namespace Sanford.Threading
 {
-	/// <summary>
-	/// Provides functionality for timestamped delegate invocation.
-	/// </summary>
+    /// <summary>
+    /// Provides functionality for timestamped delegate invocation.
+    /// </summary>
     public partial class DelegateScheduler : IDisposable, IComponent
     {
         #region DelegateScheduler Members
@@ -403,19 +403,19 @@ namespace Sanford.Threading
 
                             OnInvokeCompleted(
                                 new InvokeCompletedEventArgs(
-                                tk.Method,
-                                tk.GetArgs(),
-                                returnValue,
-                                null));
+                                    tk.Method,
+                                    tk.GetArgs(),
+                                    returnValue,
+                                    null));
                         }
                         catch(Exception ex)
                         {
                             OnInvokeCompleted(
                                 new InvokeCompletedEventArgs(
-                                tk.Method,
-                                tk.GetArgs(),
-                                null,
-                                ex));
+                                    tk.Method,
+                                    tk.GetArgs(),
+                                    null,
+                                    ex));
                         }
                     }
 

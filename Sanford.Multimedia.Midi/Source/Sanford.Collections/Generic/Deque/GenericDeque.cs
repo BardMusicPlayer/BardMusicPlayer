@@ -39,12 +39,12 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Generic
 {
-	/// <summary>
-	/// Represents a simple double-ended-queue collection of objects.
-	/// </summary>
-	[Serializable()]
-	public partial class Deque<T> : ICollection, IEnumerable<T>, ICloneable
-	{
+    /// <summary>
+    /// Represents a simple double-ended-queue collection of objects.
+    /// </summary>
+    [Serializable()]
+    public partial class Deque<T> : ICollection, IEnumerable<T>, ICloneable
+    {
         #region Deque Members
 
         #region Fields
@@ -68,8 +68,8 @@ namespace Sanford.Collections.Generic
         /// <summary>
         /// Initializes a new instance of the Deque class.
         /// </summary>
-		public Deque()
-		{
+        public Deque()
+        {
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace Sanford.Collections.Generic
             else if(index >= array.Length)
             {
                 throw new ArgumentException("Index is equal to or greater " +
-                    "than the length of array.");
+                                            "than the length of array.");
             }
             else if(Count > array.Length - index)
             {

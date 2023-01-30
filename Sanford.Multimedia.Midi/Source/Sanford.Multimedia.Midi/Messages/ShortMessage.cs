@@ -60,7 +60,7 @@ namespace Sanford.Multimedia.Midi
     /// realtime messages, and system common messages.
     /// </remarks>
     public class ShortMessage : MidiMessageBase, IMidiMessage
-	{
+    {
         #region ShortMessage Members
 
         #region Constants
@@ -105,9 +105,9 @@ namespace Sanford.Multimedia.Midi
 
         public ShortMessage(byte status, byte data1, byte data2)
         {
-            this.message = new byte[] { status, data1, data2 };
+            this.message    = new byte[] { status, data1, data2 };
             rawMessageBuilt = true;
-            msg = BuildIntMessage(this.message);
+            msg             = BuildIntMessage(this.message);
         }
 
         private static byte[] BuildByteMessage(int intMessage)
@@ -239,7 +239,7 @@ namespace Sanford.Multimedia.Midi
             {
                 if (!rawMessageBuilt)
                 {
-                    this.message = BuildByteMessage(msg);
+                    this.message    = BuildByteMessage(msg);
                     rawMessageBuilt = true;
                 }
                 return message;
@@ -257,5 +257,5 @@ namespace Sanford.Multimedia.Midi
         #endregion
 
         #endregion
-	}
+    }
 }

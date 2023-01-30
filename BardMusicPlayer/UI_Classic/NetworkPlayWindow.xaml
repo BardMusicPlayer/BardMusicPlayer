@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="NetworkPlayWindow" Height="450" Width="800">
     <Grid>
-        <controls:NetworkControl/>
+        <controls:NetworkControl />
     </Grid>
 </Window>

@@ -32,17 +32,17 @@ public sealed class NativeFormat
 
     public NativeFormat(GPFile fromFile)
     {
-        title = fromFile.title;
-        subtitle = fromFile.subtitle;
-        artist = fromFile.interpret;
-        album = fromFile.album;
-        words = fromFile.words;
-        music = fromFile.music;
-        tempos = retrieveTempos(fromFile);
+        title      = fromFile.title;
+        subtitle   = fromFile.subtitle;
+        artist     = fromFile.interpret;
+        album      = fromFile.album;
+        words      = fromFile.words;
+        music      = fromFile.music;
+        tempos     = retrieveTempos(fromFile);
         directions = fromFile.directions;
-        barMaster = retrieveMasterBars(fromFile);
-        tracks = retrieveTracks(fromFile);
-        lyrics = fromFile.lyrics;
+        barMaster  = retrieveMasterBars(fromFile);
+        tracks     = retrieveTracks(fromFile);
+        lyrics     = fromFile.lyrics;
         updateAvailableChannels();
     }
 
@@ -150,12 +150,12 @@ public sealed class NativeFormat
         {
             var track = new Track
             {
-                name = tr.name,
-                patch = tr.channel.instrument,
-                port = tr.port,
-                channel = tr.channel.channel,
+                name          = tr.name,
+                patch         = tr.channel.instrument,
+                port          = tr.port,
+                channel       = tr.channel.channel,
                 playbackState = PlaybackState.def,
-                capo = tr.offset
+                capo          = tr.offset
             };
             if (tr.isMute) track.playbackState = PlaybackState.mute;
 
@@ -314,7 +314,7 @@ public sealed class NativeFormat
                             }
                             else
                             {
-                                brushInit = endPos;
+                                brushInit     = endPos;
                                 brushIncrease = -brushIncrease;
                             }
                         }
@@ -326,7 +326,7 @@ public sealed class NativeFormat
                         {
                             //Beat values
                             isTremBarVibrato = b.effect.vibrato,
-                            fading = Fading.none
+                            fading           = Fading.none
                         };
                         if (b.effect.fadeIn) note.fading = Fading.fadeIn;
 
@@ -334,21 +334,21 @@ public sealed class NativeFormat
 
                         if (b.effect.volumeSwell) note.fading = Fading.volumeSwell;
 
-                        note.isSlapped = b.effect.slapEffect == SlapEffect.slapping;
-                        note.isPopped = b.effect.slapEffect == SlapEffect.popping;
-                        note.isHammer = n.effect.hammer;
+                        note.isSlapped  = b.effect.slapEffect == SlapEffect.slapping;
+                        note.isPopped   = b.effect.slapEffect == SlapEffect.popping;
+                        note.isHammer   = n.effect.hammer;
                         note.isRHTapped = b.effect.slapEffect == SlapEffect.tapping;
-                        note.index = index + subIndex;
-                        note.duration = flipDuration(b.duration);
+                        note.index      = index + subIndex;
+                        note.duration   = flipDuration(b.duration);
 
 
                         //Note values
-                        note.fret = n.value;
-                        note.str = n.str;
-                        note.velocity = n.velocity;
-                        note.isVibrato = n.effect.vibrato;
+                        note.fret        = n.value;
+                        note.str         = n.str;
+                        note.velocity    = n.velocity;
+                        note.isVibrato   = n.effect.vibrato;
                         note.isPalmMuted = n.effect.palmMute;
-                        note.isMuted = n.type == NoteType.dead;
+                        note.isMuted     = n.type == NoteType.dead;
 
                         if (n.effect.harmonic != null)
                         {
@@ -374,10 +374,10 @@ public sealed class NativeFormat
                             {
                                 note.slidesToNext = note.slidesToNext ||
                                                     sl is SlideType.shiftSlideTo or SlideType.legatoSlideTo;
-                                note.slideInFromAbove = note.slideInFromAbove || sl == SlideType.intoFromAbove;
-                                note.slideInFromBelow = note.slideInFromBelow || sl == SlideType.intoFromBelow;
+                                note.slideInFromAbove  = note.slideInFromAbove || sl == SlideType.intoFromAbove;
+                                note.slideInFromBelow  = note.slideInFromBelow || sl == SlideType.intoFromBelow;
                                 note.slideOutDownwards = note.slideOutDownwards || sl == SlideType.outDownwards;
-                                note.slideOutUpwards = note.slideOutUpwards || sl == SlideType.outUpwards;
+                                note.slideOutUpwards   = note.slideOutUpwards || sl == SlideType.outUpwards;
                             }
 
                         if (n.effect.bend != null)
@@ -405,7 +405,7 @@ public sealed class NativeFormat
 
                                 if (dontAddNote)
                                 {
-                                    note.connect = true;
+                                    note.connect  =  true;
                                     last.duration += note.duration;
                                     last.addBendPoints(note.bendPoints);
                                 }
@@ -449,9 +449,9 @@ public sealed class NativeFormat
                                             note.duration = (int)(note.duration * (4.0f / 3.0f));
                                             break;
                                         case false:
-                                            note.duration = (int)(note.duration * (2.0f / 3.0f));
+                                            note.duration    =  (int)(note.duration * (2.0f / 3.0f));
                                             note.resizeValue *= 2.0f / 3.0f;
-                                            note.index += (int)(note.duration * (1.0f / 3.0f));
+                                            note.index       += (int)(note.duration * (1.0f / 3.0f));
                                             break;
                                     }
 
@@ -466,9 +466,9 @@ public sealed class NativeFormat
                                             note.duration = (int)(note.duration * 1.5f);
                                             break;
                                         case false:
-                                            note.duration = (int)(note.duration * 0.5f);
+                                            note.duration    =  (int)(note.duration * 0.5f);
                                             note.resizeValue *= 0.5f;
-                                            note.index += (int)(note.duration * 0.5f);
+                                            note.index       += (int)(note.duration * 0.5f);
                                             break;
                                     }
 
@@ -483,9 +483,9 @@ public sealed class NativeFormat
                                             note.duration = (int)(note.duration * 0.5f);
                                             break;
                                         case false:
-                                            note.duration = (int)(note.duration * 1.5f);
+                                            note.duration    =  (int)(note.duration * 1.5f);
                                             note.resizeValue *= 1.5f;
-                                            note.index -= (int)(note.duration * 0.5f);
+                                            note.index       -= (int)(note.duration * 0.5f);
                                             break;
                                     }
 
@@ -505,7 +505,7 @@ public sealed class NativeFormat
                             if (n.effect.trill != null) len = flipDuration(n.effect.trill.duration);
 
                             var origDuration = note.duration;
-                            note.duration = len;
+                            note.duration    =  len;
                             note.resizeValue *= (float)len / origDuration;
                             var currentIndex = note.index + len;
 
@@ -533,7 +533,7 @@ public sealed class NativeFormat
                                 notes.Add(newOne);
                                 notesInMeasure++;
                                 currentIndex += len;
-                                originalFret = !originalFret;
+                                originalFret =  !originalFret;
                             }
                         }
 
@@ -542,7 +542,7 @@ public sealed class NativeFormat
                         if (rememberGrace && note.duration > graceLength)
                         {
                             var orig = note.duration;
-                            note.duration -= graceLength;
+                            note.duration    -= graceLength;
                             note.resizeValue *= (float)note.duration / orig;
                             //subIndex -= graceLength;
                             rememberedGrace = true;
@@ -559,8 +559,8 @@ public sealed class NativeFormat
                                 var graceNote = new Note
                                 {
                                     index = note.index,
-                                    fret = n.effect.grace.fret,
-                                    str = note.str
+                                    fret  = n.effect.grace.fret,
+                                    str   = note.str
                                 };
                                 var dur = new Duration
                                 {
@@ -570,8 +570,8 @@ public sealed class NativeFormat
                                 if (isOnBeat)
                                 {
                                     var orig = note.duration;
-                                    note.duration -= graceNote.duration;
-                                    note.index += graceNote.duration;
+                                    note.duration    -= graceNote.duration;
+                                    note.index       += graceNote.duration;
                                     note.resizeValue *= (float)note.duration / orig;
                                 }
                                 else
@@ -587,7 +587,7 @@ public sealed class NativeFormat
                                 if (isOnBeat) // shorten next note
                                 {
                                     rememberGrace = true;
-                                    graceLength = note.duration;
+                                    graceLength   = note.duration;
                                 }
                                 else //Change previous note
                                 {
@@ -606,8 +606,8 @@ public sealed class NativeFormat
                         if (n.type == NoteType.dead)
                         {
                             var orig = note.duration;
-                            note.velocity = (int)(note.velocity * 0.9f);
-                            note.duration /= 6;
+                            note.velocity    =  (int)(note.velocity * 0.9f);
+                            note.duration    /= 6;
                             note.resizeValue *= (float)note.duration / orig;
                         }
 
@@ -615,8 +615,8 @@ public sealed class NativeFormat
                         if (n.effect.palmMute)
                         {
                             var orig = note.duration;
-                            note.velocity = (int)(note.velocity * 0.7f);
-                            note.duration /= 2;
+                            note.velocity    =  (int)(note.velocity * 0.7f);
+                            note.duration    /= 2;
                             note.resizeValue *= (float)note.duration / orig;
                         }
 
@@ -627,7 +627,7 @@ public sealed class NativeFormat
                         if (n.effect.staccato)
                         {
                             var orig = note.duration;
-                            note.duration /= 2;
+                            note.duration    /= 2;
                             note.resizeValue *= (float)note.duration / orig;
                         }
 
@@ -638,8 +638,8 @@ public sealed class NativeFormat
                         //Arpeggio / Brush
                         if (hasBrush)
                         {
-                            note.index = brushInit;
-                            brushInit += brushIncrease;
+                            note.index =  brushInit;
+                            brushInit  += brushIncrease;
                         }
 
                         if (dontAddNote) continue;
@@ -651,14 +651,14 @@ public sealed class NativeFormat
 
                     if (rememberedGrace)
                     {
-                        subIndex -= graceLength;
-                        rememberGrace = false;
-                        rememberedGrace = false;
+                        subIndex        -= graceLength;
+                        rememberGrace   =  false;
+                        rememberedGrace =  false;
                     } //After the change in duration for the second beat has been done
 
-                    subIndex -= subtractSubindex;
-                    subtractSubindex = 0;
-                    subIndex += flipDuration(b.duration);
+                    subIndex         -= subtractSubindex;
+                    subtractSubindex =  0;
+                    subIndex         += flipDuration(b.duration);
 
                     //Sort brushed tones
                     if (hasBrush && brushDirection == BeatStrokeDirection.up)
@@ -679,9 +679,9 @@ public sealed class NativeFormat
 
             var measureDuration =
                 flipDuration(m.header.timeSignature.denominator) * m.header.timeSignature.numerator;
-            barMaster[measureIndex].duration = measureDuration;
-            barMaster[measureIndex].index = index;
-            index += measureDuration;
+            barMaster[measureIndex].duration =  measureDuration;
+            barMaster[measureIndex].index    =  index;
+            index                            += measureDuration;
             notesInMeasures.Add(notesInMeasure);
         }
 
@@ -707,18 +707,18 @@ public sealed class NativeFormat
             var mb = new MasterBar
             {
                 time = mh.timeSignature.numerator + "/" + mh.timeSignature.denominator.value,
-                num = mh.timeSignature.numerator,
-                den = mh.timeSignature.denominator.value
+                num  = mh.timeSignature.numerator,
+                den  = mh.timeSignature.denominator.value
             };
             var keyFull = "" + (int)mh.keySignature;
             if (keyFull.Length != 1)
             {
                 mb.keyType = int.Parse(keyFull.Substring(keyFull.Length - 1));
-                mb.key = int.Parse(keyFull.Substring(0, keyFull.Length - 1));
+                mb.key     = int.Parse(keyFull.Substring(0, keyFull.Length - 1));
             }
             else
             {
-                mb.key = 0;
+                mb.key     = 0;
                 mb.keyType = int.Parse(keyFull);
             }
 
@@ -745,7 +745,7 @@ public sealed class NativeFormat
             var init = new Tempo
             {
                 position = 0,
-                value = file.tempo
+                value    = file.tempo
             };
             if (init.value != 0) tempos.Add(init);
 
@@ -755,7 +755,7 @@ public sealed class NativeFormat
             {
                 var t = new Tempo
                 {
-                    value = mh.tempo.value,
+                    value    = mh.tempo.value,
                     position = pos
                 };
                 pos += flipDuration(mh.timeSignature.denominator) * mh.timeSignature.numerator;
@@ -771,7 +771,7 @@ public sealed class NativeFormat
             var init = new Tempo
             {
                 position = 0,
-                value = file.tempo
+                value    = file.tempo
             };
             if (init.value != 0) tempos.Add(init);
             foreach (var m in file.tracks[0].measures)
@@ -786,7 +786,7 @@ public sealed class NativeFormat
                     {
                         var t = new Tempo
                         {
-                            value = tempo.value,
+                            value    = tempo.value,
                             position = pos + smallPos
                         };
 
@@ -888,30 +888,30 @@ public sealed class Note
 
     public Note(Note old)
     {
-        str = old.str;
-        fret = old.fret;
-        velocity = old.velocity;
-        isVibrato = old.isVibrato;
-        isHammer = old.isHammer;
-        isPalmMuted = old.isPalmMuted;
-        isMuted = old.isMuted;
-        harmonic = old.harmonic;
-        harmonicFret = old.harmonicFret;
-        slidesToNext = old.slidesToNext;
-        slideInFromAbove = old.slideInFromAbove;
-        slideInFromBelow = old.slideInFromBelow;
+        str               = old.str;
+        fret              = old.fret;
+        velocity          = old.velocity;
+        isVibrato         = old.isVibrato;
+        isHammer          = old.isHammer;
+        isPalmMuted       = old.isPalmMuted;
+        isMuted           = old.isMuted;
+        harmonic          = old.harmonic;
+        harmonicFret      = old.harmonicFret;
+        slidesToNext      = old.slidesToNext;
+        slideInFromAbove  = old.slideInFromAbove;
+        slideInFromBelow  = old.slideInFromBelow;
         slideOutDownwards = old.slideOutDownwards;
-        slideOutUpwards = old.slideOutUpwards;
+        slideOutUpwards   = old.slideOutUpwards;
         bendPoints.AddRange(old.bendPoints);
         tremBarPoints.AddRange(old.tremBarPoints);
         isTremBarVibrato = old.isTremBarVibrato;
-        isSlapped = old.isSlapped;
-        isPopped = old.isPopped;
-        index = old.index;
-        duration = old.duration;
-        fading = old.fading;
-        isRHTapped = old.isRHTapped;
-        resizeValue = old.resizeValue;
+        isSlapped        = old.isSlapped;
+        isPopped         = old.isPopped;
+        index            = old.index;
+        duration         = old.duration;
+        fading           = old.fading;
+        isRHTapped       = old.isRHTapped;
+        resizeValue      = old.resizeValue;
     }
 
     public Note()
@@ -940,7 +940,7 @@ public sealed class Annotation
 
     public Annotation(string v = "", int pos = 0)
     {
-        value = v;
+        value    = v;
         position = pos;
     }
 }
@@ -963,7 +963,7 @@ public sealed class TremoloPoint
 
 public sealed class BendPoint
 {
-    public int index; //also global index of midi
+    public int index;       //also global index of midi
     public int usedChannel; //After being part of BendingPlan
     public float value;
 
@@ -1022,7 +1022,7 @@ public sealed class Track
         var _temp = new Note
         {
             index = notes[notes.Count - 1].index + notes[notes.Count - 1].duration,
-            str = -2
+            str   = -2
         };
         notes.Add(_temp);
 
@@ -1208,7 +1208,7 @@ public sealed class Track
                 channelConnections.Add(new[] { channel, usedChannel, n.index + n.duration });
                 midiTrack.messages.Add(new MidiMessage("program_change", new[] { "" + usedChannel, "" + patch },
                     n.index - currentIndex));
-                noteChannel = usedChannel;
+                noteChannel  = usedChannel;
                 currentIndex = n.index;
                 activeBendingPlans.Add(createBendingPlan(n.bendPoints, channel, usedChannel, n.duration, n.index,
                     n.resizeValue, n.isVibrato));
@@ -1266,8 +1266,8 @@ public sealed class Track
                     var newOne = new Note(n)
                     {
                         duration = lengthEach,
-                        index = beginIndex + x * lengthEach,
-                        fret = start + (n.slideInFromAbove ? -x : +x)
+                        index    = beginIndex + x * lengthEach,
+                        fret     = start + (n.slideInFromAbove ? -x : +x)
                     };
                     ret.Add(newOne);
                 }
@@ -1287,8 +1287,8 @@ public sealed class Track
                     var newOne = new Note(n)
                     {
                         duration = lengthEach,
-                        index = beginIndex + x * lengthEach,
-                        fret = myFret + (n.slideOutDownwards ? -x : +x)
+                        index    = beginIndex + x * lengthEach,
+                        fret     = myFret + (n.slideOutDownwards ? -x : +x)
                     };
                     ret.Add(newOne);
                 }
@@ -1526,7 +1526,7 @@ public sealed class Track
         //Resize the points according to (changed) note duration
         foreach (var bp in bendPoints)
         {
-            bp.index = (int)(index + (bp.index - index) * resize);
+            bp.index       = (int)(index + (bp.index - index) * resize);
             bp.usedChannel = usedChannel;
         }
 
@@ -1561,7 +1561,7 @@ public sealed class Track
                 bendingPoints.Add(bp);
             }
 
-            old_pos = bp.index;
+            old_pos   = bp.index;
             old_value = bp.value;
             if ((start || bp.index != old_pos) && isVibrato)
                 old_value -= vibrato; //Add back, so not to be influenced by it
@@ -1592,7 +1592,7 @@ public sealed class BendingPlan
         this.bendingPoints = bendingPoints;
         //this.positions = positions;
         this.originalChannel = originalChannel;
-        this.usedChannel = usedChannel;
+        this.usedChannel     = usedChannel;
     }
 }
 
@@ -1601,7 +1601,7 @@ public sealed class MasterBar
     public int den = 4;
     public int duration;
     public int index; //Midi Index
-    public int key; //C, -1 = F, 1 = G
+    public int key;   //C, -1 = F, 1 = G
     public string keyBoth = "0";
     public int keyType; //0 = Major, 1 = Minor
     public int num = 4;

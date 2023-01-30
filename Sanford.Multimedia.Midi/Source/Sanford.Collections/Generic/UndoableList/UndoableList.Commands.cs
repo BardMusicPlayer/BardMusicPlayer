@@ -57,7 +57,7 @@ namespace Sanford.Collections.Generic
             public SetCommand(IList<T> theList, int index, T item)
             {
                 this.theList = theList;
-                this.index = index;
+                this.index   = index;
                 this.newItem = item;
             }
 
@@ -76,9 +76,9 @@ namespace Sanford.Collections.Generic
 
                 Debug.Assert(index >= 0 && index < theList.Count);
 
-                oldItem = theList[index];
+                oldItem        = theList[index];
                 theList[index] = newItem;
-                undone = false;
+                undone         = false;
             }
 
             public void Undo()
@@ -96,7 +96,7 @@ namespace Sanford.Collections.Generic
                 Debug.Assert(theList[index].Equals(newItem));
 
                 theList[index] = oldItem;
-                undone = true;
+                undone         = true;
             }
 
             #endregion
@@ -121,8 +121,8 @@ namespace Sanford.Collections.Generic
             public InsertCommand(IList<T> theList, int index, T item)
             {
                 this.theList = theList;
-                this.index = index;
-                this.item = item;
+                this.index   = index;
+                this.item    = item;
             }
 
             #region ICommand Members
@@ -185,7 +185,7 @@ namespace Sanford.Collections.Generic
             public InsertRangeCommand(List<T> theList, int index, IEnumerable<T> collection)
             {
                 this.theList = theList;
-                this.index = index;
+                this.index   = index;
 
                 insertList = new List<T>(collection);
             }
@@ -250,7 +250,7 @@ namespace Sanford.Collections.Generic
             public RemoveAtCommand(IList<T> theList, int index)
             {
                 this.theList = theList;
-                this.index = index;
+                this.index   = index;
             }
 
             #region ICommand Members
@@ -268,7 +268,7 @@ namespace Sanford.Collections.Generic
 
                 Debug.Assert(index >= 0 && index < theList.Count);
 
-                item = theList[index];
+                item  = theList[index];
                 count = theList.Count;
                 theList.RemoveAt(index);
                 undone = false;
@@ -315,8 +315,8 @@ namespace Sanford.Collections.Generic
             public RemoveRangeCommand(List<T> theList, int index, int count)
             {
                 this.theList = theList;
-                this.index = index;
-                this.count = count;
+                this.index   = index;
+                this.count   = count;
             }
 
             #region ICommand Members
@@ -442,15 +442,15 @@ namespace Sanford.Collections.Generic
 
             public ReverseCommand(List<T> theList)
             {
-                this.theList = theList;
+                this.theList      = theList;
                 this.reverseRange = false;
             }
 
             public ReverseCommand(List<T> theList, int index, int count)
             {
-                this.theList = theList;
-                this.index = index;
-                this.count = count;
+                this.theList      = theList;
+                this.index        = index;
+                this.count        = count;
                 this.reverseRange = true;
             }
 

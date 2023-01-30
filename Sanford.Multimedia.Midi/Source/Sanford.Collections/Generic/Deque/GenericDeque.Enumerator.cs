@@ -25,8 +25,8 @@ namespace Sanford.Collections.Generic
 
             public Enumerator(Deque<T> owner)
             {
-                this.owner = owner;
-                currentNode = owner.front;
+                this.owner   = owner;
+                currentNode  = owner.front;
                 this.version = owner.version;
             }
 
@@ -49,7 +49,7 @@ namespace Sanford.Collections.Generic
                 #endregion
 
                 currentNode = owner.front;
-                moveResult = false;
+                moveResult  = false;
             }
 
             public object Current
@@ -93,7 +93,7 @@ namespace Sanford.Collections.Generic
 
                 if(currentNode != null)
                 {
-                    current = currentNode.Value;
+                    current     = currentNode.Value;
                     currentNode = currentNode.Next;
 
                     moveResult = true;

@@ -8,11 +8,11 @@
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents the functionality and properties of AVL nodes.
-	/// </summary>
-	internal interface IAvlNode
-	{
+    /// <summary>
+    /// Represents the functionality and properties of AVL nodes.
+    /// </summary>
+    internal interface IAvlNode
+    {
         /// <summary>
         /// Removes the current node from the AVL tree.
         /// </summary>
@@ -85,5 +85,5 @@ namespace Sanford.Collections.Immutable
         {
             get;
         }
-	}
+    }
 }

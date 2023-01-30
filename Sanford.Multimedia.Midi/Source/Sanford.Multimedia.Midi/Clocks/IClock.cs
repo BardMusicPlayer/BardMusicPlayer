@@ -36,10 +36,10 @@ using System;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Represents functionality for generating events for driving Sequence playback.
-	/// </summary>
-	public interface IClock
+    /// <summary>
+    /// Represents functionality for generating events for driving Sequence playback.
+    /// </summary>
+    public interface IClock
     {
         #region IClock Members
 

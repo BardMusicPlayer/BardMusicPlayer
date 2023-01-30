@@ -10,12 +10,12 @@ using System.ComponentModel;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents a null AVL node.
-	/// </summary>
-	[ImmutableObject(true)]
-	internal class NullAvlNode : IAvlNode
-	{
+    /// <summary>
+    /// Represents a null AVL node.
+    /// </summary>
+    [ImmutableObject(true)]
+    internal class NullAvlNode : IAvlNode
+    {
         #region IAvlNode Members
 
         /// <summary>

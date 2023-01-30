@@ -60,7 +60,7 @@ namespace Sanford.Multimedia.Midi
 
             holdPedal1Message = new bool[c];
             holdPedal2Message = new bool[c];
-            sustenutoMessage = new bool[c];
+            sustenutoMessage  = new bool[c];
         }
 
         public void Process(ChannelMessage message)
@@ -133,8 +133,8 @@ namespace Sanford.Multimedia.Midi
                     if(noteOnMessage[c, n] != null)
                     {
                         builder.MidiChannel = c;
-                        builder.Command = ChannelCommand.NoteOff;
-                        builder.Data1 = noteOnMessage[c, n].Data1;
+                        builder.Command     = ChannelCommand.NoteOff;
+                        builder.Data1       = noteOnMessage[c, n].Data1;
                         builder.Build();
 
                         stoppedMessages.Add(builder.Result);
@@ -146,8 +146,8 @@ namespace Sanford.Multimedia.Midi
                 if(holdPedal1Message[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.HoldPedal1;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.HoldPedal1;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -158,8 +158,8 @@ namespace Sanford.Multimedia.Midi
                 if(holdPedal2Message[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.HoldPedal2;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.HoldPedal2;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -170,8 +170,8 @@ namespace Sanford.Multimedia.Midi
                 if(sustenutoMessage[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.SustenutoPedal;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.SustenutoPedal;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -194,7 +194,7 @@ namespace Sanford.Multimedia.Midi
 
                 holdPedal1Message[c] = false;
                 holdPedal2Message[c] = false;
-                sustenutoMessage[c] = false;
+                sustenutoMessage[c]  = false;
             }
         }
 

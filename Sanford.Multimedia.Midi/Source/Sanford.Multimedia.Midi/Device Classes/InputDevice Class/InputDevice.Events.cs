@@ -48,9 +48,9 @@ namespace Sanford.Multimedia.Midi
                 if (PostEventsOnCreationContext)
                 {
                     context.Post(delegate (object dummy)
-                            {
-                                handler(this, e);
-                            }, null); 
+                    {
+                        handler(this, e);
+                    }, null); 
                 }
                 else
                 {

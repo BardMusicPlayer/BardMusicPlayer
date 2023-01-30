@@ -85,7 +85,7 @@ internal partial class Packet
                     var category = BitConverter.ToUInt16(message, 32); // category
                     switch (category)
                     {
-                        case 2: // instrument equip/dequip is in this category
+                        case 2:                                              // instrument equip/dequip is in this category
                             var param1 = BitConverter.ToUInt32(message, 36); // action.
                             var param2 = BitConverter.ToUInt32(message, 40); // Instrument
                             var param3 = BitConverter.ToUInt32(message, 44);

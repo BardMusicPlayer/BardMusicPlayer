@@ -53,9 +53,9 @@ namespace Sanford.Multimedia.Midi
         Continuation = 0xF7
     }
 
-	/// <summary>
-	/// Represents MIDI system exclusive messages.
-	/// </summary>
+    /// <summary>
+    /// Represents MIDI system exclusive messages.
+    /// </summary>
     public sealed class SysExMessage : MidiMessageBase, IMidiMessage, IEnumerable
     {
         #region SysExEventMessage Members
@@ -99,7 +99,7 @@ namespace Sanford.Multimedia.Midi
                     "System exclusive data is too short.", "data");
             }
             else if(data[0] != (byte)SysExType.Start && 
-                data[0] != (byte)SysExType.Continuation)
+                    data[0] != (byte)SysExType.Continuation)
             {
                 throw new ArgumentException(
                     "Unknown status value.", "data");

@@ -58,24 +58,24 @@ namespace Sanford.Multimedia.Midi
         Smpte
     }    
 
-	/// <summary>
-	/// Represents MIDI file properties.
-	/// </summary>
-	internal class MidiFileProperties
-	{
+    /// <summary>
+    /// Represents MIDI file properties.
+    /// </summary>
+    internal class MidiFileProperties
+    {
         private const int PropertyLength = 2;
 
         private static readonly byte[] MidiFileHeader =
-            {
-                (byte)'M',
-                (byte)'T',
-                (byte)'h',
-                (byte)'d',
-                0, 
-                0, 
-                0,
-                6
-            };
+        {
+            (byte)'M',
+            (byte)'T',
+            (byte)'h',
+            (byte)'d',
+            0, 
+            0, 
+            0,
+            6
+        };
 
         private int format = 1;
 
@@ -85,9 +85,9 @@ namespace Sanford.Multimedia.Midi
 
         private SequenceType sequenceType = SequenceType.Ppqn;
 
-		public MidiFileProperties()
-		{
-		}
+        public MidiFileProperties()
+        {
+        }
 
         public void Read(Stream strm)
         {
@@ -100,13 +100,13 @@ namespace Sanford.Multimedia.Midi
 
             #endregion
 
-            format = trackCount = 0;
-			division = PpqnClock.PpqnMinValue;
+            format   = trackCount = 0;
+            division = PpqnClock.PpqnMinValue;
 
             FindHeader(strm);
-            Format = (int)ReadProperty(strm);
+            Format     = (int)ReadProperty(strm);
             TrackCount = (int)ReadProperty(strm);
-            Division = (int)ReadProperty(strm);
+            Division   = (int)ReadProperty(strm);
 
             #region Invariant
 
@@ -333,9 +333,9 @@ namespace Sanford.Multimedia.Midi
                     }
 
                     if((sbyte)data[0] != -(int)SmpteFrameRate.Smpte24 &&                        
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte25 &&
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30 &&
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30Drop)
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte25 &&
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30 &&
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30Drop)
                     {
                         throw new ArgumentException("Invalid SMPTE frame rate.");
                     }
@@ -374,7 +374,7 @@ namespace Sanford.Multimedia.Midi
                 return sequenceType;
             }
         }
-	}
+    }
 
     public class MidiFileException : ApplicationException
     {

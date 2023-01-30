@@ -5,12 +5,12 @@ namespace Sanford.Multimedia.Midi
     public class SysExMessageEventArgs : EventArgs
     {
         private SysExMessage message;
-		private Track track;
+        private Track track;
 
         public SysExMessageEventArgs(Track track, SysExMessage message)
         {
             this.message = message;
-			this.track = track;
+            this.track   = track;
         }
 
         public SysExMessage Message
@@ -21,8 +21,8 @@ namespace Sanford.Multimedia.Midi
             }
         }
 
-		public Track MidiTrack {
-			get { return track; }
-		}
+        public Track MidiTrack {
+            get { return track; }
+        }
     }
 }

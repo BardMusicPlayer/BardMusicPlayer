@@ -25,8 +25,8 @@ public static class ImportGuitarPro
             ".gp4" => 4,
             ".gp5" => 5,
             ".gpx" => 6,
-            ".gp" => 7,
-            _ => version
+            ".gp"  => 7,
+            _      => version
         };
 
         switch (version)

@@ -22,7 +22,7 @@ internal class Autodiscover : IDisposable
     {
         svcRx.Stop();
 #if DEBUG
-            Console.WriteLine("Destructor Called.");
+        Console.WriteLine("Destructor Called.");
 #endif
     }
 
@@ -30,7 +30,7 @@ internal class Autodiscover : IDisposable
     {
         svcRx.Stop();
 #if DEBUG
-            Console.WriteLine("Dispose Called.");
+        Console.WriteLine("Dispose Called.");
 #endif
         //GC.SuppressFinalize(this);
     }

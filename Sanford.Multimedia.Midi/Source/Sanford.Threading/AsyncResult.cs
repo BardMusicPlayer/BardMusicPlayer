@@ -89,9 +89,9 @@ namespace Sanford.Threading
         /// </param>
         public AsyncResult(object owner, AsyncCallback callback, object state)
         {
-            this.owner = owner;
+            this.owner    = owner;
             this.callback = callback;
-            this.state = state;
+            this.state    = state;
 
             // Get the current thread ID. This will be used later to determine
             // if the operation completed synchronously.

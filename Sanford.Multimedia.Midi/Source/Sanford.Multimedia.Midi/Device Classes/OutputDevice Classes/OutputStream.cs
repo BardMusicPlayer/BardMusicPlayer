@@ -539,7 +539,7 @@ namespace Sanford.Multimedia.Midi
                 Property d = new Property();
 
                 d.sizeOfProperty = Marshal.SizeOf(typeof(Property));
-                d.property = value;
+                d.property       = value;
 
                 lock(lockObject)
                 {
@@ -599,7 +599,7 @@ namespace Sanford.Multimedia.Midi
 
                 Property t = new Property();
                 t.sizeOfProperty = Marshal.SizeOf(typeof(Property));
-                t.property = value;
+                t.property       = value;
 
                 lock(lockObject)
                 {

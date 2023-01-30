@@ -37,11 +37,11 @@ using System.IO;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Reads a track from a stream.
-	/// </summary>
-	internal class TrackReader
-	{
+    /// <summary>
+    /// Reads a track from a stream.
+    /// </summary>
+    internal class TrackReader
+    {
         private Track track = new Track();
 
         private Track newTrack = new Track();
@@ -64,9 +64,9 @@ namespace Sanford.Multimedia.Midi
 
         private int runningStatus;
 
-		public TrackReader()
-		{
-		}
+        public TrackReader()
+        {
+        }
 
         public void Read(Stream strm)
         { 
@@ -173,8 +173,8 @@ namespace Sanford.Multimedia.Midi
         {
             // If this is a channel message.
             if(status >= (int)ChannelCommand.NoteOff && 
-                status <= (int)ChannelCommand.PitchWheel + 
-                ChannelMessage.MidiChannelMaxValue)
+               status <= (int)ChannelCommand.PitchWheel + 
+               ChannelMessage.MidiChannelMaxValue)
             {
                 ParseChannelMessage();
             }
@@ -195,13 +195,13 @@ namespace Sanford.Multimedia.Midi
             }
             // Else if this is a system common message.
             else if(status >= (int)SysCommonType.MidiTimeCode &&
-                status <= (int)SysCommonType.TuneRequest)
+                    status <= (int)SysCommonType.TuneRequest)
             {
                 ParseSysCommonMessage();
             }
             // Else if this is a system realtime message.
             else if(status >= (int)SysRealtimeType.Clock &&
-                status <= (int)SysRealtimeType.Reset)
+                    status <= (int)SysRealtimeType.Reset)
             {
                 ParseSysRealtimeMessage();                
             }
@@ -214,9 +214,9 @@ namespace Sanford.Multimedia.Midi
                 throw new MidiFileException("End of track unexpectedly reached.");
             }
 
-            cmBuilder.Command = ChannelMessage.UnpackCommand(status);
+            cmBuilder.Command     = ChannelMessage.UnpackCommand(status);
             cmBuilder.MidiChannel = ChannelMessage.UnpackMidiChannel(status);
-            cmBuilder.Data1 = trackData[trackIndex];
+            cmBuilder.Data1       = trackData[trackIndex];
 
             trackIndex++;
 
@@ -430,7 +430,7 @@ namespace Sanford.Multimedia.Midi
                     temp = trackData[trackIndex];
                     trackIndex++;
                     result <<= 7;
-                    result |= temp & 0x7F;
+                    result |=  temp & 0x7F;
                 }while((temp & 0x80) == 0x80);
             }
 
@@ -444,5 +444,5 @@ namespace Sanford.Multimedia.Midi
                 return track;
             }
         }
-	}
+    }
 }

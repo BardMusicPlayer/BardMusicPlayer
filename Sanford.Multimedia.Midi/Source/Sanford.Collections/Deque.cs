@@ -38,12 +38,12 @@ using System.Diagnostics;
 
 namespace Sanford.Collections
 {
-	/// <summary>
-	/// Represents a simple double-ended-queue collection of objects.
-	/// </summary>
-	[Serializable()]
-	public class Deque : ICollection, IEnumerable, ICloneable
-	{
+    /// <summary>
+    /// Represents a simple double-ended-queue collection of objects.
+    /// </summary>
+    [Serializable()]
+    public class Deque : ICollection, IEnumerable, ICloneable
+    {
         #region Deque Members
 
         #region Fields
@@ -67,8 +67,8 @@ namespace Sanford.Collections
         /// <summary>
         /// Initializes a new instance of the Deque class.
         /// </summary>
-		public Deque()
-		{
+        public Deque()
+        {
         }
 
         /// <summary>
@@ -535,8 +535,8 @@ namespace Sanford.Collections
 
             public DequeEnumerator(Deque owner)
             {
-                this.owner = owner;
-                currentNode = owner.front;
+                this.owner   = owner;
+                currentNode  = owner.front;
                 this.version = owner.version;
             }
 
@@ -555,7 +555,7 @@ namespace Sanford.Collections
                 #endregion
 
                 currentNode = owner.front;
-                moveResult = false;
+                moveResult  = false;
             }
 
             public object Current
@@ -591,7 +591,7 @@ namespace Sanford.Collections
 
                 if(currentNode != null)
                 {
-                    current = currentNode.Value;
+                    current     = currentNode.Value;
                     currentNode = currentNode.Next;
 
                     moveResult = true;
@@ -641,7 +641,7 @@ namespace Sanford.Collections
                 #endregion
 
                 this.deque = deque;
-                this.root = deque.SyncRoot;
+                this.root  = deque.SyncRoot;
             }
 
             #endregion
@@ -864,7 +864,7 @@ namespace Sanford.Collections
             else if(index >= array.Length)
             {
                 throw new ArgumentException("Index is equal to or greater " +
-                    "than the length of array.");
+                                            "than the length of array.");
             }
             else if(Count > array.Length - index)
             {

@@ -19,7 +19,7 @@ public sealed class MidiExport
 
     public MidiExport(int fileType = 1, int ticksPerBeat = 960)
     {
-        this.fileType = fileType;
+        this.fileType     = fileType;
         this.ticksPerBeat = ticksPerBeat;
     }
 
@@ -139,7 +139,7 @@ public sealed class MidiTrack
                 }
 
                 runningStatusByte = temp;
-                statusByteSet = true;
+                statusByteSet     = true;
             }
         }
 
@@ -222,7 +222,7 @@ public sealed class MidiMessage
     //Others not needed..
     public MidiMessage(string type, IReadOnlyList<string> args, int time, byte[] data = null)
     {
-        is_meta = false;
+        is_meta   = false;
         this.type = type;
         this.time = time;
 
@@ -231,8 +231,8 @@ public sealed class MidiMessage
             //Meta Messages
             case "sequence_number":
                 is_meta = true;
-                code = 0x00;
-                number = int.Parse(args[0]);
+                code    = 0x00;
+                number  = int.Parse(args[0]);
                 break;
             case "text":
             case "copyright":
@@ -240,7 +240,7 @@ public sealed class MidiMessage
             case "marker":
             case "cue_marker":
                 is_meta = true;
-                text = args[0];
+                text    = args[0];
                 break;
         }
 
@@ -265,8 +265,8 @@ public sealed class MidiMessage
             case "instrument_name":
             case "device_name":
                 is_meta = true;
-                code = 0x03;
-                name = args[0];
+                code    = 0x03;
+                name    = args[0];
                 break;
         }
 
@@ -279,84 +279,84 @@ public sealed class MidiMessage
                 code = 0x08;
                 break;
             case "channel_prefix":
-                code = 0x20;
+                code    = 0x20;
                 channel = int.Parse(args[0]);
                 is_meta = true;
                 break;
             case "midi_port":
-                code = 0x21;
-                port = int.Parse(args[0]);
+                code    = 0x21;
+                port    = int.Parse(args[0]);
                 is_meta = true;
                 break;
             case "end_of_track":
-                code = 0x2f;
+                code    = 0x2f;
                 is_meta = true;
                 break;
             case "set_tempo":
-                code = 0x51;
-                tempo = int.Parse(args[0]);
+                code    = 0x51;
+                tempo   = int.Parse(args[0]);
                 is_meta = true;
                 break;
             case "time_signature":
-                is_meta = true;
-                code = 0x58;
-                numerator = int.Parse(args[0]); //4
-                denominator = int.Parse(args[1]); //4
-                clocks_per_click = int.Parse(args[2]); //24
+                is_meta                     = true;
+                code                        = 0x58;
+                numerator                   = int.Parse(args[0]); //4
+                denominator                 = int.Parse(args[1]); //4
+                clocks_per_click            = int.Parse(args[2]); //24
                 notated_32nd_notes_per_beat = int.Parse(args[3]); //8
                 break;
             case "key_signature":
-                is_meta = true;
-                code = 0x59;
-                key = int.Parse(args[0]);
+                is_meta  = true;
+                code     = 0x59;
+                key      = int.Parse(args[0]);
                 is_major = args[1].Equals("0"); //"0" or "1"
                 break;
             //Normal Messages
             case "note_off":
-                code = 0x80;
-                channel = int.Parse(args[0]);
-                note = int.Parse(args[1]);
+                code     = 0x80;
+                channel  = int.Parse(args[0]);
+                note     = int.Parse(args[1]);
                 velocity = int.Parse(args[2]);
                 break;
             case "note_on":
-                code = 0x90;
-                channel = int.Parse(args[0]);
-                note = int.Parse(args[1]);
+                code     = 0x90;
+                channel  = int.Parse(args[0]);
+                note     = int.Parse(args[1]);
                 velocity = int.Parse(args[2]);
                 break;
             case "polytouch":
-                code = 0xa0;
+                code    = 0xa0;
                 channel = int.Parse(args[0]);
-                note = int.Parse(args[1]);
-                value = int.Parse(args[2]);
+                note    = int.Parse(args[1]);
+                value   = int.Parse(args[2]);
                 break;
             case "control_change":
-                code = 0xb0;
+                code    = 0xb0;
                 channel = int.Parse(args[0]);
                 control = int.Parse(args[1]);
-                value = int.Parse(args[2]);
+                value   = int.Parse(args[2]);
                 break;
             case "program_change":
-                code = 0xc0;
+                code    = 0xc0;
                 channel = int.Parse(args[0]);
                 program = int.Parse(args[1]);
                 break;
             case "aftertouch":
-                code = 0xd0;
+                code    = 0xd0;
                 channel = int.Parse(args[0]);
-                value = int.Parse(args[1]);
+                value   = int.Parse(args[1]);
                 break;
             case "pitchwheel":
-                code = 0xe0;
+                code    = 0xe0;
                 channel = int.Parse(args[0]);
-                pitch = int.Parse(args[1]);
+                pitch   = int.Parse(args[1]);
                 break;
         }
 
 
         if (!type.Equals("sysex")) return;
 
-        code = 0xf0;
+        code      = 0xf0;
         this.data = data;
     }
 

@@ -489,8 +489,8 @@ namespace Sanford.Threading
 
                     PostCompletedEventArgs e = new PostCompletedEventArgs(
                         (SendOrPostCallback)result.Method,
-                         result.Error,
-                         args[0]);
+                        result.Error,
+                        args[0]);
 
                     OnPostCompleted(e);
                 }

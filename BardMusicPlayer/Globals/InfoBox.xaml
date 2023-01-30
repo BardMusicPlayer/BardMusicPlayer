@@ -7,10 +7,10 @@
         <Image Source="/Resources/Images/group.png" />
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="35" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -21,13 +21,13 @@
                         <Border.Resources>
                             <Storyboard x:Key="slide">
                                 <DoubleAnimation From="1100" To="-1100" Duration="00:00:8"
-                          Storyboard.TargetProperty="X"
-                          Storyboard.TargetName="transferCurreny"
-                          RepeatBehavior="Forever"/>
+                                                 Storyboard.TargetProperty="X"
+                                                 Storyboard.TargetName="transferCurreny"
+                                                 RepeatBehavior="Forever" />
                             </Storyboard>
                         </Border.Resources>
                         <Border.RenderTransform>
-                            <TranslateTransform x:Name="transferCurreny" X="0"/>
+                            <TranslateTransform x:Name="transferCurreny" X="0" />
                         </Border.RenderTransform>
                         <Border.Triggers>
                             <EventTrigger RoutedEvent="Border.Loaded">
@@ -38,8 +38,8 @@
                             </EventTrigger>
                         </Border.Triggers>
                         <Canvas Width="{Binding ActualWidth, ElementName=moving_border}">
-                            <TextBlock Text="Thanks to Dororo, Thymm, Lana, Liath, City-Wok, Alina, Jay, Meowchestra, Debra, Nozomi and all bards for your help and input." FontFamily="Comic Sans MS" FontSize="20" Foreground="#FFFFD200" x:Name="txt_scroll" Canvas.Left="0"/>
-                            <TextBlock Text="{Binding Text, ElementName=txt_scroll}" FontSize="20" FontFamily="Comic Sans MS" Foreground="#FFFFD200" Canvas.Left="0"/>
+                            <TextBlock Text="Thanks to Dororo, Thymm, Lana, Liath, City-Wok, Alina, Jay, Meowchestra, Debra, Nozomi and all bards for your help and input." FontFamily="Comic Sans MS" FontSize="20" Foreground="#FFFFD200" x:Name="txt_scroll" Canvas.Left="0" />
+                            <TextBlock Text="{Binding Text, ElementName=txt_scroll}" FontSize="20" FontFamily="Comic Sans MS" Foreground="#FFFFD200" Canvas.Left="0" />
                         </Canvas>
                     </Border>
                 </Border>

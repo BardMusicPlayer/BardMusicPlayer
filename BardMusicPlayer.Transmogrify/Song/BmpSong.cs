@@ -364,7 +364,7 @@ public sealed class BmpSong
 
                     try
                     {
-                        noteOnMS = 5000000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
+                        noteOnMS  = 5000000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
                         noteOffMS = 5000000 + note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
                     }
                     catch (Exception) { continue; }

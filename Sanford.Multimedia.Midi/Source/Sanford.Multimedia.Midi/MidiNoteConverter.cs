@@ -36,11 +36,11 @@ using System;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Converts a MIDI note number to its corresponding frequency.
-	/// </summary>
-	public sealed class MidiNoteConverter
-	{
+    /// <summary>
+    /// Converts a MIDI note number to its corresponding frequency.
+    /// </summary>
+    public sealed class MidiNoteConverter
+    {
         /// <summary>
         /// The minimum value a note ID can have.
         /// </summary>
@@ -79,8 +79,8 @@ namespace Sanford.Multimedia.Midi
         // Prevents instances of this class from being created - no need for
         // an instance to be created since this class only has static methods.
         private MidiNoteConverter()
-		{
-		}
+        {
+        }
 
         /// <summary>
         /// Converts the specified note to a frequency.

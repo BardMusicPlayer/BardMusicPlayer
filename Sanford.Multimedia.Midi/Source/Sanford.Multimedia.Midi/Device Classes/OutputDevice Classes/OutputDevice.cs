@@ -38,11 +38,11 @@ using System.Text;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Represents a device capable of sending MIDI messages.
-	/// </summary>
-	public sealed class OutputDevice : OutputDeviceBase
-	{
+    /// <summary>
+    /// Represents a device capable of sending MIDI messages.
+    /// </summary>
+    public sealed class OutputDevice : OutputDeviceBase
+    {
         #region Win32 Midi Output Functions and Constants
 
         [DllImport("winmm.dll")]

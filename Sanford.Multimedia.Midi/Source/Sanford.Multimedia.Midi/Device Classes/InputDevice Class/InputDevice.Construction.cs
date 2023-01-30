@@ -47,7 +47,7 @@ namespace Sanford.Multimedia.Midi
         /// specified device ID.
         /// </summary>
         public InputDevice(int deviceID, bool postEventsOnCreationContext = true, bool postDriverCallbackToDelegateQueue = true)
-           : base(deviceID)
+            : base(deviceID)
         {
             midiInProc = HandleMessage;
 
@@ -61,7 +61,7 @@ namespace Sanford.Multimedia.Midi
                 throw new InputDeviceException(result);
             }
 
-            PostEventsOnCreationContext = postEventsOnCreationContext;
+            PostEventsOnCreationContext       = postEventsOnCreationContext;
             PostDriverCallbackToDelegateQueue = postDriverCallbackToDelegateQueue;
         }
 

@@ -22,7 +22,7 @@ public class NetworkPartyServer : IDisposable
     ~NetworkPartyServer()
     {
 #if DEBUG
-            Console.WriteLine("Destructor Called."); // Breakpoint here
+        Console.WriteLine("Destructor Called."); // Breakpoint here
 #endif
     }
 
@@ -30,7 +30,7 @@ public class NetworkPartyServer : IDisposable
     {
         svcWorker.Stop();
 #if DEBUG
-            Console.WriteLine("Dispose Called.");
+        Console.WriteLine("Dispose Called.");
 #endif
         //GC.SuppressFinalize(this);
     }
@@ -43,8 +43,8 @@ public class NetworkPartyServer : IDisposable
         objWorkerServerDiscovery.WorkerReportsProgress      = true;
         objWorkerServerDiscovery.WorkerSupportsCancellation = true;
 
-        svcWorker = new SocketServer(ref objWorkerServerDiscovery, iPEndPoint, type, name);
-        objWorkerServerDiscovery.DoWork += svcWorker.Start;
+        svcWorker                                =  new SocketServer(ref objWorkerServerDiscovery, iPEndPoint, type, name);
+        objWorkerServerDiscovery.DoWork          += svcWorker.Start;
         objWorkerServerDiscovery.ProgressChanged += logWorkers_ProgressChanged;
         objWorkerServerDiscovery.RunWorkerAsync();
     }

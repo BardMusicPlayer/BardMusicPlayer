@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace Sanford.Collections.Generic
 {
-	public partial class Deque<T>
-	{
+    public partial class Deque<T>
+    {
         #region SynchronizedDeque Class
 
         // Implements a synchronization wrapper around a deque.
@@ -38,7 +38,7 @@ namespace Sanford.Collections.Generic
                 #endregion
 
                 this.deque = deque;
-                this.root = deque.SyncRoot;
+                this.root  = deque.SyncRoot;
             }
 
             #endregion
@@ -184,5 +184,5 @@ namespace Sanford.Collections.Generic
         }
 
         #endregion	
-	}
+    }
 }

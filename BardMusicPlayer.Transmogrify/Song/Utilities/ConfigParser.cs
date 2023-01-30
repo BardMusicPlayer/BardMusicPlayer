@@ -105,7 +105,7 @@ internal static class ConfigParser
                                 }
                                 var octaveRange = OctaveRange.C3toC6;
                                 if (toneIndexAndOctaveRange.Groups[2].Success) octaveRange = OctaveRange.Parse(toneIndexAndOctaveRange.Groups[2].Value);
-                                if (octaveRange.Equals(OctaveRange.Invalid)) octaveRange = OctaveRange.C3toC6;
+                                if (octaveRange.Equals(OctaveRange.Invalid)) octaveRange   = OctaveRange.C3toC6;
                                 manualToneConfig.OctaveRanges[toneIndex] = octaveRange;
                             }
                         }
@@ -130,8 +130,8 @@ internal static class ConfigParser
                 var instrumentAndOctaveRange = modifier.Match(fields[0]);
                 if (!instrumentAndOctaveRange.Success) continue; // Invalid Instrument name.
                 if (instrumentAndOctaveRange.Groups[1].Success) classicConfig.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                if (classicConfig.Instrument.Equals(Instrument.None)) continue;  // Invalid Instrument name.
-                if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
+                if (classicConfig.Instrument.Equals(Instrument.None)) continue; // Invalid Instrument name.
+                if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange            = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
                 if (classicConfig.OctaveRange.Equals(OctaveRange.Invalid)) classicConfig.OctaveRange = OctaveRange.C3toC6;
                 ParseAdditionalOptions(trackNumber, classicConfig, song, fields);
                 BmpLog.I(BmpLog.Source.Transmogrify, "Found Classic Config Instrument " + classicConfig.Instrument.Name + " OctaveRange " + classicConfig.OctaveRange.Name +" on track " + classicConfig.Track + " ;bards=" + classicConfig.PlayerCount + ";include=" + string.Join(",",classicConfig.IncludedTracks));

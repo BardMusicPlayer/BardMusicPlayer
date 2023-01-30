@@ -18,8 +18,8 @@ public sealed partial class MacroEditWindow
     public MacroEditWindow(Macro macro)
     {
         InitializeComponent();
-        _macro = macro;
-        MacroName.Text = _macro.DisplayedText;
+        _macro                = macro;
+        MacroName.Text        = _macro.DisplayedText;
         MacroFileName.Content = _macro.File;
     }
 
@@ -29,7 +29,7 @@ public sealed partial class MacroEditWindow
     {
         var openFileDialog = new OpenFileDialog
         {
-            Filter = "Basic file | *.bas",
+            Filter      = "Basic file | *.bas",
             Multiselect = true
         };
 
@@ -39,7 +39,7 @@ public sealed partial class MacroEditWindow
         if (!openFileDialog.FileName.ToLower().EndsWith(".bas", StringComparison.Ordinal))
             return;
 
-        _macro.File = openFileDialog.FileName;
+        _macro.File           = openFileDialog.FileName;
         MacroFileName.Content = openFileDialog.FileName;
     }
 

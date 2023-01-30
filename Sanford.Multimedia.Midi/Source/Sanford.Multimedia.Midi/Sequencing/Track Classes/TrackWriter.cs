@@ -38,18 +38,18 @@ using System.IO;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Writes a Track to a Stream.
-	/// </summary>
+    /// <summary>
+    /// Writes a Track to a Stream.
+    /// </summary>
     internal class TrackWriter
     {
         private static readonly byte[] TrackHeader =
-            {
-                (byte)'M',
-                (byte)'T',
-                (byte)'r',
-                (byte)'k'
-            };
+        {
+            (byte)'M',
+            (byte)'T',
+            (byte)'r',
+            (byte)'k'
+        };
 
         // The Track to write to the Stream.
         private Track track = new Track();
@@ -97,9 +97,9 @@ namespace Sanford.Multimedia.Midi
                         Write((SysRealtimeMessage)e.MidiMessage);
                         break;
 				
-		    case MessageType.Short:
-			Write((ShortMessage)e.MidiMessage);
-			break;
+                    case MessageType.Short:
+                        Write((ShortMessage)e.MidiMessage);
+                        break;
                 }
             }
 
@@ -131,8 +131,8 @@ namespace Sanford.Multimedia.Midi
             while(v > 0)
             {
                 count++;
-                array[count] = (byte)((v & 0x7F) | 0x80);
-                v >>= 7;
+                array[count] =   (byte)((v & 0x7F) | 0x80);
+                v            >>= 7;
             }
 
             while(count >= 0)
@@ -143,9 +143,9 @@ namespace Sanford.Multimedia.Midi
         }
 	    
         private void Write(ShortMessage message)
-	{
-		trackData.AddRange(message.GetBytes());
-	}
+        {
+            trackData.AddRange(message.GetBytes());
+        }
 
         private void Write(ChannelMessage message)
         {

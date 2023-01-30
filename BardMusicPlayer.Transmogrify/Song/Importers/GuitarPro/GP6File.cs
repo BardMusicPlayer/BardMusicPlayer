@@ -28,7 +28,7 @@ public sealed class GP6File : GPFile
     public GP6File(byte[] _data)
     {
         GPBase.pointer = 0;
-        udata = _data;
+        udata          = _data;
     }
 
 
@@ -87,26 +87,26 @@ public sealed class GP6File : GPFile
 
         var gp5File = GP6NodeToGP5File(parsedXml.subnodes[0]);
         tracks = gp5File.tracks;
-        self = gp5File;
+        self   = gp5File;
     }
 
     public static GP5File GP6NodeToGP5File(Node node) //node = GPIF tag
     {
         var file = new GP5File(new byte[] { })
         {
-            version = "GUITAR PRO 6.0",
+            version      = "GUITAR PRO 6.0",
             versionTuple = new[] { 6, 0 },
             //set direct members of song:
-            title = node.getSubnodeByName("Score", true).subnodes[0].content,
-            subtitle = node.getSubnodeByName("Score").subnodes[1].content,
-            interpret = node.getSubnodeByName("Score").subnodes[2].content,
-            album = node.getSubnodeByName("Score").subnodes[3].content,
-            words = node.getSubnodeByName("Score").subnodes[4].content,
-            music = node.getSubnodeByName("Score").subnodes[5].content,
-            copyright = node.getSubnodeByName("Score").subnodes[7].content,
-            tab_author = node.getSubnodeByName("Score").subnodes[8].content,
+            title         = node.getSubnodeByName("Score", true).subnodes[0].content,
+            subtitle      = node.getSubnodeByName("Score").subnodes[1].content,
+            interpret     = node.getSubnodeByName("Score").subnodes[2].content,
+            album         = node.getSubnodeByName("Score").subnodes[3].content,
+            words         = node.getSubnodeByName("Score").subnodes[4].content,
+            music         = node.getSubnodeByName("Score").subnodes[5].content,
+            copyright     = node.getSubnodeByName("Score").subnodes[7].content,
+            tab_author    = node.getSubnodeByName("Score").subnodes[8].content,
             instructional = node.getSubnodeByName("Score").subnodes[9].content,
-            notice = node.getSubnodeByName("Score").subnodes[10].content.Split('\n') //?
+            notice        = node.getSubnodeByName("Score").subnodes[10].content.Split('\n') //?
         };
 
         //Page Layout
@@ -129,15 +129,15 @@ public sealed class GP6File : GPFile
         //tempo, key, midiChannels, directions only on a per track / per measureHeader (MasterBar) basis
 
         file.measureCount = node.getSubnodeByName("MasterBars", true).subnodes.Count;
-        file.trackCount = node.getSubnodeByName("Tracks", true).subnodes.Count;
+        file.trackCount   = node.getSubnodeByName("Tracks", true).subnodes.Count;
 
         var nAutomations = node.getSubnodeByName("MasterTrack", true).getSubnodeByName("Automations", true);
         foreach (var nAutomation in nAutomations.subnodes) tempos.Add(new GP6Tempo(nAutomation));
 
         file.measureHeaders = transferMeasureHeaders(node.getSubnodeByName("MasterBars"), file);
-        file.tracks = transferTracks(node.getSubnodeByName("Tracks", true), file);
-        rhythms = readRhythms(node.getSubnodeByName("Rhythms", true));
-        chords = readChords(node.getSubnodeByName("Tracks", true));
+        file.tracks         = transferTracks(node.getSubnodeByName("Tracks", true), file);
+        rhythms             = readRhythms(node.getSubnodeByName("Rhythms", true));
+        chords              = readChords(node.getSubnodeByName("Tracks", true));
         transferBars(node, file); //Bars > Voices > Beats > Notes
 
         //TODO update global vars tempo, key, midiChannels, directions based on first value?
@@ -155,29 +155,29 @@ public sealed class GP6File : GPFile
             var clef = nBar.getSubnodeByName("Clef").content;
             _bar.clef = clef switch
             {
-                "G2" => MeasureClef.treble,
-                "F4" => MeasureClef.bass,
+                "G2"      => MeasureClef.treble,
+                "F4"      => MeasureClef.bass,
                 "Neutral" => MeasureClef.neutral,
-                _ => _bar.clef
+                _         => _bar.clef
             };
             //.. not important for this app.
 
             var voices = nBar.getSubnodeByName("Voices").content.Split(' ');
             _bar.track = song.tracks[cnt % song.trackCount];
             if (cnt % song.trackCount == 0) barCnt++;
-            _bar.header = song.measureHeaders[barCnt];
+            _bar.header    = song.measureHeaders[barCnt];
             currentMeasure = barCnt;
-            currentTrack = cnt % song.trackCount;
+            currentTrack   = cnt % song.trackCount;
 
             cnt++;
             var nSimileMark = nBar.getSubnodeByName("SimileMark", true);
             if (nSimileMark != null)
                 _bar.simileMark = nSimileMark.content switch
                 {
-                    "Simple" => SimileMark.simple,
-                    "FirstOfDouble" => SimileMark.firstOfDouble,
+                    "Simple"         => SimileMark.simple,
+                    "FirstOfDouble"  => SimileMark.firstOfDouble,
                     "SecondOfDouble" => SimileMark.secondOfDouble,
-                    _ => _bar.simileMark
+                    _                => _bar.simileMark
                 };
 
             _bar.voices = new List<Voice>();
@@ -222,7 +222,7 @@ public sealed class GP6File : GPFile
                 break;
         }
 
-        if (d.isDotted) result = (int)(result * 1.5f);
+        if (d.isDotted) result       = (int)(result * 1.5f);
         if (d.isDoubleDotted) result = (int)(result * 1.75f);
 
         return result;
@@ -230,12 +230,12 @@ public sealed class GP6File : GPFile
 
     public static Voice transferVoice(Node node, int index, Measure bar)
     {
-        totalLength = flipDuration(bar.header.timeSignature.denominator) * bar.header.timeSignature.numerator;
+        totalLength  = flipDuration(bar.header.timeSignature.denominator) * bar.header.timeSignature.numerator;
         lengthPassed = 0;
         var voice = new Voice();
         var beats = node.getSubnodeByName("Voices", true).subnodes[index].getSubnodeByName("Beats", true).content
             .Split(' ');
-        voice.beats = new List<Beat>();
+        voice.beats   = new List<Beat>();
         voice.measure = bar;
 
         foreach (var beat in beats)
@@ -261,11 +261,11 @@ public sealed class GP6File : GPFile
         beat.duration = new Duration();
         var rhythmRef = int.Parse(nBeat.getSubnodeByName("Rhythm", true).propertyValues[0],
             CultureInfo.InvariantCulture);
-        beat.duration.value = rhythms[rhythmRef].noteValue;
-        beat.duration.isDotted = rhythms[rhythmRef].augmentationDots == 1;
+        beat.duration.value          = rhythms[rhythmRef].noteValue;
+        beat.duration.isDotted       = rhythms[rhythmRef].augmentationDots == 1;
         beat.duration.isDoubleDotted = rhythms[rhythmRef].augmentationDots == 2;
-        beat.duration.tuplet = new Tuplet();
-        beat.duration.tuplet = rhythms[rhythmRef].primaryTuplet;
+        beat.duration.tuplet         = new Tuplet();
+        beat.duration.tuplet         = rhythms[rhythmRef].primaryTuplet;
 
         //Check if should add tempo mark
         if (currentTrack == 0)
@@ -296,7 +296,7 @@ public sealed class GP6File : GPFile
 
 
                         beat.effect.mixTableChange.tempo = new MixTableItem((int)myTempo, 0, true);
-                        tempo.transferred = true;
+                        tempo.transferred                = true;
                     }
         }
 
@@ -478,7 +478,7 @@ public sealed class GP6File : GPFile
         {
             beat.effect.tremoloBar = new BendEffect
             {
-                type = BendType.none, //Not defined in GP6
+                type   = BendType.none, //Not defined in GP6
                 points = new List<BendPoint>()
             };
             var originValue = float.Parse(nWhammy.propertyValues[0], CultureInfo.InvariantCulture);
@@ -568,9 +568,9 @@ public sealed class GP6File : GPFile
         tapping = false;
         var note = new Note();
         var nNote = node.getSubnodeByName("Notes", true).subnodes[index];
-        note.beat = beat;
+        note.beat   = beat;
         note.effect = new NoteEffect();
-        note.type = NoteType.normal;
+        note.type   = NoteType.normal;
 
         //Properties
         var nProperties = nNote.getSubnodeByName("Properties", true);
@@ -677,7 +677,7 @@ public sealed class GP6File : GPFile
                 if (bendMidOff1 == -1.0f)
                 {
                     bendMidOff1 = bendOrigOff + (bendDestOff - bendOrigOff) / 2.0f;
-                    bendMidVal = bendOrigVal + (bendDestVal - bendOrigVal) / 2.0f;
+                    bendMidVal  = bendOrigVal + (bendDestVal - bendOrigVal) / 2.0f;
                 }
 
                 if (bendMidOff2 == -1.0f) bendMidOff2 = bendMidOff1;
@@ -730,7 +730,7 @@ public sealed class GP6File : GPFile
             {
                 var midiValue = getGP6DrumValue(element, variation);
                 note.value = midiValue;
-                note.str = 1;
+                note.str   = 1;
             }
         }
 
@@ -749,13 +749,13 @@ public sealed class GP6File : GPFile
             var secondNote = int.Parse(nTrill.content, CultureInfo.InvariantCulture);
             note.effect.trill = new TrillEffect
             {
-                fret = secondNote,
+                fret     = secondNote,
                 duration = new Duration(trillLength)
             };
         }
 
         var nVibrato = nNote.getSubnodeByName("Vibrato");
-        if (nVibrato != null) note.effect.vibrato = true;
+        if (nVibrato != null) note.effect.vibrato                          = true;
         if (nNote.getSubnodeByName("LetRing") != null) note.effect.letRing = true;
         var nAntiAccent = nNote.getSubnodeByName("AntiAccent");
         if (nAntiAccent != null) note.effect.ghostNote = true;
@@ -763,9 +763,9 @@ public sealed class GP6File : GPFile
         if (nAccent != null)
         {
             var val = int.Parse(nAccent.content, CultureInfo.InvariantCulture);
-            note.effect.accentuatedNote = val == 4;
+            note.effect.accentuatedNote      = val == 4;
             note.effect.heavyAccentuatedNote = val == 8;
-            note.effect.staccato = val == 1;
+            note.effect.staccato             = val == 1;
         }
 
         // Node nAccidental = nNote.getSubnodeByName("Accidental"); Doesn't matter for this app.
@@ -784,12 +784,12 @@ public sealed class GP6File : GPFile
                 "1/2" => 8,
                 "1/4" => 16,
                 "1/8" => 32,
-                _ => note.effect.tremoloPicking.duration.value
+                _     => note.effect.tremoloPicking.duration.value
             };
         }
 
         note.effect.grace = graceEffect;
-        note.velocity = velocity;
+        note.velocity     = velocity;
 
         return note;
     }
@@ -799,18 +799,18 @@ public sealed class GP6File : GPFile
         var val = element * 10 + variation;
         return val switch
         {
-            0 => 35,
-            10 => 38,
-            11 => 91,
-            12 => 37,
-            20 => 99,
-            30 => 56,
-            40 => 102,
-            50 => 43,
-            60 => 45,
-            70 => 47,
-            80 => 48,
-            90 => 50,
+            0   => 35,
+            10  => 38,
+            11  => 91,
+            12  => 37,
+            20  => 99,
+            30  => 56,
+            40  => 102,
+            50  => 43,
+            60  => 45,
+            70  => 47,
+            80  => 48,
+            90  => 50,
             100 => 42,
             101 => 92,
             102 => 46,
@@ -822,7 +822,7 @@ public sealed class GP6File : GPFile
             151 => 93,
             152 => 53,
             160 => 52,
-            _ => 0
+            _   => 0
         };
     }
 
@@ -839,9 +839,9 @@ public sealed class GP6File : GPFile
                 var chordcnt = 0;
                 foreach (var chord in nItems.subnodes.Select(Item => new GP6Chord
                          {
-                             id = chordcnt,
+                             id       = chordcnt,
                              forTrack = tcnt,
-                             name = Item.propertyValues[1]
+                             name     = Item.propertyValues[1]
                          }))
                 {
                     //Here I can later parse the chord picture
@@ -903,9 +903,9 @@ public sealed class GP6File : GPFile
 
             var param = nTrack.getSubnodeByName("RSE").getSubnodeByName("ChannelStrip").getSubnodeByName("Parameters")
                 .content.Split(' ');
-            _track.channel.bank = 0;
+            _track.channel.bank    = 0;
             _track.channel.balance = (int)(100 * float.Parse(param[11], CultureInfo.InvariantCulture));
-            _track.channel.volume = (int)(100 * float.Parse(param[12], CultureInfo.InvariantCulture));
+            _track.channel.volume  = (int)(100 * float.Parse(param[12], CultureInfo.InvariantCulture));
 
 
             var nMidi = nTrack.getSubnodeByName("GeneralMidi", true);
@@ -1002,8 +1002,8 @@ public sealed class GP6File : GPFile
             var mode = nMasterBar.getSubnodeByName("Key", true).subnodes[1].content.Equals("Major") ? 0 : 1;
             _measureHeader.keySignature = (KeySignature)(accidentals * 10 + (accidentals < 0 ? -mode : mode));
 
-            _measureHeader.hasDoubleBar = nMasterBar.getSubnodeByName("DoubleBar", true) != null;
-            _measureHeader.direction = transferDirections(nMasterBar.getSubnodeByName("Directions", true));
+            _measureHeader.hasDoubleBar  = nMasterBar.getSubnodeByName("DoubleBar", true) != null;
+            _measureHeader.direction     = transferDirections(nMasterBar.getSubnodeByName("Directions", true));
             _measureHeader.fromDirection = transferFromDirections(nMasterBar.getSubnodeByName("Directions", true));
             _measureHeader.isRepeatOpen = nMasterBar.getSubnodeByName("Repeat", true) != null &&
                                           nMasterBar.getSubnodeByName("Repeat", true).propertyValues[0].Equals("true");
@@ -1035,17 +1035,17 @@ public sealed class GP6File : GPFile
                 var feel = nMasterBar.getSubnodeByName("TripletFeel", true).content;
                 _measureHeader.tripletFeel = feel switch
                 {
-                    "Triplet8th" => TripletFeel.eigth,
-                    "Triplet16th" => TripletFeel.sixteenth,
-                    "Dotted8th" => TripletFeel.dotted8th,
-                    "Dotted16th" => TripletFeel.dotted16th,
-                    "Scottish8th" => TripletFeel.scottish8th,
+                    "Triplet8th"   => TripletFeel.eigth,
+                    "Triplet16th"  => TripletFeel.sixteenth,
+                    "Dotted8th"    => TripletFeel.dotted8th,
+                    "Dotted16th"   => TripletFeel.dotted16th,
+                    "Scottish8th"  => TripletFeel.scottish8th,
                     "Scottish16th" => TripletFeel.scottish16th,
-                    _ => _measureHeader.tripletFeel
+                    _              => _measureHeader.tripletFeel
                 };
             }
 
-            _measureHeader.song = song;
+            _measureHeader.song   = song;
             _measureHeader.number = cnt++;
 
 
@@ -1094,7 +1094,7 @@ public sealed class GP6File : GPFile
             var cnt = 0;
             foreach (var _line in nLyrics.subnodes.Select(static nLine => new LyricLine
                      {
-                         lyrics = nLine.subnodes[0].content,
+                         lyrics          = nLine.subnodes[0].content,
                          startingMeasure = int.Parse(nLine.subnodes[1].content, CultureInfo.InvariantCulture)
                      }))
                 lyrics.lines[cnt++] = _line;
@@ -1160,7 +1160,7 @@ public sealed class GP6File : GPFile
             var sb = new StringBuilder();
             var firstSpace = split[x].IndexOf(' ');
             var firstSlash = split[x].IndexOf('/');
-            if (firstSpace == -1 || firstSpace > endOfTag) firstSpace = endOfTag;
+            if (firstSpace == -1 || firstSpace > endOfTag) firstSpace   = endOfTag;
             if (firstSlash != -1 && firstSlash < firstSpace) firstSpace = firstSlash;
 
             var tagName = split[x].Substring(0, firstSpace);
@@ -1206,7 +1206,7 @@ public sealed class GP6File : GPFile
                 {
                     pos++;
                     propertyNames.Add(property.ToString());
-                    property = new StringBuilder();
+                    property                = new StringBuilder();
                     collectingPropertyValue = true;
                 }
 
@@ -1252,14 +1252,14 @@ public sealed class GP6Rhythm
 
     public GP6Rhythm(int id, int noteValue, int augmentationDots, int n = 1, int m = 1)
     {
-        this.id = id;
-        this.noteValue = noteValue;
+        this.id               = id;
+        this.noteValue        = noteValue;
         this.augmentationDots = augmentationDots;
 
         primaryTuplet = new Tuplet
         {
             enters = n,
-            times = m
+            times  = m
         };
     }
 }
@@ -1276,13 +1276,13 @@ public sealed class GP6Tempo
 
     public GP6Tempo(Node nAutomation) //Node with a type-subnote "Tempo"
     {
-        linear = nAutomation.getSubnodeByName("Linear", true).content.Equals("true");
-        bar = int.Parse(nAutomation.getSubnodeByName("Bar", true).content, CultureInfo.InvariantCulture);
+        linear   = nAutomation.getSubnodeByName("Linear", true).content.Equals("true");
+        bar      = int.Parse(nAutomation.getSubnodeByName("Bar", true).content, CultureInfo.InvariantCulture);
         position = float.Parse(nAutomation.getSubnodeByName("Position", true).content, CultureInfo.InvariantCulture);
-        visible = nAutomation.getSubnodeByName("Visible", true).content.Equals("true");
+        visible  = nAutomation.getSubnodeByName("Visible", true).content.Equals("true");
         var t = nAutomation.getSubnodeByName("Value", true).content;
         var ts = t.Split(' ');
-        tempo = (int)float.Parse(ts[0], CultureInfo.InvariantCulture);
+        tempo     = (int)float.Parse(ts[0], CultureInfo.InvariantCulture);
         tempoType = int.Parse(ts[1], CultureInfo.InvariantCulture);
     }
 }
@@ -1299,11 +1299,11 @@ public sealed class Node
     public Node(List<Node> subnodes, List<string> propertyNames,
         List<string> propertyValues, string name = "", string content = "")
     {
-        this.subnodes = subnodes;
-        this.propertyNames = propertyNames;
+        this.subnodes       = subnodes;
+        this.propertyNames  = propertyNames;
         this.propertyValues = propertyValues;
-        this.content = content;
-        this.name = name;
+        this.content        = content;
+        this.name           = name;
     }
 
     public Node getSubnodeByProperty(string propertyName, string property)
@@ -1599,8 +1599,8 @@ public sealed class BitStream
 
     public BitStream(byte[] data)
     {
-        this.data = data;
-        pointer = 0;
+        this.data  = data;
+        pointer    = 0;
         subpointer = 0;
     }
 

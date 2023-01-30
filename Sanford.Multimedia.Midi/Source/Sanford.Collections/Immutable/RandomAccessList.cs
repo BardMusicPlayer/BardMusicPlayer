@@ -13,12 +13,12 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Implements Chris Okasaki's random access list.
-	/// </summary>
-	[ImmutableObject(true)]
-	public class RandomAccessList : IEnumerable
-	{
+    /// <summary>
+    /// Implements Chris Okasaki's random access list.
+    /// </summary>
+    [ImmutableObject(true)]
+    public class RandomAccessList : IEnumerable
+    {
         #region RandomAccessList Members
 
         #region Class Fields
@@ -51,11 +51,11 @@ namespace Sanford.Collections.Immutable
         /// <summary>
         /// Initializes a new instance of the RandomAccessList class.
         /// </summary>
-		public RandomAccessList()
-		{
+        public RandomAccessList()
+        {
             count = 0;
             first = null;
-		}
+        }
 
         /// <summary>
         /// Initializes a new instance of the RandomAccessList class with the
@@ -94,8 +94,8 @@ namespace Sanford.Collections.Immutable
             // If the list is empty, or there is only one tree in the list, or
             // the first tree is smaller than the second tree.
             if(Count == 0 || 
-                first.NextNode == null || 
-                first.Root.Count < first.NextNode.Root.Count)
+               first.NextNode == null || 
+               first.Root.Count < first.NextNode.Root.Count)
             {
                 // Create a new first node with the specified value.
                 RalTreeNode newRoot = new RalTreeNode(value, null, null);

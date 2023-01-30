@@ -39,8 +39,8 @@ namespace Sanford.Multimedia.Midi
     /// <summary>
     /// Provides functionality for building tempo messages.
     /// </summary>
-	public class TempoChangeBuilder : IMessageBuilder
-	{
+    public class TempoChangeBuilder : IMessageBuilder
+    {
         #region TempoChangeBuilder Members
 
         #region Constants
@@ -90,7 +90,7 @@ namespace Sanford.Multimedia.Midi
         public TempoChangeBuilder(MetaMessage e)
         {
             Initialize(e);            
-		}
+        }
 
         #endregion
 

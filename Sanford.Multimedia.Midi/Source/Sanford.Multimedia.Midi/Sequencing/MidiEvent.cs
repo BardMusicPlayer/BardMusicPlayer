@@ -68,9 +68,9 @@ namespace Sanford.Multimedia.Midi
 
             #endregion
 
-            this.owner = owner;
+            this.owner         = owner;
             this.absoluteTicks = absoluteTicks;
-            this.message = message;
+            this.message       = message;
         }
 
         internal void SetAbsoluteTicks(int absoluteTicks)

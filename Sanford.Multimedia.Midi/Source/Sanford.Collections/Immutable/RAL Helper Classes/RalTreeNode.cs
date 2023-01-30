@@ -53,8 +53,8 @@ namespace Sanford.Collections.Immutable
             RalTreeNode leftChild, 
             RalTreeNode rightChild)
         {
-            this.value = value;
-            this.leftChild = leftChild;
+            this.value      = value;
+            this.leftChild  = leftChild;
             this.rightChild = rightChild;
 
             count = 1;

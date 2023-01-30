@@ -39,10 +39,10 @@ using Sanford.Multimedia.Timers;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Generates clock events internally.
-	/// </summary>
-	public class MidiInternalClock : PpqnClock, IComponent
+    /// <summary>
+    /// Generates clock events internally.
+    /// </summary>
+    public class MidiInternalClock : PpqnClock, IComponent
     {
         #region MidiInternalClock Members
 
@@ -60,7 +60,7 @@ namespace Sanford.Multimedia.Midi
         // Indicates whether the clock has been disposed.
         private bool disposed = false;
 
-		private int sleep = 0;
+        private int sleep = 0;
 
         private ISite site = null;
 
@@ -71,16 +71,16 @@ namespace Sanford.Multimedia.Midi
         /// <summary>
         /// Initializes a new instance of the MidiInternalClock class.
         /// </summary>
-		public MidiInternalClock()
+        public MidiInternalClock()
             : this(TimerCaps.Default.periodMin)
         { 
         }
 
         public MidiInternalClock(int timerPeriod) : base(timerPeriod)
         {
-            timer = TimerFactory.Create();
-            timer.Period = timerPeriod;
-            timer.Tick += new EventHandler(HandleTick); 
+            timer        =  TimerFactory.Create();
+            timer.Period =  timerPeriod;
+            timer.Tick   += new EventHandler(HandleTick); 
         }
 
         /// <summary>
@@ -104,13 +104,13 @@ namespace Sanford.Multimedia.Midi
         #region Methods
 
         /// <summary>
-		/// Sleeps for a certain time
-		/// </summary>
-		public void Sleep(int ms) {
-			sleep += ms;
-		}
+        /// Sleeps for a certain time
+        /// </summary>
+        public void Sleep(int ms) {
+            sleep += ms;
+        }
 
-		/// <summary>
+        /// <summary>
         /// Starts the MidiInternalClock.
         /// </summary>
         public void Start()
@@ -279,10 +279,10 @@ namespace Sanford.Multimedia.Midi
         private void HandleTick(object sender, EventArgs e)
         {
 
-			if(sleep != 0) {
-				Thread.Sleep(sleep);
-				sleep = 0;
-			}
+            if(sleep != 0) {
+                Thread.Sleep(sleep);
+                sleep = 0;
+            }
 
             int t = GenerateTicks();
 
@@ -301,16 +301,16 @@ namespace Sanford.Multimedia.Midi
         #region Properties
 
         /// <summary>
-		/// Gets or sets the tempo speed multiplier.
-		/// </summary>
-		public float TempoSpeed {
-			get {
-				return GetTempoSpeed();
-			}
-			set {
-				SetTempoSpeed(value);
-			}
-		}
+        /// Gets or sets the tempo speed multiplier.
+        /// </summary>
+        public float TempoSpeed {
+            get {
+                return GetTempoSpeed();
+            }
+            set {
+                SetTempoSpeed(value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tempo in microseconds per beat.

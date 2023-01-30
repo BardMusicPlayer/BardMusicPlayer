@@ -37,11 +37,11 @@ using System.Text;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Provides functionality for building meta text messages.
-	/// </summary>
-	public class MetaTextBuilder : IMessageBuilder
-	{
+    /// <summary>
+    /// Provides functionality for building meta text messages.
+    /// </summary>
+    public class MetaTextBuilder : IMessageBuilder
+    {
         #region MetaTextBuilder Members
 
         #region Fields
@@ -245,10 +245,10 @@ namespace Sanford.Multimedia.Midi
         /// If the MetaMessage is not a text based type, an exception will be 
         /// thrown.
         /// </remarks>
-		public MetaTextBuilder(MetaMessage message)
+        public MetaTextBuilder(MetaMessage message)
         {
             Initialize(message);
-		}
+        }
 
         #endregion
 
@@ -277,7 +277,7 @@ namespace Sanford.Multimedia.Midi
 
             UTF8Encoding encoding = new UTF8Encoding();
 
-            text = encoding.GetString(message.GetBytes());
+            text      = encoding.GetString(message.GetBytes());
             this.type = message.MetaType;
         }
 
@@ -297,14 +297,14 @@ namespace Sanford.Multimedia.Midi
             bool result;
 
             if(type == MetaType.Copyright || 
-                type == MetaType.CuePoint ||
-                type == MetaType.DeviceName ||
-                type == MetaType.InstrumentName ||
-                type == MetaType.Lyric ||
-                type == MetaType.Marker ||
-                type == MetaType.ProgramName ||
-                type == MetaType.Text ||
-                type == MetaType.TrackName)
+               type == MetaType.CuePoint ||
+               type == MetaType.DeviceName ||
+               type == MetaType.InstrumentName ||
+               type == MetaType.Lyric ||
+               type == MetaType.Marker ||
+               type == MetaType.ProgramName ||
+               type == MetaType.Text ||
+               type == MetaType.TrackName)
             {
                 result = true;
             }
@@ -406,7 +406,7 @@ namespace Sanford.Multimedia.Midi
 
                 ASCIIEncoding encoding = new ASCIIEncoding();
                 byte[] data = encoding.GetBytes(text);
-                result = new MetaMessage(Type, data);
+                result  = new MetaMessage(Type, data);
                 changed = false;
             }
         }

@@ -26,7 +26,7 @@ public static partial class GameExtensions
 
         if (!OctaveRange.C3toC6.ValidateNoteRange(note))
 #if DEBUG
-                throw new BmpGruntException("Note is not in C3toC6 range.");
+            throw new BmpGruntException("Note is not in C3toC6 range.");
 #else
             return false;
 #endif
@@ -53,7 +53,7 @@ public static partial class GameExtensions
 
         if (!OctaveRange.C3toC6.ValidateNoteRange(note))
 #if DEBUG
-                throw new BmpGruntException("Note is not in C3toC6 range.");
+            throw new BmpGruntException("Note is not in C3toC6 range.");
 #else
             return false;
 #endif

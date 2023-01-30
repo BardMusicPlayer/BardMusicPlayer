@@ -91,7 +91,7 @@ internal class Voice
         var adjustedPitch = Region.PitchKeyCenter + (note - Region.PitchKeyCenter) * (Region.PitchKeyTrack / 100.0);
         if (pitchShift != 0) adjustedPitch += pitchShift;
         PitchInputTimecents = adjustedPitch * 100.0;
-        PitchOutputFactor = Region.SampleRate / (SynthHelper.Timecents2Secs(Region.PitchKeyCenter * 100.0) * outSampleRate);
+        PitchOutputFactor   = Region.SampleRate / (SynthHelper.Timecents2Secs(Region.PitchKeyCenter * 100.0) * outSampleRate);
     }
 
     public void End(float outSampleRate)

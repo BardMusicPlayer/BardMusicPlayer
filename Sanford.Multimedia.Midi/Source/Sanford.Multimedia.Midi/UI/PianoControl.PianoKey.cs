@@ -54,7 +54,7 @@ namespace Sanford.Multimedia.Midi.UI
 
             public PianoKey(PianoControl owner)
             {
-                this.owner = owner;
+                this.owner   = owner;
                 this.TabStop = false;
             }
 

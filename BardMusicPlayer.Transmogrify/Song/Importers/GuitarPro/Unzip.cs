@@ -194,15 +194,15 @@ internal sealed class Unzip : IDisposable
             var encoder = utf8 ? Encoding.UTF8 : Encoding.Default;
             yield return new Entry
             {
-                Name = encoder.GetString(fileNameBytes),
-                Comment = encoder.GetString(fileCommentBytes),
-                Crc32 = crc32,
+                Name           = encoder.GetString(fileNameBytes),
+                Comment        = encoder.GetString(fileCommentBytes),
+                Crc32          = crc32,
                 CompressedSize = compressedSize,
-                OriginalSize = fileSize,
-                HeaderOffset = fileHeaderOffset,
-                DataOffset = fileDataOffset,
-                Deflated = method == 8,
-                Timestamp = ConvertToDateTime(timestamp)
+                OriginalSize   = fileSize,
+                HeaderOffset   = fileHeaderOffset,
+                DataOffset     = fileDataOffset,
+                Deflated       = method == 8,
+                Timestamp      = ConvertToDateTime(timestamp)
             };
         }
     }
@@ -358,8 +358,8 @@ internal sealed class Unzip : IDisposable
             : base(totalFiles != 0 ? currentFile * 100 / totalFiles : 100, fileName)
         {
             CurrentFile = currentFile;
-            TotalFiles = totalFiles;
-            FileName = fileName;
+            TotalFiles  = totalFiles;
+            FileName    = fileName;
         }
 
         /// <summary>

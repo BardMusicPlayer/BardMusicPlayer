@@ -12,12 +12,12 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents a node in an AVL tree.
-	/// </summary>
-	[ImmutableObject(true)]
-	internal class AvlNode : IAvlNode
-	{
+    /// <summary>
+    /// Represents a node in an AVL tree.
+    /// </summary>
+    [ImmutableObject(true)]
+    internal class AvlNode : IAvlNode
+    {
         #region AvlNode Members
 
         #region Class Fields
@@ -59,18 +59,18 @@ namespace Sanford.Collections.Immutable
         /// <param name="rightChild">
         /// The right child.
         /// </param>
-		public AvlNode(object data, IAvlNode leftChild, IAvlNode rightChild)
-		{
+        public AvlNode(object data, IAvlNode leftChild, IAvlNode rightChild)
+        {
             // Preconditions.
             Debug.Assert(leftChild != null && rightChild != null);
 
-            this.data = data;
-            this.leftChild = leftChild;
+            this.data       = data;
+            this.leftChild  = leftChild;
             this.rightChild = rightChild;
 
-            count = 1 + leftChild.Count + rightChild.Count;
+            count  = 1 + leftChild.Count + rightChild.Count;
             height = 1 + Math.Max(leftChild.Height, rightChild.Height);
-		}
+        }
 
         #endregion
 
@@ -246,7 +246,7 @@ namespace Sanford.Collections.Immutable
                 // The replacement node is the node's left child.
                 result = this.LeftChild;
             }
-                // Else if the node's right child has no left children.
+            // Else if the node's right child has no left children.
             else if(this.RightChild.LeftChild == NullNode)
             {
                 // The replacement node is the node's right child.
@@ -255,7 +255,7 @@ namespace Sanford.Collections.Immutable
                     this.LeftChild,
                     this.RightChild.RightChild);
             }
-                // Else the node's right child has left children.
+            // Else the node's right child has left children.
             else
             {
                 /*
@@ -293,7 +293,7 @@ namespace Sanford.Collections.Immutable
                 // ascend back up the tree.
                 newNode = node.RightChild;
             }
-                // Else the bottom of the left tree has not been found.
+            // Else the bottom of the left tree has not been found.
             else
             {
                 // Create new node and continue descending down the left tree.

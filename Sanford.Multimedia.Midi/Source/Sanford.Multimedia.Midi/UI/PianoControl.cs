@@ -51,19 +51,19 @@ namespace Sanford.Multimedia.Midi.UI
         private readonly static Hashtable keyTable = new Hashtable();
 
         private static readonly KeyType[] KeyTypeTable = 
-            {
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
-                KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White
-            };
+        {
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White,
+            KeyType.White, KeyType.Black, KeyType.White, KeyType.Black, KeyType.White, KeyType.White, KeyType.Black, KeyType.White
+        };
 
         private delegate void NoteMessageCallback(ChannelMessage message);
 
@@ -160,7 +160,7 @@ namespace Sanford.Multimedia.Midi.UI
 
             for(int i = 0; i < keys.Length; i++)
             {
-                keys[i] = new PianoKey(this);
+                keys[i]        = new PianoKey(this);
                 keys[i].NoteID = i + LowNoteID;
 
                 if(KeyTypeTable[keys[i].NoteID] == KeyType.White)
@@ -197,8 +197,8 @@ namespace Sanford.Multimedia.Midi.UI
             int n = 0;
             int w = 0;
 
-            int widthsum = 0; // Sum of white keys' width
-            int LastWhiteWidth = 0; // Last white key width
+            int widthsum = 0;                      // Sum of white keys' width
+            int LastWhiteWidth = 0;                // Last white key width
             int remainder = Width % whiteKeyCount; // The remaining pixels
             int counter = 1;
             double step = remainder != 0 ? whiteKeyCount / (double)remainder : 0; // The ternary operator prevents a division by zero
@@ -209,7 +209,7 @@ namespace Sanford.Multimedia.Midi.UI
                 {
 
                     keys[n].Height = Height;
-                    keys[n].Width = whiteKeyWidth;
+                    keys[n].Width  = whiteKeyWidth;
 
                     if (remainder != 0 && counter <= whiteKeyCount && Convert.ToInt32(step * counter) == w)
                     {
@@ -217,17 +217,17 @@ namespace Sanford.Multimedia.Midi.UI
                         keys[n].Width++;
                     }
                     // See the Location property of black keys to understand
-                    widthsum += LastWhiteWidth;
-                    LastWhiteWidth = keys[n].Width;
-                    keys[n].Location = new Point(widthsum, 0);
+                    widthsum         += LastWhiteWidth;
+                    LastWhiteWidth   =  keys[n].Width;
+                    keys[n].Location =  new Point(widthsum, 0);
 
                     w++;
                     //n++; // Move?
                 }
                 else
                 {
-                    keys[n].Height = blackKeyHeight;
-                    keys[n].Width = blackKeyWidth;
+                    keys[n].Height   = blackKeyHeight;
+                    keys[n].Width    = blackKeyWidth;
                     keys[n].Location = new Point(widthsum + offset);
                     //keys[n].Location = new Point(widthsum + offset - keys[n - 1].Width); // By this way, eliminates the LastWhiteWidth var
                     keys[n].BringToFront();
@@ -240,7 +240,7 @@ namespace Sanford.Multimedia.Midi.UI
         public void Send(ChannelMessage message)
         {
             if(message.Command == ChannelCommand.NoteOn &&
-                message.Data1 >= LowNoteID && message.Data1 <= HighNoteID)
+               message.Data1 >= LowNoteID && message.Data1 <= HighNoteID)
             {
                 if(InvokeRequired)
                 {
@@ -252,7 +252,7 @@ namespace Sanford.Multimedia.Midi.UI
                 }
             }
             else if(message.Command == ChannelCommand.NoteOff &&
-                message.Data1 >= LowNoteID && message.Data1 <= HighNoteID)
+                    message.Data1 >= LowNoteID && message.Data1 <= HighNoteID)
             {
                 if(InvokeRequired)
                 {

@@ -58,7 +58,7 @@ internal sealed class Parser<TLine> : ParserBase<TLine>
     private bool readTag(int next, out int tagStart, out int tagEnd)
     {
         tagStart = -1;
-        tagEnd = -1;
+        tagEnd   = -1;
         skipWhitespaces();
         var lbPos = currentPosition;
         if (lbPos >= next)
