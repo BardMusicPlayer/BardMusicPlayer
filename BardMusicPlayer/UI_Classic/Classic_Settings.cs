@@ -14,7 +14,6 @@ public partial class Classic_MainView
     private void LoadConfig(bool reload = false)
     {
         AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
-        AMPInFrontBox.IsChecked     = BmpPigeonhole.Instance.BringBMPtoFront;
 
         //Playback
         HoldNotesBox.IsChecked        = BmpPigeonhole.Instance.HoldNotes;
@@ -37,11 +36,6 @@ public partial class Classic_MainView
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
-    }
-
-    private void AMPInFrontBox_Checked(object sender, RoutedEventArgs e)
-    {
-        BmpPigeonhole.Instance.BringBMPtoFront = AMPInFrontBox.IsChecked ?? false;
     }
 
     #region Playback

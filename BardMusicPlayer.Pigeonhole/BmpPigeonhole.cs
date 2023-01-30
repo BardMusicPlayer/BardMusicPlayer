@@ -68,17 +68,12 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     public virtual int AutostartMethod { get; set; } = 1;
 
     /// <summary>
-    /// Sets UnequipPause
-    /// </summary>
-    public virtual bool UnequipPause { get; set; } = true;
-
-    /// <summary>
     /// last selected midi input device
     /// </summary>
     public virtual int MidiInputDev { get; set; } = -1;
 
     /// <summary>
-    /// brings the bmp to front
+    /// live midi play delay
     /// </summary>
     public virtual bool LiveMidiPlayDelay { get; set; }
 
@@ -86,16 +81,6 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     /// force the playback
     /// </summary>
     public virtual bool ForcePlayback { get; set; }
-
-    /// <summary>
-    /// brings the game to front
-    /// </summary>
-    public virtual bool BringGametoFront { get; set; } = true;
-
-    /// <summary>
-    /// brings the bmp to front
-    /// </summary>
-    public virtual bool BringBMPtoFront { get; set; } = true;
 
     /// <summary>
     /// unknown but used
