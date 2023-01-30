@@ -115,11 +115,6 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     public virtual System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
 
     /// <summary>
-    /// open local orchestra after hooking new proc
-    /// </summary>
-    public virtual bool LocalOrchestra { get; set; }
-
-    /// <summary>
     /// Enable the 16 voice limit in Synthesizer
     /// </summary>
     public virtual bool EnableSynthVoiceLimiter { get; set; } = true;

@@ -14,12 +14,12 @@ public partial class Classic_MainView
     private void LoadConfig(bool reload = false)
     {
         AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
-
-        AMPInFrontBox.IsChecked = BmpPigeonhole.Instance.BringBMPtoFront;
+        AMPInFrontBox.IsChecked     = BmpPigeonhole.Instance.BringBMPtoFront;
 
         //Playback
-        HoldNotesBox.IsChecked     = BmpPigeonhole.Instance.HoldNotes;
-        ForcePlaybackBox.IsChecked = BmpPigeonhole.Instance.ForcePlayback;
+        HoldNotesBox.IsChecked        = BmpPigeonhole.Instance.HoldNotes;
+        ForcePlaybackBox.IsChecked    = BmpPigeonhole.Instance.ForcePlayback;
+        IgnoreProgChangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
 
         //Don't call this on reload
         if (!reload)
@@ -35,10 +35,8 @@ public partial class Classic_MainView
         AutoequipDalamud.IsChecked     = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
         //Local orchestra
-        LocalOrchestraBox.IsChecked    = BmpPigeonhole.Instance.LocalOrchestra;
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
-        IgnoreProgChangeBox.IsChecked  = BmpPigeonhole.Instance.IgnoreProgChange;
     }
 
     private void AMPInFrontBox_Checked(object sender, RoutedEventArgs e)
@@ -56,7 +54,12 @@ public partial class Classic_MainView
     {
         BmpPigeonhole.Instance.ForcePlayback = ForcePlaybackBox.IsChecked ?? false;
     }
-
+    
+    private void IgnoreProgChangeBox_Checked(object sender, RoutedEventArgs e)
+    {
+        BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgChangeBox.IsChecked ?? false;
+    }
+    
     private void MIDI_Input_Device_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var d = (KeyValuePair<int, string>)MIDI_Input_DeviceBox.SelectedItem;
@@ -90,10 +93,6 @@ public partial class Classic_MainView
     #endregion
 
     #region Local orchestra
-    private void LocalOrchestraBox_Checked(object sender, RoutedEventArgs e)
-    {
-        BmpPigeonhole.Instance.LocalOrchestra = LocalOrchestraBox.IsChecked ?? false;
-    }
 
     private void AutoEquipBox_Checked(object sender, RoutedEventArgs e)
     {
@@ -104,11 +103,6 @@ public partial class Classic_MainView
     private void KeepTrackSettingsBox_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.EnsembleKeepTrackSetting = KeepTrackSettingsBox.IsChecked ?? false;
-    }
-
-    private void IgnoreProgChangeBox_Checked(object sender, RoutedEventArgs e)
-    {
-        BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgChangeBox.IsChecked ?? false;
     }
     #endregion
 }

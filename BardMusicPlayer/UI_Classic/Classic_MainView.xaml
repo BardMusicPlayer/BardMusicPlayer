@@ -207,13 +207,9 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="LocalOrchestraBox"       Content="Local Orchestra"          Unchecked="LocalOrchestraBox_Checked"     Checked="LocalOrchestraBox_Checked"     ToolTip="{StaticResource LO_ENABLE}"/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="AutoEquipBox"             Content="Auto-Equip Performer(s)"          Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}" IsChecked="False"/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="2" x:Name="KeepTrackSettingsBox"     Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"  Checked="KeepTrackSettingsBox_Checked"  ToolTip="{StaticResource LO_KEEPTRACKS}"/>
+                                    <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="AutoEquipBox"             Content="Auto-Equip Performer(s)"          Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}" IsChecked="False"/>
+                                    <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="KeepTrackSettingsBox"     Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"  Checked="KeepTrackSettingsBox_Checked"  ToolTip="{StaticResource LO_KEEPTRACKS}"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
