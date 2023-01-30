@@ -144,9 +144,9 @@ internal class Score
         bar.Index = MasterBars.Count;
         if (MasterBars.Count != 0)
         {
-            bar.PreviousMasterBar = MasterBars[MasterBars.Count - 1];
+            bar.PreviousMasterBar               = MasterBars[MasterBars.Count - 1];
             bar.PreviousMasterBar.NextMasterBar = bar;
-            bar.Start = bar.PreviousMasterBar.Start + bar.PreviousMasterBar.CalculateDuration();
+            bar.Start                           = bar.PreviousMasterBar.Start + bar.PreviousMasterBar.CalculateDuration();
         }
 
         // if the group is closed only the next upcoming header can

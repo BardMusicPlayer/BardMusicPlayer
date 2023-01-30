@@ -38,11 +38,11 @@ internal sealed class DalamudServer : IDisposable
     /// </summary>
     internal DalamudServer()
     {
-        _clients = new ConcurrentDictionary<int, string>();
-        _pipe = new PipeServer<Message>("LightAmp-DalamudBridge", new NewtonsoftJsonFormatter());
-        _pipe.ClientConnected += OnConnected;
+        _clients                 =  new ConcurrentDictionary<int, string>();
+        _pipe                    =  new PipeServer<Message>("LightAmp-DalamudBridge", new NewtonsoftJsonFormatter());
+        _pipe.ClientConnected    += OnConnected;
         _pipe.ClientDisconnected += OnDisconnected;
-        _pipe.MessageReceived += OnMessage;
+        _pipe.MessageReceived    += OnMessage;
         _pipe.AllowUsersReadWrite();
         Start();
     }
@@ -55,8 +55,8 @@ internal sealed class DalamudServer : IDisposable
         try
         {
             Stop();
-            _pipe.MessageReceived -= OnMessage;
-            _pipe.ClientConnected -= OnDisconnected;
+            _pipe.MessageReceived    -= OnMessage;
+            _pipe.ClientConnected    -= OnDisconnected;
             _pipe.ClientDisconnected -= OnConnected;
             _pipe.DisposeAsync();
         }
@@ -107,9 +107,9 @@ internal sealed class DalamudServer : IDisposable
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
             new Message
             {
-                msgType = MessageType.Chat,
+                msgType    = MessageType.Chat,
                 msgChannel = chanType.ChannelCode,
-                message = text
+                message    = text
             });
         return true;
     }

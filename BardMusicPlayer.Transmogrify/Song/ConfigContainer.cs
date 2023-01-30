@@ -30,9 +30,9 @@ public sealed class ConfigContainer
         return ProcessorConfig switch
         {
             ClassicProcessorConfig classicProcessorConfig => await new ClassicProcessor(classicProcessorConfig, song).Process(),
-            LyricProcessorConfig lyricProcessorConfig => await new LyricProcessor(lyricProcessorConfig, song).Process(),
-            VSTProcessorConfig vstProcessorConfig => await new VSTProcessor(vstProcessorConfig, song).Process(),
-            _ => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type.")
+            LyricProcessorConfig lyricProcessorConfig     => await new LyricProcessor(lyricProcessorConfig, song).Process(),
+            VSTProcessorConfig vstProcessorConfig         => await new VSTProcessor(vstProcessorConfig, song).Process(),
+            _                                             => throw new BmpTransmogrifyException(ProcessorConfig.GetType() + " is not a supported configuration type.")
         };
     }
 }

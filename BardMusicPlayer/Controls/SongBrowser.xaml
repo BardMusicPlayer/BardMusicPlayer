@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="BardMusicPlayer.Controls.SongBrowser"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              Background="WhiteSmoke"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -16,28 +16,31 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Content="Path:" HorizontalAlignment="Left"/>
-            <TextBox Grid.Column="1" x:Name="SongPath" Text="" Margin="-50,0 10,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" PreviewTextInput="SongPath_PreviewTextInput" />
-            <Button Grid.Column="2" Content="..." Margin="-4,0 4,0" Click="Button_Click" Height="18"/>
+            <Label Grid.Column="0" Content="Path:" HorizontalAlignment="Left" />
+            <TextBox Grid.Column="1" x:Name="SongPath" Text="" Margin="-50,0 10,0" VerticalAlignment="Center"
+                     HorizontalAlignment="Stretch" PreviewTextInput="SongPath_PreviewTextInput" />
+            <Button Grid.Column="2" Content="..." Margin="-4,0 4,0" Click="Button_Click" Height="18" />
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left"/>
-            <TextBox Grid.Column="1" Text="" x:Name="SongSearch" Margin="-50,0 10,0" VerticalAlignment="Center" PreviewTextInput="SongSearch_PreviewTextInput" />
+            <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left" />
+            <TextBox Grid.Column="1" Text="" x:Name="SongSearch" Margin="-50,0 10,0" VerticalAlignment="Center"
+                     PreviewTextInput="SongSearch_PreviewTextInput" />
         </Grid>
-        <ListView Grid.Row="2" x:Name="SongBrowserContainer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="0" ItemsSource="{Binding Path=Title}"
-                    PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"
-                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                         ScrollViewer.CanContentScroll="True" />
+        <ListView Grid.Row="2" x:Name="SongBrowserContainer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                  BorderThickness="0" ItemsSource="{Binding Path=Title}"
+                  PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True" />
     </Grid>
 </UserControl>

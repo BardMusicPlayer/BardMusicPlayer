@@ -10,7 +10,7 @@
         ResizeMode="CanResizeWithGrip">
 
     <Grid>
-        <ContentControl Content="{Binding}"/>
+        <ContentControl Content="{Binding}" />
     </Grid>
 
 </Window>

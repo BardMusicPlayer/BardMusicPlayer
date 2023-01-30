@@ -57,15 +57,15 @@ public class Orchestrator : IDisposable
     /// </summary>
     public Orchestrator()
     {
-        _performers = new List<KeyValuePair<int, Performer>>();
-        _foundGames = new Dictionary<Game, bool>();
-        _sequencer = new Sequencer();
-        _song_Title_Parsing_Performer = new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
-        BmpSeer.Instance.GameStarted += delegate (GameStarted e) { Instance_OnGameStarted(e.Game); };
-        BmpSeer.Instance.GameStopped += Instance_OnGameStopped;
-        BmpSeer.Instance.EnsembleRequested += Instance_EnsembleRequested;
-        BmpSeer.Instance.EnsembleStarted += Instance_EnsembleStarted;
-        BmpSeer.Instance.EnsembleStopped += Instance_EnsembleStopped;
+        _performers                            =  new List<KeyValuePair<int, Performer>>();
+        _foundGames                            =  new Dictionary<Game, bool>();
+        _sequencer                             =  new Sequencer();
+        _song_Title_Parsing_Performer          =  new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
+        BmpSeer.Instance.GameStarted           += delegate (GameStarted e) { Instance_OnGameStarted(e.Game); };
+        BmpSeer.Instance.GameStopped           += Instance_OnGameStopped;
+        BmpSeer.Instance.EnsembleRequested     += Instance_EnsembleRequested;
+        BmpSeer.Instance.EnsembleStarted       += Instance_EnsembleStarted;
+        BmpSeer.Instance.EnsembleStopped       += Instance_EnsembleStopped;
         BmpSeer.Instance.InstrumentHeldChanged += Instance_InstrumentHeldChanged;
 
         _addPushedbackGamesTimer          =  new Timer();

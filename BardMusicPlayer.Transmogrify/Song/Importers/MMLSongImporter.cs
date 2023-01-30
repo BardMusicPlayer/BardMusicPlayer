@@ -38,8 +38,8 @@ public static class MMLSongImporter
 
     private static string Title { get; set; } = "None";
     private static int _Tempo { get; set; } = 120 + 16; //Tempo + 33/2
-    private static double _Length { get; set; } = 4; //length of a note
-    private static int _Octave { get; set; } = 60; //The octave in midi notes
+    private static double _Length { get; set; } = 4;    //length of a note
+    private static int _Octave { get; set; } = 60;      //The octave in midi notes
 
 
     private static int CurrentChannel { get; set; }
