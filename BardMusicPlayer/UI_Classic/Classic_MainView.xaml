@@ -199,7 +199,7 @@
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="1" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="1" Grid.Column="1" Header="Local Orchestra">
@@ -409,17 +409,15 @@
             </Grid>
 
 
-            <!-- Playcontrol Row-->
+            <!-- Play Control Row-->
             <Grid Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <!-- Controls -->
-                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="75" Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown"/>
-                <Button Grid.Row="1" x:Name="Loop_Button" Content="Loop" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="Loop_Button_Click"/>
-                <Button Grid.Row="2" x:Name="Macro_Button" Content="Macro" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="Macro_Button_Click" />
+                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="75" Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown"/>
+                <Button Grid.Row="1" x:Name="Macro_Button" Content="Macro" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="75" Click="Macro_Button_Click" />
             </Grid>
             <!-- Instrument Info Row -->
             <Grid Grid.Row="4" Grid.Column="0">
