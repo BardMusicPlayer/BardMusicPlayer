@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina;
 
 internal static class World
 {
-    // Updated as of commit 7d17810 Aug 13 2020
+    // Updated as of commit 4d23ab2 Jan 11 2023
     // https://github.com/xivapi/ffxiv-datamining/blob/master/csv/World.csv
 
     internal static readonly IReadOnlyDictionary<int, string> Ids = new Dictionary<int, string>
@@ -103,6 +103,10 @@ internal static class World
         { 401, "Phantom" },
         { 402, "Alpha" },
         { 403, "Raiden" },
+        { 404, "Marilith" },
+        { 405, "Seraph" },
+        { 406, "Halicarnassus" },
+        { 407, "Maduin" },
 
         { 1040, "DiPingGuan" },
         { 1041, "MiWuShiDi" },
@@ -244,7 +248,31 @@ internal static class World
         { 1177, "HaiMaoChaWu" },
         { 1178, "RouFengHaiWan" },
         { 1179, "HuPoYuan" },
+        { 1180, "TaiYangHaiAn2" },
+        { 1181, "YongHengChuan2" },
+        { 1182, "MoSHouLingYu2" },
+        { 1183, "YinLeiHu2" },
+        { 1184, "HeFengLiuDi2" },
+        { 1185, "YaoJingLing2" },
+        { 1186, "YiXiuJiaDe2" },
 
+        { 1188, "XiaoMaiJiuGang2" },
+        { 1189, "YueYingDao2" },
+        { 1190, "PuTaoJiuGang2" },
+        { 1191, "ShenLingShengYu2" },
+        { 1192, "ShuiJingTa2" },
+
+        { 1194, "FeiCuiHu2" },
+        { 1195, "DiPingGuan2" },
+        { 1196, "MiWuShiDi2" },
+        { 1197, "KuErZhaSi2" },
+        { 1198, "ZhiZhangXiaGu2" },
+        { 1199, "ShanHuTa2" },
+        { 1200, "YaMaWuLuoTi" },
+        { 1201, "HongChaChuan2" },
+        { 1202, "SaLeiAn" },
+        { 1203, "JiaLeiMa" },
+        
         { 2048, "Unei" },
         { 2049, "Doga" },
         { 2050, "KrBahamut" },
