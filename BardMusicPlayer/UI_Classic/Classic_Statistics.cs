@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using BardMusicPlayer.Functions;
+using BardMusicPlayer.Maestro.Events;
 using Microsoft.Win32;
 
 namespace BardMusicPlayer.UI_Classic;
@@ -12,7 +13,7 @@ namespace BardMusicPlayer.UI_Classic;
 public partial class Classic_MainView
 {
     private List<int> _notesCountForTracks = new();
-    private void UpdateStats(Maestro.Events.SongLoadedEvent e)
+    private void UpdateStats(SongLoadedEvent e)
     {
         Statistics_Total_Tracks_Label.Content     = e.MaxTracks.ToString();
         Statistics_Total_Note_Count_Label.Content = e.TotalNoteCount.ToString();

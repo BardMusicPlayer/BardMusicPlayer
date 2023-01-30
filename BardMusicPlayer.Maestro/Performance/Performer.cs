@@ -3,25 +3,29 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.DalamudBridge.Helper.Dalamud;
-using BardMusicPlayer.Maestro.Events;
-using BardMusicPlayer.Maestro.FFXIV;
-using BardMusicPlayer.Maestro.Sequencing;
-using BardMusicPlayer.Maestro.Utils;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Quotidian.Structs;
-using BardMusicPlayer.Seer;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
+using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Maestro.Events;
+using BardMusicPlayer.Maestro.FFXIV;
+using BardMusicPlayer.Maestro.Utils;
+using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.Enums;
+using BardMusicPlayer.Quotidian.Structs;
+using BardMusicPlayer.Seer;
+using BardMusicPlayer.Transmogrify.Song.Config;
+using Sanford.Multimedia.Midi;
+using Sequencer = BardMusicPlayer.Maestro.Sequencing.Sequencer;
 
 namespace BardMusicPlayer.Maestro.Performance;
 
 public class Performer
 {
     private FFXIVHook _hook = new();
-    private System.Timers.Timer _startDelayTimer { get; set; } = new();
+    private Timer _startDelayTimer { get; set; } = new();
     private bool _holdNotes { get; set; } = true;
     private bool _forcePlayback { get; set; }
     private Sequencer _sequencer { get; set; }
@@ -94,7 +98,7 @@ public class Performer
             if (_trackNumber >= _sequencer.Sequence.Count)
                 return "None";
 
-            var classicConfig = (Transmogrify.Song.Config.ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
+            var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
             return classicConfig.Instrument.Name;
         }
     }
@@ -180,7 +184,7 @@ public class Performer
         if (note.note is < 0 or > 36)
             return;
 
-        if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
+        if (game.NoteKeys[(NoteKey)note.note] is var keybind)
         {
             if (game.ChatStatus && !_forcePlayback)
                 return;
@@ -206,10 +210,10 @@ public class Performer
         if (note.note is < 0 or > 36)
             return;
 
-        if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
+        if (game.NoteKeys[(NoteKey)note.note] is var keybind)
         {
 
-            var diff = System.Diagnostics.Stopwatch.GetTimestamp() / 10000 - _lastNoteTimestamp;
+            var diff = Stopwatch.GetTimestamp() / 10000 - _lastNoteTimestamp;
             if (diff < 15)
             {
                 var sleepDuration = (int)(15 - diff);
@@ -224,7 +228,7 @@ public class Performer
             else
                 _hook.SendAsyncKeybind(keybind);
 
-            _lastNoteTimestamp = System.Diagnostics.Stopwatch.GetTimestamp() / 10000;
+            _lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
         }
     }
 
@@ -236,7 +240,7 @@ public class Performer
         if (note.note is < 0 or > 36)
             return;
 
-        if (game.NoteKeys[(Quotidian.Enums.NoteKey)note.note] is var keybind)
+        if (game.NoteKeys[(NoteKey)note.note] is var keybind)
         {
             if (game.ChatStatus && !_forcePlayback)
                 return;
@@ -304,7 +308,7 @@ public class Performer
         {
             // OctaveNum now holds the track octave and the selected octave together
             Console.WriteLine(@"Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track));
-            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.MessageType.Channel select ev.MidiMessage as Sanford.Multimedia.Midi.ChannelMessage into msg where msg.Command == Sanford.Multimedia.Midi.ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
+            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == MessageType.Channel select ev.MidiMessage as ChannelMessage into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
             ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
         }
     }
@@ -321,11 +325,11 @@ public class Performer
             return;
 
         if (UsesDalamud)
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
         else
         {
             var key = game.InstrumentKeys[Instrument.Parse(TrackInstrument)];
-            if (key != Quotidian.Enums.Keys.None)
+            if (key != Keys.None)
                 _hook.SendSyncKeybind(key);
         }
     }
@@ -347,18 +351,18 @@ public class Performer
             _hook.ClearLastPerformanceKeybinds();
 
             if (UsesDalamud)
-                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.Instrument, game = game, IntData = 0 });
             else
-                _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
+                _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.ESC]);
             await Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).ConfigureAwait(false);
         }
 
         if (UsesDalamud)
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.Instrument, game = game, IntData = Instrument.Parse(TrackInstrument).Index });
         else
         {
             var key = game.InstrumentKeys[Instrument.Parse(TrackInstrument)];
-            if (key != Quotidian.Enums.Keys.None)
+            if (key != Keys.None)
                 _hook.SendSyncKeybind(key);
         }
 
@@ -376,9 +380,9 @@ public class Performer
         _hook.ClearLastPerformanceKeybinds();
 
         if (UsesDalamud)
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.Instrument, game = game, IntData = 0 });
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.Instrument, game = game, IntData = 0 });
         else
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.ESC]);
+            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.ESC]);
     }
 
     /// <summary>
@@ -403,13 +407,13 @@ public class Performer
 
         var task = Task.Run(() =>
         {
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.VIRTUAL_PAD_SELECT]);
+            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.VIRTUAL_PAD_SELECT]);
             Task.Delay(100).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.LEFT]);
+            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.LEFT]);
             Task.Delay(100).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
             Task.Delay(400).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
         });
     }
 
@@ -429,13 +433,13 @@ public class Performer
 
         if (UsesDalamud)
         {
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.AcceptReply, game = game, BoolData = true});
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.AcceptReply, game = game, BoolData = true});
             return;
         }
 
-        _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
         Task.Delay(200);
-        _hook.SendSyncKeybind(game.NavigationMenuKeys[Quotidian.Enums.NavigationMenuKey.OK]);
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
     }
 
     /// <summary>
@@ -459,24 +463,24 @@ public class Performer
     {
         if (!game.ChatStatus)
         {
-            _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
+            _hook.SendSyncKeybind(Keys.Enter);
             Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).Wait();
         }
         _hook.CopyToClipboard(text);
         Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).Wait();
-        _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
+        _hook.SendSyncKeybind(Keys.Enter);
     }
 
     public void SendText(string text)
     {
         if (!game.ChatStatus)
         {
-            _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
+            _hook.SendSyncKeybind(Keys.Enter);
             Task.Delay(BmpPigeonhole.Instance.EnsembleReadyDelay).Wait();
         }
         _hook.SendString(text);
         Task.Delay(text.Length * 8 + 20).Wait();
-        _hook.SendSyncKeybind(Quotidian.Enums.Keys.Enter);
+        _hook.SendSyncKeybind(Keys.Enter);
     }
 
     public void SendText(ChatMessageChannelType type, string text)
@@ -488,14 +492,14 @@ public class Performer
     {
         try
         {
-            var key = Quotidian.Enums.KeyTranslation.ASCIIToGame[character];
+            var key = KeyTranslation.ASCIIToGame[character];
 
             if (modifier.ToLower().Contains("shift"))
-                key = (int)Quotidian.Enums.Keys.Shift + key;
+                key = (int)Keys.Shift + key;
             else if (modifier.ToLower().Contains("ctrl"))
-                key = (int)Quotidian.Enums.Keys.Control + key;
+                key = (int)Keys.Control + key;
             else if (modifier.ToLower().Contains("alt"))
-                key = (int)Quotidian.Enums.Keys.Alt + key;
+                key = (int)Keys.Alt + key;
             _hook.SendSyncKeybind(key);
         }
         catch
@@ -520,7 +524,7 @@ public class Performer
         return _trackNumber != 0 && _trackNumber < _sequencer.Sequence.Count;
     }
 
-    private void startDelayTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void startDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
         if (_sequencer is not null)
         {
@@ -529,9 +533,9 @@ public class Performer
         }
     }
 
-    private void InternalNote(object o, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+    private void InternalNote(object o, ChannelMessageEventArgs args)
     {
-        var builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
+        var builder = new ChannelMessageBuilder(args.Message);
 
         var noteEvent = new NoteEvent
         {
@@ -547,11 +551,11 @@ public class Performer
 
             var cmd = args.Message.Command;
             var vel = builder.Data2;
-            if (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOff || cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel == 0)
+            if (cmd == ChannelCommand.NoteOff || cmd == ChannelCommand.NoteOn && vel == 0)
             {
                 ProcessOffNote(noteEvent);
             }
-            if (cmd == Sanford.Multimedia.Midi.ChannelCommand.NoteOn && vel > 0)
+            if (cmd == ChannelCommand.NoteOn && vel > 0)
             {
                 if (_livePlayDelay)
                     ProcessOnNoteLive(noteEvent);
@@ -561,7 +565,7 @@ public class Performer
         }
     }
 
-    private void InternalProg(object sender, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+    private void InternalProg(object sender, ChannelMessageEventArgs args)
     {
         if (!_forcePlayback)
         {
@@ -601,12 +605,12 @@ public class Performer
                 _ => -1
             };
 
-            if (tone is > -1 and < 5 && game.InstrumentToneMenuKeys[(Quotidian.Enums.InstrumentToneMenuKey)tone] is var keybind)
+            if (tone is > -1 and < 5 && game.InstrumentToneMenuKeys[(InstrumentToneMenuKey)tone] is var keybind)
                 _hook.SendSyncKey(keybind);
         }
     }
 
-    private void InternalAT(object sender, Sanford.Multimedia.Midi.ChannelMessageEventArgs args)
+    private void InternalAT(object sender, ChannelMessageEventArgs args)
     {
         /*var builder = new Sanford.Multimedia.Midi.ChannelMessageBuilder(args.Message);
         var atevent = new ChannelAfterTouchEvent
@@ -631,7 +635,7 @@ public class Performer
 
     }
 
-    private void InternalLyrics(object sender, Sanford.Multimedia.Midi.MetaMessageEventArgs e)
+    private void InternalLyrics(object sender, MetaMessageEventArgs e)
     {
         if (SingerTrackNr <= 0) //0 mean no singer
             return;
@@ -639,7 +643,7 @@ public class Performer
         if (!UsesDalamud)
             return;
 
-        var builder = new Sanford.Multimedia.Midi.MetaTextBuilder(e.Message);
+        var builder = new MetaTextBuilder(e.Message);
         var text = builder.Text;
         var t = mainSequencer.MaxTrack;
         if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ Sequencer.LyricStartTrack-1)

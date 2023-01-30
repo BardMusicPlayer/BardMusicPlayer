@@ -33,7 +33,7 @@
 #endregion
 
 using System;
-using System.Threading;
+using System.Diagnostics;
 using Sanford.Threading;
 
 namespace Sanford.Multimedia.Midi
@@ -54,7 +54,7 @@ namespace Sanford.Multimedia.Midi
             delegateQueue = new DelegateQueue();
             int result = midiInOpen(out handle, deviceID, midiInProc, IntPtr.Zero, CALLBACK_FUNCTION);
 
-            System.Diagnostics.Debug.WriteLine("MidiIn handle:" + handle.ToInt64());
+            Debug.WriteLine("MidiIn handle:" + handle.ToInt64());
 
             if (result != MidiDeviceException.MMSYSERR_NOERROR)
             {

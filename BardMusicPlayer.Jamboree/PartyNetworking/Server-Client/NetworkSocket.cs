@@ -4,14 +4,16 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Timers;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
-using ZeroTier.Sockets;
+using SocketException = ZeroTier.Sockets.SocketException;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
 
@@ -37,7 +39,7 @@ public class NetworkSocket
         _remoteIP = IP;
         var localEndPoint = new IPEndPoint(IPAddress.Parse(IP), 12345);
         var bytes = new byte[1024];
-        ConnectorSocket = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+        ConnectorSocket = new ZeroTierExtendedSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         //Connect to the server
         ConnectorSocket.Connect(localEndPoint);
         //Wait til connected
@@ -86,7 +88,7 @@ public class NetworkSocket
             CloseConnection();
             return false;
         }
-        if (ListenSocket.Poll(0, System.Net.Sockets.SelectMode.SelectError))
+        if (ListenSocket.Poll(0, SelectMode.SelectError))
         {
             CloseConnection();
             return false;
@@ -95,7 +97,7 @@ public class NetworkSocket
         if (ListenSocket.Available == -1)
             return false;
 
-        if (ListenSocket.Poll(100, System.Net.Sockets.SelectMode.SelectRead))
+        if (ListenSocket.Poll(100, SelectMode.SelectRead))
         {
             try
             {
@@ -164,7 +166,7 @@ public class NetworkSocket
                 BmpJamboree.Instance.PublishEvent(new PerformanceStartEvent(packet.ReadInt64(), false));
                 break;
             case NetworkOpcodes.OpcodeEnum.MSG_SONG_DATA:
-                System.Diagnostics.Debug.WriteLine("");
+                Debug.WriteLine("");
                 break;
         }
     }
@@ -173,12 +175,12 @@ public class NetworkSocket
     {
         _await_pong              = false;
         _timer.Enabled           = false;
-        ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
-        try { ListenSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        ListenSocket.LingerState = new LingerOption(false, 10);
+        try { ListenSocket.Shutdown(SocketShutdown.Both); }
         finally { ListenSocket.Close(); }
 
-        ListenSocket.LingerState = new System.Net.Sockets.LingerOption(false, 10);
-        try { ConnectorSocket.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        ListenSocket.LingerState = new LingerOption(false, 10);
+        try { ConnectorSocket.Shutdown(SocketShutdown.Both); }
         finally { ConnectorSocket.Close(); }
         FoundClients.Instance.Remove(_remoteIP);
     }

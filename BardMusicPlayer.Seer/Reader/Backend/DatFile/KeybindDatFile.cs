@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile.Utilities;
@@ -60,9 +62,9 @@ internal class KeybindDatFile : IDisposable
                 var command = ParseSection(reader);
                 var keybind = ParseSection(reader);
 
-                var key = System.Text.Encoding.UTF8.GetString(command.Data);
+                var key = Encoding.UTF8.GetString(command.Data);
                 key = key.Substring(0, key.Length - 1); // Trim off \0
-                var dat = System.Text.Encoding.UTF8.GetString(keybind.Data);
+                var dat = Encoding.UTF8.GetString(keybind.Data);
                 var datKeys = dat.Split(',');
                 if (datKeys.Length != 3) continue;
 
@@ -70,10 +72,10 @@ internal class KeybindDatFile : IDisposable
                 var key2 = datKeys[1].Split('.');
                 KeybindList.Add(key, new Keybind
                 {
-                    MainKey1 = int.Parse(key1[0], System.Globalization.NumberStyles.HexNumber),
-                    MainKey2 = int.Parse(key2[0], System.Globalization.NumberStyles.HexNumber),
-                    ModKey1  = int.Parse(key1[1], System.Globalization.NumberStyles.HexNumber),
-                    ModKey2  = int.Parse(key2[1], System.Globalization.NumberStyles.HexNumber)
+                    MainKey1 = int.Parse(key1[0], NumberStyles.HexNumber),
+                    MainKey2 = int.Parse(key2[0], NumberStyles.HexNumber),
+                    ModKey1  = int.Parse(key1[1], NumberStyles.HexNumber),
+                    ModKey2  = int.Parse(key2[1], NumberStyles.HexNumber)
                 });
             }
         }

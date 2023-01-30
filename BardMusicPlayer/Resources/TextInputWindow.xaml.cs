@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.Resources;
+﻿using System.Windows;
+
+namespace BardMusicPlayer.Resources;
 
 /// <summary>
 /// Interaction logic for TextInputWindow.xaml
@@ -19,12 +21,12 @@ public partial class TextInputWindow
         set => ResponseTextBox.Text = value;
     }
 
-    private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e)
+    private void OKButton_Click(object sender, RoutedEventArgs e)
     {
         DialogResult = true;
     }
 
-    private void CancelButton_Click(object sender, System.Windows.RoutedEventArgs e)
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
         DialogResult = false;
     }

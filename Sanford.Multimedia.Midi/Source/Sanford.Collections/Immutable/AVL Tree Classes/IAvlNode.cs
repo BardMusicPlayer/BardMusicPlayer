@@ -6,8 +6,6 @@
  * Contact: jabberdabber@hotmail.com
  */
 
-using System;
-
 namespace Sanford.Collections.Immutable
 {
 	/// <summary>

@@ -258,13 +258,13 @@ namespace Sanford.Multimedia.Midi
 
         #region IClock Members
 
-        public event System.EventHandler Tick;
+        public event EventHandler Tick;
 
-        public event System.EventHandler Started;
+        public event EventHandler Started;
 
-        public event System.EventHandler Continued;
+        public event EventHandler Continued;
 
-        public event System.EventHandler Stopped;
+        public event EventHandler Stopped;
 
         public bool IsRunning
         {

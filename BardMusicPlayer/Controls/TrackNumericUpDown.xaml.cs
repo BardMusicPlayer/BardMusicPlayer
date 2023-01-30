@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using BardMusicPlayer.Functions;
 
 namespace BardMusicPlayer.Controls;
@@ -69,14 +70,14 @@ public sealed partial class TrackNumericUpDown
         NumValue--;
     }
 
-    private void TrackNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
+    private void TrackNumericUpDown_Key(object sender, KeyEventArgs e)
     {
         switch (e.Key)
         {
-            case System.Windows.Input.Key.Up:
+            case Key.Up:
                 NumUp_Click(sender, e);
                 break;
-            case System.Windows.Input.Key.Down:
+            case Key.Down:
                 NumDown_Click(sender, e);
                 break;
         }

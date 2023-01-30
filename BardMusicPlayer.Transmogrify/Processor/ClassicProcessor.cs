@@ -11,6 +11,7 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
@@ -44,7 +45,7 @@ internal class ClassicProcessor : BaseProcessor
 
                 var number = (int)Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).InstrumentToneMenuKey;
                 using var manager = trackChunks.Merge().ManageNotes();
-                var note = new Note((Melanchall.DryWetMidi.Common.SevenBitNumber)number);
+                var note = new Note((SevenBitNumber)number);
                 var timedEvents = manager.Objects;
                 note.Time = timedEvent.Time;
                 timedEvents.Add(note);

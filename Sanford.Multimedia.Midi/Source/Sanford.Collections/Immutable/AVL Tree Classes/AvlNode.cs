@@ -241,13 +241,13 @@ namespace Sanford.Collections.Immutable
              */
 
             // If the node has no right children.
-            if(this.RightChild == AvlNode.NullNode)
+            if(this.RightChild == NullNode)
             {  
                 // The replacement node is the node's left child.
                 result = this.LeftChild;
             }
                 // Else if the node's right child has no left children.
-            else if(this.RightChild.LeftChild == AvlNode.NullNode)
+            else if(this.RightChild.LeftChild == NullNode)
             {
                 // The replacement node is the node's right child.
                 result = new AvlNode(
@@ -264,7 +264,7 @@ namespace Sanford.Collections.Immutable
                  * node to be removed.
                  */
 
-                IAvlNode replacement = AvlNode.NullNode;
+                IAvlNode replacement = NullNode;
                 IAvlNode rightChild = RemoveReplacement(this.RightChild, ref replacement);
 
                 // Create new node with the replacement node and the new
@@ -284,7 +284,7 @@ namespace Sanford.Collections.Immutable
             IAvlNode newNode;
 
             // If the bottom of the left tree has been found.
-            if(node.LeftChild == AvlNode.NullNode)
+            if(node.LeftChild == NullNode)
             {
                 // The replacement node is the node found at this point.
                 replacement = node;

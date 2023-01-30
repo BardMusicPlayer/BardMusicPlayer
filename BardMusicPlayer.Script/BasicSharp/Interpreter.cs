@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Structs;
 
@@ -245,7 +246,7 @@ public sealed class Interpreter
 
             var input = inputHandler?.Invoke();
             // try to parse as double, if failed read value as string
-            if (double.TryParse(input, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var d))
+            if (double.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
                 vars[lex.Identifier] = new Value(d);
             else
                 vars[lex.Identifier] = new Value(input);

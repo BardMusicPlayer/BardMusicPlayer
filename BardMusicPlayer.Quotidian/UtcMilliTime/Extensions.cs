@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Quotidian.UtcMilliTime;
 
@@ -111,7 +112,7 @@ public static class Extensions
     /// <param name="continueOnCapturedContext">Optional boolean for ConfigureAwait</param>
     /// <param name="onException">Optional delegate for exception handling</param>
 #pragma warning disable RECS0165
-    public static async void SafeFireAndForget(this System.Threading.Tasks.Task task, bool continueOnCapturedContext = true, Action<Exception> onException = null)
+    public static async void SafeFireAndForget(this Task task, bool continueOnCapturedContext = true, Action<Exception> onException = null)
 #pragma warning restore RECS0165
     {
         try

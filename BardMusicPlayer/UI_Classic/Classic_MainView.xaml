@@ -37,9 +37,9 @@
             <Grid Grid.Row="0" Grid.Column="0" >
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="25"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MaxWidth="300"/>
@@ -295,7 +295,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Label  Grid.Row="0" Content="Volume" HorizontalAlignment="Center"/>
-                                <Slider Grid.Row="1" x:Name="Siren_Volume" Minimum="0" Maximum="100" Orientation="Vertical" HorizontalAlignment="Center" ValueChanged="Siren_Volume_ValueChanged"></Slider>
+                                <Slider Grid.Row="1" x:Name="Siren_Volume" Minimum="0" Maximum="100" Orientation="Vertical" HorizontalAlignment="Center" ValueChanged="Siren_Volume_ValueChanged" />
                             </Grid>
 
                             <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
@@ -306,7 +306,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0"  x:Name="Siren_Time" Content="00:00" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <Slider Grid.Column="1" x:Name="Siren_Position" Minimum="0" Maximum="100" Orientation="Horizontal" HorizontalAlignment="Stretch" ValueChanged="Siren_Playbar_Slider_ValueChanged" Thumb.DragStarted="Siren_Playbar_Slider_DragStarted" Thumb.DragCompleted="Siren_Playbar_Slider_DragCompleted" VerticalAlignment="Center" UseLayoutRounding="True"></Slider>
+                                <Slider Grid.Column="1" x:Name="Siren_Position" Minimum="0" Maximum="100" Orientation="Horizontal" HorizontalAlignment="Stretch" ValueChanged="Siren_Playbar_Slider_ValueChanged" Thumb.DragStarted="Siren_Playbar_Slider_DragStarted" Thumb.DragCompleted="Siren_Playbar_Slider_DragCompleted" VerticalAlignment="Center" UseLayoutRounding="True" />
                                 <Label Grid.Column="3"  x:Name="Siren_TimeLapsed" Content="00:00" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             </Grid>
                             <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">

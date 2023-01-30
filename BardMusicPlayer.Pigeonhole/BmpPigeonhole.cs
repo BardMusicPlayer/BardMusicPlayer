@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System.Drawing;
 using BardMusicPlayer.Pigeonhole.JsonSettings.Autosave;
 using BardMusicPlayer.Quotidian;
 
@@ -110,9 +111,9 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     /// <summary>
     /// BMP window location
     /// </summary>
-    public virtual System.Drawing.Point BmpLocation { get; set; } = System.Drawing.Point.Empty;
+    public virtual Point BmpLocation { get; set; } = Point.Empty;
 
-    public virtual System.Drawing.Size BmpSize { get; set; } = System.Drawing.Size.Empty;
+    public virtual Size BmpSize { get; set; } = Size.Empty;
 
     /// <summary>
     /// Enable the 16 voice limit in Synthesizer

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Utils;
 using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic;
@@ -25,7 +26,7 @@ public partial class Classic_MainView
         if (!reload)
         {
             MIDI_Input_DeviceBox.Items.Clear();
-            MIDI_Input_DeviceBox.ItemsSource   = Maestro.Utils.MidiInput.ReloadMidiInputDevices();
+            MIDI_Input_DeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
             MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
         }
         LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
