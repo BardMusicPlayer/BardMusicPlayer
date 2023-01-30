@@ -34,7 +34,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Sanford.Multimedia.Midi
 {
@@ -94,13 +93,13 @@ namespace Sanford.Multimedia.Midi
 
                 if(message.MessageType == MessageType.Channel)
                 {
-					chaser.Process((ChannelMessage) message);
+                    chaser.Process((ChannelMessage) message);
                 }
                 else if(message.MessageType == MessageType.Meta)
                 {
-					if(Listen) {
-						dispatcher.Dispatch(this, message);
-					}
+                    if(Listen) {
+                        dispatcher.Dispatch(this, message);
+                    }
                 }
 
                 notFinished = enumerator.MoveNext();
@@ -123,11 +122,11 @@ namespace Sanford.Multimedia.Midi
 
                 while(notFinished && enumerator.Current.AbsoluteTicks == ticks)
                 {
-					IMidiMessage mb = enumerator.Current.MidiMessage;
+                    IMidiMessage mb = enumerator.Current.MidiMessage;
 
-					if(Listen) {
-						dispatcher.Dispatch(this, enumerator.Current.MidiMessage);
-					}
+                    if(Listen) {
+                        dispatcher.Dispatch(this, enumerator.Current.MidiMessage);
+                    }
 
                     notFinished = enumerator.MoveNext();    
                 }

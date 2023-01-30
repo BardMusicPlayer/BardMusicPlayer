@@ -12,12 +12,12 @@ using System.ComponentModel;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents an array data structure.
-	/// </summary>
-	[ImmutableObject(true)]
-	public class Array : IEnumerable
-	{
+    /// <summary>
+    /// Represents an array data structure.
+    /// </summary>
+    [ImmutableObject(true)]
+    public class Array : IEnumerable
+    {
         #region Array Members
 
         #region Instance Fields
@@ -95,7 +95,7 @@ namespace Sanford.Collections.Immutable
         /// </param>
         private Array(RalTopNode head, int length)
         {
-            this.head = head;
+            this.head   = head;
             this.length = length;            
         }
 

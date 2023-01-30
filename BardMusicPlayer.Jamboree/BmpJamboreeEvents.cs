@@ -1,8 +1,8 @@
-﻿using BardMusicPlayer.Jamboree.Events;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using BardMusicPlayer.Jamboree.Events;
 
 namespace BardMusicPlayer.Jamboree;
 

@@ -24,11 +24,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
-using System.Threading;
 
 namespace Sanford.Multimedia.Timers
 {
@@ -54,10 +51,10 @@ namespace Sanford.Multimedia.Timers
                 throw new NotImplementedException("Stopwatch is not IsHighResolution");
             }
 
-            isRunning = false;
-            mode = TimerMode.Periodic;
+            isRunning  = false;
+            mode       = TimerMode.Periodic;
             resolution = TimeSpan.FromMilliseconds(1);
-            period = resolution;
+            period     = resolution;
 
             tickRaiser = new EventRaiser(OnTick);
         }

@@ -37,10 +37,10 @@ using System.Collections;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Provides functionality for building SysCommonMessages.
-	/// </summary>
-	public class SysCommonMessageBuilder : IMessageBuilder
+    /// <summary>
+    /// Provides functionality for building SysCommonMessages.
+    /// </summary>
+    public class SysCommonMessageBuilder : IMessageBuilder
     {
         #region SysCommonMessageBuilder Members
 

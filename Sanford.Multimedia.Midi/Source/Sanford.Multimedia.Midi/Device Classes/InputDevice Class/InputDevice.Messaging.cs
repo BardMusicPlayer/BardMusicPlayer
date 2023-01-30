@@ -31,11 +31,11 @@
  */
 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Sanford.Multimedia;
 
 namespace Sanford.Multimedia.Midi
 {
@@ -126,8 +126,8 @@ namespace Sanford.Multimedia.Midi
             int status = ShortMessage.UnpackStatus(message);
 
             if (status >= (int)ChannelCommand.NoteOff &&
-                   status <= (int)ChannelCommand.PitchWheel +
-                   ChannelMessage.MidiChannelMaxValue)
+                status <= (int)ChannelCommand.PitchWheel +
+                ChannelMessage.MidiChannelMaxValue)
             {
                 cmBuilder.Message = message;
                 cmBuilder.Build();
@@ -137,9 +137,9 @@ namespace Sanford.Multimedia.Midi
                 OnChannelMessageReceived(new ChannelMessageEventArgs(null, cmBuilder.Result));
             }
             else if (status == (int)SysCommonType.MidiTimeCode ||
-                   status == (int)SysCommonType.SongPositionPointer ||
-                   status == (int)SysCommonType.SongSelect ||
-                   status == (int)SysCommonType.TuneRequest)
+                     status == (int)SysCommonType.SongPositionPointer ||
+                     status == (int)SysCommonType.SongSelect ||
+                     status == (int)SysCommonType.TuneRequest)
             {
                 scBuilder.Message = message;
                 scBuilder.Build();

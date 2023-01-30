@@ -1,6 +1,9 @@
 using System;
 using System.ComponentModel;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
 
@@ -19,7 +22,7 @@ internal class Autodiscover : IDisposable
     {
         svcRx.Stop();
 #if DEBUG
-            Console.WriteLine("Destructor Called.");
+        Console.WriteLine("Destructor Called.");
 #endif
     }
 
@@ -27,7 +30,7 @@ internal class Autodiscover : IDisposable
     {
         svcRx.Stop();
 #if DEBUG
-            Console.WriteLine("Dispose Called.");
+        Console.WriteLine("Dispose Called.");
 #endif
         //GC.SuppressFinalize(this);
     }
@@ -62,7 +65,7 @@ internal class Autodiscover : IDisposable
 public class SocketRx
 {
     public bool disposing;
-    public System.Net.IPEndPoint iPEndPoint;
+    public IPEndPoint iPEndPoint;
     public string BCAddress = "";
     public string Address = "";
     public string version = "";
@@ -79,11 +82,11 @@ public class SocketRx
 
     public void Start(object sender, DoWorkEventArgs e)
     {
-        var listener = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
-        var transmitter = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp);
+        var listener = new ZeroTierExtendedSocket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        var transmitter = new ZeroTierExtendedSocket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         var r = listener.SetBroadcast();
         r                       = transmitter.SetBroadcast();
-        iPEndPoint              = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(BCAddress), 5555);
+        iPEndPoint              = new IPEndPoint(IPAddress.Parse(BCAddress), 5555);
         listener.ReceiveTimeout = 10;
         listener.BSD_Bind(iPEndPoint);
         BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[Autodiscover]: Started\r\n"));
@@ -107,13 +110,13 @@ public class SocketRx
             {
                 var t = "XIVAmp " + Address + " " + version; //Send the init ip and version
                 var p = transmitter.SendTo(iPEndPoint, Encoding.ASCII.GetBytes(t));
-                System.Threading.Thread.Sleep(3000);
+                Thread.Sleep(3000);
             }
         }
 
-        try { transmitter.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        try { transmitter.Shutdown(SocketShutdown.Both); }
         finally { transmitter.Close(); }
-        try { listener.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        try { listener.Shutdown(SocketShutdown.Both); }
         finally { listener.Close(); }
         BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[Autodiscover]: Stopped\r\n"));
     }

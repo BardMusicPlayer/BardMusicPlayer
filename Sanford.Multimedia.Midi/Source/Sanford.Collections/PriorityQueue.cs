@@ -38,10 +38,10 @@ using System.Diagnostics;
 
 namespace Sanford.Collections
 {
-	/// <summary>
-	/// Represents the priority queue data structure.
-	/// </summary>
-	public class PriorityQueue : ICollection
+    /// <summary>
+    /// Represents the priority queue data structure.
+    /// </summary>
+    public class PriorityQueue : ICollection
     {
         #region PriorityQueue Members
 
@@ -171,7 +171,7 @@ namespace Sanford.Collections
             // Insert the new node into the list.
             for(int i = 0; i < nextLevel; i++)
             {
-                newNode[i] = update[i][i];
+                newNode[i]   = update[i][i];
                 update[i][i] = newNode;
             }
 
@@ -443,8 +443,8 @@ namespace Sanford.Collections
             int nextLevel = 1;
 
             while(rand.NextDouble() < Probability && 
-                nextLevel < LevelMaxValue && 
-                nextLevel <= currentLevel)
+                  nextLevel < LevelMaxValue && 
+                  nextLevel <= currentLevel)
             {
                 nextLevel++;
             }
@@ -507,7 +507,7 @@ namespace Sanford.Collections
             for(int i = 0; i < count; i++)
             {
                 peekElement = (int)queue.Peek();
-                element = (int)queue.Dequeue();
+                element     = (int)queue.Dequeue();
 
                 Debug.Assert(element == peekElement, "Peek Test");
                 Debug.Assert(element <= previousElement, "Order Test");
@@ -727,9 +727,9 @@ namespace Sanford.Collections
 
             public PriorityQueueEnumerator(PriorityQueue owner)
             {
-                this.owner = owner;
+                this.owner   = owner;
                 this.version = owner.version;
-                head = owner.header;
+                head         = owner.header;
 
                 Reset();
             }
@@ -749,7 +749,7 @@ namespace Sanford.Collections
                 #endregion
 
                 currentNode = head;  
-                moveResult = true;
+                moveResult  = true;
             }
 
             public object Current

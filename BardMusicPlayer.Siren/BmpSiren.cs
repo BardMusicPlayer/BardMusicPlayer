@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Siren.AlphaTab;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
+using BardMusicPlayer.Siren.AlphaTab.Util;
 using BardMusicPlayer.Siren.Properties;
 using BardMusicPlayer.Transmogrify.Song;
 using NAudio.CoreAudioApi;
@@ -28,7 +29,7 @@ public class BmpSiren
     private double _lyricIndex;
     private MMDevice _mdev;
 
-    private static readonly Lazy<BmpSiren> LazyInstance = new(() => new BmpSiren());
+    private static readonly System.Lazy<BmpSiren> LazyInstance = new(() => new BmpSiren());
     public static BmpSiren Instance => LazyInstance.Value;
 
     internal BmpSiren()
@@ -55,8 +56,8 @@ public class BmpSiren
     public void Setup(MMDevice device, float defaultVolume = 0.8f, byte bufferCount = 3, byte latency = 100)
     {
         ShutDown();
-        _mdev = device;
-        _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), AlphaTab.Util.LogLevel.None, BeginInvoke);
+        _mdev   = device;
+        _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), LogLevel.None, BeginInvoke);
         foreach (var resource in Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
             _player.LoadSoundFont((byte[])((DictionaryEntry)resource).Value, true);
         _player.PositionChanged += NotifyTimePosition;

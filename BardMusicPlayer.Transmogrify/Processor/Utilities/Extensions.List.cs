@@ -86,7 +86,7 @@ internal static partial class Extensions
                 if (startTime % 100 != 0 && startTime % 100 != 50)
                 {
                     if (startTime % 100 < 25 || startTime % 100 < 75 && startTime % 100 > 50) startTime = 50 * ((startTime + 49) / 50);
-                    else startTime = 50 * (startTime / 50);
+                    else startTime                                                                      = 50 * (startTime / 50);
                 }
 
                 if (dur % 100 != 0 && dur % 100 != 25 && dur % 100 != 50 && dur % 100 != 75)

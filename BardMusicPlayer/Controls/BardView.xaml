@@ -113,11 +113,11 @@
 
                         <TextBlock Grid.Column="6" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />
                         <controls:TrackNumericUpDown Grid.Column="6" Grid.Row="1" x:Name="TrackControl"
-                                                    PreviewMouseUp="TrackNumericUpDown_MouseUp"
-                                                    Value="{Binding TrackNumber}" />
+                                                     PreviewMouseUp="TrackNumericUpDown_MouseUp"
+                                                     Value="{Binding TrackNumber}" />
                         <controls:OctaveNumericUpDown Grid.Column="7" Grid.Row="1" x:Name="OctaveControl"
-                                                     PreviewMouseUp="OctaveControl_PreviewMouseUp"
-                                                     Value="{Binding OctaveShift}" />
+                                                      PreviewMouseUp="OctaveControl_PreviewMouseUp"
+                                                      Value="{Binding OctaveShift}" />
 
                         <TextBlock Grid.Column="8" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />

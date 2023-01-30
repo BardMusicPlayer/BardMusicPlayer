@@ -429,12 +429,12 @@ namespace Sanford.Multimedia.Midi
 
     #endregion
 
-	/// <summary>
-	/// Represents MIDI channel messages.
-	/// </summary>
-	[ImmutableObject(true)]
-	public sealed class ChannelMessage : ShortMessage
-	{
+    /// <summary>
+    /// Represents MIDI channel messages.
+    /// </summary>
+    [ImmutableObject(true)]
+    public sealed class ChannelMessage : ShortMessage
+    {
         #region ChannelEventArgs Members
 
         #region Constants
@@ -591,7 +591,7 @@ namespace Sanford.Multimedia.Midi
             int result;
 
             if(command == ChannelCommand.ChannelPressure ||
-                command == ChannelCommand.ProgramChange)
+               command == ChannelCommand.ProgramChange)
             {
                 result = 1;
             }

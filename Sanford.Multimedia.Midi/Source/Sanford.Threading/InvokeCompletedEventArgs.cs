@@ -34,7 +34,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace Sanford.Threading
 {
@@ -53,7 +52,7 @@ namespace Sanford.Threading
             : base(error, false, null)
         {
             this.method = method;
-            this.args = args;
+            this.args   = args;
             this.result = result;
         }
 

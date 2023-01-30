@@ -36,15 +36,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Timers;
 using Sanford.Collections;
 
 namespace Sanford.Threading
 {
-	/// <summary>
-	/// Provides functionality for timestamped delegate invocation.
-	/// </summary>
+    /// <summary>
+    /// Provides functionality for timestamped delegate invocation.
+    /// </summary>
     public partial class DelegateScheduler : IDisposable, IComponent
     {
         #region DelegateScheduler Members
@@ -63,7 +62,7 @@ namespace Sanford.Threading
         private PriorityQueue queue = new PriorityQueue();
 
         // Used for timing events for polling the delegate queue.
-        private System.Timers.Timer timer = new System.Timers.Timer(DefaultPollingInterval);
+        private Timer timer = new Timer(DefaultPollingInterval);
 
         // For storing tasks when the scheduler isn't running.
         private List<Task> tasks = new List<Task>();
@@ -190,7 +189,7 @@ namespace Sanford.Threading
             {
                 // Only add the task to the DelegateScheduler if the count 
                 // is greater than zero or set to Infinite.
-                if(count > 0 || count == DelegateScheduler.Infinite)
+                if(count > 0 || count == Infinite)
                 {
                     if(IsRunning)
                     {
@@ -404,19 +403,19 @@ namespace Sanford.Threading
 
                             OnInvokeCompleted(
                                 new InvokeCompletedEventArgs(
-                                tk.Method,
-                                tk.GetArgs(),
-                                returnValue,
-                                null));
+                                    tk.Method,
+                                    tk.GetArgs(),
+                                    returnValue,
+                                    null));
                         }
                         catch(Exception ex)
                         {
                             OnInvokeCompleted(
                                 new InvokeCompletedEventArgs(
-                                tk.Method,
-                                tk.GetArgs(),
-                                null,
-                                ex));
+                                    tk.Method,
+                                    tk.GetArgs(),
+                                    null,
+                                    ex));
                         }
                     }
 
@@ -531,7 +530,7 @@ namespace Sanford.Threading
 
         #region IComponent Members
 
-        public event System.EventHandler Disposed;
+        public event EventHandler Disposed;
 
         public ISite Site
         {

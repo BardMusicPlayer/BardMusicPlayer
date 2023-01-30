@@ -32,7 +32,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace Sanford.Multimedia.Timers
@@ -50,12 +49,12 @@ namespace Sanford.Multimedia.Timers
         Ticks        = 0x0020
     }
 
-	/// <summary>
+    /// <summary>
     /// Represents the Windows Multimedia MMTIME structure.
-	/// </summary>
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-	public struct Time
-	{
+    public struct Time
+    {
         [FieldOffset(0)]
         public int type;
 
@@ -105,5 +104,5 @@ namespace Sanford.Multimedia.Timers
 
         [FieldOffset(4)]
         public int songPositionPointer;
-	}
+    }
 }

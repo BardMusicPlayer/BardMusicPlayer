@@ -33,10 +33,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Sanford.Multimedia.Midi.UI
@@ -56,7 +52,7 @@ namespace Sanford.Multimedia.Midi.UI
 
         private void UpdateProperties()
         {
-            lowNoteID = (int)lowNoteIDNumericUpDown.Value;
+            lowNoteID  = (int)lowNoteIDNumericUpDown.Value;
             highNoteID = (int)highNoteIDNumericUpDown.Value;
         }
 
@@ -112,7 +108,7 @@ namespace Sanford.Multimedia.Midi.UI
 
                 if(lowNoteID > highNoteID)
                 {
-                    highNoteID = lowNoteID;
+                    highNoteID                    = lowNoteID;
                     highNoteIDNumericUpDown.Value = highNoteID;
                 }                             
             }
@@ -142,7 +138,7 @@ namespace Sanford.Multimedia.Midi.UI
 
                 if(highNoteID < lowNoteID)
                 {
-                    lowNoteID = highNoteID;
+                    lowNoteID                    = highNoteID;
                     lowNoteIDNumericUpDown.Value = highNoteID;
                 }
             }

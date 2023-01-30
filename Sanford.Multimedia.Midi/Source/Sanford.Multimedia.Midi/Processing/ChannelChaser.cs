@@ -58,10 +58,10 @@ namespace Sanford.Multimedia.Midi
 
             controllerMessages = new ChannelMessage[c, d];
 
-            programChangeMessages = new ChannelMessage[c];
-            pitchBendMessages = new ChannelMessage[c];
+            programChangeMessages   = new ChannelMessage[c];
+            pitchBendMessages       = new ChannelMessage[c];
             channelPressureMessages = new ChannelMessage[c];
-            polyPressureMessages = new ChannelMessage[c];
+            polyPressureMessages    = new ChannelMessage[c];
         }
 
         public void Process(ChannelMessage message)
@@ -147,10 +147,10 @@ namespace Sanford.Multimedia.Midi
                     controllerMessages[c, n] = null;
                 }
 
-                programChangeMessages[c] = null;
-                pitchBendMessages[c] = null;
+                programChangeMessages[c]   = null;
+                pitchBendMessages[c]       = null;
                 channelPressureMessages[c] = null;
-                polyPressureMessages[c] = null;
+                polyPressureMessages[c]    = null;
             }
         }
 

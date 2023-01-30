@@ -223,15 +223,15 @@ namespace Sanford.Multimedia.Timers
         // Initialize timer with default values.
         private void Initialize()
         {
-            this.mode = TimerMode.Periodic;
-            this.period = Capabilities.periodMin;
+            this.mode       = TimerMode.Periodic;
+            this.period     = Capabilities.periodMin;
             this.resolution = 1;
 
             running = false;
 
             timeProcPeriodic = new TimeProc(TimerPeriodicEventCallback);
-            timeProcOneShot = new TimeProc(TimerOneShotEventCallback);
-            tickRaiser = new EventRaiser(OnTick);
+            timeProcOneShot  = new TimeProc(TimerOneShotEventCallback);
+            tickRaiser       = new EventRaiser(OnTick);
         }
 
         #endregion
@@ -655,7 +655,7 @@ namespace Sanford.Multimedia.Timers
 
         #region IComponent Members
 
-        public event System.EventHandler Disposed;
+        public event EventHandler Disposed;
 
         public ISite Site
         {

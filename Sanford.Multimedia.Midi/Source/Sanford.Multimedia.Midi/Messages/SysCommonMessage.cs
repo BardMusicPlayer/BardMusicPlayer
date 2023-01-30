@@ -68,12 +68,12 @@ namespace Sanford.Multimedia.Midi
 
     #endregion
 
-	/// <summary>
-	/// Represents MIDI system common messages.
-	/// </summary>
-	[ImmutableObject(true)]
-	public sealed class SysCommonMessage : ShortMessage
-	{
+    /// <summary>
+    /// Represents MIDI system common messages.
+    /// </summary>
+    [ImmutableObject(true)]
+    public sealed class SysCommonMessage : ShortMessage
+    {
         #region SysCommonMessage Members
 
         #region Construction
@@ -85,8 +85,8 @@ namespace Sanford.Multimedia.Midi
         /// <param name="type">
         /// The type of SysCommonMessage.
         /// </param>
-		public SysCommonMessage(SysCommonType type)
-		{
+        public SysCommonMessage(SysCommonType type)
+        {
             msg = (int)type;
 
             #region Ensure
@@ -198,8 +198,8 @@ namespace Sanford.Multimedia.Midi
             SysCommonMessage message = (SysCommonMessage)obj;
 
             return (this.SysCommonType == message.SysCommonType &&
-                this.Data1 == message.Data1 &&
-                this.Data2 == message.Data2);
+                    this.Data1 == message.Data1 &&
+                    this.Data2 == message.Data2);
         }
 
         #endregion

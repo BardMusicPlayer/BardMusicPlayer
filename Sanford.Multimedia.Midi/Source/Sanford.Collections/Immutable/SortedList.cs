@@ -88,7 +88,7 @@ namespace Sanford.Collections.Immutable
         /// </param>
         private SortedList(IAvlNode root, IComparer comparer)
         {
-            this.root = root;
+            this.root     = root;
             this.comparer = comparer;
 
             InitializeCompareHandler();
@@ -302,7 +302,7 @@ namespace Sanford.Collections.Immutable
                     // Search to the left.
                     result = Search(key, node.LeftChild);
                 }
-                    // Else if the specified key is greater than the current key.
+                // Else if the specified key is greater than the current key.
                 else if(compareResult > 0)
                 {
                     // Search to the right.
@@ -499,7 +499,7 @@ namespace Sanford.Collections.Immutable
 
         #region IEnumerable Members
 
-        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return new AvlEnumerator(root);
         }

@@ -36,11 +36,11 @@ using System;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Provides functionality for building song position pointer messages.
-	/// </summary>
-	public class SongPositionPointerBuilder : IMessageBuilder
-	{
+    /// <summary>
+    /// Provides functionality for building song position pointer messages.
+    /// </summary>
+    public class SongPositionPointerBuilder : IMessageBuilder
+    {
         #region SongPositionPointerBuilder Members
 
         #region Constants
@@ -78,7 +78,7 @@ namespace Sanford.Multimedia.Midi
         /// </summary>
         public SongPositionPointerBuilder()
         {
-            builder = new SysCommonMessageBuilder();
+            builder      = new SysCommonMessageBuilder();
             builder.Type = SysCommonType.SongPositionPointer;
 
             Ppqn = PpqnClock.PpqnMinValue;
@@ -97,7 +97,7 @@ namespace Sanford.Multimedia.Midi
         /// </exception>
         public SongPositionPointerBuilder(SysCommonMessage message)
         {
-            builder = new SysCommonMessageBuilder();
+            builder      = new SysCommonMessageBuilder();
             builder.Type = SysCommonType.SongPositionPointer;
 
             Initialize(message);
@@ -196,7 +196,7 @@ namespace Sanford.Multimedia.Midi
                 if(value < PpqnClock.PpqnMinValue)
                 {
                     throw new ArgumentOutOfRangeException("Ppqn", value,
-                         "Pulses per quarter note is smaller than 24.");
+                        "Pulses per quarter note is smaller than 24.");
                 }
 
                 #endregion

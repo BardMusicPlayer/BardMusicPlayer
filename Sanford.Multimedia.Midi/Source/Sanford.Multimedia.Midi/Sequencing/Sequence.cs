@@ -97,7 +97,7 @@ namespace Sanford.Multimedia.Midi
         public Sequence(int division)
         {
             properties.Division = division;
-            properties.Format = 1;
+            properties.Format   = 1;
 
             InitializeBackgroundWorkers();
         }
@@ -132,15 +132,15 @@ namespace Sanford.Multimedia.Midi
         
         private void InitializeBackgroundWorkers()
         {
-            loadWorker.DoWork += new DoWorkEventHandler(LoadDoWork);
-            loadWorker.ProgressChanged += new ProgressChangedEventHandler(OnLoadProgressChanged);
-            loadWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(OnLoadCompleted);
-            loadWorker.WorkerReportsProgress = true;
+            loadWorker.DoWork                += new DoWorkEventHandler(LoadDoWork);
+            loadWorker.ProgressChanged       += new ProgressChangedEventHandler(OnLoadProgressChanged);
+            loadWorker.RunWorkerCompleted    += new RunWorkerCompletedEventHandler(OnLoadCompleted);
+            loadWorker.WorkerReportsProgress =  true;
 
-            saveWorker.DoWork += new DoWorkEventHandler(SaveDoWork);
-            saveWorker.ProgressChanged += new ProgressChangedEventHandler(OnSaveProgressChanged);
-            saveWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(OnSaveCompleted);
-            saveWorker.WorkerReportsProgress = true;
+            saveWorker.DoWork                += new DoWorkEventHandler(SaveDoWork);
+            saveWorker.ProgressChanged       += new ProgressChangedEventHandler(OnSaveProgressChanged);
+            saveWorker.RunWorkerCompleted    += new RunWorkerCompletedEventHandler(OnSaveCompleted);
+            saveWorker.WorkerReportsProgress =  true;
         }        
 
         #endregion
@@ -190,7 +190,7 @@ namespace Sanford.Multimedia.Midi
                 }
 
                 properties = newProperties;
-                tracks = newTracks;
+                tracks     = newTracks;
             }
 
             #region Ensure
@@ -240,7 +240,7 @@ namespace Sanford.Multimedia.Midi
                 }
 
                 properties = newProperties;
-                tracks = newTracks;
+                tracks     = newTracks;
             }
 
             #region Ensure
@@ -458,7 +458,7 @@ namespace Sanford.Multimedia.Midi
                 else
                 {
                     properties = newProperties;
-                    tracks = newTracks;
+                    tracks     = newTracks;
                 }
             }            
         }

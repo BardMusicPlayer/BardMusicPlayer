@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BardMusicPlayer.Pigeonhole;
@@ -16,12 +17,15 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Importers;
-using BardMusicPlayer.Transmogrify.Song.Importers.LRC;
+using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Lyrics = BardMusicPlayer.Transmogrify.Song.Importers.LRC.Lyrics;
+using Note = Melanchall.DryWetMidi.Interaction.Note;
+using Tempo = Melanchall.DryWetMidi.Interaction.Tempo;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 
@@ -80,7 +84,7 @@ public sealed class BmpSong
         {
             ".mmsong" => CovertMidiToSong(MMSongImporter.OpenMMSongFile(path), path),
             ".mml"    => CovertMidiToSong(MMLSongImporter.OpenMMLSongFile(path), path),
-            ".gp"     => CovertMidiToSong(Importers.GuitarPro.ImportGuitarPro.OpenGTPSongFile(path), path),
+            ".gp"     => CovertMidiToSong(ImportGuitarPro.OpenGTPSongFile(path), path),
             _         => OpenMidiFile(path)
         };
         return Task.FromResult(song);
@@ -360,7 +364,7 @@ public sealed class BmpSong
 
                     try
                     {
-                        noteOnMS = 5000000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
+                        noteOnMS  = 5000000 + note.GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
                         noteOffMS = 5000000 + note.GetTimedNoteOffEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds - firstNoteus;
                     }
                     catch (Exception) { continue; }
@@ -684,7 +688,7 @@ public sealed class BmpSong
 
             newMidiFile.Write(stream, settings: new WritingSettings
             {
-                TextEncoding = System.Text.Encoding.UTF8
+                TextEncoding = Encoding.UTF8
             });
 
             stream.Flush();

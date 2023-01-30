@@ -3,11 +3,11 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Maestro.Events;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using BardMusicPlayer.Maestro.Events;
 
 namespace BardMusicPlayer.Maestro;
 

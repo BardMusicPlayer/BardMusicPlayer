@@ -120,8 +120,8 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Lyrics Track Number:" />
                         <controls:NumericUpDown Grid.Column="1" x:Name="Lyrics_TrackNr"
-                                               PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"
-                                               ToolTip="Enables the lyrics parsing &#13;0 means stop lyrics parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)" />
+                                                PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"
+                                                ToolTip="Enables the lyrics parsing &#13;0 means stop lyrics parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)" />
                     </Grid>
                     <Grid Grid.Row="4" Grid.Column="2">
                         <Grid.ColumnDefinitions>

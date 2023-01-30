@@ -34,7 +34,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Sanford.Multimedia.Timers;
@@ -45,7 +44,7 @@ namespace Sanford.Multimedia.Midi
     {
         [DllImport("winmm.dll")]
         private static extern int midiStreamOpen(ref IntPtr handle, ref int deviceID, int reserved,
-            OutputDevice.MidiOutProc proc, IntPtr instance, uint flag);
+            MidiOutProc proc, IntPtr instance, uint flag);
 
         [DllImport("winmm.dll")]
         private static extern int midiStreamClose(IntPtr handle);
@@ -540,7 +539,7 @@ namespace Sanford.Multimedia.Midi
                 Property d = new Property();
 
                 d.sizeOfProperty = Marshal.SizeOf(typeof(Property));
-                d.property = value;
+                d.property       = value;
 
                 lock(lockObject)
                 {
@@ -600,7 +599,7 @@ namespace Sanford.Multimedia.Midi
 
                 Property t = new Property();
                 t.sizeOfProperty = Marshal.SizeOf(typeof(Property));
-                t.property = value;
+                t.property       = value;
 
                 lock(lockObject)
                 {

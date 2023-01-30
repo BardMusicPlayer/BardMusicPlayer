@@ -6,14 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Timer = System.Timers.Timer;
-
-using Sanford.Multimedia.Midi;
 using System.Text.RegularExpressions;
-using BardMusicPlayer.Quotidian.Structs;
+using System.Timers;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song;
+using Sanford.Multimedia.Midi;
 
 namespace BardMusicPlayer.Maestro.Sequencing;
 

@@ -33,7 +33,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Sanford.Threading
@@ -72,10 +71,10 @@ namespace Sanford.Threading
             Delegate method,
             object[] args)
         {
-            this.count = count;
+            this.count               = count;
             this.millisecondsTimeout = millisecondsTimeout;
-            this.method = method;
-            this.args = args;
+            this.method              = method;
+            this.args                = args;
 
             ResetNextTimeout();
         }

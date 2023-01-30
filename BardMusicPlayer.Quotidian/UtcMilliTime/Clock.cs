@@ -7,6 +7,8 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace BardMusicPlayer.Quotidian.UtcMilliTime;
@@ -15,7 +17,7 @@ public sealed class Clock : ITime
 {
     private static readonly Lazy<Clock> instance = new(() => new Clock());
     public static Clock Time => instance.Value;
-    [System.Runtime.InteropServices.DllImport("kernel32")]
+    [DllImport("kernel32")]
     private static extern ulong GetTickCount64();
     private static bool successfully_synced;
     private static bool Indicated => !successfully_synced && NetworkInterface.GetIsNetworkAvailable();
@@ -79,7 +81,7 @@ public sealed class Clock : ITime
                     ntpCall.socket.BeginConnect(ipEndPoint, PartB, null);
                     break;
                 }
-                catch (System.Net.Sockets.SocketException)
+                catch (SocketException)
                 {
                     idx++;
                 }

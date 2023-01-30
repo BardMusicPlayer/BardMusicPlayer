@@ -13,13 +13,13 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents a collection of elements accessible by index and supports
-	/// insertion and deletion.
-	/// </summary>
-	[ImmutableObject(true)]
-	public class ArrayList
-	{
+    /// <summary>
+    /// Represents a collection of elements accessible by index and supports
+    /// insertion and deletion.
+    /// </summary>
+    [ImmutableObject(true)]
+    public class ArrayList
+    {
         #region ArrayList Members
 
         #region Constants
@@ -79,7 +79,7 @@ namespace Sanford.Collections.Immutable
             for(int i = 0; i < TreePoolHeight; i++)
             {
                 parent = new AvlNode(null, child, child);
-                child = parent;
+                child  = parent;
             }
 
             TreePool = parent;
@@ -91,8 +91,8 @@ namespace Sanford.Collections.Immutable
         /// <summary>
         /// Initializes a new instance of the ArrayList class.
         /// </summary>
-		public ArrayList()
-		{
+        public ArrayList()
+        {
             root = GetSubTree(DefaultCapacityHeight);
         }
 
@@ -131,7 +131,7 @@ namespace Sanford.Collections.Immutable
         /// </param>
         private ArrayList(IAvlNode root, int count)
         {
-            this.root = root;
+            this.root  = root;
             this.count = count;
         }
 

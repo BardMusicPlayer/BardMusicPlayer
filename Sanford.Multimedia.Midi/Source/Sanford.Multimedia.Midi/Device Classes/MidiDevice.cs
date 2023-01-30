@@ -34,16 +34,14 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using Sanford.Multimedia;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// The base class for all MIDI devices.
-	/// </summary>
-	public abstract class MidiDevice : Device
-	{
+    /// <summary>
+    /// The base class for all MIDI devices.
+    /// </summary>
+    public abstract class MidiDevice : Device
+    {
         #region MidiDevice Members
 
         #region Win32 Midi Device Functions

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -81,10 +83,10 @@ public partial class Classic_MainView
             if (inputbox.ResponseText.Length < 1)
                 return;
 
-            _currentPlaylist = PlaylistFunctions.CreatePlaylist(inputbox.ResponseText);
+            _currentPlaylist              = PlaylistFunctions.CreatePlaylist(inputbox.ResponseText);
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-            _showingPlaylists = false;
-            Playlist_Header.Header = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+            _showingPlaylists             = false;
+            Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
         }
     }
 
@@ -102,7 +104,7 @@ public partial class Classic_MainView
             return;
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-        Playlist_Header.Header = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
     /// <summary>
@@ -119,7 +121,7 @@ public partial class Classic_MainView
             return;
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-        Playlist_Header.Header = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
     /// <summary>
@@ -146,7 +148,7 @@ public partial class Classic_MainView
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-        Playlist_Header.Header = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
     /// <summary>
@@ -214,10 +216,10 @@ public partial class Classic_MainView
             if ((string)PlaylistContainer.SelectedItem == "..")
                 return;
 
-            _currentPlaylist = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
-            _showingPlaylists = false;
+            _currentPlaylist              = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
+            _showingPlaylists             = false;
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-            Playlist_Header.Header = _currentPlaylist.GetName().PadRight(75- _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+            Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75- _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
             return;
         }
 
@@ -390,7 +392,7 @@ public partial class Classic_MainView
         var openFileDialog = new SaveFileDialog
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
-            InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\"+ Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\"+ Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)
@@ -413,7 +415,7 @@ public partial class Classic_MainView
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
             Multiselect      = false,
-            InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sanford.Multimedia.Midi
 {
@@ -18,7 +16,7 @@ namespace Sanford.Multimedia.Midi
 
         public ShortMessageEventArgs(int message, int timestamp = 0)
         {
-            this.message = new ShortMessage(message);
+            this.message           = new ShortMessage(message);
             this.message.Timestamp = timestamp;
         }
 

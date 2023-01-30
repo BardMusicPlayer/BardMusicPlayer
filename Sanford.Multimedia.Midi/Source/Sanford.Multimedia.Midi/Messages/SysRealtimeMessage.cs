@@ -32,7 +32,6 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -83,16 +82,16 @@ namespace Sanford.Multimedia.Midi
 
     #endregion
 
-	/// <summary>
-	/// Represents MIDI system realtime messages.
-	/// </summary>
-	/// <remarks>
-	/// System realtime messages are MIDI messages that are primarily concerned 
-	/// with controlling and synchronizing MIDI devices. 
-	/// </remarks>
-	[ImmutableObject(true)]
-	public sealed class SysRealtimeMessage : ShortMessage
-	{
+    /// <summary>
+    /// Represents MIDI system realtime messages.
+    /// </summary>
+    /// <remarks>
+    /// System realtime messages are MIDI messages that are primarily concerned 
+    /// with controlling and synchronizing MIDI devices. 
+    /// </remarks>
+    [ImmutableObject(true)]
+    public sealed class SysRealtimeMessage : ShortMessage
+    {
         #region SysRealtimeMessage Members
 
         #region System Realtime Messages

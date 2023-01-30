@@ -101,7 +101,7 @@ internal static class DateTimeExtension
             var v = value[i] - '0';
             if (v is >= 0 and <= 9)
             {
-                t += weight * v;
+                t      += weight * v;
                 weight /= 10;
             }
             else if (char.IsWhiteSpace(value, i))

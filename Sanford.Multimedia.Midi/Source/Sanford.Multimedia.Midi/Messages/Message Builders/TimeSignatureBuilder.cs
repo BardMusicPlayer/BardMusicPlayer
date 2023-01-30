@@ -39,8 +39,8 @@ namespace Sanford.Multimedia.Midi
     /// <summary>
     /// Provides easy to use functionality for time signature MetaMessages.
     /// </summary>
-	public class TimeSignatureBuilder : IMessageBuilder
-	{
+    public class TimeSignatureBuilder : IMessageBuilder
+    {
         #region TimeSignature Members
 
         #region Constants
@@ -80,9 +80,9 @@ namespace Sanford.Multimedia.Midi
         /// </summary>
         public TimeSignatureBuilder()
         {
-            Numerator = DefaultNumerator;
-            Denominator = DefaultDenominator;
-            ClocksPerMetronomeClick = DefaultClocksPerMetronomeClick;
+            Numerator                       = DefaultNumerator;
+            Denominator                     = DefaultDenominator;
+            ClocksPerMetronomeClick         = DefaultClocksPerMetronomeClick;
             ThirtySecondNotesPerQuarterNote = DefaultThirtySecondNotesPerQuarterNote;
         }
 
@@ -100,10 +100,10 @@ namespace Sanford.Multimedia.Midi
         /// The TimeSignatureBuilder uses the specified MetaMessage to 
         /// initialize its property values.
         /// </remarks>
-		public TimeSignatureBuilder(MetaMessage message)
+        public TimeSignatureBuilder(MetaMessage message)
         {
             Initialize(message);            
-		}
+        }
 
         #endregion
 
@@ -267,7 +267,7 @@ namespace Sanford.Multimedia.Midi
             // message was built.
             if(changed)
             {
-                result = new MetaMessage(MetaType.TimeSignature, data);
+                result  = new MetaMessage(MetaType.TimeSignature, data);
                 changed = false;
             }
         }

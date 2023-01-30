@@ -128,19 +128,19 @@ namespace Sanford.Multimedia.Midi
 
     #endregion
 
-	/// <summary>
-	/// Represents MIDI meta messages.
-	/// </summary>
-	/// <remarks>
-	/// Meta messages are MIDI messages that are stored in MIDI files. These
-	/// messages are not sent or received via MIDI but are read and 
-	/// interpretted from MIDI files. They provide information that describes 
-	/// a MIDI file's properties. For example, tempo changes are implemented
-	/// using meta messages.
-	/// </remarks>
-	[ImmutableObject(true)]
-	public sealed class MetaMessage : MidiMessageBase, IMidiMessage
-	{
+    /// <summary>
+    /// Represents MIDI meta messages.
+    /// </summary>
+    /// <remarks>
+    /// Meta messages are MIDI messages that are stored in MIDI files. These
+    /// messages are not sent or received via MIDI but are read and 
+    /// interpretted from MIDI files. They provide information that describes 
+    /// a MIDI file's properties. For example, tempo changes are implemented
+    /// using meta messages.
+    /// </remarks>
+    [ImmutableObject(true)]
+    public sealed class MetaMessage : MidiMessageBase, IMidiMessage
+    {
         #region MetaMessage Members
 
         #region Constants
@@ -223,7 +223,7 @@ namespace Sanford.Multimedia.Midi
         /// to make sure that it is valid for the specified type. If it is not,
         /// an exception is thrown. 
         /// </remarks>
-		public MetaMessage(MetaType type, byte[] data)
+        public MetaMessage(MetaType type, byte[] data)
         {
             #region Require
 

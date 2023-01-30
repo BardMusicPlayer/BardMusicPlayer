@@ -7,10 +7,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Rectangle x:Name="Rectangle" Height="27" Width="Auto" Fill="{DynamicResource PLAYLIST_SLIDER_THUMB}"/>
+                    <Rectangle x:Name="Rectangle" Height="27" Width="Auto" Fill="{DynamicResource PLAYLIST_SLIDER_THUMB}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource PLAYLIST_SLIDER_THUMB_SELECTED}"></Setter>
+                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource PLAYLIST_SLIDER_THUMB_SELECTED}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -79,26 +79,25 @@
                 <ControlTemplate TargetType="{x:Type ListView}">
                     <Grid>
                         <Border x:Name="Bd" BorderBrush="Transparent"
-                                                    BorderThickness="0" 
-                                                    Background="{TemplateBinding Background}" Padding="1"
-                                                    SnapsToDevicePixels="true"
-                                                    Opacity="0">
-                        </Border>
+                                BorderThickness="0"
+                                Background="{TemplateBinding Background}" Padding="1"
+                                SnapsToDevicePixels="true"
+                                Opacity="0" />
                         <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding BorderThickness}">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="#FFFFFFFF"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="#FFD9D9D9"/>
+                            <Setter Property="Background" TargetName="Bd" Value="#FFFFFFFF" />
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="#FFD9D9D9" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsGrouping" Value="true"/>
-                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                <Condition Property="IsGrouping" Value="true" />
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
                             </MultiTrigger.Conditions>
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

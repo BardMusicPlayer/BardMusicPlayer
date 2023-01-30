@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Sanford.Multimedia.Midi
 {
@@ -66,7 +64,7 @@ namespace Sanford.Multimedia.Midi
 
             public TimestampedMessage(int ticks, IMidiMessage message)
             {
-                this.ticks = ticks;
+                this.ticks   = ticks;
                 this.message = message;
             }
         }

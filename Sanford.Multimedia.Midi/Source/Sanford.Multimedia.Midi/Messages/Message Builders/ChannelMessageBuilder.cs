@@ -37,9 +37,9 @@ using System.Collections;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Provides functionality for building ChannelMessages.
-	/// </summary>
+    /// <summary>
+    /// Provides functionality for building ChannelMessages.
+    /// </summary>
     public class ChannelMessageBuilder : IMessageBuilder
     {
         #region ChannelMessageBuilder Members
@@ -68,10 +68,10 @@ namespace Sanford.Multimedia.Midi
         /// </summary>
         public ChannelMessageBuilder()
         {
-            Command = ChannelCommand.Controller;
+            Command     = ChannelCommand.Controller;
             MidiChannel = 0;
-            Data1 = (int)ControllerType.AllSoundOff;
-            Data2 = 0;
+            Data1       = (int)ControllerType.AllSoundOff;
+            Data2       = 0;
         }
 
         /// <summary>

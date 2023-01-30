@@ -41,7 +41,7 @@ public sealed class GP3File : GPFile
     public GP3File(byte[] _data)
     {
         GPBase.pointer = 0;
-        GPBase.data = _data;
+        GPBase.data    = _data;
     }
 
     public void addMeasureHeader(MeasureHeader header)
@@ -66,18 +66,18 @@ public sealed class GP3File : GPFile
     {
         //HEADERS
         //VERSION
-        version = readVersion();
+        version      = readVersion();
         versionTuple = readVersionTuple();
         //INFORMATION ABOUT THE PIECE
         readInfo();
         _tripletFeel = GPBase.readBool()[0] ? TripletFeel.eigth : TripletFeel.none;
         //readLyrics();
         tempo = GPBase.readInt()[0];
-        key = (KeySignature)(GPBase.readInt()[0] * 10); //key + 0
+        key   = (KeySignature)(GPBase.readInt()[0] * 10); //key + 0
         //GPBase.readSignedByte(); //octave
         readMidiChannels();
         measureCount = GPBase.readInt()[0];
-        trackCount = GPBase.readInt()[0];
+        trackCount   = GPBase.readInt()[0];
 
         readMeasureHeaders(measureCount);
         readTracks(trackCount, channels);
@@ -130,8 +130,8 @@ public sealed class GP3File : GPFile
                 readMeasure(measure);
             }
 
-            header.tempo = tempo;
-            start += header.length();
+            header.tempo =  tempo;
+            start        += header.length();
         }
     }
 
@@ -266,14 +266,14 @@ public sealed class GP3File : GPFile
         - Note effects. See :meth:`readNoteEffects`.*/
 
         var flags = GPBase.readByte()[0];
-        note.str = guitarString.number;
+        note.str              = guitarString.number;
         note.effect.ghostNote = (flags & 0x04) != 0;
         if ((flags & 0x20) != 0) note.type = (NoteType)GPBase.readByte()[0];
 
         if ((flags & 0x01) != 0)
         {
             note.duration = GPBase.readSignedByte()[0];
-            note.tuplet = GPBase.readSignedByte()[0];
+            note.tuplet   = GPBase.readSignedByte()[0];
         }
 
         if ((flags & 0x10) != 0)
@@ -291,7 +291,7 @@ public sealed class GP3File : GPFile
 
         if ((flags & 0x80) != 0)
         {
-            note.effect.leftHandFinger = (Fingering)GPBase.readSignedByte()[0];
+            note.effect.leftHandFinger  = (Fingering)GPBase.readSignedByte()[0];
             note.effect.rightHandFinger = (Fingering)GPBase.readSignedByte()[0];
         }
 
@@ -320,7 +320,7 @@ public sealed class GP3File : GPFile
 
         var noteEffect = note.effect ?? new NoteEffect();
         var flags = GPBase.readByte()[0];
-        noteEffect.hammer = (flags & 0x02) != 0;
+        noteEffect.hammer  = (flags & 0x02) != 0;
         noteEffect.letRing = (flags & 0x08) != 0;
         if ((flags & 0x01) != 0) noteEffect.bend = readBend();
 
@@ -354,12 +354,12 @@ public sealed class GP3File : GPFile
           - *3*: Sixteenth note.*/
         var grace = new GraceEffect
         {
-            fret = GPBase.readSignedByte()[0],
+            fret     = GPBase.readSignedByte()[0],
             velocity = unpackVelocity(GPBase.readByte()[0]),
             duration = 1 << (7 - GPBase.readByte()[0])
         };
-        grace.isDead = grace.fret == -1;
-        grace.isOnBeat = false;
+        grace.isDead     = grace.fret == -1;
+        grace.isOnBeat   = false;
         grace.transition = (GraceEffectTransition)GPBase.readSignedByte()[0];
         return grace;
     }
@@ -385,7 +385,7 @@ public sealed class GP3File : GPFile
           * Vibrato: :ref:`bool`. */
         var bendEffect = new BendEffect
         {
-            type = (BendType)GPBase.readSignedByte()[0],
+            type  = (BendType)GPBase.readSignedByte()[0],
             value = GPBase.readInt()[0]
         };
         var pointCount = GPBase.readInt()[0];
@@ -465,7 +465,7 @@ public sealed class GP3File : GPFile
 
         if (tempo < 0) return;
 
-        tableChange.tempo = new MixTableItem(tempo);
+        tableChange.tempo     = new MixTableItem(tempo);
         measure.tempo().value = tempo;
     }
 
@@ -486,7 +486,7 @@ public sealed class GP3File : GPFile
         if (tableChange.tempo == null) return;
 
         tableChange.tempo.duration = GPBase.readSignedByte()[0];
-        tableChange.hideTempo = false;
+        tableChange.hideTempo      = false;
     }
 
     private BeatEffect readBeatEffects(NoteEffect effect)
@@ -514,9 +514,9 @@ public sealed class GP3File : GPFile
         - Beat stroke direction. See :meth:`readBeatStroke`.*/
         var beatEffects = new BeatEffect();
         var flags1 = GPBase.readByte()[0];
-        effect.vibrato = (flags1 & 0x01) != 0 || effect.vibrato;
+        effect.vibrato      = (flags1 & 0x01) != 0 || effect.vibrato;
         beatEffects.vibrato = (flags1 & 0x02) != 0 || beatEffects.vibrato;
-        beatEffects.fadeIn = (flags1 & 0x10) != 0;
+        beatEffects.fadeIn  = (flags1 & 0x10) != 0;
         if ((flags1 & 0x20) != 0)
         {
             var flags2 = GPBase.readByte()[0];
@@ -574,7 +574,7 @@ public sealed class GP3File : GPFile
         BendEffect barEffect = null;
         barEffect = new BendEffect
         {
-            type = BendType.dip,
+            type  = BendType.dip,
             value = GPBase.readInt()[0],
             points = new List<BendPoint>
             {
@@ -628,7 +628,7 @@ public sealed class GP3File : GPFile
           string 6. If string is untouched then the values of fret is
           *-1*.*/
 
-        chord.name = GPBase.readIntByteSizeString();
+        chord.name      = GPBase.readIntByteSizeString();
         chord.firstFret = GPBase.readInt()[0];
         if (chord.firstFret <= 0) return;
 
@@ -701,16 +701,16 @@ public sealed class GP3File : GPFile
         chord.sharp = GPBase.readBool()[0];
         var intonation = chord.sharp ? "sharp" : "flat";
         GPBase.skip(3);
-        chord.root = new PitchClass(GPBase.readInt()[0], -1, "", intonation);
-        chord.type = (ChordType)GPBase.readInt()[0];
+        chord.root      = new PitchClass(GPBase.readInt()[0], -1, "", intonation);
+        chord.type      = (ChordType)GPBase.readInt()[0];
         chord.extension = (ChordExtension)GPBase.readInt()[0];
-        chord.bass = new PitchClass(GPBase.readInt()[0], -1, "", intonation);
-        chord.tonality = (ChordAlteration)GPBase.readInt()[0];
-        chord.add = GPBase.readBool()[0];
-        chord.name = GPBase.readByteSizeString(22);
-        chord.fifth = (ChordAlteration)GPBase.readInt()[0];
-        chord.ninth = (ChordAlteration)GPBase.readInt()[0];
-        chord.eleventh = (ChordAlteration)GPBase.readInt()[0];
+        chord.bass      = new PitchClass(GPBase.readInt()[0], -1, "", intonation);
+        chord.tonality  = (ChordAlteration)GPBase.readInt()[0];
+        chord.add       = GPBase.readBool()[0];
+        chord.name      = GPBase.readByteSizeString(22);
+        chord.fifth     = (ChordAlteration)GPBase.readInt()[0];
+        chord.ninth     = (ChordAlteration)GPBase.readInt()[0];
+        chord.eleventh  = (ChordAlteration)GPBase.readInt()[0];
         chord.firstFret = GPBase.readInt()[0];
         for (var i = 0; i < 6; i++)
         {
@@ -753,7 +753,7 @@ public sealed class GP3File : GPFile
 
         var duration = new Duration
         {
-            value = 1 << (GPBase.readSignedByte()[0] + 2),
+            value    = 1 << (GPBase.readSignedByte()[0] + 2),
             isDotted = (flags & 0x01) != 0
         };
         if ((flags & 0x20) == 0) return duration;
@@ -763,35 +763,35 @@ public sealed class GP3File : GPFile
         {
             case 3:
                 duration.tuplet.enters = 3;
-                duration.tuplet.times = 2;
+                duration.tuplet.times  = 2;
                 break;
             case 5:
                 duration.tuplet.enters = 5;
-                duration.tuplet.times = 4;
+                duration.tuplet.times  = 4;
                 break;
             case 6:
                 duration.tuplet.enters = 6;
-                duration.tuplet.times = 4;
+                duration.tuplet.times  = 4;
                 break;
             case 7:
                 duration.tuplet.enters = 7;
-                duration.tuplet.times = 4;
+                duration.tuplet.times  = 4;
                 break;
             case 9:
                 duration.tuplet.enters = 9;
-                duration.tuplet.times = 8;
+                duration.tuplet.times  = 8;
                 break;
             case 10:
                 duration.tuplet.enters = 10;
-                duration.tuplet.times = 8;
+                duration.tuplet.times  = 8;
                 break;
             case 11:
                 duration.tuplet.enters = 11;
-                duration.tuplet.times = 8;
+                duration.tuplet.times  = 8;
                 break;
             case 12:
                 duration.tuplet.enters = 12;
-                duration.tuplet.times = 8;
+                duration.tuplet.times  = 8;
                 break;
         }
 
@@ -865,10 +865,10 @@ public sealed class GP3File : GPFile
 
         - Track's color. The track's displayed color in Guitar Pro.*/
         var flags = GPBase.readByte()[0];
-        track.isPercussionTrack = (flags & 0x01) != 0;
+        track.isPercussionTrack       = (flags & 0x01) != 0;
         track.is12StringedGuitarTrack = (flags & 0x02) != 0;
-        track.isBanjoTrack = (flags & 0x04) != 0;
-        track.name = GPBase.readByteSizeString(40);
+        track.isBanjoTrack            = (flags & 0x04) != 0;
+        track.name                    = GPBase.readByteSizeString(40);
         var stringCount = GPBase.readInt()[0];
 
         for (var i = 0; i < 7; i++)
@@ -880,13 +880,13 @@ public sealed class GP3File : GPFile
             track.strings.Add(oString);
         }
 
-        track.port = GPBase.readInt()[0];
+        track.port    = GPBase.readInt()[0];
         track.channel = readChannel(channels);
         if (track.channel.channel == 9) track.isPercussionTrack = true;
 
         track.fretCount = GPBase.readInt()[0];
-        track.offset = GPBase.readInt()[0];
-        track.color = readColor();
+        track.offset    = GPBase.readInt()[0];
+        track.color     = readColor();
     }
 
     private MidiChannel readChannel(IReadOnlyList<MidiChannel> channels)
@@ -972,7 +972,7 @@ public sealed class GP3File : GPFile
         var header = new MeasureHeader
         {
             number = number,
-            start = 0,
+            start  = 0,
             tempo =
             {
                 value = tempo
@@ -1030,8 +1030,8 @@ public sealed class GP3File : GPFile
     {
         var marker = new Marker
         {
-            title = GPBase.readIntByteSizeString(),
-            color = readColor(),
+            title         = GPBase.readIntByteSizeString(),
+            color         = readColor(),
             measureHeader = header
         };
 
@@ -1077,20 +1077,20 @@ public sealed class GP3File : GPFile
         {
             var newChannel = new MidiChannel
             {
-                channel = i,
+                channel       = i,
                 effectChannel = i
             };
             var instrument = GPBase.readInt()[0];
             if (newChannel.isPercussionChannel() && instrument == -1) instrument = 0;
 
             newChannel.instrument = instrument;
-            newChannel.volume = toChannelShort(GPBase.readByte()[0]);
-            newChannel.balance = toChannelShort(GPBase.readByte()[0]);
-            newChannel.chorus = toChannelShort(GPBase.readByte()[0]);
-            newChannel.reverb = toChannelShort(GPBase.readByte()[0]);
-            newChannel.phaser = toChannelShort(GPBase.readByte()[0]);
-            newChannel.tremolo = toChannelShort(GPBase.readByte()[0]);
-            _channels[i] = newChannel;
+            newChannel.volume     = toChannelShort(GPBase.readByte()[0]);
+            newChannel.balance    = toChannelShort(GPBase.readByte()[0]);
+            newChannel.chorus     = toChannelShort(GPBase.readByte()[0]);
+            newChannel.reverb     = toChannelShort(GPBase.readByte()[0]);
+            newChannel.phaser     = toChannelShort(GPBase.readByte()[0]);
+            newChannel.tremolo    = toChannelShort(GPBase.readByte()[0]);
+            _channels[i]          = newChannel;
             GPBase.skip(2);
         }
 
@@ -1121,7 +1121,7 @@ public sealed class GP3File : GPFile
         foreach (var t in _lyrics.lines)
         {
             t.startingMeasure = GPBase.readInt()[0];
-            t.lyrics = GPBase.readIntSizeString();
+            t.lyrics          = GPBase.readIntSizeString();
         }
 
         lyrics.Add(_lyrics);
@@ -1148,13 +1148,13 @@ public sealed class GP3File : GPFile
         number of notice lines stored in :ref:`int`. Each line is
         encoded in :ref:`int-byte-size-string`.*/
 
-        title = GPBase.readIntByteSizeString();
-        subtitle = GPBase.readIntByteSizeString();
-        interpret = GPBase.readIntByteSizeString();
-        album = GPBase.readIntByteSizeString();
-        author = GPBase.readIntByteSizeString();
-        copyright = GPBase.readIntByteSizeString();
-        tab_author = GPBase.readIntByteSizeString();
+        title         = GPBase.readIntByteSizeString();
+        subtitle      = GPBase.readIntByteSizeString();
+        interpret     = GPBase.readIntByteSizeString();
+        album         = GPBase.readIntByteSizeString();
+        author        = GPBase.readIntByteSizeString();
+        copyright     = GPBase.readIntByteSizeString();
+        tab_author    = GPBase.readIntByteSizeString();
         instructional = GPBase.readIntByteSizeString();
         var notesCount = GPBase.readInt()[0];
         notice = new string[notesCount];

@@ -15,7 +15,7 @@ public sealed class ParseException : Exception
         : base(generateMessage(data, pos, message), innerException)
     {
         RawLyrics = data;
-        Position = pos;
+        Position  = pos;
     }
 
     /// <summary>

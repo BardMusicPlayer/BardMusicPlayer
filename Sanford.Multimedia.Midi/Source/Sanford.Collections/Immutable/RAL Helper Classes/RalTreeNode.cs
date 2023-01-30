@@ -6,7 +6,6 @@
  * Contact: jabberdabber@hotmail.com
  */
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -54,8 +53,8 @@ namespace Sanford.Collections.Immutable
             RalTreeNode leftChild, 
             RalTreeNode rightChild)
         {
-            this.value = value;
-            this.leftChild = leftChild;
+            this.value      = value;
+            this.leftChild  = leftChild;
             this.rightChild = rightChild;
 
             count = 1;

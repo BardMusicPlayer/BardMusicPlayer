@@ -10,7 +10,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border  BorderThickness="1" BorderBrush="Transparent" Background="Transparent" Height="3"/>
+                    <Border BorderThickness="1" BorderBrush="Transparent" Background="Transparent" Height="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -22,7 +22,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border SnapsToDevicePixels="True" Background="Transparent" BorderThickness="1" BorderBrush="Transparent" Height="3"/>
+                    <Border SnapsToDevicePixels="True" Background="Transparent" BorderThickness="1" BorderBrush="Transparent" Height="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -34,10 +34,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Rectangle x:Name="Rectangle" Height="16" Width="21" Fill="{DynamicResource MAIN_VOLUME_THUMB}"/>
+                    <Rectangle x:Name="Rectangle" Height="16" Width="21" Fill="{DynamicResource MAIN_VOLUME_THUMB}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource MAIN_VOLUME_THUMB_SELECTED}"></Setter>
+                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource MAIN_VOLUME_THUMB_SELECTED}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -45,19 +45,19 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="Slider"  TargetType="Slider">
+    <ControlTemplate x:Key="Slider" TargetType="Slider">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Track Grid.Row="1" x:Name="PART_Track"   >
+            <Track Grid.Row="1" x:Name="PART_Track">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource SliderRepeatButton1}"  Command="Slider.DecreaseLarge" />
+                    <RepeatButton Style="{StaticResource SliderRepeatButton1}" Command="Slider.DecreaseLarge" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource SliderThumb}"  />
+                    <Thumb Style="{StaticResource SliderThumb}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Style="{StaticResource SliderRepeatButton}" Command="Slider.IncreaseLarge" />
@@ -67,7 +67,7 @@
     </ControlTemplate>
 
     <Style x:Key="Volumebar_Slider" TargetType="Slider">
-        <Setter Property="Focusable" Value="true"/>
+        <Setter Property="Focusable" Value="true" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Style.Triggers>

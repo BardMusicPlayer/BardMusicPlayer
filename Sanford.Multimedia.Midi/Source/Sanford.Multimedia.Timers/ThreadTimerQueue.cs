@@ -26,7 +26,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
 
 namespace Sanford.Multimedia.Timers
@@ -65,7 +64,7 @@ namespace Sanford.Multimedia.Timers
                 var tick = new Tick
                 {
                     Timer = timer,
-                    Time = watch.Elapsed
+                    Time  = watch.Elapsed
                 };
                 tickQueue.Add(tick);
                 tickQueue.Sort();
@@ -141,7 +140,7 @@ namespace Sanford.Multimedia.Timers
                     var waitTime = maxTimeout;
                     if (tickQueue.Count > 0)
                     {
-                        waitTime = Min(tickQueue[0].Time - watch.Elapsed, waitTime);
+                        waitTime        = Min(tickQueue[0].Time - watch.Elapsed, waitTime);
                         queueEmptyCount = 0;
                     }
 

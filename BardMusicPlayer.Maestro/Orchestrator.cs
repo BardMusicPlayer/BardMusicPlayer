@@ -5,9 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Maestro.Performance;
@@ -17,6 +19,7 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Transmogrify.Song;
+using Timer = System.Timers.Timer;
 
 namespace BardMusicPlayer.Maestro;
 
@@ -47,25 +50,25 @@ public class Orchestrator : IDisposable
     private List<KeyValuePair<int, Performer>> _performers { get; set; }
 
     private Dictionary<Game, bool> _foundGames { get; set; }
-    private System.Timers.Timer _addPushedbackGamesTimer;
+    private Timer _addPushedbackGamesTimer;
 
     /// <summary>
     /// The constructor
     /// </summary>
     public Orchestrator()
     {
-        _performers = new List<KeyValuePair<int, Performer>>();
-        _foundGames = new Dictionary<Game, bool>();
-        _sequencer = new Sequencer();
-        _song_Title_Parsing_Performer = new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
-        BmpSeer.Instance.GameStarted += delegate (GameStarted e) { Instance_OnGameStarted(e.Game); };
-        BmpSeer.Instance.GameStopped += Instance_OnGameStopped;
-        BmpSeer.Instance.EnsembleRequested += Instance_EnsembleRequested;
-        BmpSeer.Instance.EnsembleStarted += Instance_EnsembleStarted;
-        BmpSeer.Instance.EnsembleStopped += Instance_EnsembleStopped;
+        _performers                            =  new List<KeyValuePair<int, Performer>>();
+        _foundGames                            =  new Dictionary<Game, bool>();
+        _sequencer                             =  new Sequencer();
+        _song_Title_Parsing_Performer          =  new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
+        BmpSeer.Instance.GameStarted           += delegate (GameStarted e) { Instance_OnGameStarted(e.Game); };
+        BmpSeer.Instance.GameStopped           += Instance_OnGameStopped;
+        BmpSeer.Instance.EnsembleRequested     += Instance_EnsembleRequested;
+        BmpSeer.Instance.EnsembleStarted       += Instance_EnsembleStarted;
+        BmpSeer.Instance.EnsembleStopped       += Instance_EnsembleStopped;
         BmpSeer.Instance.InstrumentHeldChanged += Instance_InstrumentHeldChanged;
 
-        _addPushedbackGamesTimer          =  new System.Timers.Timer();
+        _addPushedbackGamesTimer          =  new Timer();
         _addPushedbackGamesTimer.Interval =  2000;
         _addPushedbackGamesTimer.Enabled  =  false;
         _addPushedbackGamesTimer.Elapsed  += CheckFoundGames;
@@ -361,7 +364,7 @@ public class Orchestrator : IDisposable
         if (delay == 0)
             delay += 100;
 
-        var sw = new System.Diagnostics.Stopwatch();
+        var sw = new Stopwatch();
         sw.Start();
         Parallel.ForEach(_performers, perf =>
         {
@@ -485,7 +488,7 @@ public class Orchestrator : IDisposable
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void CheckFoundGames(object sender, System.Timers.ElapsedEventArgs e)
+    private void CheckFoundGames(object sender, ElapsedEventArgs e)
     {
         var added = new List<Game>();
         lock (_foundGames)
