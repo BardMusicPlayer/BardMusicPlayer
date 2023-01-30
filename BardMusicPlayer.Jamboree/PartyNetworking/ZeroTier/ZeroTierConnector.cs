@@ -22,7 +22,7 @@ public class ZeroTierConnector
         var ipAddress = "";
         var networkId = (ulong)long.Parse(network, NumberStyles.HexNumber);
 #if DEBUG
-            Console.WriteLine("Connecting to network...");
+        Console.WriteLine("Connecting to network...");
 #endif
         //node.InitFromStorage(configFilePath);
         node.InitAllowNetworkCaching(false);
@@ -38,16 +38,16 @@ public class ZeroTierConnector
         while (!nodeOnline)
         { Task.Delay(50); }
 #if DEBUG
-            Console.WriteLine("Id            : " + node.IdString);
-            Console.WriteLine("Version       : " + node.Version);
-            Console.WriteLine("PrimaryPort   : " + node.PrimaryPort);
-            Console.WriteLine("SecondaryPort : " + node.SecondaryPort);
-            Console.WriteLine("TertiaryPort  : " + node.TertiaryPort);
+        Console.WriteLine("Id            : " + node.IdString);
+        Console.WriteLine("Version       : " + node.Version);
+        Console.WriteLine("PrimaryPort   : " + node.PrimaryPort);
+        Console.WriteLine("SecondaryPort : " + node.SecondaryPort);
+        Console.WriteLine("TertiaryPort  : " + node.TertiaryPort);
 #endif
         node.Join(networkId);
 
 #if DEBUG
-            Console.WriteLine("Waiting for join to complete...");
+        Console.WriteLine("Waiting for join to complete...");
 #endif
         while (node.Networks.Count == 0)
         {
@@ -56,7 +56,7 @@ public class ZeroTierConnector
 
         // Wait until we've joined the network and we have routes + addresses
 #if DEBUG
-            Console.WriteLine("Waiting for network to become transport ready...");
+        Console.WriteLine("Waiting for network to become transport ready...");
 #endif
         while (!node.IsNetworkTransportReady(networkId))
         {
@@ -64,7 +64,7 @@ public class ZeroTierConnector
         }
 
 #if DEBUG
-            Console.WriteLine("Num of assigned addresses : " + node.GetNetworkAddresses(networkId).Count);
+        Console.WriteLine("Num of assigned addresses : " + node.GetNetworkAddresses(networkId).Count);
 #endif
         if (node.GetNetworkAddresses(networkId).Count == 1)
         {
@@ -72,20 +72,20 @@ public class ZeroTierConnector
             ipAddress = addr.ToString();
         }
 #if DEBUG
-            foreach (var addr in node.GetNetworkAddresses(networkId))
-            {
-                Console.WriteLine(" - Address: " + addr);
-            }
+        foreach (var addr in node.GetNetworkAddresses(networkId))
+        {
+            Console.WriteLine(" - Address: " + addr);
+        }
 
-            Console.WriteLine("Num of routes             : " + node.GetNetworkRoutes(networkId).Count);
-            foreach (var route in node.GetNetworkRoutes(networkId))
-            {
-                Console.WriteLine(" -   Route: target={0} via={1} flags={2} metric={3}",
-                    route.Target,
-                    route.Via,
-                    route.Flags,
-                    route.Metric);
-            }
+        Console.WriteLine("Num of routes             : " + node.GetNetworkRoutes(networkId).Count);
+        foreach (var route in node.GetNetworkRoutes(networkId))
+        {
+            Console.WriteLine(" -   Route: target={0} via={1} flags={2} metric={3}",
+                route.Target,
+                route.Via,
+                route.Flags,
+                route.Metric);
+        }
 #endif
         return Task.FromResult(result: ipAddress);
     }
@@ -101,7 +101,7 @@ public class ZeroTierConnector
     private void ZeroTierEvent(Event e)
     {
 #if DEBUG
-            Console.WriteLine("Event.Code = {0} ({1})", e.Code, e.Name);
+        Console.WriteLine("Event.Code = {0} ({1})", e.Code, e.Name);
 #endif
         if (e.Code == Constants.EVENT_NODE_ONLINE)
         {

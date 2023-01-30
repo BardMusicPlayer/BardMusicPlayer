@@ -60,7 +60,7 @@ public sealed partial class DalamudBridge
 
     private void StartEventsHandler()
     {
-        _eventQueue = new ConcurrentQueue<DalamudBridgeCommandStruct>();
+        _eventQueue        = new ConcurrentQueue<DalamudBridgeCommandStruct>();
         _eventsTokenSource = new CancellationTokenSource();
         Task.Factory.StartNew(() => RunEventsHandler(_eventsTokenSource.Token), TaskCreationOptions.LongRunning);
         _eventQueueOpen = true;

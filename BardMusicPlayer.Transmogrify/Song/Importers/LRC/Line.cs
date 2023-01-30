@@ -35,7 +35,7 @@ public class Line : IComparable<Line>, IComparable
     /// <param name="content">Lyrics of this line.</param>
     public Line(DateTime timestamp, string content)
     {
-        Timestamp = timestamp;
+        Timestamp    = timestamp;
         this.content = (content ?? "").Trim();
     }
 
@@ -123,7 +123,7 @@ public sealed class LineWithSpeaker : Line
         : base(timestamp, null)
     {
         Speaker = speaker;
-        Lyrics = lyrics;
+        Lyrics  = lyrics;
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public sealed class LineWithSpeaker : Line
             if (string.IsNullOrWhiteSpace(value))
             {
                 speaker = "";
-                Lyrics = "";
+                Lyrics  = "";
                 return;
             }
 
@@ -176,12 +176,12 @@ public sealed class LineWithSpeaker : Line
             if (pi < 0)
             {
                 speaker = "";
-                Lyrics = value;
+                Lyrics  = value;
             }
             else
             {
                 Speaker = value.Substring(0, pi);
-                Lyrics = value.Substring(pi + 1);
+                Lyrics  = value.Substring(pi + 1);
             }
         }
     }

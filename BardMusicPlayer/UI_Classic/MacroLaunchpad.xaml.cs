@@ -30,8 +30,8 @@ public sealed partial class MacroLaunchpad
         BmpScript.Instance.OnRunningStateChanged += Instance_OnRunningStateChanged;
 
 
-        DataContext = this;
-        _Macros = new List<Macro>();
+        DataContext           = this;
+        _Macros               = new List<Macro>();
         MacroList.ItemsSource = _Macros;
     }
 
@@ -107,7 +107,7 @@ public sealed partial class MacroLaunchpad
     {
         var openFileDialog = new OpenFileDialog
         {
-            Filter = "Macro List | *.cfg",
+            Filter      = "Macro List | *.cfg",
             Multiselect = true
         };
 

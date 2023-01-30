@@ -61,13 +61,13 @@ public sealed class Lyrics<TLine>
     /// </summary>
     public Lyrics()
     {
-        Lines = new LineCollection<TLine>();
+        Lines    = new LineCollection<TLine>();
         MetaData = new MetaDataDictionary();
     }
 
     internal Lyrics(ParserBase<TLine> parser)
     {
-        Lines = parser.Lines;
+        Lines    = parser.Lines;
         MetaData = parser.MetaData;
     }
 

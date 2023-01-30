@@ -65,7 +65,7 @@ internal class MachinaReaderBackend : IReaderBackend
                             _packet.Size48(timeStamp, otherActorId, myActorId, message); //Handles Ensemble Stop
                             break;
                         case 56:
-                            _packet.Size56(timeStamp, otherActorId, myActorId, message);        //Handles Ensemble Request, Ensemble Reject, and Instrument Equip/De-Equip.
+                            _packet.Size56(timeStamp, otherActorId, myActorId, message); //Handles Ensemble Request, Ensemble Reject, and Instrument Equip/De-Equip.
                             break;
                         case 88:
                             _packet.Size88(timeStamp, otherActorId, myActorId, message); //Handles EnsembleStart

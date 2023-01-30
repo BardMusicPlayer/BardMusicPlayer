@@ -55,7 +55,7 @@ public sealed partial class DalamudBridge
         StopEventsHandler();
         DalamudServer?.Dispose();
         DalamudServer = null;
-        Started = false;
+        Started       = false;
     }
 
 
