@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Jamboree;
@@ -28,7 +29,7 @@ public partial class App
 
         //Load the last used catalog
         var CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
-        if (System.IO.File.Exists(CatalogFile))
+        if (File.Exists(CatalogFile))
             BmpCoffer.Initialize(CatalogFile);
         else
             BmpCoffer.Initialize(Globals.Globals.DataPath + @"\MusicCatalog.db");

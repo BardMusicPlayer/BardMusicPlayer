@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Globals;
 using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Siren;
 
@@ -56,17 +58,17 @@ public partial class Classic_MainView
     }
 
     #region EventHandler
-    private void Instance_PlaybackTimeChanged(object sender, Maestro.Events.CurrentPlayPositionEvent e)
+    private void Instance_PlaybackTimeChanged(object sender, CurrentPlayPositionEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => PlaybackTimeChanged(e)));
     }
 
-    private void Instance_PlaybackMaxTime(object sender, Maestro.Events.MaxPlayTimeEvent e)
+    private void Instance_PlaybackMaxTime(object sender, MaxPlayTimeEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => PlaybackMaxTime(e)));
     }
 
-    private void Instance_OnSongLoaded(object sender, Maestro.Events.SongLoadedEvent e)
+    private void Instance_OnSongLoaded(object sender, SongLoadedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => OnSongLoaded(e)));
     }
@@ -81,12 +83,12 @@ public partial class Classic_MainView
         Dispatcher.BeginInvoke(new Action(PlaybackStopped));
     }
 
-    private void Instance_TrackNumberChanged(object sender, Maestro.Events.TrackNumberChangedEvent e)
+    private void Instance_TrackNumberChanged(object sender, TrackNumberChangedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => TrackNumberChanged(e)));
     }
 
-    private void Instance_OctaveShiftChanged(object sender, Maestro.Events.OctaveShiftChangedEvent e)
+    private void Instance_OctaveShiftChanged(object sender, OctaveShiftChangedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => OctaveShiftChanged(e)));
     }
@@ -96,7 +98,7 @@ public partial class Classic_MainView
         Dispatcher.BeginInvoke(new Action(() => Siren_PlaybackTimeChanged(currentTime, endTime, activeVoices)));
     }
 
-    private void PlaybackTimeChanged(Maestro.Events.CurrentPlayPositionEvent e)
+    private void PlaybackTimeChanged(CurrentPlayPositionEvent e)
     {
         var Seconds = e.timeSpan.Seconds.ToString();
         var Minutes = e.timeSpan.Minutes.ToString();
@@ -107,7 +109,7 @@ public partial class Classic_MainView
             Playbar_Slider.Value = e.tick;
     }
 
-    private void PlaybackMaxTime(Maestro.Events.MaxPlayTimeEvent e)
+    private void PlaybackMaxTime(MaxPlayTimeEvent e)
     {
         var Seconds = e.timeSpan.Seconds.ToString();
         var Minutes = e.timeSpan.Minutes.ToString();
@@ -118,7 +120,7 @@ public partial class Classic_MainView
 
     }
 
-    private void OnSongLoaded(Maestro.Events.SongLoadedEvent e)
+    private void OnSongLoaded(SongLoadedEvent e)
     {
         //Statistics update
         UpdateStats(e);
@@ -160,7 +162,7 @@ public partial class Classic_MainView
         }
     }
 
-    public void TrackNumberChanged(Maestro.Events.TrackNumberChangedEvent e)
+    public void TrackNumberChanged(TrackNumberChangedEvent e)
     {
         if (e.IsHost)
         {
@@ -169,7 +171,7 @@ public partial class Classic_MainView
         }
     }
 
-    public void OctaveShiftChanged(Maestro.Events.OctaveShiftChangedEvent e)
+    public void OctaveShiftChanged(OctaveShiftChangedEvent e)
     {
         if (e.IsHost)
             OctaveNumValue = e.OctaveShift;
@@ -221,14 +223,14 @@ public partial class Classic_MainView
         }
     }
 
-    private void track_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+    private void track_txtNum_KeyUp(object sender, KeyEventArgs e)
     {
         switch (e.Key)
         {
-            case System.Windows.Input.Key.Up:
+            case Key.Up:
                 track_cmdUp_Click(sender, e);
                 break;
-            case System.Windows.Input.Key.Down:
+            case Key.Down:
                 track_cmdDown_Click(sender, e);
                 break;
         }
@@ -271,14 +273,14 @@ public partial class Classic_MainView
             BmpMaestro.Instance.SetOctaveshiftOnHost(_octavenumValue);
         }
     }
-    private void octave_txtNum_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+    private void octave_txtNum_KeyUp(object sender, KeyEventArgs e)
     {
         switch (e.Key)
         {
-            case System.Windows.Input.Key.Up:
+            case Key.Up:
                 octave_cmdUp_Click(sender, e);
                 break;
-            case System.Windows.Input.Key.Down:
+            case Key.Down:
                 octave_cmdDown_Click(sender, e);
                 break;
         }

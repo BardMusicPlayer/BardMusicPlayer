@@ -33,10 +33,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Sanford.Multimedia;
 
 namespace Sanford.Multimedia.Midi.UI
 {
@@ -109,7 +107,7 @@ namespace Sanford.Multimedia.Midi.UI
 
             protected override void OnMouseEnter(EventArgs e)
             {
-                if(Control.MouseButtons == MouseButtons.Left)
+                if(MouseButtons == MouseButtons.Left)
                 {
                     PressPianoKey();
                 }

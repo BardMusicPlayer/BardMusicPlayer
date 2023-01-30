@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 
@@ -26,7 +28,7 @@ public partial class SongBrowser
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SongBrowserContainer_PreviewMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void SongBrowserContainer_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         var filename = SongBrowserContainer.SelectedItem as string;
         if (!File.Exists(filename) || filename == null)
@@ -40,7 +42,7 @@ public partial class SongBrowser
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SongSearch_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    private void SongSearch_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         if (!Directory.Exists(SongPath.Text))
             return;
@@ -57,7 +59,7 @@ public partial class SongBrowser
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SongPath_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    private void SongPath_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         if (!Directory.Exists(SongPath.Text))
             return;
@@ -78,7 +80,7 @@ public partial class SongBrowser
     {
         var dlg = new FolderPicker
         {
-            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
         };
 
         if (dlg.ShowDialog() == true)

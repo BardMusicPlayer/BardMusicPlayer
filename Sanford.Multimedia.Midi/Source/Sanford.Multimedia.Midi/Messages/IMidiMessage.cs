@@ -32,8 +32,6 @@
 
 #endregion
 
-using System;
-
 namespace Sanford.Multimedia.Midi
 {
     /// <summary>

@@ -37,7 +37,7 @@
                     <Rectangle x:Name="Rectangle" Height="18" Width="52" Fill="{DynamicResource MAIN_POSITION_SLIDER_THUMB}"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource MAIN_POSITION_SLIDER_THUMB_SELECTED}"></Setter>
+                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource MAIN_POSITION_SLIDER_THUMB_SELECTED}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -3,9 +3,9 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Maestro.Sequencing;
 using System.Collections.Generic;
 using System.Linq;
+using BardMusicPlayer.Maestro.Sequencing;
 
 namespace BardMusicPlayer.Maestro.Events;
 

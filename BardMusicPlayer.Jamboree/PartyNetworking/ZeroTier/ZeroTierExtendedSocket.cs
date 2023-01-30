@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using ZeroTier;
+using ZeroTier.Core;
 using SocketException = ZeroTier.Sockets.SocketException;
 
 namespace BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;
@@ -106,7 +107,7 @@ public class ZeroTierExtendedSocket
         var err = zts_connect(_fd, remoteEndPoint.Address.ToString(), (ushort)remoteEndPoint.Port, ConnectTimeout);
         if (err < 0)
         {
-            throw new SocketException(err, global::ZeroTier.Core.Node.ErrNo);
+            throw new SocketException(err, Node.ErrNo);
         }
         _remoteEndPoint = remoteEndPoint;
         Connected       = true;
@@ -147,7 +148,7 @@ public class ZeroTierExtendedSocket
     /// </summary>
     /// <param name="localEndPoint"></param>
     /// <exception cref="ObjectDisposedException"></exception>
-    /// <exception cref="SocketException"></exception>
+    /// <exception cref="ZeroTier.Sockets.SocketException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public void BSD_Bind(IPEndPoint localEndPoint)
     {
@@ -300,7 +301,7 @@ public class ZeroTierExtendedSocket
         uint numfds = 1;
         if ((result = zts_bsd_poll(poll_fd_ptr, numfds, timeout_ms)) < 0)
         {
-            throw new SocketException(result, global::ZeroTier.Core.Node.ErrNo);
+            throw new SocketException(result, Node.ErrNo);
         }
         poll_set = (zts_pollfd)Marshal.PtrToStructure(poll_fd_ptr, typeof(zts_pollfd));
         if (result != 0)
@@ -371,7 +372,7 @@ public class ZeroTierExtendedSocket
     /// <param name="socketFlags"></param>
     /// <returns></returns>
     /// <exception cref="ObjectDisposedException"></exception>
-    /// <exception cref="SocketException"></exception>
+    /// <exception cref="ZeroTier.Sockets.SocketException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public int SendTo(IPEndPoint localEndPoint, byte[] buffer, int offset, int size, SocketFlags socketFlags)

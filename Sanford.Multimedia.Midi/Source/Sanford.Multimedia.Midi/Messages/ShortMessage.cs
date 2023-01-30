@@ -114,18 +114,18 @@ namespace Sanford.Multimedia.Midi
         {
             unchecked
             {
-                return new byte[] { (byte)ShortMessage.UnpackStatus(intMessage),
-                    (byte)ShortMessage.UnpackData1(intMessage),
-                    (byte)ShortMessage.UnpackData2(intMessage) };
+                return new byte[] { (byte)UnpackStatus(intMessage),
+                    (byte)UnpackData1(intMessage),
+                    (byte)UnpackData2(intMessage) };
             }
         }
 
         private static int BuildIntMessage(byte[] message)
         {
             var intMessage = 0;
-            intMessage = ShortMessage.PackStatus(intMessage, message[0]);
-            intMessage = ShortMessage.PackData1(intMessage, message[1]);
-            intMessage = ShortMessage.PackData2(intMessage, message[2]);
+            intMessage = PackStatus(intMessage, message[0]);
+            intMessage = PackData1(intMessage, message[1]);
+            intMessage = PackData2(intMessage, message[2]);
             return intMessage;
         }
 

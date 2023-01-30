@@ -5,6 +5,7 @@
 
 using System;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
+using BardMusicPlayer.Siren.AlphaTab.Util;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
 
@@ -40,7 +41,7 @@ internal interface IAlphaSynth
     /// <summary>
     /// Gets or sets the loging level.
     /// </summary>
-    AlphaTab.Util.LogLevel LogLevel
+    LogLevel LogLevel
     {
         get;
         set;
