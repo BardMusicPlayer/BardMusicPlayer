@@ -161,12 +161,12 @@
                                     </Grid.RowDefinitions>
                                     <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="AutoEquipBox"             Content="Auto-Equip Performer(s)"          Unchecked="AutoEquipBox_Checked"          Checked="AutoEquipBox_Checked"          ToolTip="{StaticResource LO_AUTOEQ}" IsChecked="False"/>
                                     <CheckBox Margin="10,0,0,0" Grid.Row="1" x:Name="KeepTrackSettingsBox"     Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"  Checked="KeepTrackSettingsBox_Checked"  ToolTip="{StaticResource LO_KEEPTRACKS}"/>
-                                    <Label Margin="10,20,0,0"    Grid.Row="2" Content="Autostart" HorizontalAlignment="Left" ToolTip="{StaticResource MISC_AUTOSTART}"/>
-                                    <ComboBox Margin="90,20,0,0" Grid.Row="2" x:Name="Autostart_source" SelectionChanged="Autostart_source_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" ToolTip="{StaticResource MISC_AUTOSTART}">
+                                    <Label Margin="10,20,0,0"    Grid.Row="2" Content="Autostart" HorizontalAlignment="Left" ToolTip="{StaticResource LO_AUTOSTART}"/>
+                                    <ComboBox Margin="90,20,0,0" Grid.Row="2" x:Name="Autostart_source" SelectionChanged="Autostart_source_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" ToolTip="{StaticResource LO_AUTOSTART}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="3" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource MISC_AUTOEQPLGN}"/>
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="3" x:Name="AutoequipDalamud"  Content="Hypnotoad Compatibility"                 Unchecked="AutoequipDalamud_Checked"  Checked="AutoequipDalamud_Checked"  ToolTip="{StaticResource LO_AUTOEQPLGN}"/>
 
                                 </Grid>
                             </GroupBox>
@@ -182,7 +182,7 @@
                                     </Grid.RowDefinitions>
                                     <CheckBox Margin="10,10,0,0"  Grid.Row="1" x:Name="HoldNotesBox" Content="Hold Notes"          Unchecked="Hold_Notes_Checked"        Checked="Hold_Notes_Checked"       ToolTip="{StaticResource PL_HOLDNOTES}"/>
                                     <CheckBox Margin="10,0,0,0"  Grid.Row="2" x:Name="ForcePlaybackBox" Content="Force Playback"   Unchecked="Force_Playback_Checked"    Checked="Force_Playback_Checked"   ToolTip="{StaticResource PL_FORCE}"/>
-                                    <CheckBox Margin="10,0,0,0" Grid.Row="3" x:Name="IgnoreProgChangeBox"      Content="Ignore Guitar Program Changes"                    Unchecked="IgnoreProgChangeBox_Checked"   Checked="IgnoreProgChangeBox_Checked"   ToolTip="{StaticResource LO_IGNOREPROG}"/>
+                                    <CheckBox Margin="10,0,0,0" Grid.Row="3" x:Name="IgnoreProgChangeBox"      Content="Ignore Guitar Program Changes"                    Unchecked="IgnoreProgChangeBox_Checked"   Checked="IgnoreProgChangeBox_Checked"   ToolTip="{StaticResource PL_IGNOREPROG}"/>
                                     <Label Margin="10,5,0,0"     Grid.Row="4" Content="MIDI Input device" HorizontalAlignment="Left"/>
                                     <ComboBox Margin="120,5,0,0" Grid.Row="4" x:Name="MIDI_Input_DeviceBox" ItemsSource="{Binding}"
                                         DisplayMemberPath="Value"
