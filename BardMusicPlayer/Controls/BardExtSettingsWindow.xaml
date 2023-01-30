@@ -55,11 +55,12 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post song title:" />
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="Songtitle_Chat_Type" HorizontalAlignment="Left"
-                                  VerticalAlignment="Stretch" Width="50"
+                                  VerticalAlignment="Stretch" Width="80"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged">
-                            <ComboBoxItem>say</ComboBoxItem>
-                            <ComboBoxItem>yell</ComboBoxItem>
-                            <ComboBoxItem>shout</ComboBoxItem>
+                            <ComboBoxItem>Say</ComboBoxItem>
+                            <ComboBoxItem>Yell</ComboBoxItem>
+                            <ComboBoxItem>Shout</ComboBoxItem>
+                            <ComboBoxItem>Party</ComboBoxItem>
                         </ComboBox>
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="Songtitle_Chat_Prefix" Text="♪" Width="30"
                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" />
@@ -67,10 +68,10 @@
                         <Label Grid.Row="1" Grid.Column="6" Content="AutoPost" HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="AutoPost via"
-                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="90"
+                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="45"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged">
-                            <ComboBoxItem>off</ComboBoxItem>
-                            <ComboBoxItem>on</ComboBoxItem>
+                            <ComboBoxItem>Off</ComboBoxItem>
+                            <ComboBoxItem>On</ComboBoxItem>
                         </ComboBox>
                         <Separator Grid.Row="3" Grid.ColumnSpan="10" Grid.Column="0" />
                     </Grid>
@@ -99,11 +100,11 @@
                         <Label Grid.Row="1" Grid.Column="0" Content="Chat Type:" VerticalAlignment="Center" />
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="Chat_Type" HorizontalAlignment="Left"
                                   VerticalAlignment="Top" Width="120">
-                            <ComboBoxItem>say</ComboBoxItem>
-                            <ComboBoxItem>yell</ComboBoxItem>
-                            <ComboBoxItem>party</ComboBoxItem>
-                            <ComboBoxItem>company</ComboBoxItem>
-                            <ComboBoxItem>macro</ComboBoxItem>
+                            <ComboBoxItem>Say</ComboBoxItem>
+                            <ComboBoxItem>Yell</ComboBoxItem>
+                            <ComboBoxItem>Shout</ComboBoxItem>
+                            <ComboBoxItem>Party</ComboBoxItem>
+                            <ComboBoxItem>Free Company</ComboBoxItem>
                         </ComboBox>
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Text Message:" />

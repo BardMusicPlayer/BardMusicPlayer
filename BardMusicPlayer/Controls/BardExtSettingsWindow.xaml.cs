@@ -59,6 +59,7 @@ public sealed partial class BardExtSettingsWindow
             0 => ChatMessageChannelType.Say,
             1 => ChatMessageChannelType.Yell,
             2 => ChatMessageChannelType.Shout,
+            3 => ChatMessageChannelType.Party,
             _ => ChatMessageChannelType.None
         };
 
@@ -96,9 +97,9 @@ public sealed partial class BardExtSettingsWindow
             {
                 0 => ChatMessageChannelType.Say,
                 1 => ChatMessageChannelType.Yell,
-                2 => ChatMessageChannelType.Group,
-                3 => ChatMessageChannelType.FC,
-                4 => ChatMessageChannelType.None,
+                2 => ChatMessageChannelType.Shout,
+                3 => ChatMessageChannelType.Party,
+                4 => ChatMessageChannelType.FC,
                 _ => ChatMessageChannelType.None
             };
             var text = new string(ChatInputText.Text.ToCharArray());
