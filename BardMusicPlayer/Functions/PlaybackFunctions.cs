@@ -78,7 +78,6 @@ public static class PlaybackFunctions
     /// <param name="item"></param>
     public static void LoadSongFromPlaylist(BmpSong item)
     {
-        BringAmpToFront();
         PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
         CurrentSong   = item;
         BmpMaestro.Instance.SetSong(CurrentSong);
@@ -166,40 +165,6 @@ public static class PlaybackFunctions
         catch (KeyNotFoundException)
         {
             return "Unknown";
-        }
-    }
-
-    /// <summary>
-    /// Helper to bring the player to front
-    /// </summary>
-    public static void BringAmpToFront()
-    {
-        if (!BmpPigeonhole.Instance.BringBMPtoFront)
-            return;
-        try
-        {
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow is { IsVisible: false })
-            {
-                mainWindow.Show();
-            }
-
-            if (mainWindow is { WindowState: WindowState.Minimized })
-            {
-                mainWindow.WindowState = WindowState.Normal;
-            }
-
-            mainWindow?.Activate();
-            if (mainWindow != null)
-            {
-                mainWindow.Topmost = true;  // important
-                mainWindow.Topmost = false; // important
-                mainWindow.Focus();         // important
-            }
-        }
-        catch
-        {
-            // ignored
         }
     }
 }
