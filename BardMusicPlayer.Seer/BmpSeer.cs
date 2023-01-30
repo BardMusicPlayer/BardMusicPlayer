@@ -9,10 +9,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using WindowsFirewallHelper;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Utilities;
+using WindowsFirewallHelper;
 
 namespace BardMusicPlayer.Seer;
 

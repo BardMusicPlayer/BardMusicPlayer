@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro;
@@ -15,6 +17,7 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.UI_Classic;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace BardMusicPlayer.Controls;
@@ -126,14 +129,14 @@ public partial class BardView
         Console.WriteLine(BardsList.SelectedItem);
     }
 
-    private void BardsList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void BardsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         SelectedBard = BardsList.SelectedItem as Performer;
 
     }
 
     /* Track UP/Down */
-    private void TrackNumericUpDown_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void TrackNumericUpDown_MouseUp(object sender, MouseButtonEventArgs e)
     {
         if (sender is TrackNumericUpDown ctl) ctl.OnValueChanged += OnValueChanged;
     }
@@ -145,7 +148,7 @@ public partial class BardView
     }
 
     /* Octave UP/Down */
-    private void OctaveControl_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void OctaveControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
     {
         if (sender is OctaveNumericUpDown ctl) ctl.OnValueChanged += OnOctaveValueChanged;
     }
@@ -171,7 +174,7 @@ public partial class BardView
         if ((sender as CheckBox)?.DataContext is Performer game) game.PerformerEnabled = ctl.IsChecked ?? false;
     }
 
-    private void Bard_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Bard_MouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ClickCount == 2)
         {
@@ -198,7 +201,7 @@ public partial class BardView
     /// <param name="e"></param>
     private void Load_Performer_Settings(object sender, RoutedEventArgs e)
     {
-        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        var openFileDialog = new OpenFileDialog
         {
             Filter      = "Performer Config | *.cfg",
             Multiselect = true
@@ -242,7 +245,7 @@ public partial class BardView
     /// <param name="e"></param>
     private void Save_Performer_Settings(object sender, RoutedEventArgs e)
     {
-        var openFileDialog = new Microsoft.Win32.SaveFileDialog
+        var openFileDialog = new SaveFileDialog
         {
             Filter = "Performer Config | *.cfg"
         };
@@ -279,7 +282,7 @@ public partial class BardView
             if (contextMenu != null)
             {
                 contextMenu.PlacementTarget = rectangle;
-                contextMenu.Placement       = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                contextMenu.Placement       = PlacementMode.Bottom;
                 contextMenu.IsOpen          = true;
             }
         }

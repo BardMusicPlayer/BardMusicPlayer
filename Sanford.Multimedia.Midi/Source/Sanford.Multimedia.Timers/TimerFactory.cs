@@ -23,10 +23,7 @@
 
 #endregion
 
-using Sanford.Multimedia.Timers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sanford.Multimedia.Timers
 {

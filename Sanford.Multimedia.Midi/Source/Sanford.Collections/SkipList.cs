@@ -35,7 +35,6 @@
 using System;
 using System.Collections;
 
-
 namespace Sanford.Collections
 {
 	/// <summary>
@@ -1100,7 +1099,7 @@ namespace Sanford.Collections
         /// <returns>
         /// An IEnumerator that can be used to iterate through the collection.
         /// </returns>
-        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return new SkipListEnumerator(this);
         }

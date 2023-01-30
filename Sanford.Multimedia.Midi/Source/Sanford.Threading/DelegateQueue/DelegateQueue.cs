@@ -33,7 +33,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
@@ -97,13 +96,13 @@ namespace Sanford.Threading
         {
             InitializeDelegateQueue();
 
-            if(SynchronizationContext.Current == null)
+            if(Current == null)
             {
                 context = new SynchronizationContext();
             }
             else
             {
-                context = SynchronizationContext.Current;
+                context = Current;
             }
         }
 
@@ -426,7 +425,7 @@ namespace Sanford.Threading
             }
 
             // Set this DelegateQueue as the SynchronizationContext for this thread.
-            SynchronizationContext.SetSynchronizationContext(this);
+            SetSynchronizationContext(this);
 
             // Placeholder for DelegateQueueAsyncResult objects.
             DelegateQueueAsyncResult result = null;
@@ -611,7 +610,7 @@ namespace Sanford.Threading
         /// <summary>
         /// Represents the method that handles the Disposed delegate of a DelegateQueue.
         /// </summary>
-        public event System.EventHandler Disposed;
+        public event EventHandler Disposed;
 
         /// <summary>
         /// Gets or sets the ISite associated with the DelegateQueue.

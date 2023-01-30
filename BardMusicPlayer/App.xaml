@@ -4,14 +4,14 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Playbar images -->
-        <ImageBrush x:Key="MAIN_POSITION_SLIDER_THUMB"></ImageBrush>
-        <ImageBrush x:Key="MAIN_POSITION_SLIDER_THUMB_SELECTED"></ImageBrush>
-        <ImageBrush x:Key="MAIN_VOLUME_THUMB"></ImageBrush>
-        <ImageBrush x:Key="MAIN_VOLUME_THUMB_SELECTED"></ImageBrush>
-        <ImageBrush x:Key="MAIN_BALANCE_THUMB"></ImageBrush>
-        <ImageBrush x:Key="MAIN_BALANCE_THUMB_SELECTED"></ImageBrush>
-        <ImageBrush x:Key="PLAYLIST_SLIDER_THUMB"></ImageBrush>
-        <ImageBrush x:Key="PLAYLIST_SLIDER_THUMB_SELECTED"></ImageBrush>
-        <ImageBrush x:Key="MAIN_VOLUME_BACKGROUND"></ImageBrush>
+        <ImageBrush x:Key="MAIN_POSITION_SLIDER_THUMB" />
+        <ImageBrush x:Key="MAIN_POSITION_SLIDER_THUMB_SELECTED" />
+        <ImageBrush x:Key="MAIN_VOLUME_THUMB" />
+        <ImageBrush x:Key="MAIN_VOLUME_THUMB_SELECTED" />
+        <ImageBrush x:Key="MAIN_BALANCE_THUMB" />
+        <ImageBrush x:Key="MAIN_BALANCE_THUMB_SELECTED" />
+        <ImageBrush x:Key="PLAYLIST_SLIDER_THUMB" />
+        <ImageBrush x:Key="PLAYLIST_SLIDER_THUMB_SELECTED" />
+        <ImageBrush x:Key="MAIN_VOLUME_BACKGROUND" />
     </Application.Resources>
 </Application>

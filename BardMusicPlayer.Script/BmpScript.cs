@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Script.BasicSharp;
 using BardMusicPlayer.Seer;
 
@@ -87,7 +88,7 @@ public sealed class BmpScript
         }
     }
 
-    public void Print(Quotidian.Structs.ChatMessageChannelType type, string text)
+    public void Print(ChatMessageChannelType type, string text)
     {
         BmpMaestro.Instance.SendText(selectedBardName, type, text, unselected_bards);
     }

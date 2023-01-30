@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using ZeroTier;
 using ZeroTier.Core;
@@ -19,7 +20,7 @@ public class ZeroTierConnector
     {
         node = new Node();
         var ipAddress = "";
-        var networkId = (ulong)long.Parse(network, System.Globalization.NumberStyles.HexNumber);
+        var networkId = (ulong)long.Parse(network, NumberStyles.HexNumber);
 #if DEBUG
             Console.WriteLine("Connecting to network...");
 #endif

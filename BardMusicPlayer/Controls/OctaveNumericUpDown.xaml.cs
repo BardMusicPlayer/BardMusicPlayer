@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace BardMusicPlayer.Controls;
 
@@ -62,14 +63,14 @@ public sealed partial class OctaveNumericUpDown
         NumValue--;
     }
 
-    private void OctaveNumericUpDown_Key(object sender, System.Windows.Input.KeyEventArgs e)
+    private void OctaveNumericUpDown_Key(object sender, KeyEventArgs e)
     {
         switch (e.Key)
         {
-            case System.Windows.Input.Key.Up:
+            case Key.Up:
                 NumUp_Click(sender, e);
                 break;
-            case System.Windows.Input.Key.Down:
+            case Key.Down:
                 NumDown_Click(sender, e);
                 break;
         }

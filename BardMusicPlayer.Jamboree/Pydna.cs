@@ -1,5 +1,5 @@
-using BardMusicPlayer.Jamboree.Events;
 using System.Net;
+using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyNetworking.Autodiscover;
 using BardMusicPlayer.Jamboree.PartyNetworking.Server_Client;
 using BardMusicPlayer.Jamboree.PartyNetworking.ZeroTier;

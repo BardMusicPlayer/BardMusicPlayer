@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Files.Structures;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.Structures;
 using Newtonsoft.Json;
@@ -46,7 +47,7 @@ internal class APIHelper
     {
         var jsonStream =
             new MemoryStream(
-                (byte[]) Files.Structures.Structures.ResourceManager.GetObject(memoryHandler.GameRegion
+                (byte[]) Structures.ResourceManager.GetObject(memoryHandler.GameRegion
                     .ToString()));
         using var reader = new StreamReader(jsonStream);
         var json = reader.ReadToEnd();

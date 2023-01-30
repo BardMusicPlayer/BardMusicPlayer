@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using BardMusicPlayer.Seer.Events;
 

@@ -499,7 +499,7 @@ namespace Sanford.Collections.Immutable
 
         #region IEnumerable Members
 
-        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return new AvlEnumerator(root);
         }

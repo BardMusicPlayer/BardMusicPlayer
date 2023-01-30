@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -390,7 +392,7 @@ public partial class Classic_MainView
         var openFileDialog = new SaveFileDialog
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
-            InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\"+ Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\"+ Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)
@@ -413,7 +415,7 @@ public partial class Classic_MainView
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
             Multiselect      = false,
-            InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)

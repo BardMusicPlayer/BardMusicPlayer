@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using BardMusicPlayer.Jamboree.Events;
 using BardMusicPlayer.Jamboree.PartyClient.PartyManagement;
@@ -123,8 +125,8 @@ public class SocketServer
 
     public void Start(object sender, DoWorkEventArgs e)
     {
-        System.Threading.Thread.Sleep(3000);
-        listener = new ZeroTierExtendedSocket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+        Thread.Sleep(3000);
+        listener = new ZeroTierExtendedSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         listener.Bind(iPEndPoint);
         listener.Listen(10);
         BmpJamboree.Instance.PublishEvent(new PartyDebugLogEvent("[SocketServer]: Started\r\n"));
@@ -134,7 +136,7 @@ public class SocketServer
             var da = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             //Only accept if a autodiscover was triggered
-            if (listener.Poll(100, System.Net.Sockets.SelectMode.SelectRead))
+            if (listener.Poll(100, SelectMode.SelectRead))
             {
                 //Incoming connection
                 var handler = listener.Accept();
@@ -215,7 +217,7 @@ public class SocketServer
         }
 
         listener.KeepAlive = false;
-        try { listener.Shutdown(System.Net.Sockets.SocketShutdown.Both); }
+        try { listener.Shutdown(SocketShutdown.Both); }
         finally 
         { 
             listener.Close(); 

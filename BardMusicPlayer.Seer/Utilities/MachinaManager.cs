@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Machina.FFXIV;
+using Machina.FFXIV.Oodle;
 using Machina.Infrastructure;
 
 namespace BardMusicPlayer.Seer.Utilities;
@@ -29,7 +30,7 @@ internal class MachinaManager : IDisposable
         {
             MonitorType         = NetworkMonitorType.RawSocket,
             OodlePath           = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
-            OodleImplementation = Machina.FFXIV.Oodle.OodleImplementation.FfxivUdp
+            OodleImplementation = OodleImplementation.FfxivUdp
         };
         _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
     }

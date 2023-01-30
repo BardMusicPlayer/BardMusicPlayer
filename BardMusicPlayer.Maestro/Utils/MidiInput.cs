@@ -3,8 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using Sanford.Multimedia.Midi;
 using System.Collections.Generic;
+using Sanford.Multimedia.Midi;
 
 namespace BardMusicPlayer.Maestro.Utils;
 

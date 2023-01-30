@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace BardMusicPlayer.Script.BasicSharp;
 
@@ -143,7 +144,7 @@ public class Lexer
                     num += lastChar;
                 } while (char.IsDigit(GetChar()) || lastChar == '.');
 
-                if (!double.TryParse(num, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var real)) throw new Exception("ERROR while parsing number");
+                if (!double.TryParse(num, NumberStyles.Float, CultureInfo.InvariantCulture, out var real)) throw new Exception("ERROR while parsing number");
 
                 Value = new Value(real);
                 return Token.Value;

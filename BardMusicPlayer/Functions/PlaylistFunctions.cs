@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using BardMusicPlayer.Transmogrify.Song;
+using Microsoft.Win32;
 
 namespace BardMusicPlayer.Functions;
 
@@ -19,7 +23,7 @@ public static class PlaylistFunctions
     /// <returns>true if success</returns>
     public static bool AddFilesToPlaylist(IPlaylist currentPlaylist)
     {
-        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        var openFileDialog = new OpenFileDialog
         {
             Filter      = Globals.Globals.FileFilters,
             Multiselect = true
@@ -50,17 +54,17 @@ public static class PlaylistFunctions
     {
         var dlg = new FolderPicker
         {
-            InputPath = System.IO.Directory.Exists(Pigeonhole.BmpPigeonhole.Instance.SongDirectory) ? System.IO.Path.GetFullPath(Pigeonhole.BmpPigeonhole.Instance.SongDirectory) : System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
         };
 
         if (dlg.ShowDialog() == true)
         {
             var path = dlg.ResultPath;
 
-            if (!System.IO.Directory.Exists(path))
+            if (!Directory.Exists(path))
                 return false;
 
-            var files = System.IO.Directory.EnumerateFiles(path, "*.*", System.IO.SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong")).ToArray();
+            var files = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong")).ToArray();
             foreach (var d in files)
             {
                 var song = BmpSong.OpenFile(d).Result;

@@ -10,7 +10,7 @@
                     <Rectangle x:Name="Rectangle" Height="27" Width="Auto" Fill="{DynamicResource PLAYLIST_SLIDER_THUMB}"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource PLAYLIST_SLIDER_THUMB_SELECTED}"></Setter>
+                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource PLAYLIST_SLIDER_THUMB_SELECTED}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -82,8 +82,7 @@
                                                     BorderThickness="0" 
                                                     Background="{TemplateBinding Background}" Padding="1"
                                                     SnapsToDevicePixels="true"
-                                                    Opacity="0">
-                        </Border>
+                                                    Opacity="0" />
                         <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding BorderThickness}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </ScrollViewer>

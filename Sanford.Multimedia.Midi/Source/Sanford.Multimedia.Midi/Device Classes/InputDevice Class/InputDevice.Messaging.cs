@@ -31,11 +31,11 @@
  */
 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Sanford.Multimedia;
 
 namespace Sanford.Multimedia.Midi
 {

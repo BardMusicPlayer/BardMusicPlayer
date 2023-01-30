@@ -3,11 +3,12 @@
  */
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace BardMusicPlayer.Quotidian.Enums;
 
 [Flags]
-[System.Runtime.InteropServices.ComVisible(true)]
+[ComVisible(true)]
 public enum Keys {
     KeyCode = 0x0000FFFF,
     Modifiers = unchecked((int)0xFFFF0000),
