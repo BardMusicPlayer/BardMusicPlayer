@@ -22,7 +22,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border SnapsToDevicePixels="True" Background="Transparent" BorderThickness="1" BorderBrush="Transparent" Height="3" />
+                    <Border SnapsToDevicePixels="True" Background="Transparent" BorderThickness="1"
+                            BorderBrush="Transparent" Height="3" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -37,7 +38,8 @@
                     <Rectangle x:Name="Rectangle" Height="16" Width="21" Fill="{DynamicResource MAIN_VOLUME_THUMB}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource MAIN_VOLUME_THUMB_SELECTED}" />
+                            <Setter TargetName="Rectangle" Property="Fill"
+                                    Value="{DynamicResource MAIN_VOLUME_THUMB_SELECTED}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

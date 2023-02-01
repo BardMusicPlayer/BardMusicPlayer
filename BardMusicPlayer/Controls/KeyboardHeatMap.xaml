@@ -109,20 +109,30 @@
             <Rectangle x:Name="ASharp" Grid.Row="0" Grid.Column="6" Fill="Black" Stroke="White" StrokeThickness="0.5" />
 
 
-            <Rectangle x:Name="CSharpOne" Grid.Row="0" Grid.Column="8" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="DSharpOne" Grid.Row="0" Grid.Column="9" Fill="Black" Stroke="White" StrokeThickness="0.5" />
+            <Rectangle x:Name="CSharpOne" Grid.Row="0" Grid.Column="8" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="DSharpOne" Grid.Row="0" Grid.Column="9" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
 
-            <Rectangle x:Name="FSharpOne" Grid.Row="0" Grid.Column="11" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="GSharpOne" Grid.Row="0" Grid.Column="12" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="ASharpOne" Grid.Row="0" Grid.Column="13" Fill="Black" Stroke="White" StrokeThickness="0.5" />
+            <Rectangle x:Name="FSharpOne" Grid.Row="0" Grid.Column="11" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="GSharpOne" Grid.Row="0" Grid.Column="12" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="ASharpOne" Grid.Row="0" Grid.Column="13" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
 
 
-            <Rectangle x:Name="CSharpTwo" Grid.Row="0" Grid.Column="15" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="DSharpTwo" Grid.Row="0" Grid.Column="16" Fill="Black" Stroke="White" StrokeThickness="0.5" />
+            <Rectangle x:Name="CSharpTwo" Grid.Row="0" Grid.Column="15" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="DSharpTwo" Grid.Row="0" Grid.Column="16" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
 
-            <Rectangle x:Name="FSharpTwo" Grid.Row="0" Grid.Column="18" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="GSharpTwo" Grid.Row="0" Grid.Column="19" Fill="Black" Stroke="White" StrokeThickness="0.5" />
-            <Rectangle x:Name="ASharpTwo" Grid.Row="0" Grid.Column="20" Fill="Black" Stroke="White" StrokeThickness="0.5" />
+            <Rectangle x:Name="FSharpTwo" Grid.Row="0" Grid.Column="18" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="GSharpTwo" Grid.Row="0" Grid.Column="19" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
+            <Rectangle x:Name="ASharpTwo" Grid.Row="0" Grid.Column="20" Fill="Black" Stroke="White"
+                       StrokeThickness="0.5" />
 
         </Grid>
     </Grid>

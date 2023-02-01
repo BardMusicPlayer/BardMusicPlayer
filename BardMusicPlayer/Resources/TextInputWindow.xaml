@@ -26,12 +26,14 @@
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="55" />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="55" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Content="_Ok" IsDefault="True" Click="OKButton_Click" Width="40" />
-            <Button Grid.Column="3" Content="_Cancel" IsCancel="True" Click="CancelButton_Click" />
+            <Button Grid.Column="1" Content="_Okay" IsDefault="True" Click="OKButton_Click" Margin="0,20,0,0"
+                    Padding="0" />
+            <Button Grid.Column="3" Content="_Cancel" IsCancel="True" Click="CancelButton_Click" Margin="0,20,0,0"
+                    Padding="0" />
         </Grid>
     </Grid>
 </Window>

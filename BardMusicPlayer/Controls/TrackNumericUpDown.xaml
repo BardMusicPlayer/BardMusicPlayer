@@ -11,14 +11,20 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <!-- Track Selection-->
-        <TextBox Grid.Column="0" x:Name="Text" TextChanged="TextChanged" TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" KeyUp="TrackNumericUpDown_Key" />
+        <TextBox Grid.Column="0" x:Name="Text" TextChanged="TextChanged" Background="White" Padding="0"
+                 TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25"
+                 VerticalAlignment="Top" KeyUp="TrackNumericUpDown_Key" />
         <Grid Grid.Column="1" Margin="0,0,-7,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="12" />
+                <RowDefinition Height="12" />
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" x:Name="NumUp" FontSize="8" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Click="NumUp_Click" Width="12" TextOptions.TextHintingMode="Fixed" />
-            <Button Grid.Row="1" x:Name="NumDown" FontSize="8" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Click="NumDown_Click" Width="12" TextOptions.TextHintingMode="Fixed" />
+            <Button Grid.Row="0" x:Name="NumUp" FontSize="8" Padding="0" HorizontalAlignment="Left"
+                    VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE70E;" Click="NumUp_Click"
+                    Width="Auto" TextOptions.TextHintingMode="Fixed" />
+            <Button Grid.Row="1" x:Name="NumDown" FontSize="8" Padding="0" HorizontalAlignment="Left"
+                    VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE70D;" Click="NumDown_Click"
+                    Width="Auto" TextOptions.TextHintingMode="Fixed" />
         </Grid>
     </Grid>
 </UserControl>
