@@ -10,7 +10,8 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/BardMusicPlayer;component/Resources/ImageButtonStyle.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/BardMusicPlayer;component/Resources/ImageButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
@@ -33,12 +34,17 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="1" Grid.Column="1" Content="Party Token" />
+                    <Label Grid.Row="1" Grid.Column="1" Content="Party Token" Padding="0" />
                     <TextBox Grid.Row="1" Grid.Column="2" x:Name="PartyToken_Text" />
-                    <Button Grid.Row="2" Grid.Column="1" Content="Join" Click="Join_Click" />
-                    <Button Grid.Row="2" Grid.Column="2" Content="Leave" Click="Leave_Click" Width="60" HorizontalAlignment="Left" FontSize="12" />
-                    <Button Grid.Row="2" Grid.Column="2" Content="Force" Click="ForcePlay_Click" Width="60" HorizontalAlignment="Left" Margin="60,0,0,0" FontSize="12" />
-                    <TextBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1" x:Name="PartyMessage_Text" VerticalScrollBarVisibility="Visible" />
+                    <Button Grid.Row="2" Grid.Column="1" Content="Join" Click="Join_Click" Padding="0" Height="Auto"
+                            Background="White" />
+                    <Button Grid.Row="2" Grid.Column="2" Content="Leave" Click="Leave_Click" Padding="0" Height="Auto"
+                            Background="White" Width="60" HorizontalAlignment="Left" FontSize="12" />
+                    <Button Grid.Row="2" Grid.Column="2" Content="Force" Click="ForcePlay_Click" Padding="0"
+                            Height="Auto" Background="White" Width="60" HorizontalAlignment="Left" Margin="60,0,0,0"
+                            FontSize="12" />
+                    <TextBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1" x:Name="PartyMessage_Text"
+                             VerticalScrollBarVisibility="Visible" />
                 </Grid>
             </TabItem>
             <TabItem Header="Debug">

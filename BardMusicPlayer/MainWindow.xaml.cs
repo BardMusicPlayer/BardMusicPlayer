@@ -21,7 +21,7 @@ public partial class MainWindow
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
         Height             = 665;
-        Width              = 855;
+        Width              = 880;
         ResizeMode         = ResizeMode.CanResizeWithGrip;
     }
 }

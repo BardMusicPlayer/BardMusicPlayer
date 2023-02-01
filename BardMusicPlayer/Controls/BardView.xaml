@@ -5,55 +5,59 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:performance="clr-namespace:BardMusicPlayer.Maestro.Performance;assembly=BardMusicPlayer.Maestro"
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1" />
-                <ColumnDefinition Width="45" />
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="45" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="25" />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5" />
             </Grid.ColumnDefinitions>
             <Grid.Background>
                 <SolidColorBrush Color="White" />
             </Grid.Background>
 
-            <Button Grid.Column="1" Margin="0,1 0,1" Content="Open" ToolTip="Open Instruments"
+            <Button Grid.Column="1" Margin="0,2 0,1" Background="White" Height="Auto" Content="Open"
+                    ToolTip="Open Instruments"
                     Click="OpenInstrumentButton_Click" />
-            <Button Grid.Column="2" Margin="2,1,2,1" Content="Send Ensemble" ToolTip="Sends ensemble ready check"
+            <Button Grid.Column="2" Margin="2,2,2,1" Background="White" Height="Auto" Content="Send Ensemble"
+                    ToolTip="Sends ensemble ready check"
                     Click="RdyCheck_Click" />
-            <Button Grid.Column="3" Margin="0,1,0,1" Content="Close" ToolTip="Close Instruments"
+            <Button Grid.Column="3" Margin="0,2,0,1" Background="White" Height="Auto" Content="Close"
+                    ToolTip="Close Instruments"
                     Click="CloseInstrumentButton_Click" />
-            <Button Grid.Column="7" Margin="0,1,0,1" Content="..." x:Name="More_Options" Width="25"
+            <Button Grid.Column="7" Margin="0,2,0,1" Background="White" Height="Auto" Content="..."
+                    x:Name="More_Options"
                     Click="MenuButton_PreviewMouseLeftButtonDown"
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <CheckBox Content="Auto-Equip Performer(s)" x:Name="Autoequip_CheckBox"
                                   Unchecked="AutoEquip_CheckBox_Checked" Checked="AutoEquip_CheckBox_Checked" />
-                        <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
-                        <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
-                        <MenuItem Header="" />
                         <CheckBox Content="Set all Gfx to low" x:Name="GfxLow_CheckBox"
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
+                        <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
+                        <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
 
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
         </Grid>
         <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}"
-                  SelectionChanged="BardsList_SelectionChanged" MouseDoubleClick="BardsList_MouseDoubleClick">
+                  SelectionChanged="BardsList_SelectionChanged" MouseDoubleClick="BardsList_MouseDoubleClick"
+                  Padding="0">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type performance:Performer}">
                     <Grid>
@@ -63,25 +67,34 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4" />      <!-- 0 Spacer-->
-                            <ColumnDefinition Width="130" />    <!-- 1 -->
-                            <ColumnDefinition Width="Auto" />      <!-- 2 Spacer-->
-                            <ColumnDefinition Width="140" />    <!-- 3 -->
-                            <ColumnDefinition Width="10" />     <!-- 4 dalamud-->
-                            <ColumnDefinition Width="10" />     <!-- 5 spacer-->
-                            <ColumnDefinition Width="40" />     <!-- 6 track-->
-                            <ColumnDefinition Width="40" />     <!-- 7 octave-->
-                            <ColumnDefinition Width="35" />     <!-- 8 -->
-                            <ColumnDefinition Width="10" />     <!-- 9 spacer-->
-                            <ColumnDefinition Width="40" />     <!-- 10 -->
+                            <ColumnDefinition Width="1" />      <!-- 0 Spacer-->
+                            <ColumnDefinition Width="Auto" />   <!-- 1 icon-->
+                            <ColumnDefinition Width="10" />      <!-- 2 Spacer-->
+                            <ColumnDefinition Width="130" />    <!-- 3 -->
+                            <ColumnDefinition Width="Auto" />   <!-- 4 Spacer-->
+                            <ColumnDefinition Width="140" />    <!-- 5 -->
+                            <ColumnDefinition Width="10" />     <!-- 6 dalamud-->
+                            <ColumnDefinition Width="10" />     <!-- 7 spacer-->
+                            <ColumnDefinition Width="Auto" />   <!-- 8 track-->
+                            <ColumnDefinition Width="Auto" />   <!-- 9 octave-->
+                            <ColumnDefinition Width="10" />     <!-- 10 spacer-->
+                            <ColumnDefinition Width="Auto" />   <!-- 11 -->
+                            <ColumnDefinition Width="10" />     <!-- 12 spacer-->
+                            <ColumnDefinition Width="Auto" />   <!-- 13 -->
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding PlayerName}" MouseDown="Bard_MouseDown" />
-                        <TextBlock Grid.Column="1" Grid.Row="1"
+                        <materialDesign:PackIcon
+                            Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                            MouseDown="Bard_MouseDown"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Kind="MenuOpen" Padding="0" />
+
+                        <TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding PlayerName}" MouseDown="Bard_MouseDown" />
+                        <TextBlock Grid.Column="3" Grid.Row="1"
                                    Text="{Binding HomeWorld, Mode=OneTime, StringFormat=m\\:ss}"
                                    MouseDown="Bard_MouseDown" />
 
-                        <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TrackInstrument,  StringFormat=m\\:ss}">
+                        <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding TrackInstrument,  StringFormat=m\\:ss}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -96,7 +109,7 @@
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <TextBlock Grid.Column="4" Grid.Row="1" Text="">
+                        <TextBlock Grid.Column="6" Grid.Row="1" Text="">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -111,24 +124,32 @@
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <TextBlock Grid.Column="6" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />
-                        <controls:TrackNumericUpDown Grid.Column="6" Grid.Row="1" x:Name="TrackControl"
+                        <!--<TextBlock Grid.Column="8" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />-->
+                        <controls:TrackNumericUpDown Grid.Column="8" Grid.Row="1" x:Name="TrackControl"
                                                      PreviewMouseUp="TrackNumericUpDown_MouseUp"
-                                                     Value="{Binding TrackNumber}" />
-                        <controls:OctaveNumericUpDown Grid.Column="7" Grid.Row="1" x:Name="OctaveControl"
+                                                     Value="{Binding TrackNumber}"
+                                                     Padding="0" Width="Auto" Height="12"
+                                                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     Margin="0,0,1,0" />
+                        <!--<TextBlock Grid.Column="9" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
+                        <controls:OctaveNumericUpDown Grid.Column="9" Grid.Row="1" x:Name="OctaveControl"
                                                       PreviewMouseUp="OctaveControl_PreviewMouseUp"
-                                                      Value="{Binding OctaveShift}" />
+                                                      Value="{Binding OctaveShift}"
+                                                      Padding="0" Width="Auto" Height="12"
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                        <TextBlock Grid.Column="8" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        <CheckBox Grid.Column="8" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
-                                  Checked="HostChecker_Checked" IsChecked="{Binding HostProcess, Mode=TwoWay}" />
+                        <TextBlock Grid.Column="11" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" Padding="0" Width="Auto" />
+                        <CheckBox Grid.Column="11" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
+                                  Checked="HostChecker_Checked" IsChecked="{Binding HostProcess, Mode=TwoWay}"
+                                  Padding="0" Width="Auto" />
 
-                        <TextBlock Grid.Column="10" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        <CheckBox Grid.Column="10" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
+                        <TextBlock Grid.Column="13" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" Padding="0" Width="Auto" />
+                        <CheckBox Grid.Column="13" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
                                   Checked="PerformerEnabledChecker_Checked"
-                                  IsChecked="{Binding PerformerEnabled, Mode=TwoWay}" />
+                                  IsChecked="{Binding PerformerEnabled, Mode=TwoWay}"
+                                  Padding="0" Width="Auto" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
