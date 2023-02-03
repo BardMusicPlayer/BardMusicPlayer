@@ -65,7 +65,7 @@ public sealed partial class TrackNumericUpDown
 
     private void NumDown_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue - 1 < 0)
+        if (NumValue - 1 < 1)
             return;
         NumValue--;
     }
