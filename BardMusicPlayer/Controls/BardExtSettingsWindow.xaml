@@ -61,7 +61,6 @@
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>Say</ComboBoxItem>
                             <ComboBoxItem>Yell</ComboBoxItem>
-                            <ComboBoxItem>Shout</ComboBoxItem>
                             <ComboBoxItem>Party</ComboBoxItem>
                         </ComboBox>
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="Songtitle_Chat_Prefix" Text="♪" Width="30"
