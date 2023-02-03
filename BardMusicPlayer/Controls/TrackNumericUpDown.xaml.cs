@@ -5,6 +5,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BardMusicPlayer.Functions;
 
+using System.Collections;
+using System.Collections.Generic;
+
+
 namespace BardMusicPlayer.Controls;
 
 /// <summary>
@@ -20,6 +24,15 @@ public sealed partial class TrackNumericUpDown
 
     public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(nameof(Value), typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+
+    public static readonly DependencyProperty MaxTracksProperty =
+        DependencyProperty.Register(nameof(MaxTracks), typeof(int), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+
+    public int MaxTracks
+    {
+        get => (int)GetValue(MaxTracksProperty);
+        set => SetValue(MaxTracksProperty, value);
+    }
 
     public string Value
     {
@@ -58,14 +71,14 @@ public sealed partial class TrackNumericUpDown
     {
         if (PlaybackFunctions.CurrentSong == null)
             return;
-        if (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
+        if ((NumValue + 1) > this.MaxTracks)
             return;
         NumValue++;
     }
 
     private void NumDown_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue - 1 < 1)
+        if ((NumValue - 1) < 1)
             return;
         NumValue--;
     }
