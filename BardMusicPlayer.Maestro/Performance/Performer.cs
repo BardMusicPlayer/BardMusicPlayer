@@ -16,6 +16,7 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
+using BardMusicPlayer.Transmogrify;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Sanford.Multimedia.Midi;
 using Sequencer = BardMusicPlayer.Maestro.Sequencing.Sequencer;
@@ -88,18 +89,29 @@ public class Performer
                 _sequencer.LoadedBmpSong.Title : _sequencer.LoadedBmpSong.DisplayedTitle; //finally, display the title
         } 
     }
-    public string TrackInstrument 
-    { 
-        get {
-            if (_sequencer?.LoadedBmpSong == null)
+    public string TrackInstrument
+    {
+        get
+        {
+            if (_sequencer == null || _sequencer.LoadedBmpSong == null)
                 return "Unknown";
             if (TrackNumber == 0)
                 return "None";
-            if (_trackNumber >= _sequencer.Sequence.Count)
+            if (this._trackNumber >= _sequencer.Sequence.Count)
                 return "None";
+            if (_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers.Count == 0)
+                return "None";
+            try
+            {
+                Transmogrify.Song.Config.ClassicProcessorConfig classicConfig = (Transmogrify.Song.Config.ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
 
-            var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
-            return classicConfig.Instrument.Name;
+                return classicConfig.Instrument.Name;
+            }
+            catch (BmpTransmogrifyException e)
+            {
+
+                return "Unknown";
+            }
         }
     }
 
