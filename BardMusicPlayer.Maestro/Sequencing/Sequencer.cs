@@ -66,7 +66,6 @@ public class Sequencer : Sequencer_Internal
             var ms = GetTimeFromTick(CurrentTick);
             var t = TimeSpan.FromMilliseconds(ms);
             return $"{(int)t.TotalMinutes:D2}:{t.Seconds:D2}";
-            //return string.Format("{0}", CurrentTick);
         }
     }
 
@@ -87,7 +86,6 @@ public class Sequencer : Sequencer_Internal
             var ms = GetTimeFromTick(MaxTick - 1);
             var t = TimeSpan.FromMilliseconds(ms);
             return $"{(int)t.TotalMinutes:D2}:{t.Seconds:D2}";
-            //return string.Format("{0}", MaxTick);
         }
     }
 
@@ -101,12 +99,27 @@ public class Sequencer : Sequencer_Internal
         }
     }
 
-    private int intendedTrack;
-    public int CurrentTrack { get; private set; }
+    private int loadedTrack = 0;
+    private int intendedTrack = 0;
+    public int CurrentTrack => loadedTrack;
 
-    public static int LyricStartTrack => 0;
+    int _lyricStartTrackIndex = 0;
+    public int LyricStartTrack => _lyricStartTrackIndex;
 
+    private int _maxTracks = 0;
     public int MaxTrack
+    {
+        get
+        {
+            if (_maxTracks < 0)
+            {
+                return 0;
+            }
+            return _maxTracks;
+        }
+    }
+
+    public int MaxAllTrack
     {
         get
         {
@@ -131,7 +144,8 @@ public class Sequencer : Sequencer_Internal
         }
     }
 
-    public int LyricNum { get; private set; }
+    public int lyricCount = 0;
+    public int LyricNum => lyricCount;
 
     public Sequencer()
     {
@@ -483,6 +497,8 @@ public class Sequencer : Sequencer_Internal
         }
 
         // Parse track names and octave shifts
+        _maxTracks = -1;
+        _lyricStartTrackIndex = -1;
         foreach (var track in Sequence)
         {
             foreach (var ev in track.Iterator())
@@ -490,13 +506,18 @@ public class Sequencer : Sequencer_Internal
                 if (ev.MidiMessage is MetaMessage { MetaType: MetaType.TrackName } metaMsg)
                 {
                     var builder = new MetaTextBuilder(metaMsg);
-                    ParseTrackName(track, builder.Text);
+                    if (builder.Text.ToLower().Contains("lyrics:") && (_lyricStartTrackIndex == -1))
+                        _lyricStartTrackIndex = _maxTracks + 1;
+                    else
+                    {
+                        ParseTrackName(track, builder.Text);
+                        _maxTracks++;
+                    }
                 }
             }
         }
 
-        CurrentTrack = trackNum;
-        LyricNum     = 0;
+        loadedTrack = trackNum;
         // Search beginning for text stuff
         foreach (var ev in LoadedTrack.Iterator())
         {
@@ -510,7 +531,7 @@ public class Sequencer : Sequencer_Internal
                             OnMetaMessagePlayed(this, new MetaMessageEventArgs(LoadedTrack, msg));
                             break;
                         case MetaType.Lyric:
-                            LyricNum++;
+                            lyricCount++;
                             break;
                     }
 
@@ -523,6 +544,5 @@ public class Sequencer : Sequencer_Internal
         }
 
         OnLoad?.Invoke(this, EventArgs.Empty);
-        Console.WriteLine(@"Loaded Midi [" + LoadedFilename + @"] t" + trackNum);
     }
 }
