@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,12 +28,35 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public partial class BardView
 {
+    public sealed class BardViewModel : INotifyPropertyChanged
+    {
+        private ObservableCollection<Performer> bardList = new ObservableCollection<Performer>();
+
+        public ObservableCollection<Performer> BardList
+        {
+            get { return bardList; }
+            set
+            {
+                bardList = value;
+                RaisePropertyChanged("BardList");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    private BardViewModel _bardViewModel = new BardViewModel();
+
     public BardView()
     {
         InitializeComponent();
 
         DataContext = this;
-        Bards       = new ObservableCollection<Performer>();
 
         BmpMaestro.Instance.OnPerformerChanged   += OnPerformerChanged;
         BmpMaestro.Instance.OnSongLoaded         += OnSongLoaded;
@@ -49,14 +73,13 @@ public partial class BardView
         Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
     }
 
-    public ObservableCollection<Performer> Bards { get; private set; }
+    public BardViewModel Bards { get => this._bardViewModel;}
 
     public Performer SelectedBard { get; set; }
 
     private void OnPerformerChanged(object sender, bool e)
     {
-        Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-        Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
+        this._bardViewModel.BardList = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
     }
 
     private void OnSongLoaded(object sender, SongLoadedEvent e)
@@ -208,7 +231,7 @@ public partial class BardView
 
         foreach (var pconfig in pdatalist)
         {
-            var p = Bards.Where(perf => perf.game.PlayerName.Equals(pconfig.Name));
+            var p = _bardViewModel.BardList.Where(perf => perf.game.PlayerName.Equals(pconfig.Name));
             var performers = p as Performer[] ?? p.ToArray();
             if (!performers.Any())
                 continue;
@@ -240,7 +263,7 @@ public partial class BardView
         if (openFileDialog.ShowDialog() != true)
             return;
 
-        var pdatalist = Bards.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = (long)performer.game.GetAffinity() }).ToList();
+        var pdatalist = _bardViewModel.BardList.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = (long)performer.game.GetAffinity() }).ToList();
         var t = JsonConvert.SerializeObject(pdatalist);
         var content = new UTF8Encoding(true).GetBytes(t);
 
@@ -251,7 +274,7 @@ public partial class BardView
 
     private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-        foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLow_CheckBox.IsChecked))
+        foreach (var p in _bardViewModel.BardList.Where(p => p.game.GfxSettingsLow != GfxLow_CheckBox.IsChecked))
         {
             p.game.GfxSettingsLow = GfxLow_CheckBox.IsChecked ?? false;
             p.game.GfxSetLow(GfxLow_CheckBox.IsChecked ?? false);
