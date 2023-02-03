@@ -16,7 +16,7 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
-using BardMusicPlayer.Transmogrify;
+using BardMusicPlayer.Transmogrify.Song.Config;
 using Sanford.Multimedia.Midi;
 using Sequencer = BardMusicPlayer.Maestro.Sequencing.Sequencer;
 
