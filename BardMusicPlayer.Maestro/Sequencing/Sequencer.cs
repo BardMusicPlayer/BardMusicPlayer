@@ -110,11 +110,10 @@ public class Sequencer : Sequencer_Internal
     {
         get
         {
-            if (Sequence.Count <= 0)
-            {
-                return 0;
-            }
-            return Sequence.Count - 1;
+            if (Sequence.Count <= 0) return 0;
+            if (Sequence.Count - 2 < 0) return 0;
+
+            return Sequence.Count - 2;
         }
     }
 
