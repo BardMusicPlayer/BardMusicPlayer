@@ -35,8 +35,6 @@ public partial class BardView
         Bards       = new ObservableCollection<Performer>();
 
         BmpMaestro.Instance.OnPerformerChanged   += OnPerformerChanged;
-        BmpMaestro.Instance.OnTrackNumberChanged += OnTrackNumberChanged;
-        BmpMaestro.Instance.OnOctaveShiftChanged += OnOctaveShiftChanged;
         BmpMaestro.Instance.OnSongLoaded         += OnSongLoaded;
         BmpMaestro.Instance.OnPerformerUpdate    += OnPerformerUpdate;
         BmpSeer.Instance.PlayerNameChanged       += OnPlayerNameChanged;
@@ -59,16 +57,6 @@ public partial class BardView
     {
         Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
         Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
-    }
-
-    private void OnTrackNumberChanged(object sender, TrackNumberChangedEvent e)
-    {
-        UpdateList();
-    }
-
-    private void OnOctaveShiftChanged(object sender, OctaveShiftChangedEvent e)
-    {
-        UpdateList();
     }
 
     private void OnSongLoaded(object sender, SongLoadedEvent e)
@@ -98,8 +86,7 @@ public partial class BardView
 
     private void UpdateList()
     {
-        Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-        Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
+        this.Dispatcher.BeginInvoke(new Action(() => this.BardsList.Items.Refresh()));
     }
 
     private void RdyCheck_Click(object sender, RoutedEventArgs e)
