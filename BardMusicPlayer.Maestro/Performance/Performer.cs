@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ using Sequencer = BardMusicPlayer.Maestro.Sequencing.Sequencer;
 
 namespace BardMusicPlayer.Maestro.Performance;
 
-public class Performer
+public class Performer : INotifyPropertyChanged
 {
     private FFXIVHook _hook = new();
     private Timer _startDelayTimer { get; set; } = new();
@@ -36,7 +37,15 @@ public class Performer
     private bool _livePlayDelay { get; set; }
     public int SingerTrackNr { get; set; }
     public Instrument ChosenInstrument { get; set; } = Instrument.Piano;
-    public int OctaveShift { get; set; }
+    private int _octaveShift = 0;
+    public int OctaveShift { get => _octaveShift; set
+        {
+            if (_octaveShift == value) return;
+
+            _octaveShift = value;
+            RaisePropertyChanged("OctaveShift");
+        }
+    }
     public int TrackNumber { get => _trackNumber;
         set {
             if (value == _trackNumber)
@@ -56,6 +65,7 @@ public class Performer
 
             _trackNumber = value;
             BmpMaestro.Instance.PublishEvent(new TrackNumberChangedEvent(game, _trackNumber, HostProcess));
+            RaisePropertyChanged("TrackNumber");
             var tOctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[_trackNumber]);
             if (tOctaveShift != OctaveShift)
             {
@@ -166,6 +176,13 @@ public class Performer
                 Update(value);
             }
         }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void RaisePropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     #region public
