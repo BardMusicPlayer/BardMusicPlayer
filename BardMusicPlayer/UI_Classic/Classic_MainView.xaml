@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="665" d:DesignWidth="880"
              TextElement.FontWeight="Regular"
@@ -131,18 +132,21 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="PlaylistRepeat_Button" Grid.Column="1" Click="PlaylistRepeat_Button_Click"
-                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_REPEAT}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="/BardMusicPlayer;component/Resources/Images/ClassicLoop.png" />
-                            </Button.Background>
+                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_REPEAT}"
+                                Background="White" Padding="0" >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Sync" />
+                            </StackPanel>
                         </Button>
+                        
                         <Button x:Name="PlaylistShuffle_Button" Grid.Column="3" Click="PlaylistShuffle_Button_Click"
-                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_SHUFFLE}">
-                            <Button.Background>
-                                <ImageBrush
-                                    ImageSource="/BardMusicPlayer;component/Resources/Images/ClassicShuffle.png" />
-                            </Button.Background>
+                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_SHUFFLE}"
+                                Background="White" Padding="0" >
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ShuffleVariant" />
+                            </StackPanel>
                         </Button>
+                        
                         <Button Grid.Column="5" x:Name="SkipSong_Button" Background="White" Width="Auto" Height="25"
                                 Padding="0" VerticalAlignment="Center" Content="Skip" Click="SkipSong_Button_Click"
                                 ToolTip="{StaticResource PLAYLIST_SKIP}" />

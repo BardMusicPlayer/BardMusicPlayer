@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
-using BardMusicPlayer.Globals;
 using BardMusicPlayer.Maestro;
 using BardMusicPlayer.Maestro.Events;
 using BardMusicPlayer.Pigeonhole;
@@ -294,12 +293,6 @@ public partial class Classic_MainView
         {
             Visibility = Visibility.Visible
         };
-    }
-
-    private void Info_Button_Click(object sender, RoutedEventArgs e)
-    {
-        var _infoBox = new InfoBox();
-        _infoBox.Show();
     }
 
     /// <summary>

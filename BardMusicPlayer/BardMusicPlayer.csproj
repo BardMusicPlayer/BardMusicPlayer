@@ -119,13 +119,4 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Images\ClassicPause.png" />
-    <Resource Include="Resources\Images\ClassicPlay.png" />
-    <Resource Include="Resources\Images\ClassicLoop.png" />
-    <Resource Include="Resources\Images\ClassicRefresh.png" />
-    <Resource Include="Resources\Images\ClassicShuffle.png" />
-    <Resource Include="Resources\Images\group.png" />
-  </ItemGroup>
-
 </Project>
