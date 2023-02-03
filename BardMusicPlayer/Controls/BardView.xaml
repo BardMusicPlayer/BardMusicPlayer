@@ -55,7 +55,7 @@
                 </Button.ContextMenu>
             </Button>
         </Grid>
-        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}" ItemsSource="{Binding Bards.BardList}"
+        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}"
                   SelectionChanged="BardsList_SelectionChanged" MouseDoubleClick="BardsList_MouseDoubleClick"
                   Padding="0">
             <ListView.ItemTemplate>

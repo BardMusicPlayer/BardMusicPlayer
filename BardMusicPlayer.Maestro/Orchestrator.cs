@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -91,7 +90,7 @@ public class Orchestrator : IDisposable
     /// </summary>
     public IEnumerable<Performer> GetAllPerformers()
     {
-        return _performers.Select(performer => performer.Value);
+        return _performers.Select(performer => performer.Value).ToList();
     }
 
     /// <summary>
