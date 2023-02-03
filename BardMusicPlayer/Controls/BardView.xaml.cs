@@ -31,6 +31,15 @@ public partial class BardView
     public sealed class BardViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Performer> bardList = new ObservableCollection<Performer>();
+        private int _maxTracks = 0;
+
+        public int MaxTracks { 
+            get => _maxTracks; 
+            set {
+                if(_maxTracks != value)
+                    _maxTracks = value;
+                RaisePropertyChanged(nameof(MaxTracks));
+            } }
 
         public ObservableCollection<Performer> BardList
         {
@@ -84,6 +93,8 @@ public partial class BardView
 
     private void OnSongLoaded(object sender, SongLoadedEvent e)
     {
+        this._bardViewModel.MaxTracks = e.MaxTracks;
+
         UpdateList();
     }
 

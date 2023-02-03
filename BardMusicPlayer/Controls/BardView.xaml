@@ -127,7 +127,7 @@
                         <!--<TextBlock Grid.Column="8" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />-->
                         <controls:TrackNumericUpDown Grid.Column="8" Grid.Row="1" x:Name="TrackControl"
                                                      PreviewMouseUp="TrackNumericUpDown_MouseUp"
-                                                     Value="{Binding TrackNumber}"
+                                                     Value="{Binding TrackNumber}" MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Bards.MaxTracks}"
                                                      Padding="0" Width="Auto" Height="12"
                                                      HorizontalAlignment="Center" VerticalAlignment="Center"
                                                      Margin="0,0,1,0" />
