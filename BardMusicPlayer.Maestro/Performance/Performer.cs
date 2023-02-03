@@ -65,7 +65,8 @@ public class Performer : INotifyPropertyChanged
 
             _trackNumber = value;
             BmpMaestro.Instance.PublishEvent(new TrackNumberChangedEvent(game, _trackNumber, HostProcess));
-            RaisePropertyChanged("TrackNumber");
+            RaisePropertyChanged(nameof(TrackNumber));
+            RaisePropertyChanged(nameof(TrackInstrument));
             var tOctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[_trackNumber]);
             if (tOctaveShift != OctaveShift)
             {
@@ -119,7 +120,6 @@ public class Performer : INotifyPropertyChanged
             }
             catch (BmpTransmogrifyException)
             {
-
                 return "Unknown";
             }
         }
