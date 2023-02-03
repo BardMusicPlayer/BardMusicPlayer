@@ -117,7 +117,7 @@ public class Performer : INotifyPropertyChanged
 
                 return classicConfig.Instrument.Name;
             }
-            catch (BmpTransmogrifyException e)
+            catch (BmpTransmogrifyException)
             {
 
                 return "Unknown";
