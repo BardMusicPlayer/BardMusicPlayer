@@ -40,7 +40,7 @@ public sealed partial class BardExtSettingsWindow
                     Songtitle_Chat_Type.SelectedIndex = 0;
                 else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Yell.ChannelCode)
                     Songtitle_Chat_Type.SelectedIndex = 1;
-                else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Shout.ChannelCode)
+                else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Party.ChannelCode)
                     Songtitle_Chat_Type.SelectedIndex = 2;
 
                 Songtitle_Post_Type.SelectedIndex = tpBard.Key.channelType.Equals(ChatMessageChannelType.None) ? 0 : 1;
@@ -58,8 +58,7 @@ public sealed partial class BardExtSettingsWindow
         {
             0 => ChatMessageChannelType.Say,
             1 => ChatMessageChannelType.Yell,
-            2 => ChatMessageChannelType.Shout,
-            3 => ChatMessageChannelType.Party,
+            2 => ChatMessageChannelType.Party,
             _ => ChatMessageChannelType.None
         };
 
@@ -83,6 +82,7 @@ public sealed partial class BardExtSettingsWindow
         {
             0 => ChatMessageChannelType.Say,
             1 => ChatMessageChannelType.Yell,
+            2 => ChatMessageChannelType.Party,
             _ => ChatMessageChannelType.None
         };
         var songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
