@@ -32,7 +32,7 @@ jobs:
     # Unit tests go here.
 
     - name: Rename artifact
-      run: Move-Item -Path .\BardMusicPlayer\bin\Release\net481\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+      run: Move-Item -Path .\BardMusicPlayer\bin\Release\net48\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
 
     - name: Store artifacts
       uses: actions/upload-artifact@v3
