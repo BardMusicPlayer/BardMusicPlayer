@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Microsoft.Win32;
