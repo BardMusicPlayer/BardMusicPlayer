@@ -46,7 +46,7 @@ public partial class App
         //Start the scripting
         BmpScript.Instance.Start();
 
-        BmpSiren.Instance.Setup();
+        BmpSiren.Instance.Setup(Globals.Globals.DataPath + @"\vst");
         //BmpJamboree.Instance.Start();
     }
 
