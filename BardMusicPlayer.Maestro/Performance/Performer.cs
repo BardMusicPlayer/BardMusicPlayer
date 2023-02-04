@@ -646,7 +646,7 @@ public class Performer
         var builder = new MetaTextBuilder(e.Message);
         var text = builder.Text;
         var t = mainSequencer.MaxTrack;
-        if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr+ Sequencer.LyricStartTrack-1)
+        if (_sequencer.GetTrackNum(e.MidiTrack) == SingerTrackNr + mainSequencer.LyricStartTrack - 1)
             game.SendText(ChatMessageChannelType.Say, text);
     }
     #endregion
