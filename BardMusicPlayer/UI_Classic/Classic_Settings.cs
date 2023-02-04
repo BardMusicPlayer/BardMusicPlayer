@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using BardMusicPlayer.Maestro;
-using BardMusicPlayer.Maestro.Utils;
+using BardMusicPlayer.Maestro.Old.Utils;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic;

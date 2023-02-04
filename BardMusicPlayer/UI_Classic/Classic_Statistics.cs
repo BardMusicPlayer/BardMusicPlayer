@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows;
 using BardMusicPlayer.Functions;
-using BardMusicPlayer.Maestro.Events;
+using BardMusicPlayer.Maestro.Old.Events;
 using Microsoft.Win32;
 
 namespace BardMusicPlayer.UI_Classic;

@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Jamboree;
-using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Script;
 using BardMusicPlayer.Seer;

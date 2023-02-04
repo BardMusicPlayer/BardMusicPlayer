@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using BardMusicPlayer.Functions;
-using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic;

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:performance="clr-namespace:BardMusicPlayer.Maestro.Performance;assembly=BardMusicPlayer.Maestro"
+             xmlns:performance="clr-namespace:BardMusicPlayer.Maestro.Old.Performance;assembly=BardMusicPlayer.Maestro"
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"

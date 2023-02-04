@@ -89,10 +89,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Coffer\BardMusicPlayer.Coffer.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.DalamudBridge\BardMusicPlayer.DalamudBridge.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj" />
+    <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayerApi\BardMusicPlayer.Script\BardMusicPlayer.Script.csproj" />
