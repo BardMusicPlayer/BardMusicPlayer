@@ -12,8 +12,7 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        WindowStartupLocation="CenterScreen"
-        Height="665" Width="880">
+        WindowStartupLocation="CenterScreen">
 
     <Grid Margin="2">
         <ContentControl Content="{Binding}" />

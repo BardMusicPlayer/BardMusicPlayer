@@ -20,7 +20,7 @@
     <Grid>
         <TabControl TabStripPlacement="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabItem Header="Network Party">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="{StaticResource BMPSuiteLightGrey}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition Width="70" />
@@ -35,7 +35,7 @@
                         <RowDefinition Height="50" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="1" Grid.Column="1" Content="Party Token" Padding="0" />
-                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="PartyToken_Text" />
+                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="PartyToken_Text" Background="White" Padding="5"/>
                     <Button Grid.Row="2" Grid.Column="1" Content="Join" Click="Join_Click" Padding="0" Height="Auto"
                             Background="White" />
                     <Button Grid.Row="2" Grid.Column="2" Content="Leave" Click="Leave_Click" Padding="0" Height="Auto"
@@ -44,7 +44,7 @@
                             Height="Auto" Background="White" Width="60" HorizontalAlignment="Left" Margin="60,0,0,0"
                             FontSize="12" />
                     <TextBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1" x:Name="PartyMessage_Text"
-                             VerticalScrollBarVisibility="Visible" />
+                             VerticalScrollBarVisibility="Visible" Background="White"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Debug">

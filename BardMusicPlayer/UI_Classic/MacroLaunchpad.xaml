@@ -22,14 +22,14 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Add" Click="Add_Click" />
-            <Button Grid.Column="1" Content="Remove" Click="Remove_Click" />
+            <Button Grid.Column="0" Content="Add" Click="Add_Click" Background="White" />
+            <Button Grid.Column="1" Content="Remove" Click="Remove_Click" Background="White" />
 
             <Button Grid.Column="3" x:Name="StopIndicator" Content="Idle" Click="StopIndicator_Click" Width="40"
-                    Padding="0" />
+                    Padding="0" Background="White" />
 
-            <Button Grid.Column="5" Content="Load" Click="Load_Click" />
-            <Button Grid.Column="6" Content="Save" Click="Save_Click" />
+            <Button Grid.Column="5" Content="Load" Click="Load_Click" Background="White" />
+            <Button Grid.Column="6" Content="Save" Click="Save_Click" Background="White" />
         </Grid>
 
         <ListView x:Name="MacroList" Grid.Row="1" SelectedItem="{Binding SelectedMacro}"

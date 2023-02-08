@@ -174,6 +174,15 @@ public partial class BardView
         if ((sender as CheckBox)?.DataContext is Performer game) game.PerformerEnabled = ctl.IsChecked ?? false;
     }
 
+    private void Bard_MouseClick(object sender, MouseButtonEventArgs e)
+    {
+        if (SelectedBard == null)
+                return;
+        
+        var bardExtSettings = new BardExtSettingsWindow(SelectedBard);
+        bardExtSettings.Activate();
+        bardExtSettings.Visibility = Visibility.Visible;
+    }
     private void Bard_MouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ClickCount == 2)
