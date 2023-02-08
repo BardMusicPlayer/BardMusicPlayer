@@ -167,7 +167,7 @@
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
-                    <Grid Background="White">
+                        <Grid Background="White">
                             <controls:BardView x:Name="BardsList" />
                         </Grid>
                     </TabItem>
