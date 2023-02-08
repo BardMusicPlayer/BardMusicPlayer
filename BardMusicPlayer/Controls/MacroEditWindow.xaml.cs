@@ -43,6 +43,11 @@ public sealed partial class MacroEditWindow
         MacroFileName.Content = openFileDialog.FileName;
     }
 
+    private void Cancel_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+    
     private void MacroName_TextChanged(object sender, TextChangedEventArgs e)
     {
         _macro.DisplayedText = MacroName.Text;

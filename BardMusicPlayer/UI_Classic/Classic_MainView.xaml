@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="665" d:DesignWidth="880"
+             d:DesignHeight="738" d:DesignWidth="910"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              Width="Auto" Height="Auto" Loaded="Window_Loaded"
@@ -156,7 +156,6 @@
                                   HorizontalAlignment="Right" ToolTip="{StaticResource PLAYLIST_AUTO}" />
                         <Label Content="Auto-play" Grid.Column="9" Height="Auto" VerticalAlignment="Center"
                                ToolTip="{StaticResource PLAYLIST_AUTO}" />
-
                     </Grid>
                 </Grid>
             </Grid>
@@ -168,7 +167,7 @@
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="White">
+                    <Grid Background="White">
                             <controls:BardView x:Name="BardsList" />
                         </Grid>
                     </TabItem>
@@ -202,7 +201,7 @@
                                     <ComboBox Margin="90,28,0,0" Grid.Row="2" x:Name="Autostart_source"
                                               SelectionChanged="Autostart_source_SelectionChanged" Background="White"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" Width="100"
-                                              Padding="5px" ToolTip="{StaticResource LO_AUTOSTART}">
+                                              Padding="5" ToolTip="{StaticResource LO_AUTOSTART}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
@@ -210,7 +209,6 @@
                                               Content="Hypnotoad Compatibility" Unchecked="AutoequipDalamud_Checked"
                                               Checked="AutoequipDalamud_Checked"
                                               ToolTip="{StaticResource LO_AUTOEQPLGN}" />
-
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="0" Grid.Column="1" Header="Playback">
@@ -241,7 +239,7 @@
                                               DisplayMemberPath="Value" Background="White"
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120"
-                                              Padding="5px" ToolTip="{StaticResource PL_MIDIINPUT}">
+                                              Padding="5" ToolTip="{StaticResource PL_MIDIINPUT}">
                                         <ComboBoxItem>None</ComboBoxItem>
                                     </ComboBox>
                                     <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
@@ -271,7 +269,7 @@
                             <!--
                             <Label Grid.Row="1" Grid.Column="0" Content="Beats per minute" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="Statistics_BPM_Label" />
--->
+                            -->
                             <Label Grid.Row="1" Grid.Column="0" Content="Total tracks" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="Statistics_Total_Tracks_Label" />
 
@@ -283,7 +281,7 @@
                             <!--
                             <Label Grid.Row="5" Grid.Column="0" Content="Note per second" />
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
--->
+                            -->
                             <Label Grid.Row="7" Grid.Column="0" Content="Song functions:" />
                             <Button Grid.Row="7" Grid.Column="1" Content="Export current song as Midi"
                                     Click="ExportAsMidi" Height="Auto" Width="250" Background="White" />
@@ -459,7 +457,7 @@
                 </Grid>
                 <!-- End Track Selection-->
                 <Button Grid.Column="4" Content="All tracks" x:Name="all_tracks_button" Click="all_tracks_button_Click"
-                        Background="White" Height="Auto" HorizontalAlignment="Right" Width="80" FontSize="12"
+                        Background="White" Height="Auto" HorizontalAlignment="Right" Width="80"
                         Padding="0" />
             </Grid>
             <!-- Playbar Row -->
@@ -497,18 +495,18 @@
             </Grid>
 
 
-            <!-- Play Control Row-->
+            <!-- Play Control Row -->
             <Grid Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="25" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!-- Controls -->
-                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" Background="White" FontSize="26"
-                        HorizontalAlignment="Left" VerticalAlignment="Center" Height="50" Width="75"
+                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" Style="{StaticResource PlayButton}" Background="White"
+                        HorizontalAlignment="Center" VerticalAlignment="Top" Height="60" Width="75"
                         Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown" />
                 <Button Grid.Row="1" x:Name="Macro_Button" Content="Macro" Background="White"
-                        HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="75"
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="25" Width="75"
                         Click="Macro_Button_Click" />
             </Grid>
             <!-- Instrument Info Row -->

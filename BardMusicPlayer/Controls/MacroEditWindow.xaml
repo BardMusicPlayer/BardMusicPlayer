@@ -5,31 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MacroEditWindow" WindowStyle="ToolWindow" Height="100" Width="400">
+        Title="MacroEditWindow" WindowStyle="ToolWindow" Height="200" Width="400" Background="{StaticResource BMPSuiteLightGrey}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Macro Name" />
-        <TextBox Grid.Row="0" Grid.Column="1" x:Name="MacroName" HorizontalAlignment="Stretch"
-                 TextChanged="MacroName_TextChanged" Padding="5" Background="White" />
+        <Label Grid.Row="0" Grid.Column="1" Content="Macro Name:" />
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="MacroName" HorizontalAlignment="Stretch"
+                 TextChanged="MacroName_TextChanged" Background="White" Padding="5"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Content="Macro File" Background="White" />
+        <Label Grid.Row="2" Grid.Column="1" Content="Macro Path:"/>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Label x:Name="MacroFileName" Background="White" Padding="5"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" x:Name="MacroFileName" />
-            <Button Grid.Column="1" Click="Button_Click" Content="Select File" Background="White" />
+            <Button Grid.Column="0" Content="Select File" Click="Button_Click" Background="White" />
+            <Button Grid.Column="2" Content="Close" Click="Cancel_Click" Background="White" />
         </Grid>
     </Grid>
 </Window>

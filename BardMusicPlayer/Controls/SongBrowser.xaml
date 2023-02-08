@@ -23,7 +23,7 @@
 
             <Label Grid.Column="0" Content="Path:" HorizontalAlignment="Left" />
             <TextBox Grid.Column="1" x:Name="SongPath" Background="White" Text=""
-                     Margin="-50,0 10,0" Padding="5px" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                     Margin="-50,0 10,0" Padding="5" VerticalAlignment="Center" HorizontalAlignment="Stretch"
                      PreviewTextInput="SongPath_PreviewTextInput" />
             <Button Grid.Column="2" Content="..." Background="White" Margin="-4,0 4,0"
                     Click="Button_Click" Height="18" Padding="5" />
@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left" />
             <TextBox Grid.Column="1" Text="" x:Name="SongSearch" Background="White"
-                     Margin="-50,0 10,0" Padding="5px" VerticalAlignment="Center"
+                     Margin="-50,0 10,0" Padding="5" VerticalAlignment="Center"
                      PreviewTextInput="SongSearch_PreviewTextInput" />
         </Grid>
         <Grid Grid.Row="2" Background="White">

@@ -62,8 +62,8 @@
                 <DataTemplate DataType="{x:Type performance:Performer}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="25" />
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
@@ -82,13 +82,12 @@
                             <ColumnDefinition Width="10" />     <!-- 12 spacer-->
                             <ColumnDefinition Width="Auto" />   <!-- 13 -->
                         </Grid.ColumnDefinitions>
-
-                        <materialDesign:PackIcon
-                            Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                            MouseDown="Bard_MouseDown"
-                            VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Kind="MenuOpen" Padding="0" />
-
+                        <Button Grid.Column="1" Grid.Row="1" Height="Auto" Width="Auto"
+                                Padding="0" Margin="0,-5,0,0"
+                                VerticalAlignment="Top" HorizontalAlignment="Center"
+                                MouseDown="Bard_MouseClick">
+                                <materialDesign:PackIcon Kind="MenuOpen" />
+                        </Button>
                         <TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding PlayerName}" MouseDown="Bard_MouseDown" />
                         <TextBlock Grid.Column="3" Grid.Row="1"
                                    Text="{Binding HomeWorld, Mode=OneTime, StringFormat=m\\:ss}"
@@ -129,14 +128,14 @@
                                                      PreviewMouseUp="TrackNumericUpDown_MouseUp"
                                                      Value="{Binding TrackNumber}"
                                                      Padding="0" Width="Auto" Height="12"
-                                                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center" VerticalAlignment="Top"
                                                      Margin="0,0,1,0" />
                         <!--<TextBlock Grid.Column="9" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
                         <controls:OctaveNumericUpDown Grid.Column="9" Grid.Row="1" x:Name="OctaveControl"
                                                       PreviewMouseUp="OctaveControl_PreviewMouseUp"
                                                       Value="{Binding OctaveShift}"
                                                       Padding="0" Width="Auto" Height="12"
-                                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
 
                         <TextBlock Grid.Column="11" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
