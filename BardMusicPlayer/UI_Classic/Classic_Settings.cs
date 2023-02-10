@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 
 namespace BardMusicPlayer.UI_Classic;
 
@@ -14,7 +17,7 @@ public partial class Classic_MainView
     /// </summary>
     private void LoadConfig(bool reload = false)
     {
-        AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
+        AutoPlay_CheckBox.IsChecked   = BmpPigeonhole.Instance.PlaylistAutoPlay;
 
         //Playback
         HoldNotesBox.IsChecked        = BmpPigeonhole.Instance.HoldNotes;
@@ -28,7 +31,7 @@ public partial class Classic_MainView
             MIDI_Input_DeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
             MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
         }
-        LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
+        LiveMidiDelay.IsChecked        = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
         //Misc
         Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
@@ -37,6 +40,10 @@ public partial class Classic_MainView
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
+        
+        //UI
+        EnableDarkMode.IsChecked       = BmpPigeonhole.Instance.DarkStyle;
+
     }
 
     #region Playback
@@ -98,6 +105,31 @@ public partial class Classic_MainView
     private void KeepTrackSettingsBox_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.EnsembleKeepTrackSetting = KeepTrackSettingsBox.IsChecked ?? false;
+    }
+    #endregion
+    
+    #region UI
+    private void EnableDarkMode_Checked(object sender, RoutedEventArgs e)
+    {
+        BmpPigeonhole.Instance.DarkStyle = EnableDarkMode.IsChecked ?? false;
+        var paletteHelper = new PaletteHelper();
+        var theme = paletteHelper.GetTheme();
+        
+        if (BmpPigeonhole.Instance.DarkStyle) {
+            theme.SetBaseTheme(Theme.Dark);
+            theme.SetPrimaryColor(Colors.DarkOrange);
+            theme.SetSecondaryColor(Colors.Blue);
+            //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
+            paletteHelper.SetTheme(theme);
+        }
+        else
+        {
+            theme.SetBaseTheme(Theme.Light);
+            theme.SetPrimaryColor(Colors.LightSlateGray);
+            theme.SetSecondaryColor(Colors.Green);
+            //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
+            paletteHelper.SetTheme(theme);
+        }
     }
     #endregion
 }

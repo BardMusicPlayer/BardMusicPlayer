@@ -6,8 +6,8 @@
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
 
-        TextElement.FontFamily="{DynamicResource robotoRegularFont}"
-        FontFamily="{DynamicResource robotoRegularFont}"
+        TextElement.FontFamily="{DynamicResource RobotoRegularFont}"
+        FontFamily="{DynamicResource RobotoRegularFont}"
 
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"

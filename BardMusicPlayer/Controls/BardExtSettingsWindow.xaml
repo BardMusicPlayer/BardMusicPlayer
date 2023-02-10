@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
         mc:Ignorable="d"
         Title="BardExtSettingsWindow" Height="400" Width="400" ResizeMode="NoResize" WindowStyle="ToolWindow"
-        Background="{StaticResource BMPSuiteLightGrey}">
+        Background="{DynamicResource BMPSuiteBackground}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -56,7 +56,6 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post song title:" />
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="Songtitle_Chat_Type" HorizontalAlignment="Left"
-                                  Background="White"
                                   VerticalAlignment="Stretch" Width="80" Padding="5"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>Say</ComboBoxItem>
@@ -64,14 +63,12 @@
                             <ComboBoxItem>Party</ComboBoxItem>
                         </ComboBox>
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="Songtitle_Chat_Prefix" Text="♪" Width="30"
-                                 Padding="5" Background="White"
+                                 Padding="5"
                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" />
-                        <Button Grid.Row="1" Grid.Column="4" Content="Send Title" Click="PostSongTitle_Click"
-                                Background="White" />
+                        <Button Grid.Row="1" Grid.Column="4" Content="Send Title" Click="PostSongTitle_Click"/>
                         <Label Grid.Row="1" Grid.Column="6" Content="AutoPost" HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="Songtitle_Post_Type" Text="AutoPost via"
-                                  Background="White"
                                   HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="45" Padding="5"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged">
                             <ComboBoxItem>Off</ComboBoxItem>
@@ -103,7 +100,6 @@
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post a message in chat:" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Chat Type:" VerticalAlignment="Center" />
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="Chat_Type" HorizontalAlignment="Left"
-                                  Background="White"
                                   VerticalAlignment="Top" Width="120" Padding="5">
                             <ComboBoxItem>Say</ComboBoxItem>
                             <ComboBoxItem>Yell</ComboBoxItem>
@@ -114,7 +110,6 @@
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Text Message:" />
                         <TextBox Grid.Row="2" Grid.Column="1" x:Name="ChatInputText" KeyDown="ChatInputText_KeyDown"
-                                 Background="White"
                                  Height="Auto" Width="240" Padding="5" />
                         <Separator Grid.Row="4" Grid.ColumnSpan="8" Grid.Column="0" />
                     </Grid>
@@ -125,9 +120,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Lyrics Track Number:" />
-                        <controls:NumericUpDown Grid.Column="1" x:Name="Lyrics_TrackNr" Background="White"
-                                                Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                FontSize="8"
+                        <controls:NumericUpDown Grid.Column="1" x:Name="Lyrics_TrackNr" Background="{DynamicResource MaterialDesignBackground}"
+                                                Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="8"
                                                 PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"
                                                 ToolTip="Enables the lyrics parsing &#13;0 means stop lyrics parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)" />
                     </Grid>
@@ -156,12 +150,9 @@
                             <ColumnDefinition Width="50" />
                             <ColumnDefinition Width="90" />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" x:Name="Save_CPU" Content="Set" Click="Save_CPU_Click"
-                                Background="White" Padding="0" />
-                        <Button Grid.Column="1" x:Name="Clear_CPU" Content="Clear" Click="Clear_CPU_Click"
-                                Background="White" Padding="0" />
-                        <Button Grid.Column="2" x:Name="Reset_CPU" Content="All Processors" Click="Reset_CPU_Click"
-                                Background="White" Padding="0" />
+                        <Button Grid.Column="0" x:Name="Save_CPU" Content="Set" Click="Save_CPU_Click" Padding="0" />
+                        <Button Grid.Column="1" x:Name="Clear_CPU" Content="Clear" Click="Clear_CPU_Click" Padding="0" />
+                        <Button Grid.Column="2" x:Name="Reset_CPU" Content="All Processors" Click="Reset_CPU_Click" Padding="0" />
                     </Grid>
                 </Grid>
             </TabItem>

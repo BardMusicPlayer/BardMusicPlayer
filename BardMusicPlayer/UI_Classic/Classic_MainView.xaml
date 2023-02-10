@@ -10,7 +10,7 @@
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              Width="Auto" Height="Auto" Loaded="Window_Loaded"
-             Background="{StaticResource BMPSuiteLightGrey}">
+             Background="{DynamicResource BMPSuiteBackground}">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -54,23 +54,23 @@
                         <ColumnDefinition MaxWidth="20" />
                     </Grid.ColumnDefinitions>
                     <Label Content="PLAYLIST" Height="25" FontSize="14" Grid.Column="0" />
-                    <Button x:Name="Playlist_New_Button" Background="White" Padding="0"
+                    <Button x:Name="Playlist_New_Button" Padding="0"
                             Click="Playlist_New_Button_Click" Content="New" ToolTip="{StaticResource PLAYLIST_NEW}"
                             Height="20" Width="40"
                             Grid.Row="0" Grid.Column="1" />
-                    <Button x:Name="Playlist_Add_Button" Background="White" Padding="0"
+                    <Button x:Name="Playlist_Add_Button" Padding="0"
                             Click="Playlist_Add_Button_Click" Content="+" ToolTip="{StaticResource PLAYLIST_ADD}"
                             Height="20" Width="20"
                             Grid.Row="0" Grid.Column="2" PreviewMouseRightButtonDown="Playlist_Add_Button_RightClick" />
-                    <Button x:Name="Playlist_Remove_Button" Background="White" Padding="0"
+                    <Button x:Name="Playlist_Remove_Button" Padding="0"
                             Click="Playlist_Remove_Button_Click" Content="-" ToolTip="{StaticResource PLAYLIST_REM}"
                             Height="20" Width="20"
                             Grid.Row="0" Grid.Column="3" />
-                    <Button x:Name="Playlist_Delete_Button" Background="White" Padding="0"
+                    <Button x:Name="Playlist_Delete_Button" Padding="0"
                             Click="Playlist_Delete_Button_Click" Content="X" ToolTip="{StaticResource PLAYLIST_DEL}"
                             Height="20" Width="20"
                             Grid.Row="0" Grid.Column="4" />
-                    <Button x:Name="Playlist_Open_Button" Background="White" Padding="0"
+                    <Button x:Name="Playlist_Open_Button" Padding="0"
                             Click="MenuButton_PreviewMouseLeftButtonDown" Content="..." Height="20" Width="20"
                             Grid.Row="0" Grid.Column="5"
                             ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
@@ -92,7 +92,7 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <DataGrid x:Name="PlaylistContainer" Background="White" Grid.Row="1" Grid.ColumnSpan="6"
+                    <DataGrid x:Name="PlaylistContainer" Background="{DynamicResource MaterialDesignBackground}" Grid.Row="1" Grid.ColumnSpan="6"
                               Grid.Column="0"
                               AutoGenerateColumns="False"
                               PreviewMouseDoubleClick="PlaylistContainer_PreviewMouseDoubleClick"
@@ -132,22 +132,20 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="PlaylistRepeat_Button" Grid.Column="1" Click="PlaylistRepeat_Button_Click"
-                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_REPEAT}"
-                                Background="White" Padding="0" >
+                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_REPEAT}"  Padding="0" >
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Sync" />
                             </StackPanel>
                         </Button>
                         
                         <Button x:Name="PlaylistShuffle_Button" Grid.Column="3" Click="PlaylistShuffle_Button_Click"
-                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_SHUFFLE}"
-                                Background="White" Padding="0" >
+                                Height="Auto" Opacity="0.5" ToolTip="{StaticResource PLAYLIST_SHUFFLE}" Padding="0" >
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ShuffleVariant" />
                             </StackPanel>
                         </Button>
                         
-                        <Button Grid.Column="5" x:Name="SkipSong_Button" Background="White" Width="Auto" Height="25"
+                        <Button Grid.Column="5" x:Name="SkipSong_Button" Width="Auto" Height="25"
                                 Padding="0" VerticalAlignment="Center" Content="Skip" Click="SkipSong_Button_Click"
                                 ToolTip="{StaticResource PLAYLIST_SKIP}" />
 
@@ -167,13 +165,14 @@
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="White">
+                        <Grid Background="{DynamicResource MaterialDesignBackground}">
                             <controls:BardView x:Name="BardsList" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Settings" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{StaticResource BMPSuiteLightGrey}">
+                        <Grid Background="{DynamicResource BMPSuiteBackground}">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="200" />
                                 <RowDefinition Height="200" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -199,7 +198,7 @@
                                     <Label Margin="10,28,0,0" Grid.Row="2" Content="Autostart"
                                            HorizontalAlignment="Left" ToolTip="{StaticResource LO_AUTOSTART}" />
                                     <ComboBox Margin="90,28,0,0" Grid.Row="2" x:Name="Autostart_source"
-                                              SelectionChanged="Autostart_source_SelectionChanged" Background="White"
+                                              SelectionChanged="Autostart_source_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" Width="100"
                                               Padding="5" ToolTip="{StaticResource LO_AUTOSTART}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
@@ -236,7 +235,7 @@
                                            HorizontalAlignment="Left" />
                                     <ComboBox Margin="100,10,0,0" Grid.Row="4" x:Name="MIDI_Input_DeviceBox"
                                               ItemsSource="{Binding}"
-                                              DisplayMemberPath="Value" Background="White"
+                                              DisplayMemberPath="Value"
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120"
                                               Padding="5" ToolTip="{StaticResource PL_MIDIINPUT}">
@@ -248,10 +247,23 @@
                                               ToolTip="{StaticResource PL_LIVE}" />
                                 </Grid>
                             </GroupBox>
+                            <GroupBox Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label Margin="0,10,80,0" Grid.Row="0" Content="Dark Mode"
+                                           HorizontalAlignment="Right" ToolTip="{StaticResource UI_DARKMODE}" />
+                                    <ToggleButton Margin="0,10,20,0" Grid.Row="0" x:Name="EnableDarkMode"
+                                           Unchecked="EnableDarkMode_Checked" Checked="EnableDarkMode_Checked"
+                                           HorizontalAlignment="Right" ToolTip="{StaticResource UI_DARKMODE}" 
+                                           Padding="0" Width="60" Height="25" />
+                                </Grid>
+                            </GroupBox>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Statistics" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{StaticResource BMPSuiteLightGrey}">
+                        <Grid Background="{DynamicResource BMPSuiteBackground}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="25" />
@@ -284,11 +296,11 @@
                             -->
                             <Label Grid.Row="7" Grid.Column="0" Content="Song functions:" />
                             <Button Grid.Row="7" Grid.Column="1" Content="Export current song as Midi"
-                                    Click="ExportAsMidi" Height="Auto" Width="250" Background="White" />
+                                    Click="ExportAsMidi" Height="Auto" Width="250" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Preview" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{StaticResource BMPSuiteLightGrey}">
+                        <Grid Background="{DynamicResource BMPSuiteBackground}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="30" />
@@ -322,7 +334,7 @@
                                       RowEditEnding="Siren_Lyrics_RowEditEnding"
                                       PreviewMouseDown="Siren_Lyrics_PreviewMouseRightButtonDown"
                                       AutoGenerateColumns="False" x:Name="Siren_Lyrics"
-                                      Background="White">
+                                      Background="{DynamicResource MaterialDesignBackground}" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Timestamp"
                                                         Binding="{Binding time, Mode=TwoWay, StringFormat ={}{0:HH:mm:ss.fff} }" />
@@ -369,23 +381,16 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" x:Name="Siren_Load" Content="Load" Click="Siren_Load_Click"
-                                        Background="White" Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="1" x:Name="Siren_Play" Content="Play" Click="Siren_Play_Click"
-                                        Background="White" Padding="0" Margin="2,0,1,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="2" x:Name="Siren_Pause" Content="Pause" Click="Siren_Pause_Click"
-                                        Background="White" Padding="0" Margin="1,0,2,0"
-                                        PreviewMouseDown="Siren_Pause_PreviewMouseDown" Height="20" Width="Auto" />
-                                <Button Grid.Column="3" x:Name="Siren_Stop" Content="Stop" Click="Siren_Stop_Click"
-                                        Background="White" Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="6" x:Name="Siren_SaveLRC" Content="Save Lrc"
-                                        Click="Siren_Save_LRC_Click" Background="White" Margin="-40,0,0,0" Height="20"
-                                        Width="80" />
+                                <Button Grid.Column="0" x:Name="Siren_Load" Content="Load" Click="Siren_Load_Click" Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
+                                <Button Grid.Column="1" x:Name="Siren_Play" Content="Play" Click="Siren_Play_Click" Padding="0" Margin="2,0,1,0" Height="20" Width="Auto" />
+                                <Button Grid.Column="2" x:Name="Siren_Pause" Content="Pause" Click="Siren_Pause_Click" PreviewMouseDown="Siren_Pause_PreviewMouseDown" Padding="0" Margin="1,0,2,0" Height="20" Width="Auto" />
+                                <Button Grid.Column="3" x:Name="Siren_Stop" Content="Stop" Click="Siren_Stop_Click" Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
+                                <Button Grid.Column="6" x:Name="Siren_SaveLRC" Content="Save Lrc" Click="Siren_Save_LRC_Click" Margin="-40,0,0,0" Height="20" Width="80" />
                             </Grid>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Browser" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{StaticResource BMPSuiteLightGrey}">
+                        <Grid Background="{DynamicResource BMPSuiteBackground}">
                             <controls:SongBrowser x:Name="SongBrowser" />
                         </Grid>
                     </TabItem>
@@ -404,17 +409,18 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" x:Name="Rewind" Style="{DynamicResource MaterialDesignOutlinedButton}"
                         Content="⏪" Click="Rewind_Click" Height="Auto" Margin="2,0,3,0" Padding="0" />
-                <TextBox Grid.Column="1" x:Name="SongName" Background="White"
+                <TextBox Grid.Column="1" x:Name="SongName"
                          PreviewMouseDown="SongName_PreviewMouseDown" Height="30" TextWrapping="Wrap" Text="Song Name"
                          FontSize="16" TextAlignment="Center" VerticalAlignment="Center" UseLayoutRounding="True"
                          Margin="3,0,5,0" />
+
                 <!-- Track Selection-->
                 <Grid Grid.Column="2" HorizontalAlignment="Left" Width="38">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="track_txtNum" Background="White" Padding="0"
+                    <TextBox Grid.Column="0" x:Name="track_txtNum" Padding="0"
                              x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged"
                              KeyUp="track_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
                              HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
@@ -437,7 +443,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="octave_txtNum" Background="White" Padding="0"
+                    <TextBox Grid.Column="0" x:Name="octave_txtNum" Padding="0"
                              x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged"
                              KeyUp="octave_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
                              HorizontalAlignment="Right" Width="28" Height="25" VerticalAlignment="Top" />
@@ -456,9 +462,7 @@
                     </Grid>
                 </Grid>
                 <!-- End Track Selection-->
-                <Button Grid.Column="4" Content="All tracks" x:Name="all_tracks_button" Click="all_tracks_button_Click"
-                        Background="White" Height="Auto" HorizontalAlignment="Right" Width="80"
-                        Padding="0" />
+                <Button Grid.Column="4" Content="All tracks" x:Name="all_tracks_button" Click="all_tracks_button_Click" Height="Auto" HorizontalAlignment="Right" Width="80" Padding="0" />
             </Grid>
             <!-- Playbar Row -->
             <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
@@ -502,10 +506,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!-- Controls -->
-                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" Style="{StaticResource PlayButton}" Background="White"
+                <Button Grid.Row="0" x:Name="Play_Button" Content="▶" Style="{StaticResource PlayButton}"
                         HorizontalAlignment="Center" VerticalAlignment="Top" Height="60" Width="75"
                         Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown" />
-                <Button Grid.Row="1" x:Name="Macro_Button" Content="Macro" Background="White"
+                <Button Grid.Row="1" x:Name="Macro_Button" Content="Macro"
                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="25" Width="75"
                         Click="Macro_Button_Click" />
             </Grid>

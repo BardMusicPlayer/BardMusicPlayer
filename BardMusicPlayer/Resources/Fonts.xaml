@@ -5,6 +5,6 @@
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <FontFamily x:Key="robotoRegularFont">/resources/fonts/roboto-regular.ttf#Roboto</FontFamily>
-    <FontFamily x:Key="robotoBoldFont">/resources/fonts/roboto-bold.ttf#Roboto Bold</FontFamily>
+    <FontFamily x:Key="RobotoRegularFont">/resources/fonts/roboto-regular.ttf#Roboto</FontFamily>
+    <FontFamily x:Key="RobotoBoldFont">/resources/fonts/roboto-bold.ttf#Roboto Bold</FontFamily>
 </ResourceDictionary>

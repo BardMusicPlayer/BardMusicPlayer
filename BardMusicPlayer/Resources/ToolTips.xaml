@@ -33,4 +33,6 @@
     <sys:String x:Key="PL_MIDIINPUT" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
     <sys:String x:Key="PL_LIVE" xml:space="preserve">Improves live play (should be disabled when playing a midi)&#13;Will be set/unset after loading a song</sys:String>
 
+    <!-- Settings: UI-->
+    <sys:String x:Key="UI_DARKMODE" xml:space="preserve">Toggle Dark Mode Styling</sys:String>
 </ResourceDictionary>
