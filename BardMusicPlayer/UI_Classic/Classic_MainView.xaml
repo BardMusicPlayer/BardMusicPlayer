@@ -92,7 +92,7 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <DataGrid x:Name="PlaylistContainer" Background="{DynamicResource MaterialDesignBackground}" Grid.Row="1" Grid.ColumnSpan="6"
+                    <DataGrid x:Name="PlaylistContainer" Grid.Row="1" Grid.ColumnSpan="6"
                               Grid.Column="0"
                               AutoGenerateColumns="False"
                               PreviewMouseDoubleClick="PlaylistContainer_PreviewMouseDoubleClick"
@@ -165,7 +165,7 @@
                 </Grid.ColumnDefinitions>
                 <TabControl Grid.ColumnSpan="2">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{DynamicResource MaterialDesignBackground}">
+                        <Grid>
                             <controls:BardView x:Name="BardsList" />
                         </Grid>
                     </TabItem>
