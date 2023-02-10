@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
         mc:Ignorable="d"
         Title="BardExtSettingsWindow" Height="400" Width="400" ResizeMode="NoResize" WindowStyle="ToolWindow"
-        Background="{DynamicResource BMPSuiteBackground}">
+        Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />

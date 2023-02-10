@@ -5,7 +5,7 @@
         SizeToContent="WidthAndHeight"
         MinWidth="300"
         MinHeight="100"
-        Background="{DynamicResource BMPSuiteBackground}"
+        Background="{DynamicResource MaterialDesignPaper}"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanMinimize">
     <Grid>
@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="1" x:Name="InfoText" />
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ResponseTextBox" Padding="5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ResponseTextBox" Padding="5" Background="{DynamicResource MaterialDesignBackground}"/>
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

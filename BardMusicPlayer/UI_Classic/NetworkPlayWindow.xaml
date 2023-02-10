@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
         mc:Ignorable="d"
+        Background="{DynamicResource MaterialDesignBackground}"
         Title="NetworkPlayWindow" Height="450" Width="800">
     <Grid>
         <controls:NetworkControl />

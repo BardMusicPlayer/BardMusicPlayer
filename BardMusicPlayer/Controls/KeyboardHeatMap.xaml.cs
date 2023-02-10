@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Transmogrify.Song;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -199,19 +200,39 @@ public partial class KeyboardHeatMap
             StartPoint = blk ? new Point(1, 0) : new Point(1, 1),
             EndPoint   = blk ? new Point(1, 1) :new Point(1, 0)
         };
-
-        if (!blk)
+        
+        
+        if (BmpPigeonhole.Instance.DarkStyle)
         {
-            brush.GradientStops.Add(new GradientStop(Colors.Red, 0));
-            brush.GradientStops.Add(new GradientStop(Colors.Red, count));
-            brush.GradientStops.Add(new GradientStop(Colors.White, count));
+            if (!blk)
+            {
+                brush.GradientStops.Add(new GradientStop(Colors.Firebrick, 0));
+                brush.GradientStops.Add(new GradientStop(Colors.Firebrick, count));
+                brush.GradientStops.Add(new GradientStop(Colors.White, count));
+            }
+            else
+            {
+                brush.GradientStops.Add(new GradientStop(Colors.Gold, 0));
+                brush.GradientStops.Add(new GradientStop(Colors.Gold, count));
+                brush.GradientStops.Add(new GradientStop(Colors.Black, count));
+            }
         }
         else
         {
-            brush.GradientStops.Add(new GradientStop(Colors.Yellow, 0));
-            brush.GradientStops.Add(new GradientStop(Colors.Yellow, count));
-            brush.GradientStops.Add(new GradientStop(Colors.Black, count));
+            if (!blk)
+            {
+                brush.GradientStops.Add(new GradientStop(Colors.Red, 0));
+                brush.GradientStops.Add(new GradientStop(Colors.Red, count));
+                brush.GradientStops.Add(new GradientStop(Colors.White, count));
+            }
+            else
+            {
+                brush.GradientStops.Add(new GradientStop(Colors.Yellow, 0));
+                brush.GradientStops.Add(new GradientStop(Colors.Yellow, count));
+                brush.GradientStops.Add(new GradientStop(Colors.Black, count));
+            }
         }
+
         return brush;
     }
 

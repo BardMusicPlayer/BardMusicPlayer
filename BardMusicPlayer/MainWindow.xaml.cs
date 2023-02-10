@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.UI_Classic;
@@ -30,25 +33,33 @@ public partial class MainWindow
             DarkModeStyle();
     }
 
-    private static void LightModeStyle()
+    public static void LightModeStyle()
     {
+        var baseTheme = Theme.Light;
+        
+        const PrimaryColor primary = PrimaryColor.BlueGrey;
+        var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
+
+        const SecondaryColor secondary = SecondaryColor.Teal;
+        var secondaryColor = SwatchHelper.Lookup[(MaterialDesignColor)secondary];
+
+        var theme = Theme.Create(baseTheme, primaryColor, secondaryColor);
         var paletteHelper = new PaletteHelper();
-        var theme = paletteHelper.GetTheme();
-        theme.SetBaseTheme(Theme.Light);
-        theme.SetPrimaryColor(Colors.LightSlateGray);
-        theme.SetSecondaryColor(Colors.Green);
-        //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
         paletteHelper.SetTheme(theme);
     }
 
-    private static void DarkModeStyle()
+    public static void DarkModeStyle()
     {
+        var baseTheme = Theme.Dark;
+        
+        const PrimaryColor primary = PrimaryColor.Grey;
+        var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
+
+        const SecondaryColor secondary = SecondaryColor.Teal;
+        var secondaryColor = SwatchHelper.Lookup[(MaterialDesignColor)secondary];
+
+        var theme = Theme.Create(baseTheme, primaryColor, secondaryColor);
         var paletteHelper = new PaletteHelper();
-        var theme = paletteHelper.GetTheme();
-        theme.SetBaseTheme(Theme.Dark);
-        theme.SetPrimaryColor(Colors.DarkOrange);
-        theme.SetSecondaryColor(Colors.Blue);
-        //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
         paletteHelper.SetTheme(theme);
     }
 }

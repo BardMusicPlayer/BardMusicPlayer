@@ -6,6 +6,7 @@
         xmlns:performance="clr-namespace:BardMusicPlayer.Maestro.Old.Performance;assembly=BardMusicPlayer.Maestro"
         mc:Ignorable="d"
         ResizeMode="NoResize"
+        Background="{DynamicResource MaterialDesignBackground}"
         Title="MacroLaunchpad" Height="450" Width="350">
     <Grid>
         <Grid.RowDefinitions>

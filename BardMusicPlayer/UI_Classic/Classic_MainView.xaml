@@ -99,7 +99,7 @@
                               AllowDrop="true"
                               VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
+                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                                 <EventSetter Event="Click" Handler="PlaylistContainer_HeaderClick" />
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
@@ -170,7 +170,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Settings" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{DynamicResource BMPSuiteBackground}">
+                        <Grid Background="{DynamicResource MaterialDesignPaper}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="200" />
                                 <RowDefinition Height="200" />
@@ -263,7 +263,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Statistics" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{DynamicResource BMPSuiteBackground}">
+                        <Grid Background="{DynamicResource MaterialDesignPaper}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="25" />
@@ -300,7 +300,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Preview" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{DynamicResource BMPSuiteBackground}">
+                        <Grid Background="{DynamicResource MaterialDesignPaper}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="30" />
@@ -390,7 +390,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Browser" Width="Auto" Height="35" Padding="0">
-                        <Grid Background="{DynamicResource BMPSuiteBackground}">
+                        <Grid Background="{DynamicResource MaterialDesignBackground}">
                             <controls:SongBrowser x:Name="SongBrowser" />
                         </Grid>
                     </TabItem>

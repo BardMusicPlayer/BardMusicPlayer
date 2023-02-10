@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Edit song" Height="250" Width="400" ResizeMode="NoResize"
-        Background="{DynamicResource BMPSuiteBackground}">
+        Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />

@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
+using BardMusicPlayer;
 using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
@@ -112,24 +114,11 @@ public partial class Classic_MainView
     private void EnableDarkMode_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.DarkStyle = EnableDarkMode.IsChecked ?? false;
-        var paletteHelper = new PaletteHelper();
-        var theme = paletteHelper.GetTheme();
-        
-        if (BmpPigeonhole.Instance.DarkStyle) {
-            theme.SetBaseTheme(Theme.Dark);
-            theme.SetPrimaryColor(Colors.DarkOrange);
-            theme.SetSecondaryColor(Colors.Blue);
-            //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
-            paletteHelper.SetTheme(theme);
-        }
+
+        if (!BmpPigeonhole.Instance.DarkStyle)
+            MainWindow.LightModeStyle();
         else
-        {
-            theme.SetBaseTheme(Theme.Light);
-            theme.SetPrimaryColor(Colors.LightSlateGray);
-            theme.SetSecondaryColor(Colors.Green);
-            //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
-            paletteHelper.SetTheme(theme);
-        }
+            MainWindow.DarkModeStyle();
     }
     #endregion
 }
