@@ -35,8 +35,8 @@ public partial class MainWindow
         var paletteHelper = new PaletteHelper();
         var theme = paletteHelper.GetTheme();
         theme.SetBaseTheme(Theme.Light);
-        //theme.SetPrimaryColor(Colors.LightSlateGray);
-        //theme.SetSecondaryColor(Colors.Green);
+        theme.SetPrimaryColor(Colors.LightSlateGray);
+        theme.SetSecondaryColor(Colors.Green);
         //theme.PrimaryMid = new ColorPair(Colors.Brown, Colors.White);
         paletteHelper.SetTheme(theme);
     }

@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="MacroEditWindow" WindowStyle="ToolWindow" Height="200" Width="400" 
-        Background="{DynamicResource BMPSuiteBackground}">
+        Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
