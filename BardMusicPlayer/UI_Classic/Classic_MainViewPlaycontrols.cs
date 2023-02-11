@@ -82,14 +82,14 @@ public partial class Classic_MainView
         {
             BmpMaestro.Instance.SetTracknumberOnHost(0);
             BmpPigeonhole.Instance.PlayAllTracks = true;
-            all_tracks_button.Background         = Brushes.LightSteelBlue;
+            all_tracks_button.Opacity            = 0.5;
         }
         else
         {
             BmpPigeonhole.Instance.PlayAllTracks = false;
             BmpMaestro.Instance.SetTracknumberOnHost(1);
             NumValue = BmpMaestro.Instance.GetHostBardTrack();
-            all_tracks_button.ClearValue(BackgroundProperty);
+            all_tracks_button.ClearValue(OpacityProperty);
         }
     }
 
