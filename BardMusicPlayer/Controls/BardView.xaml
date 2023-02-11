@@ -6,6 +6,7 @@
              xmlns:performance="clr-namespace:BardMusicPlayer.Maestro.Old.Performance;assembly=BardMusicPlayer.Maestro"
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:BardMusicPlayer.Pigeonhole;assembly=BardMusicPlayer.Pigeonhole"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -25,20 +26,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="5" />
             </Grid.ColumnDefinitions>
-            <Grid.Background>
-                <SolidColorBrush Color="White" />
-            </Grid.Background>
 
-            <Button Grid.Column="1" Margin="0,2 0,1" Background="White" Height="Auto" Content="Open"
+            <Button Grid.Column="1" Margin="0,2 0,1" Height="Auto" Content="Open"
                     ToolTip="Open Instruments"
                     Click="OpenInstrumentButton_Click" />
-            <Button Grid.Column="2" Margin="2,2,2,1" Background="White" Height="Auto" Content="Send Ensemble"
+            <Button Grid.Column="2" Margin="2,2,2,1" Height="Auto" Content="Send Ensemble"
                     ToolTip="Sends ensemble ready check"
                     Click="RdyCheck_Click" />
-            <Button Grid.Column="3" Margin="0,2,0,1" Background="White" Height="Auto" Content="Close"
+            <Button Grid.Column="3" Margin="0,2,0,1" Height="Auto" Content="Close"
                     ToolTip="Close Instruments"
                     Click="CloseInstrumentButton_Click" />
-            <Button Grid.Column="7" Margin="0,2,0,1" Background="White" Height="Auto" Content="..."
+            <Button Grid.Column="7" Margin="0,2,0,1" Height="Auto" Content="..."
                     x:Name="More_Options"
                     Click="MenuButton_PreviewMouseLeftButtonDown"
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
@@ -93,16 +91,39 @@
                                    Text="{Binding HomeWorld, Mode=OneTime, StringFormat=m\\:ss}"
                                    MouseDown="Bard_MouseDown" />
 
+                        
                         <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding TrackInstrument,  StringFormat=m\\:ss}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding PerformerEnabled}" Value="False">
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding PerformerEnabled}" Value="False"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="Red" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding PerformerEnabled}" Value="True">
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding PerformerEnabled}" Value="True"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="GreenYellow" />
-                                        </DataTrigger>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding PerformerEnabled}" Value="False"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="Firebrick"/>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding PerformerEnabled}" Value="True"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="ForestGreen"/>
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
@@ -112,12 +133,34 @@
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding UsesDalamud}" Value="False">
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding UsesDalamud}" Value="False"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="Yellow" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding UsesDalamud}" Value="True">
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding UsesDalamud}" Value="True"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" Value="GreenYellow" />
-                                        </DataTrigger>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding UsesDalamud}" Value="False"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="Gold" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding UsesDalamud}" Value="True"/>
+                                                <Condition Binding="{Binding Source={x:Static local:BmpPigeonhole.Instance}, Path=DarkStyle}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="ForestGreen" />
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>

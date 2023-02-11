@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             Background="{StaticResource BMPSuiteLightGrey}"
+             Background="{DynamicResource MaterialDesignPaper}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
@@ -22,10 +22,10 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" Content="Path:" HorizontalAlignment="Left" />
-            <TextBox Grid.Column="1" x:Name="SongPath" Background="White" Text=""
+            <TextBox Grid.Column="1" x:Name="SongPath" Text=""
                      Margin="-50,0 10,0" Padding="5" VerticalAlignment="Center" HorizontalAlignment="Stretch"
                      PreviewTextInput="SongPath_PreviewTextInput" />
-            <Button Grid.Column="2" Content="..." Background="White" Margin="-4,0 4,0"
+            <Button Grid.Column="2" Content="..." Margin="-4,0 4,0"
                     Click="Button_Click" Height="18" Padding="5" />
         </Grid>
         <Grid Grid.Row="1">
@@ -35,12 +35,12 @@
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left" />
-            <TextBox Grid.Column="1" Text="" x:Name="SongSearch" Background="White"
+            <TextBox Grid.Column="1" Text="" x:Name="SongSearch"
                      Margin="-50,0 10,0" Padding="5" VerticalAlignment="Center"
                      PreviewTextInput="SongSearch_PreviewTextInput" />
         </Grid>
-        <Grid Grid.Row="2" Background="White">
-            <ListView x:Name="SongBrowserContainer" Background="White"
+        <Grid Grid.Row="2" Background="{DynamicResource MaterialDesignBackground}">
+            <ListView x:Name="SongBrowserContainer"
                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="0"
                       ItemsSource="{Binding Path=Title}"
                       PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"

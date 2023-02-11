@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
-using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old;
+using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Siren;
 

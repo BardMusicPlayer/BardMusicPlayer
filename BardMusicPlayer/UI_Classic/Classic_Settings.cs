@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old;
+using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic;
@@ -37,6 +37,10 @@ public partial class Classic_MainView
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
+        
+        //UI
+        EnableDarkMode.IsChecked = BmpPigeonhole.Instance.DarkStyle;
+
     }
 
     #region Playback
@@ -98,6 +102,18 @@ public partial class Classic_MainView
     private void KeepTrackSettingsBox_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.EnsembleKeepTrackSetting = KeepTrackSettingsBox.IsChecked ?? false;
+    }
+    #endregion
+    
+    #region UI
+    private void EnableDarkMode_Checked(object sender, RoutedEventArgs e)
+    {
+        BmpPigeonhole.Instance.DarkStyle = EnableDarkMode.IsChecked ?? false;
+
+        if (!BmpPigeonhole.Instance.DarkStyle)
+            MainWindow.LightModeStyle();
+        else
+            MainWindow.DarkModeStyle();
     }
     #endregion
 }
