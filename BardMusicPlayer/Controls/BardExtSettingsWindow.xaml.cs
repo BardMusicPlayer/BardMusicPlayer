@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.Maestro.Old.Performance;
 using BardMusicPlayer.Maestro.Old;
+using BardMusicPlayer.Maestro.Old.Performance;
 using BardMusicPlayer.Quotidian.Structs;
 
 namespace BardMusicPlayer.Controls;

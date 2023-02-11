@@ -4,28 +4,30 @@
 
     <ResourceDictionary.MergedDictionaries>
         <materialDesign:BundledTheme BaseTheme="Inherit" PrimaryColor="BlueGrey" SecondaryColor="Teal" />
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-        
+        <ResourceDictionary
+            Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+
         <ResourceDictionary Source="../Resources/Fonts.xaml" />
         <ResourceDictionary Source="../Resources/Buttons.xaml" />
         <ResourceDictionary Source="../Resources/Border.xaml" />
         <ResourceDictionary Source="../Resources/GroupBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="13" />
     </Style>
 
     <Style TargetType="GroupBox" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
-    <Style TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}"/>
+    <Style TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}" />
     <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignTabItem}" />
     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedLightButton}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
     </Style>
     <Style TargetType="Button" x:Key="PlayButton" BasedOn="{StaticResource MaterialDesignOutlinedLightButton}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -37,12 +39,12 @@
         </Setter>
     </Style>
     <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
     </Style>
     <Style TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
     </Style>
     <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
     </Style>
 </ResourceDictionary>

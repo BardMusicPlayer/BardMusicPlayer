@@ -1,14 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-
-using BardMusicPlayer;
-using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old;
+using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Pigeonhole;
-using MaterialDesignColors;
-using MaterialDesignThemes.Wpf;
 
 namespace BardMusicPlayer.UI_Classic;
 
@@ -19,7 +14,7 @@ public partial class Classic_MainView
     /// </summary>
     private void LoadConfig(bool reload = false)
     {
-        AutoPlay_CheckBox.IsChecked   = BmpPigeonhole.Instance.PlaylistAutoPlay;
+        AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
 
         //Playback
         HoldNotesBox.IsChecked        = BmpPigeonhole.Instance.HoldNotes;
@@ -33,7 +28,7 @@ public partial class Classic_MainView
             MIDI_Input_DeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
             MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
         }
-        LiveMidiDelay.IsChecked        = BmpPigeonhole.Instance.LiveMidiPlayDelay;
+        LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
         //Misc
         Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
@@ -44,7 +39,7 @@ public partial class Classic_MainView
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
         
         //UI
-        EnableDarkMode.IsChecked       = BmpPigeonhole.Instance.DarkStyle;
+        EnableDarkMode.IsChecked = BmpPigeonhole.Instance.DarkStyle;
 
     }
 

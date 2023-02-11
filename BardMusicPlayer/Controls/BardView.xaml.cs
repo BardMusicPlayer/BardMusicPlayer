@@ -10,9 +10,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Functions;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.Performance;
-using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
@@ -177,7 +177,7 @@ public partial class BardView
     private void Bard_MouseClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedBard == null)
-                return;
+            return;
         
         var bardExtSettings = new BardExtSettingsWindow(SelectedBard);
         bardExtSettings.Activate();
