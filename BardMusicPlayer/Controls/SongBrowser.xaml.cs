@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 
@@ -21,6 +22,8 @@ public partial class SongBrowser
     {
         InitializeComponent();
         SongPath.Text = BmpPigeonhole.Instance.SongDirectory;
+        SongSearch_PreviewTextInput(null, null);
+        SongSearch.TextChanged += SongSearch_TextChanged;
     }
 
     /// <summary>
@@ -37,6 +40,13 @@ public partial class SongBrowser
         OnLoadSongFromBrowser?.Invoke(this, filename);
     }
 
+    private string GetRelativePath(string basePath, string fullPath)
+    {
+        var baseUri = new Uri(basePath);
+        var fullUri = new Uri(fullPath);
+        return baseUri.MakeRelativeUri(fullUri).ToString();
+    }
+
     /// <summary>
     /// Sets the search parameter
     /// </summary>
@@ -49,9 +59,27 @@ public partial class SongBrowser
 
         var files = Directory.EnumerateFiles(SongPath.Text, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong")).ToArray();
         var list = new List<string>(files);
+        list = list.Select(file => 
+        {
+            var directory = Path.GetDirectoryName(file);
+            if (!directory.Equals(SongPath.Text, StringComparison.OrdinalIgnoreCase))
+            {
+                return Uri.UnescapeDataString(GetRelativePath(SongPath.Text, file));
+            }
+
+            return Path.GetFileName(file);
+        }).ToList();
         if (SongSearch.Text != "")
             list = list.FindAll(s => s.ToLower().Contains(SongSearch.Text.ToLower()));
         SongBrowserContainer.ItemsSource = list;
+    }
+
+    /// <summary>
+    /// Refresh list on any character change
+    /// </summary>
+    private void SongSearch_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        SongSearch_PreviewTextInput(sender, null);
     }
 
     /// <summary>
