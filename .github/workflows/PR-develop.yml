@@ -3,8 +3,6 @@ name: Test PR against develop
 on:
   pull_request:
     branches: [ develop ]
-    paths:
-      - 'BardMusicPlayerApi/**'
 
 jobs:
 
