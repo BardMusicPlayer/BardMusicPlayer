@@ -3,7 +3,8 @@ name: Publish merge against develop
 on:
   push:
     branches: [ develop ]
-
+    paths:
+      - 'BardMusicPlayerApi/**'
 jobs:
 
   build:
@@ -17,6 +18,18 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: recursive
+
+    - name: Check for new commits in submodule repo
+      run: |
+        latest_commit=$(git ls-remote https://github.com/BardMusicPlayer/BardMusicPlayerApi.git refs/heads/develop)
+        current_commit=$(git submodule | grep BardMusicPlayerApi)
+        if [[ $latest_commit != $current_commit ]]; then
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@bardmusicplayer.com"
+          git submodule update --remote
+          git add .
+          git commit -m "Update submodule reference commit"
+        fi
 
     - name: Install .NET
       uses: actions/setup-dotnet@v3
