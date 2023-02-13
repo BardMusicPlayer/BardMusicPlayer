@@ -85,8 +85,12 @@ public sealed partial class BardExtSettingsWindow
             2 => ChatMessageChannelType.Party,
             _ => ChatMessageChannelType.None
         };
-        var songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
-        _performer.game.SendText(chanType, songName);
+
+        if (_performer.SongName != null)
+        {
+            var songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
+            _performer.game.SendText(chanType, songName);
+        }
     }
 
     private void ChatInputText_KeyDown(object sender, KeyEventArgs e)
