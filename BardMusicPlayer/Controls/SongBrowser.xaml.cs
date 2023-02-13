@@ -33,14 +33,17 @@ public partial class SongBrowser
     /// <param name="e"></param>
     private void SongBrowserContainer_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var filename = SongBrowserContainer.SelectedItem as string;
-        if (!File.Exists(filename) || filename == null)
+        if (SongBrowserContainer.SelectedItem is not string selectedFile)
             return;
 
-        OnLoadSongFromBrowser?.Invoke(this, filename);
+        var fullPath = Path.Combine(SongPath.Text, selectedFile);
+        if (File.Exists(fullPath))
+        {
+            OnLoadSongFromBrowser?.Invoke(this, fullPath);
+        }
     }
 
-    private string GetRelativePath(string basePath, string fullPath)
+    private static string GetRelativePath(string basePath, string fullPath)
     {
         var baseUri = new Uri(basePath);
         var fullUri = new Uri(fullPath);
@@ -57,16 +60,16 @@ public partial class SongBrowser
         if (!Directory.Exists(SongPath.Text))
             return;
 
-        var files = Directory.EnumerateFiles(SongPath.Text, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong")).ToArray();
+        var files = Directory.EnumerateFiles(SongPath.Text, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong") || s.EndsWith(".gp*")).ToArray();
         var list = new List<string>(files);
         list = list.Select(file => 
         {
             var directory = Path.GetDirectoryName(file);
-            if (!directory.Equals(SongPath.Text, StringComparison.OrdinalIgnoreCase))
+            if (directory != null && !directory.Equals(SongPath.Text, StringComparison.OrdinalIgnoreCase))
             {
                 return Uri.UnescapeDataString(GetRelativePath(SongPath.Text, file));
             }
-
+            
             return Path.GetFileName(file);
         }).ToList();
         if (SongSearch.Text != "")
