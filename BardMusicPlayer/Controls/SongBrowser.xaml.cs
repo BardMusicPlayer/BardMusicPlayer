@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Input;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 
@@ -69,7 +69,7 @@ public partial class SongBrowser
             {
                 return Uri.UnescapeDataString(GetRelativePath(SongPath.Text, file));
             }
-            
+
             return Path.GetFileName(file);
         }).ToList();
         if (SongSearch.Text != "")
