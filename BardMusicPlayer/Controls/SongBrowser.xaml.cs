@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
@@ -21,6 +22,8 @@ public partial class SongBrowser
     {
         InitializeComponent();
         SongPath.Text = BmpPigeonhole.Instance.SongDirectory;
+        SongSearch_PreviewTextInput(null, null);
+        SongSearch.TextChanged += SongSearch_TextChanged;
     }
 
     /// <summary>
@@ -30,11 +33,21 @@ public partial class SongBrowser
     /// <param name="e"></param>
     private void SongBrowserContainer_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var filename = SongBrowserContainer.SelectedItem as string;
-        if (!File.Exists(filename) || filename == null)
+        if (SongBrowserContainer.SelectedItem is not string selectedFile)
             return;
 
-        OnLoadSongFromBrowser?.Invoke(this, filename);
+        var fullPath = Path.Combine(SongPath.Text, selectedFile);
+        if (File.Exists(fullPath))
+        {
+            OnLoadSongFromBrowser?.Invoke(this, fullPath);
+        }
+    }
+
+    private static string GetRelativePath(string basePath, string fullPath)
+    {
+        var baseUri = new Uri(basePath);
+        var fullUri = new Uri(fullPath);
+        return baseUri.MakeRelativeUri(fullUri).ToString();
     }
 
     /// <summary>
@@ -47,11 +60,29 @@ public partial class SongBrowser
         if (!Directory.Exists(SongPath.Text))
             return;
 
-        var files = Directory.EnumerateFiles(SongPath.Text, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong")).ToArray();
+        var files = Directory.EnumerateFiles(SongPath.Text, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mid") || s.EndsWith(".mml") || s.EndsWith(".mmsong") || s.EndsWith(".gp*")).ToArray();
         var list = new List<string>(files);
+        list = list.Select(file => 
+        {
+            var directory = Path.GetDirectoryName(file);
+            if (directory != null && !directory.Equals(SongPath.Text, StringComparison.OrdinalIgnoreCase))
+            {
+                return Uri.UnescapeDataString(GetRelativePath(SongPath.Text, file));
+            }
+
+            return Path.GetFileName(file);
+        }).ToList();
         if (SongSearch.Text != "")
             list = list.FindAll(s => s.ToLower().Contains(SongSearch.Text.ToLower()));
         SongBrowserContainer.ItemsSource = list;
+    }
+
+    /// <summary>
+    /// Refresh list on any character change
+    /// </summary>
+    private void SongSearch_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        SongSearch_PreviewTextInput(sender, null);
     }
 
     /// <summary>
