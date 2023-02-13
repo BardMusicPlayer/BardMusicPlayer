@@ -3,8 +3,7 @@ name: Publish merge against develop
 on:
   push:
     branches: [ develop ]
-    paths:
-      - 'BardMusicPlayerApi/**'
+
 jobs:
 
   build:
