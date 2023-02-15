@@ -147,7 +147,12 @@ public sealed partial class Classic_MainView
     /// <param name="e"></param>
     private void Siren_Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        if (e.OriginalSource is Slider slider) BmpSiren.Instance.SetVolume((float)slider.Value);
+        if (e.OriginalSource is Slider slider)
+        {
+            slider.Minimum = 0;
+            slider.Maximum = 30;
+            BmpSiren.Instance.SetVolume((float)slider.Value, max:20);
+        }
     }
 
     /// <summary>

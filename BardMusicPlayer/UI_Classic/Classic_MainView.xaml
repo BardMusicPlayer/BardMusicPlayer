@@ -350,7 +350,7 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Content="Volume" HorizontalAlignment="Center" />
-                                <Slider Grid.Row="1" x:Name="Siren_Volume" Minimum="0" Maximum="100"
+                                <Slider Grid.Row="1" x:Name="Siren_Volume" Minimum="0" Maximum="30"
                                         Orientation="Vertical" HorizontalAlignment="Center"
                                         ValueChanged="Siren_Volume_ValueChanged" />
                             </Grid>
