@@ -19,6 +19,7 @@ jobs:
         submodules: recursive
 
     - name: Check for new commits in submodule repo
+      shell: bash
       run: |
         latest_commit=$(git ls-remote https://github.com/BardMusicPlayer/BardMusicPlayerApi.git refs/heads/develop)
         current_commit=$(git submodule | grep BardMusicPlayerApi)
