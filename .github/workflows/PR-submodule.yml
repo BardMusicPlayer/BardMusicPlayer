@@ -1,8 +1,9 @@
-name: Test PR against develop
+name: Test PR against submodule
 
 on:
   pull_request:
-    branches: [ develop ]
+    paths:
+      - 'BardMusicPlayerApi/**'
 
 jobs:
 

@@ -1,9 +1,9 @@
-name: Publish merge against develop
+name: Publish merge against submodule
 
 on:
   push:
-    branches: [ develop ]
-
+    paths:
+      - 'BardMusicPlayerApi/**'
 jobs:
 
   build:
