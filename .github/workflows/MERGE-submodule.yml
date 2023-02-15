@@ -32,6 +32,9 @@ jobs:
           git add .
           git commit -m "Update submodule reference commit"
           git push
+        else
+          echo "No changes to submodule, skipping build step."
+          exit 0
         fi
 
     - name: Install .NET
