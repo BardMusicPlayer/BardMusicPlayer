@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,8 +24,11 @@ public partial class Classic_MainView
 {
     private bool _playlistRepeat;
     private bool _playlistShuffle;
-    private bool _showingPlaylists;     //are we displaying the playlist or the songs
+    private bool _showingPlaylists; //are we displaying the playlist or the songs
+    private bool _autoPlay = BmpPigeonhole.Instance.PlaylistAutoPlay;
     private IPlaylist _currentPlaylist; //the current selected playlist
+    private int _currentShuffleIndex;
+    private List<string> _shuffledPlaylist = new();
 
     /// <summary>
     /// Plays the next song from the playlist
@@ -39,34 +43,57 @@ public partial class Classic_MainView
 
         if (_playlistShuffle)
         {
-            var rnd = new Random();
-            var random = rnd.Next(1, PlaylistContainer.Items.Count);
+            if (_currentShuffleIndex == _shuffledPlaylist.Count - 1)
+            {
+                PlaybackFunctions.StopSong();
+                Play_Button_State();
+                return;
+            }
 
-            if (random == PlaylistContainer.SelectedIndex) 
-                random = (random + 1) % PlaylistContainer.Items.Count;
-            if (random == 0)
-                random = 1;
-            PlaylistContainer.SelectedIndex = random;
+            _currentShuffleIndex++;
+            PlaylistContainer.SelectedIndex = _currentShuffleIndex;
         }
         else
         {
-            if (PlaylistContainer.SelectedIndex is -1 or 0)
+            var nextIndex = PlaylistContainer.SelectedIndex + 1;
+
+            if (nextIndex >= PlaylistContainer.Items.Count)
             {
-                PlaylistContainer.SelectedIndex = 1;
-            }
-            else
-            {
-                if (PlaylistContainer.SelectedIndex == PlaylistContainer.Items.Count - 1)
+                if (_playlistRepeat && (_autoPlay || !_autoPlay && PlaylistContainer.SelectedIndex == PlaylistContainer.Items.Count - 1))
                 {
-                    PlaylistContainer.SelectedIndex = 1;
+                    nextIndex = 0;
                 }
                 else
-                    PlaylistContainer.SelectedIndex += 1;
+                {
+                    PlaybackFunctions.StopSong();
+                    Play_Button_State();
+                    return;
+                }
             }
+
+            PlaylistContainer.SelectedIndex = nextIndex;
         }
+
         PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
         SongName.Text          = PlaybackFunctions.GetSongName();
         InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+
+        // Repeat the playlist if the last song is playing and the repeat button is enabled
+        if (_playlistRepeat && PlaylistContainer.SelectedIndex == 0)
+        {
+            PlaylistContainer.SelectedIndex = PlaylistContainer.Items.Count - 1;
+            PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
+            SongName.Text          = PlaybackFunctions.GetSongName();
+            InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+        }
+    }
+
+    private void PlaylistContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_playlistShuffle)
+        {
+            _currentShuffleIndex = _shuffledPlaylist.IndexOf((string)PlaylistContainer.SelectedItem);
+        }
     }
 
     #region upper playlist button functions
@@ -84,7 +111,7 @@ public partial class Classic_MainView
                 return;
 
             _currentPlaylist              = PlaylistFunctions.CreatePlaylist(inputbox.ResponseText);
-            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
             _showingPlaylists             = false;
             Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
         }
@@ -103,7 +130,7 @@ public partial class Classic_MainView
         if (!PlaylistFunctions.AddFilesToPlaylist(_currentPlaylist))
             return;
 
-        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
         Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
@@ -120,7 +147,7 @@ public partial class Classic_MainView
         if (!PlaylistFunctions.AddFolderToPlaylist(_currentPlaylist))
             return;
 
-        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
         Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
@@ -147,7 +174,7 @@ public partial class Classic_MainView
         }
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
 
-        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
         Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
     }
 
@@ -198,6 +225,11 @@ public partial class Classic_MainView
             PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
             Playlist_Header.Header        = "Playlists";
             _currentPlaylist              = null;
+            if (_playlistShuffle)
+            {
+                _playlistShuffle               = false;
+                PlaylistShuffle_Button.Opacity = 0.5f;
+            }
         }
     }
 
@@ -213,22 +245,10 @@ public partial class Classic_MainView
 
         if (_showingPlaylists)
         {
-            if ((string)PlaylistContainer.SelectedItem == "..")
-                return;
-
             _currentPlaylist              = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
             _showingPlaylists             = false;
-            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
             Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75- _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
-            return;
-        }
-
-        if((string)PlaylistContainer.SelectedItem == "..")
-        {
-            _showingPlaylists             = true;
-            PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
-            Playlist_Header.Header        = "Playlists";
-            _currentPlaylist              = null;
             return;
         }
 
@@ -258,6 +278,11 @@ public partial class Classic_MainView
     /// </summary>
     private void PlaylistContainer_MouseMove(object sender, MouseEventArgs e)
     {
+        if (_playlistShuffle)
+        {
+            return;
+        }
+
         if (sender is TextBlock celltext && e.LeftButton == MouseButtonState.Pressed && !_showingPlaylists)
         {
             DragDrop.DoDragDrop(PlaylistContainer, celltext, DragDropEffects.Move);
@@ -270,21 +295,32 @@ public partial class Classic_MainView
     private void Playlist_Drop(object sender, DragEventArgs e)
     {
         var droppedDataTB = e.Data.GetData(typeof(TextBlock)) as TextBlock;
-        var droppedDataStr = droppedDataTB?.DataContext as string;
-        var target = ((TextBlock)sender).DataContext as string;
 
-        if (target != null && droppedDataStr != null && (droppedDataStr.Equals("..") || target.Equals("..")))
+        if (((TextBlock)sender).DataContext is not string target || droppedDataTB?.DataContext is not string droppedDataStr)
+        {
             return;
-
+        }
 
         var removedIdx = PlaylistContainer.Items.IndexOf(droppedDataStr ?? string.Empty);
         var targetIdx = PlaylistContainer.Items.IndexOf(target ?? string.Empty);
 
+        if (removedIdx < 0 || removedIdx >= PlaylistContainer.Items.Count)
+        {
+            // The source index is out of bounds, so we return without doing anything
+            return;
+        }
+
+        if (targetIdx < 0 || targetIdx >= PlaylistContainer.Items.Count)
+        {
+            // The target index is out of bounds, so we return without doing anything
+            return;
+        }
+
         if (removedIdx < targetIdx)
         {
-            _currentPlaylist.Move(removedIdx-1, targetIdx-1);
+            _currentPlaylist.Move(removedIdx, targetIdx);
             BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
-            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
         }
         else if (removedIdx == targetIdx)
@@ -293,13 +329,9 @@ public partial class Classic_MainView
         }
         else
         {
-            var remIdx = removedIdx + 1;
-            if (PlaylistContainer.Items.Count + 1 > remIdx)
-            {
-                _currentPlaylist.Move(removedIdx-1, targetIdx-1);
-                BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
-                PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
-            }
+            _currentPlaylist.Move(removedIdx, targetIdx);
+            BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
+            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
         }
     }
 
@@ -324,20 +356,66 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void PlaylistShuffle_Button_Click(object sender, RoutedEventArgs e)
     {
+        if (_currentPlaylist == null)
+            return;
+
         _playlistShuffle               = !_playlistShuffle;
         PlaylistShuffle_Button.Opacity = _playlistShuffle ? 1 : 0.5f;
+
+        var playlist = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
+
+        if (_playlistShuffle)
+        {
+            // shuffle the playlist items
+            _shuffledPlaylist = playlist.OrderBy(item => Guid.NewGuid()).ToList();
+
+            // update the data source for the DataGrid
+            PlaylistContainer.ItemsSource = _shuffledPlaylist;
+        }
+        else
+        {
+            // use the original playlist as the data source
+            _currentShuffleIndex          = PlaylistContainer.SelectedIndex;
+            PlaylistContainer.ItemsSource = playlist;
+            _shuffledPlaylist             = null;
+        }
+
+        // refresh the UI to display the shuffled or original playlist items
+        _currentShuffleIndex = PlaylistContainer.SelectedIndex;
+        PlaylistContainer.Items.Refresh();
     }
 
     /// <summary>
-    /// Skips the current song (only works on autoplay)
+    /// Skips the current song
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void SkipSong_Button_Click(object sender, RoutedEventArgs e)
     {
-        playNextSong();
+        if (_currentPlaylist == null)
+            return;
 
-        if (!BmpPigeonhole.Instance.PlaylistAutoPlay)
+        if (PlaylistContainer.SelectedIndex == PlaylistContainer.Items.Count - 1)
+        {
+            if (!_playlistRepeat)
+            {
+                PlaybackFunctions.StopSong();
+                Play_Button_State();
+                return;
+            }
+
+            PlaylistContainer.SelectedIndex = 0;
+            PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
+            SongName.Text          = PlaybackFunctions.GetSongName();
+            InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+        }
+
+        else
+        {
+            playNextSong();
+        }
+
+        if (!_autoPlay)
             return;
 
         var rnd = new Random();
@@ -352,7 +430,7 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void AutoPlay_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.PlaylistAutoPlay = AutoPlay_CheckBox.IsChecked ?? false;
+        _autoPlay = AutoPlay_CheckBox.IsChecked ?? false;
     }
     #endregion
 
@@ -488,7 +566,7 @@ public partial class Classic_MainView
             BmpCoffer.Instance.SaveSong(song);
         }
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
-        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist, true);
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
     }
 
     /// <summary>

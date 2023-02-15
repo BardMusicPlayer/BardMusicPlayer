@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,8 +27,9 @@ public partial class Classic_MainView
         //Always start with the playlists
         _showingPlaylists = true;
         //Fill the list
-        PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
-        Playlist_Header.Header        = "Playlists";
+        Playlist_Header.Header             =  "Playlists";
+        PlaylistContainer.ItemsSource      =  BmpCoffer.Instance.GetPlaylistNames();
+        PlaylistContainer.SelectionChanged += PlaylistContainer_SelectionChanged;
 
         SongName.Text                              =  PlaybackFunctions.GetSongName();
         BmpMaestro.Instance.OnPlaybackTimeChanged  += Instance_PlaybackTimeChanged;
@@ -152,12 +153,27 @@ public partial class Classic_MainView
         if (_directLoaded)
             return;
 
-        if (BmpPigeonhole.Instance.PlaylistAutoPlay)
+        if (_autoPlay)
         {
-            playNextSong();
             var rnd = new Random();
-            PlaybackFunctions.PlaySong(rnd.Next(15, 35)*100);
-            Play_Button_State(true);
+            if (PlaylistContainer.SelectedIndex == PlaylistContainer.Items.Count - 1)
+            {
+                if (_playlistRepeat)
+                {
+                    PlaylistContainer.SelectedIndex = 0;
+                    PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
+                    SongName.Text          = PlaybackFunctions.GetSongName();
+                    InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+                    PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
+                    Play_Button_State(true);
+                }
+            }
+            else
+            {
+                playNextSong();
+                PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
+                Play_Button_State(true);
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,15 +32,18 @@ public static class PlaylistFunctions
         if (openFileDialog.ShowDialog() != true)
             return false;
 
-        foreach (var d in openFileDialog.FileNames)
+        foreach (var filePath in openFileDialog.FileNames)
         {
-            var song = BmpSong.OpenFile(d).Result;
+            var song = BmpSong.OpenFile(filePath).Result;
 
-            if(currentPlaylist.SingleOrDefault(x => x.Title.Equals(song.Title)) == null)
+            // Check if the song title is not empty or null
+            if (!string.IsNullOrEmpty(song.Title) && currentPlaylist.SingleOrDefault(x => x.FilePath.Equals(song.FilePath)) == null)
+            {
                 currentPlaylist.Add(song);
-
-            BmpCoffer.Instance.SaveSong(song);
+                BmpCoffer.Instance.SaveSong(song);
+            }
         }
+
         BmpCoffer.Instance.SavePlaylist(currentPlaylist);
         return true;
     }
@@ -110,23 +113,22 @@ public static class PlaylistFunctions
     /// </summary>
     /// <param name="playlist"></param>
     /// used: classic view
-    public static List<string> GetCurrentPlaylistItems(IPlaylist playlist)
+
+    // public static List<string> GetCurrentPlaylistItems(IPlaylist playlist)
+    // {
+    //     var data = new List<string>();
+    //     if (playlist == null)
+    //         return data;
+    //
+    //     data.AddRange(playlist.Select(item => item.Title));
+    //     return data;
+    // }
+
+    public static IEnumerable<string> GetCurrentPlaylistItems(IPlaylist playlist)
     {
         var data = new List<string>();
         if (playlist == null)
             return data;
-
-        data.AddRange(playlist.Select(item => item.Title));
-        return data;
-    }
-
-    public static IEnumerable<string> GetCurrentPlaylistItems(IPlaylist playlist, bool withupselector = false)
-    {
-        var data = new List<string>();
-        if (playlist == null)
-            return data;
-        if (withupselector)
-            data.Add("..");
         data.AddRange(playlist.Select(item => item.Title));
         return data;
     }
