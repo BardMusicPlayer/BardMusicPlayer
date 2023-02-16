@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>11</LangVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayerApi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Configurations>Debug;Release</Configurations>
+    <Authors>MoogleTroupe</Authors>
+    <Copyright>Copyright © MoogleTroupe 2023</Copyright>
+    <Version>2.0.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Machina" HintPath="Lib\Machina\Machina.dll" />
+    <Reference Include="Machina.FFXIV" HintPath="Lib\Machina\Machina.FFXIV.dll" />
+  </ItemGroup>
+
+</Project>

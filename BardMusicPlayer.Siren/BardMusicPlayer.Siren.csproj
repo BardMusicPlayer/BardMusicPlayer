@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>11</LangVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayerApi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Configurations>Debug;Release</Configurations>
+    <Authors>MoogleTroupe</Authors>
+    <Copyright>Copyright © MoogleTroupe 2023</Copyright>
+    <Version>2.0.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="Polly" Version="7.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>
