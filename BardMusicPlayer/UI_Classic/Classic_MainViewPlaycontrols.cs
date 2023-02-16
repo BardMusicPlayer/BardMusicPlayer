@@ -73,6 +73,12 @@ public partial class Classic_MainView
     /* All tracks */
     private void all_tracks_button_Click(object sender, RoutedEventArgs e)
     {
+        if (PlaybackFunctions.GetSongName() == "please load a song")
+        {
+            // A song is not loaded, so do nothing.
+            return;
+        }
+
         _alltracks              = !_alltracks;
         track_cmdDown.IsEnabled = !_alltracks;
         track_cmdUp.IsEnabled   = !_alltracks;
