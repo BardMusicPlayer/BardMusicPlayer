@@ -18,23 +18,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Check for new commits in submodule repo
-      shell: bash
-      run: |
-        latest_commit=$(git ls-remote https://github.com/BardMusicPlayer/BardMusicPlayerApi.git refs/heads/develop)
-        current_commit=$(git submodule | grep BardMusicPlayerApi)
-        if [[ $latest_commit != $current_commit ]]; then
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@bardmusicplayer.com"
-          git submodule update --remote
-          git add .
-          git commit -m "Update submodule reference commit"
-          git push
-        else
-          echo "No changes to submodule, skipping build step."
-          exit 0
-        fi
-
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
