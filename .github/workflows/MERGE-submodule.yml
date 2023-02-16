@@ -1,11 +1,9 @@
 name: Publish merge against submodule
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'BardMusicPlayerApi/**'
+  repository_dispatch:
+    types: "*"
+
 jobs:
 
   build:
@@ -23,14 +21,15 @@ jobs:
     - name: Check for new commits in submodule repo
       shell: bash
       run: |
-        latest_commit=$(git ls-remote https://github.com/BardMusicPlayer/BardMusicPlayerApi.git refs/heads/develop)
+        latest_commit=$(git ls-remote https://github.com/BardMusicPlayer/BardMusicPlayer.git refs/heads/develop)
         current_commit=$(git submodule | grep BardMusicPlayerApi)
         if [[ $latest_commit != $current_commit ]]; then
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@bardmusicplayer.com"
+          git config --global user.name "$(git log -1 --pretty=format:'%an')"
+          git config --global user.email "$(git log -1 --pretty=format:'%ae')"
           git submodule update --remote
           git add .
-          git commit -m "Update submodule reference commit"
+          new_commit=$(git -C "BardMusicPlayerApi" log -1 --pretty=format:%s)
+          git commit -m "$new_commit"
           git push
         else
           echo "No changes to submodule, skipping build step."
