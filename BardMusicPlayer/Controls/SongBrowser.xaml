@@ -42,7 +42,6 @@
         <Grid Grid.Row="2" Background="{DynamicResource MaterialDesignBackground}">
             <ListView x:Name="SongBrowserContainer"
                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="0"
-                      ItemsSource="{Binding Path=Title}"
                       PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"
                       ScrollViewer.HorizontalScrollBarVisibility="Visible"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
