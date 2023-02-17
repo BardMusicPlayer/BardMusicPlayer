@@ -1,7 +1,7 @@
 <p align="center">
   <!-- Build & commit activity -->
   <a href="https://github.com/Meowchestra/BardMusicPlayer/actions/workflows/Build.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/BardMusicPlayer/BardMusicPlayer/Build.yml?branch=develop&style=for-the-badge" alt="Build"/></a>
+    <img src="https://img.shields.io/github/actions/workflow/status/Meowchestra/BardMusicPlayer/Build.yml?branch=develop&style=for-the-badge" alt="Build"/></a>
   <a href="https://github.com/Meowchestra/BardMusicPlayer/commits/develop">
     <img src="https://img.shields.io/github/last-commit/Meowchestra/BardMusicPlayer/develop?color=00D162&style=for-the-badge" alt="Commits"/></a>
    <a href="https://github.com/Meowchestra/BardMusicPlayer/commits/develop">
