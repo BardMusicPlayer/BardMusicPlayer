@@ -1,11 +1,11 @@
 <p align="center">
   <!-- Build & commit activity -->
-  <a href="https://github.com/BardMusicPlayer/BardMusicPlayer/actions/workflows/MERGE-develop.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/BardMusicPlayer/BardMusicPlayer/MERGE-develop.yml?branch=develop&style=for-the-badge" alt="Build"/></a>
-  <a href="https://github.com/BardMusicPlayer/BardMusicPlayer/commits/develop">
-    <img src="https://img.shields.io/github/last-commit/BardMusicPlayer/BardMusicPlayer/develop?color=00D162&style=for-the-badge" alt="Commits"/></a>
-   <a href="https://github.com/BardMusicPlayer/BardMusicPlayer/commits/develop">
-    <img src="https://img.shields.io/github/commit-activity/m/BardMusicPlayer/BardMusicPlayer?color=00D162&style=for-the-badge" alt="Commit Activity"/></a>
+  <a href="https://github.com/Meowchestra/BardMusicPlayer/actions/workflows/Build.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/BardMusicPlayer/BardMusicPlayer/Build.yml?branch=develop&style=for-the-badge" alt="Build"/></a>
+  <a href="https://github.com/Meowchestra/BardMusicPlayer/commits/develop">
+    <img src="https://img.shields.io/github/last-commit/Meowchestra/BardMusicPlayer/develop?color=00D162&style=for-the-badge" alt="Commits"/></a>
+   <a href="https://github.com/Meowchestra/BardMusicPlayer/commits/develop">
+    <img src="https://img.shields.io/github/commit-activity/m/Meowchestra/BardMusicPlayer?color=00D162&style=for-the-badge" alt="Commit Activity"/></a>
   <br>
   <!-- Other -->
   <a href="https://github.com/BardMusicPlayer/BardMusicPlayer/issues">
@@ -16,8 +16,8 @@
     <img src="https://img.shields.io/discord/476802720922206209?color=5865F2&label=&logo=Discord&logoColor=ffffff&style=for-the-badge" alt="Discord"/></a>
   <br> 
   <!-- Version -->
-  <a href="https://github.com/BardMusicPlayer/BardMusicPlayer/releases/tag">
-    <img src="https://img.shields.io/github/v/tag/BardMusicPlayer/BardMusicPlayer?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
+  <a href="https://github.com/Meowchestra/BardMusicPlayer/releases/tag">
+    <img src="https://img.shields.io/github/v/tag/Meowchestra/BardMusicPlayer?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
 </p>
 
 <details>

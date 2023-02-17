@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net48</TargetFramework>
-	<LangVersion>11</LangVersion>
+    <TargetFramework>net481</TargetFramework>
+    <LangVersion>latest</LangVersion>
 	<OutputPath>bin\$(Configuration)\</OutputPath>
 	<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 	<PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
