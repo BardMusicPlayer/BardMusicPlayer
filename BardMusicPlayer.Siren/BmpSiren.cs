@@ -56,7 +56,7 @@ public class BmpSiren
     public void Setup(MMDevice device, string vstLocation, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
     {
         ShutDown();
-        _mdev   = device;
+        _mdev        = device;
         _vstLocation = vstLocation + @"\";
         VSTLoader.UpdateAndLoadVST();
         _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), LogLevel.None, BeginInvoke);
