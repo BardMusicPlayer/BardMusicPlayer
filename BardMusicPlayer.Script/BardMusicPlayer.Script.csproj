@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
- <!--   <ProjectReference Include="..\BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj" /> -->
+    <ProjectReference Include="..\BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
