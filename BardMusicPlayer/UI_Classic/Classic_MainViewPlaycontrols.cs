@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
@@ -45,7 +46,9 @@ public partial class Classic_MainView
         if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
             return;
 
+        var tokenSource = new CancellationTokenSource();
         var state = PlaybackState.EquipInstruments;
+
         while (true)
         {
             switch (state)
@@ -55,7 +58,15 @@ public partial class Classic_MainView
                     state = PlaybackState.Wait;
                     break;
                 case PlaybackState.Wait:
-                    await Task.Delay(2000);
+                    try
+                    {
+                        await Task.Delay(2000, tokenSource.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Handle cancellation
+                        return;
+                    }
                     state = PlaybackState.StartEnsCheck;
                     break;
                 case PlaybackState.StartEnsCheck:
