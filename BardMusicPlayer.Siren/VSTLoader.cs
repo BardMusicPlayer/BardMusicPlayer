@@ -3,13 +3,13 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System.Threading.Tasks;
 using System;
-using Polly;
-using System.Net.Http;
-using System.IO;
-using BardMusicPlayer.Quotidian.Structs;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using BardMusicPlayer.Quotidian.Structs;
+using Polly;
 
 namespace BardMusicPlayer.Siren;
 
