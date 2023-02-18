@@ -7,7 +7,7 @@ namespace BardMusicPlayer.Resources;
 /// </summary>
 public partial class TextInputWindow
 {
-    public TextInputWindow(string infotext, int maxinputlength = 42)
+    public TextInputWindow(string infotext, int maxinputlength = 40)
     {
         InitializeComponent();
         InfoText.Text = infotext;
