@@ -42,17 +42,19 @@ public sealed partial class Classic_MainView
             CurrentSong = Siren_LoadMidiFile();
             if (CurrentSong == null)
                 return;
+            IsPlaying               = false;
+            Siren_PlayPause.Content = "Play";
+        }
+        else if (_currentPlaylist != null)
+        {
+            CurrentSong             = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, song);
+            IsPlaying               = false;
+            Siren_PlayPause.Content = "Play";
         }
         else
         {
-            if (song == "..")
-            {
-                CurrentSong = Siren_LoadMidiFile();
-                if (CurrentSong == null)
-                    return;
-            }
-            else
-                CurrentSong = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, song);
+            // Handle the case where _currentPlaylist is null
+            return;
         }
 
         _                      = BmpSiren.Instance.Load(CurrentSong);
@@ -66,29 +68,34 @@ public sealed partial class Classic_MainView
         Siren_Lyrics.Items.Refresh();
     }
 
+    
+    private bool IsPlaying { get; set; }
+
     /// <summary>
-    /// playback start button
+    /// playback start / pause button
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Siren_Play_Click(object sender, RoutedEventArgs e)
+    private void Siren_PlayPause_Click(object sender, RoutedEventArgs e)
     {
         if (BmpSiren.Instance.IsReadyForPlayback)
-            BmpSiren.Instance.Play();
+        {
+            if (IsPlaying)
+            {
+                BmpSiren.Instance.Pause();
+                IsPlaying               = false;
+                Siren_PlayPause.Content = "Play";
+            }
+            else
+            {
+                BmpSiren.Instance.Play();
+                IsPlaying               = true;
+                Siren_PlayPause.Content = "Pause";
+            }
+        }
     }
 
-    /// <summary>
-    /// playback pause button
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Siren_Pause_Click(object sender, RoutedEventArgs e)
-    {
-        if (!BmpSiren.Instance.IsReadyForPlayback)
-            return;
 
-        BmpSiren.Instance.Pause();
-    }
 
     private void Siren_Pause_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
@@ -118,8 +125,10 @@ public sealed partial class Classic_MainView
     {
         if (!BmpSiren.Instance.IsReadyForPlayback)
             return;
-
+        
         BmpSiren.Instance.Stop();
+        IsPlaying               = false;
+        Siren_PlayPause.Content = "Play";
     }
 
     /// <summary>
@@ -165,7 +174,11 @@ public sealed partial class Classic_MainView
     {
         //if we are finished, stop the playback
         if (currentTime >= endTime)
+        {
             BmpSiren.Instance.Stop();
+            IsPlaying               = false;
+            Siren_PlayPause.Content = "Play";
+        }
 
         Siren_VoiceCount.Content = activeVoices.ToString();
 
