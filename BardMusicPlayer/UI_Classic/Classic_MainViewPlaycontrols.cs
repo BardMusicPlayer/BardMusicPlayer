@@ -37,7 +37,7 @@ public partial class Classic_MainView
         }
     }
 
-    private void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    private async void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
             return;
@@ -45,12 +45,31 @@ public partial class Classic_MainView
         if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
             return;
 
-        var task = Task.Run(() =>
+        var state = PlaybackState.EquipInstruments;
+        while (true)
         {
-            BmpMaestro.Instance.EquipInstruments();
-            Task.Delay(2000).Wait();
-            BmpMaestro.Instance.StartEnsCheck();
-        });
+            switch (state)
+            {
+                case PlaybackState.EquipInstruments:
+                    BmpMaestro.Instance.EquipInstruments();
+                    state = PlaybackState.Wait;
+                    break;
+                case PlaybackState.Wait:
+                    await Task.Delay(2000);
+                    state = PlaybackState.StartEnsCheck;
+                    break;
+                case PlaybackState.StartEnsCheck:
+                    BmpMaestro.Instance.StartEnsCheck();
+                    return;
+            }
+        }
+    }
+
+    private enum PlaybackState
+    {
+        EquipInstruments,
+        Wait,
+        StartEnsCheck
     }
 
     /* Song Select */
