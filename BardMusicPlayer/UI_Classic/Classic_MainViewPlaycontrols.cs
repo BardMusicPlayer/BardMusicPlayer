@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -38,6 +36,7 @@ public partial class Classic_MainView
         }
     }
 
+    // TODO: Needs revision, move off play button into its own logic elsewhere
     private async void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
@@ -45,8 +44,7 @@ public partial class Classic_MainView
 
         if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
             return;
-
-        var tokenSource = new CancellationTokenSource();
+        
         var state = PlaybackState.EquipInstruments;
 
         while (true)
@@ -58,15 +56,7 @@ public partial class Classic_MainView
                     state = PlaybackState.Wait;
                     break;
                 case PlaybackState.Wait:
-                    try
-                    {
-                        await Task.Delay(2000, tokenSource.Token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        // Handle cancellation
-                        return;
-                    }
+                    await Task.Delay(2000);
                     state = PlaybackState.StartEnsCheck;
                     break;
                 case PlaybackState.StartEnsCheck:
