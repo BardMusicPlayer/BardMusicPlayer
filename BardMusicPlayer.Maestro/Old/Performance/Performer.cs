@@ -70,10 +70,10 @@ public class Performer
     }
 
     public bool PerformerEnabled { get; set; } = true;
-    public bool UsesDalamud => BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(PId);
+    public bool UsesDalamud => BmpPigeonhole.Instance.UsePluginForInstrumentOpen && GameExtensions.IsConnected(Pid);
 
     public bool HostProcess { get; set; }
-    public int PId;
+    public int Pid;
     public Game game;
     public string PlayerName => game.PlayerName ?? "Unknown";
 
@@ -171,7 +171,7 @@ public class Performer
         if (arg != null)
         {
             _hook.Hook(arg.Process, false);
-            PId = arg.Pid;
+            Pid = arg.Pid;
             game = arg;
             _startDelayTimer.Elapsed += startDelayTimer_Elapsed;
         }
@@ -190,6 +190,12 @@ public class Performer
 
         if (note.note is < 0 or > 36)
             return;
+
+        if (UsesDalamud)
+        {
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.NoteOn, game = game, IntData = note.note, BoolData = true });
+            return;
+        }
 
         if (game.NoteKeys[(NoteKey)note.note] is var keybind)
         {
@@ -246,6 +252,12 @@ public class Performer
 
         if (note.note is < 0 or > 36)
             return;
+
+        if (UsesDalamud)
+        {
+            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.NoteOn, game = game, IntData = note.note, BoolData = false });
+            return;
+        }
 
         if (game.NoteKeys[(NoteKey)note.note] is var keybind)
         {
@@ -611,6 +623,12 @@ public class Performer
                     4,
                 _ => -1
             };
+
+            if (UsesDalamud)
+            {
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = DalamudBridge.Helper.Dalamud.MessageType.ProgramChange, game = game, IntData = tone });
+                return;
+            }
 
             if (tone is > -1 and < 5 && game.InstrumentToneMenuKeys[(InstrumentToneMenuKey)tone] is var keybind)
                 _hook.SendSyncKey(keybind);
