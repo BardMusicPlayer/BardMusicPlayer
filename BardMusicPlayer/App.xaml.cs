@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Jamboree;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Script;
@@ -53,7 +52,6 @@ public partial class App
     protected override void OnExit(ExitEventArgs e)
     {
         //LogManager.Shutdown();
-        BmpJamboree.Instance.Stop();
         if (BmpSiren.Instance.IsReadyForPlayback)
             BmpSiren.Instance.Stop();
         BmpSiren.Instance.ShutDown();
