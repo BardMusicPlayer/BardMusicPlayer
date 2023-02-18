@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="LiteDB" Version="5.0.15" />
     <PackageReference Include="Melanchall.DryWetMidi" Version="6.1.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3-beta1" />
   </ItemGroup>
 
   <ItemGroup>

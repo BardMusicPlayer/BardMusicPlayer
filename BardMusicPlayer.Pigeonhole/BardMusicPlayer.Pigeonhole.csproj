@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3-beta1" />
   </ItemGroup>
 
   <ItemGroup>
