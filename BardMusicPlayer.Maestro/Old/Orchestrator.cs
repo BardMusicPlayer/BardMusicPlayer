@@ -135,11 +135,11 @@ public class Orchestrator : IDisposable
 
         Parallel.ForEach(_performers, perf =>
         {
-            if (perf.Value.PId == game.Pid)
+            if (perf.Value.Pid == game.Pid)
             {
                 perf.Value.HostProcess = true;
-                HostPid = game.Pid;
-                HostGame = game;
+                HostPid                = game.Pid;
+                HostGame               = game;
             }
             else
                 perf.Value.HostProcess = false;
@@ -158,11 +158,11 @@ public class Orchestrator : IDisposable
 
         Parallel.ForEach(_performers, perf =>
         {
-            if (perf.Value.PId == p.PId)
+            if (perf.Value.Pid == p.Pid)
             {
                 perf.Value.HostProcess = true;
-                HostPid = p.PId;
-                HostGame = p.game;
+                HostPid                = p.Pid;
+                HostGame               = p.game;
             }
             else
                 perf.Value.HostProcess = false;
