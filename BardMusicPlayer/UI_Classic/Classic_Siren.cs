@@ -125,7 +125,7 @@ public sealed partial class Classic_MainView
     {
         if (!BmpSiren.Instance.IsReadyForPlayback)
             return;
-        
+
         BmpSiren.Instance.Stop();
         IsPlaying               = false;
         Siren_PlayPause.Content = "Play";
