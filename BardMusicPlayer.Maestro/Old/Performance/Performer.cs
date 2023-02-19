@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Old.FFXIV;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages.EventArg;
 using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Pigeonhole;
@@ -19,8 +17,10 @@ using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song.Config;
-using Sanford.Multimedia.Midi;
 using OldSequencer = BardMusicPlayer.Maestro.Old.Sequencing.OldSequencer;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
 
 namespace BardMusicPlayer.Maestro.Old.Performance;
 

@@ -11,6 +11,10 @@ namespace BardMusicPlayer.Maestro.Sequencer.Player
     {
         public string UUID { get; private set; }
 
+        public string Name { get; private set; }
+
+        public string HomeWorld { get; private set; }
+
         PlayerType IPlayer.PlayerType => PlayerType.Remote;
 
         internal RemotePlayer()
