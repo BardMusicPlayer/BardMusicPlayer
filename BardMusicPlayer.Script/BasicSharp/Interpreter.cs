@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -286,8 +287,9 @@ public sealed class Interpreter
 
     private void If()
     {
+        const float tolerance = 0.0001f; // define a small tolerance value
         // check if argument is equal to 0
-        var result = Expr().BinOp(new Value(0), Token.Equal).Real == 1;
+        var result = Math.Abs(Expr().BinOp(new Value(0), Token.Equal).Real - 1) < tolerance;
 
         Match(Token.Then);
         GetNextToken();
@@ -411,8 +413,9 @@ public sealed class Interpreter
                     loopsteps.Add(var, step);
             }
         }
-
-        if (vars[var].BinOp(v, Token.More).Real == 1)
+        
+        const float tolerance = 0.0001f; // define a small tolerance value
+        if (Math.Abs(vars[var].BinOp(v, Token.More).Real - 1) < tolerance)
         {
             while (true)
             {
@@ -447,7 +450,8 @@ public sealed class Interpreter
 
     private void Assert()
     {
-        var result = Expr().BinOp(new Value(0), Token.Equal).Real == 1;
+        const float tolerance = 0.0001f; // define a small tolerance value
+        var result = Math.Abs(Expr().BinOp(new Value(0), Token.Equal).Real - 1) < tolerance;
 
         if (result)
         {

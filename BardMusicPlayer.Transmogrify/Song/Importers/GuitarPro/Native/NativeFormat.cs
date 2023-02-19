@@ -398,8 +398,9 @@ public sealed class NativeFormat
 
                             if (last != null)
                             {
-                                note.fret = last.fret; //For GP3 & GP4
-                                if (last.harmonic != note.harmonic || last.harmonicFret != note.harmonicFret
+                                note.fret = last.fret;           //For GP3 & GP4
+                                const float tolerance = 0.0001f; // define a small tolerance value
+                                if (last.harmonic != note.harmonic || Math.Abs(last.harmonicFret - note.harmonicFret) > tolerance
                                    )
                                     dontAddNote = false;
 
@@ -759,7 +760,8 @@ public sealed class NativeFormat
                     position = pos
                 };
                 pos += flipDuration(mh.timeSignature.denominator) * mh.timeSignature.numerator;
-                if (oldTempo != t.value) tempos.Add(t);
+                const float tolerance = 0.0001f; // define a small tolerance value
+                if (Math.Abs(oldTempo - t.value) > tolerance) tempos.Add(t);
                 oldTempo = t.value;
             }
         }
