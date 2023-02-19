@@ -37,7 +37,6 @@ namespace BardMusicPlayer.Seer.ApiTest
             BmpSeer.Instance.KeyMapChanged += PrintBackendEventInfo;
             BmpSeer.Instance.PartyMembersChanged += PrintBackendEventInfo;
             BmpSeer.Instance.PlayerNameChanged += PrintBackendEventInfo;
-            BmpSeer.Instance.NetworkPacket += PrintBackendEventInfo;
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
 

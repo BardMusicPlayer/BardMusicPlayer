@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using BardMusicPlayer.Seer.Events;
 using Machina.FFXIV;
 using Machina.FFXIV.Oodle;
@@ -26,6 +27,8 @@ internal class MachinaManager : IDisposable
 
         Trace.UseGlobalLock = false;
         Trace.Listeners.Add(new MachinaLogger());
+
+        while (BmpSeer.Instance.Games.Count < 1) Thread.Sleep(1);
 
         _monitor = new FFXIVNetworkMonitor
         {
