@@ -111,7 +111,7 @@ public class Performer
         }
     }
 
-    public OldSequencer Sequencer
+    public OldSequencer OldSequencer
     {
         get => _sequencer;
         set
@@ -127,7 +127,7 @@ public class Performer
                 _startDelayTimer.Enabled = false;
                 mainSequencer = value;
 
-                _sequencer = new Sequencer();
+                _sequencer = new OldSequencer();
                 if (value.LoadedFileType == OldSequencer.FILETYPES.BmpSong)
                 {
                     _sequencer.Sequence = mainSequencer.Sequence;
