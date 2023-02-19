@@ -4,6 +4,7 @@
  */
 
 using BardMusicPlayer.Maestro.Sequencer.Backend;
+using BardMusicPlayer.Maestro.Sequencer.Backend.MogAmp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,9 +17,15 @@ internal class SequencerHandler : IDisposable
     private CancellationTokenSource _cts;
     private Task _task;
 
-    internal SequencerHandler(ISequencerBackend sequencerBackend)
+    internal SequencerHandler(SequencerType sequencerType)
     {
-        _sequencerBackend = sequencerBackend;
+        switch (sequencerType)
+        {
+            case SequencerType.MogAmp:
+                _sequencerBackend = new MogAmpSequencerBackend();
+                break;
+        }
+        
         _sequencerBackend.SequencerHandler = this;
         StartBackend();
     }

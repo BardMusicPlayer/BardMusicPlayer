@@ -3,6 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using BardMusicPlayer.Maestro.Sequencer;
+using BardMusicPlayer.Maestro.Sequencer.Backend.MogAmp;
 using System;
 
 namespace BardMusicPlayer.Maestro
@@ -10,6 +12,7 @@ namespace BardMusicPlayer.Maestro
     public partial class BmpMaestro
     {
         private static readonly Lazy<BmpMaestro> LazyInstance = new(() => new BmpMaestro());
+        internal SequencerHandler _sequencerHandler;
 
         /// <summary>
         /// 
@@ -23,20 +26,22 @@ namespace BardMusicPlayer.Maestro
         public static BmpMaestro Instance => LazyInstance.Value;
 
         /// <summary>
-        /// Start Grunt.
+        /// Start Maestro.
         /// </summary>
-        public void Start()
+        public void Start(SequencerType sequencerType)
         {
             if (Started) return;
+            _sequencerHandler = new SequencerHandler(sequencerType);
             Started = true;
         }
 
         /// <summary>
-        /// Stop Grunt.
+        /// Stop Maestro.
         /// </summary>
         public void Stop()
         {
             if (!Started) return;
+            _sequencerHandler.Dispose();
             Started = false;
         }
 

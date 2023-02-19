@@ -16,9 +16,9 @@ internal class MogAmpSequencerBackend : ISequencerBackend
 
     public SequencerHandler SequencerHandler { get; set; }
 
-    public MogAmpSequencerBackend(int sleepTimeInMs)
+    public MogAmpSequencerBackend()
     {
-        SequencerBackendType = EventSource.MogAmp;
+        SequencerBackendType = EventSource.BackEnd;
     }
 
     private void InitializeMogAmp()
@@ -41,7 +41,7 @@ internal class MogAmpSequencerBackend : ISequencerBackend
             {
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

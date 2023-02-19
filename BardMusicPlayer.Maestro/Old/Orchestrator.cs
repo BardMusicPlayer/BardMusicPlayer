@@ -223,7 +223,7 @@ public class Orchestrator : IDisposable
     public void Seek(int ticks)
     {
         foreach (var perf in _performers)
-            perf.Value.Sequencer.Seek(ticks);
+            perf.Value.OldSequencer.Seek(ticks);
     }
 
     /// <summary>
@@ -233,7 +233,7 @@ public class Orchestrator : IDisposable
     public void Seek(double miliseconds)
     {
         foreach (var perf in _performers)
-            perf.Value.Sequencer.Seek(miliseconds);
+            perf.Value.OldSequencer.Seek(miliseconds);
     }
 
     /// <summary>
@@ -266,8 +266,8 @@ public class Orchestrator : IDisposable
 
         foreach (var perf in _performers)
         {
-            perf.Value.Sequencer = _sequencer; //use the sequence from the main sequencer
-            perf.Value.Sequencer.LoadedBmpSong = song;       //set the song
+            perf.Value.OldSequencer = _sequencer; //use the sequence from the main sequencer
+            perf.Value.OldSequencer.LoadedBmpSong = song;       //set the song
         }
         InitNewPerformance();
     }
@@ -334,8 +334,8 @@ public class Orchestrator : IDisposable
     {
         foreach (var perf in _performers.Where(perf => perf.Value.HostProcess))
         {
-            perf.Value.Sequencer.CloseInputDevice();
-            perf.Value.Sequencer.OpenInputDevice(device);
+            perf.Value.OldSequencer.CloseInputDevice();
+            perf.Value.OldSequencer.OpenInputDevice(device);
         }
     }
 
@@ -346,7 +346,7 @@ public class Orchestrator : IDisposable
     {
         foreach (var perf in _performers.Where(perf => perf.Value.HostProcess))
         {
-            perf.Value.Sequencer.CloseInputDevice();
+            perf.Value.OldSequencer.CloseInputDevice();
         }
     }
     #endregion
@@ -501,7 +501,7 @@ public class Orchestrator : IDisposable
                     var perf = new Performer(game.Key)
                     {
                         HostProcess = game.Value,
-                        Sequencer = _sequencer,
+                        OldSequencer = _sequencer,
                         TrackNumber = 1
                     };
                     lock (_performers)
@@ -604,7 +604,7 @@ public class Orchestrator : IDisposable
         {
             if (BmpPigeonhole.Instance.AutoEquipBards)
                 _ = perf.ReplaceInstrument().Result;
-            perf.Sequencer.PlayEnded += Sequencer_PlayEnded;
+            perf.OldSequencer.PlayEnded += Sequencer_PlayEnded;
         }
 
         _updaterTokenSource = new CancellationTokenSource();
@@ -751,7 +751,7 @@ public class Orchestrator : IDisposable
             if (perf == null)
                 perf = _performers.Find(perf => perf.Value.HostProcess).Value;
             else
-                BmpMaestro.Instance.PublishEvent(new CurrentPlayPositionEvent(perf.Sequencer.CurrentTimeAsTimeSpan, perf.Sequencer.CurrentTick));
+                BmpMaestro.Instance.PublishEvent(new CurrentPlayPositionEvent(perf.OldSequencer.CurrentTimeAsTimeSpan, perf.OldSequencer.CurrentTick));
 
             await Task.Delay(200, token).ContinueWith(tsk => { }, token);
         }

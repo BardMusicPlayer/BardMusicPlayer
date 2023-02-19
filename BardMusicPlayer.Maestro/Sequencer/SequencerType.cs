@@ -3,10 +3,10 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Maestro.Events;
-
-public enum EventSource
+namespace BardMusicPlayer.Maestro.Sequencer
 {
-    Maestro = 0,
-    BackEnd = 1
+    public enum SequencerType
+    {
+        MogAmp = 0,
+    }
 }
