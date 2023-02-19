@@ -34,9 +34,4 @@
     <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Machina" HintPath="Lib\Machina\Machina.dll" />
-    <Reference Include="Machina.FFXIV" HintPath="Lib\Machina\Machina.FFXIV.dll" />
-  </ItemGroup>
-
 </Project>
