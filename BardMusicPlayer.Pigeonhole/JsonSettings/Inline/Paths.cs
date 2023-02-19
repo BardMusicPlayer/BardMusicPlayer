@@ -35,7 +35,7 @@ internal static class Paths
             }
             catch
             {
-                return new DirectoryInfo(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetEntryAssembly()?.CodeBase ?? string.Empty).Path)) ?? string.Empty);
+                return new DirectoryInfo(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetEntryAssembly()?.Location ?? string.Empty).Path)) ?? string.Empty);
             }
         }
     }

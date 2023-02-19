@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net48</TargetFramework>
+	<TargetFramework>net7.0</TargetFramework>
 	<LangVersion>11</LangVersion>
 	<OutputPath>bin\$(Configuration)\</OutputPath>
 	<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
