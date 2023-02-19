@@ -6,11 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Clocks;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages.EventArg;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Processing;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Sequencing;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Clocks;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;
 

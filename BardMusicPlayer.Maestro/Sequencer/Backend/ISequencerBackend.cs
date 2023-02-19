@@ -4,6 +4,7 @@
  */
 
 using BardMusicPlayer.Maestro.Events;
+using BardMusicPlayer.Maestro.Sequencer.Player;
 using System;
 using System.Collections.Generic;
 using System.Threading;

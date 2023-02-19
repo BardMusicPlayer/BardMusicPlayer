@@ -4,6 +4,7 @@
  */
 
 using BardMusicPlayer.Maestro.Events;
+using BardMusicPlayer.Maestro.Sequencer.Player;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ internal class MogAmpSequencerBackend : ISequencerBackend
             {
             }
 
-            await Task.Delay(100, token);
+            await Task.Delay(1, token);
         }
 
         DestroyMogAmp();

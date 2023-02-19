@@ -9,6 +9,10 @@ namespace BardMusicPlayer.Maestro.Sequencer.Player
 {
     internal interface IPlayer : IDisposable, IEquatable<IPlayer>
     {
-        string UUID { get; }
+        public string UUID { get; }
+        public string Name { get; }
+        public string HomeWorld { get; }
+
+        public PlayerType PlayerType { get; }
     }
 }

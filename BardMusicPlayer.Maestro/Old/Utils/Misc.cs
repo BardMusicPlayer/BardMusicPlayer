@@ -3,7 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using Sanford.Multimedia.Midi;
+
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing.TrackClasses;
 
 namespace BardMusicPlayer.Maestro.Old.Utils;
 

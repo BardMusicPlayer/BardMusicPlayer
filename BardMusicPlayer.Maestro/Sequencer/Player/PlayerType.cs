@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * Copyright(c) 2023 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
 
 namespace BardMusicPlayer.Maestro.Sequencer.Player
 {
-    internal class PlayerType
+    public enum PlayerType
     {
+        Local,
+        Remote
     }
 }
