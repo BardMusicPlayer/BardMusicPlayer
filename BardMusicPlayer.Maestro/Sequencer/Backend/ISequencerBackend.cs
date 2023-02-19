@@ -5,6 +5,7 @@
 
 using BardMusicPlayer.Maestro.Events;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +16,11 @@ internal interface ISequencerBackend : IDisposable
     EventSource SequencerBackendType { get; }
 
     SequencerHandler SequencerHandler { get; set; }
+
+    /// <summary>
+    /// Dictionary of Players with thier uuid as the dictionary key. A Player may be a LocalPlayer or may be a RemotePlayer.
+    /// </summary>
+    IReadOnlyDictionary<string, IPlayer> Players { get; }
 
     Task Loop(CancellationToken token);
 }
