@@ -39,7 +39,7 @@ public struct TitleParsingHelper
 /// </summary>
 public class Orchestrator : IDisposable
 {
-    private Sequencer _sequencer { get; set; }
+    private OldSequencer _sequencer { get; set; }
     private CancellationTokenSource _updaterTokenSource;
     private bool LocalOrchestraInitialized { get; set; }
     private KeyValuePair<TitleParsingHelper, Performer> _song_Title_Parsing_Performer { get; set; }
@@ -59,7 +59,7 @@ public class Orchestrator : IDisposable
     {
         _performers = new List<KeyValuePair<int, Performer>>();
         _foundGames = new Dictionary<Game, bool>();
-        _sequencer = new Sequencer();
+        _sequencer = new OldSequencer();
         _song_Title_Parsing_Performer = new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper { channelType = ChatMessageChannelType.None }, null);
         BmpSeer.Instance.GameStarted += delegate (GameStarted e) { Instance_OnGameStarted(e.Game); };
         BmpSeer.Instance.GameStopped += Instance_OnGameStopped;
