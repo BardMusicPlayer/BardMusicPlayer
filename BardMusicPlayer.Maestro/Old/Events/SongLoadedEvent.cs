@@ -12,13 +12,13 @@ namespace BardMusicPlayer.Maestro.Old.Events;
 public sealed class SongLoadedEvent : MaestroEvent
 {
 
-    internal SongLoadedEvent(int maxtracks, Sequencer sequencer)
+    internal SongLoadedEvent(int maxtracks, OldSequencer sequencer)
     {
         EventType = GetType();
         MaxTracks = maxtracks;
         _sequencer = sequencer;
     }
-    private Sequencer _sequencer;
+    private OldSequencer _sequencer;
     public int MaxTracks { get; }
     public int TotalNoteCount => _sequencer.notesPlayedCount.Values.Sum();
 

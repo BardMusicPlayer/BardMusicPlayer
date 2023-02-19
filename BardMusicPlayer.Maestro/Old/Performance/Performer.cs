@@ -20,7 +20,7 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Sanford.Multimedia.Midi;
-using Sequencer = BardMusicPlayer.Maestro.Old.Sequencing.Sequencer;
+using OldSequencer = BardMusicPlayer.Maestro.Old.Sequencing.OldSequencer;
 
 namespace BardMusicPlayer.Maestro.Old.Performance;
 
@@ -30,8 +30,8 @@ public class Performer
     private Timer _startDelayTimer { get; set; } = new();
     private bool _holdNotes { get; set; } = true;
     private bool _forcePlayback { get; set; }
-    private Sequencer _sequencer { get; set; }
-    private Sequencer mainSequencer { get; set; }
+    private OldSequencer _sequencer { get; set; }
+    private OldSequencer mainSequencer { get; set; }
     private int _trackNumber { get; set; } = 1;
     private long _lastNoteTimestamp;
     private bool _livePlayDelay { get; set; }
@@ -110,14 +110,14 @@ public class Performer
         }
     }
 
-    public Sequencer Sequencer
+    public OldSequencer Sequencer
     {
         get => _sequencer;
         set
         {
             if (value != null)
             {
-                if (value.LoadedFileType == Sequencer.FILETYPES.None && !HostProcess)
+                if (value.LoadedFileType == OldSequencer.FILETYPES.None && !HostProcess)
                     return;
 
                 //Close the input else it will hang
@@ -127,7 +127,7 @@ public class Performer
                 mainSequencer = value;
 
                 _sequencer = new Sequencer();
-                if (value.LoadedFileType == Sequencer.FILETYPES.BmpSong)
+                if (value.LoadedFileType == OldSequencer.FILETYPES.BmpSong)
                 {
                     _sequencer.Sequence = mainSequencer.Sequence;
                     OctaveShift = 0;
@@ -313,7 +313,7 @@ public class Performer
         }
     }
 
-    public void Update(Sequencer bmpSeq)
+    public void Update(OldSequencer bmpSeq)
     {
         var tn = _trackNumber;
 

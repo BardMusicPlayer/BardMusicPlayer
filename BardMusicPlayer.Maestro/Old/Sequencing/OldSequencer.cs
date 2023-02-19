@@ -19,7 +19,7 @@ using Sanford.Multimedia.Midi;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;
 
-public class Sequencer : Sequencer_Internal
+public class OldSequencer : Sequencer_Internal
 {
     private InputDevice midiInput;
 
@@ -151,7 +151,7 @@ public class Sequencer : Sequencer_Internal
     public int lyricCount = 0;
     public int LyricNum => lyricCount;
 
-    public Sequencer()
+    public OldSequencer()
     {
         Sequence = new Sequence();
 
