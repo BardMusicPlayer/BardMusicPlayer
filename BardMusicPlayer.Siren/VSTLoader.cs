@@ -24,7 +24,7 @@ internal static class VSTLoader
             if (File.Exists(BmpSiren.Instance._vstLocation + @"\version"))
             {
                 using TextReader reader = File.OpenText(BmpSiren.Instance._vstLocation + @"\version");
-                _version = int.Parse(reader.ReadLine());
+                _version = int.Parse(await reader.ReadLineAsync());
             }
             var version = int.Parse(await GetStringFromUrl(_baseURL + @"/version"));
 
@@ -40,7 +40,7 @@ internal static class VSTLoader
 
                 _version = version;
                 using var writer = new StreamWriter(BmpSiren.Instance._vstLocation + @"\version");
-                writer.Write(_version.ToString());
+                await writer.WriteAsync(_version.ToString());
             }
 
             foreach (var instrument in Instrument.All) BmpSiren.Instance._player.LoadSoundFont(File.ReadAllBytes(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2"), true);
@@ -52,14 +52,14 @@ internal static class VSTLoader
         }
     }
     private static readonly string _baseURL = "https://dl.bardmusicplayer.com/bmp/vst";
-    private static int _version = 0;
+    private static int _version;
 
     private static async Task<string> GetStringFromUrl(string url)
     {
         var httpClient = new HttpClient();
         return await Policy
             .Handle<HttpRequestException>()
-            .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+            .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: _ => TimeSpan.FromMilliseconds(300))
             .ExecuteAsync(async () =>
             {
                 using var httpResponse = await httpClient.GetAsync(url);
@@ -73,7 +73,7 @@ internal static class VSTLoader
         var httpClient = new HttpClient();
         return await Policy
             .Handle<HttpRequestException>()
-            .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: i => TimeSpan.FromMilliseconds(300))
+            .WaitAndRetryAsync(retryCount: 3, sleepDurationProvider: _ => TimeSpan.FromMilliseconds(300))
             .ExecuteAsync(async () =>
             {
                 using var httpResponse = await httpClient.GetAsync(url);

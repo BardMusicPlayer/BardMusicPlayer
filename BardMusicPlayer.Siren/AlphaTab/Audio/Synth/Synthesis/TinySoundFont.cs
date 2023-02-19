@@ -703,7 +703,8 @@ internal sealed partial class TinySoundFont
     public void ChannelSetPitchRange(int channel, float pitchRange)
     {
         var c = ChannelInit(channel);
-        if (c.PitchRange == pitchRange)
+        const float tolerance = 0.0001f;                     // define a small tolerance value
+        if (Math.Abs(c.PitchRange - pitchRange) < tolerance) // use tolerance to compare values
         {
             return;
         }
@@ -723,7 +724,8 @@ internal sealed partial class TinySoundFont
     public void ChannelSetTuning(int channel, float tuning)
     {
         var c = ChannelInit(channel);
-        if (c.Tuning == tuning)
+        const float tolerance = 0.0001f;             // define a small tolerance value
+        if (Math.Abs(c.Tuning - tuning) < tolerance) // use tolerance to compare values
         {
             return;
         }
