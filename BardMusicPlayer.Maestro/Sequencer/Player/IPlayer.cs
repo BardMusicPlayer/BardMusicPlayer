@@ -5,7 +5,7 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend
+namespace BardMusicPlayer.Maestro.Sequencer.Player
 {
     internal interface IPlayer : IDisposable, IEquatable<IPlayer>
     {

@@ -4,7 +4,6 @@
  */
 
 using BardMusicPlayer.Maestro.Sequencer;
-using BardMusicPlayer.Maestro.Sequencer.Backend.MogAmp;
 using System;
 
 namespace BardMusicPlayer.Maestro
