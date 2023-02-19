@@ -5,13 +5,13 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend
+namespace BardMusicPlayer.Maestro.Sequencer.Player
 {
-    public partial class RemotePlayer : IPlayer
+    public partial class LocalPlayer : IPlayer
     {
         public string UUID { get; private set; }
 
-        internal RemotePlayer()
+        internal LocalPlayer()
         {
             UUID = Guid.NewGuid().ToString();
         }
