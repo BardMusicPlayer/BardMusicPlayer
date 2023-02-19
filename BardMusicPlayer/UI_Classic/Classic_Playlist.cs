@@ -113,7 +113,13 @@ public partial class Classic_MainView
             _currentPlaylist              = PlaylistFunctions.CreatePlaylist(inputbox.ResponseText);
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
             _showingPlaylists             = false;
-            Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+
+            var icon = "↩".PadRight(2);
+            var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+            var name = _currentPlaylist.GetName();
+            var headerText = $"{icon} {timeString} {name}";
+
+            Playlist_Header.Header = headerText;
         }
     }
 
@@ -131,7 +137,13 @@ public partial class Classic_MainView
             return;
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
-        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+
+        var icon = "↩".PadRight(2);
+        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+        var name = _currentPlaylist.GetName();
+        var headerText = $"{icon} {timeString} {name}";
+
+        Playlist_Header.Header = headerText;
     }
 
     /// <summary>
@@ -148,7 +160,13 @@ public partial class Classic_MainView
             return;
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
-        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+
+        var icon = "↩".PadRight(2);
+        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+        var name = _currentPlaylist.GetName();
+        var headerText = $"{icon} {timeString} {name}";
+
+        Playlist_Header.Header = headerText;
     }
 
     /// <summary>
@@ -173,9 +191,14 @@ public partial class Classic_MainView
             BmpCoffer.Instance.DeleteSong(song);
         }
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
-
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
-        Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75 - _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+
+        var icon = "↩".PadRight(2);
+        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+        var name = _currentPlaylist.GetName();
+        var headerText = $"{icon} {timeString} {name}";
+
+        Playlist_Header.Header = headerText;
     }
 
     /// <summary>
@@ -248,7 +271,13 @@ public partial class Classic_MainView
             _currentPlaylist              = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
             _showingPlaylists             = false;
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
-            Playlist_Header.Header        = _currentPlaylist.GetName().PadRight(75- _currentPlaylist.GetName().Length, ' ') + new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss");
+
+            var icon = "↩".PadRight(2);
+            var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+            var name = _currentPlaylist.GetName();
+            var headerText = $"{icon} {timeString} {name}";
+
+            Playlist_Header.Header = headerText;
             return;
         }
 

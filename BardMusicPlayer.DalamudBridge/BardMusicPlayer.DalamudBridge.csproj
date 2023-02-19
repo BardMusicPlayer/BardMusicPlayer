@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Formatters.Newtonsoft.Json" Version="13.0.44" />
-    <PackageReference Include="H.Pipes" Version="2.0.44" />
-    <PackageReference Include="H.Pipes.AccessControl" Version="2.0.44" />
+    <PackageReference Include="H.Formatters.Newtonsoft.Json" Version="13.0.45" />
+    <PackageReference Include="H.Pipes" Version="2.0.45" />
+    <PackageReference Include="H.Pipes.AccessControl" Version="2.0.45" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 

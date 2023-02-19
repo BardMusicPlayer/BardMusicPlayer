@@ -241,7 +241,6 @@
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120"
                                               Padding="5" ToolTip="{StaticResource PL_MIDIINPUT}">
-                                        <ComboBoxItem>None</ComboBoxItem>
                                     </ComboBox>
                                     <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
                                               Content="Enable note delay for live playing"
@@ -378,21 +377,17 @@
                                     <ColumnDefinition Width="45" />
                                     <ColumnDefinition Width="45" />
                                     <ColumnDefinition Width="45" />
-                                    <ColumnDefinition Width="45" />
                                     <ColumnDefinition Width="30" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" x:Name="Siren_Load" Content="Load" Click="Siren_Load_Click"
                                         Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="1" x:Name="Siren_Play" Content="Play" Click="Siren_Play_Click"
-                                        Padding="0" Margin="2,0,1,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="2" x:Name="Siren_Pause" Content="Pause" Click="Siren_Pause_Click"
-                                        PreviewMouseDown="Siren_Pause_PreviewMouseDown" Padding="0" Margin="1,0,2,0"
-                                        Height="20" Width="Auto" />
-                                <Button Grid.Column="3" x:Name="Siren_Stop" Content="Stop" Click="Siren_Stop_Click"
+                                <Button Grid.Column="1" x:Name="Siren_PlayPause" Content="Play" Click="Siren_PlayPause_Click" PreviewMouseDown="Siren_Pause_PreviewMouseDown"
+                                        Padding="0" Margin="2,0,2,0" Height="20" Width="Auto" />
+                                <Button Grid.Column="2" x:Name="Siren_Stop" Content="Stop" Click="Siren_Stop_Click"
                                         Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
-                                <Button Grid.Column="6" x:Name="Siren_SaveLRC" Content="Save Lrc"
+                                <Button Grid.Column="5" x:Name="Siren_SaveLRC" Content="Save Lrc"
                                         Click="Siren_Save_LRC_Click" Margin="-40,0,0,0" Height="20" Width="80" />
                             </Grid>
                         </Grid>

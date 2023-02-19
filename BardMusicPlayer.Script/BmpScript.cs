@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-//using BardMusicPlayer.Maestro;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Script.BasicSharp;
@@ -44,11 +44,11 @@ public sealed class BmpScript
 
     public void SetSelectedBard(int num)
     {
-        /*if (num == 0)
-        {*/
+        if (num == 0)
+        {
             selectedBardName = "all";
             return;
-        /*}
+        }
 
         var plist = BmpMaestro.Instance.GetAllPerformers();
         var performers = plist.ToList();
@@ -59,7 +59,7 @@ public sealed class BmpScript
         }
 
         var performer = performers.ElementAt(num - 1);
-        selectedBardName = performer != null ? performer.game.PlayerName : "";*/
+        selectedBardName = performer != null ? performer.game.PlayerName : "";
     }
 
     public void SetSelectedBardName(string name)
@@ -90,12 +90,12 @@ public sealed class BmpScript
 
     public void Print(ChatMessageChannelType type, string text)
     {
-       // BmpMaestro.Instance.SendText(selectedBardName, type, text, unselected_bards);
+       BmpMaestro.Instance.SendText(selectedBardName, type, text, unselected_bards);
     }
 
     public void TapKey(string modifier, string character)
-    {
-      //  BmpMaestro.Instance.TapKey(selectedBardName, modifier, character, unselected_bards);
+    { 
+        BmpMaestro.Instance.TapKey(selectedBardName, modifier, character, unselected_bards);
     }
 
     #endregion

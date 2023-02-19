@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
@@ -37,20 +36,41 @@ public partial class Classic_MainView
         }
     }
 
-    private void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    // TODO: Needs revision, move off play button into its own logic elsewhere
+    private async void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
             return;
 
         if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
             return;
+        
+        var state = PlaybackState.EquipInstruments;
 
-        var task = Task.Run(() =>
+        while (true)
         {
-            BmpMaestro.Instance.EquipInstruments();
-            Task.Delay(2000).Wait();
-            BmpMaestro.Instance.StartEnsCheck();
-        });
+            switch (state)
+            {
+                case PlaybackState.EquipInstruments:
+                    BmpMaestro.Instance.EquipInstruments();
+                    state = PlaybackState.Wait;
+                    break;
+                case PlaybackState.Wait:
+                    await Task.Delay(2000);
+                    state = PlaybackState.StartEnsCheck;
+                    break;
+                case PlaybackState.StartEnsCheck:
+                    BmpMaestro.Instance.StartEnsCheck();
+                    return;
+            }
+        }
+    }
+
+    private enum PlaybackState
+    {
+        EquipInstruments,
+        Wait,
+        StartEnsCheck
     }
 
     /* Song Select */
