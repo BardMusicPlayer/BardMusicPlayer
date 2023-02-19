@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
@@ -18,6 +20,7 @@ using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequenci
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song;
+using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;
 
@@ -420,7 +423,14 @@ public class OldSequencer : Sequencer_Internal
 
         LoadedFileType = FILETYPES.BmpSong;
         LoadedBmpSong = bmpSong;
-        Sequence = new Sequence(bmpSong.GetSequencerMidi());
+
+        using var midiStream = new MemoryStream();
+        bmpSong.GetProcessedMidiFile().Result.Write(midiStream, MidiFileFormat.MultiTrack,
+                   new WritingSettings { TextEncoding = Encoding.ASCII });
+        midiStream.Flush();
+        midiStream.Position = 0;
+
+        Sequence = new Sequence(midiStream);
         load(Sequence, trackNum);
     }
 
