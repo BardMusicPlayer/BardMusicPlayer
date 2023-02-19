@@ -5,6 +5,9 @@
 
 using BardMusicPlayer.Maestro.Events;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,14 +24,18 @@ internal class MogAmpSequencerBackend : ISequencerBackend
         SequencerBackendType = EventSource.BackEnd;
     }
 
+    private ConcurrentDictionary<string, IPlayer> _players;
+
+    public IReadOnlyDictionary<string, IPlayer> Players => new ReadOnlyDictionary<string, IPlayer>(_players);
+
     private void InitializeMogAmp()
     {
-
+        _players = new ConcurrentDictionary<string, IPlayer>();
     }
 
     private void DestroyMogAmp()
     {
-
+        _players = null;
     }
 
     public async Task Loop(CancellationToken token)
