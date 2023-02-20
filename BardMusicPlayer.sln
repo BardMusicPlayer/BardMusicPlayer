@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Seer.ApiTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Siren.ApiTest", "BardMusicPlayer.Siren.ApiTest\BardMusicPlayer.Siren.ApiTest.csproj", "{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.DryWetMidi", "BardMusicPlayer.DryWetMidi\BardMusicPlayer.DryWetMidi.csproj", "{6874C12B-1C55-43C5-988D-6230D23AB078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.DryWetMidi", "BardMusicPlayer.DryWetMidi\BardMusicPlayer.DryWetMidi.csproj", "{6874C12B-1C55-43C5-988D-6230D23AB078}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,10 +104,10 @@ Global
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Debug|x64.Build.0 = Debug|x64
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Release|x64.ActiveCfg = Release|x64
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Release|x64.Build.0 = Release|x64
-		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.Build.0 = Debug|Any CPU
-		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.ActiveCfg = Release|Any CPU
-		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.Build.0 = Release|Any CPU
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.ActiveCfg = Debug|x64
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.Build.0 = Debug|x64
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.ActiveCfg = Release|x64
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
