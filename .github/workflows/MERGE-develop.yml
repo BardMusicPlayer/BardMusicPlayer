@@ -26,11 +26,12 @@ jobs:
 
     - name: Build with dotnet
       run: dotnet publish /p:Configuration=Release /p:PublishProfile=Publish
-
-    # Unit tests go here.
-
+      
+    - name: What files do we have
+      run: Get-ChildItem -Recurse .\BardMusicPlayer\
+      
     - name: Rename artifact
-      run: Move-Item -Path .\BardMusicPlayer\bin\Release\Publish\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+      run: Move-Item -Path .\bin\Release\Publish\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
 
     - name: Store artifacts
       uses: actions/upload-artifact@v3
