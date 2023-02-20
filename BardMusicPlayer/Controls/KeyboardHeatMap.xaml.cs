@@ -168,7 +168,9 @@ public partial class KeyboardHeatMap
         {
             if (tracknumber-1 >= song.TrackContainers.Count)
                 return;
-
+              
+            
+            /** The follow code has a memory leak and needs to be fixed. **/
             var noteCountDict = getNoteCountForKey(song, tracknumber, octaveshift);
 
             foreach (var n in noteCountDict)
@@ -178,6 +180,7 @@ public partial class KeyboardHeatMap
                 var wantedNode = FindName(noteInfo[n.Key].name);
                 if (wantedNode is Rectangle r) r.Fill = NoteFill(noteInfo[n.Key].black_key, n.Value);
             }
+            /** END - The follow code has a memory leak and needs to be fixed. **/
         }
     }
 

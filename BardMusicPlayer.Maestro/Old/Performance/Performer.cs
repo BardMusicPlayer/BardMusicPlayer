@@ -9,18 +9,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Maestro.Old.FFXIV;
+using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.FFXIV;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages.EventArg;
 using BardMusicPlayer.Maestro.Old.Sequencing;
 using BardMusicPlayer.Maestro.Old.Utils;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song.Config;
-using Sanford.Multimedia.Midi;
 using MessageType = BardMusicPlayer.DalamudBridge.Helper.Dalamud.MessageType;
 
 namespace BardMusicPlayer.Maestro.Old.Performance;
@@ -31,8 +33,8 @@ public class Performer
     private Timer _startDelayTimer { get; set; } = new();
     private bool _holdNotes { get; set; } = true;
     private bool _forcePlayback { get; set; }
-    private Sequencer _sequencer { get; set; }
-    private Sequencer mainSequencer { get; set; }
+    private OldSequencer _sequencer { get; set; }
+    private OldSequencer mainSequencer { get; set; }
     private int _trackNumber { get; set; } = 1;
     private long _lastNoteTimestamp;
     private bool _livePlayDelay { get; set; }
@@ -111,14 +113,14 @@ public class Performer
         }
     }
 
-    public Sequencer Sequencer
+    public OldSequencer OldSequencer
     {
         get => _sequencer;
         set
         {
             if (value != null)
             {
-                if (value.LoadedFileType == Sequencer.FILETYPES.None && !HostProcess)
+                if (value.LoadedFileType == OldSequencer.FILETYPES.None && !HostProcess)
                     return;
 
                 //Close the input else it will hang
@@ -127,8 +129,8 @@ public class Performer
                 _startDelayTimer.Enabled = false;
                 mainSequencer = value;
 
-                _sequencer = new Sequencer();
-                if (value.LoadedFileType == Sequencer.FILETYPES.BmpSong)
+                _sequencer = new OldSequencer();
+                if (value.LoadedFileType == OldSequencer.FILETYPES.BmpSong)
                 {
                     _sequencer.Sequence = mainSequencer.Sequence;
                     OctaveShift = 0;
@@ -314,7 +316,7 @@ public class Performer
         }
     }
 
-    public void Update(Sequencer bmpSeq)
+    public void Update(OldSequencer bmpSeq)
     {
         var tn = _trackNumber;
 
@@ -328,7 +330,7 @@ public class Performer
         {
             // OctaveNum now holds the track octave and the selected octave together
             Console.WriteLine(@"Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track));
-            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Lib.Sanford.Multimedia.Midi.Messages.MessageType.Channel select ev.MidiMessage as ChannelMessage into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
+            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageType.Channel select ev.MidiMessage as ChannelMessage into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
             ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
         }
     }
