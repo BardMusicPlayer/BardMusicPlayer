@@ -25,7 +25,7 @@ jobs:
       run: (Get-Content .\BardMusicPlayer\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer\MainWindow.xaml.cs
 
     - name: Build with dotnet
-      run: dotnet publish /p:Configuration=Rlease /p:PublishProfile=Publish
+      run: dotnet publish /p:Configuration=Release /p:PublishProfile=Publish
 
     # Unit tests go here.
 
