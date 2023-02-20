@@ -25,11 +25,3 @@ jobs:
       run: dotnet build --configuration Debug
 
     # Unit tests go here. Some day we may actually have unit test in BMP. ¯\_(ツ)_/¯
-
-    - name: Store artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: BardMusicPlayer
-        path: BardMusicPlayer\bin\Debug\net48\*.exe
-        if-no-files-found: error
-        retention-days: 1
