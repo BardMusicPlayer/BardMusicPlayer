@@ -183,7 +183,8 @@ public sealed partial class Classic_MainView
         Siren_VoiceCount.Content = activeVoices.ToString();
 
         TimeSpan t;
-        if (Siren_Position.Maximum != endTime)
+        const float tolerance = 0.0001f;                            // define a small tolerance value
+        if (Math.Abs(Siren_Position.Maximum - endTime) > tolerance) // use tolerance to compare values
         {
             Siren_Position.Maximum   = endTime;
             t                        = TimeSpan.FromMilliseconds(endTime);
