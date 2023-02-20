@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
 using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
@@ -417,7 +418,7 @@ public class OldSequencer : Sequencer_Internal
         return 0;
     }
 
-    public void Load(BmpSong bmpSong, int trackNum = 1)
+    public void Load(BmpSong bmpSong)
     {
         if (bmpSong == null)
             return;
@@ -425,17 +426,19 @@ public class OldSequencer : Sequencer_Internal
         LoadedFileType = FILETYPES.BmpSong;
         LoadedBmpSong = bmpSong;
 
+        var dryWetSong = bmpSong.GetProcessedMidiFile().Result;
+        dryWetSong.Chunks.Insert(0, TrackChunkUtilities.Merge(dryWetSong.GetTrackChunks()));
+
         using var midiStream = new MemoryStream();
-        bmpSong.GetProcessedMidiFile().Result.Write(midiStream, MidiFileFormat.MultiTrack,
-                   new WritingSettings { TextEncoding = Encoding.ASCII });
+        dryWetSong.Write(midiStream, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
         midiStream.Flush();
         midiStream.Position = 0;
 
         Sequence = new Sequence(midiStream);
-        load(Sequence, trackNum);
+        load(Sequence, Sequence.Count - 1);
     }
 
-    public void load(Sequence sequence, int trackNum = 1)
+    public void load(Sequence sequence, int trackNum)
     {
         OnTrackNameChange?.Invoke(this, string.Empty);
         OnTempoChange?.Invoke(this, 0);
