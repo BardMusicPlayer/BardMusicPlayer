@@ -22,10 +22,10 @@ jobs:
 
     - name: Checkout Downloads
       uses: actions/checkout@v3
-      path: .\Downloads
       with:
         repository: BardMusicPlayer/Downloads
         ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
+        path: .\Downloads
 
     - name: Upload Beta Build
       shell: bash
