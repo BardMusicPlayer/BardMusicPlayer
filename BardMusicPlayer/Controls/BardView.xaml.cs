@@ -94,6 +94,28 @@ public partial class BardView
     private void OnInstrumentHeldChanged(InstrumentHeldChanged e)
     {
         UpdateList();
+        if (e.InstrumentHeld.Index == 0)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (CloseInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+                    OpenInstrumentButton.Visibility  = Visibility.Visible;
+                    CloseInstrumentButton.Visibility = Visibility.Hidden;
+                }
+            ));
+        }
+        else
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (OpenInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+                    OpenInstrumentButton.Visibility  = Visibility.Hidden;
+                    CloseInstrumentButton.Visibility = Visibility.Visible;
+                }
+            ));
+        }
     }
 
     private void UpdateList()

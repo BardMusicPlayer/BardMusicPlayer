@@ -82,7 +82,7 @@ public class Orchestrator : IDisposable
     /// </summary>
     public IEnumerable<Game> GetAllGames()
     {
-        return _performers.Select(performer => performer.Value.game).ToList();
+        return _performers.Select(performer => performer.Value.game);
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class Orchestrator : IDisposable
     /// </summary>
     public IEnumerable<Performer> GetAllPerformers()
     {
-        return _performers.Select(performer => performer.Value).ToList();
+        return _performers.Select(performer => performer.Value);
     }
 
     /// <summary>

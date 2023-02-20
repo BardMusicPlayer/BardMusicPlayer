@@ -27,15 +27,15 @@
                 <ColumnDefinition Width="5" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="1" Margin="0,2 0,1" Height="Auto" Content="Open"
+            <Button Grid.Column="1" x:Name="OpenInstrumentButton" Margin="0,2 0,1" Height="Auto" Content="Open"
                     ToolTip="Open Instruments"
                     Click="OpenInstrumentButton_Click" />
-            <Button Grid.Column="2" Margin="2,2,2,1" Height="Auto" Content="Send Ensemble"
+            <Button Grid.Column="1" x:Name="CloseInstrumentButton" Margin="0,2,0,1" Height="Auto" Content="Close"
+                    ToolTip="Close Instruments"
+                    Click="CloseInstrumentButton_Click" Visibility="Hidden"/>
+            <Button Grid.Column="2" x:Name="SendEnsembleButton" Margin="2,2,2,1" Height="Auto" Content="Send Ensemble"
                     ToolTip="Sends ensemble ready check"
                     Click="RdyCheck_Click" />
-            <Button Grid.Column="3" Margin="0,2,0,1" Height="Auto" Content="Close"
-                    ToolTip="Close Instruments"
-                    Click="CloseInstrumentButton_Click" />
             <Button Grid.Column="7" Margin="0,2,0,1" Height="Auto" Content="..."
                     x:Name="More_Options"
                     Click="MenuButton_PreviewMouseLeftButtonDown"
@@ -48,7 +48,6 @@
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
                         <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
-
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
