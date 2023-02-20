@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Note
 {
     /// <summary>
     /// Represents a note, i.e. note name and octave.
@@ -69,7 +71,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <see cref="Note"/> by.</param>
         /// <returns>The current <see cref="Note"/> transposed by the <paramref name="interval"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
-        public Note Transpose(Interval interval)
+        public Note Transpose(Interval.Interval interval)
         {
             return Get((SevenBitNumber)(NoteNumber + interval.HalfSteps));
         }
@@ -180,7 +182,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(note), note);
 
-            return note.Transpose(Interval.FromHalfSteps(halfSteps));
+            return note.Transpose(Interval.Interval.FromHalfSteps(halfSteps));
         }
 
         /// <summary>

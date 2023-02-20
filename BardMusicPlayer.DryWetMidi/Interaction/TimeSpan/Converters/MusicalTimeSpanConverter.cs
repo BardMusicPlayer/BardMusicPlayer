@@ -1,14 +1,14 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
 {
     internal sealed class MusicalTimeSpanConverter : ITimeSpanConverter
     {
         #region ITimeSpanConverter
 
-        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
+        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
@@ -21,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return new MusicalTimeSpan(Math.Abs(xy.Item1), Math.Abs(xy.Item2));
         }
 
-        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
+        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)

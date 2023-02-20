@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common
 {
     internal sealed class TestCheckpoints
 

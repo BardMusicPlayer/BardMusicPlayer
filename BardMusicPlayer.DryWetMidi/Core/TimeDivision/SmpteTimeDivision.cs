@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.TimeDivision
 {
     /// <summary>
     /// Time division that represents subdivisions of a second, in a way consistent with

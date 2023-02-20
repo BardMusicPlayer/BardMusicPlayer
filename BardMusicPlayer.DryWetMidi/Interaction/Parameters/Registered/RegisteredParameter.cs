@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered
 {
     /// <summary>
     /// Represents MIDI registered parameter (RPN).

@@ -1,7 +1,6 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer.Bounds
 {
     /// <summary>
     /// Represents time range used in time processing tools.

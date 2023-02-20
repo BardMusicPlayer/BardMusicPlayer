@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿using BardMusicPlayer.DryWetMidi.Composing.Descriptors;
+
+namespace BardMusicPlayer.DryWetMidi.Composing.Transformations
 {
     /// <summary>
     /// Transforms a chord described by the specified <see cref="ChordDescriptor"/> and returns

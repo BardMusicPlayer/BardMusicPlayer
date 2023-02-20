@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
 {
     internal static class NotesToCsvConverter
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject
 {
     /// <summary>
     /// Contains arguments for the <see cref="INotifyLengthChanged.LengthChanged"/> event.

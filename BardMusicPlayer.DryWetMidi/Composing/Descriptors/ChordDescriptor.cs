@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.Composing
+namespace BardMusicPlayer.DryWetMidi.Composing.Descriptors
 {
     /// <summary>
     /// Represents an object that describes a chord.
@@ -31,7 +30,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public ChordDescriptor(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity, ITimeSpan length)
+        public ChordDescriptor(IEnumerable<Note> notes, SevenBitNumber velocity, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -48,7 +47,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <summary>
         /// Gets the notes of the chord.
         /// </summary>
-        public IEnumerable<MusicTheory.Note> Notes { get; }
+        public IEnumerable<Note> Notes { get; }
 
         /// <summary>
         /// Gets the velocity of the chord.

@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered;
+
+namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
 {
     internal sealed class RegisteredParameterId : IObjectId
     {

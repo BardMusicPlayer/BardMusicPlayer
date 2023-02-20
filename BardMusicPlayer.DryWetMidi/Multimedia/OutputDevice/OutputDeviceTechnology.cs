@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice
 {
     /// <summary>
     /// Type of a MIDI output device on Windows (see <c>wTechnology</c> field

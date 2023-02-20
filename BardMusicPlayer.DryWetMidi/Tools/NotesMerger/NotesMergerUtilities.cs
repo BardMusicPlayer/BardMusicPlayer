@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.NotesMerger
 {
     /// <summary>
     /// Provides methods to merge nearby notes.

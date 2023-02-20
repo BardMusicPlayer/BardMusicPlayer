@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
 {
     /// <summary>
     /// Defines how a note's number is presented in CSV representation: either a number or

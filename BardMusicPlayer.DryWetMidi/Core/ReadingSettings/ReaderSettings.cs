@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Lazy;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Settings according to which <see cref="MidiReader"/> should read MIDI data.

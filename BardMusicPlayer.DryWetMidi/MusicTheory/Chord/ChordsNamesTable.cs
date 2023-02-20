@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
 {
     internal static class ChordsNamesTable
     {
@@ -92,7 +91,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
             var definition = NamesDefinitions.FirstOrDefault(d => d.Names.Contains(chordCharacteristic.Replace(" ", string.Empty)));
             if (definition != null)
-                notesNames.AddRange(definition.Intervals.First().Select(i => rootNoteName.Transpose(Interval.FromHalfSteps(i))));
+                notesNames.AddRange(definition.Intervals.First().Select(i => rootNoteName.Transpose(Interval.Interval.FromHalfSteps(i))));
 
             return notesNames.ToArray();
         }
@@ -122,7 +121,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
             var result = new List<string>(GetChordNamesInternal(notesNames));
 
             var firstNoteName = notesNames.First();
-            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString)}"));
+            result.AddRange(GetChordNamesInternal(notesNames.Skip(1).ToArray()).Select(n => $"{n}/{firstNoteName.ToString().Replace(Note.Note.SharpLongString, Note.Note.SharpShortString)}"));
 
             return result;
         }
@@ -177,7 +176,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
                 if (matched)
                 {
-                    result.AddRange(nameDefinition.Names.Select(n => $"{rootNoteName.ToString().Replace(Note.SharpLongString, Note.SharpShortString)}{n}"));
+                    result.AddRange(nameDefinition.Names.Select(n => $"{rootNoteName.ToString().Replace(Note.Note.SharpLongString, Note.Note.SharpShortString)}{n}"));
                     break;
                 }
             }

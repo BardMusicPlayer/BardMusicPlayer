@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Represents an object that has time.

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Grid
 {
     /// <summary>
     /// Grid where points in time are distributed arbitrarily according to provided collection
@@ -59,7 +58,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of points in time of the current grid.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
-        public IEnumerable<long> GetTimes(TempoMap tempoMap)
+        public IEnumerable<long> GetTimes(TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 

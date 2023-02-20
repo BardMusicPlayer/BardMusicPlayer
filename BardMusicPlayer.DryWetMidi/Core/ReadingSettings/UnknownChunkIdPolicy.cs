@@ -1,4 +1,7 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Specifies how reading engine should react on chunk with unknown ID. The default

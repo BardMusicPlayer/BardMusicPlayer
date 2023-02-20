@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.RecordTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv
 {
     internal static class CsvToMidiFileConverter
     {
@@ -22,19 +29,19 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         private static readonly Dictionary<string, RecordType> RecordTypes_MidiCsv =
             new Dictionary<string, RecordType>(StringComparer.OrdinalIgnoreCase)
             {
-                [MidiCsvRecordTypes.File.Header] = RecordType.Header,
+                [MidiCsvRecordTypes.File.Header]          = RecordType.Header,
                 [MidiCsvRecordTypes.File.TrackChunkStart] = RecordType.TrackChunkStart,
-                [MidiCsvRecordTypes.File.TrackChunkEnd] = RecordType.TrackChunkEnd,
-                [MidiCsvRecordTypes.File.FileEnd] = RecordType.FileEnd
+                [MidiCsvRecordTypes.File.TrackChunkEnd]   = RecordType.TrackChunkEnd,
+                [MidiCsvRecordTypes.File.FileEnd]         = RecordType.FileEnd
             };
 
         #endregion
 
         #region Methods
 
-        public static MidiFile ConvertToMidiFile(Stream stream, MidiFileCsvConversionSettings settings)
+        public static Core.MidiFile ConvertToMidiFile(Stream stream, MidiFileCsvConversionSettings settings)
         {
-            var midiFile = new MidiFile();
+            var midiFile = new Core.MidiFile();
             var events = new Dictionary<int, List<TimedMidiEvent>>();
 
             using (var csvReader = new CsvReader(stream, settings.CsvSettings))

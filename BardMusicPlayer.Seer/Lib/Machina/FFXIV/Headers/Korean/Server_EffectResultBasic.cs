@@ -15,7 +15,6 @@
 
 using System.Runtime.InteropServices;
 
-
 namespace Machina.FFXIV.Headers.Korean
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

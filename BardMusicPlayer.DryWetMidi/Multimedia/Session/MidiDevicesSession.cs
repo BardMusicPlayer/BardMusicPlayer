@@ -1,7 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using BardMusicPlayer.DryWetMidi.Multimedia.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Session
 {
     internal static class MidiDevicesSession
     {

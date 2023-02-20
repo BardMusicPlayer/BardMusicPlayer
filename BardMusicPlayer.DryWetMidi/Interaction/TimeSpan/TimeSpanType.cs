@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
 {
     /// <summary>
     /// The type of a time span.

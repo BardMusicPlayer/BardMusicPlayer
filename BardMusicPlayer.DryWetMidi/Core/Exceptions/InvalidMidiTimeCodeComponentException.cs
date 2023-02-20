@@ -1,12 +1,12 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when the reading engine has encountered an invalid MIDI time
-    /// code component (i.e. a value that doesn't belong to values of <see cref="Core.MidiTimeCodeComponent"/>)
+    /// code component (i.e. a value that doesn't belong to values of <see cref="Events.SystemCommon.MidiTimeCodeComponent"/>)
     /// during reading <see cref="MidiTimeCodeEvent"/>.
     /// </summary>
     [Serializable]

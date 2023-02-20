@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿using BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator;
+
+namespace BardMusicPlayer.DryWetMidi.Multimedia
 {
     internal static class NativeApiUtilities
     {

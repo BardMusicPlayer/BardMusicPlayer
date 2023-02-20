@@ -1,8 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     /// <summary>
     /// Represents time signature which is number of beats of specified length.

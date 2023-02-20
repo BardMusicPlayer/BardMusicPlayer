@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.TempoMapValuesCaches;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
 {
     internal sealed class MetricTimeSpanConverter : ITimeSpanConverter
     {
         #region ITimeSpanConverter
 
-        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
+        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
@@ -24,14 +24,14 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return endTimeSpan - startTimeSpan;
         }
 
-        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
+        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
                 throw new ArgumentException("Time division is not supported for time span conversion.", nameof(tempoMap));
 
             var metricTimeSpan = (MetricTimeSpan)timeSpan;
-            if ((TimeSpan)metricTimeSpan == TimeSpan.Zero)
+            if ((System.TimeSpan)metricTimeSpan == System.TimeSpan.Zero)
                 return 0;
 
             var startTimeSpan = TicksToMetricTimeSpan(time, tempoMap);
@@ -44,7 +44,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         #region Methods
 
-        private static MetricTimeSpan TicksToMetricTimeSpan(long timeSpan, TempoMap tempoMap)
+        private static MetricTimeSpan TicksToMetricTimeSpan(long timeSpan, TempoMap.TempoMap tempoMap)
         {
             if (timeSpan == 0)
                 return new MetricTimeSpan();
@@ -63,7 +63,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return new MetricTimeSpan(RoundMicroseconds(totalMicroseconds));
         }
 
-        private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, TempoMap tempoMap)
+        private static long MetricTimeSpanToTicks(MetricTimeSpan timeSpan, TempoMap.TempoMap tempoMap)
         {
             var timeMicroseconds = timeSpan.TotalMicroseconds;
             if (timeMicroseconds == 0)

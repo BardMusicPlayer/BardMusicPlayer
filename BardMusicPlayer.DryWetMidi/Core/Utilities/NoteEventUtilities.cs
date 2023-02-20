@@ -1,9 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Utilities
 {
     /// <summary>
     /// Set of extension methods for <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events.

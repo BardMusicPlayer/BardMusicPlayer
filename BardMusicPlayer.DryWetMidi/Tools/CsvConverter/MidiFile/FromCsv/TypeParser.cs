@@ -1,6 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv
 {
     internal static class TypeParser
     {
@@ -19,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
                 case NoteNumberFormat.NoteNumber:
                     return SevenBitNumber(p, s);
                 case NoteNumberFormat.Letter:
-                    return MusicTheory.Note.Parse(p).NoteNumber;
+                    return Note.Parse(p).NoteNumber;
             }
 
             return null;

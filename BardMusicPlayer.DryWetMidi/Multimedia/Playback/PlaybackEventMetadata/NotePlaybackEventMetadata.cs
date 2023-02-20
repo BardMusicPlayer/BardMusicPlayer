@@ -1,7 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Multimedia.Playback.Callbacks;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.PlaybackEventMetadata
 {
     internal sealed class NotePlaybackEventMetadata
     {

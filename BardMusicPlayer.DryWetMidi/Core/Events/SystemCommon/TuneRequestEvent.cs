@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon
 {
     /// <summary>
     /// Represents Tune Request event.
@@ -22,15 +24,15 @@
 
         #region Overrides
 
-        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
         }
 
-        internal override void Write(MidiWriter writer, WritingSettings settings)
+        internal override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
         }
 
-        internal override int GetSize(WritingSettings settings)
+        internal override int GetSize(WritingSettings.WritingSettings settings)
         {
             return 0;
         }

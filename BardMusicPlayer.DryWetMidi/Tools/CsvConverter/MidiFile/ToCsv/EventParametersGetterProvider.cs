@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.ToCsv
 {
     internal static class EventParametersGetterProvider
     {

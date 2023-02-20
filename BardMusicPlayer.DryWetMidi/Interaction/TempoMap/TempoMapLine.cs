@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     internal enum TempoMapLine
     {

@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Events.Converters
 {
     /// <summary>
     /// Defines format of a MIDI data bytes. Depending on this format the specific

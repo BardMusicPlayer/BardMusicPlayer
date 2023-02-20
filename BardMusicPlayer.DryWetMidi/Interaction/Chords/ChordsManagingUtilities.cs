@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Chords
 {
     /// <summary>
     /// Extension methods for chords managing.
@@ -179,7 +187,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         [Obsolete("OBS15")]
-        public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        public static Chord SetTimeAndLength(this Chord chord, ITimeSpan time, ITimeSpan length, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -802,16 +810,16 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Returns <see cref="MusicTheory.Chord"/> containing notes of the specified <see cref="Chord"/>.
+        /// Returns <see cref="MusicTheory.Chord.Chord"/> containing notes of the specified <see cref="Chord"/>.
         /// </summary>
         /// <param name="chord"><see cref="Chord"/> to get music theory chord from.</param>
-        /// <returns><see cref="MusicTheory.Chord"/> containing notes of the <paramref name="chord"/>.</returns>
+        /// <returns><see cref="MusicTheory.Chord.Chord"/> containing notes of the <paramref name="chord"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
-        public static MusicTheory.Chord GetMusicTheoryChord(this Chord chord)
+        public static MusicTheory.Chord.Chord GetMusicTheoryChord(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
-            return new MusicTheory.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
+            return new MusicTheory.Chord.Chord(chord.Notes.OrderBy(n => n.NoteNumber).Select(n => n.NoteName).ToArray());
         }
 
         internal static IEnumerable<Tuple<ITimedObject, int[]>> GetChordsAndNotesAndTimedEventsLazy(

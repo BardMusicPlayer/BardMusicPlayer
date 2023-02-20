@@ -1,9 +1,11 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Base;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.LengthedObjectsQuantizer;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer
 {
     /// <summary>
     /// Settings according to which quantizing should be performed by the <see cref="Quantizer"/>.

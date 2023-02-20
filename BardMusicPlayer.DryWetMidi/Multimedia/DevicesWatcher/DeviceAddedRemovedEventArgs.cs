@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.DevicesWatcher
 {
     /// <summary>
     /// Provides data for <see cref="DevicesWatcher.DeviceAdded"/> and

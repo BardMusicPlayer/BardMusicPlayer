@@ -1,8 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Chords
 {
     /// <summary>
     /// Settings which define how chords should be detected and built. More info in the

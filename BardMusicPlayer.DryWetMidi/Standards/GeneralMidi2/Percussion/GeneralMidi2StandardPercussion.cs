@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Standards
+﻿namespace BardMusicPlayer.DryWetMidi.Standards.GeneralMidi2.Percussion
 {
     /// <summary>
     /// General MIDI Level 2 'Standard' percussion.

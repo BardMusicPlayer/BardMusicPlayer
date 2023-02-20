@@ -1,4 +1,7 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Base
 {
     /// <summary>
     /// Represents a MIDI file meta event.
@@ -54,7 +57,7 @@
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
-        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal sealed override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             ReadContent(reader, settings, size);
         }
@@ -64,7 +67,7 @@
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        internal sealed override void Write(MidiWriter writer, WritingSettings settings)
+        internal sealed override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             WriteContent(writer, settings);
         }
@@ -74,7 +77,7 @@
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        internal sealed override int GetSize(WritingSettings settings)
+        internal sealed override int GetSize(WritingSettings.WritingSettings settings)
         {
             return GetContentSize(settings);
         }
@@ -102,21 +105,21 @@
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
-        protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size);
+        protected abstract void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, int size);
 
         /// <summary>
         /// Writes content of a MIDI meta event.
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+        protected abstract void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings);
 
         /// <summary>
         /// Gets the size of the content of a MIDI meta event.
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected abstract int GetContentSize(WritingSettings settings);
+        protected abstract int GetContentSize(WritingSettings.WritingSettings settings);
 
         #endregion
     }

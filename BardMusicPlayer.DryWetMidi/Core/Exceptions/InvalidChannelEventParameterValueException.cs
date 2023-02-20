@@ -1,8 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when the reading engine has encountered an invalid parameter

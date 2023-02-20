@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Writers
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventWriter"/> for an event.

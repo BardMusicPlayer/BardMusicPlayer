@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Octave;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {
@@ -96,7 +98,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// Default velocity that will be applied to all further notes and chords if it's not
         /// specified explicitly. Velocity can be altered with <see cref="SetVelocity(SevenBitNumber)"/>.
         /// </summary>
-        public static readonly SevenBitNumber DefaultVelocity = Interaction.Note.DefaultVelocity;
+        public static readonly SevenBitNumber DefaultVelocity = Interaction.Notes.Note.DefaultVelocity;
 
         /// <summary>
         /// Default length that will be applied to all further notes and chords if it's not
@@ -118,9 +120,9 @@ namespace BardMusicPlayer.DryWetMidi.Composing
 
         /// <summary>
         /// Default root note further notes will be based on if it's not specified explicitly.
-        /// Root note can be altered with <see cref="SetRootNote(MusicTheory.Note)"/>.
+        /// Root note can be altered with <see cref="SetRootNote(MusicTheory.Note.Note)"/>.
         /// </summary>
-        public static readonly MusicTheory.Note DefaultRootNote = Octave.Middle.C;
+        public static readonly Note DefaultRootNote = Octave.Middle.C;
 
         #endregion
 
@@ -178,7 +180,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes and chords that don't take velocity as an argument. In these
         /// cases the value of the <see cref="Velocity"/> property will be used. For example,
-        /// <see cref="Note(MusicTheory.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note)"/>.
+        /// <see cref="Note(MusicTheory.Note.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note.Note)"/>.
         /// </para>
         /// </remarks>
         public SevenBitNumber Velocity { get; private set; } = DefaultVelocity;
@@ -191,7 +193,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <para>
         /// There are methods to add notes and chords that don't take length as an argument. In these
         /// cases the value of the <see cref="NoteLength"/> property will be used. For example,
-        /// <see cref="Note(MusicTheory.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note)"/>.
+        /// <see cref="Note(MusicTheory.Note.Note)"/> or <see cref="Chord(IEnumerable{Interval}, MusicTheory.Note.Note)"/>.
         /// </para>
         /// </remarks>
         public ITimeSpan NoteLength { get; private set; } = DefaultNoteLength;
@@ -224,7 +226,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
 
         /// <summary>
         /// Gets the root note further notes will be based on if it's not specified explicitly.
-        /// Root note can be altered with <see cref="SetRootNote(MusicTheory.Note)"/>.
+        /// Root note can be altered with <see cref="SetRootNote(MusicTheory.Note.Note)"/>.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -233,7 +235,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <see cref="Note(Interval)"/>.
         /// </para>
         /// </remarks>
-        public MusicTheory.Note RootNote { get; private set; } = DefaultRootNote;
+        public Note RootNote { get; private set; } = DefaultRootNote;
 
         #endregion
 

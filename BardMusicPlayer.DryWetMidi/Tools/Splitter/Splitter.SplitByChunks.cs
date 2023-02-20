@@ -1,11 +1,9 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Tools.Splitter.Settings;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Splitter
 {
     public static partial class Splitter
     {

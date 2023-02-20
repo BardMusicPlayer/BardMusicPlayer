@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
 
-namespace BardMusicPlayer.DryWetMidi.Standards
+namespace BardMusicPlayer.DryWetMidi.Standards.GeneralMidi
 {
     /// <summary>
     /// Provides utilities for General MIDI Level 1.

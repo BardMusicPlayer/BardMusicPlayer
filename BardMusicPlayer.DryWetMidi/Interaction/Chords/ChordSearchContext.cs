@@ -1,6 +1,8 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Chords
 {
     /// <summary>
     /// Defines a context to search chords within. More info in the

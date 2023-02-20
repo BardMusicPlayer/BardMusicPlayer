@@ -1,7 +1,6 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
 {
     /// <summary>
     /// Provides data for the <see cref="InputDevice.MidiTimeCodeReceived"/> event.

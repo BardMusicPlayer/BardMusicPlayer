@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Events.Base
 {
     /// <summary>
     /// Represents a system real-time event.
@@ -24,15 +24,15 @@
 
         #region Overrides
 
-        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal sealed override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
         }
 
-        internal sealed override void Write(MidiWriter writer, WritingSettings settings)
+        internal sealed override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
         }
 
-        internal sealed override int GetSize(WritingSettings settings)
+        internal sealed override int GetSize(WritingSettings.WritingSettings settings)
         {
             return 0;
         }

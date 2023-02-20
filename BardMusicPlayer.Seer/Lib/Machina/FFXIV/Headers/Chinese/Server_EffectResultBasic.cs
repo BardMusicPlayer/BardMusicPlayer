@@ -15,7 +15,6 @@
 
 using System.Runtime.InteropServices;
 
-
 namespace Machina.FFXIV.Headers.Chinese
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

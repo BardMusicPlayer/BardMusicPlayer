@@ -1,7 +1,6 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.WritingSettings
 {
     /// <summary>
     /// Settings according to which <see cref="MidiWriter"/> should write MIDI data.

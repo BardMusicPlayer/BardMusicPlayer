@@ -1,4 +1,7 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Specifies how reading engine should react on invalid value of a system common event's

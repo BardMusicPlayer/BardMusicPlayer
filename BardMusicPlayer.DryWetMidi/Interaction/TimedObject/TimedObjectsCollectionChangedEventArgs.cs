@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Provides data for the <see cref="TimedObjectsCollection{TObject}.CollectionChanged"/> event.

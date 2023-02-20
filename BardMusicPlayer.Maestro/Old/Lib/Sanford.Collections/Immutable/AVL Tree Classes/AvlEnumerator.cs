@@ -34,7 +34,7 @@ namespace Sanford.Collections.Immutable
         private int index;
 
         // Used for traversing the tree inorder.
-        private System.Collections.Stack nodeStack = new System.Collections.Stack();
+        private Stack nodeStack = new Stack();
 
         #endregion
 

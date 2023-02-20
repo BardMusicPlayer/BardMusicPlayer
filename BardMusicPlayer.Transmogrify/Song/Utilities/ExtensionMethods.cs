@@ -6,6 +6,7 @@
 using System.IO;
 using System.Text;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
 namespace BardMusicPlayer.Transmogrify.Song.Utilities;
 

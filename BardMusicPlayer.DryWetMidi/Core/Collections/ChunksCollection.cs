@@ -1,10 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Collections
 {
     /// <summary>
     /// Collection of <see cref="MidiChunk"/> objects.
@@ -67,7 +65,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
         public void Add(MidiChunk chunk)
@@ -84,7 +82,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that header chunks cannot be added into the collection since it may cause inconsistence in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunks"/> is <c>null</c>.</exception>
         public void AddRange(IEnumerable<MidiChunk> chunks)
@@ -100,7 +98,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunk">The chunk to insert.</param>
@@ -130,7 +128,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that header chunks cannot be inserted into the collection since it may cause inconsistence in the file structure.
         /// Header chunk with appropriate information will be written to a file automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <param name="index">The zero-based index at which the chunk should be inserted.</param>
         /// <param name="chunks">The chunk to insert.</param>

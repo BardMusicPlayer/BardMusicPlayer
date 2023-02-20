@@ -6,12 +6,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Song.Utilities;
 

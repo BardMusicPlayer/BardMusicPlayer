@@ -1,16 +1,21 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
+using BardMusicPlayer.DryWetMidi.Interaction.ValueLine;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     /// <summary>
     /// Provides a way to manage tempo map of a MIDI file. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
     /// </summary>
-    /// <seealso cref="Interaction.TempoMap"/>
+    /// <seealso cref="Interaction.TempoMap.TempoMap"/>
     public sealed class TempoMapManager : IDisposable
     {
         #region Fields

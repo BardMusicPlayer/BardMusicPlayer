@@ -1,7 +1,8 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator.Session;
+using BardMusicPlayer.DryWetMidi.Multimedia.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator
 {
     /// <summary>
     /// Tick generator providing most accurate ticking, allowing firing intervals of 1 ms which

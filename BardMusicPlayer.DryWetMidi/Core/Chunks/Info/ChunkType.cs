@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Chunks.Info
 {
     /// <summary>
     /// Represents a chunk's identity described by its type and corresponding ID.

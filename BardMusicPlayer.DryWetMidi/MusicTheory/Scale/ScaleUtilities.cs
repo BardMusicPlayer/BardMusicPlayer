@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Scale
 {
     /// <summary>
     /// Provides useful utilities for working with <see cref="Scale"/>.
@@ -56,7 +55,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="scale"><see cref="Scale"/> to get notes of.</param>
         /// <returns>Notes that belong to the <paramref name="scale"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
-        public static IEnumerable<Note> GetNotes(this Scale scale)
+        public static IEnumerable<Note.Note> GetNotes(this Scale scale)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
@@ -64,7 +63,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                                            .SkipWhile(number => NoteUtilities.GetNoteName(number) != scale.RootNote)
                                            .First();
 
-            yield return Note.Get((SevenBitNumber)noteNumber);
+            yield return Note.Note.Get((SevenBitNumber)noteNumber);
 
             while (true)
             {
@@ -74,7 +73,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                     if (!NoteUtilities.IsNoteNumberValid(noteNumber))
                         yield break;
 
-                    yield return Note.Get((SevenBitNumber)noteNumber);
+                    yield return Note.Note.Get((SevenBitNumber)noteNumber);
                 }
             }
         }
@@ -96,7 +95,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
             {
                 foreach (var interval in scale.Intervals)
                 {
-                    var noteNumber = (lastNoteNumber + interval) % Octave.OctaveSize;
+                    var noteNumber = (lastNoteNumber + interval) % Octave.Octave.OctaveSize;
                     yield return (NoteName)noteNumber;
 
                     lastNoteNumber = noteNumber;
@@ -123,7 +122,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<Note> GetAscendingNotes(this Scale scale, Note rootNote)
+        public static IEnumerable<Note.Note> GetAscendingNotes(this Scale scale, Note.Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
@@ -151,7 +150,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<Note> GetDescendingNotes(this Scale scale, Note rootNote)
+        public static IEnumerable<Note.Note> GetDescendingNotes(this Scale scale, Note.Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
@@ -180,7 +179,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static bool IsNoteInScale(this Scale scale, Note note)
+        public static bool IsNoteInScale(this Scale scale, Note.Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -207,7 +206,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static Note GetNextNote(this Scale scale, Note note)
+        public static Note.Note GetNextNote(this Scale scale, Note.Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -235,7 +234,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static Note GetPreviousNote(this Scale scale, Note note)
+        public static Note.Note GetPreviousNote(this Scale scale, Note.Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);

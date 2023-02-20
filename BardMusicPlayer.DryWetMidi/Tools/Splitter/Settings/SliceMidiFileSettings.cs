@@ -1,7 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Splitter.Settings
 {
     /// <summary>
     /// Settings according to which a <see cref="MidiFile"/> should be split by vertical split methods.

@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
 {
     /// <summary>
     /// Represents a chord's quality.

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Tools.Common.TimeProcessing;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Bounds;
+using Random = BardMusicPlayer.DryWetMidi.Common.Random;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer.Base
 {
     /// <summary>
     /// Provides methods to randomize objects time.
@@ -89,7 +89,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             var maxTime = timeBounds.Item2;
 
             var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + Common.Random.Instance.Next(difference) + 1;
+            return minTime + Random.Instance.Next(difference) + 1;
         }
 
         #endregion

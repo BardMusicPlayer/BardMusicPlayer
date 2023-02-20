@@ -1,7 +1,9 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Meta
 {
     /// <summary>
     /// Represents a Sequencer Specific meta event.
@@ -54,7 +56,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="size">Size of the event's content.</param>
         /// <exception cref="ArgumentOutOfRangeException">Sequencer specific event cannot be read since the size is
         /// negative number.</exception>
-        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             ThrowIfArgument.IsNegative(
                 nameof(size),
@@ -88,7 +90,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var data = Data;
             if (data != null)
@@ -100,7 +102,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected override int GetContentSize(WritingSettings settings)
+        protected override int GetContentSize(WritingSettings.WritingSettings settings)
         {
             return Data?.Length ?? 0;
         }

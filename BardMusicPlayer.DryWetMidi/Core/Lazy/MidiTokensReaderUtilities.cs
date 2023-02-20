@@ -1,8 +1,8 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// Provides useful utility methods for <see cref="MidiTokensReader"/>. See

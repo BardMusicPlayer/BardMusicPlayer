@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Tools.LengthedObjectsSplitter.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.LengthedObjectsSplitter
 {
     /// <summary>
     /// Provides methods for splitting chords.

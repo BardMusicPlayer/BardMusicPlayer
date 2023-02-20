@@ -1,8 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
 
 namespace BardMusicPlayer.DryWetMidi.Core
 {

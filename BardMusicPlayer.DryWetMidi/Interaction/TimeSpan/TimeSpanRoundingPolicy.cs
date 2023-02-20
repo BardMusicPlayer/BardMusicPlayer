@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
 {
     /// <summary>
     /// Specifies how a time span should be rounded.
@@ -9,7 +7,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
     /// <para>
     /// The default value of the enum is <see cref="NoRounding"/>. Let's see how remaining options work.
     /// Please note that rounding step should be specified (see
-    /// <see cref="TimeSpanUtilities.Round(ITimeSpan, TimeSpanRoundingPolicy, long, ITimeSpan, TempoMap)"/>).
+    /// <see cref="TimeSpanUtilities.Round"/>).
     /// </para>
     /// <para>
     /// <see cref="RoundUp"/> used to round a time span to the smallest one that is greater than or equal

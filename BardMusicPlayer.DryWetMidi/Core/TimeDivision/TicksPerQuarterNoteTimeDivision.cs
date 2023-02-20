@@ -1,7 +1,6 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.TimeDivision
 {
     /// <summary>
     /// Time division that represents number of delta-time "ticks" which make up a quarter-note.

@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Specifies how reading engine should react on <c>Note On</c> events with velocity of zero.

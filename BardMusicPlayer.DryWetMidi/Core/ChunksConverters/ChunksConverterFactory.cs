@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.ChunksConverters
 {
     /// <summary>
     /// Provider of an implementation of the <see cref="IChunksConverter"/> interface which

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.InputDevice;
+using BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.DevicesConnector
 {
     /// <summary>
     /// Provides a way to connect an input MIDI device to an output MIDI devices to redirect all

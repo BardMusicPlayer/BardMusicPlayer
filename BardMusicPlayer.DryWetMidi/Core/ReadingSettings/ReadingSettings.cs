@@ -1,8 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Text;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Chunks.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Settings according to which MIDI data should be read.

@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
 {
     /// <summary>
     /// Callback used to read unknown channel event if <see cref="ReadingSettings.UnknownChannelEventPolicy"/>

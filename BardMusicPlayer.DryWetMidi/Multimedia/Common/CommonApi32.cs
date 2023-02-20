@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Common
 {
     internal sealed class CommonApi32 : CommonApi
     {

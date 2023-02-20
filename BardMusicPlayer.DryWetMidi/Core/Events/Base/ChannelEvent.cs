@@ -1,6 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Base
 {
     /// <summary>
     /// Represents a MIDI file channel event.
@@ -44,7 +46,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="reader">Reader to read data byte with.</param>
         /// <param name="settings">Settings according to which a data byte should be read and processed.</param>
         /// <returns>A data byte read with <paramref name="reader"/>.</returns>
-        protected byte ReadDataByte(MidiReader reader, ReadingSettings settings)
+        protected byte ReadDataByte(MidiReader reader, ReadingSettings.ReadingSettings settings)
         {
             var value = reader.ReadByte();
             if (value > SevenBitNumber.MaxValue)

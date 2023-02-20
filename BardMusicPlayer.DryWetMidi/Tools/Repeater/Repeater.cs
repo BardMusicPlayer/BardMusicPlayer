@@ -1,11 +1,18 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Repeater
 {
     /// <summary>
     /// Provides a way to repeat MIDI data using different options. More info in the

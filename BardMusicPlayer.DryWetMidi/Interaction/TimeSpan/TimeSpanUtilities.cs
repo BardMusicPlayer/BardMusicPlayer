@@ -1,10 +1,11 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using TimeSpanConverter = BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters.TimeSpanConverter;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
 {
     /// <summary>
     /// Provides useful utilities for working with <see cref="ITimeSpan"/>.
@@ -25,10 +26,10 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
         {
-            [TimeSpanType.Midi] = new MidiTimeSpan(long.MaxValue),
-            [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
-            [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
-            [TimeSpanType.BarBeatTicks] = new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue),
+            [TimeSpanType.Midi]            = new MidiTimeSpan(long.MaxValue),
+            [TimeSpanType.Metric]          = new MetricTimeSpan(System.TimeSpan.MaxValue),
+            [TimeSpanType.Musical]         = new MusicalTimeSpan(long.MaxValue, 1),
+            [TimeSpanType.BarBeatTicks]    = new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue),
             [TimeSpanType.BarBeatFraction] = new BarBeatFractionTimeSpan(long.MaxValue, double.MaxValue)
         };
 
@@ -75,7 +76,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             TimeSpanRoundingPolicy roundingPolicy,
             long time,
             ITimeSpan step,
-            TempoMap tempoMap)
+            TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
             ThrowIfArgument.IsInvalidEnumValue(nameof(roundingPolicy), roundingPolicy);

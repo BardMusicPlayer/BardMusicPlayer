@@ -17,6 +17,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -57,7 +58,7 @@ namespace Machina.Sockets
         private string BuildSource(string host, int port)
         {
             if (!string.IsNullOrEmpty(_file))
-                return new StringBuilder($"file://{System.IO.Path.GetDirectoryName(_file)}", PCAP_BUF_SIZE).ToString();
+                return new StringBuilder($"file://{Path.GetDirectoryName(_file)}", PCAP_BUF_SIZE).ToString();
             StringBuilder source = new StringBuilder("rpcap://", PCAP_BUF_SIZE);
             if (string.IsNullOrEmpty(host))
                 return source.ToString();

@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Represents the method that will handle the <see cref="TimedObjectsCollection{TObject}.CollectionChanged"/> event.

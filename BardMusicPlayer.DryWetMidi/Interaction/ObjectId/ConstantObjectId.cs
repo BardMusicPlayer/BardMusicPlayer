@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
 {
     internal sealed class ConstantObjectId<TId> : IObjectId
     {

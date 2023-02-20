@@ -1,7 +1,6 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback
 {
     /// <summary>
     /// Callback used to modify MIDI event before playing.

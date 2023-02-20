@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.Callbacks
 {
     /// <summary>
     /// Callback used to process note to be played by <see cref="Playback"/>.

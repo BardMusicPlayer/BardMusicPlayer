@@ -1,8 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
-namespace BardMusicPlayer.DryWetMidi.Composing
+namespace BardMusicPlayer.DryWetMidi.Composing.Actions
 {
     internal sealed class AddTextEventAction<TEvent> : PatternAction
         where TEvent : BaseTextEvent

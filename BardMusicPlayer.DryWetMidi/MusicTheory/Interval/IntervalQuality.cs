@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Interval
 {
     /// <summary>
     /// Represents an interval's quality.

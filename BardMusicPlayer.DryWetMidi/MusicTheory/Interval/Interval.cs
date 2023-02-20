@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Scale;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Interval
 {
     /// <summary>
     /// Represents a musical interval in terms of half steps number.
@@ -208,8 +209,8 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
             var result = new List<IntervalDefinition>();
 
-            var quality = QualitiesPattern[Size % Octave.OctaveSize];
-            var number = 7 * (Size / Octave.OctaveSize) + IntervalNumbersOffsets[Size % Octave.OctaveSize];
+            var quality = QualitiesPattern[Size % Octave.Octave.OctaveSize];
+            var number = 7 * (Size / Octave.Octave.OctaveSize) + IntervalNumbersOffsets[Size % Octave.Octave.OctaveSize];
 
             if (quality != null)
             {
@@ -334,7 +335,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                 maxIntervalNumber = 7;
 
             var result = intervalNumber > maxIntervalNumber
-                ? ((intervalNumber - 1) / 7) * Octave.OctaveSize
+                ? ((intervalNumber - 1) / 7) * Octave.Octave.OctaveSize
                 : 0;
 
             var additionalNumber = intervalNumber;

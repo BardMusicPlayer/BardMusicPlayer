@@ -1,8 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations
 {
     /// <summary>
     /// Represents bar/beat time span which represents bars, beats and ticks. More info in the

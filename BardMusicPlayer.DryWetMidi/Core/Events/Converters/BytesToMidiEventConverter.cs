@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Text;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.Readers;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Converters
 {
     /// <summary>
     /// Provides methods to convert bytes to an instance of the <see cref="MidiEvent"/>.
@@ -59,10 +64,10 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on unknown channel event. The default is
-        /// <see cref="UnknownChannelEventPolicy.Abort"/>.
+        /// <see cref="Core.ReadingSettings.UnknownChannelEventPolicy.Abort"/>.
         /// </summary>
         /// <remarks>
-        /// <para>If <see cref="UnknownChannelEventPolicy.Abort"/> is used, an instance of the
+        /// <para>If <see cref="Core.ReadingSettings.UnknownChannelEventPolicy.Abort"/> is used, an instance of the
         /// <see cref="UnknownChannelEventException"/> will be thrown if channel event has unknown status byte.</para>
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
@@ -237,7 +242,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             }
         }
 
-        internal ReadingSettings ReadingSettings { get; } = new ReadingSettings();
+        internal ReadingSettings.ReadingSettings ReadingSettings { get; } = new ReadingSettings.ReadingSettings();
 
         #endregion
 

@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
 {
     /// <summary>
     /// Mode of the arithmetic operation between two <see cref="ITimeSpan"/>.

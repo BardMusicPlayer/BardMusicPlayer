@@ -1,13 +1,16 @@
 ﻿using System.Diagnostics;
-using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Writers
 {
     internal sealed class MetaEventWriter : IEventWriter
     {
         #region IEventWriter
 
-        public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings settings, bool writeStatusByte)
+        public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings.WritingSettings settings, bool writeStatusByte)
         {
             if (writeStatusByte)
                 writer.WriteByte(EventStatusBytes.Global.Meta);
@@ -93,7 +96,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             midiEvent.Write(writer, settings);
         }
 
-        public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
+        public int CalculateSize(MidiEvent midiEvent, WritingSettings.WritingSettings settings, bool writeStatusByte)
         {
             var contentSize = midiEvent.GetSize(settings);
             return (writeStatusByte ? 1 : 0) + 1 + contentSize.GetVlqLength() + contentSize;

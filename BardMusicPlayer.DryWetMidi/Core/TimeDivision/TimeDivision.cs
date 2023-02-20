@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.TimeDivision
 {
     /// <summary>
     /// MIDI file time division.

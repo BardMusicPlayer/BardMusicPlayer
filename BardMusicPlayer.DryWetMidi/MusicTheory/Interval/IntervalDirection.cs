@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Interval
 {
     /// <summary>
     /// Direction of a musical interval represented by the <see cref="Interval"/>.

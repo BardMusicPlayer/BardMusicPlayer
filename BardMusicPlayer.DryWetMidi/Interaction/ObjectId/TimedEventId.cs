@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
 {
     internal sealed class TimedEventId : IObjectId
     {

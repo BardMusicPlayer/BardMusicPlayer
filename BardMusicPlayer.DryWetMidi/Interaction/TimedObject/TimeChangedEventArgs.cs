@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Contains arguments for the <see cref="INotifyTimeChanged.TimeChanged"/> event.

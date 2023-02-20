@@ -1,4 +1,4 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
 namespace BardMusicPlayer.DryWetMidi.Interaction
 {

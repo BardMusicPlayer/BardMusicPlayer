@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Note
 {
     /// <summary>
     /// Name of a note of the 12-tone chromatic scale.

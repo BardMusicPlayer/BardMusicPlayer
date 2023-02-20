@@ -1,7 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
 {
     /// <summary>
     /// Time span that represents time or length.

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.TempoMapValuesCaches
 {
     internal sealed class MetricTempoMapValuesCache : ITempoMapValuesCache
     {
@@ -59,7 +59,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         public IEnumerable<TempoMapLine> InvalidateOnLines { get; } = new[] { TempoMapLine.Tempo };
 
-        public void Invalidate(TempoMap tempoMap)
+        public void Invalidate(TempoMap.TempoMap tempoMap)
         {
             var microseconds = new List<AccumulatedMicroseconds>();
 

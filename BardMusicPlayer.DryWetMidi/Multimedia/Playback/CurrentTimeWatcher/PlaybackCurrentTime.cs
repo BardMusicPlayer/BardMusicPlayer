@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.CurrentTimeWatcher
 {
     /// <summary>
     /// Holds the current time of a playback.

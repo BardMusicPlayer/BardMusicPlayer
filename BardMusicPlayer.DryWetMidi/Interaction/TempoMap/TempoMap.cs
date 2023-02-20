@@ -1,10 +1,10 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.ValueLine;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     /// <summary>
     /// Represents a tempo map of a MIDI file. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.

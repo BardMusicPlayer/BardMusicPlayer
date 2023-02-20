@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
 {
     /// <summary>
     /// Represents the ID (key) of an object.

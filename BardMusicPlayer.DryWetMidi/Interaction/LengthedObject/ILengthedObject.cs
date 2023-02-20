@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject
 {
     /// <summary>
     /// Represents an object that has length.

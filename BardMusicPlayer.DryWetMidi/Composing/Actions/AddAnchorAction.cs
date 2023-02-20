@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿namespace BardMusicPlayer.DryWetMidi.Composing.Actions
 {
     internal sealed class AddAnchorAction : PatternAction
     {

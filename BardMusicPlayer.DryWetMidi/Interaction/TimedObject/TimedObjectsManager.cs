@@ -1,9 +1,12 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Provides a way to manage timed objects of different types within an <see cref="EventsCollection"/>

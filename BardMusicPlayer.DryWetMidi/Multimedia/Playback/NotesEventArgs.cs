@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback
 {
     /// <summary>
     /// Holds notes collection for <see cref="Playback.NotesPlaybackStarted"/> and

@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimedEvents
 {
     /// <summary>
     /// Extension methods for managing MIDI events by their absolute time.
@@ -35,7 +41,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         [Obsolete("OBS14")]
-        public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap tempoMap)
+        public static TimedEvent SetTime(this TimedEvent timedEvent, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(timedEvent), timedEvent);
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -248,7 +254,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// <exception cref="ArgumentException"><paramref name="midiEvent"/> is either system real-time or
         /// system common one.</exception>
         [Obsolete("OBS16")]
-        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap tempoMap)
+        public static void AddEvent(this TimedObjectsCollection<TimedEvent> eventsCollection, MidiEvent midiEvent, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);

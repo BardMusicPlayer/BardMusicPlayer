@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.DevicesConnector
 {
     /// <summary>
     /// Callback used to process events coming from <see cref="DevicesConnector.InputDevice"/> before

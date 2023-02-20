@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
 {
     internal static class ChordParser
     {

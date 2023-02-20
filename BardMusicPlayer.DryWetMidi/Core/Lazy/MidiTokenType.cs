@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// The type of a MIDI token.

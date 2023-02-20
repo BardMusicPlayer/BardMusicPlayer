@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject
 {
     /// <summary>
     /// Provides the event which fired when the length of an object has been changed.

@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Info
 {
     internal static class StandardMetaEventStatusBytes
     {

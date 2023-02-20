@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     internal interface ITempoMapValuesCache
     {

@@ -1,10 +1,14 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Merger
 {
     /// <summary>
     /// Provides merging logic for group of objects. More info in the <see href="xref:a_merger">Merger</see> article.

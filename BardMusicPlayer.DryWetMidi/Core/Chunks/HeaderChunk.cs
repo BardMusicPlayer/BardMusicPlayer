@@ -1,7 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Chunks
 {
     internal sealed class HeaderChunk : MidiChunk
     {
@@ -30,7 +32,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         public ushort FileFormat { get; set; }
 
-        public TimeDivision TimeDivision { get; set; }
+        public TimeDivision.TimeDivision TimeDivision { get; set; }
 
         public ushort TracksNumber { get; set; }
 
@@ -40,9 +42,9 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         internal static void ReadData(
             MidiReader reader,
-            ReadingSettings settings,
+            ReadingSettings.ReadingSettings settings,
             out ushort fileFormat,
-            out TimeDivision timeDivision,
+            out TimeDivision.TimeDivision timeDivision,
             out ushort tracksNumber)
         {
             fileFormat = reader.ReadWord();
@@ -81,11 +83,11 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <exception cref="UnknownFileFormatException">The header chunk contains unknown file format and
         /// <see cref="ReadingSettings.UnknownFileFormatPolicy"/> property of the <paramref name="settings"/> set to
         /// <see cref="UnknownFileFormatPolicy.Abort"/>.</exception>
-        protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, uint size)
         {
             ushort fileFormat;
             ushort tracksNumber;
-            TimeDivision timeDivision;
+            TimeDivision.TimeDivision timeDivision;
             ReadData(reader, settings, out fileFormat, out timeDivision, out tracksNumber);
 
             FileFormat = fileFormat;
@@ -104,7 +106,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
-        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             writer.WriteWord(FileFormat);
             writer.WriteWord(TracksNumber);
@@ -120,7 +122,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// This method must always return 6.
         /// </remarks>
-        protected override uint GetContentSize(WritingSettings settings)
+        protected override uint GetContentSize(WritingSettings.WritingSettings settings)
         {
             return 6;
         }

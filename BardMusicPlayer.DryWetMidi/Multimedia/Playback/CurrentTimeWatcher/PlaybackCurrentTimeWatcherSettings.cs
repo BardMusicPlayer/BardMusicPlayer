@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿using BardMusicPlayer.DryWetMidi.Multimedia.Clock;
+
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.CurrentTimeWatcher
 {
     /// <summary>
     /// Settings for <see cref="PlaybackCurrentTimeWatcher"/>.

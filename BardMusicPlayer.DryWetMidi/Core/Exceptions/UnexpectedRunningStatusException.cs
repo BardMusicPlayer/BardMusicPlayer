@@ -1,7 +1,6 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when the reading engine encountered unexpected running

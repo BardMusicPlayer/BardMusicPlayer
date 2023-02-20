@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Tools;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Tools.Resizer;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Notes.Utilities
 {
     /// <summary>
     /// Provides ways to resize collection of notes.
@@ -43,7 +42,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         public static void ResizeNotes(this IEnumerable<Note> notes,
                                        ITimeSpan length,
                                        TimeSpanType distanceCalculationType,
-                                       TempoMap tempoMap)
+                                       TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -84,7 +83,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         public static void ResizeNotes(this IEnumerable<Note> notes,
                                        double ratio,
                                        TimeSpanType distanceCalculationType,
-                                       TempoMap tempoMap)
+                                       TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative");

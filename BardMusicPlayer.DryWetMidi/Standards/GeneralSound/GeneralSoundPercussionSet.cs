@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Standards
+﻿namespace BardMusicPlayer.DryWetMidi.Standards.GeneralSound
 {
     /// <summary>
     /// General Sound percussion set.

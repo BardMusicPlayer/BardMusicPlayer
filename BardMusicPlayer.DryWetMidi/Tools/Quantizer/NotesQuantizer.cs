@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.LengthedObjectsQuantizer;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer
 {
     /// <summary>
     /// Settings according to which notes should be quantized.

@@ -1,10 +1,17 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Notes
 {
     /// <summary>
     /// Extension methods for notes managing.
@@ -230,7 +237,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         [Obsolete("OBS15")]
-        public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap tempoMap)
+        public static Note SetTimeAndLength(this Note note, ITimeSpan time, ITimeSpan length, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
             ThrowIfArgument.IsNull(nameof(time), time);
@@ -825,12 +832,12 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Returns <see cref="MusicTheory.Note"/> corresponding to the specified <see cref="Note"/>.
+        /// Returns <see cref="MusicTheory.Note.Note"/> corresponding to the specified <see cref="Note"/>.
         /// </summary>
         /// <param name="note"><see cref="Note"/> to get music theory note from.</param>
-        /// <returns><see cref="MusicTheory.Note"/> corresponding to the <paramref name="note"/>.</returns>
+        /// <returns><see cref="MusicTheory.Note.Note"/> corresponding to the <paramref name="note"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
-        public static MusicTheory.Note GetMusicTheoryNote(this Note note)
+        public static MusicTheory.Note.Note GetMusicTheoryNote(this Note note)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
 

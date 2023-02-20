@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
 {
     internal static class TimeSpanConverter
     {
@@ -30,18 +29,18 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         #region Methods
 
-        public static TTimeSpan ConvertTo<TTimeSpan>(long timeSpan, long time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(long timeSpan, long time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             return (TTimeSpan)GetConverter<TTimeSpan>().ConvertTo(timeSpan, time, tempoMap);
         }
 
-        public static ITimeSpan ConvertTo(long timeSpan, TimeSpanType timeSpanType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(long timeSpan, TimeSpanType timeSpanType, long time, TempoMap.TempoMap tempoMap)
         {
             return GetConverter(timeSpanType).ConvertTo(timeSpan, time, tempoMap);
         }
 
-        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, long time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             if (timeSpan is TTimeSpan)
@@ -50,7 +49,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return ConvertTo<TTimeSpan>(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 
-        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, TimeSpanType timeSpanType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, TimeSpanType timeSpanType, long time, TempoMap.TempoMap tempoMap)
         {
             if (timeSpan.GetType() == TimeSpansTypes[timeSpanType])
                 return timeSpan.Clone();
@@ -58,7 +57,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return ConvertTo(ConvertFrom(timeSpan, time, tempoMap), timeSpanType, time, tempoMap);
         }
 
-        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, Type timeSpanType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan timeSpan, Type timeSpanType, long time, TempoMap.TempoMap tempoMap)
         {
             if (timeSpan.GetType() == timeSpanType)
                 return timeSpan.Clone();
@@ -66,7 +65,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return GetConverter(timeSpanType).ConvertTo(ConvertFrom(timeSpan, time, tempoMap), time, tempoMap);
         }
 
-        public static long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
+        public static long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             return GetConverter(timeSpan.GetType()).ConvertFrom(timeSpan, time, tempoMap);
         }

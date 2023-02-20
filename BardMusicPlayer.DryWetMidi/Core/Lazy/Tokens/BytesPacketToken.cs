@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens
 {
     /// <summary>
     /// Represents a bytes packet.

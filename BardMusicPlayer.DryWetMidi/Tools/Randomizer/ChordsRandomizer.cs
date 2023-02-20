@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Tools.Randomizer.LengthedObjectsRandomizer;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer
 {
     /// <summary>
     /// Settings according to which chords should be randomized.

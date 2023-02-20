@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using BardMusicPlayer.DryWetMidi.Multimedia.InputDevice;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Recording
 {
     /// <summary>
     /// Provides a way to record MIDI data received by an input MIDI device. More info in the

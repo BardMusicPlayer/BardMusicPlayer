@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Converters;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Events.Writers;
+using BardMusicPlayer.DryWetMidi.Multimedia.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.DevicesWatcher;
+using BardMusicPlayer.DryWetMidi.Multimedia.InputDevice;
+using BardMusicPlayer.DryWetMidi.Multimedia.Session;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice
 {
     /// <summary>
     /// Represents an output MIDI device. More info in the

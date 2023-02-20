@@ -1,6 +1,8 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Notes
 {
     /// <summary>
     /// Defines a context to search notes within. The default value is <see cref="SingleEventsCollection"/>.

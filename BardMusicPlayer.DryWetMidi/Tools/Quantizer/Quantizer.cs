@@ -1,10 +1,19 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Interaction.Grid;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using BardMusicPlayer.DryWetMidi.Tools.Common;
+using BardMusicPlayer.DryWetMidi.Tools.Common.TimeProcessing;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Base;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Bounds;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.LengthedObjectsQuantizer;
+using Random = BardMusicPlayer.DryWetMidi.Common.Random;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer
 {
     /// <summary>
     /// Performs quantizing of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
@@ -288,7 +297,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             var maxTime = timeBounds.Item2;
 
             var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + Common.Random.Instance.Next(difference) + 1;
+            return minTime + Random.Instance.Next(difference) + 1;
         }
 
         private static ICollection<long> GetGridTimes(

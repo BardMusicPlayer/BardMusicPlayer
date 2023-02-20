@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
 {
     /// <summary>
     /// Utilities for working with <see cref="Chord"/>.
@@ -20,7 +19,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <returns>Intervals from the root note of the <paramref name="chord"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">Some intervals are greater than <see cref="SevenBitNumber.MaxValue"/>.</exception>
-        public static IEnumerable<Interval> GetIntervalsFromRootNote(this Chord chord)
+        public static IEnumerable<Interval.Interval> GetIntervalsFromRootNote(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
@@ -34,11 +33,11 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="chord">Chord to get intervals between notes.</param>
         /// <returns>Intervals between notes of the <paramref name="chord"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
-        public static IEnumerable<Interval> GetIntervalsBetweenNotes(this Chord chord)
+        public static IEnumerable<Interval.Interval> GetIntervalsBetweenNotes(this Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
-            return GetIntervals(chord).Select(i => Interval.FromHalfSteps(i)).ToList();
+            return GetIntervals(chord).Select(i => Interval.Interval.FromHalfSteps(i)).ToList();
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static Note ResolveRootNote(this Chord chord, Octave octave)
+        public static Note.Note ResolveRootNote(this Chord chord, Octave.Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -83,13 +82,13 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<Note> ResolveNotes(this Chord chord, Octave octave)
+        public static IEnumerable<Note.Note> ResolveNotes(this Chord chord, Octave.Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
 
             var rootNote = chord.ResolveRootNote(octave);
-            var result = new List<Note> { rootNote };
+            var result = new List<Note.Note> { rootNote };
             result.AddRange(chord.GetIntervalsFromRootNote().Select(i => rootNote + i));
             return result;
         }
@@ -111,10 +110,10 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
             }
         }
 
-        internal static IEnumerable<Interval> GetIntervalsFromRootNote(ICollection<NoteName> notesNames)
+        internal static IEnumerable<Interval.Interval> GetIntervalsFromRootNote(ICollection<NoteName> notesNames)
         {
             var lastInterval = SevenBitNumber.MinValue;
-            var result = new List<Interval>();
+            var result = new List<Interval.Interval>();
 
             foreach (var interval in GetIntervals(notesNames))
             {
@@ -122,7 +121,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                     throw new InvalidOperationException($"Some interval(s) are greater than {SevenBitNumber.MaxValue}.");
 
                 lastInterval += interval;
-                result.Add(Interval.GetUp(lastInterval));
+                result.Add(Interval.Interval.GetUp(lastInterval));
             }
 
             return result;
@@ -141,7 +140,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
             {
                 var offset = (int)noteName - lastNoteNumber;
                 if (offset <= 0)
-                    offset += Octave.OctaveSize;
+                    offset += Octave.Octave.OctaveSize;
 
                 yield return (SevenBitNumber)offset;
                 lastNoteNumber = (int)noteName;

@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.RecordTypes;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.ToCsv
 {
     internal static class MidiFileToCsvConverter
     {
         #region Methods
 
-        public static void ConvertToCsv(MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings)
+        public static void ConvertToCsv(Core.MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings)
         {
             using (var csvWriter = new CsvWriter(stream, settings.CsvSettings))
             {
@@ -105,7 +111,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         }
 
         private static void WriteHeader(CsvWriter csvWriter,
-                                        MidiFile midiFile,
+                                        Core.MidiFile midiFile,
                                         MidiFileCsvConversionSettings settings,
                                         TempoMap tempoMap)
         {

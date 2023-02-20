@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Utilities
 {
     /// <summary>
     /// Utility methods for <see cref="TrackChunk"/>.
@@ -33,13 +32,13 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void ShiftEvents(this TrackChunk trackChunk, ITimeSpan distance, TempoMap tempoMap)
+        public static void ShiftEvents(this TrackChunk trackChunk, ITimeSpan distance, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var convertedDistance = TimeConverter.ConvertFrom(distance, TempoMap.Create(tempoMap.TimeDivision));
+            var convertedDistance = TimeConverter.ConvertFrom(distance, TempoMap.TempoMap.Create(tempoMap.TimeDivision));
 
             var firstEvent = trackChunk.Events.FirstOrDefault();
             if (firstEvent == null)
@@ -68,7 +67,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void ShiftEvents(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, TempoMap tempoMap)
+        public static void ShiftEvents(this IEnumerable<TrackChunk> trackChunks, ITimeSpan distance, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(distance), distance);

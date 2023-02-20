@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
+
+namespace BardMusicPlayer.DryWetMidi.Common.DataTypes
 {
     internal static class ShortByteParser
     {

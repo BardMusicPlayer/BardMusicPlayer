@@ -1,8 +1,10 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations
 {
     /// <summary>
     /// Represents a time span as an amount of time measured in units of the time division

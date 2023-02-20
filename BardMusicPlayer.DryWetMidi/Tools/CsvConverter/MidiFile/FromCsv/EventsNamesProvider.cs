@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.RecordTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv
 {
     internal static class EventsNamesProvider
     {
@@ -11,7 +9,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             new Dictionary<MidiFileCsvLayout, string[]>
             {
                 [MidiFileCsvLayout.DryWetMidi] = GetEventsNames(typeof(DryWetMidiRecordTypes.Events)),
-                [MidiFileCsvLayout.MidiCsv] = GetEventsNames(typeof(MidiCsvRecordTypes.Events))
+                [MidiFileCsvLayout.MidiCsv]    = GetEventsNames(typeof(MidiCsvRecordTypes.Events))
             };
 
         #region Methods

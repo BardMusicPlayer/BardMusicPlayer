@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace BardMusicPlayer.DryWetMidi.Composing
+﻿namespace BardMusicPlayer.DryWetMidi.Composing.Actions
 {
     internal enum AnchorPosition
     {

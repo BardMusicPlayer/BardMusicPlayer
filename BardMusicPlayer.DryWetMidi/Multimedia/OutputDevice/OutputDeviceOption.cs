@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice
 {
     /// <summary>
     /// Optional functionality supported by an output device on Windows (see <c>dwSupport</c> field

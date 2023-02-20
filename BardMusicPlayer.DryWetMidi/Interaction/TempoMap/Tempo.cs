@@ -1,8 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
 {
     /// <summary>
     /// Represents tempo expressed in microseconds per quarter note or beats per minute.

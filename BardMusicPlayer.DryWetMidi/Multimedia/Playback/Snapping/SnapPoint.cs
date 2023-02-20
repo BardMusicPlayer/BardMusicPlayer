@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.Snapping
 {
     /// <summary>
     /// Snap point for <see cref="Playback"/>.

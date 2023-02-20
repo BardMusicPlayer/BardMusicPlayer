@@ -1,7 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Repeater
 {
     /// <summary>
     /// Holds all the required data to process a part by the <see cref="Repeater"/>. More info in the

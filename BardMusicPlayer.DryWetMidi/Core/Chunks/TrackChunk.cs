@@ -1,10 +1,16 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.Readers;
+using BardMusicPlayer.DryWetMidi.Core.Events.Writers;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Chunks
 {
     /// <summary>
     /// Represents a track chunk of a standard MIDI file.
@@ -42,7 +48,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public TrackChunk(IEnumerable<MidiEvent> events)
@@ -60,7 +66,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
@@ -112,7 +118,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter just
         /// read is invalid.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with End Of Track event.</exception>
-        protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, uint size)
         {
             var endReaderPosition = reader.Position + size;
             var endOfTrackPresented = false;
@@ -158,7 +164,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
-        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             ProcessEvents(settings, (eventWriter, midiEvent, writeStatusByte) =>
             {
@@ -173,7 +179,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the chunk's content will be written.</param>
         /// <returns>Number of bytes required to write <see cref="TrackChunk"/>'s content.</returns>
-        protected override uint GetContentSize(WritingSettings settings)
+        protected override uint GetContentSize(WritingSettings.WritingSettings settings)
         {
             uint result = 0;
 
@@ -199,7 +205,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         #region Methods
 
-        internal static MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
+        internal static MidiEvent ReadEvent(MidiReader reader, ReadingSettings.ReadingSettings settings, ref byte? channelEventStatusByte)
         {
             var deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)
@@ -235,7 +241,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         internal static void ProcessEvent(
             MidiEvent midiEvent,
-            WritingSettings settings,
+            WritingSettings.WritingSettings settings,
             Action<IEventWriter, MidiEvent, bool> eventHandler,
             ref bool lastEventIsEndOfTrack,
             ref long additionalDeltaTime,
@@ -310,7 +316,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             eventHandler(eventWriter, eventToWrite, writeStatusByte);
         }
 
-        private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
+        private void ProcessEvents(WritingSettings.WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
         {
             byte? runningStatus = null;
 

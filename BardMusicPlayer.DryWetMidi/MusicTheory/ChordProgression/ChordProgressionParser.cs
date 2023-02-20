@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Chord;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Scale;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.ChordProgression
 {
     internal static class ChordProgressionParser
     {
@@ -33,15 +34,15 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, Scale scale, out ChordProgression chordProgression)
+        internal static ParsingResult TryParse(string input, Scale.Scale scale, out ChordProgression chordProgression)
         {
             chordProgression = null;
 
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.EmptyInputString;
 
-            var parts = input.Split(new[] { PartsDelimiter }, System.StringSplitOptions.RemoveEmptyEntries);
-            var chords = new List<Chord>();
+            var parts = input.Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
+            var chords = new List<Chord.Chord>();
 
             foreach (var part in parts)
             {
@@ -65,7 +66,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                     rootNoteName +
                     fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
 
-                Chord chord;
+                Chord.Chord chord;
                 var chordParsingResult = ChordParser.TryParse(chordString, out chord);
                 if (chordParsingResult.Status != ParsingStatus.Parsed)
                     return chordParsingResult;

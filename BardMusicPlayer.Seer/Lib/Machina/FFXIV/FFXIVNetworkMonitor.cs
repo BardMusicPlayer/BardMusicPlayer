@@ -15,8 +15,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
+using Machina.FFXIV.Oodle;
 using Machina.Infrastructure;
 
 namespace Machina.FFXIV
@@ -74,8 +74,8 @@ namespace Machina.FFXIV
         public TCPNetworkMonitorConfig.RPCapConf RPCap
         { get; set; } = new TCPNetworkMonitorConfig.RPCapConf();
 
-        public Oodle.OodleImplementation OodleImplementation
-        { get; set; } = Oodle.OodleImplementation.FfxivUdp;
+        public OodleImplementation OodleImplementation
+        { get; set; } = OodleImplementation.FfxivUdp;
 
         public string OodlePath
         { get; set; } = @"C:\Program Files (x86)\FINAL FANTASY XIV - A Realm Reborn\game\ffxiv_dx11.exe";
@@ -137,7 +137,7 @@ namespace Machina.FFXIV
             _monitor.DataSentEventHandler = (TCPConnection connection, byte[] data) => ProcessSentMessage(connection, data);
             _monitor.DataReceivedEventHandler = (TCPConnection connection, byte[] data) => ProcessReceivedMessage(connection, data);
 
-            Oodle.OodleFactory.SetImplementation(OodleImplementation, OodlePath);
+            OodleFactory.SetImplementation(OodleImplementation, OodlePath);
 
             _monitor.Start();
         }

@@ -1,7 +1,8 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.Session;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.VirtualDevice
 {
     /// <summary>
     /// Represents a virtual loopback MIDI device (MIDI cable). More info in the
@@ -89,12 +90,12 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the input subdevice of the current <see cref="VirtualDevice"/>.
         /// </summary>
-        public InputDevice InputDevice { get; private set; }
+        public InputDevice.InputDevice InputDevice { get; private set; }
 
         /// <summary>
         /// Gets the output subdevice of the current <see cref="VirtualDevice"/>.
         /// </summary>
-        public OutputDevice OutputDevice { get; private set; }
+        public OutputDevice.OutputDevice OutputDevice { get; private set; }
 
         #endregion
 
@@ -143,10 +144,10 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
                 VirtualDeviceApiProvider.Api.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out deviceInfo));
 
             var inputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetInputDeviceInfo(deviceInfo);
-            InputDevice = new InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
+            InputDevice = new InputDevice.InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
 
             var outputDeviceInfo = VirtualDeviceApiProvider.Api.Api_GetOutputDeviceInfo(deviceInfo);
-            OutputDevice = new OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
+            OutputDevice = new OutputDevice.OutputDevice(outputDeviceInfo, CreationContext.VirtualDevice);
 
 #if TEST
             _handle = new VirtualDeviceHandle(deviceInfo, TestCheckpoints);

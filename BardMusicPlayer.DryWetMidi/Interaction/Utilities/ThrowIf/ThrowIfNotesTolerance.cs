@@ -1,6 +1,6 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf
 {
     internal static class ThrowIfNotesTolerance
     {

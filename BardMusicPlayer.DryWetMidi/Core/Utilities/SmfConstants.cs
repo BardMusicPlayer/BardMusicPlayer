@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Utilities
 {
     /// <summary>
     /// Constants related to Standard MIDI Files.

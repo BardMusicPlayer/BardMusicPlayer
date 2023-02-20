@@ -1,8 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Splitter.Settings
 {
     /// <summary>
     /// Defines how a MIDI file should be split by channel using

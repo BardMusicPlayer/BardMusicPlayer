@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer.Base
 {
     /// <summary>
     /// Settings according to which objects should be randomized.

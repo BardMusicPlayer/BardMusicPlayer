@@ -1,8 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers
 {
     internal static class MusicalTimeSpanParser
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.VirtualDevice
 {
     internal abstract class VirtualDeviceApi : NativeApi
     {

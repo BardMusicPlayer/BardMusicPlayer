@@ -1,9 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations
 {
     /// <summary>
     /// Represents a result of summation or subtraction of two <see cref="ITimeSpan"/>.

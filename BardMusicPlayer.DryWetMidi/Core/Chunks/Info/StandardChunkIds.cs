@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Chunks.Info
 {
     internal static class StandardChunkIds
     {

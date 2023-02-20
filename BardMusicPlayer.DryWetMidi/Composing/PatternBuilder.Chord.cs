@@ -1,10 +1,13 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Composing.Descriptors;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Chord;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Octave;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {
@@ -32,7 +35,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord)
+        public PatternBuilder Chord(Chord chord)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
@@ -66,7 +69,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave)
+        public PatternBuilder Chord(Chord chord, Octave octave)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -101,7 +104,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length)
+        public PatternBuilder Chord(Chord chord, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -136,7 +139,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length)
+        public PatternBuilder Chord(Chord chord, Octave octave, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -162,7 +165,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, SevenBitNumber velocity)
+        public PatternBuilder Chord(Chord chord, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
@@ -193,7 +196,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, SevenBitNumber velocity)
+        public PatternBuilder Chord(Chord chord, Octave octave, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -225,7 +228,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Chord(Chord chord, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -255,7 +258,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Chord(Chord chord, Octave octave, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
             ThrowIfArgument.IsNull(nameof(octave), octave);
@@ -392,7 +395,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
-        public PatternBuilder Chord(IEnumerable<Interval> intervals, MusicTheory.Note rootNote)
+        public PatternBuilder Chord(IEnumerable<Interval> intervals, Note rootNote)
         {
             return Chord(intervals, rootNote, NoteLength, Velocity);
         }
@@ -428,7 +431,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> interval,
-                                    MusicTheory.Note rootNote,
+                                    Note rootNote,
                                     ITimeSpan length)
         {
             return Chord(interval, rootNote, length, Velocity);
@@ -462,7 +465,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals,
-                                    MusicTheory.Note rootNote,
+                                    Note rootNote,
                                     SevenBitNumber velocity)
         {
             return Chord(intervals, rootNote, NoteLength, velocity);
@@ -498,7 +501,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(IEnumerable<Interval> intervals,
-                                    MusicTheory.Note rootNote,
+                                    Note rootNote,
                                     ITimeSpan length,
                                     SevenBitNumber velocity)
         {
@@ -611,7 +614,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes)
+        public PatternBuilder Chord(IEnumerable<Note> notes)
         {
             return Chord(notes, NoteLength, Velocity);
         }
@@ -637,7 +640,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, ITimeSpan length)
+        public PatternBuilder Chord(IEnumerable<Note> notes, ITimeSpan length)
         {
             return Chord(notes, length, Velocity);
         }
@@ -653,7 +656,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<Note> notes, SevenBitNumber velocity)
         {
             return Chord(notes, NoteLength, velocity);
         }
@@ -676,7 +679,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Chord(IEnumerable<MusicTheory.Note> notes, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Chord(IEnumerable<Note> notes, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -901,7 +904,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
             ThrowIfArgument.IsNull(nameof(octave), octave);
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return Chord(MusicTheory.Chord.Parse(chord), octave, length, velocity);
+            return Chord(MusicTheory.Chord.Chord.Parse(chord), octave, length, velocity);
         }
 
         #endregion

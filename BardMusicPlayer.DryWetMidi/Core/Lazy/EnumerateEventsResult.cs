@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// Represents a result of the <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/>

@@ -1,9 +1,11 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.Writers;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// Provides a way to write data to a MIDI file sequentially token by token keeping
@@ -28,7 +30,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         private readonly Stream _stream;
         private readonly MidiWriter _writer;
-        private readonly WritingSettings _settings;
+        private readonly WritingSettings.WritingSettings _settings;
         private readonly bool _disposeStream;
 
         private State _state = State.FileHeader;
@@ -54,10 +56,10 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         internal MidiTokensWriter(
             Stream stream,
-            WritingSettings settings,
+            WritingSettings.WritingSettings settings,
             bool disposeStream,
             MidiFileFormat format,
-            TimeDivision timeDivision)
+            TimeDivision.TimeDivision timeDivision)
         {
             _stream = stream;
             if (!_stream.CanWrite)
@@ -67,7 +69,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
             _settings = settings;
             if (_settings == null)
-                _settings = new WritingSettings();
+                _settings = new WritingSettings.WritingSettings();
 
             if (_settings.WriterSettings == null)
                 _settings.WriterSettings = new WriterSettings();
@@ -210,7 +212,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             chunk.Write(_writer, _settings);
         }
 
-        private void WriteFileHeader(MidiFileFormat format, TimeDivision timeDivision)
+        private void WriteFileHeader(MidiFileFormat format, TimeDivision.TimeDivision timeDivision)
         {
             var headerChunk = new HeaderChunk
             {

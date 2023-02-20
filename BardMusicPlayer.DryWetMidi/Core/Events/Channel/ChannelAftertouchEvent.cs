@@ -1,6 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Channel
 {
     /// <summary>
     /// Represents a Channel Pressure (Aftertouch) message.
@@ -50,17 +51,17 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         #region Overrides
 
-        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             _dataByte1 = ReadDataByte(reader, settings);
         }
 
-        internal override void Write(MidiWriter writer, WritingSettings settings)
+        internal override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             writer.WriteByte(_dataByte1);
         }
 
-        internal override int GetSize(WritingSettings settings)
+        internal override int GetSize(WritingSettings.WritingSettings settings)
         {
             return 1;
         }

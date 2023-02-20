@@ -1,8 +1,10 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Utilities
 {
     /// <summary>
     /// Utilities for working with bars and beats.
@@ -19,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// <returns>Length of a bar in ticks.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
-        public static int GetBarLength(long bars, TempoMap tempoMap)
+        public static int GetBarLength(long bars, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -37,7 +39,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// <returns>Length of a beat in ticks.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
-        public static int GetBeatLength(long bars, TempoMap tempoMap)
+        public static int GetBeatLength(long bars, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -58,7 +60,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             return 4 * ticksPerQuarterNote / timeSignature.Denominator;
         }
 
-        private static Tuple<TimeSignature, short> GetTimeSignatureAndTicksPerQuarterNote(long bars, TempoMap tempoMap)
+        private static Tuple<TimeSignature, short> GetTimeSignatureAndTicksPerQuarterNote(long bars, TempoMap.TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)

@@ -1,8 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
 {
     /// <summary>
     /// Provides a way to convert the length of an object from one representation to another.
@@ -33,7 +33,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan ConvertTo<TTimeSpan>(long length, long time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(long length, long time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
@@ -64,7 +64,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, long time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
@@ -95,7 +95,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan ConvertTo<TTimeSpan>(long length, ITimeSpan time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(long length, ITimeSpan time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
@@ -126,7 +126,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(long length, TimeSpanType lengthType, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfLengthArgument.IsNegative(nameof(length), length);
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
@@ -157,7 +157,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan length, long time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan length, long time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -188,7 +188,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, long time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
@@ -221,7 +221,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan length, ITimeSpan time, TempoMap tempoMap)
+        public static TTimeSpan ConvertTo<TTimeSpan>(ITimeSpan length, ITimeSpan time, TempoMap.TempoMap tempoMap)
             where TTimeSpan : ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -254,7 +254,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, ITimeSpan time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan length, TimeSpanType lengthType, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
@@ -288,7 +288,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
         /// <exception cref="NotSupportedException"><paramref name="lengthType"/> is not supported.</exception>
-        public static ITimeSpan ConvertTo(ITimeSpan length, Type lengthType, long time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan length, Type lengthType, long time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(lengthType), lengthType);
@@ -324,7 +324,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><paramref name="lengthType"/> is not supported.</exception>
-        public static ITimeSpan ConvertTo(ITimeSpan length, Type lengthType, ITimeSpan time, TempoMap tempoMap)
+        public static ITimeSpan ConvertTo(ITimeSpan length, Type lengthType, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(lengthType), lengthType);
@@ -353,7 +353,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static long ConvertFrom(ITimeSpan length, long time, TempoMap tempoMap)
+        public static long ConvertFrom(ITimeSpan length, long time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfTimeArgument.IsNegative(nameof(time), time);
@@ -383,7 +383,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static long ConvertFrom(ITimeSpan length, ITimeSpan time, TempoMap tempoMap)
+        public static long ConvertFrom(ITimeSpan length, ITimeSpan time, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(time), time);

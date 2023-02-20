@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.Notes
 {
     /// <summary>
     /// Defines how start event of a note should be found in case of overlapping notes with

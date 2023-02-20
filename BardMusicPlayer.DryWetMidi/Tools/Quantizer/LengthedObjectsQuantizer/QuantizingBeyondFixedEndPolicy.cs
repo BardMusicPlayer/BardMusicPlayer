@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer.LengthedObjectsQuantizer
 {
     /// <summary>
     /// Policy which defines how a quantizer should act in case of object's side

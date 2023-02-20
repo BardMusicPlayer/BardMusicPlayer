@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Repeater
 {
     /// <summary>
     /// Specifies how shift for <see cref="Repeater"/> should be calculated. More info in the

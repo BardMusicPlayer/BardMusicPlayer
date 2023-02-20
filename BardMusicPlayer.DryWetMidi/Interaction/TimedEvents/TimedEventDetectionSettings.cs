@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimedEvents
 {
     /// <summary>
     /// Settings which define how timed events should be detected and built.

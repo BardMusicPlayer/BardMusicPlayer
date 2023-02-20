@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// Provides a way to read a MIDI file sequentially token by token keeping
@@ -68,7 +69,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         private readonly Stream _stream;
         private readonly MidiReader _reader;
-        private readonly ReadingSettings _settings;
+        private readonly ReadingSettings.ReadingSettings _settings;
         private readonly bool _disposeStream;
 
         private State _state = State.Initial;
@@ -85,7 +86,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         #region Constructor
 
-        internal MidiTokensReader(Stream stream, ReadingSettings settings, bool disposeStream)
+        internal MidiTokensReader(Stream stream, ReadingSettings.ReadingSettings settings, bool disposeStream)
         {
             _stream = stream;
             if (!_stream.CanRead)
@@ -93,7 +94,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
             _settings = settings;
             if (_settings == null)
-                _settings = new ReadingSettings();
+                _settings = new ReadingSettings.ReadingSettings();
 
             if (_settings.ReaderSettings == null)
                 _settings.ReaderSettings = new ReaderSettings();
@@ -236,7 +237,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
                     {
                         ushort fileFormat;
                         ushort tracksNumber;
-                        TimeDivision timeDivision;
+                        TimeDivision.TimeDivision timeDivision;
                         HeaderChunk.ReadData(_reader, _settings, out fileFormat, out timeDivision, out tracksNumber);
 
                         GoToNextState();

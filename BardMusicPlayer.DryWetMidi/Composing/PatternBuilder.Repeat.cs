@@ -1,8 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

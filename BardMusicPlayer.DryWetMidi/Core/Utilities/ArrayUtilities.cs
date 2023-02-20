@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Utilities
 {
     internal static class ArrayUtilities
     {

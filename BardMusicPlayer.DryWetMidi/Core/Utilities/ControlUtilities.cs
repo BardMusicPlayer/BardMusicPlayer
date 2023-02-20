@@ -1,8 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Utilities
 {
     /// <summary>
     /// Set of extension methods for <see cref="ControlChangeEvent"/> event.

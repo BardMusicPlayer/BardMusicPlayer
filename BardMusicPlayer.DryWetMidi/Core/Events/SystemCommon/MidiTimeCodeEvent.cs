@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon
 {
     /// <summary>
     /// Represents MIDI Time Code (MIDI Quarter Frame) event.
@@ -81,7 +83,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
 
         #region Overrides
 
-        internal override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             var data = reader.ReadByte();
 
@@ -107,7 +109,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             ComponentValue = componentValue;
         }
 
-        internal override void Write(MidiWriter writer, WritingSettings settings)
+        internal override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var component = Component;
 
@@ -119,7 +121,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             writer.WriteByte(data);
         }
 
-        internal override int GetSize(WritingSettings settings)
+        internal override int GetSize(WritingSettings.WritingSettings settings)
         {
             return 1;
         }
