@@ -10,8 +10,8 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Generator;
 using BardMusicPlayer.Siren.AlphaTab.Model;
 using BardMusicPlayer.Transmogrify.Song;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 using MidiFile = BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.MidiFile;
 
 namespace BardMusicPlayer.Siren;

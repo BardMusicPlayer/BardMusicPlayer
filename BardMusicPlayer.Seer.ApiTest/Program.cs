@@ -5,7 +5,6 @@
 
 using System;
 using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer.ApiTest
@@ -41,23 +40,9 @@ namespace BardMusicPlayer.Seer.ApiTest
 
             BmpSeer.Instance.SetupFirewall("BardMusicPlayer.Seer.ApiTest");
 
-            Console.WriteLine("Hit enter to start Seer");
+            BmpSeer.Instance.Start();
 
             Console.ReadLine();
-
-            while (true)
-            {
-                BmpSeer.Instance.Start();
-
-                Console.ReadLine();
-
-                BmpSeer.Instance.Stop();
-
-                Console.WriteLine("Seer stopped. Hit enter to start it again.");
-
-                Console.ReadLine();
-            }
-
         }
 
         private static void PrintExceptionInfo(SeerExceptionEvent seerExceptionEvent)

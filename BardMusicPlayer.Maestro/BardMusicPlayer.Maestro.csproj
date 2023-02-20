@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net48</TargetFramework>
+	<TargetFramework>net7.0</TargetFramework>
 	<LangVersion>11</LangVersion>
 	<OutputPath>bin\$(Configuration)\</OutputPath>
 	<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
@@ -17,11 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Melanchall.DryWetMidi" Version="6.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
 	<ProjectReference Include="..\BardMusicPlayer.DalamudBridge\BardMusicPlayer.DalamudBridge.csproj" />
+	<ProjectReference Include="..\BardMusicPlayer.DryWetMidi\BardMusicPlayer.DryWetMidi.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />

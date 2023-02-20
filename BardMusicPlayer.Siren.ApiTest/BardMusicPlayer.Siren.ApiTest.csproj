@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <StartupObject>BardMusicPlayer.Siren.ApiTest.Program</StartupObject>
     <LangVersion>11</LangVersion>
 	<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>

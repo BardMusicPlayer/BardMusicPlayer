@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
@@ -110,8 +109,13 @@ public sealed class BmpScript
 
         basic.StopExec();
 
+        var cts = new CancellationTokenSource();
+        var task = Task.Run(() => {
+            // Perform any cleanup or other necessary actions here
+        }, cts.Token);
+
         if (thread.ThreadState == ThreadState.Running)
-            thread.Abort();
+            cts.Cancel();
     }
 
     #endregion 
@@ -135,9 +139,9 @@ public sealed class BmpScript
             {
                 basic.Exec();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message + "\r\n"+basic.GetLine(), "Exec Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show(e.Message + "\r\n"+basic.GetLine(), "Exec Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             OnRunningStateChanged?.Invoke(this, false);

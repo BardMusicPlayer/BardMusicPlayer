@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.DalamudBrid
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt", "BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj", "{00C375F8-5071-4FC6-86EC-BED3398F1BC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Jamboree", "BardMusicPlayer.Jamboree\BardMusicPlayer.Jamboree.csproj", "{7FE86DB2-13DA-4656-8776-6E7DFB9F9015}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Maestro", "BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj", "{00BAC18C-1670-4CFC-8826-AD02347BA776}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Pigeonhole", "BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj", "{CD059BEC-16C3-4BF4-AA8F-15EA9D473758}"
@@ -32,13 +30,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Transmogrif
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt.ApiTest", "BardMusicPlayer.Grunt.ApiTest\BardMusicPlayer.Grunt.ApiTest.csproj", "{D6E1572F-B6DF-435A-81E6-68DB7D489043}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Jamboree.ApiTest", "BardMusicPlayer.Jamboree.ApiTest\BardMusicPlayer.Jamboree.ApiTest.csproj", "{E78F152A-F694-442D-83D0-5EC44F0919CB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Maestro.ApiTest", "BardMusicPlayer.Maestro.ApiTest\BardMusicPlayer.Maestro.ApiTest.csproj", "{47040A0E-E29C-42F6-B707-AC31D1F92F44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Seer.ApiTest", "BardMusicPlayer.Seer.ApiTest\BardMusicPlayer.Seer.ApiTest.csproj", "{DA8E71B2-AA69-4BA4-B3D9-C7E8554DB7A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Siren.ApiTest", "BardMusicPlayer.Siren.ApiTest\BardMusicPlayer.Siren.ApiTest.csproj", "{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BardMusicPlayer.DryWetMidi", "BardMusicPlayer.DryWetMidi\BardMusicPlayer.DryWetMidi.csproj", "{6874C12B-1C55-43C5-988D-6230D23AB078}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +60,6 @@ Global
 		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Debug|x64.Build.0 = Debug|x64
 		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Release|x64.ActiveCfg = Release|x64
 		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Release|x64.Build.0 = Release|x64
-		{7FE86DB2-13DA-4656-8776-6E7DFB9F9015}.Debug|x64.ActiveCfg = Debug|x64
-		{7FE86DB2-13DA-4656-8776-6E7DFB9F9015}.Debug|x64.Build.0 = Debug|x64
-		{7FE86DB2-13DA-4656-8776-6E7DFB9F9015}.Release|x64.ActiveCfg = Release|x64
-		{7FE86DB2-13DA-4656-8776-6E7DFB9F9015}.Release|x64.Build.0 = Release|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Debug|x64.ActiveCfg = Debug|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Debug|x64.Build.0 = Debug|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Release|x64.ActiveCfg = Release|x64
@@ -98,10 +92,6 @@ Global
 		{D6E1572F-B6DF-435A-81E6-68DB7D489043}.Debug|x64.Build.0 = Debug|x64
 		{D6E1572F-B6DF-435A-81E6-68DB7D489043}.Release|x64.ActiveCfg = Release|x64
 		{D6E1572F-B6DF-435A-81E6-68DB7D489043}.Release|x64.Build.0 = Release|x64
-		{E78F152A-F694-442D-83D0-5EC44F0919CB}.Debug|x64.ActiveCfg = Debug|x64
-		{E78F152A-F694-442D-83D0-5EC44F0919CB}.Debug|x64.Build.0 = Debug|x64
-		{E78F152A-F694-442D-83D0-5EC44F0919CB}.Release|x64.ActiveCfg = Release|x64
-		{E78F152A-F694-442D-83D0-5EC44F0919CB}.Release|x64.Build.0 = Release|x64
 		{47040A0E-E29C-42F6-B707-AC31D1F92F44}.Debug|x64.ActiveCfg = Debug|x64
 		{47040A0E-E29C-42F6-B707-AC31D1F92F44}.Debug|x64.Build.0 = Debug|x64
 		{47040A0E-E29C-42F6-B707-AC31D1F92F44}.Release|x64.ActiveCfg = Release|x64
@@ -114,6 +104,10 @@ Global
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Debug|x64.Build.0 = Debug|x64
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Release|x64.ActiveCfg = Release|x64
 		{4BEAFD0E-AE07-4D3E-A8C5-3B499D7DA200}.Release|x64.Build.0 = Release|x64
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Debug|x64.Build.0 = Debug|Any CPU
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.ActiveCfg = Release|Any CPU
+		{6874C12B-1C55-43C5-988D-6230D23AB078}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

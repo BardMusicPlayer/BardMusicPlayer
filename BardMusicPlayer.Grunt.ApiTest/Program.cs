@@ -7,7 +7,6 @@ using System;
 using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Grunt;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 

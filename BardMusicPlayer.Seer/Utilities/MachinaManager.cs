@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using BardMusicPlayer.Seer.Events;
 using Machina.FFXIV;
 using Machina.FFXIV.Oodle;
@@ -27,9 +28,11 @@ internal class MachinaManager : IDisposable
         Trace.UseGlobalLock = false;
         Trace.Listeners.Add(new MachinaLogger());
 
+        while (BmpSeer.Instance.Games.Count < 1) Thread.Sleep(1);
+
         _monitor = new FFXIVNetworkMonitor
         {
-            MonitorType         = NetworkMonitorType.RawSocket,
+            MonitorType = Environment.GetEnvironmentVariable("WINEPREFIX") != null ? NetworkMonitorType.WinPCap : NetworkMonitorType.RawSocket,
             OodlePath           = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
             OodleImplementation = OodleImplementation.FfxivUdp
         };
