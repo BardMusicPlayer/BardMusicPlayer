@@ -28,7 +28,7 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Immutabl
         private int index;
 
         // For storing and traversing the nodes in the tree.
-        private Stack treeStack = new Stack();
+        private System.Collections.Stack treeStack = new System.Collections.Stack();
 
         // The first top node in the list.
         private RalTopNode head;

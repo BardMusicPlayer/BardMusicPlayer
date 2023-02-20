@@ -34,7 +34,7 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Immutabl
         private int index;
 
         // Used for traversing the tree inorder.
-        private Stack nodeStack = new Stack();
+        private System.Collections.Stack nodeStack = new System.Collections.Stack();
 
         #endregion
 

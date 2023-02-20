@@ -11,16 +11,16 @@ using System.Timers;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.FFXIV;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Old.Lib.Sanford.Multimedia.Midi.Messages.EventArg;
 using BardMusicPlayer.Maestro.Old.Sequencing;
 using BardMusicPlayer.Maestro.Old.Utils;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Transmogrify.Song.Config;
-using Sanford.Multimedia.Midi;
 using MessageType = BardMusicPlayer.DalamudBridge.Helper.Dalamud.MessageType;
 
 namespace BardMusicPlayer.Maestro.Old.Performance;
@@ -328,7 +328,7 @@ public class Performer
         {
             // OctaveNum now holds the track octave and the selected octave together
             Console.WriteLine(@"Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track));
-            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Lib.Sanford.Multimedia.Midi.Messages.MessageType.Channel select ev.MidiMessage as ChannelMessage into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
+            var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageType.Channel select ev.MidiMessage as ChannelMessage into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
             ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
         }
     }
