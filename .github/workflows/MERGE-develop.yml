@@ -18,48 +18,26 @@ jobs:
 
     - name: Publish with dotnet
       working-directory: .\BardMusicPlayer
-      run: dotnet publish /p:Configuration=Release /p:PublishProfile=Publish
-      
-    - name: Rename artifact
-      run: Move-Item -Path .\BardMusicPlayer\bin\Release\Publish\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+      run: dotnet publish -r win-x64 -p:PublishSingleFile=true --self-contained false -c Release
 
-    - name: Store artifacts
-      uses: actions/upload-artifact@v3
+    - name: Checkout Downloads
+      uses: actions/checkout@v3
+      working-directory: .\Downloads
       with:
-        name: BardMusicPlayer
-        path: .\BardMusicPlayer-*.exe
-        if-no-files-found: error
-        retention-days: 1
+        repository: BardMusicPlayer/Downloads
+        ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
-    
-      - name: Checkout Downloads
-        uses: actions/checkout@v3
-        with:
-          repository: BardMusicPlayer/Downloads
-          ssh-key: ${{ secrets.DEPLOY_KEY_DOWNLOADS }}
-      
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: BardMusicPlayer
-          path: bmp/2/
-      
-      - name: Update Directory Listing
-        run: |
-          echo -e "<br/>- <a href=\"https://dl.bardmusicplayer.com/bmp/2/BardMusicPlayer-${{ github.sha }}.exe\">BMP 2.X-${{ github.sha }}</a> (<a href=\"https://github.com/BardMusicPlayer/BardMusicPlayer/commit/${{ github.sha }}\">ChangeLog</a>) `date`" >> bmp/2/index.html
-      
-      - name: Commit Downloads
-        run: |
-          git config --global user.email "doot@bardmusicplayer.com"
-          git config --global user.name "Bard Build Bot"
-          git add bmp/2/*
-          git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
-          git push origin HEAD
+    - name:  Upload Beta Build
+      shell: bash
+      working-directory: .\Downloads
+      run: |
+        cp ../BardMusicPlayer/bin/Release/net7.0-windows/win-x64/publish/BardMusicPlayer.exe bmp/2/BardMusicPlayer-${{ github.sha }}.exe
+        echo -e "<br/>- <a href=\"https://dl.bardmusicplayer.com/bmp/2/BardMusicPlayer-${{ github.sha }}.exe\">BMP 2.X-${{ github.sha }}</a> (<a href=\"https://github.com/BardMusicPlayer/BardMusicPlayer/commit/${{ github.sha }}\">ChangeLog</a>) `date`" >> bmp/2/index.html
+        git config --global user.email "doot@bardmusicplayer.com"
+        git config --global user.name "Bard Build Bot"
+        git add bmp/2/*
+        git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
+        git push origin HEAD
           
       - name: Discord notification
         env:
@@ -67,4 +45,3 @@ jobs:
         uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
           args: 'A new beta release will be available in 5 minutes at https://dl.bardmusicplayer.com/bmp/2'
-
