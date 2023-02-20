@@ -163,14 +163,14 @@ public sealed partial class BardExtSettingsWindow
 
     private void Save_CPU_Click(object sender, RoutedEventArgs e)
     {
-        long mask = 0;
+        ulong mask = 0;
         var idx = 0;
         foreach (var box in _cpuBoxes)
         {
             if (box.IsChecked != null && (bool)box.IsChecked)
-                mask += 0b1 << idx;
+                mask += 0b1ul << idx;
             else
-                mask += 0b0 << idx;
+                mask += 0b0ul << idx;
             idx++;
         }
         //If mask == 0 show an error
@@ -181,7 +181,7 @@ public sealed partial class BardExtSettingsWindow
                 return;
         }
         else
-            _performer.game.SetAffinity(mask);
+            _performer.game.SetAffinity((long)mask);
     }
 
     private void Clear_CPU_Click(object sender, RoutedEventArgs e)
