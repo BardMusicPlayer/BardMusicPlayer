@@ -8,7 +8,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <Configurations>Debug;Release</Configurations>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
   </PropertyGroup>
 
 </Project>
