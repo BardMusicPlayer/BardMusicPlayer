@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using BardMusicPlayer.DalamudBridge;
+using BardMusicPlayer.Maestro.Old.FFXIV;
+using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.FFXIV;
 using BardMusicPlayer.Maestro.Old.Sequencing;
