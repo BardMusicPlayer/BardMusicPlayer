@@ -7,7 +7,7 @@ using System;
 using System.Text;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Transmogrify.Song;
-using Melanchall.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Siren.ApiTest
 {

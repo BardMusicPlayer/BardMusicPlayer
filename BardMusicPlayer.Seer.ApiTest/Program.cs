@@ -5,7 +5,6 @@
 
 using System;
 using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 
 namespace BardMusicPlayer.Seer.ApiTest

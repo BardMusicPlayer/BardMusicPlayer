@@ -20,12 +20,12 @@ using BardMusicPlayer.Transmogrify.Song.Importers;
 using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 using Lyrics = BardMusicPlayer.Transmogrify.Song.Importers.LRC.Lyrics;
-using Note = Melanchall.DryWetMidi.Interaction.Note;
-using Tempo = Melanchall.DryWetMidi.Interaction.Tempo;
+using Note = BardMusicPlayer.DryWetMidi.Interaction.Note;
+using Tempo = BardMusicPlayer.DryWetMidi.Interaction.Tempo;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 

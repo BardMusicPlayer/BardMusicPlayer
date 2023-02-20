@@ -5,7 +5,7 @@
 
 using System.IO;
 using System.Text;
-using Melanchall.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Song.Utilities;
 

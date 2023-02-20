@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Processor;
 

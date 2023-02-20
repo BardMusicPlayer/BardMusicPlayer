@@ -10,8 +10,8 @@ using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Song.Utilities;
 

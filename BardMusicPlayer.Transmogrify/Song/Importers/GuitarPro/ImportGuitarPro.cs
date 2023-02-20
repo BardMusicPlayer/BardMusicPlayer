@@ -3,7 +3,7 @@
 using System.IO;
 using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro.Native;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
-using Melanchall.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core;
 
 #endregion
 

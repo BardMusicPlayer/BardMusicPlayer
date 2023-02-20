@@ -11,9 +11,9 @@ using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Processor;
 

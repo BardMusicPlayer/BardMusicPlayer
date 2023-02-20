@@ -7,12 +7,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Utilities;
-using WindowsFirewallHelper;
+using Machina.Headers;
+using static System.Collections.Specialized.BitVector32;
 
 namespace BardMusicPlayer.Seer;
 
@@ -45,21 +47,31 @@ public partial class BmpSeer : IDisposable
     {
         try
         {
-            if (!FirewallManager.IsServiceRunning) return true;
+            if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return true;
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = "netsh";
+            psi.UseShellExecute = false;
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.Arguments = $@"advfirewall firewall delete rule name=""{appName}""";
 
-            if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName)))
-            {
-                FirewallManager.Instance.Rules.Remove(
-                    FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
-            }
+            Process proc = Process.Start(psi);
+            proc.WaitForExit();
 
-            var rule = FirewallManager.Instance.CreateApplicationRule(
-                appName,
-                FirewallAction.Allow,
-                Assembly.GetEntryAssembly()?.Location
-            );
+            psi = new ProcessStartInfo();
+            psi.FileName = "netsh";
+            psi.UseShellExecute = false;
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.Arguments = $@"advfirewall firewall add rule name=""{appName}"" dir=in action=allow profile=any program=""{Process.GetCurrentProcess().MainModule.FileName}""";
 
-            FirewallManager.Instance.Rules.Add(rule);
+            proc = Process.Start(psi);
+            proc.WaitForExit();
+
             return true;
         }
         catch (Exception ex)
@@ -78,13 +90,18 @@ public partial class BmpSeer : IDisposable
     {
         try
         {
-            if (!FirewallManager.IsServiceRunning) return true;
+            if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return true;
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = "netsh";
+            psi.UseShellExecute = false;
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.Arguments = $@"advfirewall firewall delete rule name=""{appName}""";
 
-            if (FirewallManager.Instance.Rules.Any(x => x.Name != null && x.Name.Equals(appName)))
-            {
-                FirewallManager.Instance.Rules.Remove(
-                    FirewallManager.Instance.Rules.First(x => x.Name.Equals(appName)));
-            }
+            Process proc = Process.Start(psi);
+            proc.WaitForExit();
 
             return true;
         }

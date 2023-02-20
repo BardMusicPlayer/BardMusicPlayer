@@ -5,9 +5,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using BardMusicPlayer.Quotidian.Structs;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Interaction;
 using Newtonsoft.Json;
 
 #endregion
