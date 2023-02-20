@@ -1,8 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator
 {
     /// <summary>
     /// The exception that is thrown when an error occurred on <see cref="TickGenerator"/>.

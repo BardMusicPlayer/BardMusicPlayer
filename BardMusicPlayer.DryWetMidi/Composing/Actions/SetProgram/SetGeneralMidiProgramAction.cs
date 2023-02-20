@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using BardMusicPlayer.DryWetMidi.Standards;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Standards.GeneralMidi;
 
-namespace BardMusicPlayer.DryWetMidi.Composing
+namespace BardMusicPlayer.DryWetMidi.Composing.Actions.SetProgram
 {
     internal sealed class SetGeneralMidiProgramAction : PatternAction
     {

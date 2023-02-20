@@ -1,9 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Tools.Common;
+using BardMusicPlayer.DryWetMidi.Tools.Randomizer.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer.LengthedObjectsRandomizer
 {
     /// <summary>
     /// Settings according to which lengthed objects should be randomized.

@@ -15,7 +15,6 @@
 
 using System.Runtime.InteropServices;
 
-
 namespace Machina.FFXIV.Headers
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

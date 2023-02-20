@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.GetObjects
 {
     /// <summary>
     /// Determines a rule for creating rests. The default value is <see cref="NoSeparation"/>.

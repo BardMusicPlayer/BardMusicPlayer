@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Chords
 {
     /// <summary>
     /// Holds the data for a <see cref="Chord"/> construction.

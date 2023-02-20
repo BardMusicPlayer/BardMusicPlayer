@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Octave
 {
     /// <summary>
     /// Represents an octave defined by its number.
@@ -17,7 +17,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
         private static readonly ConcurrentDictionary<int, Octave> Cache = new ConcurrentDictionary<int, Octave>();
 
-        private readonly Dictionary<NoteName, Note> _notes;
+        private readonly Dictionary<NoteName, Note.Note> _notes;
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                          .Cast<NoteName>()
                          .Where(n => NoteUtilities.IsNoteValid(n, octave))
                          .ToDictionary(n => n,
-                                       n => Note.Get(n, octave));
+                                       n => Note.Note.Get(n, octave));
         }
 
         #endregion
@@ -80,73 +80,73 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// Gets the C note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note C => GetNote(NoteName.C);
+        public Note.Note C => GetNote(NoteName.C);
 
         /// <summary>
         /// Gets the C# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note CSharp => GetNote(NoteName.CSharp);
+        public Note.Note CSharp => GetNote(NoteName.CSharp);
 
         /// <summary>
         /// Gets the D note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note D => GetNote(NoteName.D);
+        public Note.Note D => GetNote(NoteName.D);
 
         /// <summary>
         /// Gets the D# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note DSharp => GetNote(NoteName.DSharp);
+        public Note.Note DSharp => GetNote(NoteName.DSharp);
 
         /// <summary>
         /// Gets the E note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note E => GetNote(NoteName.E);
+        public Note.Note E => GetNote(NoteName.E);
 
         /// <summary>
         /// Gets the F note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note F => GetNote(NoteName.F);
+        public Note.Note F => GetNote(NoteName.F);
 
         /// <summary>
         /// Gets the F# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note FSharp => GetNote(NoteName.FSharp);
+        public Note.Note FSharp => GetNote(NoteName.FSharp);
 
         /// <summary>
         /// Gets the G note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note G => GetNote(NoteName.G);
+        public Note.Note G => GetNote(NoteName.G);
 
         /// <summary>
         /// Gets the G# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note GSharp => GetNote(NoteName.GSharp);
+        public Note.Note GSharp => GetNote(NoteName.GSharp);
 
         /// <summary>
         /// Gets the A note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note A => GetNote(NoteName.A);
+        public Note.Note A => GetNote(NoteName.A);
 
         /// <summary>
         /// Gets the A# note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note ASharp => GetNote(NoteName.ASharp);
+        public Note.Note ASharp => GetNote(NoteName.ASharp);
 
         /// <summary>
         /// Gets the B note of an octave defined by the current <see cref="Octave"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Unable to get a note.</exception>
-        public Note B => GetNote(NoteName.B);
+        public Note.Note B => GetNote(NoteName.B);
 
         #endregion
 
@@ -159,11 +159,11 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <returns>Note with the specified note name and current octave.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="InvalidOperationException">Unable to get a note for the <paramref name="noteName"/>.</exception>
-        public Note GetNote(NoteName noteName)
+        public Note.Note GetNote(NoteName noteName)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
-            Note note;
+            Note.Note note;
             if (!_notes.TryGetValue(noteName, out note))
                 throw new InvalidOperationException($"Unable to get the {noteName} note.");
 

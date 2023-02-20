@@ -1,7 +1,8 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.ValueLine
 {
     /// <summary>
     /// Represents a change of a parameter's value at some time.

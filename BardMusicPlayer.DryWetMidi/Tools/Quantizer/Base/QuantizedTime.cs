@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer.Base
 {
     /// <summary>
     /// Holds information about new time for an object that was calculated during quantizing.

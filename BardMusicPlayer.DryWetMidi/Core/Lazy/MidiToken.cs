@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Lazy
 {
     /// <summary>
     /// Represents a single MIDI token from a MIDI file.

@@ -1,11 +1,11 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.ObjectId;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Splitter.Settings
 {
     /// <summary>
     /// Defines how a MIDI file should be split by objects using
-    /// <see cref="Splitter.SplitByObjects(Core.MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)"/> method.
+    /// <see cref="Splitter.SplitByObjects"/> method.
     /// More info in the
     /// <see href="xref:a_file_splitting#splitbyobjects">MIDI file splitting: SplitByObjects</see> article.
     /// </summary>

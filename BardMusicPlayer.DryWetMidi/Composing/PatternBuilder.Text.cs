@@ -1,6 +1,6 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

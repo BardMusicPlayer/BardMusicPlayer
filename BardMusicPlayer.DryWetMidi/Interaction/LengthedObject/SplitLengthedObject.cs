@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject
 {
     /// <summary>
     /// Container for left and right parts of split lengthed object.

@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿using BardMusicPlayer.DryWetMidi.Composing.Transformations;
+
+namespace BardMusicPlayer.DryWetMidi.Composing
 {
     /// <summary>
     /// Defines additional options for a patterns's actions repeating.

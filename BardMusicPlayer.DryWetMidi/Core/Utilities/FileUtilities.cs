@@ -1,11 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using Microsoft.Win32.SafeHandles;
-using System;
-using System.ComponentModel;
-using System.IO;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
+using BardMusicPlayer.DryWetMidi.Common;
+using Microsoft.Win32.SafeHandles;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Utilities
 {
     internal static class FileUtilities
     {

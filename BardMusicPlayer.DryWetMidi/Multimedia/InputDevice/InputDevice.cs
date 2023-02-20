@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Converters;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.Readers;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Multimedia.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.DevicesWatcher;
+using BardMusicPlayer.DryWetMidi.Multimedia.Session;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
 {
     /// <summary>
     /// Represents an input MIDI device. More info in the
@@ -194,7 +202,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets reaction of the input device on <c>Note On</c> events with velocity of zero.
-        /// The default is <see cref="SilentNoteOnPolicy.NoteOn"/>.
+        /// The default is <see cref="Core.ReadingSettings.SilentNoteOnPolicy.NoteOn"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public SilentNoteOnPolicy SilentNoteOnPolicy

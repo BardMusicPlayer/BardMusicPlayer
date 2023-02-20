@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+
+namespace BardMusicPlayer.DryWetMidi.Core
 {
     /// <summary>
     /// Format of a Standard MIDI file which specifies overall structure of the file.

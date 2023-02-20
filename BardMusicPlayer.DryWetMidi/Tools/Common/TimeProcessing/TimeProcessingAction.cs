@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Common.TimeProcessing
 {
     /// <summary>
     /// Indicates whether an object is being processed should be skipped or not.

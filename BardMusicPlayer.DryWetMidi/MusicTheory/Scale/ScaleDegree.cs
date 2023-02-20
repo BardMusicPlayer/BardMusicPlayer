@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Scale
 {
     /// <summary>
     /// Represents specific note (degree) of a musical scale.

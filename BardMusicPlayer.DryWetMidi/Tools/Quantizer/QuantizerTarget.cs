@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer
 {
     /// <summary>
     /// An object's target (start, end, both ends) to quantize.

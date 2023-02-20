@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Standards.GeneralMidi;
+using BardMusicPlayer.DryWetMidi.Standards.GeneralMidi2.Percussion;
 
-namespace BardMusicPlayer.DryWetMidi.Standards
+namespace BardMusicPlayer.DryWetMidi.Standards.GeneralMidi2
 {
     /// <summary>
     /// Provides utilities for General MIDI Level 2.

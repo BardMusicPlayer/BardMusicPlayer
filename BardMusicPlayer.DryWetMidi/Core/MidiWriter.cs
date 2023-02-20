@@ -1,6 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.IO;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
 namespace BardMusicPlayer.DryWetMidi.Core
 {

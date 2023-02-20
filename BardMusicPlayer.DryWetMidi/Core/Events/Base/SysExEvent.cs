@@ -1,7 +1,8 @@
-﻿using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Base
 {
     /// <summary>
     /// Represents a MIDI file system exclusive event.
@@ -56,7 +57,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
-        internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
+        internal sealed override void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             ThrowIfArgument.IsNegative(
                 nameof(size),
@@ -75,7 +76,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        internal sealed override void Write(MidiWriter writer, WritingSettings settings)
+        internal sealed override void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var data = Data;
             if (data != null)
@@ -87,7 +88,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        internal sealed override int GetSize(WritingSettings settings)
+        internal sealed override int GetSize(WritingSettings.WritingSettings settings)
         {
             return Data?.Length ?? 0;
         }

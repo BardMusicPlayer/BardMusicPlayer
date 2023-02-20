@@ -1,8 +1,11 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.IO;
+using BardMusicPlayer.DryWetMidi.Core.Chunks.Info;
+using BardMusicPlayer.DryWetMidi.Core.Equality.Chunk;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Chunks
 {
     /// <summary>
     /// Represents a chunk of Standard MIDI file.
@@ -18,8 +21,8 @@ namespace BardMusicPlayer.DryWetMidi.Core
     /// not be presented in the <see cref="MidiFile.Chunks"/>. Its data is used by the reading engine to set properties
     /// of the <see cref="MidiFile"/> such as <see cref="MidiFile.TimeDivision"/> and <see cref="MidiFile.OriginalFormat"/>. You cannot add header
     /// chunks in the chunks collection of the file since an appropriate one will be written by writing engine automatically
-    /// on <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/> or
-    /// <see cref="MidiFile.Write(Stream, MidiFileFormat, WritingSettings)"/>.
+    /// on <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/> or
+    /// <see cref="MidiFile.Write(System.IO.Stream,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
     /// </para>
     /// <para>
     /// The structure of a MIDI chunk allows any custom chunks be placed in a MIDI file along with the standard
@@ -171,7 +174,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// in its header.</exception>
         /// <exception cref="NotEnoughBytesException">Size of the chunk cannot be read since the reader's
         /// underlying stream doesn't have enough bytes.</exception>
-        internal void Read(MidiReader reader, ReadingSettings settings)
+        internal void Read(MidiReader reader, ReadingSettings.ReadingSettings settings)
         {
             long readerPosition;
             var size = ReadSize(reader, out readerPosition);
@@ -201,7 +204,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <exception cref="IOException">
         /// An I/O error occurred on the <paramref name="writer"/>'s underlying stream.
         /// </exception>
-        internal void Write(MidiWriter writer, WritingSettings settings)
+        internal void Write(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var size = GetContentSize(settings);
             WriteHeader(ChunkId, size, writer, settings);
@@ -215,7 +218,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             return size;
         }
 
-        internal static void WriteHeader(string chunkId, uint size, MidiWriter writer, WritingSettings settings)
+        internal static void WriteHeader(string chunkId, uint size, MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             writer.WriteString(chunkId);
             writer.WriteDword(size);
@@ -227,14 +230,14 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="reader">Reader to read the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
-        protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, uint size);
+        protected abstract void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, uint size);
 
         /// <summary>
         /// Writes content of a chunk. Content is a part of chunk's data without its header (ID and size).
         /// </summary>
         /// <param name="writer">Writer to write the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
-        protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+        protected abstract void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings);
 
         /// <summary>
         /// Gets size of chunk's content as number of bytes required to write it according to specified
@@ -242,7 +245,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the chunk's content will be written.</param>
         /// <returns>Number of bytes required to write chunk's content.</returns>
-        protected abstract uint GetContentSize(WritingSettings settings);
+        protected abstract uint GetContentSize(WritingSettings.WritingSettings settings);
 
         #endregion
     }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.GetObjects.Settings
 {
     /// <summary>
     /// Settings which define how rests should be detected and built.

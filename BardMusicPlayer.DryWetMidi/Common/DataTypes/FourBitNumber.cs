@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
 
-namespace BardMusicPlayer.DryWetMidi.Common
+namespace BardMusicPlayer.DryWetMidi.Common.DataTypes
 {
     /// <summary>
     /// Type that is used to represent a four-bit number (0-15; or in binary format 0000-1111).

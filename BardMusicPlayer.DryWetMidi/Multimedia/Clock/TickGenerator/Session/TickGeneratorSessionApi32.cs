@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator.Session
 {
     internal sealed class TickGeneratorSessionApi32 : TickGeneratorSessionApi
     {

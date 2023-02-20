@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
 {
     /// <summary>
     /// Represents a chord as a set of notes names.
@@ -78,12 +78,12 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
-        public Chord(NoteName rootNoteName, IEnumerable<Interval> intervalsFromRoot)
+        public Chord(NoteName rootNoteName, IEnumerable<Interval.Interval> intervalsFromRoot)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
             ThrowIfArgument.IsNull(nameof(intervalsFromRoot), intervalsFromRoot);
 
-            NotesNames = new[] { Interval.Zero }.Concat(intervalsFromRoot)
+            NotesNames = new[] { Interval.Interval.Zero }.Concat(intervalsFromRoot)
                 .Where(i => i != null)
                 .OrderBy(i => i.HalfSteps)
                 .Select(i => rootNoteName.Transpose(i))
@@ -98,8 +98,8 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="intervalsFromRoot">Intervals from root note.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNoteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
-        public Chord(NoteName rootNoteName, params Interval[] intervalsFromRoot)
-            : this(rootNoteName, intervalsFromRoot as IEnumerable<Interval>)
+        public Chord(NoteName rootNoteName, params Interval.Interval[] intervalsFromRoot)
+            : this(rootNoteName, intervalsFromRoot as IEnumerable<Interval.Interval>)
         {
         }
 
@@ -182,14 +182,14 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </list>
         /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="intervalsFromRoot"/> is <c>null</c>.</exception>
-        public static Chord GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, params Interval[] intervalsFromRoot)
+        public static Chord GetByTriad(NoteName rootNoteName, ChordQuality chordQuality, params Interval.Interval[] intervalsFromRoot)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
             ThrowIfArgument.IsInvalidEnumValue(nameof(chordQuality), chordQuality);
             ThrowIfArgument.IsNull(nameof(intervalsFromRoot), intervalsFromRoot);
 
             var intervals = IntervalsByQuality[chordQuality];
-            return new Chord(rootNoteName, intervals.Select(i => Interval.FromDefinition(i)).Concat(intervalsFromRoot));
+            return new Chord(rootNoteName, intervals.Select(i => Interval.Interval.FromDefinition(i)).Concat(intervalsFromRoot));
         }
 
         #endregion
@@ -234,7 +234,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return string.Join(" ", NotesNames.Select(n => n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)));
+            return string.Join(" ", NotesNames.Select(n => n.ToString().Replace(Note.Note.SharpLongString, Note.Note.SharpShortString)));
         }
 
         /// <summary>

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Utilities
 {
     /// <summary>
     /// Utility methods for <see cref="MidiFile"/>.
@@ -35,7 +38,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan GetDuration<TTimeSpan>(this TrackChunk trackChunk, TempoMap tempoMap)
+        public static TTimeSpan GetDuration<TTimeSpan>(this TrackChunk trackChunk, TempoMap.TempoMap tempoMap)
             where TTimeSpan : class, ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -69,7 +72,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
-        public static ITimeSpan GetDuration(this TrackChunk trackChunk, TimeSpanType durationType, TempoMap tempoMap)
+        public static ITimeSpan GetDuration(this TrackChunk trackChunk, TimeSpanType durationType, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
@@ -103,7 +106,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
+        public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk> trackChunks, TempoMap.TempoMap tempoMap)
             where TTimeSpan : class, ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -137,7 +140,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
-        public static ITimeSpan GetDuration(this IEnumerable<TrackChunk> trackChunks, TimeSpanType durationType, TempoMap tempoMap)
+        public static ITimeSpan GetDuration(this IEnumerable<TrackChunk> trackChunks, TimeSpanType durationType, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);

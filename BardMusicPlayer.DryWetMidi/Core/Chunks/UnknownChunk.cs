@@ -1,7 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Chunks
 {
     /// <summary>
     /// Represents an unknown chunk.
@@ -64,7 +65,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the reader's underlying stream was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the reader's underlying stream.</exception>
-        protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, uint size)
         {
             if (size == 0)
             {
@@ -103,7 +104,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
         /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
-        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var data = Data;
             if (data != null)
@@ -116,7 +117,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the chunk's content will be written.</param>
         /// <returns>Number of bytes required to write <see cref="UnknownChunk"/>'s content.</returns>
-        protected override uint GetContentSize(WritingSettings settings)
+        protected override uint GetContentSize(WritingSettings.WritingSettings settings)
         {
             return (uint)(Data?.Length ?? 0);
         }

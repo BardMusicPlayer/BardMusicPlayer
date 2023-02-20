@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.RecordTypes
 {
     internal static class MidiCsvRecordTypes
     {

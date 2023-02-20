@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile
 {
     /// <summary>
     /// The format which should be used to write notes to or read them from CSV.

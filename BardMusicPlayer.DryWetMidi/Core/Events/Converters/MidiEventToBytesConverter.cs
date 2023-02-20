@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
+﻿using System.ComponentModel;
 using System.Text;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Events.Writers;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Converters
 {
     /// <summary>
     /// Provides methods to convert an instance of the <see cref="MidiEvent"/> to bytes.
@@ -17,7 +20,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         private readonly MemoryStream _dataBytesStream;
         private readonly MidiWriter _midiWriter;
 
-        private readonly WritingSettings _writingSettings = new WritingSettings();
+        private readonly WritingSettings.WritingSettings _writingSettings = new WritingSettings.WritingSettings();
 
         private BytesFormat _bytesFormat = BytesFormat.File;
 

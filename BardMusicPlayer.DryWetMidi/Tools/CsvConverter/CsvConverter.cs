@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.ToCsv;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter
 {
     /// <summary>
     /// Provides methods to convert MIDI objects to CSV representation and vice versa.
@@ -54,7 +56,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public void ConvertMidiFileToCsv(MidiFile midiFile, string filePath, bool overwriteFile = false, MidiFileCsvConversionSettings settings = null)
+        public void ConvertMidiFileToCsv(Core.MidiFile midiFile, string filePath, bool overwriteFile = false, MidiFileCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -89,7 +91,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support writing.</exception>
         /// <exception cref="IOException">An I/O error occurred while writing to the stream.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
-        public void ConvertMidiFileToCsv(MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings = null)
+        public void ConvertMidiFileToCsv(Core.MidiFile midiFile, Stream stream, MidiFileCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -136,7 +138,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public MidiFile ConvertCsvToMidiFile(string filePath, MidiFileCsvConversionSettings settings = null)
+        public Core.MidiFile ConvertCsvToMidiFile(string filePath, MidiFileCsvConversionSettings settings = null)
         {
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
             {
@@ -155,7 +157,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
         /// <exception cref="ArgumentException"><paramref name="stream"/> doesn't support reading.</exception>
         /// <exception cref="IOException">An I/O error occurred while reading from the stream.</exception>
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
-        public MidiFile ConvertCsvToMidiFile(Stream stream, MidiFileCsvConversionSettings settings = null)
+        public Core.MidiFile ConvertCsvToMidiFile(Stream stream, MidiFileCsvConversionSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 

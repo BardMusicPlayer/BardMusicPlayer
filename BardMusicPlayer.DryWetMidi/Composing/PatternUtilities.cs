@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Composing.Selections;
+using BardMusicPlayer.DryWetMidi.Composing.Transformations;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

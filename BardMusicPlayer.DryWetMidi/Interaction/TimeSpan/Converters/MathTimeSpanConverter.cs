@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
 {
     internal sealed class MathTimeSpanConverter : ITimeSpanConverter
     {
         #region Constants
 
-        private static readonly Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
-            new Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>>
+        private static readonly Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap.TempoMap, long>> Converters =
+            new Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap.TempoMap, long>>
             {
                 [TimeSpanMode.TimeTime] = ConvertFromTimeTime,
                 [TimeSpanMode.TimeLength] = ConvertFromTimeLength,
@@ -19,16 +18,16 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         #region ITimeSpanConverter
 
-        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap tempoMap)
+        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             throw new NotSupportedException($"Conversion to the {nameof(MathTimeSpan)} is not supported.");
         }
 
-        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
+        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var mathTimeSpan = (MathTimeSpan)timeSpan;
 
-            Func<MathTimeSpan, long, TempoMap, long> converter;
+            Func<MathTimeSpan, long, TempoMap.TempoMap, long> converter;
             if (Converters.TryGetValue(mathTimeSpan.Mode, out converter))
                 return converter(mathTimeSpan, time, tempoMap);
             else
@@ -39,7 +38,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         #region Methods
 
-        private static long ConvertFromLengthLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        private static long ConvertFromLengthLength(MathTimeSpan mathTimeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var convertedTimeSpan1 = LengthConverter.ConvertFrom(mathTimeSpan.TimeSpan1, time, tempoMap);
             var endTime1 = time + convertedTimeSpan1;
@@ -61,7 +60,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             }
         }
 
-        private static long ConvertFromTimeLength(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        private static long ConvertFromTimeLength(MathTimeSpan mathTimeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var convertedTimeSpan1 = TimeConverter.ConvertFrom(mathTimeSpan.TimeSpan1, tempoMap);
 
@@ -82,7 +81,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             }
         }
 
-        private static long ConvertFromTimeTime(MathTimeSpan mathTimeSpan, long time, TempoMap tempoMap)
+        private static long ConvertFromTimeTime(MathTimeSpan mathTimeSpan, long time, TempoMap.TempoMap tempoMap)
         {
             var timeSpan1 = mathTimeSpan.TimeSpan1;
             var timeSpan2 = mathTimeSpan.TimeSpan2;

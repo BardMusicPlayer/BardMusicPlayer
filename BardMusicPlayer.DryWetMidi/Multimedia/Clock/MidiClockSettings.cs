@@ -1,7 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock
 {
     /// <summary>
     /// Holds settings for <see cref="MidiClock"/> used by a clock driven object.
@@ -10,7 +10,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
     {
         #region Fields
 
-        private Func<TickGenerator> _createTickGeneratorCallback = () => new HighPrecisionTickGenerator();
+        private Func<TickGenerator.TickGenerator> _createTickGeneratorCallback = () => new HighPrecisionTickGenerator();
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
         /// Gets or sets a callback used to create tick generator for MIDI clock.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
-        public Func<TickGenerator> CreateTickGeneratorCallback
+        public Func<TickGenerator.TickGenerator> CreateTickGeneratorCallback
         {
             get { return _createTickGeneratorCallback; }
             set

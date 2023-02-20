@@ -1,7 +1,8 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Composing
+namespace BardMusicPlayer.DryWetMidi.Composing.Actions
 {
     internal sealed class StepBackAction : StepAction
     {

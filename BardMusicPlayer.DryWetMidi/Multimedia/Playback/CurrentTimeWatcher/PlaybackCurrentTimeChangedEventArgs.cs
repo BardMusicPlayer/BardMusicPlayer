@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.CurrentTimeWatcher
 {
     /// <summary>
     /// Holds current times of playbacks for <see cref="PlaybackCurrentTimeWatcher.CurrentTimeChanged"/>.

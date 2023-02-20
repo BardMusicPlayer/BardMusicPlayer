@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Merger
 {
     /// <summary>
     /// Determines how velocities should be merged during notes merging. The default value is <see cref="First"/>.

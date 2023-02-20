@@ -1,8 +1,9 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations
 {
     /// <summary>
     /// Represents metric time span which represents hours, minutes and seconds. More info in the
@@ -13,7 +14,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         #region Constants
 
         private const int MicrosecondsInMillisecond = 1000;
-        private const long TicksInMicrosecond = TimeSpan.TicksPerMillisecond / MicrosecondsInMillisecond;
+        private const long TicksInMicrosecond = System.TimeSpan.TicksPerMillisecond / MicrosecondsInMillisecond;
         private const long MaxTotalMicroseconds = long.MaxValue / TicksInMicrosecond;
 
         private static readonly string TotalMicrosecondsIsOutOfRangeMessage =
@@ -23,7 +24,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
 
         #region Fields
 
-        private readonly TimeSpan _timeSpan;
+        private readonly System.TimeSpan _timeSpan;
 
         #endregion
 
@@ -52,7 +53,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
                 MaxTotalMicroseconds,
                 TotalMicrosecondsIsOutOfRangeMessage);
 
-            _timeSpan = new TimeSpan(totalMicroseconds * TicksInMicrosecond);
+            _timeSpan = new System.TimeSpan(totalMicroseconds * TicksInMicrosecond);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// <see cref="TimeSpan"/> object.
         /// </summary>
         /// <param name="timeSpan">Time interval to initialize the <see cref="MetricTimeSpan"/>.</param>
-        public MetricTimeSpan(TimeSpan timeSpan)
+        public MetricTimeSpan(System.TimeSpan timeSpan)
         {
             _timeSpan = timeSpan;
         }
@@ -123,7 +124,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(seconds), seconds, "Number of seconds is negative.");
             ThrowIfArgument.IsNegative(nameof(milliseconds), milliseconds, "Number of milliseconds is negative.");
 
-            _timeSpan = new TimeSpan(0, hours, minutes, seconds, milliseconds);
+            _timeSpan = new System.TimeSpan(0, hours, minutes, seconds, milliseconds);
         }
 
         #endregion
@@ -242,7 +243,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan"><see cref="TimeSpan"/> to convert to <see cref="MetricTimeSpan"/>.</param>
         /// <returns><paramref name="timeSpan"/> represented as <see cref="MetricTimeSpan"/>.</returns>
-        public static implicit operator MetricTimeSpan(TimeSpan timeSpan)
+        public static implicit operator MetricTimeSpan(System.TimeSpan timeSpan)
         {
             return new MetricTimeSpan(timeSpan);
         }
@@ -252,7 +253,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </summary>
         /// <param name="timeSpan"><see cref="MetricTimeSpan"/> to convert to <see cref="TimeSpan"/>.</param>
         /// <returns><paramref name="timeSpan"/> represented as <see cref="TimeSpan"/>.</returns>
-        public static implicit operator TimeSpan(MetricTimeSpan timeSpan)
+        public static implicit operator System.TimeSpan(MetricTimeSpan timeSpan)
         {
             return timeSpan._timeSpan;
         }

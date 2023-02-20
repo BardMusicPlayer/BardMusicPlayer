@@ -1,7 +1,10 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Standards;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Composing.Actions.SetProgram;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Standards.GeneralMidi;
+using BardMusicPlayer.DryWetMidi.Standards.GeneralMidi2;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

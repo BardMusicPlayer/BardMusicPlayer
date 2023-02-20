@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿using BardMusicPlayer.DryWetMidi.Composing.Descriptors;
+
+namespace BardMusicPlayer.DryWetMidi.Composing.Transformations
 {
     /// <summary>
     /// Transforms a note described by the specified <see cref="NoteDescriptor"/> and returns

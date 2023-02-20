@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens
 {
     /// <summary>
     /// Represents the data of a header chunk of a MIDI file.
@@ -8,7 +8,7 @@
     {
         #region Constructor
 
-        internal FileHeaderToken(ushort fileFormat, TimeDivision timeDivision, ushort tracksNumber)
+        internal FileHeaderToken(ushort fileFormat, TimeDivision.TimeDivision timeDivision, ushort tracksNumber)
             : base(MidiTokenType.FileHeader)
         {
             FileFormat = fileFormat;
@@ -28,7 +28,7 @@
         /// <summary>
         /// Gets the time division of a MIDI file.
         /// </summary>
-        public TimeDivision TimeDivision { get; }
+        public TimeDivision.TimeDivision TimeDivision { get; }
 
         /// <summary>
         /// Gets the number of track chunks in a MIDI file.

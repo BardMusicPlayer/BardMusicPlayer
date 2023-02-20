@@ -240,8 +240,7 @@
                                               DisplayMemberPath="Value"
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120"
-                                              Padding="5" ToolTip="{StaticResource PL_MIDIINPUT}">
-                                    </ComboBox>
+                                              Padding="5" ToolTip="{StaticResource PL_MIDIINPUT}" />
                                     <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
                                               Content="Enable note delay for live playing"
                                               Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked"

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using System.Text.RegularExpressions;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Note
 {
     internal static class NoteNameParser
     {
@@ -59,9 +57,9 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                 }
             }
 
-            noteBaseNumber %= Octave.OctaveSize;
+            noteBaseNumber %= Octave.Octave.OctaveSize;
             if (noteBaseNumber < 0)
-                noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
+                noteBaseNumber = Octave.Octave.OctaveSize + noteBaseNumber;
 
             noteName = (NoteName)noteBaseNumber;
             return ParsingResult.Parsed;

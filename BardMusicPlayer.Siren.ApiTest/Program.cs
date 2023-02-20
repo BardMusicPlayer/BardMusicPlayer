@@ -5,9 +5,10 @@
 
 using System;
 using System.Text;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Transmogrify.Song;
-using BardMusicPlayer.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Siren.ApiTest
 {

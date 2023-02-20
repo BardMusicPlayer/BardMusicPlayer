@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Info;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Readers
 {
     /// <summary>
     /// Provides a way to get <see cref="IEventReader"/> for an event.

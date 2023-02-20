@@ -1,8 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown while writing a MIDI file when the <see cref="MidiFile.Chunks"/>

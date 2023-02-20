@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Tools.Common.TimeProcessing;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Bounds;
+using BardMusicPlayer.DryWetMidi.Tools.Randomizer.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer
 {
     /// <summary>
     /// Settings according to which timed events should be randomized.

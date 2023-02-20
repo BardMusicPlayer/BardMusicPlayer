@@ -1,8 +1,12 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
 {
     /// <summary>
     /// Provides methods to get the ID (key) of an object.

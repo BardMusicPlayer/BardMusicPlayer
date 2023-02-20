@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.ChordProgression
 {
     /// <summary>
     /// Represents a chord progression as a set of chords.
@@ -18,7 +16,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="chords">Chords of the chord progression.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="chords"/> contains <c>null</c>.</exception>
-        public ChordProgression(IEnumerable<Chord> chords)
+        public ChordProgression(IEnumerable<Chord.Chord> chords)
         {
             ThrowIfArgument.IsNull(nameof(chords), chords);
             ThrowIfArgument.ContainsNull(nameof(chords), chords);
@@ -32,8 +30,8 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <param name="chords">Chords of the chord progression.</param>
         /// <exception cref="ArgumentNullException"><paramref name="chords"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="chords"/> contains <c>null</c>.</exception>
-        public ChordProgression(params Chord[] chords)
-            : this(chords as IEnumerable<Chord>)
+        public ChordProgression(params Chord.Chord[] chords)
+            : this(chords as IEnumerable<Chord.Chord>)
         {
         }
 
@@ -44,7 +42,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <summary>
         /// Gets the chords of the chord progression.
         /// </summary>
-        public IEnumerable<Chord> Chords { get; }
+        public IEnumerable<Chord.Chord> Chords { get; }
 
         #endregion
 
@@ -62,7 +60,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, Scale scale, out ChordProgression chordProgression)
+        public static bool TryParse(string input, Scale.Scale scale, out ChordProgression chordProgression)
         {
             return ParsingUtilities.TryParse(input, GetParsing(input, scale), out chordProgression);
         }
@@ -76,12 +74,12 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static ChordProgression Parse(string input, Scale scale)
+        public static ChordProgression Parse(string input, Scale.Scale scale)
         {
             return ParsingUtilities.Parse(input, GetParsing(input, scale));
         }
 
-        private static Parsing<ChordProgression> GetParsing(string input, Scale scale)
+        private static Parsing<ChordProgression> GetParsing(string input, Scale.Scale scale)
         {
             ChordProgression chordProgression;
             var result = ChordProgressionParser.TryParse(input, scale, out chordProgression);

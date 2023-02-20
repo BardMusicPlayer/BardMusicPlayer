@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile
 {
     /// <summary>
     /// Settings according to which <see cref="MidiFile"/> must be read from or written to
@@ -83,7 +85,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write notes to or read them from CSV.
-        /// The default value is <see cref="Tools.NoteFormat.Events"/>.
+        /// The default value is <see cref="Tools.CsvConverter.MidiFile.NoteFormat.Events"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteFormat NoteFormat
@@ -99,7 +101,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets the format which should be used to write a note's number to or read it from CSV.
-        /// The default value is <see cref="Tools.NoteNumberFormat.NoteNumber"/>.
+        /// The default value is <see cref="Notes.NoteNumberFormat.NoteNumber"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public NoteNumberFormat NoteNumberFormat

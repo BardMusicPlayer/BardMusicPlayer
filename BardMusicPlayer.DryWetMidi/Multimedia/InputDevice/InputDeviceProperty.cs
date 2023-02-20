@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
 {
     /// <summary>
     /// Additional property attached to an instance of the <see cref="InputDevice"/>.

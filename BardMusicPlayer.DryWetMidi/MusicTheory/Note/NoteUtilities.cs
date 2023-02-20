@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Note
 {
     /// <summary>
     /// Provides utilities for working with the <see cref="Note"/>.
@@ -25,14 +25,14 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <returns>Note name which is <paramref name="noteName"/> transposed by <paramref name="interval"/>.</returns>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
-        public static NoteName Transpose(this NoteName noteName, Interval interval)
+        public static NoteName Transpose(this NoteName noteName, Interval.Interval interval)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
-            var noteNumber = ((int)noteName + interval) % Octave.OctaveSize;
+            var noteNumber = ((int)noteName + interval) % Octave.Octave.OctaveSize;
             if (noteNumber < 0)
-                noteNumber += Octave.OctaveSize;
+                noteNumber += Octave.Octave.OctaveSize;
 
             return (NoteName)noteNumber;
         }
@@ -44,7 +44,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <returns>Name of the note presented by <paramref name="noteNumber"/>.</returns>
         public static NoteName GetNoteName(SevenBitNumber noteNumber)
         {
-            return (NoteName)(noteNumber % Octave.OctaveSize);
+            return (NoteName)(noteNumber % Octave.Octave.OctaveSize);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// </remarks>
         public static int GetNoteOctave(SevenBitNumber noteNumber)
         {
-            return noteNumber / Octave.OctaveSize - OctaveOffset;
+            return noteNumber / Octave.Octave.OctaveSize - OctaveOffset;
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
         private static int CalculateNoteNumber(NoteName noteName, int octave)
         {
-            return (octave + OctaveOffset) * Octave.OctaveSize + (int)noteName;
+            return (octave + OctaveOffset) * Octave.Octave.OctaveSize + (int)noteName;
         }
 
         #endregion

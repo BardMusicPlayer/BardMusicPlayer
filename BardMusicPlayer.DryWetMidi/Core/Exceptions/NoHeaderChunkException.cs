@@ -1,7 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
 {
     /// <summary>
     /// The exception that is thrown when a MIDI file doesn't contain a header chunk.

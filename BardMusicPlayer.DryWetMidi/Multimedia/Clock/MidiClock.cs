@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using BardMusicPlayer.DryWetMidi.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock
 {
     /// <summary>
     /// MIDI clock used to drive playback or any timer-based object.
@@ -54,7 +53,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
 
         private double _speed = DefaultSpeed;
 
-        private readonly TickGenerator _tickGenerator;
+        private readonly TickGenerator.TickGenerator _tickGenerator;
 
         #endregion
 
@@ -70,7 +69,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
         /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
         /// no tick generator.</param>
         /// <param name="interval">Interval of clock's ticiking.</param>
-        public MidiClock(bool startImmediately, TickGenerator tickGenerator, TimeSpan interval)
+        public MidiClock(bool startImmediately, TickGenerator.TickGenerator tickGenerator, TimeSpan interval)
         {
             ThrowIfArgument.IsLessThan(nameof(interval), interval, TimeSpan.FromMilliseconds(1), "Interval is less than 1 ms.");
 

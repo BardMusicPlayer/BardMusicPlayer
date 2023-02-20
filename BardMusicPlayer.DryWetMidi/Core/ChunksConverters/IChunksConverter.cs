@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.ChunksConverters
 {
     /// <summary>
     /// Provides a way to convert a collection of <see cref="MidiChunk"/> objects to

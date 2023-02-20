@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -274,13 +275,13 @@ namespace Machina.Infrastructure
                 else
                 {
                     Trace.WriteLine($"ProcessTCPInfo: Unable to retrieve TCP table. Return code: {ret}", "DEBUG-MACHINA");
-                    throw new System.ComponentModel.Win32Exception(ret);
+                    throw new Win32Exception(ret);
                 }
             }
             catch (Exception ex)
             {
                 Trace.WriteLine("ProcessTCPInfo: Exception updating TCP connection list." + ex.ToString(), "DEBUG-MACHINA");
-                throw new System.ComponentModel.Win32Exception(ret, ex.Message);
+                throw new Win32Exception(ret, ex.Message);
             }
             finally
             {

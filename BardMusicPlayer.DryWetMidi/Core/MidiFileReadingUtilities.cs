@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Chunks.Info;
 
 namespace BardMusicPlayer.DryWetMidi.Core
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Core
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Events.Info
 {
     /// <summary>
     /// Represents an event's identity described by its type and corresponding status byte.

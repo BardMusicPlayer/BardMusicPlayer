@@ -28,7 +28,7 @@ namespace Sanford.Collections.Immutable
         private int index;
 
         // For storing and traversing the nodes in the tree.
-        private System.Collections.Stack treeStack = new System.Collections.Stack();
+        private Stack treeStack = new Stack();
 
         // The first top node in the list.
         private RalTopNode head;

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Chunks.Info
 {
     /// <summary>
     /// Collection of <see cref="ChunkType"/> objects which provide identity information of a chunk.

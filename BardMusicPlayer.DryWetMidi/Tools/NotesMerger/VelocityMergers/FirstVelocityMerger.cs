@@ -1,6 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.NotesMerger.VelocityMergers
 {
     internal sealed class FirstVelocityMerger : VelocityMerger
     {

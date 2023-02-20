@@ -1,4 +1,8 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Equality.Event;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Equality.Chunk
 {
     internal static class MidiChunkEquality
     {

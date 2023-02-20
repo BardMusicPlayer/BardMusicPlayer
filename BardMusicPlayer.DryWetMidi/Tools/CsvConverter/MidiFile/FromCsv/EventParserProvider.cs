@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.RecordTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv
 {
     internal static class EventParserProvider
     {
@@ -14,12 +17,12 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             new Dictionary<string, EventParser>(StringComparer.OrdinalIgnoreCase)
             {
                 [MidiCsvRecordTypes.Events.SequenceTrackName] = GetTextEventParser<SequenceTrackNameEvent>(),
-                [MidiCsvRecordTypes.Events.CopyrightNotice] = GetTextEventParser<CopyrightNoticeEvent>(),
-                [MidiCsvRecordTypes.Events.InstrumentName] = GetTextEventParser<InstrumentNameEvent>(),
-                [MidiCsvRecordTypes.Events.Marker] = GetTextEventParser<MarkerEvent>(),
-                [MidiCsvRecordTypes.Events.CuePoint] = GetTextEventParser<CuePointEvent>(),
-                [MidiCsvRecordTypes.Events.Lyric] = GetTextEventParser<LyricEvent>(),
-                [MidiCsvRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
+                [MidiCsvRecordTypes.Events.CopyrightNotice]   = GetTextEventParser<CopyrightNoticeEvent>(),
+                [MidiCsvRecordTypes.Events.InstrumentName]    = GetTextEventParser<InstrumentNameEvent>(),
+                [MidiCsvRecordTypes.Events.Marker]            = GetTextEventParser<MarkerEvent>(),
+                [MidiCsvRecordTypes.Events.CuePoint]          = GetTextEventParser<CuePointEvent>(),
+                [MidiCsvRecordTypes.Events.Lyric]             = GetTextEventParser<LyricEvent>(),
+                [MidiCsvRecordTypes.Events.Text]              = GetTextEventParser<TextEvent>(),
                 [MidiCsvRecordTypes.Events.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
                     TypeParser.UShort),
@@ -59,16 +62,16 @@ namespace BardMusicPlayer.DryWetMidi.Tools
                 [MidiCsvRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
                     TypeParser.Byte),
-                [MidiCsvRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
+                [MidiCsvRecordTypes.Events.NoteOn]  = GetNoteEventParser<NoteOnEvent>(2),
                 [MidiCsvRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
                 [MidiCsvRecordTypes.Events.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
                     TypeParser.FourBitNumber,
                     TypeParser.UShort),
-                [MidiCsvRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
-                [MidiCsvRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
+                [MidiCsvRecordTypes.Events.ControlChange]     = GetChannelEventParser<ControlChangeEvent>(2),
+                [MidiCsvRecordTypes.Events.ProgramChange]     = GetChannelEventParser<ProgramChangeEvent>(1),
                 [MidiCsvRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [MidiCsvRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
+                [MidiCsvRecordTypes.Events.NoteAftertouch]    = GetNoteEventParser<ChannelAftertouchEvent>(2),
                 [MidiCsvRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
                 [MidiCsvRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(
@@ -79,12 +82,12 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             new Dictionary<string, EventParser>(StringComparer.OrdinalIgnoreCase)
             {
                 [DryWetMidiRecordTypes.Events.SequenceTrackName] = GetTextEventParser<SequenceTrackNameEvent>(),
-                [DryWetMidiRecordTypes.Events.CopyrightNotice] = GetTextEventParser<CopyrightNoticeEvent>(),
-                [DryWetMidiRecordTypes.Events.InstrumentName] = GetTextEventParser<InstrumentNameEvent>(),
-                [DryWetMidiRecordTypes.Events.Marker] = GetTextEventParser<MarkerEvent>(),
-                [DryWetMidiRecordTypes.Events.CuePoint] = GetTextEventParser<CuePointEvent>(),
-                [DryWetMidiRecordTypes.Events.Lyric] = GetTextEventParser<LyricEvent>(),
-                [DryWetMidiRecordTypes.Events.Text] = GetTextEventParser<TextEvent>(),
+                [DryWetMidiRecordTypes.Events.CopyrightNotice]   = GetTextEventParser<CopyrightNoticeEvent>(),
+                [DryWetMidiRecordTypes.Events.InstrumentName]    = GetTextEventParser<InstrumentNameEvent>(),
+                [DryWetMidiRecordTypes.Events.Marker]            = GetTextEventParser<MarkerEvent>(),
+                [DryWetMidiRecordTypes.Events.CuePoint]          = GetTextEventParser<CuePointEvent>(),
+                [DryWetMidiRecordTypes.Events.Lyric]             = GetTextEventParser<LyricEvent>(),
+                [DryWetMidiRecordTypes.Events.Text]              = GetTextEventParser<TextEvent>(),
                 [DryWetMidiRecordTypes.Events.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
                     TypeParser.UShort),
@@ -124,16 +127,16 @@ namespace BardMusicPlayer.DryWetMidi.Tools
                 [DryWetMidiRecordTypes.Events.UnknownMeta] = GetBytesBasedEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[2]),
                     TypeParser.Byte),
-                [DryWetMidiRecordTypes.Events.NoteOn] = GetNoteEventParser<NoteOnEvent>(2),
+                [DryWetMidiRecordTypes.Events.NoteOn]  = GetNoteEventParser<NoteOnEvent>(2),
                 [DryWetMidiRecordTypes.Events.NoteOff] = GetNoteEventParser<NoteOffEvent>(2),
                 [DryWetMidiRecordTypes.Events.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
                     TypeParser.FourBitNumber,
                     TypeParser.UShort),
-                [DryWetMidiRecordTypes.Events.ControlChange] = GetChannelEventParser<ControlChangeEvent>(2),
-                [DryWetMidiRecordTypes.Events.ProgramChange] = GetChannelEventParser<ProgramChangeEvent>(1),
+                [DryWetMidiRecordTypes.Events.ControlChange]     = GetChannelEventParser<ControlChangeEvent>(2),
+                [DryWetMidiRecordTypes.Events.ProgramChange]     = GetChannelEventParser<ProgramChangeEvent>(1),
                 [DryWetMidiRecordTypes.Events.ChannelAftertouch] = GetChannelEventParser<ChannelAftertouchEvent>(1),
-                [DryWetMidiRecordTypes.Events.NoteAftertouch] = GetNoteEventParser<ChannelAftertouchEvent>(2),
+                [DryWetMidiRecordTypes.Events.NoteAftertouch]    = GetNoteEventParser<ChannelAftertouchEvent>(2),
                 [DryWetMidiRecordTypes.Events.SysExCompleted] = GetBytesBasedEventParser(
                     x => new NormalSysExEvent((byte[])x[1])),
                 [DryWetMidiRecordTypes.Events.SysExIncompleted] = GetBytesBasedEventParser(

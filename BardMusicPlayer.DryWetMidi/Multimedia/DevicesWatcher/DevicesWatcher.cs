@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BardMusicPlayer.DryWetMidi.Multimedia.Session;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.DevicesWatcher
 {
     /// <summary>
     /// Provides a way to watch devices adding/removing in the system. More info in the
@@ -74,22 +74,22 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
 
         private void OnInputDeviceAdded(object sender, IntPtr info)
         {
-            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.AddedDevice)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice.InputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnInputDeviceRemoved(object sender, IntPtr info)
         {
-            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice.InputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         private void OnOutputDeviceAdded(object sender, IntPtr info)
         {
-            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.AddedDevice)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice.OutputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnOutputDeviceRemoved(object sender, IntPtr info)
         {
-            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice.OutputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         #endregion

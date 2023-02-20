@@ -1,8 +1,11 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
+using BardMusicPlayer.DryWetMidi.Composing.Descriptors;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {
@@ -18,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// a number of half steps from the current root note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note.Note)"/> method. By default the root note is C4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4. To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
@@ -39,7 +42,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <param name="length">The length of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note.Note)"/> method. By default the root note is C4.
         /// To set default velocity use <see cref="SetVelocity(SevenBitNumber)"/> method. By default the
         /// velocity is 100.
         /// </remarks>
@@ -69,7 +72,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note.Note)"/> method. By default the root note is C4.
         /// To set default note length use <see cref="SetNoteLength(ITimeSpan)"/> method. By default the length
         /// is 1/4.
         /// </remarks>
@@ -90,7 +93,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <param name="velocity">The velocity of a note.</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <remarks>
-        /// To set root note use <see cref="SetRootNote(MusicTheory.Note)"/> method. By default the root note is C4.
+        /// To set root note use <see cref="SetRootNote(MusicTheory.Note.Note)"/> method. By default the root note is C4.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occured:</para>
@@ -193,7 +196,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// velocity is 100.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
-        public PatternBuilder Note(MusicTheory.Note note)
+        public PatternBuilder Note(Note note)
         {
             return Note(note, NoteLength, Velocity);
         }
@@ -219,7 +222,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length)
+        public PatternBuilder Note(Note note, ITimeSpan length)
         {
             return Note(note, length, Velocity);
         }
@@ -235,7 +238,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// is 1/4.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
-        public PatternBuilder Note(MusicTheory.Note note, SevenBitNumber velocity)
+        public PatternBuilder Note(Note note, SevenBitNumber velocity)
         {
             return Note(note, NoteLength, velocity);
         }
@@ -258,7 +261,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length, SevenBitNumber velocity)
+        public PatternBuilder Note(Note note, ITimeSpan length, SevenBitNumber velocity)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -340,7 +343,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
             ThrowIfArgument.IsNull(nameof(length), length);
 
-            return Note(MusicTheory.Note.Parse(note), length, velocity);
+            return Note(MusicTheory.Note.Note.Parse(note), length, velocity);
         }
 
         #endregion

@@ -1,10 +1,16 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.Notes
 {
     /// <summary>
     /// Represents a musical note.
@@ -310,7 +316,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </summary>
         internal TimedEvent TimedNoteOffEvent { get; } = new TimedEvent(new NoteOffEvent { Velocity = DefaultOffVelocity });
 
-        internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
+        internal MusicTheory.Note.Note UnderlyingNote => MusicTheory.Note.Note.Get(NoteNumber);
 
         #endregion
 

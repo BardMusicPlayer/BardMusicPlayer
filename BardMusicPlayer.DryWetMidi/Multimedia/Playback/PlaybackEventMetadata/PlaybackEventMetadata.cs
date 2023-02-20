@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback.PlaybackEventMetadata
 {
     internal sealed class PlaybackEventMetadata
     {

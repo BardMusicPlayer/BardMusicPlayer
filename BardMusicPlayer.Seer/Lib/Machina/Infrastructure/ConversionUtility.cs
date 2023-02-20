@@ -16,6 +16,7 @@
 using System;
 using System.Globalization;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Machina.Infrastructure
@@ -93,7 +94,7 @@ namespace Machina.Infrastructure
         {
             if (!IPAddress.TryParse(ip, out IPAddress address))
                 return 0;
-            if (address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+            if (address.AddressFamily != AddressFamily.InterNetwork)
                 return 0;
             uint longIp = BitConverter.ToUInt32(address.GetAddressBytes(), 0);
             return longIp;

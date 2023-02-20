@@ -1,11 +1,13 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+
+namespace BardMusicPlayer.DryWetMidi.Composing
 {
     /// <summary>
     /// Defines the state of a pattern action.
     /// </summary>
     /// <remarks>
     /// Pattern actions correspond to methods on <see cref="PatternBuilder"/>. For example,
-    /// <see cref="PatternBuilder.Note(MusicTheory.Interval)"/> creates 'Add note' action,
+    /// <see cref="PatternBuilder.Note(Interval)"/> creates 'Add note' action,
     /// so the state will define whether a note will be enabled, disabled or excluded from pattern at all.
     /// </remarks>
     public enum PatternActionState

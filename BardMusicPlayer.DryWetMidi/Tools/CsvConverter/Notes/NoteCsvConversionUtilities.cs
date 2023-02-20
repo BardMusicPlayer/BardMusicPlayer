@@ -1,6 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
 {
     internal static class NoteCsvConversionUtilities
     {
@@ -13,7 +14,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
                 case NoteNumberFormat.NoteNumber:
                     return noteNumber;
                 case NoteNumberFormat.Letter:
-                    return MusicTheory.Note.Get(noteNumber);
+                    return Note.Get(noteNumber);
             }
 
             return null;

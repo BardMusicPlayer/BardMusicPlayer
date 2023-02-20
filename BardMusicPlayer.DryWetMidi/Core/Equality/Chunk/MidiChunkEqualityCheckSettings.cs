@@ -1,4 +1,8 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Equality.Event;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Equality.Chunk
 {
     /// <summary>
     /// Holds settings according to which <see cref="MidiChunk"/> objects should

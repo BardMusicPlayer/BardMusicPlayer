@@ -1,7 +1,9 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
-using BardMusicPlayer.DryWetMidi.MusicTheory;
-using System;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Octave;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {
@@ -19,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// Setting a root note is not an action and thus will not be stored in a pattern.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="rootNote"/> is <c>null</c>.</exception>
-        public PatternBuilder SetRootNote(MusicTheory.Note rootNote)
+        public PatternBuilder SetRootNote(Note rootNote)
         {
             ThrowIfArgument.IsNull(nameof(rootNote), rootNote);
 

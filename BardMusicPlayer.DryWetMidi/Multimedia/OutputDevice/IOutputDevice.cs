@@ -1,7 +1,6 @@
-﻿using BardMusicPlayer.DryWetMidi.Core;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice
 {
     /// <summary>
     /// Represents an abstract output MIDI device. More info in the

@@ -1,4 +1,9 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects.Settings;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+
+namespace BardMusicPlayer.DryWetMidi.Interaction.GetObjects
 {
     /// <summary>
     /// Settings which define how objects should be detected and built.

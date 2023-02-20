@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Events.SystemRealTime
 {
     /// <summary>
     /// Represents Reset event.

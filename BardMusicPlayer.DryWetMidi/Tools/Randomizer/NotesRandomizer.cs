@@ -1,7 +1,7 @@
-﻿using BardMusicPlayer.DryWetMidi.Interaction;
-using System;
+﻿using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Tools.Randomizer.LengthedObjectsRandomizer;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer
 {
     /// <summary>
     /// Settings according to which notes should be randomized.

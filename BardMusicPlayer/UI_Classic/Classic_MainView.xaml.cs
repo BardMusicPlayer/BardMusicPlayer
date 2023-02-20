@@ -6,7 +6,6 @@ using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
-using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Siren;
 
 namespace BardMusicPlayer.UI_Classic;

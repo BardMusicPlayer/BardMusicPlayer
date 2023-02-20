@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.ChunksConverters;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Equality.File;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.Lazy;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
 
 namespace BardMusicPlayer.DryWetMidi.Core
 {
@@ -104,7 +111,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
         /// <see cref="SmpteTimeDivision"/> class.</para>
         /// </remarks>
-        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
+        public TimeDivision.TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
 
         /// <summary>
         /// Gets collection of chunks of a MIDI file.
@@ -191,39 +198,39 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </list>
         /// </exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file and that should be treated as error
-        /// according to the <see cref="ReadingSettings.NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
+        /// according to the <see cref="NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
+        /// in its header and that should be treated as error according to the <see cref="InvalidChunkSizePolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// should be treated as error accordng to the <see cref="UnknownChunkIdPolicy"/> of the
         /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one (declared in the file header) and that should be treated as error according to
-        /// the <see cref="ReadingSettings.UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
+        /// the <see cref="UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownFileFormatException">The header chunk of the file specifies unknown file format and
-        /// that should be treated as error according to the <see cref="ReadingSettings.UnknownFileFormatPolicy"/> of
+        /// that should be treated as error according to the <see cref="UnknownFileFormatPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
         /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
-        /// <see cref="ReadingSettings.InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <see cref="InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
         /// just read is invalid and that should be treated as error according to the
-        /// <see cref="ReadingSettings.InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <see cref="InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event and that
-        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChannelEventPolicy"/> of
+        /// should be treated as error according to the <see cref="UnknownChannelEventPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="NotEnoughBytesException">MIDI file data cannot be read since the reader's underlying stream doesn't
-        /// have enough bytes and that should be treated as error according to the <see cref="ReadingSettings.NotEnoughBytesPolicy"/>
+        /// have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// should be treated as error accordng to the <see cref="MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
-        public static MidiFile Read(string filePath, ReadingSettings settings = null)
+        public static MidiFile Read(string filePath, ReadingSettings.ReadingSettings settings = null)
         {
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
             {
@@ -265,7 +272,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
-        public static MidiTokensReader ReadLazy(string filePath, ReadingSettings settings = null)
+        public static MidiTokensReader ReadLazy(string filePath, ReadingSettings.ReadingSettings settings = null)
         {
             var fileStream = FileUtilities.OpenFileForRead(filePath);
             return ReadLazy(fileStream, true, settings);
@@ -309,7 +316,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings.WritingSettings settings = null)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
@@ -367,8 +374,8 @@ namespace BardMusicPlayer.DryWetMidi.Core
             string filePath,
             bool overwriteFile = false,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
-            WritingSettings settings = null,
-            TimeDivision timeDivision = null)
+            WritingSettings.WritingSettings settings = null,
+            TimeDivision.TimeDivision timeDivision = null)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
@@ -413,39 +420,39 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </list>
         /// </exception>
         /// <exception cref="NoHeaderChunkException">There is no header chunk in a file and that should be treated as error
-        /// according to the <see cref="ReadingSettings.NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
+        /// according to the <see cref="NoHeaderChunkPolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual header or track chunk's size differs from the one declared
-        /// in its header and that should be treated as error according to the <see cref="ReadingSettings.InvalidChunkSizePolicy"/>
+        /// in its header and that should be treated as error according to the <see cref="InvalidChunkSizePolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChunkException">Chunk to be read has unknown ID and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.UnknownChunkIdPolicy"/> of the
+        /// should be treated as error accordng to the <see cref="UnknownChunkIdPolicy"/> of the
         /// <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedTrackChunksCountException">Actual track chunks
         /// count differs from the expected one (declared in the file header) and that should be treated as error according to
-        /// the <see cref="ReadingSettings.UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
+        /// the <see cref="UnexpectedTrackChunksCountPolicy"/> of the specified <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownFileFormatException">The header chunk of the file specifies unknown file format and
-        /// that should be treated as error according to the <see cref="ReadingSettings.UnknownFileFormatPolicy"/> of
+        /// that should be treated as error according to the <see cref="UnknownFileFormatPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidChannelEventParameterValueException">Value of a channel event's parameter
         /// just read is invalid (is out of [0; 127] range) and that should be treated as error according to the
-        /// <see cref="ReadingSettings.InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <see cref="InvalidChannelEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidMetaEventParameterValueException">Value of a meta event's parameter
         /// just read is invalid and that should be treated as error according to the
-        /// <see cref="ReadingSettings.InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
+        /// <see cref="InvalidMetaEventParameterValuePolicy"/> of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event and that
-        /// should be treated as error according to the <see cref="ReadingSettings.UnknownChannelEventPolicy"/> of
+        /// should be treated as error according to the <see cref="UnknownChannelEventPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="NotEnoughBytesException">MIDI file data cannot be read since the reader's underlying stream doesn't
-        /// have enough bytes and that should be treated as error according to the <see cref="ReadingSettings.NotEnoughBytesPolicy"/>
+        /// have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>
         /// of the <paramref name="settings"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="MissedEndOfTrackEventException">Track chunk doesn't end with <c>End Of Track</c> event and that
-        /// should be treated as error accordng to the <see cref="ReadingSettings.MissedEndOfTrackPolicy"/> of
+        /// should be treated as error accordng to the <see cref="MissedEndOfTrackPolicy"/> of
         /// the <paramref name="settings"/>.</exception>
         /// <exception cref="InvalidOperationException"><see cref="ReaderSettings.Buffer"/> of <paramref name="settings"/>
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
-        public static MidiFile Read(Stream stream, ReadingSettings settings = null)
+        public static MidiFile Read(Stream stream, ReadingSettings.ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -455,7 +462,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             //
 
             if (settings == null)
-                settings = new ReadingSettings();
+                settings = new ReadingSettings.ReadingSettings();
 
             if (settings.ReaderSettings == null)
                 settings.ReaderSettings = new ReaderSettings();
@@ -580,7 +587,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
-        public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings settings = null)
+        public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings.ReadingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return ReadLazy(stream, false, settings);
@@ -601,7 +608,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings.WritingSettings settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
@@ -615,7 +622,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             //
 
             if (settings == null)
-                settings = new WritingSettings();
+                settings = new WritingSettings.WritingSettings();
 
             if (settings.WriterSettings == null)
                 settings.WriterSettings = new WriterSettings();
@@ -683,9 +690,9 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </exception>
         public static MidiTokensWriter WriteLazy(
             Stream stream,
-            WritingSettings settings = null,
+            WritingSettings.WritingSettings settings = null,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
-            TimeDivision timeDivision = null)
+            TimeDivision.TimeDivision timeDivision = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return WriteLazy(stream, false, settings, format, timeDivision);
@@ -763,7 +770,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
-        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings settings)
+        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings.ReadingSettings settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return new MidiTokensReader(stream, settings, disposeStream);
@@ -772,9 +779,9 @@ namespace BardMusicPlayer.DryWetMidi.Core
         private static MidiTokensWriter WriteLazy(
             Stream stream,
             bool disposeStream,
-            WritingSettings settings,
+            WritingSettings.WritingSettings settings,
             MidiFileFormat format,
-            TimeDivision timeDivision)
+            TimeDivision.TimeDivision timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return new MidiTokensWriter(
@@ -785,7 +792,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
                 timeDivision ?? new TicksPerQuarterNoteTimeDivision());
         }
 
-        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
+        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings.ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
             MidiChunk chunk = null;
 

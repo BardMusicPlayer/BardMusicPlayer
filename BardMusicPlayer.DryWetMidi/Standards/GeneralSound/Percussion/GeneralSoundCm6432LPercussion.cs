@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Standards
+﻿namespace BardMusicPlayer.DryWetMidi.Standards.GeneralSound.Percussion
 {
     /// <summary>
     /// General Sound 'CM-64/CM-32L' percussion.

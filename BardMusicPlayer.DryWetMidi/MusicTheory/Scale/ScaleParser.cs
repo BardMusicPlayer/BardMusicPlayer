@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using System.Text.RegularExpressions;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Scale
 {
     internal static class ScaleParser
     {
@@ -46,7 +46,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
 
             //
 
-            IEnumerable<Interval> intervals;
+            IEnumerable<Interval.Interval> intervals;
 
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)
@@ -56,7 +56,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                     .OfType<Capture>()
                     .Select(c =>
                     {
-                        Interval interval;
+                        Interval.Interval interval;
                         var parsingResult = IntervalParser.TryParse(c.Value, out interval);
 
                         return new

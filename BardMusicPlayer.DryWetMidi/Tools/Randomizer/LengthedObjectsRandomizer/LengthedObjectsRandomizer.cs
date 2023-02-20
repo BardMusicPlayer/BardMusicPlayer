@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Tools.Common;
+using BardMusicPlayer.DryWetMidi.Tools.Common.TimeProcessing;
+using BardMusicPlayer.DryWetMidi.Tools.Quantizer.Bounds;
+using BardMusicPlayer.DryWetMidi.Tools.Randomizer.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.Randomizer.LengthedObjectsRandomizer
 {
     /// <summary>
     /// Provides methods to randomize lengthed objects time.

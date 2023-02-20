@@ -1,11 +1,11 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Lazy;
+using BardMusicPlayer.DryWetMidi.Interaction.Chords;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Provides a wrapper around <see cref="MidiTokensWriter"/> to write objects to it keeping

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.Parsing;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Scale
 {
     /// <summary>
     /// Represents a musical scale.
@@ -22,7 +21,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNote"/> specified an
         /// invalid value.</exception>
-        public Scale(IEnumerable<Interval> intervals, NoteName rootNote)
+        public Scale(IEnumerable<Interval.Interval> intervals, NoteName rootNote)
         {
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNote), rootNote);
@@ -38,7 +37,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
         /// <summary>
         /// Gets inetrvals between adjacent notes of the current <see cref="Scale"/>.
         /// </summary>
-        public IEnumerable<Interval> Intervals { get; }
+        public IEnumerable<Interval.Interval> Intervals { get; }
 
         /// <summary>
         /// Gets root note (tonic) of the current <see cref="Scale"/>.

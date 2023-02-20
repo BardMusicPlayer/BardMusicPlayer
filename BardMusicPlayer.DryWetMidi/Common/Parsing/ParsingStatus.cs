@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common.Parsing
 {
     internal enum ParsingStatus
     {

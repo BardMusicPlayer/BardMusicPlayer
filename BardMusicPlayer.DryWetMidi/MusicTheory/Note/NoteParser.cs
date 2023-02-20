@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Note
 {
     internal static class NoteParser
     {
@@ -42,7 +41,7 @@ namespace BardMusicPlayer.DryWetMidi.MusicTheory
                 return noteNameParsingResult;
 
             int octaveNumber;
-            if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Middle.Number, out octaveNumber))
+            if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Octave.Middle.Number, out octaveNumber))
                 return ParsingResult.Error(OctaveIsOutOfRange);
 
             if (!NoteUtilities.IsNoteValid(noteName, octaveNumber))

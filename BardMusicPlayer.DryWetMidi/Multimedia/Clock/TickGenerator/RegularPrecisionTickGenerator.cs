@@ -1,11 +1,11 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 using BardMusicPlayer.DryWetMidi.Common;
+using Timer = System.Timers.Timer;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator
 {
     /// <summary>
-    /// Tick generator which uses <see cref="Timer"/> for ticking.
+    /// Tick generator which uses <see cref="System.Threading.Timer"/> for ticking.
     /// </summary>
     public sealed class RegularPrecisionTickGenerator : TickGenerator
     {
@@ -25,7 +25,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
 
         #region Fields
 
-        private System.Timers.Timer _timer;
+        private Timer _timer;
         private bool _disposed = false;
 
         #endregion
@@ -46,7 +46,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
                                          MaxInterval,
                                          $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
 
-            _timer = new System.Timers.Timer(interval.TotalMilliseconds);
+            _timer = new Timer(interval.TotalMilliseconds);
             _timer.Elapsed += OnElapsed;
             _timer.Start();
         }

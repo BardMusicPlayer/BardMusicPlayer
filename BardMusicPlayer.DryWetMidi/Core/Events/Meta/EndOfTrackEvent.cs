@@ -1,4 +1,6 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Meta
 {
     /// <summary>
     /// Represents an End Of Track meta event.
@@ -25,7 +27,7 @@
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
-        protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        protected override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
         }
 
@@ -34,7 +36,7 @@
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
         }
 
@@ -43,7 +45,7 @@
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected override int GetContentSize(WritingSettings settings)
+        protected override int GetContentSize(WritingSettings.WritingSettings settings)
         {
             return 0;
         }

@@ -1,8 +1,11 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Exceptions;
+using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Meta
 {
     /// <summary>
     /// Represents a text meta event.
@@ -56,7 +59,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="size">Size of the event's content.</param>
         /// <exception cref="ArgumentOutOfRangeException">Text event cannot be read since the size is
         /// negative number.</exception>
-        protected sealed override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
+        protected sealed override void ReadContent(MidiReader reader, ReadingSettings.ReadingSettings settings, int size)
         {
             ThrowIfArgument.IsNegative(
                 nameof(size),
@@ -95,7 +98,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        protected sealed override void WriteContent(MidiWriter writer, WritingSettings settings)
+        protected sealed override void WriteContent(MidiWriter writer, WritingSettings.WritingSettings settings)
         {
             var text = Text;
             if (string.IsNullOrEmpty(text))
@@ -111,7 +114,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        protected sealed override int GetContentSize(WritingSettings settings)
+        protected sealed override int GetContentSize(WritingSettings.WritingSettings settings)
         {
             var text = Text;
             if (string.IsNullOrEmpty(text))

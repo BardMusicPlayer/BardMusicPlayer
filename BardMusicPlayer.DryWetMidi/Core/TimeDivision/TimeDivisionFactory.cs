@@ -1,6 +1,7 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.TimeDivision
 {
     internal static class TimeDivisionFactory
     {

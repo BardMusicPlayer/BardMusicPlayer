@@ -1,8 +1,9 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.MusicTheory.Note;
 
-namespace BardMusicPlayer.DryWetMidi.Composing
+namespace BardMusicPlayer.DryWetMidi.Composing.Descriptors
 {
     /// <summary>
     /// Represents an object that describes a note.
@@ -29,7 +30,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public NoteDescriptor(MusicTheory.Note note, SevenBitNumber velocity, ITimeSpan length)
+        public NoteDescriptor(Note note, SevenBitNumber velocity, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -46,7 +47,7 @@ namespace BardMusicPlayer.DryWetMidi.Composing
         /// <summary>
         /// Gets the note.
         /// </summary>
-        public MusicTheory.Note Note { get; }
+        public Note Note { get; }
 
         /// <summary>
         /// Gets the velocity of the note.

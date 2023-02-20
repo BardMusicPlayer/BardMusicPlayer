@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered
 {
     // TODO: https://www.midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2
     /// <summary>

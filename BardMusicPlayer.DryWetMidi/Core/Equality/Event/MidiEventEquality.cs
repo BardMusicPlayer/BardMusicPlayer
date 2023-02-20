@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
+using BardMusicPlayer.DryWetMidi.Core.Events.SystemCommon;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Equality.Event
 {
     internal static class MidiEventEquality
     {

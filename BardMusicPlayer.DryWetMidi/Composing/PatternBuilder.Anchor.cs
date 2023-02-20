@@ -1,5 +1,5 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
+using BardMusicPlayer.DryWetMidi.Composing.Actions;
 
 namespace BardMusicPlayer.DryWetMidi.Composing
 {

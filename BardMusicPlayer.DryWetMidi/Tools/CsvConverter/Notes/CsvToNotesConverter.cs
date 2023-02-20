@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using BardMusicPlayer.DryWetMidi.Common;
-using BardMusicPlayer.DryWetMidi.Interaction;
+﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Tools
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
 {
     internal static class CsvToNotesConverter
     {
@@ -68,8 +70,8 @@ namespace BardMusicPlayer.DryWetMidi.Tools
                     return SevenBitNumber.TryParse(input, out result);
                 case NoteNumberFormat.Letter:
                     {
-                        MusicTheory.Note note;
-                        if (!MusicTheory.Note.TryParse(input, out note))
+                        MusicTheory.Note.Note note;
+                        if (!MusicTheory.Note.Note.TryParse(input, out note))
                             return false;
 
                         result = note.NoteNumber;

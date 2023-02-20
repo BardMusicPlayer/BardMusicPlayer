@@ -1,11 +1,17 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
+﻿using System.ComponentModel;
+using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Collections;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
+using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+using BardMusicPlayer.DryWetMidi.Interaction.Utilities.ThrowIf;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
 {
     /// <summary>
     /// Extension methods for objects that implement the <see cref="ITimedObject"/> interface.
@@ -34,7 +40,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTime"/> is not supported.</exception>
-        public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap tempoMap)
+        public static TTime TimeAs<TTime>(this ITimedObject obj, TempoMap.TempoMap tempoMap)
             where TTime : ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);
@@ -64,7 +70,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
-        public static ITimeSpan TimeAs(this ITimedObject obj, TimeSpanType timeType, TempoMap tempoMap)
+        public static ITimeSpan TimeAs(this ITimedObject obj, TimeSpanType timeType, TempoMap.TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);
             ThrowIfArgument.IsInvalidEnumValue(nameof(timeType), timeType);
@@ -123,7 +129,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap tempoMap)
+        public static IEnumerable<TObject> AtTime<TObject>(this IEnumerable<TObject> objects, ITimeSpan time, TempoMap.TempoMap tempoMap)
             where TObject : ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -259,7 +265,7 @@ namespace BardMusicPlayer.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static TObject SetTime<TObject>(this TObject obj, ITimeSpan time, TempoMap tempoMap)
+        public static TObject SetTime<TObject>(this TObject obj, ITimeSpan time, TempoMap.TempoMap tempoMap)
             where TObject : ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(obj), obj);

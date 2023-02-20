@@ -1,10 +1,8 @@
-﻿using BardMusicPlayer.DryWetMidi.Common;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Collections
 {
     /// <summary>
     /// Collection of <see cref="MidiEvent"/> objects.
@@ -85,7 +83,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         public void Add(MidiEvent midiEvent)
@@ -104,7 +102,7 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <remarks>
         /// Note that End Of Track events cannot be added into the collection since it may cause inconsistence in a
         /// track chunk structure. End Of Track event will be written to the track chunk automatically on
-        /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
+        /// <see cref="MidiFile.Write(string,bool,BardMusicPlayer.DryWetMidi.Core.MidiFileFormat,BardMusicPlayer.DryWetMidi.Core.WritingSettings.WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
         public void AddRange(IEnumerable<MidiEvent> events)

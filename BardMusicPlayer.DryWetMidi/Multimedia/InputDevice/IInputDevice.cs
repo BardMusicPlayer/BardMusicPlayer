@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
 {
     /// <summary>
     /// Represents an abstract input MIDI device. More info in the

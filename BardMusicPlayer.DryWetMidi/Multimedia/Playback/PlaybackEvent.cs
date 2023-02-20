@@ -1,7 +1,6 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Core;
+﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Playback
 {
     internal sealed class PlaybackEvent
     {
@@ -24,7 +23,7 @@ namespace BardMusicPlayer.DryWetMidi.Multimedia
 
         public long RawTime { get; }
 
-        public PlaybackEventMetadata Metadata { get; } = new PlaybackEventMetadata();
+        public PlaybackEventMetadata.PlaybackEventMetadata Metadata { get; } = new PlaybackEventMetadata.PlaybackEventMetadata();
 
         #endregion
     }

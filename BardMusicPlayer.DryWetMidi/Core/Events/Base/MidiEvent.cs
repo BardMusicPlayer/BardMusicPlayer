@@ -1,7 +1,7 @@
-﻿using System;
-using BardMusicPlayer.DryWetMidi.Common;
+﻿using BardMusicPlayer.DryWetMidi.Common;
+using BardMusicPlayer.DryWetMidi.Core.Equality.Event;
 
-namespace BardMusicPlayer.DryWetMidi.Core
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Base
 {
     /// <summary>
     /// Represents a MIDI file event stored in a track chunk.
@@ -81,21 +81,21 @@ namespace BardMusicPlayer.DryWetMidi.Core
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
-        internal abstract void Read(MidiReader reader, ReadingSettings settings, int size);
+        internal abstract void Read(MidiReader reader, ReadingSettings.ReadingSettings settings, int size);
 
         /// <summary>
         /// Writes content of a MIDI event.
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
-        internal abstract void Write(MidiWriter writer, WritingSettings settings);
+        internal abstract void Write(MidiWriter writer, WritingSettings.WritingSettings settings);
 
         /// <summary>
         /// Gets the size of the content of a MIDI event.
         /// </summary>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         /// <returns>Size of the event's content.</returns>
-        internal abstract int GetSize(WritingSettings settings);
+        internal abstract int GetSize(WritingSettings.WritingSettings settings);
 
         /// <summary>
         /// Clones event by creating a copy of it.

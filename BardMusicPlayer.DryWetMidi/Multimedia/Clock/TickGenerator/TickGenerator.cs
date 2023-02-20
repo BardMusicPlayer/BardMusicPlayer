@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator
 {
     /// <summary>
     /// Tick generator which provides ticking with the specified interval.

@@ -1,4 +1,4 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile
 {
     /// <summary>
     /// Layout (format) of CSV data representing a MIDI file. The default value is <see cref="DryWetMidi"/>.

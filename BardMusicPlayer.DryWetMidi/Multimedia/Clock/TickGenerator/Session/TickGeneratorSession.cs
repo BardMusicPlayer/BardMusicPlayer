@@ -1,6 +1,6 @@
-﻿using System;
+﻿using BardMusicPlayer.DryWetMidi.Multimedia.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator.Session
 {
     internal static class TickGeneratorSession
     {
