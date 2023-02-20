@@ -209,7 +209,7 @@ public partial class Game : IDisposable, IEquatable<Game>
     public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
 
     public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
-
+#pragma warning disable CA1416
     public IntPtr GetAffinity()
     {
         return Process.ProcessorAffinity;
@@ -221,4 +221,5 @@ public partial class Game : IDisposable, IEquatable<Game>
             return;
         Process.ProcessorAffinity = (IntPtr)AffinityMask;
     }
+#pragma warning restore CA1416
 }

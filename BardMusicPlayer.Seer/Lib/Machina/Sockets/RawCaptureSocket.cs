@@ -86,14 +86,14 @@ namespace Machina.Sockets
             socket.Bind(new IPEndPoint(localAddress, 0));
 
             socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.HeaderIncluded, true);
-
+#pragma warning disable CA1416
             if (_isWindows)
             {
                 byte[] trueBytes = new byte[4] { 3, 0, 0, 0 }; // 3 == RCVALL_IPLEVEL, so it only intercepts the target interface
                 byte[] outBytes = new byte[4];
                 _ = socket.IOControl(IOControlCode.ReceiveAll, trueBytes, outBytes);
             }
-
+#pragma warning restore CA1416
             if (remoteAddress > 0)
                 socket.Connect(new IPEndPoint(remoteAddress, 0));
 

@@ -13,7 +13,7 @@ namespace BardMusicPlayer.Seer.Utilities;
 internal static class SeerExtensions
 {
     private static uint TOKEN_QUERY = 0x0008;
-
+#pragma warning disable CA1416
     internal static WindowsIdentity WindowsIdentity(this Process process)
     {
         var ph = IntPtr.Zero;
@@ -30,6 +30,7 @@ internal static class SeerExtensions
 
         return wi;
     }
+#pragma warning restore CA1416
 
     [DllImport("advapi32.dll", SetLastError = true)]
     private static extern bool OpenProcessToken(IntPtr processHandle, uint desiredAccess, out IntPtr tokenHandle);
