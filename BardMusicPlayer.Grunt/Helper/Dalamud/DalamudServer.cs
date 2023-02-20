@@ -30,7 +30,9 @@ internal class DalamudServer : IDisposable
         _pipe.ClientConnected    += OnConnected;
         _pipe.ClientDisconnected += OnDisconnected;
         _pipe.MessageReceived    += OnMessage;
+#pragma warning disable CA1416
         _pipe.AllowUsersReadWrite();
+#pragma warning restore CA1416
         Start();
     }
 
@@ -66,7 +68,7 @@ internal class DalamudServer : IDisposable
         return true;
     }
 
-    private void OnMessage(object sender, ConnectionMessageEventArgs<string?> e)
+    private void OnMessage(object? sender, ConnectionMessageEventArgs<string?> e)
     {
         if (string.IsNullOrEmpty(e.Message)) return;
 
@@ -88,13 +90,13 @@ internal class DalamudServer : IDisposable
         }
     }
 
-    private void OnDisconnected(object sender, ConnectionEventArgs<string> e)
+    private void OnDisconnected(object? sender, ConnectionEventArgs<string> e)
     {
         if (_clients.Values.Contains(e.Connection.PipeName)) _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.PipeName).Key, out _);
         Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} disconnected");
     }
 
-    private static void OnConnected(object sender, ConnectionEventArgs<string> e)
+    private static void OnConnected(object? sender, ConnectionEventArgs<string> e)
     {
         Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} connected");
     }

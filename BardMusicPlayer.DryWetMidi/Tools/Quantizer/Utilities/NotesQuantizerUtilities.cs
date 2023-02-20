@@ -147,6 +147,7 @@ namespace BardMusicPlayer.DryWetMidi.Tools
             midiFile.GetTrackChunks().QuantizeNotes(grid, tempoMap, settings);
         }
 
+        [Obsolete("Obsolete")]
         private static QuantizingSettings GetSettings(NotesQuantizingSettings settings) => new QuantizingSettings
         {
             DistanceCalculationType = settings.DistanceCalculationType,

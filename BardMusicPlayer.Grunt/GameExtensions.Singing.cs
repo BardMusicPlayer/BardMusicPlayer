@@ -37,7 +37,9 @@ public static partial class GameExtensions
         {
             var tcs = new TaskCompletionSource<bool>();
             var clipboardThread = new Thread(() => SendLyricLineClipBoardTask(tcs, game, text));
+#pragma warning disable CA1416
             clipboardThread.SetApartmentState(ApartmentState.STA);
+#pragma warning restore CA1416
             clipboardThread.Start();
             sent = await tcs.Task;
         }
