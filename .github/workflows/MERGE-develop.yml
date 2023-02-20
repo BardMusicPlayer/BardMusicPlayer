@@ -25,13 +25,14 @@ jobs:
       run: (Get-Content .\BardMusicPlayer\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer\MainWindow.xaml.cs
 
     - name: Build with dotnet
+      working-directory: .\BardMusicPlayer
       run: dotnet publish /p:Configuration=Release /p:PublishProfile=Publish
       
     - name: What files do we have
-      run: Get-ChildItem -Recurse .\BardMusicPlayer\
+      run: Get-ChildItem -Recurse .\BardMusicPlayer\bin
       
     - name: Rename artifact
-      run: Move-Item -Path .\bin\Release\Publish\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
+      run: Move-Item -Path .\BardMusicPlayer\bin\Release\Publish\BardMusicPlayer.exe -Destination (".\BardMusicPlayer-"+(git rev-parse HEAD)+".exe")
 
     - name: Store artifacts
       uses: actions/upload-artifact@v3
