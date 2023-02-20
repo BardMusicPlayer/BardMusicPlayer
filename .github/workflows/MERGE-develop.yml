@@ -16,15 +16,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
+#    - name: Install .NET
+#      uses: actions/setup-dotnet@v3
+#      with:
+#        dotnet-version: 7.0.x
 
     - name: Set Version
       run: (Get-Content .\BardMusicPlayer\MainWindow.xaml.cs).Replace('CUSTOM', (git rev-parse --short HEAD)) | Set-Content .\BardMusicPlayer\MainWindow.xaml.cs
 
     - name: Build with dotnet
+      working-directory: .\BardMusicPlayer
+      run: dotnet build --configuration Release
+
+    - name: Publish with dotnet
       working-directory: .\BardMusicPlayer
       run: dotnet publish /p:Configuration=Release /p:PublishProfile=Publish
       
