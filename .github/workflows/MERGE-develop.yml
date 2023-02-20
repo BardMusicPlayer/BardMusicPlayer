@@ -39,9 +39,9 @@ jobs:
         git commit -am"Beta build ${{ github.run_number }} commit ${{ github.sha }}"
         git push origin HEAD
           
-      - name: Discord notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
-        with:
-          args: 'A new beta release will be available in 5 minutes at https://dl.bardmusicplayer.com/bmp/2'
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+      with:
+        args: 'A new beta release will be available in 5 minutes at https://dl.bardmusicplayer.com/bmp/2'
