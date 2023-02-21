@@ -1,30 +1,29 @@
 using System;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing.TrackClasses;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+
+public class SysExMessageEventArgs : EventArgs
 {
-    public class SysExMessageEventArgs : EventArgs
+    private SysExMessage message;
+    private Track track;
+
+    public SysExMessageEventArgs(Track track, SysExMessage message)
     {
-        private SysExMessage message;
-        private Track track;
+        this.message = message;
+        this.track   = track;
+    }
 
-        public SysExMessageEventArgs(Track track, SysExMessage message)
+    public SysExMessage Message
+    {
+        get
         {
-            this.message = message;
-            this.track = track;
+            return message;
         }
+    }
 
-        public SysExMessage Message
-        {
-            get
-            {
-                return message;
-            }
-        }
-
-        public Track MidiTrack
-        {
-            get { return track; }
-        }
+    public Track MidiTrack
+    {
+        get { return track; }
     }
 }

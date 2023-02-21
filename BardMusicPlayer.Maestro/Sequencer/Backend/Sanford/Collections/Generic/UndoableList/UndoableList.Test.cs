@@ -36,239 +36,238 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList;
+
+public partial class UndoableList<T> : IList<T>
 {
-    public partial class UndoableList<T> : IList<T>
+    [Conditional("MIDIDEBUG")]
+    public static void Test()
     {
-        [Conditional("MIDIDEBUG")]
-        public static void Test()
+        int count = 10;
+        List<int> comparisonList = new List<int>(count);
+        UndoableList<int> undoList = new UndoableList<int>(count);
+
+        PopulateLists(comparisonList, undoList, count);
+        TestAdd(comparisonList, undoList);
+        TestClear(comparisonList, undoList);
+        TestInsert(comparisonList, undoList);
+        TestInsertRange(comparisonList, undoList);
+        TestRemove(comparisonList, undoList);
+        TestRemoveAt(comparisonList, undoList);
+        TestRemoveRange(comparisonList, undoList);
+        TestReverse(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void TestAdd(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        Stack<int> redoStack = new Stack<int>();
+
+        while(comparisonList.Count > 0)
         {
-            int count = 10;
-            List<int> comparisonList = new List<int>(count);
-            UndoableList<int> undoList = new UndoableList<int>(count);
-
-            PopulateLists(comparisonList, undoList, count);
-            TestAdd(comparisonList, undoList);
-            TestClear(comparisonList, undoList);
-            TestInsert(comparisonList, undoList);
-            TestInsertRange(comparisonList, undoList);
-            TestRemove(comparisonList, undoList);
-            TestRemoveAt(comparisonList, undoList);
-            TestRemoveRange(comparisonList, undoList);
-            TestReverse(comparisonList, undoList);
-        }
-
-        [Conditional("MIDIDEBUG")]
-        private static void TestAdd(List<int> comparisonList, UndoableList<int> undoList)
-        {
-            TestEquals(comparisonList, undoList);
-
-            Stack<int> redoStack = new Stack<int>();
-
-            while(comparisonList.Count > 0)
-            {
-                redoStack.Push(comparisonList[comparisonList.Count - 1]);
-                comparisonList.RemoveAt(comparisonList.Count - 1);
-                Debug.Assert(undoList.Undo());
-                TestEquals(comparisonList, undoList);
-            }
-
-            while(redoStack.Count > 0)
-            {
-                comparisonList.Add(redoStack.Pop());
-                Debug.Assert(undoList.Redo());
-                TestEquals(comparisonList, undoList);
-            }
-        }
-
-        [Conditional("MIDIDEBUG")]
-        private static void TestClear(List<int> comparisonList, UndoableList<int> undoList)
-        {
-            TestEquals(comparisonList, undoList);
-
-            undoList.Clear();
-
+            redoStack.Push(comparisonList[comparisonList.Count - 1]);
+            comparisonList.RemoveAt(comparisonList.Count - 1);
             Debug.Assert(undoList.Undo());
-
             TestEquals(comparisonList, undoList);
         }
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestInsert(List<int> comparisonList, UndoableList<int> undoList)
+        while(redoStack.Count > 0)
         {
-            TestEquals(comparisonList, undoList);
-
-            int index = comparisonList.Count / 2;
-
-            comparisonList.Insert(index, 999);
-            undoList.Insert(index, 999);
-
-            comparisonList.RemoveAt(index);
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Insert(index, 999);
+            comparisonList.Add(redoStack.Pop());
             Debug.Assert(undoList.Redo());
-
             TestEquals(comparisonList, undoList);
         }
+    }
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestInsertRange(List<int> comparisonList, UndoableList<int> undoList)
-        {
-            TestEquals(comparisonList, undoList);
+    [Conditional("MIDIDEBUG")]
+    private static void TestClear(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
 
-            int[] range = { 1, 2, 3, 4, 5 };
-            int index = comparisonList.Count / 2;
+        undoList.Clear();
 
-            comparisonList.InsertRange(index, range);
-            undoList.InsertRange(index, range);
+        Debug.Assert(undoList.Undo());
 
-            TestEquals(comparisonList, undoList);
+        TestEquals(comparisonList, undoList);
+    }
 
-            comparisonList.RemoveRange(index, range.Length);
-            Debug.Assert(undoList.Undo());
+    [Conditional("MIDIDEBUG")]
+    private static void TestInsert(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        int index = comparisonList.Count / 2;
+
+        comparisonList.Insert(index, 999);
+        undoList.Insert(index, 999);
+
+        comparisonList.RemoveAt(index);
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Insert(index, 999);
+        Debug.Assert(undoList.Redo());
+
+        TestEquals(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void TestInsertRange(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        int[] range = { 1, 2, 3, 4, 5 };
+        int index = comparisonList.Count / 2;
+
+        comparisonList.InsertRange(index, range);
+        undoList.InsertRange(index, range);
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.RemoveRange(index, range.Length);
+        Debug.Assert(undoList.Undo());
             
-            TestEquals(comparisonList, undoList);
+        TestEquals(comparisonList, undoList);
 
-            comparisonList.InsertRange(index, range);
-            Debug.Assert(undoList.Redo());
+        comparisonList.InsertRange(index, range);
+        Debug.Assert(undoList.Redo());
 
-            TestEquals(comparisonList, undoList);
-        }
+        TestEquals(comparisonList, undoList);
+    }
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestRemove(List<int> comparisonList, UndoableList<int> undoList)
+    [Conditional("MIDIDEBUG")]
+    private static void TestRemove(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        int index = comparisonList.Count / 2;
+
+        int item = comparisonList[index];
+
+        comparisonList.Remove(item);
+        undoList.Remove(item);
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Insert(index, item);
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void TestRemoveAt(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        int index = comparisonList.Count / 2;
+
+        int item = comparisonList[index];
+
+        comparisonList.RemoveAt(index);
+        undoList.RemoveAt(index);
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Insert(index, item);
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void TestRemoveRange(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        int index = comparisonList.Count / 2;
+        int count = comparisonList.Count - index;
+
+        List<int> range = comparisonList.GetRange(index, count);
+
+        comparisonList.RemoveRange(index, count);
+        undoList.RemoveRange(index, count);
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.InsertRange(index, range);
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void TestReverse(List<int> comparisonList, UndoableList<int> undoList)
+    {
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Reverse();
+        undoList.Reverse();
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Reverse();
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Reverse();
+        Debug.Assert(undoList.Redo());
+
+        TestEquals(comparisonList, undoList);
+
+        int count = comparisonList.Count / 2;
+
+        comparisonList.Reverse(0, count);
+        undoList.Reverse(0, count);
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Reverse(0, count);
+        Debug.Assert(undoList.Undo());
+
+        TestEquals(comparisonList, undoList);
+
+        comparisonList.Reverse(0, count);
+        Debug.Assert(undoList.Redo());
+
+        TestEquals(comparisonList, undoList);
+    }
+
+    [Conditional("MIDIDEBUG")]
+    private static void PopulateLists(IList<int> a, IList<int> b, int count)
+    {
+        Random r = new Random();
+        int item;
+
+        for(int i = 0; i < count; i++)
         {
-            TestEquals(comparisonList, undoList);
-
-            int index = comparisonList.Count / 2;
-
-            int item = comparisonList[index];
-
-            comparisonList.Remove(item);
-            undoList.Remove(item);
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Insert(index, item);
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
+            item = r.Next();
+            a.Add(item);
+            b.Add(item);
         }
+    }
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestRemoveAt(List<int> comparisonList, UndoableList<int> undoList)
+    [Conditional("MIDIDEBUG")]
+    private static void TestEquals(ICollection<int> a, ICollection<int> b)
+    {
+        bool equals = true;
+
+        if(a.Count != b.Count)
         {
-            TestEquals(comparisonList, undoList);
-
-            int index = comparisonList.Count / 2;
-
-            int item = comparisonList[index];
-
-            comparisonList.RemoveAt(index);
-            undoList.RemoveAt(index);
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Insert(index, item);
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
+            equals = false;
         }
+        IEnumerator<int> aEnumerator = a.GetEnumerator();
+        IEnumerator<int> bEnumerator = b.GetEnumerator();
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestRemoveRange(List<int> comparisonList, UndoableList<int> undoList)
+        while(equals && aEnumerator.MoveNext() && bEnumerator.MoveNext())
         {
-            TestEquals(comparisonList, undoList);
-
-            int index = comparisonList.Count / 2;
-            int count = comparisonList.Count - index;
-
-            List<int> range = comparisonList.GetRange(index, count);
-
-            comparisonList.RemoveRange(index, count);
-            undoList.RemoveRange(index, count);
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.InsertRange(index, range);
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
+            equals = aEnumerator.Current.Equals(bEnumerator.Current);
         }
 
-        [Conditional("MIDIDEBUG")]
-        private static void TestReverse(List<int> comparisonList, UndoableList<int> undoList)
-        {
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Reverse();
-            undoList.Reverse();
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Reverse();
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Reverse();
-            Debug.Assert(undoList.Redo());
-
-            TestEquals(comparisonList, undoList);
-
-            int count = comparisonList.Count / 2;
-
-            comparisonList.Reverse(0, count);
-            undoList.Reverse(0, count);
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Reverse(0, count);
-            Debug.Assert(undoList.Undo());
-
-            TestEquals(comparisonList, undoList);
-
-            comparisonList.Reverse(0, count);
-            Debug.Assert(undoList.Redo());
-
-            TestEquals(comparisonList, undoList);
-        }
-
-        [Conditional("MIDIDEBUG")]
-        private static void PopulateLists(IList<int> a, IList<int> b, int count)
-        {
-            Random r = new Random();
-            int item;
-
-            for(int i = 0; i < count; i++)
-            {
-                item = r.Next();
-                a.Add(item);
-                b.Add(item);
-            }
-        }
-
-        [Conditional("MIDIDEBUG")]
-        private static void TestEquals(ICollection<int> a, ICollection<int> b)
-        {
-            bool equals = true;
-
-            if(a.Count != b.Count)
-            {
-                equals = false;
-            }
-            IEnumerator<int> aEnumerator = a.GetEnumerator();
-            IEnumerator<int> bEnumerator = b.GetEnumerator();
-
-            while(equals && aEnumerator.MoveNext() && bEnumerator.MoveNext())
-            {
-                equals = aEnumerator.Current.Equals(bEnumerator.Current);
-            }
-
-            Debug.Assert(equals);
-        }
+        Debug.Assert(equals);
     }
 }

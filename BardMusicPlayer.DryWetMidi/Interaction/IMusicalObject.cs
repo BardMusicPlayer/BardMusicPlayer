@@ -1,19 +1,18 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction
+namespace BardMusicPlayer.DryWetMidi.Interaction;
+
+/// <summary>
+/// Musical objects that can be played.
+/// </summary>
+public interface IMusicalObject
 {
+    #region Properties
+
     /// <summary>
-    /// Musical objects that can be played.
+    /// Gets the channel which should be used to play an object.
     /// </summary>
-    public interface IMusicalObject
-    {
-        #region Properties
+    FourBitNumber Channel { get; }
 
-        /// <summary>
-        /// Gets the channel which should be used to play an object.
-        /// </summary>
-        FourBitNumber Channel { get; }
-
-        #endregion
-    }
+    #endregion
 }

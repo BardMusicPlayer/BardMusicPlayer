@@ -1,32 +1,31 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice;
+
+internal static class InputDeviceApiProvider
 {
-    internal static class InputDeviceApiProvider
+    #region Constants
+
+    private static readonly bool Is64Bit = IntPtr.Size == 8;
+
+    #endregion
+
+    #region Fields
+
+    private static InputDeviceApi _api;
+
+    #endregion
+
+    #region Properties
+
+    public static InputDeviceApi Api
     {
-        #region Constants
-
-        private static readonly bool Is64Bit = IntPtr.Size == 8;
-
-        #endregion
-
-        #region Fields
-
-        private static InputDeviceApi _api;
-
-        #endregion
-
-        #region Properties
-
-        public static InputDeviceApi Api
+        get
         {
-            get
-            {
-                if (_api == null)
-                    _api = Is64Bit ? (InputDeviceApi)new InputDeviceApi64() : new InputDeviceApi32();
+            if (_api == null)
+                _api = Is64Bit ? (InputDeviceApi)new InputDeviceApi64() : new InputDeviceApi32();
 
-                return _api;
-            }
+            return _api;
         }
-
-        #endregion
     }
+
+    #endregion
 }

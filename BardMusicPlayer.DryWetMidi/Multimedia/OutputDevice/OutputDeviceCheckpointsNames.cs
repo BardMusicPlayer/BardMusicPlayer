@@ -1,12 +1,11 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.OutputDevice;
+
+internal static class OutputDeviceCheckpointsNames
 {
-    internal static class OutputDeviceCheckpointsNames
-    {
-        #region Constants
+    #region Constants
 
-        public const string HandleFinalizerEntered = "OUT A";
-        public const string DeviceClosedInHandleFinalizer = "OUT B";
+    public const string HandleFinalizerEntered = "OUT A";
+    public const string DeviceClosedInHandleFinalizer = "OUT B";
 
-        #endregion
-    }
+    #endregion
 }

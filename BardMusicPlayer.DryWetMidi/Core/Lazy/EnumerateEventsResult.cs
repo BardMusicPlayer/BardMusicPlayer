@@ -1,26 +1,25 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Lazy
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy;
+
+/// <summary>
+/// Represents a result of the <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/>
+/// method.
+/// </summary>
+public sealed class EnumerateEventsResult
 {
+    #region Properties
+
     /// <summary>
-    /// Represents a result of the <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/>
-    /// method.
+    /// Gets a lazy collection of MIDI events.
     /// </summary>
-    public sealed class EnumerateEventsResult
-    {
-        #region Properties
+    public IEnumerable<MidiEvent> Events { get; internal set; }
 
-        /// <summary>
-        /// Gets a lazy collection of MIDI events.
-        /// </summary>
-        public IEnumerable<MidiEvent> Events { get; internal set; }
+    /// <summary>
+    /// Gets a MIDI token following the last MIDI event iterated by the
+    /// <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/> method.
+    /// </summary>
+    public MidiToken NextToken { get; internal set; }
 
-        /// <summary>
-        /// Gets a MIDI token following the last MIDI event iterated by the
-        /// <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/> method.
-        /// </summary>
-        public MidiToken NextToken { get; internal set; }
-
-        #endregion
-    }
+    #endregion
 }

@@ -1,21 +1,20 @@
 ﻿using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Converters;
+
+internal sealed class MidiTimeSpanConverter : ITimeSpanConverter
 {
-    internal sealed class MidiTimeSpanConverter : ITimeSpanConverter
+    #region ITimeSpanConverter
+
+    public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap.TempoMap tempoMap)
     {
-        #region ITimeSpanConverter
-
-        public ITimeSpan ConvertTo(long timeSpan, long time, TempoMap.TempoMap tempoMap)
-        {
-            return (MidiTimeSpan)timeSpan;
-        }
-
-        public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
-        {
-            return ((MidiTimeSpan)timeSpan).TimeSpan;
-        }
-
-        #endregion
+        return (MidiTimeSpan)timeSpan;
     }
+
+    public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap.TempoMap tempoMap)
+    {
+        return ((MidiTimeSpan)timeSpan).TimeSpan;
+    }
+
+    #endregion
 }

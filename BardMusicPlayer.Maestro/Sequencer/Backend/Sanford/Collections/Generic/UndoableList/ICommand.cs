@@ -1,8 +1,7 @@
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList;
+
+internal interface ICommand
 {
-    internal interface ICommand
-    {
-        void Execute();
-        void Undo();
-    }
+    void Execute();
+    void Undo();
 }

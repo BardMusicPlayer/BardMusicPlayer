@@ -1,12 +1,11 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile.FromCsv;
+
+internal enum RecordType
 {
-    internal enum RecordType
-    {
-        Header,
-        TrackChunkStart,
-        TrackChunkEnd,
-        FileEnd,
-        Event,
-        Note
-    }
+    Header,
+    TrackChunkStart,
+    TrackChunkEnd,
+    FileEnd,
+    Event,
+    Note
 }

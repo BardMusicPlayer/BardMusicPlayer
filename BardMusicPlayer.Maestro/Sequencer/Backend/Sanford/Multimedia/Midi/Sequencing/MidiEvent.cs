@@ -35,115 +35,114 @@
 using System;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;
+
+public class MidiEvent
 {
-    public class MidiEvent
+    private object owner = null;
+
+    private int absoluteTicks;
+
+    private IMidiMessage message;
+
+    private MidiEvent next = null;
+
+    private MidiEvent previous = null;
+
+    internal MidiEvent(object owner, int absoluteTicks, IMidiMessage message)
     {
-        private object owner = null;
+        #region Require
 
-        private int absoluteTicks;
-
-        private IMidiMessage message;
-
-        private MidiEvent next = null;
-
-        private MidiEvent previous = null;
-
-        internal MidiEvent(object owner, int absoluteTicks, IMidiMessage message)
+        if (owner == null)
         {
-            #region Require
-
-            if (owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
-            else if (absoluteTicks < 0)
-            {
-                throw new ArgumentOutOfRangeException("absoluteTicks", absoluteTicks,
-                    "Absolute ticks out of range.");
-            }
-            else if (message == null)
-            {
-                throw new ArgumentNullException("e");
-            }
-
-            #endregion
-
-            this.owner = owner;
-            this.absoluteTicks = absoluteTicks;
-            this.message = message;
+            throw new ArgumentNullException("owner");
+        }
+        else if (absoluteTicks < 0)
+        {
+            throw new ArgumentOutOfRangeException("absoluteTicks", absoluteTicks,
+                "Absolute ticks out of range.");
+        }
+        else if (message == null)
+        {
+            throw new ArgumentNullException("e");
         }
 
-        internal void SetAbsoluteTicks(int absoluteTicks)
+        #endregion
+
+        this.owner         = owner;
+        this.absoluteTicks = absoluteTicks;
+        this.message       = message;
+    }
+
+    internal void SetAbsoluteTicks(int absoluteTicks)
+    {
+        this.absoluteTicks = absoluteTicks;
+    }
+
+    internal object Owner
+    {
+        get
         {
-            this.absoluteTicks = absoluteTicks;
+            return owner;
         }
+    }
 
-        internal object Owner
+    public int AbsoluteTicks
+    {
+        get
         {
-            get
-            {
-                return owner;
-            }
+            return absoluteTicks;
         }
+    }
 
-        public int AbsoluteTicks
+    public int DeltaTicks
+    {
+        get
         {
-            get
+            int deltaTicks;
+
+            if (Previous != null)
             {
-                return absoluteTicks;
+                deltaTicks = AbsoluteTicks - previous.AbsoluteTicks;
             }
+            else
+            {
+                deltaTicks = AbsoluteTicks;
+            }
+
+            return deltaTicks;
         }
+    }
 
-        public int DeltaTicks
+    public IMidiMessage MidiMessage
+    {
+        get
         {
-            get
-            {
-                int deltaTicks;
-
-                if (Previous != null)
-                {
-                    deltaTicks = AbsoluteTicks - previous.AbsoluteTicks;
-                }
-                else
-                {
-                    deltaTicks = AbsoluteTicks;
-                }
-
-                return deltaTicks;
-            }
+            return message;
         }
+    }
 
-        public IMidiMessage MidiMessage
+    internal MidiEvent Next
+    {
+        get
         {
-            get
-            {
-                return message;
-            }
+            return next;
         }
-
-        internal MidiEvent Next
+        set
         {
-            get
-            {
-                return next;
-            }
-            set
-            {
-                next = value;
-            }
+            next = value;
         }
+    }
 
-        internal MidiEvent Previous
+    internal MidiEvent Previous
+    {
+        get
         {
-            get
-            {
-                return previous;
-            }
-            set
-            {
-                previous = value;
-            }
+            return previous;
+        }
+        set
+        {
+            previous = value;
         }
     }
 }

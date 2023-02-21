@@ -32,39 +32,38 @@
 
 #endregion
 
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 using System;
 using System.Collections.Generic;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
+
+public partial class InputDevice
 {
-    public partial class InputDevice
-    {
-        private delegate void GenericDelegate<T>(T args);
+    private delegate void GenericDelegate<T>(T args);
 
-        private DelegateQueue delegateQueue = null;
+    private DelegateQueue delegateQueue = null;
 
-        private volatile int bufferCount = 0;
+    private volatile int bufferCount = 0;
 
-        private readonly object lockObject = new object();
+    private readonly object lockObject = new object();
 
-        private MidiInProc midiInProc;
+    private MidiInProc midiInProc;
 
-        private bool recording = false;
+    private bool recording = false;
 
-        private MidiHeaderBuilder headerBuilder = new MidiHeaderBuilder();
+    private MidiHeaderBuilder headerBuilder = new MidiHeaderBuilder();
 
-        private ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
+    private ChannelMessageBuilder cmBuilder = new ChannelMessageBuilder();
 
-        private SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
+    private SysCommonMessageBuilder scBuilder = new SysCommonMessageBuilder();
 
-        private IntPtr handle;
+    private IntPtr handle;
 
-        private volatile bool resetting = false;
+    private volatile bool resetting = false;
 
-        private int sysExBufferSize = 4096;
+    private int sysExBufferSize = 4096;
 
-        private List<byte> sysExData = new List<byte>();
-    }
+    private List<byte> sysExData = new List<byte>();
 }

@@ -15,44 +15,43 @@
 
 using System;
 
-namespace Machina.FFXIV.Oodle
+namespace Machina.FFXIV.Oodle;
+
+public class OodleUDPWrapper : IOodleWrapper
 {
-    public class OodleUDPWrapper : IOodleWrapper
+    private const byte HashtableBits = 17;   // was 19 pre-OodleTCP era
+    private const int WindowSize = 0x100000; // was 0x16000 pre-OodleTCP era
+
+    private readonly byte[] _state;
+    private readonly byte[] _shared;
+    private readonly byte[] _window = new byte[WindowSize];
+
+    private readonly IOodleNative _oodleNative;
+
+    public OodleUDPWrapper(IOodleNative native)
     {
-        private const byte HashtableBits = 17; // was 19 pre-OodleTCP era
-        private const int WindowSize = 0x100000; // was 0x16000 pre-OodleTCP era
+        _oodleNative = native;
 
-        private readonly byte[] _state;
-        private readonly byte[] _shared;
-        private readonly byte[] _window = new byte[WindowSize];
+        int stateSize = _oodleNative.OodleNetwork1UDP_State_Size();
+        int sharedSize = _oodleNative.OodleNetwork1_Shared_Size(HashtableBits);
 
-        private readonly IOodleNative _oodleNative;
+        _state  = new byte[stateSize];
+        _shared = new byte[sharedSize];
 
-        public OodleUDPWrapper(IOodleNative native)
+        _oodleNative.OodleNetwork1_Shared_SetWindow(_shared, HashtableBits, _window, _window.Length);
+
+        _oodleNative.OodleNetwork1UDP_Train(_state, _shared, IntPtr.Zero, IntPtr.Zero, 0);
+    }
+
+    public unsafe bool Decompress(byte[] payload, int offset, int compressedLength, byte[] plaintext, int decompressedLength)
+    {
+        fixed (byte* pPayload = payload)
         {
-            _oodleNative = native;
-
-            int stateSize = _oodleNative.OodleNetwork1UDP_State_Size();
-            int sharedSize = _oodleNative.OodleNetwork1_Shared_Size(HashtableBits);
-
-            _state = new byte[stateSize];
-            _shared = new byte[sharedSize];
-
-            _oodleNative.OodleNetwork1_Shared_SetWindow(_shared, HashtableBits, _window, _window.Length);
-
-            _oodleNative.OodleNetwork1UDP_Train(_state, _shared, IntPtr.Zero, IntPtr.Zero, 0);
-        }
-
-        public unsafe bool Decompress(byte[] payload, int offset, int compressedLength, byte[] plaintext, int decompressedLength)
-        {
-            fixed (byte* pPayload = payload)
-            {
-                if (!_oodleNative.OodleNetwork1UDP_Decode(_state, _shared, new IntPtr(pPayload + offset), 
+            if (!_oodleNative.OodleNetwork1UDP_Decode(_state, _shared, new IntPtr(pPayload + offset), 
                     compressedLength, plaintext, decompressedLength))
-                    return false;
-            }
-
-            return true;
+                return false;
         }
+
+        return true;
     }
 }

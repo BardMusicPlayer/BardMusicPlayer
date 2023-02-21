@@ -1,19 +1,18 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.MidiFile;
+
+/// <summary>
+/// Layout (format) of CSV data representing a MIDI file. The default value is <see cref="DryWetMidi"/>.
+/// </summary>
+public enum MidiFileCsvLayout
 {
     /// <summary>
-    /// Layout (format) of CSV data representing a MIDI file. The default value is <see cref="DryWetMidi"/>.
+    /// Format used by DryWetMIDI which gives more compact and human readable CSV
+    /// representation.
     /// </summary>
-    public enum MidiFileCsvLayout
-    {
-        /// <summary>
-        /// Format used by DryWetMIDI which gives more compact and human readable CSV
-        /// representation.
-        /// </summary>
-        DryWetMidi = 0,
+    DryWetMidi = 0,
 
-        /// <summary>
-        /// Format used by midicsv (http://www.fourmilab.ch/webtools/midicsv/) program.
-        /// </summary>
-        MidiCsv
-    }
+    /// <summary>
+    /// Format used by midicsv (http://www.fourmilab.ch/webtools/midicsv/) program.
+    /// </summary>
+    MidiCsv
 }

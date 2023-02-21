@@ -1,10 +1,9 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common.Parsing
+﻿namespace BardMusicPlayer.DryWetMidi.Common.Parsing;
+
+internal enum ParsingStatus
 {
-    internal enum ParsingStatus
-    {
-        Parsed,
-        EmptyInputString,
-        NotMatched,
-        FormatError
-    }
+    Parsed,
+    EmptyInputString,
+    NotMatched,
+    FormatError
 }

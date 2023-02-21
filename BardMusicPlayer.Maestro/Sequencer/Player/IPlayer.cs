@@ -5,14 +5,13 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Player
-{
-    internal interface IPlayer : IDisposable, IEquatable<IPlayer>
-    {
-        public string UUID { get; }
-        public string Name { get; }
-        public string HomeWorld { get; }
+namespace BardMusicPlayer.Maestro.Sequencer.Player;
 
-        public PlayerType PlayerType { get; }
-    }
+internal interface IPlayer : IDisposable, IEquatable<IPlayer>
+{
+    public string UUID { get; }
+    public string Name { get; }
+    public string HomeWorld { get; }
+
+    public PlayerType PlayerType { get; }
 }

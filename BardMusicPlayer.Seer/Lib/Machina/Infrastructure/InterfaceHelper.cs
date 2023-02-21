@@ -19,70 +19,69 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace Machina.Infrastructure
+namespace Machina.Infrastructure;
+
+public static class InterfaceHelper
 {
-    public static class InterfaceHelper
+
+    public static string GetLocalIPv4(NetworkInterfaceType type = NetworkInterfaceType.Ethernet)
     {
+        // Repurposed from: http://stackoverflow.com/a/28621250/2685650.
 
-        public static string GetLocalIPv4(NetworkInterfaceType type = NetworkInterfaceType.Ethernet)
+        return NetworkInterface
+                   .GetAllNetworkInterfaces()
+                   .FirstOrDefault(ni =>
+                       ni.NetworkInterfaceType == type
+                       && ni.OperationalStatus == OperationalStatus.Up
+                       && ni.GetIPProperties().GatewayAddresses.FirstOrDefault() != null
+                       && ni.GetIPProperties().UnicastAddresses.FirstOrDefault(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork) != null
+                   )
+                   ?.GetIPProperties()
+                   .UnicastAddresses
+                   .FirstOrDefault(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                   ?.Address
+                   ?.ToString()
+               ?? string.Empty;
+    }
+
+    public static IPAddress[] GetAllIPAddresses()
+    {
+        List<NetworkInterface> _interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+        IPAddress[] ret = _interfaces
+            .Where(x => x.OperationalStatus == OperationalStatus.Up)
+            .Select(x => x.GetIPProperties())
+            .SelectMany(x => x.UnicastAddresses)
+            .Select(x => x.Address)
+            .Where(x => x.IsIPv6LinkLocal == false)
+            .Where(x => (x.ToString() ?? "").Contains('.'))
+            .ToArray();
+
+        return ret;
+    }
+
+
+    public static IList<string> GetNetworkInterfaceIPs()
+    {
+        List<string> ret = new List<string>();
+
+        NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+        for (int i = 0; i < interfaces.Length; i++)
         {
-            // Repurposed from: http://stackoverflow.com/a/28621250/2685650.
+            if (interfaces[i].OperationalStatus != OperationalStatus.Up)
+                continue;
 
-            return NetworkInterface
-                .GetAllNetworkInterfaces()
-                .FirstOrDefault(ni =>
-                    ni.NetworkInterfaceType == type
-                    && ni.OperationalStatus == OperationalStatus.Up
-                    && ni.GetIPProperties().GatewayAddresses.FirstOrDefault() != null
-                    && ni.GetIPProperties().UnicastAddresses.FirstOrDefault(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork) != null
-                )
-                ?.GetIPProperties()
-                .UnicastAddresses
-                .FirstOrDefault(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                ?.Address
-                ?.ToString()
-                ?? string.Empty;
-        }
-
-        public static IPAddress[] GetAllIPAddresses()
-        {
-            List<NetworkInterface> _interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
-
-            IPAddress[] ret = _interfaces
-                .Where(x => x.OperationalStatus == OperationalStatus.Up)
-                .Select(x => x.GetIPProperties())
-                .SelectMany(x => x.UnicastAddresses)
-                .Select(x => x.Address)
-                .Where(x => x.IsIPv6LinkLocal == false)
-                .Where(x => (x.ToString() ?? "").Contains('.'))
-                .ToArray();
-
-            return ret;
-        }
-
-
-        public static IList<string> GetNetworkInterfaceIPs()
-        {
-            List<string> ret = new List<string>();
-
-            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-            for (int i = 0; i < interfaces.Length; i++)
+            IPInterfaceProperties ipProps = interfaces[i].GetIPProperties();
+            for (int j = 0; j < ipProps.UnicastAddresses.Count; j++)
             {
-                if (interfaces[i].OperationalStatus != OperationalStatus.Up)
-                    continue;
-
-                IPInterfaceProperties ipProps = interfaces[i].GetIPProperties();
-                for (int j = 0; j < ipProps.UnicastAddresses.Count; j++)
-                {
-                    string ip = ipProps.UnicastAddresses[j]?.Address?.ToString() ?? "";
-                    if (ip.Length <= 15 && ip.Contains('.')) // ipv4 addresses only
-                        if (!ret.Any(x => x == ip))
-                            ret.Add(ip);
-                }
+                string ip = ipProps.UnicastAddresses[j]?.Address?.ToString() ?? "";
+                if (ip.Length <= 15 && ip.Contains('.')) // ipv4 addresses only
+                    if (!ret.Any(x => x == ip))
+                        ret.Add(ip);
             }
-
-            return ret;
         }
+
+        return ret;
     }
 }

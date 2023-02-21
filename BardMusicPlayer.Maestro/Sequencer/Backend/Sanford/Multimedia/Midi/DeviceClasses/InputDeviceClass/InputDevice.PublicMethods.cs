@@ -35,179 +35,178 @@
 using System;
 using System.Threading;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
+
+public partial class InputDevice
 {
-    public partial class InputDevice
+    public override void Close()
     {
-        public override void Close()
+        #region Guard
+
+        if(IsDisposed)
         {
-            #region Guard
-
-            if(IsDisposed)
-            {
-                return;
-            }
-
-            #endregion
-
-            Dispose(true);
+            return;
         }
 
-        public void StartRecording()
+        #endregion
+
+        Dispose(true);
+    }
+
+    public void StartRecording()
+    {
+        #region Require
+
+        if(IsDisposed)
         {
-            #region Require
-
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException("InputDevice");
-            }
-
-            #endregion
-
-            #region Guard
-
-            if(recording)
-            {
-                return;
-            }
-
-            #endregion
-
-            lock(lockObject)
-            {
-                int result = AddSysExBuffer();
-
-                if(result == DeviceException.MMSYSERR_NOERROR)
-                {
-                    result = AddSysExBuffer();
-                }
-
-                if(result == DeviceException.MMSYSERR_NOERROR)
-                {
-                    result = AddSysExBuffer();
-                }
-
-                if(result == DeviceException.MMSYSERR_NOERROR)
-                {
-                    result = AddSysExBuffer();
-                }
-
-                if(result == DeviceException.MMSYSERR_NOERROR)
-                {
-                    result = midiInStart(Handle);
-                }
-
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
-                {
-                    recording = true;
-                }
-                else
-                {
-                    throw new InputDeviceException(result);
-                }
-            }
+            throw new ObjectDisposedException("InputDevice");
         }
 
-        public void StopRecording()
+        #endregion
+
+        #region Guard
+
+        if(recording)
         {
-            #region Require
-
-            if(IsDisposed)
-            {
-                throw new ObjectDisposedException("InputDevice");
-            }
-
-            #endregion
-
-            #region Guard
-
-            if(!recording)
-            {
-                return;
-            }
-
-            #endregion
-
-            lock(lockObject)
-            {
-                int result = midiInStop(Handle);
-
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
-                {
-                    recording = false;
-                }
-                else
-                {
-                    throw new InputDeviceException(result);
-                }
-            }
+            return;
         }
 
-        public override void Reset()
-        {
-            #region Require
+        #endregion
 
-            if(IsDisposed)
+        lock(lockObject)
+        {
+            int result = AddSysExBuffer();
+
+            if(result == DeviceException.MMSYSERR_NOERROR)
             {
-                throw new ObjectDisposedException("InputDevice");
+                result = AddSysExBuffer();
             }
 
-            #endregion
-
-            lock(lockObject)
+            if(result == DeviceException.MMSYSERR_NOERROR)
             {
-                resetting = true;
-
-                int result = midiInReset(Handle);                
-
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
-                {
-                    recording = false;
-
-                    while(bufferCount > 0)
-                    {
-                        Monitor.Wait(lockObject);
-                    }
-
-                    resetting = false;
-                }
-                else
-                {
-                    resetting = false;
-
-                    throw new InputDeviceException(result);
-                }
+                result = AddSysExBuffer();
             }
-        }
-        
-        public static MidiInCaps GetDeviceCapabilities(int deviceID)
-        {
-            int result;
-            MidiInCaps caps = new MidiInCaps();
 
-            IntPtr devID = (IntPtr)deviceID;
-            result = midiInGetDevCaps(devID, ref caps, SizeOfMidiHeader);
+            if(result == DeviceException.MMSYSERR_NOERROR)
+            {
+                result = AddSysExBuffer();
+            }
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result == DeviceException.MMSYSERR_NOERROR)
+            {
+                result = midiInStart(Handle);
+            }
+
+            if(result == MidiDeviceException.MMSYSERR_NOERROR)
+            {
+                recording = true;
+            }
+            else
             {
                 throw new InputDeviceException(result);
             }
-
-            return caps;
         }
+    }
 
-        public override void Dispose()
+    public void StopRecording()
+    {
+        #region Require
+
+        if(IsDisposed)
         {
-            #region Guard
-
-            if(IsDisposed)
-            {
-                return;
-            }
-
-            #endregion
-
-            Dispose(true);
+            throw new ObjectDisposedException("InputDevice");
         }
+
+        #endregion
+
+        #region Guard
+
+        if(!recording)
+        {
+            return;
+        }
+
+        #endregion
+
+        lock(lockObject)
+        {
+            int result = midiInStop(Handle);
+
+            if(result == MidiDeviceException.MMSYSERR_NOERROR)
+            {
+                recording = false;
+            }
+            else
+            {
+                throw new InputDeviceException(result);
+            }
+        }
+    }
+
+    public override void Reset()
+    {
+        #region Require
+
+        if(IsDisposed)
+        {
+            throw new ObjectDisposedException("InputDevice");
+        }
+
+        #endregion
+
+        lock(lockObject)
+        {
+            resetting = true;
+
+            int result = midiInReset(Handle);                
+
+            if(result == MidiDeviceException.MMSYSERR_NOERROR)
+            {
+                recording = false;
+
+                while(bufferCount > 0)
+                {
+                    Monitor.Wait(lockObject);
+                }
+
+                resetting = false;
+            }
+            else
+            {
+                resetting = false;
+
+                throw new InputDeviceException(result);
+            }
+        }
+    }
+        
+    public static MidiInCaps GetDeviceCapabilities(int deviceID)
+    {
+        int result;
+        MidiInCaps caps = new MidiInCaps();
+
+        IntPtr devID = (IntPtr)deviceID;
+        result = midiInGetDevCaps(devID, ref caps, SizeOfMidiHeader);
+
+        if(result != MidiDeviceException.MMSYSERR_NOERROR)
+        {
+            throw new InputDeviceException(result);
+        }
+
+        return caps;
+    }
+
+    public override void Dispose()
+    {
+        #region Guard
+
+        if(IsDisposed)
+        {
+            return;
+        }
+
+        #endregion
+
+        Dispose(true);
     }
 }

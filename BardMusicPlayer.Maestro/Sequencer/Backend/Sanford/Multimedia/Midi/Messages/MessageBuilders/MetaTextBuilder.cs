@@ -35,152 +35,332 @@
 using System;
 using System.Text;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
+
+/// <summary>
+/// Provides functionality for building meta text messages.
+/// </summary>
+public class MetaTextBuilder : IMessageBuilder
 {
+    #region MetaTextBuilder Members
+
+    #region Fields
+
+    // The text represented by the MetaMessage.
+    private string text;
+
+    // The MetaMessage type - must be one of the text based types.
+    private MetaType type = MetaType.Text;
+
+    // The built MetaMessage.
+    private MetaMessage result = null;
+
+    // Indicates whether or not the text has changed since the message was 
+    // last built.
+    private bool changed = true;
+
+    #endregion
+
+    #region Construction
+
     /// <summary>
-    /// Provides functionality for building meta text messages.
+    /// Initializes a new instance of the MetaMessageTextBuilder class.
     /// </summary>
-    public class MetaTextBuilder : IMessageBuilder
+    public MetaTextBuilder()
     {
-        #region MetaTextBuilder Members
+        text = string.Empty;
+    }
 
-        #region Fields
+    /// <summary>
+    /// Initializes a new instance of the MetaMessageTextBuilder class with the 
+    /// specified type.
+    /// </summary>
+    /// <param name="type">
+    /// The type of MetaMessage.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// If the MetaMessage type is not a text based type.
+    /// </exception>
+    /// <remarks>
+    /// The MetaMessage type must be one of the following text based 
+    /// types:
+    /// <list>
+    /// <item>
+    /// Copyright
+    /// </item>
+    /// <item>
+    /// Cuepoint
+    /// </item>
+    /// <item>
+    /// DeviceName
+    /// </item>
+    /// <item>
+    /// InstrumentName
+    /// </item>
+    /// <item>
+    /// Lyric
+    /// </item>
+    /// <item>
+    /// Marker
+    /// </item>
+    /// <item>
+    /// ProgramName
+    /// </item>
+    /// <item>
+    /// Text
+    /// </item>
+    /// <item>
+    /// TrackName
+    /// </item>
+    /// </list>
+    /// If the MetaMessage is not a text based type, an exception 
+    /// will be thrown.
+    /// </remarks>
+    public MetaTextBuilder(MetaType type)
+    {
+        #region Require
 
-        // The text represented by the MetaMessage.
-        private string text;
-
-        // The MetaMessage type - must be one of the text based types.
-        private MetaType type = MetaType.Text;
-
-        // The built MetaMessage.
-        private MetaMessage result = null;
-
-        // Indicates whether or not the text has changed since the message was 
-        // last built.
-        private bool changed = true;
+        if(!IsTextType(type))
+        {
+            throw new ArgumentException("Not text based meta message type.",
+                "message");
+        }
 
         #endregion
 
-        #region Construction
+        this.text = string.Empty;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the MetaMessageTextBuilder class.
-        /// </summary>
-        public MetaTextBuilder()
+    /// <summary>
+    /// Initializes a new instance of the MetaMessageTextBuilder class with the 
+    /// specified type.
+    /// </summary>
+    /// <param name="type">
+    /// The type of MetaMessage.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// If the MetaMessage type is not a text based type.
+    /// </exception>
+    /// <remarks>
+    /// The MetaMessage type must be one of the following text based 
+    /// types:
+    /// <list>
+    /// <item>
+    /// Copyright
+    /// </item>
+    /// <item>
+    /// Cuepoint
+    /// </item>
+    /// <item>
+    /// DeviceName
+    /// </item>
+    /// <item>
+    /// InstrumentName
+    /// </item>
+    /// <item>
+    /// Lyric
+    /// </item>
+    /// <item>
+    /// Marker
+    /// </item>
+    /// <item>
+    /// ProgramName
+    /// </item>
+    /// <item>
+    /// Text
+    /// </item>
+    /// <item>
+    /// TrackName
+    /// </item>
+    /// </list>
+    /// If the MetaMessage is not a text based type, an exception 
+    /// will be thrown.
+    /// </remarks>
+    public MetaTextBuilder(MetaType type, string text)
+    {
+        #region Require
+
+        if(!IsTextType(type))
         {
-            text = string.Empty;
+            throw new ArgumentException("Not text based meta message type.",
+                "message");
         }
 
-        /// <summary>
-        /// Initializes a new instance of the MetaMessageTextBuilder class with the 
-        /// specified type.
-        /// </summary>
-        /// <param name="type">
-        /// The type of MetaMessage.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If the MetaMessage type is not a text based type.
-        /// </exception>
-        /// <remarks>
-        /// The MetaMessage type must be one of the following text based 
-        /// types:
-        /// <list>
-        /// <item>
-        /// Copyright
-        /// </item>
-        /// <item>
-        /// Cuepoint
-        /// </item>
-        /// <item>
-        /// DeviceName
-        /// </item>
-        /// <item>
-        /// InstrumentName
-        /// </item>
-        /// <item>
-        /// Lyric
-        /// </item>
-        /// <item>
-        /// Marker
-        /// </item>
-        /// <item>
-        /// ProgramName
-        /// </item>
-        /// <item>
-        /// Text
-        /// </item>
-        /// <item>
-        /// TrackName
-        /// </item>
-        /// </list>
-        /// If the MetaMessage is not a text based type, an exception 
-        /// will be thrown.
-        /// </remarks>
-        public MetaTextBuilder(MetaType type)
+        #endregion
+
+        this.type = type;
+
+        if(text != null)
         {
-            #region Require
-
-            if(!IsTextType(type))
-            {
-                throw new ArgumentException("Not text based meta message type.",
-                    "message");
-            }
-
-            #endregion
-
+            this.text = text;
+        }
+        else
+        {
             this.text = string.Empty;
         }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the MetaMessageTextBuilder class with the 
-        /// specified type.
-        /// </summary>
-        /// <param name="type">
-        /// The type of MetaMessage.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If the MetaMessage type is not a text based type.
-        /// </exception>
-        /// <remarks>
-        /// The MetaMessage type must be one of the following text based 
-        /// types:
-        /// <list>
-        /// <item>
-        /// Copyright
-        /// </item>
-        /// <item>
-        /// Cuepoint
-        /// </item>
-        /// <item>
-        /// DeviceName
-        /// </item>
-        /// <item>
-        /// InstrumentName
-        /// </item>
-        /// <item>
-        /// Lyric
-        /// </item>
-        /// <item>
-        /// Marker
-        /// </item>
-        /// <item>
-        /// ProgramName
-        /// </item>
-        /// <item>
-        /// Text
-        /// </item>
-        /// <item>
-        /// TrackName
-        /// </item>
-        /// </list>
-        /// If the MetaMessage is not a text based type, an exception 
-        /// will be thrown.
-        /// </remarks>
-        public MetaTextBuilder(MetaType type, string text)
+        
+    /// <summary>
+    /// Initializes a new instance of the MetaMessageTextBuilder class with the
+    /// specified MetaMessage.
+    /// </summary>
+    /// <param name="message">
+    /// The MetaMessage to use for initializing the MetaMessageTextBuilder.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// If the MetaMessage is not a text based type.
+    /// </exception>
+    /// <remarks>
+    /// The MetaMessage must be one of the following text based types:
+    /// <list>
+    /// <item>
+    /// Copyright
+    /// </item>
+    /// <item>
+    /// Cuepoint
+    /// </item>
+    /// <item>
+    /// DeviceName
+    /// </item>
+    /// <item>
+    /// InstrumentName
+    /// </item>
+    /// <item>
+    /// Lyric
+    /// </item>
+    /// <item>
+    /// Marker
+    /// </item>
+    /// <item>
+    /// ProgramName
+    /// </item>
+    /// <item>
+    /// Text
+    /// </item>
+    /// <item>
+    /// TrackName
+    /// </item>
+    /// </list>
+    /// If the MetaMessage is not a text based type, an exception will be 
+    /// thrown.
+    /// </remarks>
+    public MetaTextBuilder(MetaMessage message)
+    {
+        Initialize(message);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Initializes the MetaMessageTextBuilder with the specified MetaMessage.
+    /// </summary>
+    /// <param name="message">
+    /// The MetaMessage to use for initializing the MetaMessageTextBuilder.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// If the MetaMessage is not a text based type.
+    /// </exception>
+    public void Initialize(MetaMessage message)
+    {
+        #region Require
+
+        if(!IsTextType(message.MetaType))
+        {
+            throw new ArgumentException("Not text based meta message.",
+                "message");
+        }
+
+        #endregion
+
+        UTF8Encoding encoding = new UTF8Encoding();
+
+        text      = encoding.GetString(message.GetBytes());
+        this.type = message.MetaType;
+    }
+
+    /// <summary>
+    /// Indicates whether or not the specified MetaType is a text based 
+    /// type.
+    /// </summary>
+    /// <param name="type">
+    /// The MetaType to test.
+    /// </param>
+    /// <returns>
+    /// <b>true</b> if the MetaType is a text based type; 
+    /// otherwise, <b>false</b>.
+    /// </returns>
+    private bool IsTextType(MetaType type)
+    {
+        bool result;
+
+        if(type == MetaType.Copyright || 
+           type == MetaType.CuePoint ||
+           type == MetaType.DeviceName ||
+           type == MetaType.InstrumentName ||
+           type == MetaType.Lyric ||
+           type == MetaType.Marker ||
+           type == MetaType.ProgramName ||
+           type == MetaType.Text ||
+           type == MetaType.TrackName)
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets or sets the text for the MetaMessage.
+    /// </summary>
+    public string Text
+    {
+        get
+        {
+            return text;
+        }
+        set
+        {
+            if(value != null)
+            {
+                text = value;
+            }
+            else
+            {
+                text = string.Empty;
+            }
+
+            changed = true;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the MetaMessage type.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// If the type is not a text based type.
+    /// </exception>
+    public MetaType Type
+    {
+        get
+        {
+            return type;
+        }
+        set
         {
             #region Require
 
-            if(!IsTextType(type))
+            if(!IsTextType(value))
             {
                 throw new ArgumentException("Not text based meta message type.",
                     "message");
@@ -188,229 +368,48 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Mess
 
             #endregion
 
-            this.type = type;
+            type = value;
 
-            if(text != null)
-            {
-                this.text = text;
-            }
-            else
-            {
-                this.text = string.Empty;
-            }
+            changed = true;
         }
+    }
 
-        
-        /// <summary>
-        /// Initializes a new instance of the MetaMessageTextBuilder class with the
-        /// specified MetaMessage.
-        /// </summary>
-        /// <param name="message">
-        /// The MetaMessage to use for initializing the MetaMessageTextBuilder.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If the MetaMessage is not a text based type.
-        /// </exception>
-        /// <remarks>
-        /// The MetaMessage must be one of the following text based types:
-        /// <list>
-        /// <item>
-        /// Copyright
-        /// </item>
-        /// <item>
-        /// Cuepoint
-        /// </item>
-        /// <item>
-        /// DeviceName
-        /// </item>
-        /// <item>
-        /// InstrumentName
-        /// </item>
-        /// <item>
-        /// Lyric
-        /// </item>
-        /// <item>
-        /// Marker
-        /// </item>
-        /// <item>
-        /// ProgramName
-        /// </item>
-        /// <item>
-        /// Text
-        /// </item>
-        /// <item>
-        /// TrackName
-        /// </item>
-        /// </list>
-        /// If the MetaMessage is not a text based type, an exception will be 
-        /// thrown.
-        /// </remarks>
-        public MetaTextBuilder(MetaMessage message)
+    /// <summary>
+    /// Gets the built MetaMessage.
+    /// </summary>
+    public MetaMessage Result
+    {
+        get
         {
-            Initialize(message);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Initializes the MetaMessageTextBuilder with the specified MetaMessage.
-        /// </summary>
-        /// <param name="message">
-        /// The MetaMessage to use for initializing the MetaMessageTextBuilder.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If the MetaMessage is not a text based type.
-        /// </exception>
-        public void Initialize(MetaMessage message)
-        {
-            #region Require
-
-            if(!IsTextType(message.MetaType))
-            {
-                throw new ArgumentException("Not text based meta message.",
-                    "message");
-            }
-
-            #endregion
-
-            UTF8Encoding encoding = new UTF8Encoding();
-
-            text      = encoding.GetString(message.GetBytes());
-            this.type = message.MetaType;
-        }
-
-        /// <summary>
-        /// Indicates whether or not the specified MetaType is a text based 
-        /// type.
-        /// </summary>
-        /// <param name="type">
-        /// The MetaType to test.
-        /// </param>
-        /// <returns>
-        /// <b>true</b> if the MetaType is a text based type; 
-        /// otherwise, <b>false</b>.
-        /// </returns>
-        private bool IsTextType(MetaType type)
-        {
-            bool result;
-
-            if(type == MetaType.Copyright || 
-               type == MetaType.CuePoint ||
-               type == MetaType.DeviceName ||
-               type == MetaType.InstrumentName ||
-               type == MetaType.Lyric ||
-               type == MetaType.Marker ||
-               type == MetaType.ProgramName ||
-               type == MetaType.Text ||
-               type == MetaType.TrackName)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
             return result;
         }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the text for the MetaMessage.
-        /// </summary>
-        public string Text
-        {
-            get
-            {
-                return text;
-            }
-            set
-            {
-                if(value != null)
-                {
-                    text = value;
-                }
-                else
-                {
-                    text = string.Empty;
-                }
-
-                changed = true;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the MetaMessage type.
-        /// </summary>
-        /// <exception cref="ArgumentException">
-        /// If the type is not a text based type.
-        /// </exception>
-        public MetaType Type
-        {
-            get
-            {
-                return type;
-            }
-            set
-            {
-                #region Require
-
-                if(!IsTextType(value))
-                {
-                    throw new ArgumentException("Not text based meta message type.",
-                        "message");
-                }
-
-                #endregion
-
-                type = value;
-
-                changed = true;
-            }
-        }
-
-        /// <summary>
-        /// Gets the built MetaMessage.
-        /// </summary>
-        public MetaMessage Result
-        {
-            get
-            {
-                return result;
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-        #region IMessageBuilder Members
-
-        /// <summary>
-        /// Builds the text MetaMessage.
-        /// </summary>
-        public void Build()
-        {
-            // If the text has changed since the last time this method was 
-            // called.
-            if(changed)
-            {
-                //
-                // Build text MetaMessage.
-                //
-
-                ASCIIEncoding encoding = new ASCIIEncoding();
-                byte[] data = encoding.GetBytes(text);
-                result  = new MetaMessage(Type, data);
-                changed = false;
-            }
-        }
-
-        #endregion
     }
+
+    #endregion
+
+    #endregion
+
+    #region IMessageBuilder Members
+
+    /// <summary>
+    /// Builds the text MetaMessage.
+    /// </summary>
+    public void Build()
+    {
+        // If the text has changed since the last time this method was 
+        // called.
+        if(changed)
+        {
+            //
+            // Build text MetaMessage.
+            //
+
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] data = encoding.GetBytes(text);
+            result  = new MetaMessage(Type, data);
+            changed = false;
+        }
+    }
+
+    #endregion
 }

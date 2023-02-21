@@ -3,20 +3,19 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayerApi/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Maestro.Sequencer;
 using System.Threading;
+using BardMusicPlayer.Maestro.Sequencer;
 
-namespace BardMusicPlayer.Maestro.ApiTest
+namespace BardMusicPlayer.Maestro.ApiTest;
+
+internal class Program
 {
-    internal class Program
+    static void Main()
     {
-        static void Main()
-        {
-            BmpMaestro.Instance.Start(SequencerType.MogAmp);
+        BmpMaestro.Instance.Start(SequencerType.MogAmp);
 
-            Thread.Sleep(5000);
+        Thread.Sleep(5000);
 
-            BmpMaestro.Instance.Stop();
-        }
+        BmpMaestro.Instance.Stop();
     }
 }

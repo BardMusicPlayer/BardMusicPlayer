@@ -7,385 +7,384 @@ using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing.TrackClasses;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;
+
+public class Sequencer : IComponent
 {
-    public class Sequencer : IComponent
+    private Sequence sequence = null;
+
+    private Dictionary<Track, IEnumerator<int>> enumerators = new Dictionary<Track, IEnumerator<int>>();
+
+    private MessageDispatcher dispatcher = new MessageDispatcher();
+
+    private ChannelChaser chaser = new ChannelChaser();
+
+    private ChannelStopper stopper = new ChannelStopper();
+
+    private MidiInternalClock clock = new MidiInternalClock();
+
+    private int tracksPlayingCount;
+
+    private readonly object lockObject = new object();
+
+    private bool playing = false;
+
+    private bool disposed = false;
+
+    private ISite site = null;
+
+    #region Events
+
+    public event EventHandler PlayingCompleted;
+
+    public event EventHandler<ChannelMessageEventArgs> ChannelMessagePlayed
     {
-        private Sequence sequence = null;
-
-        private Dictionary<Track, IEnumerator<int>> enumerators = new Dictionary<Track, IEnumerator<int>>();
-
-        private MessageDispatcher dispatcher = new MessageDispatcher();
-
-        private ChannelChaser chaser = new ChannelChaser();
-
-        private ChannelStopper stopper = new ChannelStopper();
-
-        private MidiInternalClock clock = new MidiInternalClock();
-
-        private int tracksPlayingCount;
-
-        private readonly object lockObject = new object();
-
-        private bool playing = false;
-
-        private bool disposed = false;
-
-        private ISite site = null;
-
-        #region Events
-
-        public event EventHandler PlayingCompleted;
-
-        public event EventHandler<ChannelMessageEventArgs> ChannelMessagePlayed
+        add
         {
-            add
-            {
-                dispatcher.ChannelMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.ChannelMessageDispatched -= value;
-            }
+            dispatcher.ChannelMessageDispatched += value;
         }
-
-        public event EventHandler<SysExMessageEventArgs> SysExMessagePlayed
+        remove
         {
-            add
-            {
-                dispatcher.SysExMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.SysExMessageDispatched -= value;
-            }
+            dispatcher.ChannelMessageDispatched -= value;
         }
+    }
 
-        public event EventHandler<MetaMessageEventArgs> MetaMessagePlayed
+    public event EventHandler<SysExMessageEventArgs> SysExMessagePlayed
+    {
+        add
         {
-            add
-            {
-                dispatcher.MetaMessageDispatched += value;
-            }
-            remove
-            {
-                dispatcher.MetaMessageDispatched -= value;
-            }
+            dispatcher.SysExMessageDispatched += value;
         }
-
-        public event EventHandler<ChasedEventArgs> Chased
+        remove
         {
-            add
-            {
-                chaser.Chased += value;
-            }
-            remove
-            {
-                chaser.Chased -= value;
-            }
+            dispatcher.SysExMessageDispatched -= value;
         }
+    }
 
-        public event EventHandler<StoppedEventArgs> Stopped
+    public event EventHandler<MetaMessageEventArgs> MetaMessagePlayed
+    {
+        add
         {
-            add
-            {
-                stopper.Stopped += value;
-            }
-            remove
-            {
-                stopper.Stopped -= value;
-            }
+            dispatcher.MetaMessageDispatched += value;
         }
-
-        #endregion
-
-        public Sequencer()
+        remove
         {
-            dispatcher.MetaMessageDispatched += delegate (object sender, MetaMessageEventArgs e)
-            {
-                if (e.Message.MetaType == MetaType.EndOfTrack)
-                {
-                    tracksPlayingCount--;
-
-                    if (tracksPlayingCount == 0)
-                    {
-                        Stop();
-
-                        OnPlayingCompleted(EventArgs.Empty);
-                    }
-                }
-                else
-                {
-                    clock.Process(e.Message);
-                }
-            };
-
-            dispatcher.ChannelMessageDispatched += delegate (object sender, ChannelMessageEventArgs e)
-            {
-                stopper.Process(e.Message);
-            };
-
-            clock.Tick += delegate (object sender, EventArgs e)
-            {
-                lock (lockObject)
-                {
-                    if (!playing)
-                    {
-                        return;
-                    }
-
-                    foreach (var enumerator in enumerators.Values)
-                    {
-                        enumerator.MoveNext();
-                    }
-                }
-            };
+            dispatcher.MetaMessageDispatched -= value;
         }
+    }
 
-        ~Sequencer()
+    public event EventHandler<ChasedEventArgs> Chased
+    {
+        add
         {
-            Dispose(false);
+            chaser.Chased += value;
         }
-
-        protected virtual void Dispose(bool disposing)
+        remove
         {
-            if (disposing)
+            chaser.Chased -= value;
+        }
+    }
+
+    public event EventHandler<StoppedEventArgs> Stopped
+    {
+        add
+        {
+            stopper.Stopped += value;
+        }
+        remove
+        {
+            stopper.Stopped -= value;
+        }
+    }
+
+    #endregion
+
+    public Sequencer()
+    {
+        dispatcher.MetaMessageDispatched += delegate (object sender, MetaMessageEventArgs e)
+        {
+            if (e.Message.MetaType == MetaType.EndOfTrack)
             {
-                lock (lockObject)
+                tracksPlayingCount--;
+
+                if (tracksPlayingCount == 0)
                 {
                     Stop();
 
-                    clock.Dispose();
-
-                    disposed = true;
-
-                    GC.SuppressFinalize(this);
+                    OnPlayingCompleted(EventArgs.Empty);
                 }
             }
-        }
-
-        public void Start()
-        {
-            #region Require
-
-            if (disposed)
+            else
             {
-                throw new ObjectDisposedException(GetType().Name);
+                clock.Process(e.Message);
             }
+        };
 
-            #endregion           
+        dispatcher.ChannelMessageDispatched += delegate (object sender, ChannelMessageEventArgs e)
+        {
+            stopper.Process(e.Message);
+        };
 
+        clock.Tick += delegate (object sender, EventArgs e)
+        {
             lock (lockObject)
             {
-                Stop();
-
-                Position = 0;
-
-                Continue();
-            }
-        }
-
-        public void Continue()
-        {
-            #region Require
-
-            if (disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-
-            #endregion
-
-            #region Guard
-
-            if (Sequence == null)
-            {
-                return;
-            }
-
-            #endregion
-
-            lock (lockObject)
-            {
-                Stop();
-
-                enumerators.Clear();
-
-                foreach (var t in Sequence)
-                {
-                    enumerators.Add(t, t.TickIterator(Position, chaser, dispatcher).GetEnumerator());
-                }
-
-                tracksPlayingCount = Sequence.Count;
-
-                playing = true;
-                clock.Ppqn = sequence.Division;
-                clock.Continue();
-            }
-        }
-
-        public void Stop()
-        {
-            #region Require
-
-            if (disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-
-            #endregion
-
-            lock (lockObject)
-            {
-                #region Guard
-
                 if (!playing)
                 {
                     return;
                 }
 
-                #endregion
+                foreach (var enumerator in enumerators.Values)
+                {
+                    enumerator.MoveNext();
+                }
+            }
+        };
+    }
 
-                playing = false;
-                clock.Stop();
-                stopper.AllSoundOff();
+    ~Sequencer()
+    {
+        Dispose(false);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            lock (lockObject)
+            {
+                Stop();
+
+                clock.Dispose();
+
+                disposed = true;
+
+                GC.SuppressFinalize(this);
             }
         }
+    }
 
-        protected virtual void OnPlayingCompleted(EventArgs e)
+    public void Start()
+    {
+        #region Require
+
+        if (disposed)
         {
-            var handler = PlayingCompleted;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            throw new ObjectDisposedException(GetType().Name);
         }
 
-        protected virtual void OnDisposed(EventArgs e)
-        {
-            var handler = Disposed;
+        #endregion           
 
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+        lock (lockObject)
+        {
+            Stop();
+
+            Position = 0;
+
+            Continue();
         }
+    }
 
-        public int Position
+    public void Continue()
+    {
+        #region Require
+
+        if (disposed)
         {
-            get
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException(GetType().Name);
-                }
-
-                #endregion
-
-                return clock.Ticks;
-            }
-            set
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException(GetType().Name);
-                }
-                else if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                #endregion
-
-                bool wasPlaying;
-
-                lock (lockObject)
-                {
-                    wasPlaying = playing;
-
-                    Stop();
-
-                    clock.SetTicks(value);
-                }
-
-                lock (lockObject)
-                {
-                    if (wasPlaying)
-                    {
-                        Continue();
-                    }
-                }
-            }
-        }
-
-        public Sequence Sequence
-        {
-            get
-            {
-                return sequence;
-            }
-            set
-            {
-                #region Require
-
-                if (value == null)
-                {
-                    throw new ArgumentNullException();
-                }
-                else if (value.SequenceType == SequenceType.Smpte)
-                {
-                    throw new NotSupportedException();
-                }
-
-                #endregion
-
-                lock (lockObject)
-                {
-                    Stop();
-                    sequence = value;
-                }
-            }
-        }
-
-        #region IComponent Members
-
-        public event EventHandler Disposed;
-
-        public ISite Site
-        {
-            get
-            {
-                return site;
-            }
-            set
-            {
-                site = value;
-            }
+            throw new ObjectDisposedException(GetType().Name);
         }
 
         #endregion
 
-        #region IDisposable Members
+        #region Guard
 
-        public void Dispose()
+        if (Sequence == null)
+        {
+            return;
+        }
+
+        #endregion
+
+        lock (lockObject)
+        {
+            Stop();
+
+            enumerators.Clear();
+
+            foreach (var t in Sequence)
+            {
+                enumerators.Add(t, t.TickIterator(Position, chaser, dispatcher).GetEnumerator());
+            }
+
+            tracksPlayingCount = Sequence.Count;
+
+            playing    = true;
+            clock.Ppqn = sequence.Division;
+            clock.Continue();
+        }
+    }
+
+    public void Stop()
+    {
+        #region Require
+
+        if (disposed)
+        {
+            throw new ObjectDisposedException(GetType().Name);
+        }
+
+        #endregion
+
+        lock (lockObject)
         {
             #region Guard
 
-            if (disposed)
+            if (!playing)
             {
                 return;
             }
 
             #endregion
 
-            Dispose(true);
+            playing = false;
+            clock.Stop();
+            stopper.AllSoundOff();
+        }
+    }
+
+    protected virtual void OnPlayingCompleted(EventArgs e)
+    {
+        var handler = PlayingCompleted;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    protected virtual void OnDisposed(EventArgs e)
+    {
+        var handler = Disposed;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    public int Position
+    {
+        get
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+
+            #endregion
+
+            return clock.Ticks;
+        }
+        set
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+            else if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            #endregion
+
+            bool wasPlaying;
+
+            lock (lockObject)
+            {
+                wasPlaying = playing;
+
+                Stop();
+
+                clock.SetTicks(value);
+            }
+
+            lock (lockObject)
+            {
+                if (wasPlaying)
+                {
+                    Continue();
+                }
+            }
+        }
+    }
+
+    public Sequence Sequence
+    {
+        get
+        {
+            return sequence;
+        }
+        set
+        {
+            #region Require
+
+            if (value == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else if (value.SequenceType == SequenceType.Smpte)
+            {
+                throw new NotSupportedException();
+            }
+
+            #endregion
+
+            lock (lockObject)
+            {
+                Stop();
+                sequence = value;
+            }
+        }
+    }
+
+    #region IComponent Members
+
+    public event EventHandler Disposed;
+
+    public ISite Site
+    {
+        get
+        {
+            return site;
+        }
+        set
+        {
+            site = value;
+        }
+    }
+
+    #endregion
+
+    #region IDisposable Members
+
+    public void Dispose()
+    {
+        #region Guard
+
+        if (disposed)
+        {
+            return;
         }
 
         #endregion
+
+        Dispose(true);
     }
+
+    #endregion
 }

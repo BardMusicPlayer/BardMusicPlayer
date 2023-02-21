@@ -15,33 +15,32 @@
 
 using System;
 
-namespace Machina.Sockets
+namespace Machina.Sockets;
+
+/// <summary>
+/// Defines the common public routines for raw socket capturea
+/// </summary>
+internal interface ICaptureSocket : IDisposable
 {
     /// <summary>
-    /// Defines the common public routines for raw socket capturea
+    /// Initializes the raw socket and starts the capture process
+    ///   Note that remoteAddress can be used to significantly improve the reliability of capture of active connections by
+    ///   offloading filtering to the winsock/winpcap layer, however if the goal is to capture all packets for a single
+    ///   TCP connection, the remote address must be known and the socket created before the connection is initiated.
+    ///   This is frequently impossible for monitoring third-party applications.
     /// </summary>
-    internal interface ICaptureSocket : IDisposable
-    {
-        /// <summary>
-        /// Initializes the raw socket and starts the capture process
-        ///   Note that remoteAddress can be used to significantly improve the reliability of capture of active connections by
-        ///   offloading filtering to the winsock/winpcap layer, however if the goal is to capture all packets for a single
-        ///   TCP connection, the remote address must be known and the socket created before the connection is initiated.
-        ///   This is frequently impossible for monitoring third-party applications.
-        /// </summary>
-        /// <param name="localAddress">local IP address of the interface initiating the packets of interest</param>
-        /// <param name="remoteAddress">remote IP address of the host, or 0 to capture all packets on the local interface.</param>
-        void StartCapture(uint localAddress, uint remoteAddress = 0);
+    /// <param name="localAddress">local IP address of the interface initiating the packets of interest</param>
+    /// <param name="remoteAddress">remote IP address of the host, or 0 to capture all packets on the local interface.</param>
+    void StartCapture(uint localAddress, uint remoteAddress = 0);
 
-        /// <summary>
-        /// Stops raw socket capture and cleans up any resources.
-        /// </summary>
-        void StopCapture();
+    /// <summary>
+    /// Stops raw socket capture and cleans up any resources.
+    /// </summary>
+    void StopCapture();
 
-        /// <summary>
-        /// Returns both a reference to a byte array buffer, and the amount of bytes in that array containing payload data.
-        ///   Size value of 0 indicates that there is no data available.
-        /// </summary>
-        CapturedData Receive();
-    }
+    /// <summary>
+    /// Returns both a reference to a byte array buffer, and the amount of bytes in that array containing payload data.
+    ///   Size value of 0 indicates that there is no data available.
+    /// </summary>
+    CapturedData Receive();
 }

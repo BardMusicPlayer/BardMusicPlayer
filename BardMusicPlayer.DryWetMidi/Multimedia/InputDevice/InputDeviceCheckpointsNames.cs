@@ -1,15 +1,14 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.InputDevice;
+
+internal static class InputDeviceCheckpointsNames
 {
-    internal static class InputDeviceCheckpointsNames
-    {
-        #region Constants
+    #region Constants
 
-        public const string HandleFinalizerEntered = "IN A";
-        public const string DeviceDisconnectedInHandleFinalizer = "IN B";
-        public const string DeviceClosedInHandleFinalizer = "IN C";
+    public const string HandleFinalizerEntered = "IN A";
+    public const string DeviceDisconnectedInHandleFinalizer = "IN B";
+    public const string DeviceClosedInHandleFinalizer = "IN C";
 
-        public const string MessageDataReceived = "MSG DATA";
+    public const string MessageDataReceived = "MSG DATA";
 
-        #endregion
-    }
+    #endregion
 }

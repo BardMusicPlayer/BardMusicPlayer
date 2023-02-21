@@ -1,28 +1,27 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator.Session
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator.Session;
+
+internal abstract class TickGeneratorSessionApi : NativeApi
 {
-    internal abstract class TickGeneratorSessionApi : NativeApi
+    #region Nested enums
+
+    public enum TGSESSION_OPENRESULT
     {
-        #region Nested enums
+        TGSESSION_OPENRESULT_OK = 0,
 
-        public enum TGSESSION_OPENRESULT
-        {
-            TGSESSION_OPENRESULT_OK = 0,
-
-            TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO = 101,
-            TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY = 102
-        }
-
-        public enum TGSESSION_CLOSERESULT
-        {
-            TGSESSION_CLOSERESULT_OK = 0
-        }
-
-        #endregion
-
-        #region Methods
-
-        public abstract TGSESSION_OPENRESULT Api_OpenSession(out IntPtr handle);
-
-        #endregion
+        TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO = 101,
+        TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY = 102
     }
+
+    public enum TGSESSION_CLOSERESULT
+    {
+        TGSESSION_CLOSERESULT_OK = 0
+    }
+
+    #endregion
+
+    #region Methods
+
+    public abstract TGSESSION_OPENRESULT Api_OpenSession(out IntPtr handle);
+
+    #endregion
 }

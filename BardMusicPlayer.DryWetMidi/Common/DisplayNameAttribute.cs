@@ -1,20 +1,19 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common;
+
+internal sealed class DisplayNameAttribute : Attribute
 {
-    internal sealed class DisplayNameAttribute : Attribute
+    #region Constructor
+
+    public DisplayNameAttribute(string name)
     {
-        #region Constructor
-
-        public DisplayNameAttribute(string name)
-        {
-            Name = name;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string Name { get; }
-
-        #endregion
+        Name = name;
     }
+
+    #endregion
+
+    #region Properties
+
+    public string Name { get; }
+
+    #endregion
 }

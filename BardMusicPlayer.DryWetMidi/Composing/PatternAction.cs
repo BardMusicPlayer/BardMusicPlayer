@@ -1,19 +1,18 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Composing
+﻿namespace BardMusicPlayer.DryWetMidi.Composing;
+
+internal abstract class PatternAction
 {
-    internal abstract class PatternAction
-    {
-        #region Properties
+    #region Properties
 
-        public PatternActionState State { get; set; }
+    public PatternActionState State { get; set; }
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        public abstract PatternActionResult Invoke(long time, PatternContext context);
+    public abstract PatternActionResult Invoke(long time, PatternContext context);
 
-        public abstract PatternAction Clone();
+    public abstract PatternAction Clone();
 
-        #endregion
-    }
+    #endregion
 }

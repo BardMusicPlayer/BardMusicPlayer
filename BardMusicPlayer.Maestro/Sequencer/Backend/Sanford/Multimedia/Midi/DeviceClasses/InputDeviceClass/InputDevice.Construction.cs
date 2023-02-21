@@ -32,48 +32,47 @@
 
 #endregion
 
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 using System;
 using System.Diagnostics;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
+
+public partial class InputDevice : MidiDevice
 {
-    public partial class InputDevice : MidiDevice
+    #region Construction
+
+    /// <summary>
+    /// Initializes a new instance of the InputDevice class with the 
+    /// specified device ID.
+    /// </summary>
+    public InputDevice(int deviceID, bool postEventsOnCreationContext = true, bool postDriverCallbackToDelegateQueue = true)
+        : base(deviceID)
     {
-        #region Construction
+        midiInProc = HandleMessage;
 
-        /// <summary>
-        /// Initializes a new instance of the InputDevice class with the 
-        /// specified device ID.
-        /// </summary>
-        public InputDevice(int deviceID, bool postEventsOnCreationContext = true, bool postDriverCallbackToDelegateQueue = true)
-            : base(deviceID)
+        delegateQueue = new DelegateQueue();
+        int result = midiInOpen(out handle, deviceID, midiInProc, IntPtr.Zero, CALLBACK_FUNCTION);
+
+        Debug.WriteLine("MidiIn handle:" + handle.ToInt64());
+
+        if (result != MidiDeviceException.MMSYSERR_NOERROR)
         {
-            midiInProc = HandleMessage;
-
-            delegateQueue = new DelegateQueue();
-            int result = midiInOpen(out handle, deviceID, midiInProc, IntPtr.Zero, CALLBACK_FUNCTION);
-
-            Debug.WriteLine("MidiIn handle:" + handle.ToInt64());
-
-            if (result != MidiDeviceException.MMSYSERR_NOERROR)
-            {
-                throw new InputDeviceException(result);
-            }
-
-            PostEventsOnCreationContext       = postEventsOnCreationContext;
-            PostDriverCallbackToDelegateQueue = postDriverCallbackToDelegateQueue;
+            throw new InputDeviceException(result);
         }
 
-        ~InputDevice()
-        {
-            if (!IsDisposed)
-            {
-                midiInReset(handle);
-                midiInClose(handle);
-            }
-        }
-
-        #endregion
+        PostEventsOnCreationContext       = postEventsOnCreationContext;
+        PostDriverCallbackToDelegateQueue = postDriverCallbackToDelegateQueue;
     }
+
+    ~InputDevice()
+    {
+        if (!IsDisposed)
+        {
+            midiInReset(handle);
+            midiInClose(handle);
+        }
+    }
+
+    #endregion
 }

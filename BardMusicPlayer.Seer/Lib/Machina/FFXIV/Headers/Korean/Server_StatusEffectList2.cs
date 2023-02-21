@@ -15,25 +15,24 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Korean
+namespace Machina.FFXIV.Headers.Korean;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public unsafe struct Server_StatusEffectList2
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Server_StatusEffectList2
-    {
-        public Server_MessageHeader MessageHeader; // 8 DWORDS
-        public uint Unknown3;
-        public byte JobID;
-        public byte Level1;
-        public byte Level2;
-        public byte Level3;
-        public uint CurrentHP;
-        public uint MaxHP;
-        public ushort CurrentMP;
-        public ushort MaxMP;
-        public byte DamageShield;
-        public ushort Unknown1; // used to be TP
-        public byte Unknown2;
-        public fixed byte Effects[30 * 3 * 4];
-        // 4 bytes padding at end?
-    }
+    public Server_MessageHeader MessageHeader; // 8 DWORDS
+    public uint Unknown3;
+    public byte JobID;
+    public byte Level1;
+    public byte Level2;
+    public byte Level3;
+    public uint CurrentHP;
+    public uint MaxHP;
+    public ushort CurrentMP;
+    public ushort MaxMP;
+    public byte DamageShield;
+    public ushort Unknown1; // used to be TP
+    public byte Unknown2;
+    public fixed byte Effects[30 * 3 * 4];
+    // 4 bytes padding at end?
 }

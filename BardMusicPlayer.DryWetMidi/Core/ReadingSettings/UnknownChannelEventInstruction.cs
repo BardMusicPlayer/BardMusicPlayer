@@ -1,20 +1,19 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core.Exceptions;
 
-namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
+namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+
+/// <summary>
+/// Instruction for reading engine which tells how unknown channel event should be handled.
+/// </summary>
+public enum UnknownChannelEventInstruction
 {
     /// <summary>
-    /// Instruction for reading engine which tells how unknown channel event should be handled.
+    /// Abort reading and throw <see cref="UnknownChannelEventException"/>.
     /// </summary>
-    public enum UnknownChannelEventInstruction
-    {
-        /// <summary>
-        /// Abort reading and throw <see cref="UnknownChannelEventException"/>.
-        /// </summary>
-        Abort,
+    Abort,
 
-        /// <summary>
-        /// Skip data bytes.
-        /// </summary>
-        SkipData
-    }
+    /// <summary>
+    /// Skip data bytes.
+    /// </summary>
+    SkipData
 }

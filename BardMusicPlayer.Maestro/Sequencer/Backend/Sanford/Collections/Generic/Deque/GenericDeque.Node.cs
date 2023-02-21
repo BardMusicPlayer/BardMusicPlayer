@@ -1,59 +1,58 @@
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque;
+
+public partial class Deque<T>
 {
-    public partial class Deque<T>
+    #region Node Class
+
+    // Represents a node in the deque.
+    [Serializable()]
+    private class Node
     {
-        #region Node Class
+        private T value;
 
-        // Represents a node in the deque.
-        [Serializable()]
-        private class Node
+        private Node previous = null;
+
+        private Node next = null;
+
+        public Node(T value)
         {
-            private T value;
+            this.value = value;
+        }
 
-            private Node previous = null;
-
-            private Node next = null;
-
-            public Node(T value)
+        public T Value
+        {
+            get
             {
-                this.value = value;
-            }
-
-            public T Value
-            {
-                get
-                {
-                    return value;
-                }
-            }
-
-            public Node Previous
-            {
-                get
-                {
-                    return previous;
-                }
-                set
-                {
-                    previous = value;
-                }
-            }
-
-            public Node Next
-            {
-                get
-                {
-                    return next;
-                }
-                set
-                {
-                    next = value;
-                }
+                return value;
             }
         }
 
-        #endregion
+        public Node Previous
+        {
+            get
+            {
+                return previous;
+            }
+            set
+            {
+                previous = value;
+            }
+        }
+
+        public Node Next
+        {
+            get
+            {
+                return next;
+            }
+            set
+            {
+                next = value;
+            }
+        }
     }
+
+    #endregion
 }

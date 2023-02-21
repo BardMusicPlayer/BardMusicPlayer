@@ -1,47 +1,46 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common.Parsing;
 
-namespace BardMusicPlayer.DryWetMidi.MusicTheory.Octave
+namespace BardMusicPlayer.DryWetMidi.MusicTheory.Octave;
+
+internal static class OctaveParser
 {
-    internal static class OctaveParser
+    #region Constants
+
+    private const string OctaveNumberGroupName = "o";
+
+    private static readonly string OctaveNumberGroup = ParsingUtilities.GetIntegerNumberGroup(OctaveNumberGroupName);
+
+    private static readonly string[] Patterns = new[]
     {
-        #region Constants
+        OctaveNumberGroup
+    };
 
-        private const string OctaveNumberGroupName = "o";
+    private const string OctaveIsOutOfRange = "Octave number is out of range.";
 
-        private static readonly string OctaveNumberGroup = ParsingUtilities.GetIntegerNumberGroup(OctaveNumberGroupName);
+    #endregion
 
-        private static readonly string[] Patterns = new[]
-        {
-            OctaveNumberGroup
-        };
+    #region Methods
 
-        private const string OctaveIsOutOfRange = "Octave number is out of range.";
+    internal static ParsingResult TryParse(string input, out Octave octave)
+    {
+        octave = null;
 
-        #endregion
+        if (string.IsNullOrWhiteSpace(input))
+            return ParsingResult.EmptyInputString;
 
-        #region Methods
+        var match = ParsingUtilities.Match(input, Patterns);
+        if (match == null)
+            return ParsingResult.NotMatched;
 
-        internal static ParsingResult TryParse(string input, out Octave octave)
-        {
-            octave = null;
+        int octaveNumber;
+        if (!ParsingUtilities.ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out octaveNumber) ||
+            octaveNumber < Octave.MinOctaveNumber ||
+            octaveNumber > Octave.MaxOctaveNumber)
+            return ParsingResult.Error(OctaveIsOutOfRange);
 
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            int octaveNumber;
-            if (!ParsingUtilities.ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out octaveNumber) ||
-                octaveNumber < Octave.MinOctaveNumber ||
-                octaveNumber > Octave.MaxOctaveNumber)
-                return ParsingResult.Error(OctaveIsOutOfRange);
-
-            octave = Octave.Get(octaveNumber);
-            return ParsingResult.Parsed;
-        }
-
-        #endregion
+        octave = Octave.Get(octaveNumber);
+        return ParsingResult.Parsed;
     }
+
+    #endregion
 }

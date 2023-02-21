@@ -35,101 +35,100 @@
 using System;
 using System.Threading;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia;
+
+public abstract class Device : IDisposable
 {
-    public abstract class Device : IDisposable
+    protected const int CALLBACK_FUNCTION = 0x30000;
+
+    protected const int CALLBACK_EVENT = 0x50000;
+
+    private int deviceID;
+
+    protected SynchronizationContext context;
+
+    // Indicates whether the device has been disposed.
+    private bool disposed = false;
+
+    public event EventHandler<ErrorEventArgs> Error;
+
+    public Device(int deviceID)
     {
-        protected const int CALLBACK_FUNCTION = 0x30000;
+        this.deviceID = deviceID;
 
-        protected const int CALLBACK_EVENT = 0x50000;
-
-        private int deviceID;
-
-        protected SynchronizationContext context;
-
-        // Indicates whether the device has been disposed.
-        private bool disposed = false;
-
-        public event EventHandler<ErrorEventArgs> Error;
-
-        public Device(int deviceID)
+        if (SynchronizationContext.Current == null)
         {
-            this.deviceID = deviceID;
-
-            if (SynchronizationContext.Current == null)
-            {
-                context = new SynchronizationContext();
-            }
-            else
-            {
-                context = SynchronizationContext.Current;
-            }
+            context = new SynchronizationContext();
         }
-
-        protected virtual void Dispose(bool disposing)
+        else
         {
-            if (disposing)
-            {
-                disposed = true;
-
-                GC.SuppressFinalize(this);
-            }
+            context = SynchronizationContext.Current;
         }
-
-        protected virtual void OnError(ErrorEventArgs e)
-        {
-            var handler = Error;
-
-            if (handler != null)
-            {
-                context.Post(delegate (object dummy)
-                {
-                    handler(this, e);
-                }, null);
-            }
-        }
-
-        /// <summary>
-        /// Closes the MIDI device.
-        /// </summary>
-        public abstract void Close();
-
-        /// <summary>
-        /// Resets the device.
-        /// </summary>
-        public abstract void Reset();
-
-        /// <summary>
-        /// Gets the device handle.
-        /// </summary>
-        public abstract IntPtr Handle
-        {
-            get;
-        }
-
-        public int DeviceID
-        {
-            get
-            {
-                return deviceID;
-            }
-        }
-
-        public bool IsDisposed
-        {
-            get
-            {
-                return disposed;
-            }
-        }
-
-        #region IDisposable
-
-        /// <summary>
-        /// Disposes of the device.
-        /// </summary>
-        public abstract void Dispose();
-
-        #endregion
     }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            disposed = true;
+
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    protected virtual void OnError(ErrorEventArgs e)
+    {
+        var handler = Error;
+
+        if (handler != null)
+        {
+            context.Post(delegate (object dummy)
+            {
+                handler(this, e);
+            }, null);
+        }
+    }
+
+    /// <summary>
+    /// Closes the MIDI device.
+    /// </summary>
+    public abstract void Close();
+
+    /// <summary>
+    /// Resets the device.
+    /// </summary>
+    public abstract void Reset();
+
+    /// <summary>
+    /// Gets the device handle.
+    /// </summary>
+    public abstract IntPtr Handle
+    {
+        get;
+    }
+
+    public int DeviceID
+    {
+        get
+        {
+            return deviceID;
+        }
+    }
+
+    public bool IsDisposed
+    {
+        get
+        {
+            return disposed;
+        }
+    }
+
+    #region IDisposable
+
+    /// <summary>
+    /// Disposes of the device.
+    /// </summary>
+    public abstract void Dispose();
+
+    #endregion
 }

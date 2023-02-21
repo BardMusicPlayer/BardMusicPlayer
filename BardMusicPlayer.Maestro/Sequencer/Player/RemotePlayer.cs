@@ -5,28 +5,27 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Player
+namespace BardMusicPlayer.Maestro.Sequencer.Player;
+
+public partial class RemotePlayer : IPlayer
 {
-    public partial class RemotePlayer : IPlayer
+    public string UUID { get; private set; }
+
+    public string Name { get; private set; }
+
+    public string HomeWorld { get; private set; }
+
+    PlayerType IPlayer.PlayerType => PlayerType.Remote;
+
+    internal RemotePlayer()
     {
-        public string UUID { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string HomeWorld { get; private set; }
-
-        PlayerType IPlayer.PlayerType => PlayerType.Remote;
-
-        internal RemotePlayer()
-        {
-            UUID = Guid.NewGuid().ToString();
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-
-        bool IEquatable<IPlayer>.Equals(IPlayer other) => string.Equals(UUID, other.UUID);
+        UUID = Guid.NewGuid().ToString();
     }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+
+    bool IEquatable<IPlayer>.Equals(IPlayer other) => string.Equals(UUID, other.UUID);
 }

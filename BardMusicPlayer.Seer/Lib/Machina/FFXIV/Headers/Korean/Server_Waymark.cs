@@ -15,22 +15,21 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Korean
+namespace Machina.FFXIV.Headers.Korean;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public unsafe struct Server_Waymark
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Server_Waymark
+    public enum WaymarkStatus : byte
     {
-        public enum WaymarkStatus : byte
-        {
-            Off = 0,
-            On = 1
-        };
-        public Server_MessageHeader MessageHeader; // 8 DWORDS
-        public WaymarkType Waymark;
-        public WaymarkStatus Status;
-        public ushort unknown;
-        public int PosX;
-        public int PosY;// To calculate 'float' coords from these you cast them to float and then divide by 1000.0
-        public int PosZ;
-    }
+        Off = 0,
+        On = 1
+    };
+    public Server_MessageHeader MessageHeader; // 8 DWORDS
+    public WaymarkType Waymark;
+    public WaymarkStatus Status;
+    public ushort unknown;
+    public int PosX;
+    public int PosY; // To calculate 'float' coords from these you cast them to float and then divide by 1000.0
+    public int PosZ;
 }

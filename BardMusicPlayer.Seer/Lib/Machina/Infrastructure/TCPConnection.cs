@@ -17,51 +17,49 @@ using System.Net;
 using Machina.Decoders;
 using Machina.Sockets;
 
-namespace Machina.Infrastructure
+namespace Machina.Infrastructure;
+
+public class TCPConnection
 {
-    public class TCPConnection
+    public uint LocalIP { get; set; }
+    public ushort LocalPort { get; set; }
+    public uint RemoteIP { get; set; }
+    public ushort RemotePort { get; set; }
+
+    public uint ProcessId { get; set; }
+
+    public string ID => ToString();
+
+    internal ICaptureSocket Socket { get; set; }
+
+    internal IPDecoder IPDecoderReceive
+    { get; set; }
+    internal IPDecoder IPDecoderSend
+    { get; set; }
+    internal TCPDecoder TCPDecoderReceive
+    { get; set; }
+    internal TCPDecoder TCPDecoderSend
+    { get; set; }
+
+    public override bool Equals(object obj)
     {
-        public uint LocalIP { get; set; }
-        public ushort LocalPort { get; set; }
-        public uint RemoteIP { get; set; }
-        public ushort RemotePort { get; set; }
-
-        public uint ProcessId { get; set; }
-
-        public string ID => ToString();
-
-        internal ICaptureSocket Socket { get; set; }
-
-        internal IPDecoder IPDecoderReceive
-        { get; set; }
-        internal IPDecoder IPDecoderSend
-        { get; set; }
-        internal TCPDecoder TCPDecoderReceive
-        { get; set; }
-        internal TCPDecoder TCPDecoderSend
-        { get; set; }
-
-        public override bool Equals(object obj)
+        return obj is TCPConnection c
+               && LocalIP == c.LocalIP
+               && LocalPort == c.LocalPort
+               && RemoteIP == c.RemoteIP
+               && RemotePort == c.RemotePort;
+    }
+    public override int GetHashCode()
+    {
+        unchecked
         {
-            return obj is TCPConnection c
-                && LocalIP == c.LocalIP
-                && LocalPort == c.LocalPort
-                && RemoteIP == c.RemoteIP
-                && RemotePort == c.RemotePort;
-        }
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (int)(LocalIP ^ LocalPort ^ RemoteIP ^ RemotePort);
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"{new IPAddress(LocalIP)}:{LocalPort}=>" +
-                $"{new IPAddress(RemoteIP)}:{RemotePort}({ProcessId})";
+            return (int)(LocalIP ^ LocalPort ^ RemoteIP ^ RemotePort);
         }
     }
 
+    public override string ToString()
+    {
+        return $"{new IPAddress(LocalIP)}:{LocalPort}=>" +
+               $"{new IPAddress(RemoteIP)}:{RemotePort}({ProcessId})";
+    }
 }

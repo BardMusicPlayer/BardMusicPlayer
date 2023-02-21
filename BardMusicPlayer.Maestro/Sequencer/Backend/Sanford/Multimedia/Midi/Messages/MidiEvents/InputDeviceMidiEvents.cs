@@ -2,144 +2,143 @@
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MidiEvents
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MidiEvents;
+
+/// <summary>
+/// MidiSignal provides all midi events from an input device
+/// </summary>
+public class InputDeviceMidiEvents : MidiEvents
 {
-    /// <summary>
-    /// MidiSignal provides all midi events from an input device
-    /// </summary>
-    public class InputDeviceMidiEvents : MidiEvents
+    readonly InputDevice FInDevice;
+
+    public int DeviceID
     {
-        readonly InputDevice FInDevice;
-
-        public int DeviceID
+        get
         {
-            get
+            if (FInDevice != null)
             {
-                if (FInDevice != null)
-                {
-                    return FInDevice.DeviceID;
-                }
-                else
-                {
-                    return -1;
-                }
+                return FInDevice.DeviceID;
+            }
+            else
+            {
+                return -1;
             }
         }
+    }
 
-        /// <summary>
-        /// Create Midisignal with an input device which fires the events
-        /// </summary>
-        /// <param name="inDevice"></param>
-        public InputDeviceMidiEvents(InputDevice inDevice)
+    /// <summary>
+    /// Create Midisignal with an input device which fires the events
+    /// </summary>
+    /// <param name="inDevice"></param>
+    public InputDeviceMidiEvents(InputDevice inDevice)
+    {
+        FInDevice = inDevice;
+        FInDevice.StartRecording();
+    }
+
+    public void Dispose()
+    {
+        FInDevice.Dispose();
+    }
+
+    public static InputDeviceMidiEvents FromDeviceID(int deviceID)
+    {
+        var deviceCount = InputDevice.DeviceCount;
+        if (deviceCount > 0)
         {
-            FInDevice = inDevice;
-            FInDevice.StartRecording();
+            deviceID %= deviceCount;
+            return new InputDeviceMidiEvents(new InputDevice(deviceID));
         }
+        return null;
+    }
 
-        public void Dispose()
+    /// <summary>
+    /// All incoming midi messages in short format
+    /// </summary>
+    public event MidiMessageEventHandler MessageReceived
+    {
+        add
         {
-            FInDevice.Dispose();
+            FInDevice.MessageReceived += value;
         }
-
-        public static InputDeviceMidiEvents FromDeviceID(int deviceID)
+        remove
         {
-            var deviceCount = InputDevice.DeviceCount;
-            if (deviceCount > 0)
-            {
-                deviceID %= deviceCount;
-                return new InputDeviceMidiEvents(new InputDevice(deviceID));
-            }
-            return null;
+            FInDevice.MessageReceived -= value;
         }
+    }
 
-        /// <summary>
-        /// All incoming midi messages in short format
-        /// </summary>
-        public event MidiMessageEventHandler MessageReceived
+    /// <summary>
+    /// All incoming midi messages in short format
+    /// </summary>
+    public event EventHandler<ShortMessageEventArgs> ShortMessageReceived
+    {
+        add
         {
-            add
-            {
-                FInDevice.MessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.MessageReceived -= value;
-            }
+            FInDevice.ShortMessageReceived += value;
         }
-
-        /// <summary>
-        /// All incoming midi messages in short format
-        /// </summary>
-        public event EventHandler<ShortMessageEventArgs> ShortMessageReceived
+        remove
         {
-            add
-            {
-                FInDevice.ShortMessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.ShortMessageReceived -= value;
-            }
+            FInDevice.ShortMessageReceived -= value;
         }
+    }
 
-        /// <summary>
-        /// Channel messages like, note, controller, program, ...
-        /// </summary>
-        public event EventHandler<ChannelMessageEventArgs> ChannelMessageReceived
+    /// <summary>
+    /// Channel messages like, note, controller, program, ...
+    /// </summary>
+    public event EventHandler<ChannelMessageEventArgs> ChannelMessageReceived
+    {
+        add
         {
-            add
-            {
-                FInDevice.ChannelMessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.ChannelMessageReceived -= value;
-            }
+            FInDevice.ChannelMessageReceived += value;
         }
-
-        /// <summary>
-        /// SysEx messages
-        /// </summary>
-        public event EventHandler<SysExMessageEventArgs> SysExMessageReceived
+        remove
         {
-            add
-            {
-                FInDevice.SysExMessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.SysExMessageReceived -= value;
-            }
+            FInDevice.ChannelMessageReceived -= value;
         }
+    }
 
-        /// <summary>
-        /// Midi timecode, song position, song select, tune request
-        /// </summary>
-        public event EventHandler<SysCommonMessageEventArgs> SysCommonMessageReceived
+    /// <summary>
+    /// SysEx messages
+    /// </summary>
+    public event EventHandler<SysExMessageEventArgs> SysExMessageReceived
+    {
+        add
         {
-            add
-            {
-                FInDevice.SysCommonMessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.SysCommonMessageReceived -= value;
-            }
+            FInDevice.SysExMessageReceived += value;
         }
-
-        /// <summary>
-        /// Timing events, midi clock, start, stop, reset, active sense, tick
-        /// </summary>
-        public event EventHandler<SysRealtimeMessageEventArgs> SysRealtimeMessageReceived
+        remove
         {
-            add
-            {
-                FInDevice.SysRealtimeMessageReceived += value;
-            }
-            remove
-            {
-                FInDevice.SysRealtimeMessageReceived -= value;
-            }
+            FInDevice.SysExMessageReceived -= value;
+        }
+    }
+
+    /// <summary>
+    /// Midi timecode, song position, song select, tune request
+    /// </summary>
+    public event EventHandler<SysCommonMessageEventArgs> SysCommonMessageReceived
+    {
+        add
+        {
+            FInDevice.SysCommonMessageReceived += value;
+        }
+        remove
+        {
+            FInDevice.SysCommonMessageReceived -= value;
+        }
+    }
+
+    /// <summary>
+    /// Timing events, midi clock, start, stop, reset, active sense, tick
+    /// </summary>
+    public event EventHandler<SysRealtimeMessageEventArgs> SysRealtimeMessageReceived
+    {
+        add
+        {
+            FInDevice.SysRealtimeMessageReceived += value;
+        }
+        remove
+        {
+            FInDevice.SysRealtimeMessageReceived -= value;
         }
     }
 }

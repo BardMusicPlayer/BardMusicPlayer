@@ -34,45 +34,44 @@
 
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
+
+public partial class InputDevice
 {
-    public partial class InputDevice
+    public override IntPtr Handle
     {
-        public override IntPtr Handle
-        {
-            get 
-            { 
-                return handle; 
-            }
+        get 
+        { 
+            return handle; 
         }
+    }
 
-        public int SysExBufferSize
+    public int SysExBufferSize
+    {
+        get
         {
-            get
-            {
-                return sysExBufferSize;
-            }
-            set
-            {
-                #region Require
-
-                if(value < 1)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                #endregion
-
-                sysExBufferSize = value;
-            }
+            return sysExBufferSize;
         }
-
-        public static int DeviceCount
+        set
         {
-            get
+            #region Require
+
+            if(value < 1)
             {
-                return midiInGetNumDevs();
+                throw new ArgumentOutOfRangeException();
             }
+
+            #endregion
+
+            sysExBufferSize = value;
+        }
+    }
+
+    public static int DeviceCount
+    {
+        get
+        {
+            return midiInGetNumDevs();
         }
     }
 }

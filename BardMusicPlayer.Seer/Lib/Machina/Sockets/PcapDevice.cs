@@ -19,72 +19,71 @@ using System.Runtime.InteropServices;
 using System.Text;
 using static Machina.Sockets.PcapInterop;
 
-namespace Machina.Sockets
+namespace Machina.Sockets;
+
+internal class PcapDevice
 {
-    internal class PcapDevice
+    public string Name { get; internal set; }
+    public string Description { get; internal set; }
+    public IList<uint> Addresses { get; internal set; }
+
+    public static unsafe IList<PcapDevice> GetAllDevices(string source, ref pcap_rmtauth auth)
     {
-        public string Name { get; internal set; }
-        public string Description { get; internal set; }
-        public IList<uint> Addresses { get; internal set; }
+        List<PcapDevice> deviceList = new List<PcapDevice>();
+        IntPtr deviceListPtr = IntPtr.Zero;
+        IntPtr currentAddress;
 
-        public static unsafe IList<PcapDevice> GetAllDevices(string source, ref pcap_rmtauth auth)
+        try
         {
-            List<PcapDevice> deviceList = new List<PcapDevice>();
-            IntPtr deviceListPtr = IntPtr.Zero;
-            IntPtr currentAddress;
+            StringBuilder errorBuffer = new StringBuilder(PCAP_ERRBUF_SIZE);
+            int returnCode = pcap_findalldevs_ex(source, ref auth, ref deviceListPtr, errorBuffer);
+            if (returnCode != 0)
+                throw new PcapException($"Cannot enumerate devices: [{errorBuffer}].");
 
-            try
+            IntPtr ip = deviceListPtr;
+            while (ip != IntPtr.Zero)
             {
-                StringBuilder errorBuffer = new StringBuilder(PCAP_ERRBUF_SIZE);
-                int returnCode = pcap_findalldevs_ex(source, ref auth, ref deviceListPtr, errorBuffer);
-                if (returnCode != 0)
-                    throw new PcapException($"Cannot enumerate devices: [{errorBuffer}].");
+                pcap_if dev = (pcap_if)Marshal.PtrToStructure(ip, typeof(pcap_if));
 
-                IntPtr ip = deviceListPtr;
-                while (ip != IntPtr.Zero)
+                PcapDevice device = new PcapDevice
                 {
-                    pcap_if dev = (pcap_if)Marshal.PtrToStructure(ip, typeof(pcap_if));
+                    Name        = dev.name,
+                    Description = dev.description,
+                    Addresses   = new List<uint>()
+                };
+                currentAddress = dev.addresses;
 
-                    PcapDevice device = new PcapDevice
+                while (currentAddress != IntPtr.Zero)
+                {
+                    pcap_addr address = *(pcap_addr*)currentAddress;
+
+                    if (address.addr != IntPtr.Zero)
                     {
-                        Name = dev.name,
-                        Description = dev.description,
-                        Addresses = new List<uint>()
-                    };
-                    currentAddress = dev.addresses;
-
-                    while (currentAddress != IntPtr.Zero)
-                    {
-                        pcap_addr address = *(pcap_addr*)currentAddress;
-
-                        if (address.addr != IntPtr.Zero)
-                        {
-                            sockaddr_in sockaddress = *(sockaddr_in*)address.addr;
-                            if (sockaddress.sin_family == AF_INET || sockaddress.sin_family == AF_INET_BSD)
-                                device.Addresses.Add(sockaddress.sin_addr);
-                        }
-
-                        currentAddress = address.next;
+                        sockaddr_in sockaddress = *(sockaddr_in*)address.addr;
+                        if (sockaddress.sin_family == AF_INET || sockaddress.sin_family == AF_INET_BSD)
+                            device.Addresses.Add(sockaddress.sin_addr);
                     }
 
-                    deviceList.Add(device);
-
-                    ip = dev.next;
+                    currentAddress = address.next;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new PcapException("Unable to get WinPcap device list.", ex);
-            }
-            finally
-            {
-                // always release memory after getting device list.
-                if (deviceListPtr != IntPtr.Zero)
-                    pcap_freealldevs(deviceListPtr);
-            }
 
-            return deviceList;
+                deviceList.Add(device);
+
+                ip = dev.next;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new PcapException("Unable to get WinPcap device list.", ex);
+        }
+        finally
+        {
+            // always release memory after getting device list.
+            if (deviceListPtr != IntPtr.Zero)
+                pcap_freealldevs(deviceListPtr);
         }
 
+        return deviceList;
     }
+
 }

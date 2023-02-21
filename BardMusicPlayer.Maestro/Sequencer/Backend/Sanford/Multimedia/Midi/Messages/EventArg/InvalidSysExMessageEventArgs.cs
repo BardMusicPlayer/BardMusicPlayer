@@ -1,23 +1,22 @@
 using System;
 using System.Collections;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+
+public class InvalidSysExMessageEventArgs : EventArgs
 {
-    public class InvalidSysExMessageEventArgs : EventArgs
+    private byte[] messageData;
+
+    public InvalidSysExMessageEventArgs(byte[] messageData)
     {
-        private byte[] messageData;
+        this.messageData = messageData;
+    }
 
-        public InvalidSysExMessageEventArgs(byte[] messageData)
+    public ICollection MessageData
+    {
+        get
         {
-            this.messageData = messageData;
-        }
-
-        public ICollection MessageData
-        {
-            get
-            {
-                return messageData;
-            }
+            return messageData;
         }
     }
 }

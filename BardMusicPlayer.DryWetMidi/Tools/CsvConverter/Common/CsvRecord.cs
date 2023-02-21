@@ -1,26 +1,25 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
+
+internal sealed class CsvRecord
 {
-    internal sealed class CsvRecord
+    #region Constructor
+
+    public CsvRecord(int lineNumber, int linesCount, string[] values)
     {
-        #region Constructor
-
-        public CsvRecord(int lineNumber, int linesCount, string[] values)
-        {
-            LineNumber = lineNumber;
-            LinesCount = linesCount;
-            Values = values;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public int LineNumber { get; }
-
-        public int LinesCount { get; }
-
-        public string[] Values { get; }
-
-        #endregion
+        LineNumber = lineNumber;
+        LinesCount = linesCount;
+        Values     = values;
     }
+
+    #endregion
+
+    #region Properties
+
+    public int LineNumber { get; }
+
+    public int LinesCount { get; }
+
+    public string[] Values { get; }
+
+    #endregion
 }

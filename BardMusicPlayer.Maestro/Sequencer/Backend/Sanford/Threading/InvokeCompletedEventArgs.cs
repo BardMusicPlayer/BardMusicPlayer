@@ -35,26 +35,25 @@
 using System;
 using System.ComponentModel;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading;
+
+/// <summary>
+/// Represents information about the InvokeCompleted event.
+/// </summary>
+public class InvokeCompletedEventArgs : AsyncCompletedEventArgs
 {
-    /// <summary>
-    /// Represents information about the InvokeCompleted event.
-    /// </summary>
-    public class InvokeCompletedEventArgs : AsyncCompletedEventArgs
+    private Delegate method;
+
+    private object[] args;
+
+    private object result;
+
+    public InvokeCompletedEventArgs(Delegate method, object[] args, object result, Exception error)
+        : base(error, false, null)
     {
-        private Delegate method;
-
-        private object[] args;
-
-        private object result;
-
-        public InvokeCompletedEventArgs(Delegate method, object[] args, object result, Exception error)
-            : base(error, false, null)
-        {
-            this.method = method;
-            this.args = args;
-            this.result = result;
-        }
-
+        this.method = method;
+        this.args   = args;
+        this.result = result;
     }
+
 }

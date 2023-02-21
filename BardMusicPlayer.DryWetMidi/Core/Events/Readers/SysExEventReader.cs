@@ -2,36 +2,35 @@
 using BardMusicPlayer.DryWetMidi.Core.Events.Info;
 using BardMusicPlayer.DryWetMidi.Core.Events.SysEx;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Events.Readers
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Readers;
+
+internal sealed class SysExEventReader : IEventReader
 {
-    internal sealed class SysExEventReader : IEventReader
+    #region IEventReader
+
+    public MidiEvent Read(MidiReader reader, ReadingSettings.ReadingSettings settings, byte currentStatusByte)
     {
-        #region IEventReader
+        var size = reader.ReadVlqNumber();
 
-        public MidiEvent Read(MidiReader reader, ReadingSettings.ReadingSettings settings, byte currentStatusByte)
+        //
+
+        SysExEvent sysExEvent = null;
+
+        switch (currentStatusByte)
         {
-            var size = reader.ReadVlqNumber();
-
-            //
-
-            SysExEvent sysExEvent = null;
-
-            switch (currentStatusByte)
-            {
-                case EventStatusBytes.Global.NormalSysEx:
-                    sysExEvent = new NormalSysExEvent();
-                    break;
-                case EventStatusBytes.Global.EscapeSysEx:
-                    sysExEvent = new EscapeSysExEvent();
-                    break;
-            }
-
-            //
-
-            sysExEvent.Read(reader, settings, size);
-            return sysExEvent;
+            case EventStatusBytes.Global.NormalSysEx:
+                sysExEvent = new NormalSysExEvent();
+                break;
+            case EventStatusBytes.Global.EscapeSysEx:
+                sysExEvent = new EscapeSysExEvent();
+                break;
         }
 
-        #endregion
+        //
+
+        sysExEvent.Read(reader, settings, size);
+        return sysExEvent;
     }
+
+    #endregion
 }

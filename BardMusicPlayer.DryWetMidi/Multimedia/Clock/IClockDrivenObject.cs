@@ -1,17 +1,16 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock;
+
+/// <summary>
+/// Represents an object driven by clock (timer).
+/// </summary>
+public interface IClockDrivenObject
 {
+    #region Methods
+
     /// <summary>
-    /// Represents an object driven by clock (timer).
+    /// Advances current object's clock time.
     /// </summary>
-    public interface IClockDrivenObject
-    {
-        #region Methods
+    void TickClock();
 
-        /// <summary>
-        /// Advances current object's clock time.
-        /// </summary>
-        void TickClock();
-
-        #endregion
-    }
+    #endregion
 }

@@ -1,29 +1,28 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings
+﻿namespace BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
+
+/// <summary>
+/// Specifies how reading engine should buffer incoming MIDI data before reading it.
+/// The default is <see cref="UseFixedSizeBuffer"/>.
+/// </summary>
+public enum BufferingPolicy
 {
     /// <summary>
-    /// Specifies how reading engine should buffer incoming MIDI data before reading it.
-    /// The default is <see cref="UseFixedSizeBuffer"/>.
+    /// Use buffer of fixed size specified by <see cref="ReaderSettings.BufferSize"/>.
     /// </summary>
-    public enum BufferingPolicy
-    {
-        /// <summary>
-        /// Use buffer of fixed size specified by <see cref="ReaderSettings.BufferSize"/>.
-        /// </summary>
-        UseFixedSizeBuffer = 0,
+    UseFixedSizeBuffer = 0,
 
-        /// <summary>
-        /// Don't buffer data and read it from stream as is.
-        /// </summary>
-        DontUseBuffering,
+    /// <summary>
+    /// Don't buffer data and read it from stream as is.
+    /// </summary>
+    DontUseBuffering,
 
-        /// <summary>
-        /// Use buffer specified by <see cref="ReaderSettings.Buffer"/>.
-        /// </summary>
-        UseCustomBuffer,
+    /// <summary>
+    /// Use buffer specified by <see cref="ReaderSettings.Buffer"/>.
+    /// </summary>
+    UseCustomBuffer,
 
-        /// <summary>
-        /// Put entire MIDI data to buffer in memory and read it from here.
-        /// </summary>
-        BufferAllData
-    }
+    /// <summary>
+    /// Put entire MIDI data to buffer in memory and read it from here.
+    /// </summary>
+    BufferAllData
 }

@@ -15,18 +15,17 @@
 
 using System;
 
-namespace Machina.FFXIV.Headers.Chinese
+namespace Machina.FFXIV.Headers.Chinese;
+
+[Flags]
+public enum WaymarkType : uint
 {
-    [Flags]
-    public enum WaymarkType : uint
-    {
-        A = 0x1,
-        B = 0x2,
-        C = 0x4,
-        D = 0x8,
-        One = 0x10,
-        Two = 0x20,
-        Three = 0x40,
-        Four = 0x80,
-    };
-}
+    A = 0x1,
+    B = 0x2,
+    C = 0x4,
+    D = 0x8,
+    One = 0x10,
+    Two = 0x20,
+    Three = 0x40,
+    Four = 0x80,
+};

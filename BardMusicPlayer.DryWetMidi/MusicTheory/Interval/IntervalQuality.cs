@@ -1,33 +1,32 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Interval
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Interval;
+
+/// <summary>
+/// Represents an interval's quality.
+/// </summary>
+public enum IntervalQuality
 {
     /// <summary>
-    /// Represents an interval's quality.
+    /// Perfect interval.
     /// </summary>
-    public enum IntervalQuality
-    {
-        /// <summary>
-        /// Perfect interval.
-        /// </summary>
-        Perfect,
+    Perfect,
 
-        /// <summary>
-        /// Major interval.
-        /// </summary>
-        Major,
+    /// <summary>
+    /// Major interval.
+    /// </summary>
+    Major,
 
-        /// <summary>
-        /// Minor interval.
-        /// </summary>
-        Minor,
+    /// <summary>
+    /// Minor interval.
+    /// </summary>
+    Minor,
 
-        /// <summary>
-        /// Augmented interval.
-        /// </summary>
-        Augmented,
+    /// <summary>
+    /// Augmented interval.
+    /// </summary>
+    Augmented,
 
-        /// <summary>
-        /// Diminished interval.
-        /// </summary>
-        Diminished
-    }
+    /// <summary>
+    /// Diminished interval.
+    /// </summary>
+    Diminished
 }

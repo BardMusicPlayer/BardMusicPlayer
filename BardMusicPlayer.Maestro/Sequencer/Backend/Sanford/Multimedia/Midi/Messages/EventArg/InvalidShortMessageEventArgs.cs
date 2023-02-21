@@ -1,22 +1,21 @@
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
+
+public class InvalidShortMessageEventArgs : EventArgs
 {
-    public class InvalidShortMessageEventArgs : EventArgs
+    private int message;
+
+    public InvalidShortMessageEventArgs(int message)
     {
-        private int message;
+        this.message = message;
+    }
 
-        public InvalidShortMessageEventArgs(int message)
+    public int Message
+    {
+        get
         {
-            this.message = message;
-        }
-
-        public int Message
-        {
-            get
-            {
-                return message;
-            }
+            return message;
         }
     }
 }

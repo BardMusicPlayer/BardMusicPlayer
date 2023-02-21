@@ -1,8 +1,7 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+
+internal enum TempoMapLine
 {
-    internal enum TempoMapLine
-    {
-        Tempo,
-        TimeSignature
-    }
+    Tempo,
+    TimeSignature
 }

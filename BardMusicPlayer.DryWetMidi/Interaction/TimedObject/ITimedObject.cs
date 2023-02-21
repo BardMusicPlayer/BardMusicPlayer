@@ -1,27 +1,26 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
+
+/// <summary>
+/// Represents an object that has time.
+/// </summary>
+public interface ITimedObject
 {
+    #region Properties
+
     /// <summary>
-    /// Represents an object that has time.
+    /// Gets or sets the time of an object.
     /// </summary>
-    public interface ITimedObject
-    {
-        #region Properties
+    long Time { get; set; }
 
-        /// <summary>
-        /// Gets or sets the time of an object.
-        /// </summary>
-        long Time { get; set; }
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Methods
+    /// <summary>
+    /// Clones object by creating a copy of it.
+    /// </summary>
+    /// <returns>Copy of the object.</returns>
+    ITimedObject Clone();
 
-        /// <summary>
-        /// Clones object by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the object.</returns>
-        ITimedObject Clone();
-
-        #endregion
-    }
+    #endregion
 }

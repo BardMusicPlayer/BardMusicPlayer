@@ -2,97 +2,96 @@
 using BardMusicPlayer.DryWetMidi.Common;
 using Timer = System.Timers.Timer;
 
-namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator
+namespace BardMusicPlayer.DryWetMidi.Multimedia.Clock.TickGenerator;
+
+/// <summary>
+/// Tick generator which uses <see cref="System.Threading.Timer"/> for ticking.
+/// </summary>
+public sealed class RegularPrecisionTickGenerator : TickGenerator
 {
+    #region Constants
+
     /// <summary>
-    /// Tick generator which uses <see cref="System.Threading.Timer"/> for ticking.
+    /// The smallest possible interval.
     /// </summary>
-    public sealed class RegularPrecisionTickGenerator : TickGenerator
+    public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
+
+    /// <summary>
+    /// The largest possible interval.
+    /// </summary>
+    public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(int.MaxValue);
+
+    #endregion
+
+    #region Fields
+
+    private Timer _timer;
+    private bool _disposed = false;
+
+    #endregion
+
+    #region Overrides
+
+    /// <summary>
+    /// Starts a tick generator.
+    /// </summary>
+    /// <param name="interval">Interval between ticks.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="interval"/> is out of
+    /// [<see cref="MinInterval"/>; <see cref="MaxInterval"/>] range.</exception>
+    protected override void Start(TimeSpan interval)
     {
-        #region Constants
+        ThrowIfArgument.IsOutOfRange(nameof(interval),
+            interval,
+            MinInterval,
+            MaxInterval,
+            $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
 
-        /// <summary>
-        /// The smallest possible interval.
-        /// </summary>
-        public static readonly TimeSpan MinInterval = TimeSpan.FromMilliseconds(1);
+        _timer         =  new Timer(interval.TotalMilliseconds);
+        _timer.Elapsed += OnElapsed;
+        _timer.Start();
+    }
 
-        /// <summary>
-        /// The largest possible interval.
-        /// </summary>
-        public static readonly TimeSpan MaxInterval = TimeSpan.FromMilliseconds(int.MaxValue);
+    /// <summary>
+    /// Stops a tick generator.
+    /// </summary>
+    protected override void Stop()
+    {
+        _timer.Stop();
+    }
 
-        #endregion
+    #endregion
 
-        #region Fields
+    #region Methods
 
-        private Timer _timer;
-        private bool _disposed = false;
+    private void OnElapsed(object sender, ElapsedEventArgs e)
+    {
+        if (!IsRunning || _disposed)
+            return;
 
-        #endregion
+        GenerateTick();
+    }
 
-        #region Overrides
+    #endregion
 
-        /// <summary>
-        /// Starts a tick generator.
-        /// </summary>
-        /// <param name="interval">Interval between ticks.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="interval"/> is out of
-        /// [<see cref="MinInterval"/>; <see cref="MaxInterval"/>] range.</exception>
-        protected override void Start(TimeSpan interval)
-        {
-            ThrowIfArgument.IsOutOfRange(nameof(interval),
-                                         interval,
-                                         MinInterval,
-                                         MaxInterval,
-                                         $"Interval is out of [{MinInterval}, {MaxInterval}] range.");
+    #region IDisposable
 
-            _timer = new Timer(interval.TotalMilliseconds);
-            _timer.Elapsed += OnElapsed;
-            _timer.Start();
-        }
+    /// <summary>
+    /// Releases all resources used by the current tick generator.
+    /// </summary>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
 
-        /// <summary>
-        /// Stops a tick generator.
-        /// </summary>
-        protected override void Stop()
+        if (disposing && IsRunning)
         {
             _timer.Stop();
+            _timer.Elapsed -= OnElapsed;
+            _timer.Dispose();
         }
 
-        #endregion
-
-        #region Methods
-
-        private void OnElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (!IsRunning || _disposed)
-                return;
-
-            GenerateTick();
-        }
-
-        #endregion
-
-        #region IDisposable
-
-        /// <summary>
-        /// Releases all resources used by the current tick generator.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing && IsRunning)
-            {
-                _timer.Stop();
-                _timer.Elapsed -= OnElapsed;
-                _timer.Dispose();
-            }
-
-            _disposed = true;
-        }
-
-        #endregion
+        _disposed = true;
     }
+
+    #endregion
 }

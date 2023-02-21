@@ -1,23 +1,22 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.LengthedObject;
+
+/// <summary>
+/// Part of an <see cref="ILengthedObject"/>.
+/// </summary>
+public enum LengthedObjectPart
 {
     /// <summary>
-    /// Part of an <see cref="ILengthedObject"/>.
+    /// Start of an object.
     /// </summary>
-    public enum LengthedObjectPart
-    {
-        /// <summary>
-        /// Start of an object.
-        /// </summary>
-        Start,
+    Start,
 
-        /// <summary>
-        /// End of an object.
-        /// </summary>
-        End,
+    /// <summary>
+    /// End of an object.
+    /// </summary>
+    End,
 
-        /// <summary>
-        /// Entire object from its start to its end.
-        /// </summary>
-        Entire
-    }
+    /// <summary>
+    /// Entire object from its start to its end.
+    /// </summary>
+    Entire
 }

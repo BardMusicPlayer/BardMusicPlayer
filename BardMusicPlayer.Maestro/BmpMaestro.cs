@@ -6,49 +6,48 @@
 using BardMusicPlayer.Maestro.Sequencer;
 using System;
 
-namespace BardMusicPlayer.Maestro
+namespace BardMusicPlayer.Maestro;
+
+public partial class BmpMaestro
 {
-    public partial class BmpMaestro
+    private static readonly Lazy<BmpMaestro> LazyInstance = new(() => new BmpMaestro());
+    internal SequencerHandler _sequencerHandler;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool Started { get; private set; }
+
+    private BmpMaestro()
     {
-        private static readonly Lazy<BmpMaestro> LazyInstance = new(() => new BmpMaestro());
-        internal SequencerHandler _sequencerHandler;
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Started { get; private set; }
+    public static BmpMaestro Instance => LazyInstance.Value;
 
-        private BmpMaestro()
-        {
-        }
+    /// <summary>
+    /// Start Maestro.
+    /// </summary>
+    public void Start(SequencerType sequencerType)
+    {
+        if (Started) return;
+        _sequencerHandler = new SequencerHandler(sequencerType);
+        Started           = true;
+    }
 
-        public static BmpMaestro Instance => LazyInstance.Value;
+    /// <summary>
+    /// Stop Maestro.
+    /// </summary>
+    public void Stop()
+    {
+        if (!Started) return;
+        _sequencerHandler.Dispose();
+        Started = false;
+    }
 
-        /// <summary>
-        /// Start Maestro.
-        /// </summary>
-        public void Start(SequencerType sequencerType)
-        {
-            if (Started) return;
-            _sequencerHandler = new SequencerHandler(sequencerType);
-            Started = true;
-        }
-
-        /// <summary>
-        /// Stop Maestro.
-        /// </summary>
-        public void Stop()
-        {
-            if (!Started) return;
-            _sequencerHandler.Dispose();
-            Started = false;
-        }
-
-        ~BmpMaestro() => Dispose();
-        public void Dispose()
-        {
-            Stop();
-            GC.SuppressFinalize(this);
-        }
+    ~BmpMaestro() => Dispose();
+    public void Dispose()
+    {
+        Stop();
+        GC.SuppressFinalize(this);
     }
 }

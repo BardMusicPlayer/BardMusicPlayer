@@ -1,31 +1,30 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core.Lazy.Tokens;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Lazy
+namespace BardMusicPlayer.DryWetMidi.Core.Lazy;
+
+/// <summary>
+/// The type of a MIDI token.
+/// </summary>
+/// <seealso cref="MidiTokensReader"/>
+public enum MidiTokenType
 {
     /// <summary>
-    /// The type of a MIDI token.
+    /// A chunk's header. See <see cref="ChunkHeaderToken"/>.
     /// </summary>
-    /// <seealso cref="MidiTokensReader"/>
-    public enum MidiTokenType
-    {
-        /// <summary>
-        /// A chunk's header. See <see cref="ChunkHeaderToken"/>.
-        /// </summary>
-        ChunkHeader,
+    ChunkHeader,
 
-        /// <summary>
-        /// The data of a header chunk of a MIDI file. See <see cref="FileHeaderToken"/>.
-        /// </summary>
-        FileHeader,
+    /// <summary>
+    /// The data of a header chunk of a MIDI file. See <see cref="FileHeaderToken"/>.
+    /// </summary>
+    FileHeader,
 
-        /// <summary>
-        /// A MIDI event. See <see cref="MidiEventToken"/>.
-        /// </summary>
-        MidiEvent,
+    /// <summary>
+    /// A MIDI event. See <see cref="MidiEventToken"/>.
+    /// </summary>
+    MidiEvent,
 
-        /// <summary>
-        /// A bytes packet. See <see cref="BytesPacketToken"/>.
-        /// </summary>
-        BytesPacket
-    }
+    /// <summary>
+    /// A bytes packet. See <see cref="BytesPacketToken"/>.
+    /// </summary>
+    BytesPacket
 }
