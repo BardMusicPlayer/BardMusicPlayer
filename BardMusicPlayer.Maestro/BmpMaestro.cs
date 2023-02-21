@@ -3,8 +3,8 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Maestro.Sequencer;
 using System;
+using BardMusicPlayer.Maestro.Sequencer;
 
 namespace BardMusicPlayer.Maestro;
 
