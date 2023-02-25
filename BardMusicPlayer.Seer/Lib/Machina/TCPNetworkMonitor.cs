@@ -116,36 +116,20 @@ public class TCPNetworkMonitor : IDisposable
         _connectionManager.Cleanup();
     }
 
-    private void ProcessDataLoop(CancellationToken token)
+    private async Task ProcessDataLoop(CancellationToken token)
     {
         try
         {
             while (!token.IsCancellationRequested)
             {
-                try
-                {
-                    _connectionManager.Refresh();
-
-                    ProcessNetworkData();
-
-                }
-                catch (OperationCanceledException)
-                {
-
-                }
-                catch (Exception ex)
-                {
-                    if (DateTime.UtcNow.Subtract(_lastLoopError).TotalSeconds > 5)
-                        Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex.ToString(), "DEBUG-MACHINA");
-                    _lastLoopError = DateTime.UtcNow;
-                }
-
-                Task.Delay(30, token).Wait(token);
+                _connectionManager.Refresh();
+                ProcessNetworkData();
+                await Task.Delay(30, token);
             }
         }
         catch (OperationCanceledException)
         {
-
+            // Handle cancellation
         }
         catch (Exception ex)
         {
@@ -155,22 +139,18 @@ public class TCPNetworkMonitor : IDisposable
 
     private void ProcessNetworkData()
     {
-        byte[] tcpbuffer;
-        byte[] payloadBuffer;
-
-        for (int i = 0; i < _connectionManager.Connections.Count; i++)
+        foreach (var connection in _connectionManager.Connections)
         {
-            TCPConnection connection = _connectionManager.Connections[i];
+            using var socket = connection.Socket;
             CapturedData data;
-
-            while ((data = connection.Socket.Receive()).Size > 0)
+            while ((data = socket.Receive()).Size > 0)
             {
                 connection.IPDecoderSend.FilterAndStoreData(data.Buffer, data.Size);
-
+                byte[] tcpbuffer;
                 while ((tcpbuffer = connection.IPDecoderSend.GetNextIPPayload()) != null)
                 {
                     connection.TCPDecoderSend.FilterAndStoreData(tcpbuffer);
-                    while ((payloadBuffer = connection.TCPDecoderSend.GetNextTCPDatagram()) != null)
+                    while (connection.TCPDecoderSend.GetNextTCPDatagram() is { } payloadBuffer)
                         OnDataSent(connection, payloadBuffer);
                 }
 
@@ -178,7 +158,7 @@ public class TCPNetworkMonitor : IDisposable
                 while ((tcpbuffer = connection.IPDecoderReceive.GetNextIPPayload()) != null)
                 {
                     connection.TCPDecoderReceive.FilterAndStoreData(tcpbuffer);
-                    while ((payloadBuffer = connection.TCPDecoderReceive.GetNextTCPDatagram()) != null)
+                    while (connection.TCPDecoderReceive.GetNextTCPDatagram() is { } payloadBuffer)
                         OnDataReceived(connection, payloadBuffer);
                 }
             }
