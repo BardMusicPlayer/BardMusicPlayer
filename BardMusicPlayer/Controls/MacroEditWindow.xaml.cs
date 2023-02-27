@@ -13,12 +13,12 @@ public sealed partial class MacroEditWindow
     public MacroEditWindow(Macro macro)
     {
         InitializeComponent();
-        _macro                = macro;
-        MacroName.Text        = _macro.DisplayedText;
-        MacroFileName.Content = _macro.File;
+        Macro                 = macro;
+        MacroName.Text        = Macro.DisplayedText;
+        MacroFileName.Content = Macro.File;
     }
 
-    private Macro _macro { get; }
+    private Macro Macro { get; }
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
@@ -34,7 +34,7 @@ public sealed partial class MacroEditWindow
         if (!openFileDialog.FileName.ToLower().EndsWith(".bas", StringComparison.Ordinal))
             return;
 
-        _macro.File           = openFileDialog.FileName;
+        Macro.File            = openFileDialog.FileName;
         MacroFileName.Content = openFileDialog.FileName;
     }
 
@@ -45,6 +45,6 @@ public sealed partial class MacroEditWindow
     
     private void MacroName_TextChanged(object sender, TextChangedEventArgs e)
     {
-        _macro.DisplayedText = MacroName.Text;
+        Macro.DisplayedText = MacroName.Text;
     }
 }

@@ -16,7 +16,7 @@ public partial class MainWindow
         InitializeComponent();
 
         Title              = "BardMusicPlayer BETA Version: 2.X-CUSTOM";
-        DataContext        = new Classic_MainView();
+        DataContext        = new ClassicMainView();
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
         Height             = 738;

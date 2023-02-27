@@ -10,7 +10,7 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public sealed partial class OctaveNumericUpDown
 {
-    public EventHandler<int> OnValueChanged;
+    public EventHandler<int>? OnValueChanged;
 
     public OctaveNumericUpDown()
     {
@@ -42,7 +42,8 @@ public sealed partial class OctaveNumericUpDown
 
     /* Track UP/Down */
     private int _numValue;
-    public int NumValue
+
+    private int NumValue
     {
         get => _numValue;
         set
@@ -80,11 +81,13 @@ public sealed partial class OctaveNumericUpDown
         if (Text == null)
             return;
 
-        var str = Regex.Replace(Text.Text, @"[^\d|\.\-]", "");
+        var str = MyRegex().Replace(Text.Text, "");
         if (int.TryParse(str, out var val))
         {
             NumValue = val;
         }
     }
 
+    [GeneratedRegex("[^\\d|\\.\\-]")]
+    private static partial Regex MyRegex();
 }

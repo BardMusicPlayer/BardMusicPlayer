@@ -10,22 +10,22 @@ using BardMusicPlayer.Siren;
 namespace BardMusicPlayer.UI_Classic;
 
 /// <summary>
-/// Interaction logic for Classic_MainView.xaml
+/// Interaction logic for ClassicMainView.xaml
 /// </summary>
-public partial class Classic_MainView
+public partial class ClassicMainView
 {
-    private int MaxTracks = 1;
-    private bool _directLoaded { get; set; } //indicates if a song was loaded directly or from playlist
+    private int _maxTracks = 1;
+    private bool DirectLoaded { get; set; } //indicates if a song was loaded directly or from playlist
     //private NetworkPlayWindow _networkWindow = null;
-    public static Classic_MainView CurrentInstance { get; private set; }
-    public Classic_MainView()
+    public static ClassicMainView? CurrentInstance { get; private set; }
+    public ClassicMainView()
     {
         InitializeComponent();
         CurrentInstance = this;
         //Always start with the playlists
         _showingPlaylists = true;
         //Fill the list
-        Playlist_Header.Header             =  "Playlists";
+        PlaylistHeader.Header              =  "Playlists";
         PlaylistContainer.ItemsSource      =  BmpCoffer.Instance.GetPlaylistNames();
         PlaylistContainer.SelectionChanged += PlaylistContainer_SelectionChanged;
 
@@ -37,7 +37,7 @@ public partial class Classic_MainView
         BmpMaestro.Instance.OnPlaybackStopped      += Instance_PlaybackStopped;
         BmpMaestro.Instance.OnTrackNumberChanged   += Instance_TrackNumberChanged;
         BmpMaestro.Instance.OnOctaveShiftChanged   += Instance_OctaveShiftChanged;
-        Siren_Volume.Value                         =  BmpSiren.Instance.GetVolume();
+        SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
 
@@ -45,7 +45,7 @@ public partial class Classic_MainView
         LoadConfig();
     }
 
-    private void Globals_OnConfigReload(object sender, EventArgs e)
+    private void Globals_OnConfigReload(object? sender, EventArgs e)
     {
         LoadConfig(true);
     }
@@ -56,37 +56,37 @@ public partial class Classic_MainView
     }
 
     #region EventHandler
-    private void Instance_PlaybackTimeChanged(object sender, CurrentPlayPositionEvent e)
+    private void Instance_PlaybackTimeChanged(object? sender, CurrentPlayPositionEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => PlaybackTimeChanged(e)));
     }
 
-    private void Instance_PlaybackMaxTime(object sender, MaxPlayTimeEvent e)
+    private void Instance_PlaybackMaxTime(object? sender, MaxPlayTimeEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => PlaybackMaxTime(e)));
     }
 
-    private void Instance_OnSongLoaded(object sender, SongLoadedEvent e)
+    private void Instance_OnSongLoaded(object? sender, SongLoadedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => OnSongLoaded(e)));
     }
 
-    private void Instance_PlaybackStarted(object sender, bool e)
+    private void Instance_PlaybackStarted(object? sender, bool e)
     {
         Dispatcher.BeginInvoke(new Action(PlaybackStarted));
     }
 
-    private void Instance_PlaybackStopped(object sender, bool e)
+    private void Instance_PlaybackStopped(object? sender, bool e)
     {
         Dispatcher.BeginInvoke(new Action(PlaybackStopped));
     }
 
-    private void Instance_TrackNumberChanged(object sender, TrackNumberChangedEvent e)
+    private void Instance_TrackNumberChanged(object? sender, TrackNumberChangedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => TrackNumberChanged(e)));
     }
 
-    private void Instance_OctaveShiftChanged(object sender, OctaveShiftChangedEvent e)
+    private void Instance_OctaveShiftChanged(object? sender, OctaveShiftChangedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => OctaveShiftChanged(e)));
     }
@@ -98,23 +98,23 @@ public partial class Classic_MainView
 
     private void PlaybackTimeChanged(CurrentPlayPositionEvent e)
     {
-        var Seconds = e.timeSpan.Seconds.ToString();
-        var Minutes = e.timeSpan.Minutes.ToString();
-        var time = (Minutes.Length == 1 ? "0" + Minutes : Minutes) + ":" + (Seconds.Length == 1 ? "0" + Seconds : Seconds);
+        var seconds = e.timeSpan.Seconds.ToString();
+        var minutes = e.timeSpan.Minutes.ToString();
+        var time = (minutes.Length == 1 ? "0" + minutes : minutes) + ":" + (seconds.Length == 1 ? "0" + seconds : seconds);
         ElapsedTime.Content = time;
 
-        if (!_Playbar_dragStarted)
-            Playbar_Slider.Value = e.tick;
+        if (!_playBarDragStarted)
+            PlayBarSlider.Value = e.tick;
     }
 
     private void PlaybackMaxTime(MaxPlayTimeEvent e)
     {
-        var Seconds = e.timeSpan.Seconds.ToString();
-        var Minutes = e.timeSpan.Minutes.ToString();
-        var time = (Minutes.Length == 1 ? "0" + Minutes : Minutes) + ":" + (Seconds.Length == 1 ? "0" + Seconds : Seconds);
+        var seconds = e.timeSpan.Seconds.ToString();
+        var minutes = e.timeSpan.Minutes.ToString();
+        var time = (minutes.Length == 1 ? "0" + minutes : minutes) + ":" + (seconds.Length == 1 ? "0" + seconds : seconds);
         TotalTime.Content = time;
 
-        Playbar_Slider.Maximum = e.tick;
+        PlayBarSlider.Maximum = e.tick;
 
     }
 
@@ -123,32 +123,32 @@ public partial class Classic_MainView
         //Statistics update
         UpdateStats(e);
         //update heatmap
-        KeyHeat.initUI(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
+        KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
 
-        if (PlaybackFunctions.PlaybackState != PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+        if (PlaybackFunctions.PlaybackState != PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
             Play_Button_State();
 
-        MaxTracks = e.MaxTracks;
-        if (NumValue <= MaxTracks)
+        _maxTracks = e.MaxTracks;
+        if (NumValue <= _maxTracks)
             return;
-        NumValue = MaxTracks;
+        NumValue = _maxTracks;
 
-        BmpMaestro.Instance.SetTracknumberOnHost(MaxTracks);
+        BmpMaestro.Instance.SetTracknumberOnHost(_maxTracks);
     }
 
-    public void PlaybackStarted()
+    private void PlaybackStarted()
     {
-        PlaybackFunctions.PlaybackState = PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING;
+        PlaybackFunctions.PlaybackState = PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying;
         Play_Button_State(true);
     }
 
-    public void PlaybackStopped()
+    private void PlaybackStopped()
     {
         PlaybackFunctions.StopSong();
         Play_Button_State();
 
         //if this wasn't a song from the playlist, do nothing
-        if (_directLoaded)
+        if (DirectLoaded)
             return;
 
         if (_autoPlay)
@@ -168,14 +168,14 @@ public partial class Classic_MainView
             }
             else
             {
-                playNextSong();
+                PlayNextSong();
                 PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
                 Play_Button_State(true);
             }
         }
     }
 
-    public void TrackNumberChanged(TrackNumberChangedEvent e)
+    private void TrackNumberChanged(TrackNumberChangedEvent e)
     {
         if (e.IsHost)
         {
@@ -184,7 +184,7 @@ public partial class Classic_MainView
         }
     }
 
-    public void OctaveShiftChanged(OctaveShiftChangedEvent e)
+    private void OctaveShiftChanged(OctaveShiftChangedEvent e)
     {
         if (e.IsHost)
             OctaveNumValue = e.OctaveShift;
@@ -193,22 +193,23 @@ public partial class Classic_MainView
 
     #region Track UP/Down
     private int _numValue = 1;
-    public int NumValue
+
+    private int NumValue
     {
         get => _numValue;
         set
         {
-            _numValue         = value;
-            track_txtNum.Text = "t" + value;
+            _numValue        = value;
+            TrackTxtNum.Text = "t" + value;
 
             //update heatmap
-            KeyHeat.initUI(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
+            KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         }
     }
     private void track_cmdUp_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue == MaxTracks)
+        if (NumValue == _maxTracks)
             return;
         NumValue++;
         BmpMaestro.Instance.SetTracknumberOnHost(NumValue);
@@ -224,14 +225,14 @@ public partial class Classic_MainView
 
     private void track_txtNum_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (track_txtNum == null)
+        if (TrackTxtNum == null)
             return;
 
-        if (int.TryParse(track_txtNum.Text.Replace("t", ""), out _numValue))
+        if (int.TryParse(TrackTxtNum.Text.Replace("t", ""), out _numValue))
         {
-            if (_numValue < 0 || _numValue > MaxTracks)
+            if (_numValue < 0 || _numValue > _maxTracks)
                 return;
-            track_txtNum.Text = "t" + _numValue;
+            TrackTxtNum.Text = "t" + _numValue;
             BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
         }
     }
@@ -252,15 +253,16 @@ public partial class Classic_MainView
     #endregion
 
     #region Octave UP/Down
-    private int _octavenumValue = 1;
-    public int OctaveNumValue
+    private int _octaveNumValue = 1;
+
+    private int OctaveNumValue
     {
-        get => _octavenumValue;
+        get => _octaveNumValue;
         set
         {
-            _octavenumValue    = value;
-            octave_txtNum.Text = @"ø" + value;
-            KeyHeat.initUI(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
+            _octaveNumValue   = value;
+            OctaveTxtNum.Text = @"ø" + value;
+            KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
         }
     }
     private void octave_cmdUp_Click(object sender, RoutedEventArgs e)
@@ -277,13 +279,13 @@ public partial class Classic_MainView
 
     private void octave_txtNum_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (octave_txtNum == null)
+        if (OctaveTxtNum == null)
             return;
 
-        if (int.TryParse(octave_txtNum.Text.Replace(@"ø", ""), out _octavenumValue))
+        if (int.TryParse(OctaveTxtNum.Text.Replace(@"ø", ""), out _octaveNumValue))
         {
-            octave_txtNum.Text = @"ø" + _octavenumValue;
-            BmpMaestro.Instance.SetOctaveshiftOnHost(_octavenumValue);
+            OctaveTxtNum.Text = @"ø" + _octaveNumValue;
+            BmpMaestro.Instance.SetOctaveshiftOnHost(_octaveNumValue);
         }
     }
     private void octave_txtNum_KeyUp(object sender, KeyEventArgs e)
@@ -303,7 +305,7 @@ public partial class Classic_MainView
 
     private void Macro_Button_Click(object sender, RoutedEventArgs e)
     {
-        var macroLaunchpad = new MacroLaunchpad
+        var _ = new MacroLaunchpad
         {
             Visibility = Visibility.Visible
         };
@@ -312,13 +314,13 @@ public partial class Classic_MainView
     /// <summary>
     /// triggered by the song browser if a file should be loaded
     /// </summary>
-    private void Instance_SongBrowserLoadedSong(object sender, string filename)
+    private void Instance_SongBrowserLoadedSong(object? sender, string? filename)
     {
         if (PlaybackFunctions.LoadSong(filename))
         {
             SongName.Text          = PlaybackFunctions.GetSongName();
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-            _directLoaded          = true;
+            DirectLoaded           = true;
         }
     }
 }

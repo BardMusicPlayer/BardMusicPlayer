@@ -8,13 +8,13 @@ namespace BardMusicPlayer.Functions;
 
 public class SongContainer
 {
-    public string Name { get; set; } = "";
-    public byte[] Data { get; set; }
+    public string Name { get; init; } = "";
+    public byte[]? Data { get; init; }
 }
 
 public static class JsonPlaylist
 {
-    public static List<SongContainer> Load(string filename)
+    public static List<SongContainer>? Load(string filename)
     {
         var memoryStream = new MemoryStream();
         var compressedFileStream = File.Open(filename, FileMode.Open);
@@ -43,11 +43,11 @@ public static class JsonPlaylist
 
 public static class PlaylistImporter
 {
-    static List<KeyValuePair<string, string>> songs_url = new();
+    private static readonly List<KeyValuePair<string, string>> SongsUrl = new();
     public static void ImportPlaylist()
     {
         var httpClient = new HttpClient();
-        const string publicFolderId = "1M1mU2ZxMgxz0_S274gf1oKLrea3AX_4Q";
+        const string publicFolderId = "";
         const string nextPageToken = "";
         do
         {
@@ -68,22 +68,22 @@ public static class PlaylistImporter
                 if (data.Contains("<path fill=\"none\""))
                     continue;
 
-                if (data.Contains("jsdata"))
+                if (data.Contains("JSData"))
                 {
                     var name = data.Split('"')[1];
-                    var path = data.Split(new[] { "jsdata" }, StringSplitOptions.RemoveEmptyEntries)[1].Split(';')[3];
-                    songs_url.Add(new KeyValuePair<string, string>(name, path));
+                    var path = data.Split(new[] { "JSData" }, StringSplitOptions.RemoveEmptyEntries)[1].Split(';')[3];
+                    SongsUrl.Add(new KeyValuePair<string, string>(name, path));
                     Console.WriteLine(data);
                 }
             }
-            Console.WriteLine(songs_url.ToString());
+            Console.WriteLine(SongsUrl.ToString());
         } while (!string.IsNullOrEmpty(nextPageToken));
         httpClient.Dispose();
     }
 
     public static byte[] DownloadFile(string name)
     {
-        var foundSong = songs_url.Find(x => x.Key.ToLower().Contains(name.ToLower()));
+        var foundSong = SongsUrl.Find(x => x.Key.ToLower().Contains(name.ToLower()));
 
         var httpClient = new HttpClient();
         var file = httpClient.GetByteArrayAsync("https://drive.google.com/uc?export=download&id=" + foundSong.Value).Result;

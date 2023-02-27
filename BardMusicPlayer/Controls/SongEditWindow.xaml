@@ -23,10 +23,10 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Label Grid.Row="1" Grid.Column="1" Content="Internal track name:" />
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="Internal_TrackName" Text="" IsReadOnly="True" Padding="5" />
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="InternalTrackName" Text="" IsReadOnly="True" Padding="5" />
         <Button Grid.Row="3" Grid.Column="1" Content="Copy internal to displayed" Click="CopyI_D_Click" />
         <Label Grid.Row="4" Grid.Column="1" Content="Displayed track name:" />
-        <TextBox Grid.Row="5" Grid.Column="1" x:Name="Displayed_TrackName" Text="" Padding="5" />
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="DisplayedTrackName" Text="" Padding="5" />
         <Grid Grid.Row="7" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />

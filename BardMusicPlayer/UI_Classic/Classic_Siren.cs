@@ -14,17 +14,17 @@ namespace BardMusicPlayer.UI_Classic;
 
 public sealed class LyricsContainer
 {
-    public LyricsContainer(DateTime t, string l) { time = t; line = l; }
-    public DateTime time { get; set; }
-    public string line { get; set; }
+    public LyricsContainer(DateTime t, string l) { Time = t; Line = l; }
+    public DateTime Time { get; set; }
+    public string Line { get; set; }
 }
 
 /// <summary>
-/// Interaction logic for Classic_MainView.xaml
+/// Interaction logic for ClassicMainView.xaml
 /// </summary>
-public sealed partial class Classic_MainView
+public sealed partial class ClassicMainView
 {
-    ObservableCollection<LyricsContainer> lyricsData = new();
+    private readonly ObservableCollection<LyricsContainer> _lyricsData = new();
 
     /// <summary>
     /// load button
@@ -33,21 +33,21 @@ public sealed partial class Classic_MainView
     /// <param name="e"></param>
     private void Siren_Load_Click(object sender, RoutedEventArgs e)
     {
-        Siren_VoiceCount.Content = 0;
-        BmpSong CurrentSong;
+        SirenVoiceCount.Content = 0;
+        BmpSong? currentSong;
         if (PlaylistContainer.SelectedItem is not string song)
         {
-            CurrentSong = Siren_LoadMidiFile();
-            if (CurrentSong == null)
+            currentSong = Siren_LoadMidiFile();
+            if (currentSong == null)
                 return;
-            IsPlaying               = false;
-            Siren_PlayPause.Content = "Play";
+            IsPlaying              = false;
+            SirenPlayPause.Content = "Play";
         }
         else if (_currentPlaylist != null)
         {
-            CurrentSong             = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, song);
-            IsPlaying               = false;
-            Siren_PlayPause.Content = "Play";
+            currentSong            = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, song);
+            IsPlaying              = false;
+            SirenPlayPause.Content = "Play";
         }
         else
         {
@@ -55,15 +55,19 @@ public sealed partial class Classic_MainView
             return;
         }
 
-        _                      = BmpSiren.Instance.Load(CurrentSong);
-        Siren_SongName.Content = BmpSiren.Instance.CurrentSongTitle;
+        _                     = BmpSiren.Instance.Load(currentSong);
+        SirenSongName.Content = BmpSiren.Instance.CurrentSongTitle;
 
         //Fill the lyrics editor
-        lyricsData.Clear();
-        foreach (var line in CurrentSong.LyricsContainer)
-            lyricsData.Add(new LyricsContainer(line.Key, line.Value));
-        Siren_Lyrics.DataContext = lyricsData;
-        Siren_Lyrics.Items.Refresh();
+        _lyricsData.Clear();
+        if (currentSong != null)
+        {
+            foreach (var line in currentSong.LyricsContainer)
+                _lyricsData.Add(new LyricsContainer(line.Key, line.Value));
+        }
+
+        SirenLyrics.DataContext = _lyricsData;
+        SirenLyrics.Items.Refresh();
     }
 
     
@@ -81,36 +85,38 @@ public sealed partial class Classic_MainView
             if (IsPlaying)
             {
                 BmpSiren.Instance.Pause();
-                IsPlaying               = false;
-                Siren_PlayPause.Content = "Play";
+                IsPlaying              = false;
+                SirenPlayPause.Content = "Play";
             }
             else
             {
                 BmpSiren.Instance.Play();
-                IsPlaying               = true;
-                Siren_PlayPause.Content = "Pause";
+                IsPlaying              = true;
+                SirenPlayPause.Content = "Pause";
             }
         }
     }
-
-
 
     private void Siren_Pause_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton == MouseButton.Right)
         {
-            var curr = new DateTime(1, 1, 1).AddMilliseconds(Siren_Position.Value);
-            if (Siren_Lyrics.SelectedIndex == -1)
+            var curr = new DateTime(1, 1, 1).AddMilliseconds(SirenPosition.Value);
+            if (SirenLyrics.SelectedIndex == -1)
                 return;
 
-            var idx = Siren_Lyrics.SelectedIndex;
-            var t = lyricsData[idx];
-            lyricsData.RemoveAt(idx);
-            t.time = curr;
-            lyricsData.Insert(idx, t);
+            var idx = SirenLyrics.SelectedIndex;
+            var t = _lyricsData[idx];
+            _lyricsData.RemoveAt(idx);
+            t.Time = curr;
+            _lyricsData.Insert(idx, t);
 
-            Siren_Lyrics.DataContext = lyricsData;
-            Siren_Lyrics.Items.Refresh();
+            // Use the Dispatcher to schedule the refresh
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SirenLyrics.DataContext = _lyricsData;
+                SirenLyrics.Items.Refresh();
+            }));
         }
     }
 
@@ -125,15 +131,15 @@ public sealed partial class Classic_MainView
             return;
 
         BmpSiren.Instance.Stop();
-        IsPlaying               = false;
-        Siren_PlayPause.Content = "Play";
+        IsPlaying              = false;
+        SirenPlayPause.Content = "Play";
     }
 
     /// <summary>
     /// opens a file selector box and loads the selected song 
     /// </summary>
     /// <returns>BmpSong</returns>
-    private static BmpSong Siren_LoadMidiFile()
+    private static BmpSong? Siren_LoadMidiFile()
     {
         var openFileDialog = new OpenFileDialog
         {
@@ -174,37 +180,37 @@ public sealed partial class Classic_MainView
         if (currentTime >= endTime)
         {
             BmpSiren.Instance.Stop();
-            IsPlaying               = false;
-            Siren_PlayPause.Content = "Play";
+            IsPlaying              = false;
+            SirenPlayPause.Content = "Play";
         }
 
-        Siren_VoiceCount.Content = activeVoices.ToString();
+        SirenVoiceCount.Content = activeVoices.ToString();
 
         TimeSpan t;
-        const float tolerance = 0.0001f;                            // define a small tolerance value
-        if (Math.Abs(Siren_Position.Maximum - endTime) > tolerance) // use tolerance to compare values
+        const float tolerance = 0.0001f;                           // define a small tolerance value
+        if (Math.Abs(SirenPosition.Maximum - endTime) > tolerance) // use tolerance to compare values
         {
-            Siren_Position.Maximum   = endTime;
-            t                        = TimeSpan.FromMilliseconds(endTime);
-            Siren_TimeLapsed.Content = $"{t.Minutes:D2}:{t.Seconds:D2}";
+            SirenPosition.Maximum   = endTime;
+            t                       = TimeSpan.FromMilliseconds(endTime);
+            SirenTimeLapsed.Content = $"{t.Minutes:D2}:{t.Seconds:D2}";
         }
 
-        t                  = TimeSpan.FromMilliseconds(currentTime);
-        Siren_Time.Content = $"{t.Minutes:D2}:{t.Seconds:D2}";
-        if (!_Siren_Playbar_dragStarted)
-            Siren_Position.Value = currentTime;
+        t                 = TimeSpan.FromMilliseconds(currentTime);
+        SirenTime.Content = $"{t.Minutes:D2}:{t.Seconds:D2}";
+        if (!_sirenPlayBarDragStarted)
+            SirenPosition.Value = currentTime;
 
         //Set the lyrics progress
-        if (Siren_Lyrics.Items.Count > 0)
+        if (SirenLyrics.Items.Count > 0)
         {
-            var ret = Siren_Lyrics.Items.Cast<LyricsContainer>().ToList();
+            var ret = SirenLyrics.Items.Cast<LyricsContainer>().ToList();
             var idx = -1 + ret
-                .Select(dt => new TimeSpan(0, dt.time.Hour, dt.time.Minute, dt.time.Second, dt.time.Millisecond))
+                .Select(dt => new TimeSpan(0, dt.Time.Hour, dt.Time.Minute, dt.Time.Second, dt.Time.Millisecond))
                 .TakeWhile(ts => ts < t).Count();
 
-            Siren_Lyrics.SelectedIndex = idx;
-            if (Siren_Lyrics.SelectedItem != null)
-                Siren_Lyrics.ScrollIntoView(Siren_Lyrics.SelectedItem);
+            SirenLyrics.SelectedIndex = idx;
+            if (SirenLyrics.SelectedItem != null)
+                SirenLyrics.ScrollIntoView(SirenLyrics.SelectedItem);
         }
     }
 
@@ -213,57 +219,57 @@ public sealed partial class Classic_MainView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Siren_Playbar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) { }
+    private void Siren_PlayBar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) { }
 
     /// <summary>
     /// DragStarted, to indicate the slider has moved by user
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Siren_Playbar_Slider_DragStarted(object sender, DragStartedEventArgs e)
+    private void Siren_PlayBar_Slider_DragStarted(object sender, DragStartedEventArgs e)
     {
-        _Siren_Playbar_dragStarted = true;
+        _sirenPlayBarDragStarted = true;
     }
 
     /// <summary>
-    /// Drag action for the playbar
+    /// Drag action for the play bar
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Siren_Playbar_Slider_DragCompleted(object sender, DragCompletedEventArgs e)
+    private void Siren_PlayBar_Slider_DragCompleted(object sender, DragCompletedEventArgs e)
     {
-        BmpSiren.Instance.SetPosition((int)Siren_Position.Value);
-        _Siren_Playbar_dragStarted = false;
+        BmpSiren.Instance.SetPosition((int)SirenPosition.Value);
+        _sirenPlayBarDragStarted = false;
     }
 
     private void Siren_Lyrics_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var curr = new DateTime(1, 1, 1).AddMilliseconds(Siren_Position.Value);
+        var curr = new DateTime(1, 1, 1).AddMilliseconds(SirenPosition.Value);
         switch (e.ChangedButton)
         {
-            case MouseButton.Middle when Siren_Lyrics.SelectedIndex == -1:
+            case MouseButton.Middle when SirenLyrics.SelectedIndex == -1:
                 return;
             case MouseButton.Middle:
             {
-                var idx = Siren_Lyrics.SelectedIndex;
-                var t = lyricsData[idx];
-                lyricsData.RemoveAt(idx);
-                t.time = curr;
-                lyricsData.Insert(idx, t);
+                var idx = SirenLyrics.SelectedIndex;
+                var t = _lyricsData[idx];
+                _lyricsData.RemoveAt(idx);
+                t.Time = curr;
+                _lyricsData.Insert(idx, t);
                 break;
             }
-            case MouseButton.Right when Siren_Lyrics.SelectedIndex == -1:
-                lyricsData.Insert(0, new LyricsContainer(curr, ""));
+            case MouseButton.Right when SirenLyrics.SelectedIndex == -1:
+                _lyricsData.Insert(0, new LyricsContainer(curr, ""));
                 break;
             case MouseButton.Right:
-                lyricsData.Insert(Siren_Lyrics.SelectedIndex + 1, new LyricsContainer(curr, ""));
+                _lyricsData.Insert(SirenLyrics.SelectedIndex + 1, new LyricsContainer(curr, ""));
                 break;
             default:
                 return;
         }
 
-        Siren_Lyrics.CommitEdit();
-        Siren_Lyrics.DataContext = lyricsData;
+        SirenLyrics.CommitEdit();
+        SirenLyrics.DataContext = _lyricsData;
     }
 
     private void Siren_Lyrics_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e) { }
@@ -298,23 +304,20 @@ public sealed partial class Classic_MainView
             file.WriteLine("[ve:" + Assembly.GetExecutingAssembly().GetName().Version + "]");
 
             // show an error message or take some other appropriate action
-            foreach (var l in lyricsData)
+            foreach (var l in _lyricsData)
             {
-                file.WriteLine("[" + l.time.Minute + ":"
-                               + l.time.Second + "."
-                               + l.time.Millisecond + "]"
-                               + l.line);
+                file.WriteLine("[" + l.Time.Minute + ":"
+                               + l.Time.Second + "."
+                               + l.Time.Millisecond + "]"
+                               + l.Line);
             }
 
             file.Close();
 
             BmpSiren.Instance.CurrentSong.LyricsContainer.Clear();
-            foreach (var l in lyricsData)
+            foreach (var l in _lyricsData)
             {
-                if (!BmpSiren.Instance.CurrentSong.LyricsContainer.ContainsKey(l.time))
-                {
-                    BmpSiren.Instance.CurrentSong.LyricsContainer.Add(l.time, l.line);
-                }
+                BmpSiren.Instance.CurrentSong.LyricsContainer.TryAdd(l.Time, l.Line);
             }
         }
     }

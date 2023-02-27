@@ -6,32 +6,32 @@ using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.UI_Classic;
 
-public partial class Classic_MainView
+public partial class ClassicMainView
 {
     /// <summary>
     /// load the settings
     /// </summary>
     private void LoadConfig(bool reload = false)
     {
-        AutoPlay_CheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
+        AutoPlayCheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
 
         //Playback
-        HoldNotesBox.IsChecked        = BmpPigeonhole.Instance.HoldNotes;
-        ForcePlaybackBox.IsChecked    = BmpPigeonhole.Instance.ForcePlayback;
-        IgnoreProgChangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
+        HoldNotesBox.IsChecked           = BmpPigeonhole.Instance.HoldNotes;
+        ForcePlaybackBox.IsChecked       = BmpPigeonhole.Instance.ForcePlayback;
+        IgnoreProgramChangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
 
         //Don't call this on reload
         if (!reload)
         {
-            MIDI_Input_DeviceBox.Items.Clear();
-            MIDI_Input_DeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
-            MIDI_Input_DeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
+            MidiInputDeviceBox.Items.Clear();
+            MidiInputDeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
+            MidiInputDeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
         }
         LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
         //Misc
-        Autostart_source.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-        AutoequipDalamud.IsChecked     = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
+        AutostartSource.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
+        HypnotoadBox.IsChecked        = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
@@ -53,14 +53,14 @@ public partial class Classic_MainView
         BmpPigeonhole.Instance.ForcePlayback = ForcePlaybackBox.IsChecked ?? false;
     }
     
-    private void IgnoreProgChangeBox_Checked(object sender, RoutedEventArgs e)
+    private void IgnoreProgramChangeBox_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgChangeBox.IsChecked ?? false;
+        BmpPigeonhole.Instance.IgnoreProgChange = IgnoreProgramChangeBox.IsChecked ?? false;
     }
     
     private void MIDI_Input_Device_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var d = (KeyValuePair<int, string>)MIDI_Input_DeviceBox.SelectedItem;
+        var d = (KeyValuePair<int, string>)MidiInputDeviceBox.SelectedItem;
         BmpPigeonhole.Instance.MidiInputDev = d.Key;
         if (d.Key == -1)
         {
@@ -78,15 +78,15 @@ public partial class Classic_MainView
     #endregion
 
     #region Misc
-    private void Autostart_source_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void Autostart_Source_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var d = Autostart_source.SelectedIndex;
+        var d = AutostartSource.SelectedIndex;
         BmpPigeonhole.Instance.AutostartMethod = d;
     }
 
-    private void AutoequipDalamud_Checked(object sender, RoutedEventArgs e)
+    private void Hypnotoad_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = AutoequipDalamud.IsChecked ?? false;
+        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = HypnotoadBox.IsChecked ?? false;
     }
     #endregion
 

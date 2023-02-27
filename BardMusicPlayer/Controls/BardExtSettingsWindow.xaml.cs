@@ -13,46 +13,46 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public sealed partial class BardExtSettingsWindow
 {
-    private Performer _performer;
-    private List<CheckBox> _cpuBoxes = new();
+    private readonly Performer? _performer;
+    private readonly List<CheckBox> _cpuBoxes = new();
 
-    public BardExtSettingsWindow(Performer performer)
+    public BardExtSettingsWindow(Performer? performer)
     {
         _performer = performer;
         InitializeComponent();
-        Title = "Settings for: " + _performer.PlayerName;
+        Title = "Settings for: " + _performer?.PlayerName;
 
-        Songtitle_Post_Type.SelectedIndex = 0;
-        Songtitle_Chat_Type.SelectedIndex = 0;
-        Chat_Type.SelectedIndex           = 0;
+        SongTitlePostType.SelectedIndex = 0;
+        SongTitleChatType.SelectedIndex = 0;
+        ChatType.SelectedIndex          = 0;
 
         //Get the values for the song parsing bard
         var tpBard = BmpMaestro.Instance.GetSongTitleParsingBard();
         if (tpBard.Value != null)
         {
-            if (tpBard.Value.game.Pid == _performer.game.Pid)
+            if (_performer != null && tpBard.Value.game.Pid == _performer.game.Pid)
             {
-                Songtitle_Chat_Prefix.Text = tpBard.Key.prefix;
+                SongTitleChatPrefix.Text = tpBard.Key.prefix;
 
                 if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Say.ChannelCode)
-                    Songtitle_Chat_Type.SelectedIndex = 0;
+                    SongTitleChatType.SelectedIndex = 0;
                 else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Yell.ChannelCode)
-                    Songtitle_Chat_Type.SelectedIndex = 1;
+                    SongTitleChatType.SelectedIndex = 1;
                 else if (tpBard.Key.channelType.ChannelCode == ChatMessageChannelType.Party.ChannelCode)
-                    Songtitle_Chat_Type.SelectedIndex = 2;
+                    SongTitleChatType.SelectedIndex = 2;
 
-                Songtitle_Post_Type.SelectedIndex = tpBard.Key.channelType.Equals(ChatMessageChannelType.None) ? 0 : 1;
+                SongTitlePostType.SelectedIndex = tpBard.Key.channelType.Equals(ChatMessageChannelType.None) ? 0 : 1;
             }
         }
 
-        Lyrics_TrackNr.Value = performer.SingerTrackNr.ToString();
-        GfxTest.IsChecked    = _performer.game.GfxSettingsLow;
-        PopulateCPUTab();
+        LyricsTrackNr.Value = performer?.SingerTrackNr.ToString();
+        GfxTest.IsChecked   = _performer?.game.GfxSettingsLow;
+        PopulateCpuTab();
     }
 
     private void SongTitle_Post_Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var chanType = Songtitle_Chat_Type.SelectedIndex switch
+        var chanType = SongTitleChatType.SelectedIndex switch
         {
             0 => ChatMessageChannelType.Say,
             1 => ChatMessageChannelType.Yell,
@@ -60,23 +60,23 @@ public sealed partial class BardExtSettingsWindow
             _ => ChatMessageChannelType.None
         };
 
-        switch (Songtitle_Post_Type.SelectedIndex)
+        switch (SongTitlePostType.SelectedIndex)
         {
             case 0:
                 BmpMaestro.Instance.SetSongTitleParsingBard(ChatMessageChannelType.None, "", null);
                 break;
             case 1:
-                BmpMaestro.Instance.SetSongTitleParsingBard(chanType, Songtitle_Chat_Prefix.Text, _performer);
+                BmpMaestro.Instance.SetSongTitleParsingBard(chanType, SongTitleChatPrefix.Text, _performer);
                 break;
         }
     }
 
     private void PostSongTitle_Click(object sender, RoutedEventArgs e)
     {
-        if (_performer.SongName == "")
+        if (_performer?.SongName == "")
             return;
 
-        var chanType = Songtitle_Chat_Type.SelectedIndex switch
+        var chanType = SongTitleChatType.SelectedIndex switch
         {
             0 => ChatMessageChannelType.Say,
             1 => ChatMessageChannelType.Yell,
@@ -84,9 +84,9 @@ public sealed partial class BardExtSettingsWindow
             _ => ChatMessageChannelType.None
         };
 
-        if (_performer.SongName != null)
+        if (_performer?.SongName != null)
         {
-            var songName = $"{Songtitle_Chat_Prefix.Text} {_performer.SongName} {Songtitle_Chat_Prefix.Text}";
+            var songName = $"{SongTitleChatPrefix.Text} {_performer.SongName} {SongTitleChatPrefix.Text}";
             _performer.game.SendText(chanType, songName);
         }
     }
@@ -95,7 +95,7 @@ public sealed partial class BardExtSettingsWindow
     {
         if (e.Key == Key.Return)
         {
-            var chanType = Chat_Type.SelectedIndex switch
+            var chanType = ChatType.SelectedIndex switch
             {
                 0 => ChatMessageChannelType.Say,
                 1 => ChatMessageChannelType.Yell,
@@ -105,7 +105,7 @@ public sealed partial class BardExtSettingsWindow
                 _ => ChatMessageChannelType.None
             };
             var text = new string(ChatInputText.Text.ToCharArray());
-            _performer.game.SendText(chanType, text);
+            _performer?.game.SendText(chanType, text);
             ChatInputText.Text = "";
         }
     }
@@ -115,46 +115,49 @@ public sealed partial class BardExtSettingsWindow
         if (sender is NumericUpDown ctl) ctl.OnValueChanged += Lyrics_TrackNr_OnValueChanged;
     }
 
-    private void Lyrics_TrackNr_OnValueChanged(object sender, int s)
+    private void Lyrics_TrackNr_OnValueChanged(object? sender, int s)
     {
-        _performer.SingerTrackNr = s;
+        if (_performer != null) _performer.SingerTrackNr    =  s;
         if (sender is NumericUpDown ctl) ctl.OnValueChanged -= Lyrics_TrackNr_OnValueChanged;
     }
 
     #region CPU-Tab
-    private void PopulateCPUTab()
+    private void PopulateCpuTab()
     {
         //Get the our application's process.
-        var process = _performer.game.Process;
+        var _ = _performer?.game.Process;
 
         //Get the processor count of our machine.
         var cpuCount = Environment.ProcessorCount;
-        var AffinityMask = (long)_performer.game.GetAffinity();
-
-        var res = (int)Math.Ceiling(cpuCount / (double)3);
-        var idx = 1;
-        for (var col = 0; col != 3; col++)
+        if (_performer != null)
         {
-            CPUDisplay.ColumnDefinitions.Add(new ColumnDefinition());
-                
-            for (var i = 0; i != res + 1; i++)
+            var affinityMask = (long)_performer.game.GetAffinity();
+
+            var res = (int)Math.Ceiling(cpuCount / (double)3);
+            var idx = 1;
+            for (var col = 0; col != 3; col++)
             {
-                if (idx == cpuCount+1)
-                    break;
-                if (CPUDisplay.RowDefinitions.Count < res +1)
-                    CPUDisplay.RowDefinitions.Add(new RowDefinition());
-                var uc = new CheckBox
+                CpuDisplay.ColumnDefinitions.Add(new ColumnDefinition());
+                
+                for (var i = 0; i != res + 1; i++)
                 {
-                    Name    = "CPU" + idx,
-                    Content = "CPU" + idx
-                };
-                if ((AffinityMask & (1 << idx-1)) > 0) //-1 since we count at 1
-                    uc.IsChecked = true;
-                _cpuBoxes.Add(uc);
-                CPUDisplay.Children.Add(uc);
-                Grid.SetRow(uc, i);
-                Grid.SetColumn(uc, CPUDisplay.ColumnDefinitions.Count - 1);
-                idx++;
+                    if (idx == cpuCount+1)
+                        break;
+                    if (CpuDisplay.RowDefinitions.Count < res +1)
+                        CpuDisplay.RowDefinitions.Add(new RowDefinition());
+                    var uc = new CheckBox
+                    {
+                        Name    = "CPU" + idx,
+                        Content = "CPU" + idx
+                    };
+                    if ((affinityMask & (1 << idx-1)) > 0) //-1 since we count at 1
+                        uc.IsChecked = true;
+                    _cpuBoxes.Add(uc);
+                    CpuDisplay.Children.Add(uc);
+                    Grid.SetRow(uc, i);
+                    Grid.SetColumn(uc, CpuDisplay.ColumnDefinitions.Count - 1);
+                    idx++;
+                }
             }
         }
     }
@@ -179,7 +182,7 @@ public sealed partial class BardExtSettingsWindow
                 return;
         }
         else
-            _performer.game.SetAffinity((long)mask);
+            _performer?.game.SetAffinity((long)mask);
     }
 
     private void Clear_CPU_Click(object sender, RoutedEventArgs e)
@@ -204,17 +207,17 @@ public sealed partial class BardExtSettingsWindow
     {
         if (GfxTest.IsChecked != null && (bool)GfxTest.IsChecked)
         {
-            if (_performer.game.GfxSettingsLow)
+            if (_performer != null && _performer.game.GfxSettingsLow)
                 return;
-            _performer.game.GfxSetLow(true);
-            _performer.game.GfxSettingsLow = true;
+            _performer?.game.GfxSetLow(true);
+            if (_performer != null) _performer.game.GfxSettingsLow = true;
         }
         else
         {
-            if (!_performer.game.GfxSettingsLow)
+            if (_performer != null && !_performer.game.GfxSettingsLow)
                 return;
-            _performer.game.GfxSetLow(false);
-            _performer.game.GfxSettingsLow = false;
+            _performer?.game.GfxSetLow(false);
+            if (_performer != null) _performer.game.GfxSettingsLow = false;
         }
     }
 }

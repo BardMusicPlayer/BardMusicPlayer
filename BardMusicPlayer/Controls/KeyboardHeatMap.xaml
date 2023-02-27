@@ -6,8 +6,8 @@
              x:Name="NumbericUpDown"
              mc:Ignorable="d" Height="25" Width="40">
 
-    <Grid Name="tgrd">
-        <Grid Name="grd">
+    <Grid>
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -64,7 +64,7 @@
             <Rectangle x:Name="CThree" Grid.Column="21" Fill="White" Stroke="Black" StrokeThickness="0.5" />
 
         </Grid>
-        <Grid Name="blk_grd">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
 

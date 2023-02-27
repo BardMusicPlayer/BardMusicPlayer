@@ -9,21 +9,21 @@ using BardMusicPlayer.Pigeonhole;
 namespace BardMusicPlayer.UI_Classic;
 
 /// <summary>
-/// Interaction logic for Classic_MainView.xaml
+/// Interaction logic for ClassicMainView.xaml
 /// </summary>
-public partial class Classic_MainView
+public partial class ClassicMainView
 {
-    private bool _alltracks;
-    private bool _Playbar_dragStarted;
-    private bool _Siren_Playbar_dragStarted;
+    private bool _allTracks;
+    private bool _playBarDragStarted;
+    private bool _sirenPlayBarDragStarted;
 
     /* Play button state */
-    public void Play_Button_State(bool playing = false) { Play_Button.Content = !playing ? @"▶" : @"⏸"; }
+    public void Play_Button_State(bool playing = false) { PlayButton.Content = !playing ? @"▶" : @"⏸"; }
 
     /* Playback */
     private void Play_Button_Click(object sender, RoutedEventArgs e)
     {
-        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
         {
             PlaybackFunctions.PauseSong();
             Play_Button_State();
@@ -38,7 +38,7 @@ public partial class Classic_MainView
     // TODO: Needs revision, move off play button into its own logic elsewhere
     private async void Play_Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
             return;
 
         if (!BmpPigeonhole.Instance.UsePluginForInstrumentOpen)
@@ -61,6 +61,8 @@ public partial class Classic_MainView
                 case PlaybackState.StartEnsCheck:
                     BmpMaestro.Instance.StartEnsCheck();
                     return;
+                default:
+                    throw new ArgumentException(null);
             }
         }
     }
@@ -81,7 +83,7 @@ public partial class Classic_MainView
             {
                 SongName.Text          = PlaybackFunctions.GetSongName();
                 InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-                _directLoaded          = true;
+                DirectLoaded           = true;
             }
         }
 
@@ -98,45 +100,45 @@ public partial class Classic_MainView
             return;
         }
 
-        _alltracks              = !_alltracks;
-        track_cmdDown.IsEnabled = !_alltracks;
-        track_cmdUp.IsEnabled   = !_alltracks;
-        track_txtNum.IsEnabled  = !_alltracks;
+        _allTracks             = !_allTracks;
+        TrackCmdDown.IsEnabled = !_allTracks;
+        TrackCmdUp.IsEnabled   = !_allTracks;
+        TrackTxtNum.IsEnabled  = !_allTracks;
 
-        if (_alltracks)
+        if (_allTracks)
         {
             BmpMaestro.Instance.SetTracknumberOnHost(0);
             BmpPigeonhole.Instance.PlayAllTracks = true;
-            all_tracks_button.Opacity            = 0.5;
+            AllTracksButton.Opacity              = 0.5;
         }
         else
         {
             BmpPigeonhole.Instance.PlayAllTracks = false;
             BmpMaestro.Instance.SetTracknumberOnHost(1);
             NumValue = BmpMaestro.Instance.GetHostBardTrack();
-            all_tracks_button.ClearValue(OpacityProperty);
+            AllTracksButton.ClearValue(OpacityProperty);
         }
     }
 
     private void Rewind_Click(object sender, RoutedEventArgs e)
     {
         PlaybackFunctions.StopSong();
-        Play_Button.Content = @"▶";
+        PlayButton.Content = @"▶";
     }
 
-    private void Playbar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void PlayBar_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
     }
 
-    private void Playbar_Slider_DragStarted(object sender, DragStartedEventArgs e)
+    private void PlayBar_Slider_DragStarted(object sender, DragStartedEventArgs e)
     {
-        _Playbar_dragStarted = true;
+        _playBarDragStarted = true;
     }
 
-    private void Playbar_Slider_DragCompleted(object sender, DragCompletedEventArgs e)
+    private void PlayBar_Slider_DragCompleted(object sender, DragCompletedEventArgs e)
     {
         BmpMaestro.Instance.SetPlaybackStart((int)((Slider)sender).Value);
-        _Playbar_dragStarted = false;
+        _playBarDragStarted = false;
     }
 
 }

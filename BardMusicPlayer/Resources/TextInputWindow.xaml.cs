@@ -7,12 +7,12 @@ namespace BardMusicPlayer.Resources;
 /// </summary>
 public partial class TextInputWindow
 {
-    public TextInputWindow(string infotext, int maxinputlength = 40)
+    public TextInputWindow(string infoText, int maxInputLength = 40)
     {
         InitializeComponent();
-        InfoText.Text = infotext;
+        InfoText.Text = infoText;
         ResponseTextBox.Focus();
-        ResponseTextBox.MaxLength = maxinputlength;
+        ResponseTextBox.MaxLength = maxInputLength;
     }
 
     public string ResponseText

@@ -15,22 +15,22 @@ using Microsoft.Win32;
 namespace BardMusicPlayer.UI_Classic;
 
 /// <summary>
-/// Interaction logic for Classic_MainView.xaml
+/// Interaction logic for ClassicMainView.xaml
 /// </summary>
-public partial class Classic_MainView
+public partial class ClassicMainView
 {
     private bool _playlistRepeat;
     private bool _playlistShuffle;
     private bool _showingPlaylists; //are we displaying the playlist or the songs
     private bool _autoPlay = BmpPigeonhole.Instance.PlaylistAutoPlay;
-    private IPlaylist _currentPlaylist; //the current selected playlist
+    private IPlaylist? _currentPlaylist; //the current selected playlist
     private int _currentShuffleIndex;
-    private List<string> _shuffledPlaylist = new();
+    private List<string>? _shuffledPlaylist = new();
 
     /// <summary>
     /// Plays the next song from the playlist
     /// </summary>
-    private void playNextSong()
+    private void PlayNextSong()
     {
         if (_currentPlaylist == null)
             return;
@@ -40,7 +40,7 @@ public partial class Classic_MainView
 
         if (_playlistShuffle)
         {
-            if (_currentShuffleIndex == _shuffledPlaylist.Count - 1)
+            if (_shuffledPlaylist != null && _currentShuffleIndex == _shuffledPlaylist.Count - 1)
             {
                 PlaybackFunctions.StopSong();
                 Play_Button_State();
@@ -89,7 +89,8 @@ public partial class Classic_MainView
     {
         if (_playlistShuffle)
         {
-            _currentShuffleIndex = _shuffledPlaylist.IndexOf((string)PlaylistContainer.SelectedItem);
+            if (_shuffledPlaylist != null)
+                _currentShuffleIndex = _shuffledPlaylist.IndexOf((string)PlaylistContainer.SelectedItem);
         }
     }
 
@@ -99,24 +100,24 @@ public partial class Classic_MainView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Playlist_New_Button_Click(object sender, RoutedEventArgs e)
+    private void Playlist_New_Button_Click(object? sender, RoutedEventArgs? e)
     {
-        var inputbox = new TextInputWindow("Playlist Name");
-        if (inputbox.ShowDialog() == true)
+        var inputBox = new TextInputWindow("Playlist Name");
+        if (inputBox.ShowDialog() == true)
         {
-            if (inputbox.ResponseText.Length < 1)
+            if (inputBox.ResponseText.Length < 1)
                 return;
 
-            _currentPlaylist              = PlaylistFunctions.CreatePlaylist(inputbox.ResponseText);
+            _currentPlaylist              = PlaylistFunctions.CreatePlaylist(inputBox.ResponseText);
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
             _showingPlaylists             = false;
 
             var icon = "↩".PadRight(2);
             var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
-            var name = _currentPlaylist.GetName();
+            var name = _currentPlaylist?.GetName();
             var headerText = $"{icon} {timeString} {name}";
 
-            Playlist_Header.Header = headerText;
+            PlaylistHeader.Header = headerText;
         }
     }
 
@@ -140,7 +141,7 @@ public partial class Classic_MainView
         var name = _currentPlaylist.GetName();
         var headerText = $"{icon} {timeString} {name}";
 
-        Playlist_Header.Header = headerText;
+        PlaylistHeader.Header = headerText;
     }
 
     /// <summary>
@@ -163,7 +164,7 @@ public partial class Classic_MainView
         var name = _currentPlaylist.GetName();
         var headerText = $"{icon} {timeString} {name}";
 
-        Playlist_Header.Header = headerText;
+        PlaylistHeader.Header = headerText;
     }
 
     /// <summary>
@@ -179,11 +180,9 @@ public partial class Classic_MainView
         if (_showingPlaylists)
             return;
 
-        foreach (string s in PlaylistContainer.SelectedItems)
+        foreach (string? s in PlaylistContainer.SelectedItems)
         {
             var song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, s);
-            if (song == null)
-                continue;
             _currentPlaylist.Remove(song);
             BmpCoffer.Instance.DeleteSong(song);
         }
@@ -195,7 +194,7 @@ public partial class Classic_MainView
         var name = _currentPlaylist.GetName();
         var headerText = $"{icon} {timeString} {name}";
 
-        Playlist_Header.Header = headerText;
+        PlaylistHeader.Header = headerText;
     }
 
     /// <summary>
@@ -226,7 +225,7 @@ public partial class Classic_MainView
         _showingPlaylists = true;
         BmpCoffer.Instance.DeletePlaylist(_currentPlaylist);
         PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
-        Playlist_Header.Header        = "Playlists";
+        PlaylistHeader.Header         = "Playlists";
         _currentPlaylist              = null;
     }
     #endregion
@@ -239,16 +238,16 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void PlaylistContainer_HeaderClick(object sender, RoutedEventArgs e)
     {
-        if (sender is DataGridColumnHeader columnHeader)
+        if (sender is DataGridColumnHeader)
         {
             _showingPlaylists             = true;
             PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
-            Playlist_Header.Header        = "Playlists";
+            PlaylistHeader.Header         = "Playlists";
             _currentPlaylist              = null;
             if (_playlistShuffle)
             {
-                _playlistShuffle               = false;
-                PlaylistShuffle_Button.Opacity = 0.5f;
+                _playlistShuffle              = false;
+                PlaylistShuffleButton.Opacity = 0.5f;
             }
         }
     }
@@ -274,14 +273,14 @@ public partial class Classic_MainView
             var name = _currentPlaylist.GetName();
             var headerText = $"{icon} {timeString} {name}";
 
-            Playlist_Header.Header = headerText;
+            PlaylistHeader.Header = headerText;
             return;
         }
 
         PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
         SongName.Text          = PlaybackFunctions.GetSongName();
         InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-        _directLoaded          = false;
+        DirectLoaded           = false;
     }
 
     /// <summary>
@@ -291,12 +290,12 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void PlaylistContainer_RightButton(object sender, MouseButtonEventArgs e)
     {
-        var celltext = sender as TextBlock;
-        if (celltext is { Text: "" })
+        var cellText = sender as TextBlock;
+        if (cellText is { Text: "" })
             return;
 
-        var song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, celltext?.Text);
-        var sew = new SongEditWindow(song);
+        var song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, cellText?.Text);
+        var _ = new SongEditWindow(song);
     }
 
     /// <summary>
@@ -309,9 +308,9 @@ public partial class Classic_MainView
             return;
         }
 
-        if (sender is TextBlock celltext && e.LeftButton == MouseButtonState.Pressed && !_showingPlaylists)
+        if (sender is TextBlock cellText && e.LeftButton == MouseButtonState.Pressed && !_showingPlaylists)
         {
-            DragDrop.DoDragDrop(PlaylistContainer, celltext, DragDropEffects.Move);
+            DragDrop.DoDragDrop(PlaylistContainer, cellText, DragDropEffects.Move);
         }
     }
 
@@ -320,15 +319,15 @@ public partial class Classic_MainView
     /// </summary>
     private void Playlist_Drop(object sender, DragEventArgs e)
     {
-        var droppedDataTB = e.Data.GetData(typeof(TextBlock)) as TextBlock;
+        var droppedDataTb = e.Data.GetData(typeof(TextBlock)) as TextBlock;
 
-        if (((TextBlock)sender).DataContext is not string target || droppedDataTB?.DataContext is not string droppedDataStr)
+        if (((TextBlock)sender).DataContext is not string target || droppedDataTb?.DataContext is not string droppedDataStr)
         {
             return;
         }
 
-        var removedIdx = PlaylistContainer.Items.IndexOf(droppedDataStr ?? string.Empty);
-        var targetIdx = PlaylistContainer.Items.IndexOf(target ?? string.Empty);
+        var removedIdx = PlaylistContainer.Items.IndexOf(droppedDataStr);
+        var targetIdx = PlaylistContainer.Items.IndexOf(target);
 
         if (removedIdx < 0 || removedIdx >= PlaylistContainer.Items.Count)
         {
@@ -344,7 +343,7 @@ public partial class Classic_MainView
 
         if (removedIdx < targetIdx)
         {
-            _currentPlaylist.Move(removedIdx, targetIdx);
+            _currentPlaylist?.Move(removedIdx, targetIdx);
             BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
@@ -355,7 +354,7 @@ public partial class Classic_MainView
         }
         else
         {
-            _currentPlaylist.Move(removedIdx, targetIdx);
+            _currentPlaylist?.Move(removedIdx, targetIdx);
             BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
         }
@@ -371,8 +370,8 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void PlaylistRepeat_Button_Click(object sender, RoutedEventArgs e)
     {
-        _playlistRepeat               = !_playlistRepeat;
-        PlaylistRepeat_Button.Opacity = _playlistRepeat ? 1 : 0.5f;
+        _playlistRepeat              = !_playlistRepeat;
+        PlaylistRepeatButton.Opacity = _playlistRepeat ? 1 : 0.5f;
     }
 
     /// <summary>
@@ -385,15 +384,15 @@ public partial class Classic_MainView
         if (_currentPlaylist == null)
             return;
 
-        _playlistShuffle               = !_playlistShuffle;
-        PlaylistShuffle_Button.Opacity = _playlistShuffle ? 1 : 0.5f;
+        _playlistShuffle              = !_playlistShuffle;
+        PlaylistShuffleButton.Opacity = _playlistShuffle ? 1 : 0.5f;
 
         var playlist = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
         if (_playlistShuffle)
         {
             // shuffle the playlist items
-            _shuffledPlaylist = playlist.OrderBy(item => Guid.NewGuid()).ToList();
+            _shuffledPlaylist = playlist.OrderBy(_ => Guid.NewGuid()).ToList();
 
             // update the data source for the DataGrid
             PlaylistContainer.ItemsSource = _shuffledPlaylist;
@@ -438,7 +437,7 @@ public partial class Classic_MainView
 
         else
         {
-            playNextSong();
+            PlayNextSong();
         }
 
         if (!_autoPlay)
@@ -456,7 +455,7 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void AutoPlay_Checked(object sender, RoutedEventArgs e)
     {
-        _autoPlay = AutoPlay_CheckBox.IsChecked ?? false;
+        _autoPlay = AutoPlayCheckBox.IsChecked ?? false;
     }
     #endregion
 
@@ -468,14 +467,18 @@ public partial class Classic_MainView
     /// <param name="e"></param>
     private void Search_Click(object sender, RoutedEventArgs e)
     {
-        var inputbox = new TextInputWindow("Search for...", 80);
-        inputbox.Focus();
-        if (inputbox.ShowDialog() == true)
+        var inputBox = new TextInputWindow("Search for...", 80);
+        inputBox.Focus();
+        if (inputBox.ShowDialog() == true)
         {
             try
             {
-                var song = _currentPlaylist.First(x => x.Title.ToLower().Contains(inputbox.ResponseText.ToLower()));
-                PlaylistContainer.SelectedIndex = PlaylistContainer.Items.IndexOf(song.Title);
+                if (_currentPlaylist != null)
+                {
+                    var song = _currentPlaylist.First(x => x.Title.ToLower().Contains(inputBox.ResponseText.ToLower()));
+                    PlaylistContainer.SelectedIndex = PlaylistContainer.Items.IndexOf(song.Title);
+                }
+
                 PlaylistContainer.ScrollIntoView(PlaylistContainer.Items[PlaylistContainer.SelectedIndex]);
                 PlaylistContainer.UpdateLayout();
             }
@@ -584,13 +587,17 @@ public partial class Classic_MainView
             return;
 
         var list = JsonPlaylist.Load(openFileDialog.FileName);
-        foreach (var rawdata in list)
+        if (list != null)
         {
-            var song = BmpSong.ImportMidiFromByte(rawdata.Data, "dummy").Result;
-            song.Title = rawdata.Name;
-            _currentPlaylist.Add(song);
-            BmpCoffer.Instance.SaveSong(song);
+            foreach (var rawData in list)
+            {
+                var song = BmpSong.ImportMidiFromByte(rawData.Data, "dummy").Result;
+                song.Title = rawData.Name;
+                _currentPlaylist.Add(song);
+                BmpCoffer.Instance.SaveSong(song);
+            }
         }
+
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
     }

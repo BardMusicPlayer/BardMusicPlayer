@@ -9,7 +9,7 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public sealed partial class NumericUpDown
 {
-    public EventHandler<int> OnValueChanged;
+    public EventHandler<int>? OnValueChanged;
 
     public NumericUpDown()
     {
@@ -19,7 +19,7 @@ public sealed partial class NumericUpDown
     public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(nameof(Value), typeof(string), typeof(NumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
 
-    public string Value
+    public string? Value
     {
         get => (string)GetValue(ValueProperty);
         set => SetValue(ValueProperty, value);
@@ -31,7 +31,7 @@ public sealed partial class NumericUpDown
         c?.OnValueChangedC(c.Value);
     }
 
-    private void OnValueChangedC(string c)
+    private void OnValueChangedC(string? c)
     {
         NumValue = Convert.ToInt32(c);
     }
@@ -39,7 +39,8 @@ public sealed partial class NumericUpDown
 
     /* Track UP/Down */
     private int _numValue;
-    public int NumValue
+
+    private int NumValue
     {
         get => _numValue;
         set
@@ -64,11 +65,13 @@ public sealed partial class NumericUpDown
         if (Text == null)
             return;
 
-        var str = Regex.Replace(Text.Text, @"[^\d|\.\-]", "");
+        var str = MyRegex().Replace(Text.Text, "");
         if (int.TryParse(str, out var val))
         {
             NumValue = val;
         }
     }
 
+    [GeneratedRegex("[^\\d|\\.\\-]")]
+    private static partial Regex MyRegex();
 }
