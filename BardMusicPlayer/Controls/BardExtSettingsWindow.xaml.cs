@@ -103,7 +103,7 @@ public sealed partial class BardExtSettingsWindow
                 1 => ChatMessageChannelType.Yell,
                 2 => ChatMessageChannelType.Shout,
                 3 => ChatMessageChannelType.Party,
-                4 => ChatMessageChannelType.FC,
+                4 => ChatMessageChannelType.FreeCompany,
                 _ => ChatMessageChannelType.None
             };
             var text = new string(ChatInputText.Text.ToCharArray());
