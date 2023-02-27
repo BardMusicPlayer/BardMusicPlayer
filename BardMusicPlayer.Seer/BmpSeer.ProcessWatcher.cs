@@ -35,18 +35,22 @@ public partial class BmpSeer
         {
             try
             {
-                // Remove exited processes from the list
-                processes.RemoveAll(p => p.HasExited);
-
                 // Get new processes and add them to the list
                 processes.AddRange(Process.GetProcessesByName("ffxiv_dx11"));
+
+                // Sort processes by creation time
+                processes = processes.OrderBy(p => p.StartTime).ToList();
 
                 // Remove games that are no longer running
                 foreach (var game in _games.Values.Where(g => g.Process != null))
                 {
                     if (game.Process.HasExited || !game.Process.Responding || processes.All(p => p.Id != game.Pid))
                     {
+                        // Dispose the game
                         game.Dispose();
+        
+                        // Remove the game from the dictionary
+                        _games.TryRemove(game.Process.Id, out _);
                     }
                 }
 
