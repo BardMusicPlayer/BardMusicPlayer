@@ -1,12 +1,7 @@
-#region
-
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using BardMusicPlayer.UI_Classic;
 using Microsoft.Win32;
-
-#endregion
 
 namespace BardMusicPlayer.Controls;
 

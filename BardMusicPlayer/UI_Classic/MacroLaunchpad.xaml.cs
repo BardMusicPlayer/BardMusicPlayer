@@ -1,8 +1,4 @@
-﻿#region
-
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +7,6 @@ using BardMusicPlayer.Controls;
 using BardMusicPlayer.Script;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-
-#endregion
 
 namespace BardMusicPlayer.UI_Classic;
 

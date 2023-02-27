@@ -8,14 +8,17 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>bmp.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Configurations>Debug;Release</Configurations>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Platforms>x64</Platforms>
-    <PlatformTarget>x64</PlatformTarget>
-    <Configurations>Debug;Release</Configurations>
-
     <AssemblyTitle>BardMusicPlayer</AssemblyTitle>
     <Product>BardMusicPlayer</Product>
     <Authors>MoogleTroupe</Authors>

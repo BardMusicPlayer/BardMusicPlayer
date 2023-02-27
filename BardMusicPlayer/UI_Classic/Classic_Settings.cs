@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Utils;
