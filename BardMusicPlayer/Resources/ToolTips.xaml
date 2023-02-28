@@ -2,37 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
-    <!-- The tooltip text file -->
-
     <!-- Playlist -->
-    <sys:String x:Key="PLAYLIST_NEW" xml:space="preserve">Create a new playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_ADD" xml:space="preserve">Add song(s) to the current playlist &#13;Right click add a folder</sys:String>
-    <sys:String x:Key="PLAYLIST_REM" xml:space="preserve">Remove the selected song(s) from the playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_DEL" xml:space="preserve">Delete the current playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_SEARCH" xml:space="preserve">Search for a song in the playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_NEWCAT" xml:space="preserve">Creates a new MusicCatalog</sys:String>
-    <sys:String x:Key="PLAYLIST_OPEN" xml:space="preserve">Opens a MusicCatalog</sys:String>
-    <sys:String x:Key="PLAYLIST_EXPORT" xml:space="preserve">Export the current MusicCatalog</sys:String>
-    <sys:String x:Key="PLAYLIST_CLEANUP" xml:space="preserve">Reorganise the MusicCatalog to save space</sys:String>
-    <sys:String x:Key="PLAYLIST_AUTO" xml:space="preserve">Auto plays the next song in the playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_SKIP" xml:space="preserve">Skips the current playing song</sys:String>
-    <sys:String x:Key="PLAYLIST_REPEAT" xml:space="preserve">Repeat playlist</sys:String>
-    <sys:String x:Key="PLAYLIST_SHUFFLE" xml:space="preserve">Shuffle playlist</sys:String>
+    <sys:String x:Key="PlaylistNew" xml:space="preserve">Create a new playlist</sys:String>
+    <sys:String x:Key="PlaylistAdd" xml:space="preserve">Add song(s) to the current playlist &#13;Right click add a folder</sys:String>
+    <sys:String x:Key="PlaylistRem" xml:space="preserve">Remove the selected song(s) from the playlist</sys:String>
+    <sys:String x:Key="PlaylistDel" xml:space="preserve">Delete the current playlist</sys:String>
+    <sys:String x:Key="PlaylistSearch" xml:space="preserve">Search for a song in the playlist</sys:String>
+    <sys:String x:Key="PlaylistNewCatalog" xml:space="preserve">Creates a new MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistOpen" xml:space="preserve">Opens a MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistExport" xml:space="preserve">Export the current MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistCleanup" xml:space="preserve">Reorganise the MusicCatalog to save space</sys:String>
+    <sys:String x:Key="PlaylistAuto" xml:space="preserve">Auto plays the next song in the playlist</sys:String>
+    <sys:String x:Key="PlaylistSkip" xml:space="preserve">Skips the current playing song</sys:String>
+    <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat playlist</sys:String>
+    <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle playlist</sys:String>
 
     <!-- Settings: Local Orchestra-->
-    <sys:String x:Key="LO_ENABLE" xml:space="preserve">Enables the local orchestra</sys:String>
-    <sys:String x:Key="LO_AUTOEQ" xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
-    <sys:String x:Key="LO_KEEPTRACKS" xml:space="preserve">Keep the performer settings</sys:String>
-    <sys:String x:Key="LO_AUTOSTART" xml:space="preserve">Select the autostart trigger [Metronome is preferred]</sys:String>
-    <sys:String x:Key="LO_AUTOEQPLGN" xml:space="preserve">Enables auto-equip / ensemble accept via Hypnotoad dalamud plugin</sys:String>
+    <sys:String x:Key="LocalOrchestraEnable" xml:space="preserve">Enables the local orchestra</sys:String>
+    <sys:String x:Key="LocalOrchestraAutoEquip" xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
+    <sys:String x:Key="LocalOrchestraKeepTracks" xml:space="preserve">Keep the performer settings</sys:String>
+    <sys:String x:Key="LocalOrchestraAutoStart" xml:space="preserve">Select the autostart trigger [Metronome is preferred]</sys:String>
+    <sys:String x:Key="LocalOrchestraHypnotoad" xml:space="preserve">Use Hypnotoad enhancements &#13;Only enable if plugin is available!</sys:String>
 
     <!-- Settings: Playback-->
-    <sys:String x:Key="PL_HOLDNOTES" xml:space="preserve">Plays the length of a note as intended</sys:String>
-    <sys:String x:Key="PL_FORCE" xml:space="preserve">Ignore everything and play</sys:String>
-    <sys:String x:Key="PL_IGNOREPROG" xml:space="preserve">Ignores guitar program change events &#13;Except Program:ElectricGuitar</sys:String>
-    <sys:String x:Key="PL_MIDIINPUT" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
-    <sys:String x:Key="PL_LIVE" xml:space="preserve">Improves live play (should be disabled when playing a midi)&#13;Will be set/unset after loading a song</sys:String>
+    <sys:String x:Key="PlaybackHoldNotes" xml:space="preserve">Plays the length of a note as intended</sys:String>
+    <sys:String x:Key="PlaybackForce" xml:space="preserve">Ignore everything and play</sys:String>
+    <sys:String x:Key="PlaybackIgnoreProgram" xml:space="preserve">Ignores guitar program change events &#13;Except Program:ElectricGuitar</sys:String>
+    <sys:String x:Key="PlaybackMidiInput" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
+    <sys:String x:Key="PlaybackLive" xml:space="preserve">Improves live play (should be disabled when playing a midi)&#13;Will be set/unset after loading a song</sys:String>
 
     <!-- Settings: UI-->
-    <sys:String x:Key="UI_DARKMODE" xml:space="preserve">Toggle Dark Mode Styling</sys:String>
+    <sys:String x:Key="DarkMode" xml:space="preserve">Toggle Dark Mode Styling</sys:String>
 </ResourceDictionary>

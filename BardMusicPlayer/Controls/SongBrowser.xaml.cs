@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +13,7 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public partial class SongBrowser
 {
-    public EventHandler<string> OnLoadSongFromBrowser;
+    public EventHandler<string>? OnLoadSongFromBrowser;
 
     public SongBrowser()
     {
@@ -55,7 +52,7 @@ public partial class SongBrowser
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SongSearch_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void SongSearch_PreviewTextInput(object? sender, TextCompositionEventArgs? e)
     {
         if (!Directory.Exists(SongPath.Text))
             return;
@@ -80,7 +77,7 @@ public partial class SongBrowser
     /// <summary>
     /// Refresh list on any character change
     /// </summary>
-    private void SongSearch_TextChanged(object sender, TextChangedEventArgs e)
+    private void SongSearch_TextChanged(object? sender, TextChangedEventArgs e)
     {
         SongSearch_PreviewTextInput(sender, null);
     }

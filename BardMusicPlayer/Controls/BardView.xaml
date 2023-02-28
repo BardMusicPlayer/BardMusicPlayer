@@ -8,7 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:BardMusicPlayer.Pigeonhole;assembly=BardMusicPlayer.Pigeonhole"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance }">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -32,19 +32,19 @@
                     Click="OpenInstrumentButton_Click" />
             <Button Grid.Column="1" x:Name="CloseInstrumentButton" Margin="0,2,0,1" Height="Auto" Content="Close"
                     ToolTip="Close Instruments"
-                    Click="CloseInstrumentButton_Click" Visibility="Hidden"/>
+                    Click="CloseInstrumentButton_Click" Visibility="Hidden" />
             <Button Grid.Column="2" x:Name="SendEnsembleButton" Margin="2,2,2,1" Height="Auto" Content="Send Ensemble"
                     ToolTip="Sends ensemble ready check"
                     Click="RdyCheck_Click" />
             <Button Grid.Column="7" Margin="0,2,0,1" Height="Auto" Content="..."
-                    x:Name="More_Options"
+                    x:Name="MoreOptions"
                     Click="MenuButton_PreviewMouseLeftButtonDown"
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <CheckBox Content="Auto-Equip Performer(s)" x:Name="Autoequip_CheckBox"
+                        <CheckBox Content="Auto-Equip Performer(s)" x:Name="AutoEquipCheckBox"
                                   Unchecked="AutoEquip_CheckBox_Checked" Checked="AutoEquip_CheckBox_Checked" />
-                        <CheckBox Content="Set all Gfx to low" x:Name="GfxLow_CheckBox"
+                        <CheckBox Content="Set all Gfx to low" x:Name="GfxLowCheckBox"
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
                         <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
@@ -70,7 +70,7 @@
                             <ColumnDefinition Width="130" />    <!-- 3 -->
                             <ColumnDefinition Width="Auto" />   <!-- 4 Spacer-->
                             <ColumnDefinition Width="140" />    <!-- 5 -->
-                            <ColumnDefinition Width="10" />     <!-- 6 dalamud-->
+                            <ColumnDefinition Width="10" />     <!-- 6 Dalamud-->
                             <ColumnDefinition Width="10" />     <!-- 7 spacer-->
                             <ColumnDefinition Width="Auto" />   <!-- 8 track-->
                             <ColumnDefinition Width="Auto" />   <!-- 9 octave-->
