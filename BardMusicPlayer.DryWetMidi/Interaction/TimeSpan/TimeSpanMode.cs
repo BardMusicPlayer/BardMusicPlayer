@@ -1,23 +1,22 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan;
+
+/// <summary>
+/// Mode of the arithmetic operation between two <see cref="ITimeSpan"/>.
+/// </summary>
+public enum TimeSpanMode
 {
     /// <summary>
-    /// Mode of the arithmetic operation between two <see cref="ITimeSpan"/>.
+    /// Both time spans represent time.
     /// </summary>
-    public enum TimeSpanMode
-    {
-        /// <summary>
-        /// Both time spans represent time.
-        /// </summary>
-        TimeTime,
+    TimeTime,
 
-        /// <summary>
-        /// First time span represents time and second one represents length.
-        /// </summary>
-        TimeLength,
+    /// <summary>
+    /// First time span represents time and second one represents length.
+    /// </summary>
+    TimeLength,
 
-        /// <summary>
-        /// Both time spans represent length.
-        /// </summary>
-        LengthLength
-    }
+    /// <summary>
+    /// Both time spans represent length.
+    /// </summary>
+    LengthLength
 }

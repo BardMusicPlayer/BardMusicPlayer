@@ -22,98 +22,97 @@ using Machina.Headers;
 using Machina.Infrastructure;
 using Machina.Sockets;
 
-namespace Machina
+namespace Machina;
+
+public class ConnectionManager : IDisposable
 {
-    public class ConnectionManager : IDisposable
+    public TCPNetworkMonitorConfig Config { get; } = new TCPNetworkMonitorConfig();
+    public IList<TCPConnection> Connections { get; } = new List<TCPConnection>(2);
+
+
+    private readonly ProcessTCPInfo _processTCPInfo = new ProcessTCPInfo();
+    private bool _disposedValue;
+
+    public void Refresh()
     {
-        public TCPNetworkMonitorConfig Config { get; } = new TCPNetworkMonitorConfig();
-        public IList<TCPConnection> Connections { get; } = new List<TCPConnection>(2);
+        // Update any filters
+        _processTCPInfo.ProcessID          = Config.ProcessID;
+        _processTCPInfo.ProcessIDList      = Config.ProcessIDList;
+        _processTCPInfo.ProcessWindowName  = Config.WindowName;
+        _processTCPInfo.ProcessWindowClass = Config.WindowClass;
+        _processTCPInfo.LocalIP            = Config.LocalIP;
 
+        // todo: do not pass in current connections?
+        // get any active game connections
+        _processTCPInfo.UpdateTCPIPConnections(Connections);
 
-        private readonly ProcessTCPInfo _processTCPInfo = new ProcessTCPInfo();
-        private bool _disposedValue;
-
-        public void Refresh()
+        foreach (TCPConnection connection in Connections)
         {
-            // Update any filters
-            _processTCPInfo.ProcessID = Config.ProcessID;
-            _processTCPInfo.ProcessIDList = Config.ProcessIDList;
-            _processTCPInfo.ProcessWindowName = Config.WindowName;
-            _processTCPInfo.ProcessWindowClass = Config.WindowClass;
-            _processTCPInfo.LocalIP = Config.LocalIP;
-
-            // todo: do not pass in current connections?
-            // get any active game connections
-            _processTCPInfo.UpdateTCPIPConnections(Connections);
-
-            foreach (TCPConnection connection in Connections)
+            if (connection.Socket == null)
             {
-                if (connection.Socket == null)
-                {
-                    // Set up decoders for data sent from local machine
-                    connection.IPDecoderSend = new IPDecoder(connection.LocalIP, connection.RemoteIP, IPProtocol.TCP);
-                    connection.TCPDecoderSend = new TCPDecoder(connection.LocalPort, connection.RemotePort);
+                // Set up decoders for data sent from local machine
+                connection.IPDecoderSend  = new IPDecoder(connection.LocalIP, connection.RemoteIP, IPProtocol.TCP);
+                connection.TCPDecoderSend = new TCPDecoder(connection.LocalPort, connection.RemotePort);
 
-                    // set up decoders for data received by local machine
-                    connection.IPDecoderReceive = new IPDecoder(connection.RemoteIP, connection.LocalIP, IPProtocol.TCP);
-                    connection.TCPDecoderReceive = new TCPDecoder(connection.RemotePort, connection.LocalPort);
+                // set up decoders for data received by local machine
+                connection.IPDecoderReceive  = new IPDecoder(connection.RemoteIP, connection.LocalIP, IPProtocol.TCP);
+                connection.TCPDecoderReceive = new TCPDecoder(connection.RemotePort, connection.LocalPort);
 
-                    // set up socket
-                    connection.Socket = Config.MonitorType == NetworkMonitorType.WinPCap ?
-                        new PCapCaptureSocket(Config.RPCap) :
-                        (ICaptureSocket)new RawCaptureSocket();
+                // set up socket
+                connection.Socket = Config.MonitorType == NetworkMonitorType.WinPCap ?
+                    new PCapCaptureSocket(Config.RPCap) :
+                    (ICaptureSocket)new RawCaptureSocket();
 
-                    connection.Socket.StartCapture(connection.LocalIP, Config.UseRemoteIpFilter ? connection.RemoteIP : 0);
-                }
+                connection.Socket.StartCapture(connection.LocalIP, Config.UseRemoteIpFilter ? connection.RemoteIP : 0);
+            }
+        }
+    }
+
+    public void Cleanup()
+    {
+        for (int i = 0; i < Connections.Count; i++)
+        {
+            if (Connections[i].Socket != null)
+            {
+                Trace.WriteLine("TCPNetworkMonitor: Stopping " + Config.MonitorType.ToString() + " listener between [" +
+                                new IPAddress(Connections[i].LocalIP).ToString() + "] => [" +
+                                new IPAddress(Connections[i].RemoteIP).ToString() + "].", "DEBUG-MACHINA");
+
+                Connections[i].Socket.StopCapture();
+                Connections[i].Socket?.Dispose();
+                Connections[i].Socket = null;
             }
         }
 
-        public void Cleanup()
-        {
-            for (int i = 0; i < Connections.Count; i++)
-            {
-                if (Connections[i].Socket != null)
-                {
-                    Trace.WriteLine("TCPNetworkMonitor: Stopping " + Config.MonitorType.ToString() + " listener between [" +
-                        new IPAddress(Connections[i].LocalIP).ToString() + "] => [" +
-                        new IPAddress(Connections[i].RemoteIP).ToString() + "].", "DEBUG-MACHINA");
+        Connections.Clear();
+    }
 
-                    Connections[i].Socket.StopCapture();
+    #region IDisposable
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                for (int i = 0; i < Connections.Count; i++)
+                {
+                    // Note: Do not call Trace in Dispose()
+                    Connections[i].Socket?.StopCapture();
                     Connections[i].Socket?.Dispose();
                     Connections[i].Socket = null;
                 }
+                Connections.Clear();
             }
 
-            Connections.Clear();
+            _disposedValue = true;
         }
-
-        #region IDisposable
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    for (int i = 0; i < Connections.Count; i++)
-                    {
-                        // Note: Do not call Trace in Dispose()
-                        Connections[i].Socket?.StopCapture();
-                        Connections[i].Socket?.Dispose();
-                        Connections[i].Socket = null;
-                    }
-                    Connections.Clear();
-                }
-
-                _disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

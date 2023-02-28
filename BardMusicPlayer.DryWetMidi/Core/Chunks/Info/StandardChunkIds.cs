@@ -1,20 +1,19 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Core.Chunks.Info
+﻿namespace BardMusicPlayer.DryWetMidi.Core.Chunks.Info;
+
+internal static class StandardChunkIds
 {
-    internal static class StandardChunkIds
+    #region Fields
+
+    private static string[] _ids;
+
+    #endregion
+
+    #region Methods
+
+    public static string[] GetIds()
     {
-        #region Fields
-
-        private static string[] _ids;
-
-        #endregion
-
-        #region Methods
-
-        public static string[] GetIds()
-        {
-            return _ids ?? (_ids = new[] { HeaderChunk.Id, TrackChunk.Id });
-        }
-
-        #endregion
+        return _ids ?? (_ids = new[] { HeaderChunk.Id, TrackChunk.Id });
     }
+
+    #endregion
 }

@@ -1,19 +1,18 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Quantizer;
+
+/// <summary>
+/// An object's target (start, end, both ends) to quantize.
+/// </summary>
+[Flags]
+public enum QuantizerTarget
 {
     /// <summary>
-    /// An object's target (start, end, both ends) to quantize.
+    /// Start time of an object.
     /// </summary>
-    [Flags]
-    public enum QuantizerTarget
-    {
-        /// <summary>
-        /// Start time of an object.
-        /// </summary>
-        Start = 1,
+    Start = 1,
 
-        /// <summary>
-        /// End time of an object.
-        /// </summary>
-        End = 2
-    }
+    /// <summary>
+    /// End time of an object.
+    /// </summary>
+    End = 2
 }

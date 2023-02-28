@@ -1,19 +1,18 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
+
+/// <summary>
+/// Defines how a note's number is presented in CSV representation: either a number or
+/// a letter (for example, A#5).
+/// </summary>
+public enum NoteNumberFormat
 {
     /// <summary>
-    /// Defines how a note's number is presented in CSV representation: either a number or
-    /// a letter (for example, A#5).
+    /// A note's number is presented as just a number.
     /// </summary>
-    public enum NoteNumberFormat
-    {
-        /// <summary>
-        /// A note's number is presented as just a number.
-        /// </summary>
-        NoteNumber,
+    NoteNumber,
 
-        /// <summary>
-        /// A note's number is presented as a letter.
-        /// </summary>
-        Letter
-    }
+    /// <summary>
+    /// A note's number is presented as a letter.
+    /// </summary>
+    Letter
 }

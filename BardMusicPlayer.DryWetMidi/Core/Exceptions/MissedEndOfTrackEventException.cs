@@ -1,26 +1,25 @@
 ﻿using BardMusicPlayer.DryWetMidi.Common;
 using BardMusicPlayer.DryWetMidi.Core.ReadingSettings;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Exceptions
+namespace BardMusicPlayer.DryWetMidi.Core.Exceptions;
+
+/// <summary>
+/// The exception that is thrown when a MIDI file chunk doesn't end with an <c>End of Track</c> event.
+/// </summary>
+/// <remarks>
+/// <para>Note that this exception will be thrown only if <see cref="ReadingSettings.MissedEndOfTrackPolicy"/>
+/// is set to <see cref="MissedEndOfTrackPolicy.Abort"/> for the <see cref="ReadingSettings"/>
+/// used for reading a MIDI file.</para>
+/// </remarks>
+[Serializable]
+public sealed class MissedEndOfTrackEventException : MidiException
 {
-    /// <summary>
-    /// The exception that is thrown when a MIDI file chunk doesn't end with an <c>End of Track</c> event.
-    /// </summary>
-    /// <remarks>
-    /// <para>Note that this exception will be thrown only if <see cref="ReadingSettings.MissedEndOfTrackPolicy"/>
-    /// is set to <see cref="MissedEndOfTrackPolicy.Abort"/> for the <see cref="ReadingSettings"/>
-    /// used for reading a MIDI file.</para>
-    /// </remarks>
-    [Serializable]
-    public sealed class MissedEndOfTrackEventException : MidiException
+    #region Constructors
+
+    internal MissedEndOfTrackEventException()
+        : base("Track chunk doesn't end with End Of Track event.")
     {
-        #region Constructors
-
-        internal MissedEndOfTrackEventException()
-            : base("Track chunk doesn't end with End Of Track event.")
-        {
-        }
-
-        #endregion
     }
+
+    #endregion
 }

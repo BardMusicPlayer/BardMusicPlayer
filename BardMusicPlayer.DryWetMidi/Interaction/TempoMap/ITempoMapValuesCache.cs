@@ -1,17 +1,16 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap
+﻿namespace BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
+
+internal interface ITempoMapValuesCache
 {
-    internal interface ITempoMapValuesCache
-    {
-        #region Properties
+    #region Properties
 
-        IEnumerable<TempoMapLine> InvalidateOnLines { get; }
+    IEnumerable<TempoMapLine> InvalidateOnLines { get; }
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        void Invalidate(TempoMap tempoMap);
+    void Invalidate(TempoMap tempoMap);
 
-        #endregion
-    }
+    #endregion
 }

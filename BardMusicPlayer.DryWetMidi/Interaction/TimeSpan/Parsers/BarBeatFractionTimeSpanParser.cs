@@ -2,55 +2,54 @@
 using BardMusicPlayer.DryWetMidi.Common.Parsing;
 using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers
+namespace BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Parsers;
+
+internal static class BarBeatFractionTimeSpanParser
 {
-    internal static class BarBeatFractionTimeSpanParser
+    #region Constants
+
+    private const string BarsGroupName = "bars";
+    private const string BeatsGroupName = "beats";
+
+    private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(BarsGroupName);
+    private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName);
+
+    private static readonly string Divider = Regex.Escape("_");
+
+    private static readonly string[] Patterns = new[]
     {
-        #region Constants
+        $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+    };
 
-        private const string BarsGroupName = "bars";
-        private const string BeatsGroupName = "beats";
+    private const string BarsIsOutOfRange = "Bars number is out of range.";
+    private const string BeatsIsOutOfRange = "Beats number is out of range.";
 
-        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(BarsGroupName);
-        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName);
+    #endregion
 
-        private static readonly string Divider = Regex.Escape("_");
+    #region Methods
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
-        };
+    internal static ParsingResult TryParse(string input, out BarBeatFractionTimeSpan timeSpan)
+    {
+        timeSpan = null;
 
-        private const string BarsIsOutOfRange = "Bars number is out of range.";
-        private const string BeatsIsOutOfRange = "Beats number is out of range.";
+        if (string.IsNullOrWhiteSpace(input))
+            return ParsingResult.EmptyInputString;
 
-        #endregion
+        var match = ParsingUtilities.Match(input, Patterns);
+        if (match == null)
+            return ParsingResult.NotMatched;
 
-        #region Methods
+        long bars;
+        if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out bars))
+            return ParsingResult.Error(BarsIsOutOfRange);
 
-        internal static ParsingResult TryParse(string input, out BarBeatFractionTimeSpan timeSpan)
-        {
-            timeSpan = null;
+        double beats;
+        if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, out beats))
+            return ParsingResult.Error(BeatsIsOutOfRange);
 
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            long bars;
-            if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out bars))
-                return ParsingResult.Error(BarsIsOutOfRange);
-
-            double beats;
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, out beats))
-                return ParsingResult.Error(BeatsIsOutOfRange);
-
-            timeSpan = new BarBeatFractionTimeSpan(bars, beats);
-            return ParsingResult.Parsed;
-        }
-
-        #endregion
+        timeSpan = new BarBeatFractionTimeSpan(bars, beats);
+        return ParsingResult.Parsed;
     }
+
+    #endregion
 }

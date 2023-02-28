@@ -1,118 +1,117 @@
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
+
+public partial class DelegateQueue
 {
-    public partial class DelegateQueue
+    private enum NotificationType
     {
-        private enum NotificationType
+        None,
+        BeginInvokeCompleted,
+        PostCompleted
+    }
+
+    /// <summary>
+    /// Implements the IAsyncResult interface for the DelegateQueue class.
+    /// </summary>
+    private class DelegateQueueAsyncResult : AsyncResult
+    {
+        // The delegate to be invoked.
+        private Delegate method;
+
+        // Args to be passed to the delegate.
+        private object[] args;
+
+        // The object returned from the delegate.
+        private object returnValue = null;
+
+        // Represents a possible exception thrown by invoking the method.
+        private Exception error = null;
+
+        private NotificationType notificationType;
+
+        public DelegateQueueAsyncResult(
+            object owner, 
+            Delegate method, 
+            object[] args, 
+            bool synchronously, 
+            NotificationType notificationType) 
+            : base(owner, null, null)
         {
-            None,
-            BeginInvokeCompleted,
-            PostCompleted
+            this.method           = method;
+            this.args             = args;
+            this.notificationType = notificationType;
         }
 
-        /// <summary>
-        /// Implements the IAsyncResult interface for the DelegateQueue class.
-        /// </summary>
-        private class DelegateQueueAsyncResult : AsyncResult
+        public DelegateQueueAsyncResult(
+            object owner,
+            AsyncCallback callback,
+            object state,
+            Delegate method,
+            object[] args,
+            bool synchronously,
+            NotificationType notificationType)
+            : base(owner, callback, state)
         {
-            // The delegate to be invoked.
-            private Delegate method;
+            this.method           = method;
+            this.args             = args;
+            this.notificationType = notificationType;
+        }
 
-            // Args to be passed to the delegate.
-            private object[] args;
-
-            // The object returned from the delegate.
-            private object returnValue = null;
-
-            // Represents a possible exception thrown by invoking the method.
-            private Exception error = null;
-
-            private NotificationType notificationType;
-
-            public DelegateQueueAsyncResult(
-                object owner, 
-                Delegate method, 
-                object[] args, 
-                bool synchronously, 
-                NotificationType notificationType) 
-                : base(owner, null, null)
+        public void Invoke()
+        {
+            try
             {
-                this.method           = method;
-                this.args             = args;
-                this.notificationType = notificationType;
+                returnValue = method.DynamicInvoke(args);
             }
-
-            public DelegateQueueAsyncResult(
-                object owner,
-                AsyncCallback callback,
-                object state,
-                Delegate method,
-                object[] args,
-                bool synchronously,
-                NotificationType notificationType)
-                : base(owner, callback, state)
+            catch(Exception ex)
             {
-                this.method           = method;
-                this.args             = args;
-                this.notificationType = notificationType;
+                error = ex;
             }
-
-            public void Invoke()
+            finally
             {
-                try
-                {
-                    returnValue = method.DynamicInvoke(args);
-                }
-                catch(Exception ex)
-                {
-                    error = ex;
-                }
-                finally
-                {
-                    Signal();
-                }
+                Signal();
             }
+        }
 
-            public object[] GetArgs()
+        public object[] GetArgs()
+        {
+            return args;
+        }
+
+        public object ReturnValue
+        {
+            get
             {
-                return args;
+                return returnValue;
             }
+        }
 
-            public object ReturnValue
+        public Exception Error
+        {
+            get
             {
-                get
-                {
-                    return returnValue;
-                }
+                return error;
             }
-
-            public Exception Error
+            set
             {
-                get
-                {
-                    return error;
-                }
-                set
-                {
-                    error = value;
-                }
+                error = value;
             }
+        }
 
-            public Delegate Method
+        public Delegate Method
+        {
+            get
             {
-                get
-                {
-                    return method;
-                }
+                return method;
             }
+        }
 
-            public NotificationType NotificationType
+        public NotificationType NotificationType
+        {
+            get
             {
-                get
-                {
-                    return notificationType;
-                }
+                return notificationType;
             }
         }
     }

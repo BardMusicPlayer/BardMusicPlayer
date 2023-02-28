@@ -1,11 +1,10 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common;
+
+internal sealed class ObjectWrapper<TObject>
 {
-    internal sealed class ObjectWrapper<TObject>
-    {
-        #region Properties
+    #region Properties
 
-        public TObject Object { get; set; }
+    public TObject Object { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

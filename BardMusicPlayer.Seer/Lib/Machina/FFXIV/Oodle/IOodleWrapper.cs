@@ -13,10 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see<http://www.gnu.org/licenses/>.
 
-namespace Machina.FFXIV.Oodle
+namespace Machina.FFXIV.Oodle;
+
+public interface IOodleWrapper
 {
-    public interface IOodleWrapper
-    {
-        unsafe bool Decompress(byte[] payload, int offset, int compressedLength, byte[] plaintext, int decompressedLength);
-    }
+    unsafe bool Decompress(byte[] payload, int offset, int compressedLength, byte[] plaintext, int decompressedLength);
 }

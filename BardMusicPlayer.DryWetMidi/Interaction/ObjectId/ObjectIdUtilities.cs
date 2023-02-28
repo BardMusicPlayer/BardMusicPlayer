@@ -6,63 +6,62 @@ using BardMusicPlayer.DryWetMidi.Interaction.Parameters.Registered;
 using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 
-namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId
+namespace BardMusicPlayer.DryWetMidi.Interaction.ObjectId;
+
+/// <summary>
+/// Provides methods to get the ID (key) of an object.
+/// </summary>
+public static class ObjectIdUtilities
 {
+    #region Methods
+
     /// <summary>
-    /// Provides methods to get the ID (key) of an object.
+    /// Gets the ID (key) of the specified object using standard logic.
     /// </summary>
-    public static class ObjectIdUtilities
+    /// <param name="obj">Object to get ID for.</param>
+    /// <returns>An object that represents the ID of the <paramref name="obj"/>.</returns>
+    /// <exception cref="NotSupportedException">Getting of ID for <paramref name="obj"/> is not supported.</exception>
+    public static IObjectId GetObjectId(this ITimedObject obj)
     {
-        #region Methods
+        ThrowIfArgument.IsNull(nameof(obj), obj);
 
-        /// <summary>
-        /// Gets the ID (key) of the specified object using standard logic.
-        /// </summary>
-        /// <param name="obj">Object to get ID for.</param>
-        /// <returns>An object that represents the ID of the <paramref name="obj"/>.</returns>
-        /// <exception cref="NotSupportedException">Getting of ID for <paramref name="obj"/> is not supported.</exception>
-        public static IObjectId GetObjectId(this ITimedObject obj)
-        {
-            ThrowIfArgument.IsNull(nameof(obj), obj);
+        var note = obj as Note;
+        if (note != null)
+            return GetNoteId(note);
 
-            var note = obj as Note;
-            if (note != null)
-                return GetNoteId(note);
+        var timedEvent = obj as TimedEvent;
+        if (timedEvent != null)
+            return new TimedEventId(timedEvent.Event.EventType);
 
-            var timedEvent = obj as TimedEvent;
-            if (timedEvent != null)
-                return new TimedEventId(timedEvent.Event.EventType);
+        var chord = obj as Chord;
+        if (chord != null)
+            return new ChordId(chord.Notes.Select(GetNoteId).ToArray());
 
-            var chord = obj as Chord;
-            if (chord != null)
-                return new ChordId(chord.Notes.Select(GetNoteId).ToArray());
+        var rest = obj as Rest;
+        if (rest != null)
+            return new RestId(rest.Channel, rest.NoteNumber);
 
-            var rest = obj as Rest;
-            if (rest != null)
-                return new RestId(rest.Channel, rest.NoteNumber);
+        var registeredParameter = obj as RegisteredParameter;
+        if (registeredParameter != null)
+            return new RegisteredParameterId(registeredParameter.ParameterType);
 
-            var registeredParameter = obj as RegisteredParameter;
-            if (registeredParameter != null)
-                return new RegisteredParameterId(registeredParameter.ParameterType);
-
-            throw new NotSupportedException($"Getting of ID for {obj} is not supported.");
-        }
-
-        /// <summary>
-        /// Gets the ID (key) as the specified value.
-        /// </summary>
-        /// <param name="id">ID to wrap and return.</param>
-        /// <returns>An object that holds <paramref name="id"/>.</returns>
-        public static IObjectId GetObjectId<TId>(TId id)
-        {
-            return new ConstantObjectId<TId>(id);
-        }
-
-        private static NoteId GetNoteId(Note note)
-        {
-            return new NoteId(note.Channel, note.NoteNumber);
-        }
-
-        #endregion
+        throw new NotSupportedException($"Getting of ID for {obj} is not supported.");
     }
+
+    /// <summary>
+    /// Gets the ID (key) as the specified value.
+    /// </summary>
+    /// <param name="id">ID to wrap and return.</param>
+    /// <returns>An object that holds <paramref name="id"/>.</returns>
+    public static IObjectId GetObjectId<TId>(TId id)
+    {
+        return new ConstantObjectId<TId>(id);
+    }
+
+    private static NoteId GetNoteId(Note note)
+    {
+        return new NoteId(note.Channel, note.NoteNumber);
+    }
+
+    #endregion
 }

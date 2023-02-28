@@ -3,12 +3,12 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.Maestro.Events;
-using BardMusicPlayer.Maestro.Sequencer.Player;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using BardMusicPlayer.Maestro.Events;
+using BardMusicPlayer.Maestro.Sequencer.Player;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend;
 

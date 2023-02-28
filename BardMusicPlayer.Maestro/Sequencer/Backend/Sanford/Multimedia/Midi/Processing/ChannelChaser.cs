@@ -36,133 +36,132 @@ using System;
 using System.Collections;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
+
+public class ChannelChaser
 {
-    public class ChannelChaser
+    private ChannelMessage[,] controllerMessages;
+
+    private ChannelMessage[] programChangeMessages;
+
+    private ChannelMessage[] pitchBendMessages;
+
+    private ChannelMessage[] channelPressureMessages;
+
+    private ChannelMessage[] polyPressureMessages;
+
+    public event EventHandler<ChasedEventArgs> Chased;
+
+    public ChannelChaser()
     {
-        private ChannelMessage[,] controllerMessages;
+        var c = ChannelMessage.MidiChannelMaxValue + 1;
+        var d = ShortMessage.DataMaxValue + 1;
 
-        private ChannelMessage[] programChangeMessages;
+        controllerMessages = new ChannelMessage[c, d];
 
-        private ChannelMessage[] pitchBendMessages;
+        programChangeMessages   = new ChannelMessage[c];
+        pitchBendMessages       = new ChannelMessage[c];
+        channelPressureMessages = new ChannelMessage[c];
+        polyPressureMessages    = new ChannelMessage[c];
+    }
 
-        private ChannelMessage[] channelPressureMessages;
-
-        private ChannelMessage[] polyPressureMessages;
-
-        public event EventHandler<ChasedEventArgs> Chased;
-
-        public ChannelChaser()
+    public void Process(ChannelMessage message)
+    {
+        switch (message.Command)
         {
-            var c = ChannelMessage.MidiChannelMaxValue + 1;
-            var d = ShortMessage.DataMaxValue + 1;
+            case ChannelCommand.Controller:
+                controllerMessages[message.MidiChannel, message.Data1] = message;
+                break;
 
-            controllerMessages = new ChannelMessage[c, d];
+            case ChannelCommand.ChannelPressure:
+                channelPressureMessages[message.MidiChannel] = message;
+                break;
 
-            programChangeMessages = new ChannelMessage[c];
-            pitchBendMessages = new ChannelMessage[c];
-            channelPressureMessages = new ChannelMessage[c];
-            polyPressureMessages = new ChannelMessage[c];
+            case ChannelCommand.PitchWheel:
+                pitchBendMessages[message.MidiChannel] = message;
+                break;
+
+            case ChannelCommand.PolyPressure:
+                polyPressureMessages[message.MidiChannel] = message;
+                break;
+
+            case ChannelCommand.ProgramChange:
+                programChangeMessages[message.MidiChannel] = message;
+                break;
         }
+    }
 
-        public void Process(ChannelMessage message)
+    public void Chase()
+    {
+        var chasedMessages = new ArrayList();
+
+        for (var c = 0; c <= ChannelMessage.MidiChannelMaxValue; c++)
         {
-            switch (message.Command)
+            for (var n = 0; n <= ShortMessage.DataMaxValue; n++)
             {
-                case ChannelCommand.Controller:
-                    controllerMessages[message.MidiChannel, message.Data1] = message;
-                    break;
-
-                case ChannelCommand.ChannelPressure:
-                    channelPressureMessages[message.MidiChannel] = message;
-                    break;
-
-                case ChannelCommand.PitchWheel:
-                    pitchBendMessages[message.MidiChannel] = message;
-                    break;
-
-                case ChannelCommand.PolyPressure:
-                    polyPressureMessages[message.MidiChannel] = message;
-                    break;
-
-                case ChannelCommand.ProgramChange:
-                    programChangeMessages[message.MidiChannel] = message;
-                    break;
-            }
-        }
-
-        public void Chase()
-        {
-            var chasedMessages = new ArrayList();
-
-            for (var c = 0; c <= ChannelMessage.MidiChannelMaxValue; c++)
-            {
-                for (var n = 0; n <= ShortMessage.DataMaxValue; n++)
+                if (controllerMessages[c, n] != null)
                 {
-                    if (controllerMessages[c, n] != null)
-                    {
-                        chasedMessages.Add(controllerMessages[c, n]);
+                    chasedMessages.Add(controllerMessages[c, n]);
 
-                        controllerMessages[c, n] = null;
-                    }
-                }
-
-                if (programChangeMessages[c] != null)
-                {
-                    chasedMessages.Add(programChangeMessages[c]);
-
-                    programChangeMessages[c] = null;
-                }
-
-                if (pitchBendMessages[c] != null)
-                {
-                    chasedMessages.Add(pitchBendMessages[c]);
-
-                    pitchBendMessages[c] = null;
-                }
-
-                if (channelPressureMessages[c] != null)
-                {
-                    chasedMessages.Add(channelPressureMessages[c]);
-
-                    channelPressureMessages[c] = null;
-                }
-
-                if (polyPressureMessages[c] != null)
-                {
-                    chasedMessages.Add(polyPressureMessages[c]);
-
-                    polyPressureMessages[c] = null;
-                }
-            }
-
-            OnChased(new ChasedEventArgs(chasedMessages));
-        }
-
-        public void Reset()
-        {
-            for (var c = 0; c <= ChannelMessage.MidiChannelMaxValue; c++)
-            {
-                for (var n = 0; n <= ShortMessage.DataMaxValue; n++)
-                {
                     controllerMessages[c, n] = null;
                 }
+            }
+
+            if (programChangeMessages[c] != null)
+            {
+                chasedMessages.Add(programChangeMessages[c]);
 
                 programChangeMessages[c] = null;
+            }
+
+            if (pitchBendMessages[c] != null)
+            {
+                chasedMessages.Add(pitchBendMessages[c]);
+
                 pitchBendMessages[c] = null;
+            }
+
+            if (channelPressureMessages[c] != null)
+            {
+                chasedMessages.Add(channelPressureMessages[c]);
+
                 channelPressureMessages[c] = null;
+            }
+
+            if (polyPressureMessages[c] != null)
+            {
+                chasedMessages.Add(polyPressureMessages[c]);
+
                 polyPressureMessages[c] = null;
             }
         }
 
-        protected virtual void OnChased(ChasedEventArgs e)
-        {
-            var handler = Chased;
+        OnChased(new ChasedEventArgs(chasedMessages));
+    }
 
-            if (handler != null)
+    public void Reset()
+    {
+        for (var c = 0; c <= ChannelMessage.MidiChannelMaxValue; c++)
+        {
+            for (var n = 0; n <= ShortMessage.DataMaxValue; n++)
             {
-                handler(this, e);
+                controllerMessages[c, n] = null;
             }
+
+            programChangeMessages[c]   = null;
+            pitchBendMessages[c]       = null;
+            channelPressureMessages[c] = null;
+            polyPressureMessages[c]    = null;
+        }
+    }
+
+    protected virtual void OnChased(ChasedEventArgs e)
+    {
+        var handler = Chased;
+
+        if (handler != null)
+        {
+            handler(this, e);
         }
     }
 }

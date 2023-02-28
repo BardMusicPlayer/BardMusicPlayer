@@ -1,43 +1,42 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common;
+
+internal sealed class Random
 {
-    internal sealed class Random
+    #region Fields
+
+    private static volatile System.Random _instance;
+    private static readonly object _lockObject = new object();
+
+    #endregion
+
+    #region Constructor
+
+    private Random()
     {
-        #region Fields
+    }
 
-        private static volatile System.Random _instance;
-        private static readonly object _lockObject = new object();
+    #endregion
 
-        #endregion
+    #region Properties
 
-        #region Constructor
-
-        private Random()
+    public static System.Random Instance
+    {
+        get
         {
-        }
-
-        #endregion
-
-        #region Properties
-
-        public static System.Random Instance
-        {
-            get
+            if (_instance == null)
             {
-                if (_instance == null)
+                lock (_lockObject)
                 {
-                    lock (_lockObject)
+                    if (_instance == null)
                     {
-                        if (_instance == null)
-                        {
-                            _instance = new System.Random();
-                        }
+                        _instance = new System.Random();
                     }
                 }
-
-                return _instance;
             }
-        }
 
-        #endregion
+            return _instance;
+        }
     }
+
+    #endregion
 }

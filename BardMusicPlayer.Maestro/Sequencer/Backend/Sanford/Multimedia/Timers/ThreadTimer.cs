@@ -27,281 +27,75 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers;
+
+/// <summary>
+/// Replacement for the Windows multimedia timer that also runs on Mono
+/// </summary>
+sealed class ThreadTimer : ITimer
 {
-    /// <summary>
-    /// Replacement for the Windows multimedia timer that also runs on Mono
-    /// </summary>
-    sealed class ThreadTimer : ITimer
+    ThreadTimerQueue queue;
+
+    bool isRunning;
+    TimerMode mode;
+    TimeSpan period;
+    TimeSpan resolution;
+
+    static object[] emptyArgs = new object[] { EventArgs.Empty };
+
+    public ThreadTimer()
+        : this(ThreadTimerQueue.Instance)
     {
-        ThreadTimerQueue queue;
-
-        bool isRunning;
-        TimerMode mode;
-        TimeSpan period;
-        TimeSpan resolution;
-
-        static object[] emptyArgs = new object[] { EventArgs.Empty };
-
-        public ThreadTimer()
-            : this(ThreadTimerQueue.Instance)
+        if (!Stopwatch.IsHighResolution)
         {
-            if (!Stopwatch.IsHighResolution)
-            {
-                throw new NotImplementedException("Stopwatch is not IsHighResolution");
-            }
-
-            isRunning = false;
-            mode = TimerMode.Periodic;
-            resolution = TimeSpan.FromMilliseconds(1);
-            period = resolution;
-
-            tickRaiser = new EventRaiser(OnTick);
+            throw new NotImplementedException("Stopwatch is not IsHighResolution");
         }
 
-        ThreadTimer(ThreadTimerQueue queue)
+        isRunning  = false;
+        mode       = TimerMode.Periodic;
+        resolution = TimeSpan.FromMilliseconds(1);
+        period     = resolution;
+
+        tickRaiser = new EventRaiser(OnTick);
+    }
+
+    ThreadTimer(ThreadTimerQueue queue)
+    {
+        this.queue = queue;
+    }
+
+    internal void DoTick()
+    {
+        if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
         {
-            this.queue = queue;
+            SynchronizingObject.BeginInvoke(tickRaiser, emptyArgs);
         }
-
-        internal void DoTick()
+        else
         {
-            if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
-            {
-                SynchronizingObject.BeginInvoke(tickRaiser, emptyArgs);
-            }
-            else
-            {
-                OnTick(EventArgs.Empty);
-            }
+            OnTick(EventArgs.Empty);
         }
+    }
 
-        // Represents methods that raise events.
-        private delegate void EventRaiser(EventArgs e);
+    // Represents methods that raise events.
+    private delegate void EventRaiser(EventArgs e);
 
-        // Represents the method that raises the Tick event.
-        private EventRaiser tickRaiser;
+    // Represents the method that raises the Tick event.
+    private EventRaiser tickRaiser;
 
-        // The ISynchronizeInvoke object to use for marshaling events.
-        private ISynchronizeInvoke synchronizingObject = null;
+    // The ISynchronizeInvoke object to use for marshaling events.
+    private ISynchronizeInvoke synchronizingObject = null;
 
-        public bool IsRunning
+    public bool IsRunning
+    {
+        get
         {
-            get
-            {
-                return isRunning;
-            }
+            return isRunning;
         }
+    }
 
-        public TimerMode Mode
-        {
-            get
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                return mode;
-            }
-
-            set
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                mode = value;
-
-                if (IsRunning)
-                {
-                    Stop();
-                    Start();
-                }
-            }
-        }
-
-        public int Period
-        {
-            get
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                return (int)period.TotalMilliseconds;
-            }
-            set
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                var wasRunning = IsRunning;
-
-                if (wasRunning)
-                {
-                    Stop();
-                }
-
-                period = TimeSpan.FromMilliseconds(value);
-
-                if (wasRunning)
-                {
-                    Start();
-                }
-            }
-        }
-
-        public TimeSpan PeriodTimeSpan
-        {
-            get { return period; }
-        }
-
-        public int Resolution
-        {
-            get
-            {
-                return (int)resolution.TotalMilliseconds;
-            }
-
-            set
-            {
-                resolution = TimeSpan.FromMilliseconds(value);
-            }
-        }
-
-        // For implementing IComponent.
-        private ISite site = null;
-
-        public ISite Site
-        {
-            get
-            {
-                return site;
-            }
-
-            set
-            {
-                site = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the object used to marshal event-handler calls.
-        /// </summary>
-        public ISynchronizeInvoke SynchronizingObject
-        {
-            get
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                return synchronizingObject;
-            }
-            set
-            {
-                #region Require
-
-                if (disposed)
-                {
-                    throw new ObjectDisposedException("Timer");
-                }
-
-                #endregion
-
-                synchronizingObject = value;
-            }
-        }
-
-        public event EventHandler Disposed;
-        public event EventHandler Started;
-        public event EventHandler Stopped;
-        public event EventHandler Tick;
-
-        public void Dispose()
-        {
-            Stop();
-            disposed = true;
-            OnDisposed(EventArgs.Empty);
-        }
-
-        #region Event Raiser Methods
-
-        // Raises the Disposed event.
-        private void OnDisposed(EventArgs e)
-        {
-            var handler = Disposed;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        // Raises the Started event.
-        private void OnStarted(EventArgs e)
-        {
-            var handler = Started;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        // Raises the Stopped event.
-        private void OnStopped(EventArgs e)
-        {
-            var handler = Stopped;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        // Raises the Tick event.
-        private void OnTick(EventArgs e)
-        {
-            var handler = Tick;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        #endregion        
-
-        bool disposed = false;
-
-        public void Start()
+    public TimerMode Mode
+    {
+        get
         {
             #region Require
 
@@ -312,40 +106,33 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers
 
             #endregion
 
-            #region Guard
+            return mode;
+        }
+
+        set
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException("Timer");
+            }
+
+            #endregion
+
+            mode = value;
 
             if (IsRunning)
             {
-                return;
-            }
-
-            #endregion
-
-            // If the periodic event callback should be used.
-            if (Mode == TimerMode.Periodic)
-            {
-                queue.Add(this);
-                isRunning = true;
-            }
-            // Else the one shot event callback should be used.
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
-            {
-                SynchronizingObject.BeginInvoke(
-                    new EventRaiser(OnStarted),
-                    new object[] { EventArgs.Empty });
-            }
-            else
-            {
-                OnStarted(EventArgs.Empty);
+                Stop();
+                Start();
             }
         }
+    }
 
-        public void Stop()
+    public int Period
+    {
+        get
         {
             #region Require
 
@@ -356,29 +143,241 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers
 
             #endregion
 
-            #region Guard
+            return (int)period.TotalMilliseconds;
+        }
+        set
+        {
+            #region Require
 
-            if (!IsRunning)
+            if (disposed)
             {
-                return;
+                throw new ObjectDisposedException("Timer");
             }
 
             #endregion
 
-            queue.Remove(this);
-            isRunning = false;
+            var wasRunning = IsRunning;
 
-            if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
+            if (wasRunning)
             {
-                SynchronizingObject.BeginInvoke(
-                    new EventRaiser(OnStopped),
-                    new object[] { EventArgs.Empty });
+                Stop();
             }
-            else
+
+            period = TimeSpan.FromMilliseconds(value);
+
+            if (wasRunning)
             {
-                OnStopped(EventArgs.Empty);
+                Start();
             }
         }
-
     }
+
+    public TimeSpan PeriodTimeSpan
+    {
+        get { return period; }
+    }
+
+    public int Resolution
+    {
+        get
+        {
+            return (int)resolution.TotalMilliseconds;
+        }
+
+        set
+        {
+            resolution = TimeSpan.FromMilliseconds(value);
+        }
+    }
+
+    // For implementing IComponent.
+    private ISite site = null;
+
+    public ISite Site
+    {
+        get
+        {
+            return site;
+        }
+
+        set
+        {
+            site = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the object used to marshal event-handler calls.
+    /// </summary>
+    public ISynchronizeInvoke SynchronizingObject
+    {
+        get
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException("Timer");
+            }
+
+            #endregion
+
+            return synchronizingObject;
+        }
+        set
+        {
+            #region Require
+
+            if (disposed)
+            {
+                throw new ObjectDisposedException("Timer");
+            }
+
+            #endregion
+
+            synchronizingObject = value;
+        }
+    }
+
+    public event EventHandler Disposed;
+    public event EventHandler Started;
+    public event EventHandler Stopped;
+    public event EventHandler Tick;
+
+    public void Dispose()
+    {
+        Stop();
+        disposed = true;
+        OnDisposed(EventArgs.Empty);
+    }
+
+    #region Event Raiser Methods
+
+    // Raises the Disposed event.
+    private void OnDisposed(EventArgs e)
+    {
+        var handler = Disposed;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    // Raises the Started event.
+    private void OnStarted(EventArgs e)
+    {
+        var handler = Started;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    // Raises the Stopped event.
+    private void OnStopped(EventArgs e)
+    {
+        var handler = Stopped;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    // Raises the Tick event.
+    private void OnTick(EventArgs e)
+    {
+        var handler = Tick;
+
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    #endregion        
+
+    bool disposed = false;
+
+    public void Start()
+    {
+        #region Require
+
+        if (disposed)
+        {
+            throw new ObjectDisposedException("Timer");
+        }
+
+        #endregion
+
+        #region Guard
+
+        if (IsRunning)
+        {
+            return;
+        }
+
+        #endregion
+
+        // If the periodic event callback should be used.
+        if (Mode == TimerMode.Periodic)
+        {
+            queue.Add(this);
+            isRunning = true;
+        }
+        // Else the one shot event callback should be used.
+        else
+        {
+            throw new NotImplementedException();
+        }
+
+        if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
+        {
+            SynchronizingObject.BeginInvoke(
+                new EventRaiser(OnStarted),
+                new object[] { EventArgs.Empty });
+        }
+        else
+        {
+            OnStarted(EventArgs.Empty);
+        }
+    }
+
+    public void Stop()
+    {
+        #region Require
+
+        if (disposed)
+        {
+            throw new ObjectDisposedException("Timer");
+        }
+
+        #endregion
+
+        #region Guard
+
+        if (!IsRunning)
+        {
+            return;
+        }
+
+        #endregion
+
+        queue.Remove(this);
+        isRunning = false;
+
+        if (SynchronizingObject != null && SynchronizingObject.InvokeRequired)
+        {
+            SynchronizingObject.BeginInvoke(
+                new EventRaiser(OnStopped),
+                new object[] { EventArgs.Empty });
+        }
+        else
+        {
+            OnStopped(EventArgs.Empty);
+        }
+    }
+
 }

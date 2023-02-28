@@ -4,31 +4,30 @@ using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 using BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Common;
 
-namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes
-{
-    internal static class NotesToCsvConverter
-    {
-        #region Methods
+namespace BardMusicPlayer.DryWetMidi.Tools.CsvConverter.Notes;
 
-        public static void ConvertToCsv(IEnumerable<Note> notes, Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings)
+internal static class NotesToCsvConverter
+{
+    #region Methods
+
+    public static void ConvertToCsv(IEnumerable<Note> notes, Stream stream, TempoMap tempoMap, NoteCsvConversionSettings settings)
+    {
+        using (var csvWriter = new CsvWriter(stream, settings.CsvSettings))
         {
-            using (var csvWriter = new CsvWriter(stream, settings.CsvSettings))
+            foreach (var note in notes.Where(n => n != null))
             {
-                foreach (var note in notes.Where(n => n != null))
+                csvWriter.WriteRecord(new[]
                 {
-                    csvWriter.WriteRecord(new[]
-                    {
-                        note.TimeAs(settings.TimeType, tempoMap),
-                        note.Channel,
-                        NoteCsvConversionUtilities.FormatNoteNumber(note.NoteNumber, settings.NoteNumberFormat),
-                        note.LengthAs(settings.NoteLengthType, tempoMap),
-                        note.Velocity,
-                        note.OffVelocity
-                    });
-                }
+                    note.TimeAs(settings.TimeType, tempoMap),
+                    note.Channel,
+                    NoteCsvConversionUtilities.FormatNoteNumber(note.NoteNumber, settings.NoteNumberFormat),
+                    note.LengthAs(settings.NoteLengthType, tempoMap),
+                    note.Velocity,
+                    note.OffVelocity
+                });
             }
         }
-
-        #endregion
     }
+
+    #endregion
 }

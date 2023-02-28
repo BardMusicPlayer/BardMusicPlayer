@@ -35,141 +35,140 @@
 using System;
 using System.Diagnostics;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateScheduler
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateScheduler;
+
+public class Task : IComparable
 {
-    public class Task : IComparable
+    #region Task Members
+
+    #region Fields
+
+    // The number of times left to invoke the delegate associated with this Task.
+    private int count;
+
+    // The interval between delegate invocation.
+    private int millisecondsTimeout;
+
+    // The delegate to invoke.
+    private Delegate method;
+
+    // The arguments to pass to the delegate when it is invoked.
+    private object[] args;
+
+    // The time for the next timeout;
+    private DateTime nextTimeout;
+
+    // For locking.
+    private readonly object lockObject = new object();
+
+    #endregion
+
+    #region Construction
+
+    internal Task(
+        int count,
+        int millisecondsTimeout,
+        Delegate method,
+        object[] args)
     {
-        #region Task Members
+        this.count               = count;
+        this.millisecondsTimeout = millisecondsTimeout;
+        this.method              = method;
+        this.args                = args;
 
-        #region Fields
+        ResetNextTimeout();
+    }
 
-        // The number of times left to invoke the delegate associated with this Task.
-        private int count;
+    #endregion
 
-        // The interval between delegate invocation.
-        private int millisecondsTimeout;
+    #region Methods
 
-        // The delegate to invoke.
-        private Delegate method;
+    internal void ResetNextTimeout()
+    {
+        nextTimeout = DateTime.Now.AddMilliseconds(millisecondsTimeout);
+    }
 
-        // The arguments to pass to the delegate when it is invoked.
-        private object[] args;
+    internal object Invoke(DateTime signalTime)
+    {
+        Debug.Assert(count == DelegateScheduler.Infinite || count > 0);
 
-        // The time for the next timeout;
-        private DateTime nextTimeout;
+        var returnValue = method.DynamicInvoke(args);
 
-        // For locking.
-        private readonly object lockObject = new object();
-
-        #endregion
-
-        #region Construction
-
-        internal Task(
-            int count,
-            int millisecondsTimeout,
-            Delegate method,
-            object[] args)
+        if (count == DelegateScheduler.Infinite)
         {
-            this.count = count;
-            this.millisecondsTimeout = millisecondsTimeout;
-            this.method = method;
-            this.args = args;
-
-            ResetNextTimeout();
+            nextTimeout = nextTimeout.AddMilliseconds(millisecondsTimeout);
         }
-
-        #endregion
-
-        #region Methods
-
-        internal void ResetNextTimeout()
+        else
         {
-            nextTimeout = DateTime.Now.AddMilliseconds(millisecondsTimeout);
-        }
+            count--;
 
-        internal object Invoke(DateTime signalTime)
-        {
-            Debug.Assert(count == DelegateScheduler.Infinite || count > 0);
-
-            var returnValue = method.DynamicInvoke(args);
-
-            if (count == DelegateScheduler.Infinite)
+            if (count > 0)
             {
                 nextTimeout = nextTimeout.AddMilliseconds(millisecondsTimeout);
             }
-            else
-            {
-                count--;
-
-                if (count > 0)
-                {
-                    nextTimeout = nextTimeout.AddMilliseconds(millisecondsTimeout);
-                }
-            }
-
-            return returnValue;
         }
 
-        public object[] GetArgs()
-        {
-            return args;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public DateTime NextTimeout
-        {
-            get
-            {
-                return nextTimeout;
-            }
-        }
-
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
-
-        public Delegate Method
-        {
-            get
-            {
-                return method;
-            }
-        }
-
-        public int MillisecondsTimeout
-        {
-            get
-            {
-                return millisecondsTimeout;
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-        #region IComparable Members
-
-        public int CompareTo(object obj)
-        {
-            var t = obj as Task;
-
-            if (t == null)
-            {
-                throw new ArgumentException("obj is not the same type as this instance.");
-            }
-
-            return -nextTimeout.CompareTo(t.nextTimeout);
-        }
-
-        #endregion
+        return returnValue;
     }
+
+    public object[] GetArgs()
+    {
+        return args;
+    }
+
+    #endregion
+
+    #region Properties
+
+    public DateTime NextTimeout
+    {
+        get
+        {
+            return nextTimeout;
+        }
+    }
+
+    public int Count
+    {
+        get
+        {
+            return count;
+        }
+    }
+
+    public Delegate Method
+    {
+        get
+        {
+            return method;
+        }
+    }
+
+    public int MillisecondsTimeout
+    {
+        get
+        {
+            return millisecondsTimeout;
+        }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region IComparable Members
+
+    public int CompareTo(object obj)
+    {
+        var t = obj as Task;
+
+        if (t == null)
+        {
+            throw new ArgumentException("obj is not the same type as this instance.");
+        }
+
+        return -nextTimeout.CompareTo(t.nextTimeout);
+    }
+
+    #endregion
 }

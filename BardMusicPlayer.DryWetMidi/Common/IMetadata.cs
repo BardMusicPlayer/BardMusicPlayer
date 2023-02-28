@@ -1,13 +1,12 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Common;
+
+/// <summary>
+/// Provides a way to attach arbitrary data to an object.
+/// </summary>
+public interface IMetadata
 {
     /// <summary>
-    /// Provides a way to attach arbitrary data to an object.
+    /// Gets or sets a metadata associated with the current object.
     /// </summary>
-    public interface IMetadata
-    {
-        /// <summary>
-        /// Gets or sets a metadata associated with the current object.
-        /// </summary>
-        object Metadata { get; set; }
-    }
+    object Metadata { get; set; }
 }

@@ -1,18 +1,17 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Tools.Common
+﻿namespace BardMusicPlayer.DryWetMidi.Tools.Common;
+
+/// <summary>
+/// Target of an object that should be processed by a tool.
+/// </summary>
+public enum LengthedObjectTarget
 {
     /// <summary>
-    /// Target of an object that should be processed by a tool.
+    /// Start time of a lengthed object.
     /// </summary>
-    public enum LengthedObjectTarget
-    {
-        /// <summary>
-        /// Start time of a lengthed object.
-        /// </summary>
-        Start,
+    Start,
 
-        /// <summary>
-        /// End time of a lengthed object.
-        /// </summary>
-        End
-    }
+    /// <summary>
+    /// End time of a lengthed object.
+    /// </summary>
+    End
 }

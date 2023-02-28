@@ -1,23 +1,22 @@
 using System;
 using System.Collections;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
+
+public class ChasedEventArgs : EventArgs
 {
-    public class ChasedEventArgs : EventArgs
+    private ICollection messages;
+
+    public ChasedEventArgs(ICollection messages)
     {
-        private ICollection messages;
+        this.messages = messages;
+    }
 
-        public ChasedEventArgs(ICollection messages)
+    public ICollection Messages
+    {
+        get
         {
-            this.messages = messages;
-        }
-
-        public ICollection Messages
-        {
-            get
-            {
-                return messages;
-            }
+            return messages;
         }
     }
 }

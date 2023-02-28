@@ -36,24 +36,23 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
+
+public class PostCompletedEventArgs : AsyncCompletedEventArgs
 {
-    public class PostCompletedEventArgs : AsyncCompletedEventArgs
+    private SendOrPostCallback callback;
+
+    public PostCompletedEventArgs(SendOrPostCallback callback, Exception error, object state)
+        : base(error, false, state)
     {
-        private SendOrPostCallback callback;
+        this.callback = callback;
+    }
 
-        public PostCompletedEventArgs(SendOrPostCallback callback, Exception error, object state)
-            : base(error, false, state)
+    public SendOrPostCallback Callback
+    {
+        get
         {
-            this.callback = callback;
-        }
-
-        public SendOrPostCallback Callback
-        {
-            get
-            {
-                return callback;
-            }
+            return callback;
         }
     }
 }

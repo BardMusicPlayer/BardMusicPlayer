@@ -4,32 +4,24 @@
  */
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Common.DataTypes;
 using BardMusicPlayer.DryWetMidi.Core;
 using BardMusicPlayer.DryWetMidi.Core.Chunks;
 using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
 using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
-using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
 using BardMusicPlayer.DryWetMidi.Core.Utilities;
 using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
-using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
 using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
 using BardMusicPlayer.DryWetMidi.Interaction.Utilities;
-using BardMusicPlayer.Pigeonhole;
-using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Importers;
@@ -38,7 +30,6 @@ using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
 using Lyrics = BardMusicPlayer.Transmogrify.Song.Importers.LRC.Lyrics;
 using Note = BardMusicPlayer.DryWetMidi.Interaction.Notes.Note;
-using Tempo = BardMusicPlayer.DryWetMidi.Interaction.TempoMap.Tempo;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 

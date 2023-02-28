@@ -2,63 +2,62 @@
 using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 using BardMusicPlayer.DryWetMidi.Core.Events.Info;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Events.Writers
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Writers;
+
+internal sealed class ChannelEventWriter : IEventWriter
 {
-    internal sealed class ChannelEventWriter : IEventWriter
+    #region IEventWriter
+
+    public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings.WritingSettings settings, bool writeStatusByte)
     {
-        #region IEventWriter
-
-        public void Write(MidiEvent midiEvent, MidiWriter writer, WritingSettings.WritingSettings settings, bool writeStatusByte)
+        if (writeStatusByte)
         {
-            if (writeStatusByte)
-            {
-                var statusByte = GetStatusByte(midiEvent);
-                writer.WriteByte(statusByte);
-            }
-
-            //
-
-            midiEvent.Write(writer, settings);
+            var statusByte = GetStatusByte(midiEvent);
+            writer.WriteByte(statusByte);
         }
 
-        public int CalculateSize(MidiEvent midiEvent, WritingSettings.WritingSettings settings, bool writeStatusByte)
-        {
-            return (writeStatusByte ? 1 : 0) + midiEvent.GetSize(settings);
-        }
+        //
 
-        public byte GetStatusByte(MidiEvent midiEvent)
-        {
-            byte statusByte = 0;
-
-            switch (midiEvent.EventType)
-            {
-                case MidiEventType.NoteOff:
-                    statusByte = EventStatusBytes.Channel.NoteOff;
-                    break;
-                case MidiEventType.NoteOn:
-                    statusByte = EventStatusBytes.Channel.NoteOn;
-                    break;
-                case MidiEventType.ControlChange:
-                    statusByte = EventStatusBytes.Channel.ControlChange;
-                    break;
-                case MidiEventType.PitchBend:
-                    statusByte = EventStatusBytes.Channel.PitchBend;
-                    break;
-                case MidiEventType.ChannelAftertouch:
-                    statusByte = EventStatusBytes.Channel.ChannelAftertouch;
-                    break;
-                case MidiEventType.ProgramChange:
-                    statusByte = EventStatusBytes.Channel.ProgramChange;
-                    break;
-                case MidiEventType.NoteAftertouch:
-                    statusByte = EventStatusBytes.Channel.NoteAftertouch;
-                    break;
-            }
-
-            var channel = ((ChannelEvent)midiEvent).Channel;
-            return DataTypesUtilities.CombineAsFourBitNumbers(statusByte, channel);
-        }
-
-        #endregion
+        midiEvent.Write(writer, settings);
     }
+
+    public int CalculateSize(MidiEvent midiEvent, WritingSettings.WritingSettings settings, bool writeStatusByte)
+    {
+        return (writeStatusByte ? 1 : 0) + midiEvent.GetSize(settings);
+    }
+
+    public byte GetStatusByte(MidiEvent midiEvent)
+    {
+        byte statusByte = 0;
+
+        switch (midiEvent.EventType)
+        {
+            case MidiEventType.NoteOff:
+                statusByte = EventStatusBytes.Channel.NoteOff;
+                break;
+            case MidiEventType.NoteOn:
+                statusByte = EventStatusBytes.Channel.NoteOn;
+                break;
+            case MidiEventType.ControlChange:
+                statusByte = EventStatusBytes.Channel.ControlChange;
+                break;
+            case MidiEventType.PitchBend:
+                statusByte = EventStatusBytes.Channel.PitchBend;
+                break;
+            case MidiEventType.ChannelAftertouch:
+                statusByte = EventStatusBytes.Channel.ChannelAftertouch;
+                break;
+            case MidiEventType.ProgramChange:
+                statusByte = EventStatusBytes.Channel.ProgramChange;
+                break;
+            case MidiEventType.NoteAftertouch:
+                statusByte = EventStatusBytes.Channel.NoteAftertouch;
+                break;
+        }
+
+        var channel = ((ChannelEvent)midiEvent).Channel;
+        return DataTypesUtilities.CombineAsFourBitNumbers(statusByte, channel);
+    }
+
+    #endregion
 }

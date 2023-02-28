@@ -1,22 +1,21 @@
 using System;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia;
+
+public class ErrorEventArgs : EventArgs
 {
-    public class ErrorEventArgs : EventArgs
+    private Exception ex;
+
+    public ErrorEventArgs(Exception ex)
     {
-        private Exception ex;
+        this.ex = ex;
+    }
 
-        public ErrorEventArgs(Exception ex)
+    public Exception Error
+    {
+        get
         {
-            this.ex = ex;
-        }
-
-        public Exception Error
-        {
-            get
-            {
-                return ex;
-            }
+            return ex;
         }
     }
 }

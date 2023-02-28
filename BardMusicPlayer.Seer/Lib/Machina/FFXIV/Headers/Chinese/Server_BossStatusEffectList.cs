@@ -15,25 +15,24 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Chinese
+namespace Machina.FFXIV.Headers.Chinese;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public unsafe struct Server_BossStatusEffectList
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Server_BossStatusEffectList
-    {
-        public Server_MessageHeader MessageHeader; // 8 DWORDS
-        public fixed byte Effects2[30 * 3 * 4];
-        public byte JobID;
-        public byte Level1;
-        public byte Level2;
-        public byte Level3;
-        public uint CurrentHP;
-        public uint MaxHP;
-        public ushort CurrentMP;
-        public ushort MaxMP;
-        public ushort Unknown1;
-        public byte DamageShield;
-        public byte Unknown2;
-        public fixed byte Effects1[30 * 3 * 4];
-        public uint Unknown3;
-    }
+    public Server_MessageHeader MessageHeader; // 8 DWORDS
+    public fixed byte Effects2[30 * 3 * 4];
+    public byte JobID;
+    public byte Level1;
+    public byte Level2;
+    public byte Level3;
+    public uint CurrentHP;
+    public uint MaxHP;
+    public ushort CurrentMP;
+    public ushort MaxMP;
+    public ushort Unknown1;
+    public byte DamageShield;
+    public byte Unknown2;
+    public fixed byte Effects1[30 * 3 * 4];
+    public uint Unknown3;
 }

@@ -28,147 +28,146 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers;
+
+/// <summary>
+/// Queues and executes timer events in an internal worker thread.
+/// </summary>
+class ThreadTimerQueue
 {
-    /// <summary>
-    /// Queues and executes timer events in an internal worker thread.
-    /// </summary>
-    class ThreadTimerQueue
+    Stopwatch watch = Stopwatch.StartNew();
+    Thread loop;
+    List<Tick> tickQueue = new List<Tick>();
+
+    public static ThreadTimerQueue Instance
     {
-        Stopwatch watch = Stopwatch.StartNew();
-        Thread loop;
-        List<Tick> tickQueue = new List<Tick>();
-
-        public static ThreadTimerQueue Instance
+        get
         {
-            get
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    instance = new ThreadTimerQueue();
-                }
-                return instance;
-
+                instance = new ThreadTimerQueue();
             }
-        }
-        static ThreadTimerQueue instance;
+            return instance;
 
-        private ThreadTimerQueue()
-        {
         }
+    }
+    static ThreadTimerQueue instance;
 
-        public void Add(ThreadTimer timer)
+    private ThreadTimerQueue()
+    {
+    }
+
+    public void Add(ThreadTimer timer)
+    {
+        lock (this)
         {
-            lock (this)
+            var tick = new Tick
             {
-                var tick = new Tick
-                {
-                    Timer = timer,
-                    Time = watch.Elapsed
-                };
-                tickQueue.Add(tick);
-                tickQueue.Sort();
+                Timer = timer,
+                Time  = watch.Elapsed
+            };
+            tickQueue.Add(tick);
+            tickQueue.Sort();
 
-                if (loop == null)
-                {
-                    loop = new Thread(TimerLoop);
-                    loop.Start();
-                }
-                Monitor.PulseAll(this);
+            if (loop == null)
+            {
+                loop = new Thread(TimerLoop);
+                loop.Start();
             }
+            Monitor.PulseAll(this);
         }
+    }
 
-        public void Remove(ThreadTimer timer)
+    public void Remove(ThreadTimer timer)
+    {
+        lock (this)
         {
-            lock (this)
+            var i = 0;
+            for (; i < tickQueue.Count; ++i)
             {
-                var i = 0;
-                for (; i < tickQueue.Count; ++i)
+                if (tickQueue[i].Timer == timer)
                 {
-                    if (tickQueue[i].Timer == timer)
+                    break;
+                }
+            }
+            if (i < tickQueue.Count)
+            {
+                tickQueue.RemoveAt(i);
+            }
+            Monitor.PulseAll(this);
+        }
+    }
+
+    class Tick : IComparable
+    {
+        public ThreadTimer Timer;
+        public TimeSpan Time;
+
+        public int CompareTo(object obj)
+        {
+            var r = obj as Tick;
+            if (r == null)
+            {
+                return -1;
+            }
+            return Time.CompareTo(r.Time);
+        }
+    }
+
+    static TimeSpan Min(TimeSpan x0, TimeSpan x1)
+    {
+        if (x0 > x1)
+        {
+            return x1;
+        }
+        else
+        {
+            return x0;
+        }
+    }
+
+    /// <summary>
+    /// The thread to execute the timer events
+    /// </summary>
+    private void TimerLoop()
+    {
+        lock (this)
+        {
+            var maxTimeout = TimeSpan.FromMilliseconds(500);
+
+            for (var queueEmptyCount = 0; queueEmptyCount < 3; ++queueEmptyCount)
+            {
+                var waitTime = maxTimeout;
+                if (tickQueue.Count > 0)
+                {
+                    waitTime        = Min(tickQueue[0].Time - watch.Elapsed, waitTime);
+                    queueEmptyCount = 0;
+                }
+
+                if (waitTime > TimeSpan.Zero)
+                {
+                    Monitor.Wait(this, waitTime);
+                }
+
+                if (tickQueue.Count > 0)
+                {
+                    var tick = tickQueue[0];
+                    var mode = tick.Timer.Mode;
+                    Monitor.Exit(this);
+                    tick.Timer.DoTick();
+                    Monitor.Enter(this);
+                    if (mode == TimerMode.Periodic)
                     {
-                        break;
+                        tick.Time += tick.Timer.PeriodTimeSpan;
+                        tickQueue.Sort();
+                    }
+                    else
+                    {
+                        tickQueue.RemoveAt(0);
                     }
                 }
-                if (i < tickQueue.Count)
-                {
-                    tickQueue.RemoveAt(i);
-                }
-                Monitor.PulseAll(this);
             }
-        }
-
-        class Tick : IComparable
-        {
-            public ThreadTimer Timer;
-            public TimeSpan Time;
-
-            public int CompareTo(object obj)
-            {
-                var r = obj as Tick;
-                if (r == null)
-                {
-                    return -1;
-                }
-                return Time.CompareTo(r.Time);
-            }
-        }
-
-        static TimeSpan Min(TimeSpan x0, TimeSpan x1)
-        {
-            if (x0 > x1)
-            {
-                return x1;
-            }
-            else
-            {
-                return x0;
-            }
-        }
-
-        /// <summary>
-        /// The thread to execute the timer events
-        /// </summary>
-        private void TimerLoop()
-        {
-            lock (this)
-            {
-                var maxTimeout = TimeSpan.FromMilliseconds(500);
-
-                for (var queueEmptyCount = 0; queueEmptyCount < 3; ++queueEmptyCount)
-                {
-                    var waitTime = maxTimeout;
-                    if (tickQueue.Count > 0)
-                    {
-                        waitTime = Min(tickQueue[0].Time - watch.Elapsed, waitTime);
-                        queueEmptyCount = 0;
-                    }
-
-                    if (waitTime > TimeSpan.Zero)
-                    {
-                        Monitor.Wait(this, waitTime);
-                    }
-
-                    if (tickQueue.Count > 0)
-                    {
-                        var tick = tickQueue[0];
-                        var mode = tick.Timer.Mode;
-                        Monitor.Exit(this);
-                        tick.Timer.DoTick();
-                        Monitor.Enter(this);
-                        if (mode == TimerMode.Periodic)
-                        {
-                            tick.Time += tick.Timer.PeriodTimeSpan;
-                            tickQueue.Sort();
-                        }
-                        else
-                        {
-                            tickQueue.RemoveAt(0);
-                        }
-                    }
-                }
-                loop = null;
-            }
+            loop = null;
         }
     }
 }

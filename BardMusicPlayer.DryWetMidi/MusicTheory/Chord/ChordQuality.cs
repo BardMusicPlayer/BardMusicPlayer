@@ -1,28 +1,27 @@
-﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord
+﻿namespace BardMusicPlayer.DryWetMidi.MusicTheory.Chord;
+
+/// <summary>
+/// Represents a chord's quality.
+/// </summary>
+public enum ChordQuality
 {
     /// <summary>
-    /// Represents a chord's quality.
+    /// Major chord.
     /// </summary>
-    public enum ChordQuality
-    {
-        /// <summary>
-        /// Major chord.
-        /// </summary>
-        Major,
+    Major,
 
-        /// <summary>
-        /// Minor chord.
-        /// </summary>
-        Minor,
+    /// <summary>
+    /// Minor chord.
+    /// </summary>
+    Minor,
 
-        /// <summary>
-        /// Augmented chord.
-        /// </summary>
-        Augmented,
+    /// <summary>
+    /// Augmented chord.
+    /// </summary>
+    Augmented,
 
-        /// <summary>
-        /// Diminished chord.
-        /// </summary>
-        Diminished
-    }
+    /// <summary>
+    /// Diminished chord.
+    /// </summary>
+    Diminished
 }

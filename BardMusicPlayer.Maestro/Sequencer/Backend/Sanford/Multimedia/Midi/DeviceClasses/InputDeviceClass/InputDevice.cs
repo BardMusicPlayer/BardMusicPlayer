@@ -35,98 +35,97 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
+
+/// <summary>
+/// Represents a MIDI device capable of receiving MIDI events.
+/// </summary>
+public partial class InputDevice : MidiDevice
 {
-    /// <summary>
-    /// Represents a MIDI device capable of receiving MIDI events.
-    /// </summary>
-    public partial class InputDevice : MidiDevice
+    protected override void Dispose(bool disposing)
     {
-        protected override void Dispose(bool disposing)
+        if(disposing)
         {
-            if(disposing)
+            lock(lockObject)
             {
-                lock(lockObject)
+                Reset();
+
+                int result = midiInClose(handle);
+
+                if(result == MidiDeviceException.MMSYSERR_NOERROR)
                 {
-                    Reset();
-
-                    int result = midiInClose(handle);
-
-                    if(result == MidiDeviceException.MMSYSERR_NOERROR)
-                    {
-                        delegateQueue.Dispose();
-                    }
-                    else
-                    {
-                        throw new InputDeviceException(result);
-                    }
+                    delegateQueue.Dispose();
+                }
+                else
+                {
+                    throw new InputDeviceException(result);
                 }
             }
-            else
-            {
-                midiInReset(handle);
-                midiInClose(handle);
-            }
-
-            base.Dispose(disposing);
         }
+        else
+        {
+            midiInReset(handle);
+            midiInClose(handle);
+        }
+
+        base.Dispose(disposing);
     }
+}
+
+/// <summary>
+/// The exception that is thrown when a error occurs with the InputDevice
+/// class.
+/// </summary>
+public class InputDeviceException : MidiDeviceException
+{
+    #region InputDeviceException Members
+
+    #region Win32 Midi Input Error Function
+
+    [DllImport("winmm.dll", CharSet = CharSet.Unicode)]
+    private static extern int midiInGetErrorText(int errCode, 
+        StringBuilder errMsg, int sizeOfErrMsg);
+
+    #endregion
+
+    #region Fields
+
+    // Error message.
+    private StringBuilder errMsg = new StringBuilder(128);
+
+    #endregion 
+
+    #region Construction
 
     /// <summary>
-    /// The exception that is thrown when a error occurs with the InputDevice
-    /// class.
+    /// Initializes a new instance of the InputDeviceException class with
+    /// the specified error code.
     /// </summary>
-    public class InputDeviceException : MidiDeviceException
+    /// <param name="errCode">
+    /// The error code.
+    /// </param>
+    public InputDeviceException(int errCode) : base(errCode)
     {
-        #region InputDeviceException Members
-
-        #region Win32 Midi Input Error Function
-
-        [DllImport("winmm.dll", CharSet = CharSet.Unicode)]
-        private static extern int midiInGetErrorText(int errCode, 
-            StringBuilder errMsg, int sizeOfErrMsg);
-
-        #endregion
-
-        #region Fields
-
-        // Error message.
-        private StringBuilder errMsg = new StringBuilder(128);
-
-        #endregion 
-
-        #region Construction
-
-        /// <summary>
-        /// Initializes a new instance of the InputDeviceException class with
-        /// the specified error code.
-        /// </summary>
-        /// <param name="errCode">
-        /// The error code.
-        /// </param>
-        public InputDeviceException(int errCode) : base(errCode)
-        {
-            // Get error message.
-            midiInGetErrorText(errCode, errMsg, errMsg.Capacity);
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets a message that describes the current exception.
-        /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return errMsg.ToString();
-            }
-        }
-
-        #endregion
-
-        #endregion
+        // Get error message.
+        midiInGetErrorText(errCode, errMsg, errMsg.Capacity);
     }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets a message that describes the current exception.
+    /// </summary>
+    public override string Message
+    {
+        get
+        {
+            return errMsg.ToString();
+        }
+    }
+
+    #endregion
+
+    #endregion
 }

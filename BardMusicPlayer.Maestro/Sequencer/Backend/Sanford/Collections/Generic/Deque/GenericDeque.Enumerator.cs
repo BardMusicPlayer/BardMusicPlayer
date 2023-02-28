@@ -1,38 +1,60 @@
 using System;
 using System.Collections.Generic;
 
-namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque
+namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque;
+
+public partial class Deque<T>
 {
-    public partial class Deque<T>
+    #region Enumerator Class
+
+    [Serializable()]
+    private class Enumerator : IEnumerator<T>
     {
-        #region Enumerator Class
+        private Deque<T> owner;
 
-        [Serializable()]
-        private class Enumerator : IEnumerator<T>
+        private Node currentNode;
+
+        private T current = default(T);
+
+        private bool moveResult = false;
+
+        private long version;
+
+        // A value indicating whether the enumerator has been disposed.
+        private bool disposed = false;
+
+        public Enumerator(Deque<T> owner)
         {
-            private Deque<T> owner;
+            this.owner   = owner;
+            currentNode  = owner.front;
+            this.version = owner.version;
+        }
 
-            private Node currentNode;
+        #region IEnumerator Members
 
-            private T current = default(T);
+        public void Reset()
+        {
+            #region Require
 
-            private bool moveResult = false;
-
-            private long version;
-
-            // A value indicating whether the enumerator has been disposed.
-            private bool disposed = false;
-
-            public Enumerator(Deque<T> owner)
+            if(disposed)
             {
-                this.owner   = owner;
-                currentNode  = owner.front;
-                this.version = owner.version;
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
+            else if(version != owner.version)
+            {
+                throw new InvalidOperationException(
+                    "The Deque was modified after the enumerator was created.");
             }
 
-            #region IEnumerator Members
+            #endregion
 
-            public void Reset()
+            currentNode = owner.front;
+            moveResult  = false;
+        }
+
+        public object Current
+        {
+            get
             {
                 #region Require
 
@@ -40,42 +62,57 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.
                 {
                     throw new ObjectDisposedException(this.GetType().Name);
                 }
-                else if(version != owner.version)
+                else if(!moveResult)
                 {
                     throw new InvalidOperationException(
-                        "The Deque was modified after the enumerator was created.");
+                        "The enumerator is positioned before the first " +
+                        "element of the Deque or after the last element.");
                 }
 
                 #endregion
 
-                currentNode = owner.front;
-                moveResult  = false;
+                return current;
             }
+        }
 
-            public object Current
+        public bool MoveNext()
+        {
+            #region Require
+
+            if(disposed)
             {
-                get
-                {
-                    #region Require
-
-                    if(disposed)
-                    {
-                        throw new ObjectDisposedException(this.GetType().Name);
-                    }
-                    else if(!moveResult)
-                    {
-                        throw new InvalidOperationException(
-                            "The enumerator is positioned before the first " +
-                            "element of the Deque or after the last element.");
-                    }
-
-                    #endregion
-
-                    return current;
-                }
+                throw new ObjectDisposedException(this.GetType().Name);
+            }
+            else if(version != owner.version)
+            {
+                throw new InvalidOperationException(
+                    "The Deque was modified after the enumerator was created.");
             }
 
-            public bool MoveNext()
+            #endregion
+
+            if(currentNode != null)
+            {
+                current     = currentNode.Value;
+                currentNode = currentNode.Next;
+
+                moveResult = true;
+            }
+            else
+            {
+                moveResult = false;
+            }
+
+            return moveResult;
+        }
+
+        #endregion
+
+        #region IEnumerator<T> Members
+
+        T IEnumerator<T>.Current
+        {
+            get
             {
                 #region Require
 
@@ -83,68 +120,30 @@ namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.
                 {
                     throw new ObjectDisposedException(this.GetType().Name);
                 }
-                else if(version != owner.version)
+                else if(!moveResult)
                 {
                     throw new InvalidOperationException(
-                        "The Deque was modified after the enumerator was created.");
+                        "The enumerator is positioned before the first " +
+                        "element of the Deque or after the last element.");
                 }
 
                 #endregion
 
-                if(currentNode != null)
-                {
-                    current     = currentNode.Value;
-                    currentNode = currentNode.Next;
-
-                    moveResult = true;
-                }
-                else
-                {
-                    moveResult = false;
-                }
-
-                return moveResult;
+                return current;
             }
+        }
 
-            #endregion
+        #endregion
 
-            #region IEnumerator<T> Members
+        #region IDisposable Members
 
-            T IEnumerator<T>.Current
-            {
-                get
-                {
-                    #region Require
-
-                    if(disposed)
-                    {
-                        throw new ObjectDisposedException(this.GetType().Name);
-                    }
-                    else if(!moveResult)
-                    {
-                        throw new InvalidOperationException(
-                            "The enumerator is positioned before the first " +
-                            "element of the Deque or after the last element.");
-                    }
-
-                    #endregion
-
-                    return current;
-                }
-            }
-
-            #endregion
-
-            #region IDisposable Members
-
-            public void Dispose()
-            {
-                disposed = true;
-            }
-
-            #endregion
+        public void Dispose()
+        {
+            disposed = true;
         }
 
         #endregion
     }
+
+    #endregion
 }

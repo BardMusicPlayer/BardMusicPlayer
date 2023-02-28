@@ -1,12 +1,11 @@
-﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.VirtualDevice
+﻿namespace BardMusicPlayer.DryWetMidi.Multimedia.VirtualDevice;
+
+internal static class VirtualDeviceCheckpointsNames
 {
-    internal static class VirtualDeviceCheckpointsNames
-    {
-        #region Constants
+    #region Constants
 
-        public const string HandleFinalizerEntered = "VIR A";
-        public const string DeviceClosedInHandleFinalizer = "VIR B";
+    public const string HandleFinalizerEntered = "VIR A";
+    public const string DeviceClosedInHandleFinalizer = "VIR B";
 
-        #endregion
-    }
+    #endregion
 }

@@ -15,17 +15,16 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers
+namespace Machina.FFXIV.Headers;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Server_SystemLogMessage
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Server_SystemLogMessage
-    {
-        public Server_MessageHeader MessageHeader; // 8 DWORDS
-        public uint unknown1;
-        public uint logmessageid;
-        public uint param1;
-        public uint param2;
-        public uint param3;
-        public uint padding1;
-    }
+    public Server_MessageHeader MessageHeader; // 8 DWORDS
+    public uint unknown1;
+    public uint logmessageid;
+    public uint param1;
+    public uint param2;
+    public uint param3;
+    public uint padding1;
 }

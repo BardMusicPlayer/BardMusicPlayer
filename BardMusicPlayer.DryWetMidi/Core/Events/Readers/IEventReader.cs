@@ -1,13 +1,12 @@
 ﻿using BardMusicPlayer.DryWetMidi.Core.Events.Base;
 
-namespace BardMusicPlayer.DryWetMidi.Core.Events.Readers
+namespace BardMusicPlayer.DryWetMidi.Core.Events.Readers;
+
+internal interface IEventReader
 {
-    internal interface IEventReader
-    {
-        #region Methods
+    #region Methods
 
-        MidiEvent Read(MidiReader reader, ReadingSettings.ReadingSettings settings, byte currentStatusByte);
+    MidiEvent Read(MidiReader reader, ReadingSettings.ReadingSettings settings, byte currentStatusByte);
 
-        #endregion
-    }
+    #endregion
 }
