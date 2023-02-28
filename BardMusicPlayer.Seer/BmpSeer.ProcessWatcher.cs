@@ -50,7 +50,7 @@ public partial class BmpSeer
                         game.Dispose();
         
                         // Remove the game from the dictionary
-                        _games.TryRemove(game.Process.Id, out _);
+                        _games.TryRemove(game.Pid, out _);
                     }
                 }
 
@@ -75,7 +75,8 @@ public partial class BmpSeer
                     }
                     else
                     {
-                        _games.TryAdd(process.Id, game);
+                        if (!_games.TryAdd(process.Id, game))
+                            game.Dispose();
                     }
                 }
             }
