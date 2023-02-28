@@ -111,55 +111,6 @@ internal class LinkedList<T> where T : class
         First             = node;
         Length++;
     }
-    
-    private async Task ProcessDataLoop(CancellationToken token)
-    {
-        try
-        {
-            while (!token.IsCancellationRequested)
-            {
-                _connectionManager.Refresh();
-                ProcessNetworkData();
-                await Task.Delay(30, token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // Handle cancellation
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex.ToString(), "DEBUG-MACHINA");
-        }
-    }
-
-    private void ProcessNetworkData()
-    {
-        foreach (var connection in _connectionManager.Connections)
-        {
-            using var socket = connection.Socket;
-            CapturedData data;
-            while ((data = socket.Receive()).Size > 0)
-            {
-                connection.IPDecoderSend.FilterAndStoreData(data.Buffer, data.Size);
-                byte[] tcpbuffer;
-                while ((tcpbuffer = connection.IPDecoderSend.GetNextIPPayload()) != null)
-                {
-                    connection.TCPDecoderSend.FilterAndStoreData(tcpbuffer);
-                    while (connection.TCPDecoderSend.GetNextTCPDatagram() is { } payloadBuffer)
-                        OnDataSent(connection, payloadBuffer);
-                }
-
-                connection.IPDecoderReceive.FilterAndStoreData(data.Buffer, data.Size);
-                while ((tcpbuffer = connection.IPDecoderReceive.GetNextIPPayload()) != null)
-                {
-                    connection.TCPDecoderReceive.FilterAndStoreData(tcpbuffer);
-                    while (connection.TCPDecoderReceive.GetNextTCPDatagram() is { } payloadBuffer)
-                        OnDataReceived(connection, payloadBuffer);
-                }
-            }
-        }
-    }
 }
 
 internal class LinkedListNode<T> where T : class
