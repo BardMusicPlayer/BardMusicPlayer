@@ -122,18 +122,30 @@ public class TCPNetworkMonitor : IDisposable
         {
             while (!token.IsCancellationRequested)
             {
-                _connectionManager.Refresh();
-                ProcessNetworkData();
+                try
+                {
+                    _connectionManager.Refresh();
+                    ProcessNetworkData();
+                }
+                catch (OperationCanceledException)
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    if (DateTime.UtcNow.Subtract(_lastLoopError).TotalSeconds > 5)
+                        Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex, "DEBUG-MACHINA");
+                    _lastLoopError = DateTime.UtcNow;
+                }
                 await Task.Delay(30, token);
             }
         }
         catch (OperationCanceledException)
         {
-            // Handle cancellation
         }
         catch (Exception ex)
         {
-            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex.ToString(), "DEBUG-MACHINA");
+            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex, "DEBUG-MACHINA");
         }
     }
 
