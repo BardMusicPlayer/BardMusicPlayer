@@ -34,7 +34,7 @@ internal class MachinaManager : IDisposable
         {
             MonitorType = Environment.GetEnvironmentVariable("WINEPREFIX") != null ? NetworkMonitorType.WinPCap : NetworkMonitorType.RawSocket,
             OodlePath           = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
-            OodleImplementation = OodleImplementation.FfxivUdp
+            OodleImplementation = OodleImplementation.FfxivTcp
         };
         _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
     }
