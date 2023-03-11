@@ -13,11 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see<http://www.gnu.org/licenses/>.
 
-namespace Machina.FFXIV;
-
-public enum GameRegion
+namespace Machina.FFXIV
 {
-    Global = 1,
-    Chinese = 2,
-    Korean = 3
-};
+    public enum GameRegion
+    {
+        Global = 1,
+        Chinese = 2,
+        Korean = 3
+    };
+}

@@ -15,59 +15,60 @@
 
 using Machina.FFXIV.Memory;
 
-namespace Machina.FFXIV.Oodle;
-
-public static class OodleFactory
+namespace Machina.FFXIV.Oodle
 {
-    private static IOodleNative _oodleNative;
-    private static OodleImplementation _oodleImplementation;
-
-    private static readonly object _lock = new object();
-
-    public static void SetImplementation(OodleImplementation implementation, string path)
+    public static class OodleFactory
     {
-        lock (_lock)
+        private static IOodleNative _oodleNative;
+        private static OodleImplementation _oodleImplementation;
+
+        private static readonly object _lock = new object();
+
+        public static void SetImplementation(OodleImplementation implementation, string path)
         {
-            _oodleImplementation = implementation;
-
-            // Note: Do not re-initialize if not changing implementation type.
-            if (implementation == OodleImplementation.LibraryTcp || implementation == OodleImplementation.LibraryUdp)
+            lock (_lock)
             {
-                if (!(_oodleNative is OodleNative_Library))
-                    _oodleNative?.UnInitialize();
-                else
-                    return;
-                _oodleNative = new OodleNative_Library();
-            }
-            else
-            {
-                if (!(_oodleNative is OodleNative_Ffxiv))
-                    _oodleNative?.UnInitialize();
-                else
-                    return;
+                _oodleImplementation = implementation;
 
-                // Control signatures for Korean FFXIV Oodle implementation
-                if (implementation == OodleImplementation.KoreanFfxivUdp)
-                    _oodleNative = new OodleNative_Ffxiv(new KoreanSigScan());
+                // Note: Do not re-initialize if not changing implementation type.
+                if (implementation == OodleImplementation.LibraryTcp || implementation == OodleImplementation.LibraryUdp)
+                {
+                    if (!(_oodleNative is OodleNative_Library))
+                        _oodleNative?.UnInitialize();
+                    else
+                        return;
+                    _oodleNative = new OodleNative_Library();
+                }
                 else
-                    _oodleNative = new OodleNative_Ffxiv(new SigScan());
+                {
+                    if (!(_oodleNative is OodleNative_Ffxiv))
+                        _oodleNative?.UnInitialize();
+                    else
+                        return;
 
+                    // Control signatures for Korean FFXIV Oodle implementation
+                    if (implementation == OodleImplementation.KoreanFfxivUdp)
+                        _oodleNative = new OodleNative_Ffxiv(new KoreanSigScan());
+                    else
+                        _oodleNative = new OodleNative_Ffxiv(new SigScan());
+
+                }
+                _oodleNative.Initialize(path);
             }
-            _oodleNative.Initialize(path);
         }
-    }
 
-    public static IOodleWrapper Create()
-    {
-        lock (_lock)
+        public static IOodleWrapper Create()
         {
-            if (_oodleNative is null)
-                return null;
+            lock (_lock)
+            {
+                if (_oodleNative is null)
+                    return null;
 
-            if (_oodleImplementation == OodleImplementation.FfxivTcp || _oodleImplementation == OodleImplementation.LibraryTcp)
-                return new OodleTCPWrapper(_oodleNative);
-            else
-                return new OodleUDPWrapper(_oodleNative);
+                if (_oodleImplementation == OodleImplementation.FfxivTcp || _oodleImplementation == OodleImplementation.LibraryTcp)
+                    return new OodleTCPWrapper(_oodleNative);
+                else
+                    return new OodleUDPWrapper(_oodleNative);
+            }
         }
     }
 }

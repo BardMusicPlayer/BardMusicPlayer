@@ -20,191 +20,192 @@ using System.Threading.Tasks;
 using Machina.Infrastructure;
 using Machina.Sockets;
 
-namespace Machina;
-
-/// <summary>
-/// TCPNetworkMonitor: This class uses either Winsock raw socket or a PCap kernel driver to read local network traffic.  A C# task polls the received data and 
-///   raises it to event listeners synchronously.  Data is only captured for the specified processes.  
-///   
-///   It is configured through the following properties, which are exposed on the .Config property:
-///     MonitorType: Specifies whether it should use a winsock raw socket, or use PCap (requires separate kernel driver installation).  Default is a raw socket.
-///     ProcessID: Specifies a single process ID to record traffic from
-///     ProcessIDList: Specifies a collection of process IDs to record traffic from, to support collecting data from multiple processes at the same time
-///     WindowName: Specifies the window name to record traffic from, where process ID is unavailable
-///     WindowClass: Specifies the window class to record traffic from, where process ID is unavailable
-///     UseRemoteIpFilter: boolean that specifies whether to start data capture as connections are detected within the target process (new behavior), or monitor
-///       the primary interface for the process and capture all data sent/received on that interface - and filter it.  The new behavior may cause some data to be lost 
-///       on connection startup, but significantly reduces the filtering overhead caused by other traffic on the network interface.
-///     RPCap: specifies configuration properties to engage RPcap uri-based network parameters
-///     
-///   In addition to the configuration properties, two public delegates are exposed
-///     DataReceivedEventHandler: Delegate that is called when data is received and successfully decoded through IP and TCP decoders.  Note that a connection identifier is 
-///       supplied to distinguish between multiple connections.
-///     DataSentEventHandler: Delegate that is called when data is sent and successfully decoded through IP and TCP decoders.  Note that a connection identifier is 
-///       supplied to distinguish between multiple connections.
-/// </summary>
-public class TCPNetworkMonitor : IDisposable
+namespace Machina
 {
     /// <summary>
-    /// Specifies configuration values for the TCP monitor
+    /// TCPNetworkMonitor: This class uses either Winsock raw socket or a PCap kernel driver to read local network traffic.  A C# task polls the received data and 
+    ///   raises it to event listeners synchronously.  Data is only captured for the specified processes.  
+    ///   
+    ///   It is configured through the following properties, which are exposed on the .Config property:
+    ///     MonitorType: Specifies whether it should use a winsock raw socket, or use PCap (requires separate kernel driver installation).  Default is a raw socket.
+    ///     ProcessID: Specifies a single process ID to record traffic from
+    ///     ProcessIDList: Specifies a collection of process IDs to record traffic from, to support collecting data from multiple processes at the same time
+    ///     WindowName: Specifies the window name to record traffic from, where process ID is unavailable
+    ///     WindowClass: Specifies the window class to record traffic from, where process ID is unavailable
+    ///     UseRemoteIpFilter: boolean that specifies whether to start data capture as connections are detected within the target process (new behavior), or monitor
+    ///       the primary interface for the process and capture all data sent/received on that interface - and filter it.  The new behavior may cause some data to be lost 
+    ///       on connection startup, but significantly reduces the filtering overhead caused by other traffic on the network interface.
+    ///     RPCap: specifies configuration properties to engage RPcap uri-based network parameters
+    ///     
+    ///   In addition to the configuration properties, two public delegates are exposed
+    ///     DataReceivedEventHandler: Delegate that is called when data is received and successfully decoded through IP and TCP decoders.  Note that a connection identifier is 
+    ///       supplied to distinguish between multiple connections.
+    ///     DataSentEventHandler: Delegate that is called when data is sent and successfully decoded through IP and TCP decoders.  Note that a connection identifier is 
+    ///       supplied to distinguish between multiple connections.
     /// </summary>
-    public TCPNetworkMonitorConfig Config => _connectionManager.Config;
-
-    #region Data Delegates with Process Id section
-    public delegate void DataReceivedDelegate2(TCPConnection connection, byte[] data);
-
-    /// <summary>
-    /// Specifies the delegate that is called when data is received and successfully decoded.
-    /// </summary>
-    public DataReceivedDelegate2 DataReceivedEventHandler;
-
-    public void OnDataReceived(TCPConnection connection, byte[] data)
+    public class TCPNetworkMonitor : IDisposable
     {
-        DataReceivedEventHandler?.Invoke(connection, data);
-    }
+        /// <summary>
+        /// Specifies configuration values for the TCP monitor
+        /// </summary>
+        public TCPNetworkMonitorConfig Config => _connectionManager.Config;
 
-    public delegate void DataSentDelegate2(TCPConnection connection, byte[] data);
+        #region Data Delegates with Process Id section
+        public delegate void DataReceivedDelegate2(TCPConnection connection, byte[] data);
 
-    public DataSentDelegate2 DataSentEventHandler;
+        /// <summary>
+        /// Specifies the delegate that is called when data is received and successfully decoded.
+        /// </summary>
+        public DataReceivedDelegate2 DataReceivedEventHandler;
 
-    public void OnDataSent(TCPConnection connection, byte[] data)
-    {
-        DataSentEventHandler?.Invoke(connection, data);
-    }
-    #endregion
-
-    private readonly ConnectionManager _connectionManager = new ConnectionManager();
-    private Task _monitorTask;
-    private CancellationTokenSource _tokenSource;
-
-    private bool _disposedValue;
-    private DateTime _lastLoopError = DateTime.MinValue;
-
-    /// <summary>
-    /// Validates the parameters and starts the monitor.
-    /// </summary>
-    public void Start()
-    {
-        if (Config.ProcessID == 0 && string.IsNullOrWhiteSpace(Config.WindowName) && string.IsNullOrWhiteSpace(Config.WindowClass))
-            throw new ArgumentException("TCPNetworkMonitor: Please specify one of Config.ProcessID, Config.ProcessIDList, Config.WindowName or Config.WindowClass.");
-        if (DataReceivedEventHandler == null && DataSentEventHandler == null)
-            throw new ArgumentException("TCPNetworkMonitor: Please set DataReceivedEventHandler and/or DataSentEventHandler.");
-
-        _tokenSource = new CancellationTokenSource();
-        _monitorTask = Task.Run(() => ProcessDataLoop(_tokenSource.Token));
-    }
-
-    /// <summary>
-    /// Stops the monitor if it is active.
-    /// </summary>
-    public void Stop()
-    {
-        _tokenSource?.Cancel();
-
-        if (_monitorTask != null)
+        public void OnDataReceived(TCPConnection connection, byte[] data)
         {
-            if (!_monitorTask.Wait(100) || _monitorTask.Status == TaskStatus.Running)
-                Trace.Write("TCPNetworkMonitor: Task cannot be stopped.", "DEBUG-MACHINA");
-            else
-                _monitorTask.Dispose();
-            _monitorTask = null;
+            DataReceivedEventHandler?.Invoke(connection, data);
         }
 
-        _tokenSource?.Dispose();
-        _tokenSource = null;
+        public delegate void DataSentDelegate2(TCPConnection connection, byte[] data);
 
-        _connectionManager.Cleanup();
-    }
+        public DataSentDelegate2 DataSentEventHandler;
 
-    private void ProcessDataLoop(CancellationToken token)
-    {
-        try
+        public void OnDataSent(TCPConnection connection, byte[] data)
         {
-            while (!token.IsCancellationRequested)
+            DataSentEventHandler?.Invoke(connection, data);
+        }
+        #endregion
+
+        private readonly ConnectionManager _connectionManager = new ConnectionManager();
+        private Task _monitorTask;
+        private CancellationTokenSource _tokenSource;
+
+        private bool _disposedValue;
+        private DateTime _lastLoopError = DateTime.MinValue;
+
+        /// <summary>
+        /// Validates the parameters and starts the monitor.
+        /// </summary>
+        public void Start()
+        {
+            if (Config.ProcessID == 0 && string.IsNullOrWhiteSpace(Config.WindowName) && string.IsNullOrWhiteSpace(Config.WindowClass))
+                throw new ArgumentException("TCPNetworkMonitor: Please specify one of Config.ProcessID, Config.ProcessIDList, Config.WindowName or Config.WindowClass.");
+            if (DataReceivedEventHandler == null && DataSentEventHandler == null)
+                throw new ArgumentException("TCPNetworkMonitor: Please set DataReceivedEventHandler and/or DataSentEventHandler.");
+
+            _tokenSource = new CancellationTokenSource();
+            _monitorTask = Task.Run(() => ProcessDataLoop(_tokenSource.Token));
+        }
+
+        /// <summary>
+        /// Stops the monitor if it is active.
+        /// </summary>
+        public void Stop()
+        {
+            _tokenSource?.Cancel();
+
+            if (_monitorTask != null)
             {
-                try
-                {
-                    _connectionManager.Refresh();
-
-                    ProcessNetworkData();
-
-                }
-                catch (OperationCanceledException)
-                {
-
-                }
-                catch (Exception ex)
-                {
-                    if (DateTime.UtcNow.Subtract(_lastLoopError).TotalSeconds > 5)
-                        Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex.ToString(), "DEBUG-MACHINA");
-                    _lastLoopError = DateTime.UtcNow;
-                }
-
-                Task.Delay(30, token).Wait(token);
+                if (!_monitorTask.Wait(100) || _monitorTask.Status == TaskStatus.Running)
+                    Trace.Write("TCPNetworkMonitor: Task cannot be stopped.", "DEBUG-MACHINA");
+                else
+                    _monitorTask.Dispose();
+                _monitorTask = null;
             }
+
+            _tokenSource?.Dispose();
+            _tokenSource = null;
+
+            _connectionManager.Cleanup();
         }
-        catch (OperationCanceledException)
+
+        private void ProcessDataLoop(CancellationToken token)
         {
-
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex.ToString(), "DEBUG-MACHINA");
-        }
-    }
-
-    private void ProcessNetworkData()
-    {
-        byte[] tcpbuffer;
-        byte[] payloadBuffer;
-
-        for (int i = 0; i < _connectionManager.Connections.Count; i++)
-        {
-            TCPConnection connection = _connectionManager.Connections[i];
-            CapturedData data;
-
-            while ((data = connection.Socket.Receive()).Size > 0)
+            try
             {
-                connection.IPDecoderSend.FilterAndStoreData(data.Buffer, data.Size);
-
-                while ((tcpbuffer = connection.IPDecoderSend.GetNextIPPayload()) != null)
+                while (!token.IsCancellationRequested)
                 {
-                    connection.TCPDecoderSend.FilterAndStoreData(tcpbuffer);
-                    while ((payloadBuffer = connection.TCPDecoderSend.GetNextTCPDatagram()) != null)
-                        OnDataSent(connection, payloadBuffer);
-                }
+                    try
+                    {
+                        _connectionManager.Refresh();
 
-                connection.IPDecoderReceive.FilterAndStoreData(data.Buffer, data.Size);
-                while ((tcpbuffer = connection.IPDecoderReceive.GetNextIPPayload()) != null)
-                {
-                    connection.TCPDecoderReceive.FilterAndStoreData(tcpbuffer);
-                    while ((payloadBuffer = connection.TCPDecoderReceive.GetNextTCPDatagram()) != null)
-                        OnDataReceived(connection, payloadBuffer);
+                        ProcessNetworkData();
+
+                    }
+                    catch (OperationCanceledException)
+                    {
+
+                    }
+                    catch (Exception ex)
+                    {
+                        if (DateTime.UtcNow.Subtract(_lastLoopError).TotalSeconds > 5)
+                            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex.ToString(), "DEBUG-MACHINA");
+                        _lastLoopError = DateTime.UtcNow;
+                    }
+
+                    Task.Delay(30, token).Wait(token);
                 }
             }
-        }
-    }
-
-    #region IDisposable
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposedValue)
-        {
-            if (disposing)
+            catch (OperationCanceledException)
             {
-                _monitorTask?.Dispose();
-                _tokenSource?.Dispose();
-                _connectionManager.Dispose();
-            }
-            _disposedValue = true;
-        }
-    }
 
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex.ToString(), "DEBUG-MACHINA");
+            }
+        }
+
+        private void ProcessNetworkData()
+        {
+            byte[] tcpbuffer;
+            byte[] payloadBuffer;
+
+            for (int i = 0; i < _connectionManager.Connections.Count; i++)
+            {
+                TCPConnection connection = _connectionManager.Connections[i];
+                CapturedData data;
+
+                while ((data = connection.Socket.Receive()).Size > 0)
+                {
+                    connection.IPDecoderSend.FilterAndStoreData(data.Buffer, data.Size);
+
+                    while ((tcpbuffer = connection.IPDecoderSend.GetNextIPPayload()) != null)
+                    {
+                        connection.TCPDecoderSend.FilterAndStoreData(tcpbuffer);
+                        while ((payloadBuffer = connection.TCPDecoderSend.GetNextTCPDatagram()) != null)
+                            OnDataSent(connection, payloadBuffer);
+                    }
+
+                    connection.IPDecoderReceive.FilterAndStoreData(data.Buffer, data.Size);
+                    while ((tcpbuffer = connection.IPDecoderReceive.GetNextIPPayload()) != null)
+                    {
+                        connection.TCPDecoderReceive.FilterAndStoreData(tcpbuffer);
+                        while ((payloadBuffer = connection.TCPDecoderReceive.GetNextTCPDatagram()) != null)
+                            OnDataReceived(connection, payloadBuffer);
+                    }
+                }
+            }
+        }
+
+        #region IDisposable
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _monitorTask?.Dispose();
+                    _tokenSource?.Dispose();
+                    _connectionManager.Dispose();
+                }
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
-    #endregion
 }

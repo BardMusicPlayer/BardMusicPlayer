@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -30,19 +31,31 @@ internal class MachinaManager : IDisposable
 
         while (BmpSeer.Instance.Games.Count < 1) Thread.Sleep(1);
 
-        _monitor = new FFXIVNetworkMonitor
+        _monitor = new FFXIVNetworkMonitor();
+
+        if (BmpSeer.Instance.Games.Values.First().GameRegion == Quotidian.Enums.GameRegion.Global)
         {
-            MonitorType = Environment.GetEnvironmentVariable("WINEPREFIX") != null ? NetworkMonitorType.WinPCap : NetworkMonitorType.RawSocket,
-            OodlePath           = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
-            OodleImplementation = OodleImplementation.FfxivTcp
-        };
-        _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
+            _useDeucalion = true;
+        } 
+        else
+        {
+            _monitor = new FFXIVNetworkMonitor
+            {
+                MonitorType = Environment.GetEnvironmentVariable("WINEPREFIX") != null ? NetworkMonitorType.WinPCap : NetworkMonitorType.RawSocket,
+                OodlePath = BmpSeer.Instance.Games.Values.First().GamePath + @"\game\ffxiv_dx11.exe",
+                OodleImplementation = OodleImplementation.FfxivUdp
+            };
+
+            _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
+        }
     }
 
     private static readonly List<int> Lengths = new() {48, 56, 88, 656, 664, 928, 3576 };
     private readonly FFXIVNetworkMonitor _monitor;
     private readonly object _lock;
     private bool _monitorRunning;
+    private static bool _useDeucalion = false;
+    private static ConcurrentDictionary<uint, FFXIVNetworkMonitor> _deucalionSessions = new();
 
     internal delegate void MessageReceivedHandler(int processId, byte[] message);
 
@@ -50,35 +63,72 @@ internal class MachinaManager : IDisposable
 
     internal void AddGame(int pid)
     {
-        lock (_lock)
+        if (!_useDeucalion)
         {
-            if (_monitorRunning)
+            lock (_lock)
             {
-                _monitor.Stop();
-                _monitorRunning = false;
-            }
+                if (_monitorRunning)
+                {
+                    _monitor.Stop();
+                    _monitorRunning = false;
+                }
 
-            _monitor.ProcessIDList.Add((uint) pid);
-            _monitor.Start();
-            _monitorRunning = true;
+                _monitor.ProcessIDList.Add((uint)pid);
+                _monitor.Start();
+                _monitorRunning = true;
+            }
+        } else
+        {
+            try
+            {
+                var deucalionSession = new FFXIVNetworkMonitor
+                {
+                    ProcessID = (uint)pid,
+                    UseDeucalion = true
+                };
+                _deucalionSessions.TryAdd((uint)pid, deucalionSession);
+                deucalionSession.MessageReceivedEventHandler += MessageReceivedEventHandler;
+                Console.WriteLine("Calling Machina Deucalion monitor Start()");
+                deucalionSession.Start();
+            } catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
         }
     }
 
     internal void RemoveGame(int pid)
     {
-        lock (_lock)
+        if (!_useDeucalion)
         {
-            if (_monitorRunning)
+            lock (_lock)
             {
-                _monitor.Stop();
-                _monitorRunning = false;
+                if (_monitorRunning)
+                {
+                    _monitor.Stop();
+                    _monitorRunning = false;
+                }
+
+                _monitor.ProcessIDList.Remove((uint)pid);
+                if (_monitor.ProcessIDList.Count <= 0) return;
+
+                _monitor.Start();
+                _monitorRunning = true;
             }
-
-            _monitor.ProcessIDList.Remove((uint) pid);
-            if (_monitor.ProcessIDList.Count <= 0) return;
-
-            _monitor.Start();
-            _monitorRunning = true;
+        } else
+        {
+            try
+            {
+                if (_deucalionSessions.Remove((uint)pid, out var deucalionSession)) {
+                    deucalionSession.Stop();
+                    deucalionSession.MessageReceivedEventHandler -= MessageReceivedEventHandler;
+                    deucalionSession.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
         }
     }
 
@@ -95,16 +145,31 @@ internal class MachinaManager : IDisposable
 
     public void Dispose()
     {
-        lock (_lock)
+        if (!_useDeucalion)
         {
-            if (_monitorRunning)
+            lock (_lock)
             {
-                _monitor.Stop();
-                _monitorRunning = false;
-            }
+                if (_monitorRunning)
+                {
+                    _monitor.Stop();
+                    _monitorRunning = false;
+                }
 
-            _monitor.ProcessIDList.Clear();
-            _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
+                _monitor.ProcessIDList.Clear();
+                _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
+            }
+        } else
+        {
+            foreach (var deucalionSession in _deucalionSessions.Values)
+            {
+                try
+                {
+                    deucalionSession.Stop();
+                    deucalionSession.MessageReceivedEventHandler -= MessageReceivedEventHandler;
+                    deucalionSession.Dispose();
+                } catch { }
+                _deucalionSessions.Clear();
+            }
         }
     }
 }

@@ -16,35 +16,36 @@
 using System.Runtime.InteropServices;
 using Machina.Infrastructure;
 
-namespace Machina.Headers;
-
-[StructLayout(LayoutKind.Explicit)]
-public struct IPv6Header
+namespace Machina.Headers
 {
-    [FieldOffset(0)]
-    public byte version_ltc; // low word = Version, high word = portion of traffic class 
-    [FieldOffset(1)]
-    public byte htc_lfl; // low 4 bits = portion of traffic class, upper 4 bits = part of flow label
-    [FieldOffset(2)]
-    public ushort flow_label; // remainder of flow label
-    [FieldOffset(4)]
-    public ushort payload_length;
-    [FieldOffset(6)]
-    public byte next_header; // type of next header
-    [FieldOffset(7)]
-    public byte hop_limit;
-    [FieldOffset(8)]
-    public ulong source_address1;
-    [FieldOffset(16)]
-    public ulong source_address2;
-    [FieldOffset(24)]
-    public ulong dest_address1;
-    [FieldOffset(32)]
-    public ulong dest_address2;
+    [StructLayout(LayoutKind.Explicit)]
+    public struct IPv6Header
+    {
+        [FieldOffset(0)]
+        public byte version_ltc; // low word = Version, high word = portion of traffic class 
+        [FieldOffset(1)]
+        public byte htc_lfl; // low 4 bits = portion of traffic class, upper 4 bits = part of flow label
+        [FieldOffset(2)]
+        public ushort flow_label; // remainder of flow label
+        [FieldOffset(4)]
+        public ushort payload_length;
+        [FieldOffset(6)]
+        public byte next_header; // type of next header
+        [FieldOffset(7)]
+        public byte hop_limit;
+        [FieldOffset(8)]
+        public ulong source_address1;
+        [FieldOffset(16)]
+        public ulong source_address2;
+        [FieldOffset(24)]
+        public ulong dest_address1;
+        [FieldOffset(32)]
+        public ulong dest_address2;
 
-    public const byte MinSize = 40;
+        public const byte MinSize = 40;
 
-    public byte Version => (byte)(version_ltc >> 4);
+        public byte Version => (byte)(version_ltc >> 4);
 
-    public ushort PayloadLength => ConversionUtility.ntohs(payload_length);
+        public ushort PayloadLength => ConversionUtility.ntohs(payload_length);
+    }
 }

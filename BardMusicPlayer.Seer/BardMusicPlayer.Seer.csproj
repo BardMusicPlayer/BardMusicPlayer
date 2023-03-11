@@ -34,4 +34,11 @@
     <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Lib\Machina\FFXIV\Deucalion\Distrib\deucalion-0.8.0.dll" />
+    <EmbeddedResource Include="Lib\Machina\FFXIV\Headers\Opcodes\Chinese.txt" />
+    <EmbeddedResource Include="Lib\Machina\FFXIV\Headers\Opcodes\Global.txt" />
+    <EmbeddedResource Include="Lib\Machina\FFXIV\Headers\Opcodes\Korean.txt" />
+  </ItemGroup>
+
 </Project>

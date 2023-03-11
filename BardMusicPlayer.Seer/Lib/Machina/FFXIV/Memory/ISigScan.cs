@@ -16,9 +16,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Machina.FFXIV.Memory;
-
-public interface ISigScan
+namespace Machina.FFXIV.Memory
 {
-    Dictionary<SignatureType, int> Read(IntPtr library);
+    public interface ISigScan
+    {
+        Dictionary<SignatureType, int> Read(IntPtr library);
+    }
 }

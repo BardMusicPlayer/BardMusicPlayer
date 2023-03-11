@@ -13,13 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see<http://www.gnu.org/licenses/>.
 
-namespace Machina.FFXIV.Oodle;
-
-public enum OodleImplementation
+namespace Machina.FFXIV.Oodle
 {
-    FfxivUdp = 1,
-    LibraryUdp = 2,
-    FfxivTcp = 3,
-    LibraryTcp = 4,
-    KoreanFfxivUdp = 5
+    public enum OodleImplementation
+    {
+        FfxivUdp = 1,
+        LibraryUdp = 2,
+        FfxivTcp = 3,
+        LibraryTcp = 4,
+        KoreanFfxivUdp = 5
+    }
 }
