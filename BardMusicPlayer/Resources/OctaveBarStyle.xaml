@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Playbar Slider -->
+    <!-- PlayBar Slider -->
     <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -68,7 +68,7 @@
         </Grid>
     </ControlTemplate>
 
-    <Style x:Key="Balancebar_Slider" TargetType="Slider">
+    <Style x:Key="BalanceBarSlider" TargetType="Slider">
         <Setter Property="Focusable" Value="true" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />

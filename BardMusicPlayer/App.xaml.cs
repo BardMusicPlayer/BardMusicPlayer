@@ -27,9 +27,9 @@ public partial class App
         // LogManager.Initialize(new(view.Log));
 
         //Load the last used catalog
-        var CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
-        if (File.Exists(CatalogFile))
-            BmpCoffer.Initialize(CatalogFile);
+        var catalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
+        if (File.Exists(catalogFile))
+            BmpCoffer.Initialize(catalogFile);
         else
             BmpCoffer.Initialize(Globals.Globals.DataPath + @"\MusicCatalog.db");
 

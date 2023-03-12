@@ -15,13 +15,14 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Korean;
-
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_UpdateHpMpTp
+namespace Machina.FFXIV.Headers.Korean
 {
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public uint CurrentHp;
-    public ushort CurrentMp;
-    public ushort Unknown1;
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_UpdateHpMpTp
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public uint CurrentHp;
+        public ushort CurrentMp;
+        public ushort Unknown1;
+    }
 }

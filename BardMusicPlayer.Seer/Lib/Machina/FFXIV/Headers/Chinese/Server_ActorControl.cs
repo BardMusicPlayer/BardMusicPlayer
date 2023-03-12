@@ -15,62 +15,63 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Chinese;
-
-public enum Server_ActorControlCategory : ushort
+namespace Machina.FFXIV.Headers.Chinese
 {
-    HoT_DoT = 0x17,
-    CancelAbility = 0x0f,
-    Death = 0x06,
-    TargetIcon = 0x22,
-    Tether = 0x23,
-    GainEffect = 0x14,
-    LoseEffect = 0x15,
-    UpdateEffect = 0x16,
-    Targetable = 0x36,
-    DirectorUpdate = 0x6d,
-    LimitBreak = 0x1f9
-};
+    public enum Server_ActorControlCategory : ushort
+    {
+        HoT_DoT = 0x17,
+        CancelAbility = 0x0f,
+        Death = 0x06,
+        TargetIcon = 0x22,
+        Tether = 0x23,
+        GainEffect = 0x14,
+        LoseEffect = 0x15,
+        UpdateEffect = 0x16,
+        Targetable = 0x36,
+        DirectorUpdate = 0x6d,
+        LimitBreak = 0x1f9
+    };
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_ActorControl
-{
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public Server_ActorControlCategory category;
-    public ushort padding;
-    public uint param1;
-    public uint param2;
-    public uint param3;
-    public uint param4;
-    public uint padding1;
-}
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_ActorControl
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public Server_ActorControlCategory category;
+        public ushort padding;
+        public uint param1;
+        public uint param2;
+        public uint param3;
+        public uint param4;
+        public uint padding1;
+    }
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_ActorControlSelf
-{
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public Server_ActorControlCategory category;
-    public ushort padding;
-    public uint param1;
-    public uint param2;
-    public uint param3;
-    public uint param4;
-    public uint param5;
-    public uint param6;
-    public uint padding1;
-}
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_ActorControlSelf
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public Server_ActorControlCategory category;
+        public ushort padding;
+        public uint param1;
+        public uint param2;
+        public uint param3;
+        public uint param4;
+        public uint param5;
+        public uint param6;
+        public uint padding1;
+    }
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_ActorControlTarget
-{
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public Server_ActorControlCategory category;
-    public ushort padding;
-    public uint param1;
-    public uint param2;
-    public uint param3;
-    public uint param4;
-    public uint padding1;
-    public uint TargetID;
-    public uint padding2;
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_ActorControlTarget
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public Server_ActorControlCategory category;
+        public ushort padding;
+        public uint param1;
+        public uint param2;
+        public uint param3;
+        public uint param4;
+        public uint padding1;
+        public uint TargetID;
+        public uint padding2;
+    }
 }

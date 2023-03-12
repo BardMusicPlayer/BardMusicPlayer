@@ -9,8 +9,8 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public partial class SongEditWindow
 {
-    BmpSong _song;
-    public SongEditWindow(BmpSong song)
+    private readonly BmpSong? _song;
+    public SongEditWindow(BmpSong? song)
     {
         InitializeComponent();
         if (song == null)
@@ -20,20 +20,23 @@ public partial class SongEditWindow
         }
         Visibility = Visibility.Visible;
 
-        _song                    = song;
-        Internal_TrackName.Text  = _song.Title;
-        Displayed_TrackName.Text = _song.DisplayedTitle;
+        _song                   = song;
+        InternalTrackName.Text  = _song.Title;
+        DisplayedTrackName.Text = _song.DisplayedTitle;
     }
 
     private void CopyI_D_Click(object sender, RoutedEventArgs e)
     {
-        Displayed_TrackName.Text = Internal_TrackName.Text;
+        DisplayedTrackName.Text = InternalTrackName.Text;
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
-        _song.DisplayedTitle = Displayed_TrackName.Text;
-        BmpCoffer.Instance.SaveSong(_song);
+        if (_song != null)
+        {
+            _song.DisplayedTitle = DisplayedTrackName.Text;
+            BmpCoffer.Instance.SaveSong(_song);
+        }
     }
 
     private void Cancel_Click(object sender, RoutedEventArgs e)

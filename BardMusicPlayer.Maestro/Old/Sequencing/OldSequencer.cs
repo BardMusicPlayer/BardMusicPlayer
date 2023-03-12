@@ -425,16 +425,8 @@ public class OldSequencer : Sequencer_Internal
 
         LoadedFileType = FILETYPES.BmpSong;
         LoadedBmpSong = bmpSong;
-
-        var dryWetSong = bmpSong.GetProcessedMidiFile().Result;
-        dryWetSong.Chunks.Insert(0, TrackChunkUtilities.Merge(dryWetSong.GetTrackChunks()));
-
-        using var midiStream = new MemoryStream();
-        dryWetSong.Write(midiStream, MidiFileFormat.MultiTrack, new WritingSettings { TextEncoding = Encoding.ASCII });
-        midiStream.Flush();
-        midiStream.Position = 0;
-
-        Sequence = new Sequence(midiStream);
+        using var stream = bmpSong.GetProcessedMidiFile().Result.ConvertToSanfordSpec();
+        Sequence = new Sequence(stream);
         load(Sequence, Sequence.Count - 1);
     }
 

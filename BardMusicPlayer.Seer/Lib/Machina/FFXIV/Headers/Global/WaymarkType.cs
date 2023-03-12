@@ -15,17 +15,18 @@
 
 using System;
 
-namespace Machina.FFXIV.Headers;
-
-[Flags]
-public enum WaymarkType : byte
+namespace Machina.FFXIV.Headers
 {
-    A = 0x1,
-    B = 0x2,
-    C = 0x4,
-    D = 0x8,
-    One = 0x10,
-    Two = 0x20,
-    Three = 0x40,
-    Four = 0x80,
-};
+    [Flags]
+    public enum WaymarkType : byte
+    {
+        A = 0x1,
+        B = 0x2,
+        C = 0x4,
+        D = 0x8,
+        One = 0x10,
+        Two = 0x20,
+        Three = 0x40,
+        Four = 0x80,
+    };
+}

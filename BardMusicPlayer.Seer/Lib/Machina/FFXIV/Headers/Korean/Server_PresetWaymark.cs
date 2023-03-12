@@ -15,17 +15,18 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Korean;
-
-// Thanks to Discord user Wintermute for decoding this
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct Server_PresetWaymark
+namespace Machina.FFXIV.Headers.Korean
 {
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public WaymarkType WaymarkType;
-    public byte Unknown1;
-    public short Unknown2;
-    public fixed int PosX[8]; // Xints[0] has X of waymark A, Xints[1] X of B, etc.
-    public fixed int PosY[8]; // To calculate 'float' coords from these you cast them to float and then divide by 1000.0
-    public fixed int PosZ[8];
+    // Thanks to Discord user Wintermute for decoding this
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public unsafe struct Server_PresetWaymark
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public WaymarkType WaymarkType;
+        public byte Unknown1;
+        public short Unknown2;
+        public fixed int PosX[8];// Xints[0] has X of waymark A, Xints[1] X of B, etc.
+        public fixed int PosY[8];// To calculate 'float' coords from these you cast them to float and then divide by 1000.0
+        public fixed int PosZ[8];
+    }
 }

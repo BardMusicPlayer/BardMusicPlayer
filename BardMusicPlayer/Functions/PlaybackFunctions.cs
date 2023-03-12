@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
@@ -12,19 +11,20 @@ public static class PlaybackFunctions
     /// <summary>
     /// The playback states
     /// </summary>
-    public enum PlaybackState_Enum
+    public enum PlaybackStateEnum
     {
-        PLAYBACK_STATE_STOPPED = 0,
-        PLAYBACK_STATE_PLAYING,
-        PLAYBACK_STATE_PAUSE,
-        PLAYBACK_STATE_PLAYNEXT //indicates the next song should be played
+        PlaybackStateStopped = 0,
+        PlaybackStatePlaying,
+        PlaybackStatePause,
+        PlaybackStatePlayNext
     }
-    public static PlaybackState_Enum PlaybackState;
+
+    internal static PlaybackStateEnum PlaybackState;
 
     /// <summary>
     /// The currently loaded song
     /// </summary>
-    public static BmpSong CurrentSong { get; set; }
+    public static BmpSong? CurrentSong { get; private set; }
 
     /// <summary>
     /// Loads a midi file into the sequencer
@@ -45,7 +45,7 @@ public static class PlaybackFunctions
         if (!openFileDialog.CheckFileExists)
             return false;
 
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
+        PlaybackState = PlaybackStateEnum.PlaybackStateStopped;
 
         Globals.Globals.DirectoryPath = Path.GetDirectoryName(openFileDialog.FileName);
 
@@ -58,12 +58,12 @@ public static class PlaybackFunctions
     /// Loads a midi file into the sequencer
     /// </summary>
     /// <returns>true if success</returns>
-    public static bool LoadSong(string filename)
+    public static bool LoadSong(string? filename)
     {
-        if (!File.Exists(filename) || filename == null)
+        if (!File.Exists(filename))
             return false;
 
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
+        PlaybackState = PlaybackStateEnum.PlaybackStateStopped;
 
         CurrentSong = BmpSong.OpenFile(filename).Result;
         BmpMaestro.Instance.SetSong(CurrentSong);
@@ -74,9 +74,9 @@ public static class PlaybackFunctions
     /// Load a song from the playlist into the sequencer
     /// </summary>
     /// <param name="item"></param>
-    public static void LoadSongFromPlaylist(BmpSong item)
+    public static void LoadSongFromPlaylist(BmpSong? item)
     {
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
+        PlaybackState = PlaybackStateEnum.PlaybackStateStopped;
         CurrentSong   = item;
         BmpMaestro.Instance.SetSong(CurrentSong);
     }
@@ -86,7 +86,7 @@ public static class PlaybackFunctions
     /// </summary>
     public static void PlaySong(int delay)
     {
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_PLAYING;
+        PlaybackState = PlaybackStateEnum.PlaybackStatePlaying;
         BmpMaestro.Instance.StartLocalPerformer(delay);
     }
 
@@ -95,7 +95,7 @@ public static class PlaybackFunctions
     /// </summary>
     public static void PauseSong()
     {
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_PAUSE;
+        PlaybackState = PlaybackStateEnum.PlaybackStatePause;
         BmpMaestro.Instance.PauseLocalPerformer();
     }
 
@@ -104,7 +104,7 @@ public static class PlaybackFunctions
     /// </summary>
     public static void StopSong()
     {
-        PlaybackState = PlaybackState_Enum.PLAYBACK_STATE_STOPPED;
+        PlaybackState = PlaybackStateEnum.PlaybackStateStopped;
         BmpMaestro.Instance.StopLocalPerformer();
     }
 
@@ -123,16 +123,16 @@ public static class PlaybackFunctions
     /// <returns>instrument name as string</returns>
     public static string GetInstrumentNameForHostPlayer()
     {
-        var tracknumber = BmpMaestro.Instance.GetHostBardTrack();
-        if (tracknumber == 0)
+        var trackNumber = BmpMaestro.Instance.GetHostBardTrack();
+        if (trackNumber == 0)
             return "All Tracks";
         if (CurrentSong == null)
             return "No song loaded";
-        if (tracknumber > CurrentSong.TrackContainers.Count)
+        if (trackNumber > CurrentSong.TrackContainers.Count)
             return "None";
         try
         {
-            var classicConfig = (ClassicProcessorConfig)CurrentSong.TrackContainers[tracknumber -1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
+            var classicConfig = (ClassicProcessorConfig)CurrentSong.TrackContainers[trackNumber -1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
             return classicConfig.Instrument.Name;
         }
         catch (KeyNotFoundException)
@@ -145,19 +145,19 @@ public static class PlaybackFunctions
     /// Gets the instrument name from a given song and track
     /// </summary>
     /// <param name="song"></param>
-    /// <param name="tracknumber"></param>
+    /// <param name="trackNumber"></param>
     /// <returns>instrument name as string</returns>
-    public static string GetInstrumentName(BmpSong song, int tracknumber)
+    public static string GetInstrumentName(BmpSong? song, int trackNumber)
     {
-        if (tracknumber == 0)
+        if (trackNumber == 0)
             return "All Tracks";
         if (song == null)
             return "No song loaded";
-        if (tracknumber > CurrentSong.TrackContainers.Count)
+        if (CurrentSong != null && trackNumber > CurrentSong.TrackContainers.Count)
             return "None";
         try
         {
-            var classicConfig = (ClassicProcessorConfig)song.TrackContainers[tracknumber-1].ConfigContainers[0].ProcessorConfig;
+            var classicConfig = (ClassicProcessorConfig)song.TrackContainers[trackNumber-1].ConfigContainers[0].ProcessorConfig;
             return classicConfig.Instrument.Name;
         }
         catch (KeyNotFoundException)

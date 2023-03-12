@@ -15,22 +15,24 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers;
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_ActorCast
+namespace Machina.FFXIV.Headers
 {
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public ushort ActionID;
-    public byte SkillType;
-    public byte Unknown;
-    public uint Unknown1; // also action ID
-    public float CastTime;
-    public uint TargetID;
-    public float Rotation; // in radians
-    public uint Unknown2;
-    public ushort PosX;
-    public ushort PosY;
-    public ushort PosZ;
-    public ushort Unknown3;
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_ActorCast
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public ushort ActionID;
+        public byte SkillType;
+        public byte Unknown;
+        public uint Unknown1; // also action ID
+        public float CastTime;
+        public uint TargetID;
+        public float Rotation; // in radians
+        public uint Unknown2;
+        public ushort PosX;
+        public ushort PosY;
+        public ushort PosZ;
+        public ushort Unknown3;
+    }
 }

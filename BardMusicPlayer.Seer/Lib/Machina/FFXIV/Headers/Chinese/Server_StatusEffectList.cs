@@ -15,32 +15,33 @@
 
 using System.Runtime.InteropServices;
 
-namespace Machina.FFXIV.Headers.Chinese;
-
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct Server_StatusEffectListEntry
+namespace Machina.FFXIV.Headers.Chinese
 {
-    public ushort EffectID;
-    public ushort OtherInfo;
-    public float Duration;
-    public uint ActorID;
-}
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Server_StatusEffectListEntry
+    {
+        public ushort EffectID;
+        public ushort OtherInfo;
+        public float Duration;
+        public uint ActorID;
+    }
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct Server_StatusEffectList
-{
-    public Server_MessageHeader MessageHeader; // 8 DWORDS
-    public byte JobID;
-    public byte Level1;
-    public byte Level2;
-    public byte Level3;
-    public uint CurrentHP;
-    public uint MaxHP;
-    public ushort CurrentMP;
-    public ushort MaxMP;
-    public ushort Unknown1; // used to be TP
-    public byte DamageShield;
-    public byte Unknown2;
-    public fixed byte Effects[30 * 3 * 4];
-    // 4 bytes padding at end?
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public unsafe struct Server_StatusEffectList
+    {
+        public Server_MessageHeader MessageHeader; // 8 DWORDS
+        public byte JobID;
+        public byte Level1;
+        public byte Level2;
+        public byte Level3;
+        public uint CurrentHP;
+        public uint MaxHP;
+        public ushort CurrentMP;
+        public ushort MaxMP;
+        public ushort Unknown1; // used to be TP
+        public byte DamageShield;
+        public byte Unknown2;
+        public fixed byte Effects[30 * 3 * 4];
+        // 4 bytes padding at end?
+    }
 }
