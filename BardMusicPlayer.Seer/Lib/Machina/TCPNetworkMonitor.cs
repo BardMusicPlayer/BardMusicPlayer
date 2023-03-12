@@ -1,4 +1,4 @@
-﻿// Copyright © 2021 Ravahn - All Rights Reserved
+// Copyright © 2021 Ravahn - All Rights Reserved
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ public class TCPNetworkMonitor : IDisposable
         _connectionManager.Cleanup();
     }
 
-    private async Task ProcessDataLoop(CancellationToken token)
+    private void ProcessDataLoop(CancellationToken token)
     {
         try
         {
@@ -125,7 +125,9 @@ public class TCPNetworkMonitor : IDisposable
                 try
                 {
                     _connectionManager.Refresh();
+
                     ProcessNetworkData();
+
                 }
                 catch (OperationCanceledException)
                 {
@@ -134,35 +136,41 @@ public class TCPNetworkMonitor : IDisposable
                 catch (Exception ex)
                 {
                     if (DateTime.UtcNow.Subtract(_lastLoopError).TotalSeconds > 5)
-                        Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex, "DEBUG-MACHINA");
+                        Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop inner code: " + ex.ToString(), "DEBUG-MACHINA");
                     _lastLoopError = DateTime.UtcNow;
                 }
-                await Task.Delay(30, token);
+
+                Task.Delay(30, token).Wait(token);
             }
         }
         catch (OperationCanceledException)
         {
+
         }
         catch (Exception ex)
         {
-            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex, "DEBUG-MACHINA");
+            Trace.WriteLine("TCPNetworkMonitor Error in ProcessDataLoop: " + ex.ToString(), "DEBUG-MACHINA");
         }
     }
 
     private void ProcessNetworkData()
     {
-        foreach (var connection in _connectionManager.Connections)
+        byte[] tcpbuffer;
+        byte[] payloadBuffer;
+
+        for (int i = 0; i < _connectionManager.Connections.Count; i++)
         {
-            using var socket = connection.Socket;
+            TCPConnection connection = _connectionManager.Connections[i];
             CapturedData data;
-            while ((data = socket.Receive()).Size > 0)
+
+            while ((data = connection.Socket.Receive()).Size > 0)
             {
                 connection.IPDecoderSend.FilterAndStoreData(data.Buffer, data.Size);
-                byte[] tcpbuffer;
+
                 while ((tcpbuffer = connection.IPDecoderSend.GetNextIPPayload()) != null)
                 {
                     connection.TCPDecoderSend.FilterAndStoreData(tcpbuffer);
-                    while (connection.TCPDecoderSend.GetNextTCPDatagram() is { } payloadBuffer)
+                    while ((payloadBuffer = connection.TCPDecoderSend.GetNextTCPDatagram()) != null)
                         OnDataSent(connection, payloadBuffer);
                 }
 
@@ -170,7 +178,7 @@ public class TCPNetworkMonitor : IDisposable
                 while ((tcpbuffer = connection.IPDecoderReceive.GetNextIPPayload()) != null)
                 {
                     connection.TCPDecoderReceive.FilterAndStoreData(tcpbuffer);
-                    while (connection.TCPDecoderReceive.GetNextTCPDatagram() is { } payloadBuffer)
+                    while ((payloadBuffer = connection.TCPDecoderReceive.GetNextTCPDatagram()) != null)
                         OnDataReceived(connection, payloadBuffer);
                 }
             }
