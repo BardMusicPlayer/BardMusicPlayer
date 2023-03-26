@@ -4,8 +4,9 @@
  */
 
 using System.Collections.Generic;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 
 namespace BardMusicPlayer.Transmogrify.Processor.Utilities;
 

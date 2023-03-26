@@ -55,6 +55,7 @@ public class BmpSiren
     /// <param name="latency"></param>
     public void Setup(MMDevice device, string vstLocation, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         ShutDown();
         _mdev        = device;
         _vstLocation = vstLocation + @"\";
@@ -69,6 +70,7 @@ public class BmpSiren
     /// </summary>
     public int GetVolume()
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return 0; // Temporary Mac/Linux disable.
         return (int)(_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume * 30);
     }
 
@@ -79,6 +81,7 @@ public class BmpSiren
     /// <param name="max">Reduces the maximum volume by a fraction out of 100. i.e. max: 20 = 1/5th volume</param>
     public void SetVolume(float x, float max)
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         _mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume = x / 30 * (max / 100);
     }
 
@@ -104,6 +107,7 @@ public class BmpSiren
     /// <param name="latency"></param>
     public void Setup(string vstLocation, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
         Setup(mmAudio, vstLocation, defaultVolume, bufferCount, latency);
     }
@@ -113,6 +117,7 @@ public class BmpSiren
     /// </summary>
     public void ShutDown()
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         if (_player == null) return;
         _player.Stop();
         _player.PositionChanged -= NotifyTimePosition;
@@ -126,6 +131,7 @@ public class BmpSiren
     /// <returns>This BmpSiren</returns>
     public async Task<BmpSiren> Load(BmpSong song)
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReady) throw new BmpException("Siren not initialized.");
         if (_player.State == PlayerState.Playing) _player.Stop();
         (var midiFile, _lyrics) = await song.GetSynthMidi();
@@ -142,6 +148,7 @@ public class BmpSiren
     /// <returns>This BmpSiren</returns>
     public BmpSiren Play()
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
         _player.Play();
         return this;
@@ -153,6 +160,7 @@ public class BmpSiren
     /// <returns>This BmpSiren</returns>
     public BmpSiren Pause()
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
         _player.Pause();
         return this;
@@ -164,6 +172,7 @@ public class BmpSiren
     /// <returns>This BmpSiren</returns>
     public BmpSiren Stop()
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReadyForPlayback) throw new BmpException("Siren not loaded with a song.");
         _player.Stop();
         _lyricIndex = 0;
@@ -176,6 +185,7 @@ public class BmpSiren
     /// <returns>This BmpSiren</returns>
     public BmpSiren SetPosition(int time)
     {
+        if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReadyForPlayback) return this; // throw new BmpException("Siren not loaded with a song.");
         if (time < 0) time = 0;
         //if (time > _player.PlaybackRange.EndTick) return Stop();

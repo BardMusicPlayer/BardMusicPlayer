@@ -14,6 +14,7 @@ namespace BardMusicPlayer.Seer.Utilities.KnownFolder;
 /// </summary>
 internal sealed class KnownFolder
 {
+#pragma warning disable CA1416
     // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
     /// <summary>
@@ -22,6 +23,7 @@ internal sealed class KnownFolder
     /// </summary>
     /// <param name="type">The <see cref="KnownFolderType"/> of the known folder to represent.</param>
     internal KnownFolder(KnownFolderType type) : this(type, WindowsIdentity.GetCurrent()) { }
+#pragma warning restore CA1416
 
     /// <summary>
     /// Initializes a new instance of the <see cref="KnownFolder"/> class for the folder of the given type. It
@@ -84,7 +86,7 @@ internal sealed class KnownFolder
     internal void Create() { GetPath(KnownFolderFlags.Init | KnownFolderFlags.Create); }
 
     // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
-
+#pragma warning disable CA1416
     private string GetPath(KnownFolderFlags flags)
     {
         var result = SHGetKnownFolderPath(Type.GetGuid(), (uint) flags, Identity.Token, out var outPath);
@@ -108,6 +110,7 @@ internal sealed class KnownFolder
                 result);
         }
     }
+#pragma warning restore CA1416
 
     /// <summary>
     /// Retrieves the full path of a known folder identified by the folder's known folder ID.

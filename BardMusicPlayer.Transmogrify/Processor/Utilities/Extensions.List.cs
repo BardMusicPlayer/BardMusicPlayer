@@ -6,8 +6,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Interaction;
+using BardMusicPlayer.DryWetMidi.Common.DataTypes;
+using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 
 namespace BardMusicPlayer.Transmogrify.Processor.Utilities;
 
@@ -176,7 +176,12 @@ internal static partial class Extensions
 
             if (j + 1 < notes.Count)
             {
-                if (notes[j + 1].Time <= notes[j].Time + notes[j].Length + 25)
+                if (notes[j].Length >= 100 && notes[j + 1].Time <= notes[j].Time + notes[j].Length + 60)
+                {
+                    dur = notes[j + 1].Time - notes[j].Time - 60;
+                    dur = dur < 60 ? 60 : dur;
+                }
+                else if (notes[j].Length < 100 && notes[j + 1].Time <= notes[j].Time + notes[j].Length + 25)
                 {
                     dur = notes[j + 1].Time - notes[j].Time - 25;
                     dur = dur < 25 ? 25 : dur;

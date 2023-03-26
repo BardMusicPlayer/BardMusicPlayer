@@ -22,28 +22,32 @@ using H.Pipes.Args;
 
 namespace BardMusicPlayer.DalamudBridge.Helper.Dalamud;
 
-public sealed class Message
+public sealed class PayloadMessage
 {
-    public MessageType msgType { get; set; } = MessageType.None;
-    public int msgChannel { get; set; }
-    public string message { get; set; } = "";
+    public MessageType MsgType { get; set; } = MessageType.None;
+    public int MsgChannel { get; set; }
+    public string Message { get; set; } = "";
 }
 
 internal sealed class DalamudServer : IDisposable
 {
     private readonly ConcurrentDictionary<int, string> _clients;
-    private readonly PipeServer<Message> _pipe;
+    private readonly PipeServer<PayloadMessage> _pipe;
+
+    private readonly Version minVersion = new Version("0.0.1.8");
 
     /// <summary>
     /// </summary>
     internal DalamudServer()
     {
         _clients                 =  new ConcurrentDictionary<int, string>();
-        _pipe                    =  new PipeServer<Message>("LightAmp-DalamudBridge", new NewtonsoftJsonFormatter());
+        _pipe                    =  new PipeServer<PayloadMessage>("Hypnotoad", new NewtonsoftJsonFormatter());
         _pipe.ClientConnected    += OnConnected;
         _pipe.ClientDisconnected += OnDisconnected;
         _pipe.MessageReceived    += OnMessage;
+#pragma warning disable CA1416
         _pipe.AllowUsersReadWrite();
+#pragma warning restore CA1416
         Start();
     }
 
@@ -105,11 +109,11 @@ internal sealed class DalamudServer : IDisposable
             return false;
 
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
-            new Message
+            new PayloadMessage
             {
-                msgType    = MessageType.Chat,
-                msgChannel = chanType.ChannelCode,
-                message    = text
+                MsgType    = MessageType.Chat,
+                MsgChannel = chanType.ChannelCode,
+                Message    = text
             });
         return true;
     }
@@ -126,10 +130,10 @@ internal sealed class DalamudServer : IDisposable
             return false;
 
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
-            new Message
+            new PayloadMessage
             {
-                msgType = MessageType.Instrument,
-                message = instrumentID.ToString()
+                MsgType = MessageType.Instrument,
+                Message = instrumentID.ToString()
             });
         return true;
     }
@@ -146,10 +150,10 @@ internal sealed class DalamudServer : IDisposable
             return false;
 
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
-            new Message
+            new PayloadMessage
             {
-                msgType = MessageType.AcceptReply,
-                message = ""
+                MsgType = MessageType.AcceptReply,
+                Message = ""
             });
         return true;
     }
@@ -166,10 +170,10 @@ internal sealed class DalamudServer : IDisposable
             return false;
 
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
-            new Message
+            new PayloadMessage
             {
-                msgType = MessageType.SetGfx,
-                message = arg ? "1" : "0"
+                MsgType = MessageType.SetGfx,
+                Message = arg ? "1" : "0"
             });
         return true;
     }
@@ -185,10 +189,10 @@ internal sealed class DalamudServer : IDisposable
             return false;
 
         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
-            new Message
+            new PayloadMessage
             {
-                msgType = MessageType.StartEnsemble,
-                message = ""
+                MsgType = MessageType.StartEnsemble,
+                Message = ""
             });
         return true;
     }
@@ -205,10 +209,10 @@ internal sealed class DalamudServer : IDisposable
         if (!IsConnected(pid))
             return false;
 
-        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(new Message
+        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(new PayloadMessage
         {
-            msgType = pressed ? MessageType.NoteOn : MessageType.NoteOff,
-            message = note.ToString()
+            MsgType = pressed ? MessageType.NoteOn : MessageType.NoteOff,
+            Message = note.ToString()
         });
         return true;
     }
@@ -224,10 +228,10 @@ internal sealed class DalamudServer : IDisposable
         if (!IsConnected(pid))
             return false;
 
-        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(new Message
+        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(new PayloadMessage
         {
-            msgType = MessageType.ProgramChange,
-            message = ProgNumber.ToString()
+            MsgType = MessageType.ProgramChange,
+            Message = ProgNumber.ToString()
         });
         return true;
     }
@@ -237,25 +241,47 @@ internal sealed class DalamudServer : IDisposable
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnMessage(object sender, ConnectionMessageEventArgs<Message?> e)
+    private void OnMessage(object? sender, ConnectionMessageEventArgs<PayloadMessage?> e)
     {
         var inMsg = e.Message;
         if (inMsg == null)
             return;
 
-        switch (inMsg.msgType)
+        switch (inMsg.MsgType)
         {
             case MessageType.Handshake:
             {
-                var t = Convert.ToInt32(inMsg.message);
+                var t = Convert.ToInt32(inMsg.Message);
                 _clients.TryAdd(t, e.Connection.PipeName);
                 Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} {t} connected");
                 break;
             }
+            case MessageType.Version:
+                try
+                {
+                    var t = inMsg.Message;
+                    var pid = Convert.ToInt32(t.Split(':')[0]);
+                    var version = new Version(t.Split(':')[1]);
+                    if (version < minVersion)
+                    {
+                        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
+                            new PayloadMessage
+                            {
+                                MsgType = MessageType.Version,
+                                Message = minVersion.ToString()
+                            });
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                break;
             case MessageType.SetGfx:
                 try
                 {
-                    var t = inMsg.message;
+                    var t = inMsg.Message;
                     var pid = Convert.ToInt32(t.Split(':')[0]);
                     var lowsettings = Convert.ToBoolean(t.Split(':')[1]);
                     if (BmpSeer.Instance.Games.ContainsKey(pid))
@@ -275,7 +301,7 @@ internal sealed class DalamudServer : IDisposable
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnDisconnected(object sender, ConnectionEventArgs<Message> e)
+    private void OnDisconnected(object? sender, ConnectionEventArgs<PayloadMessage> e)
     {
         if (_clients.Values.Contains(e.Connection.PipeName))
             _clients.TryRemove(_clients.FirstOrDefault(x => x.Value == e.Connection.PipeName).Key, out _);
@@ -287,7 +313,7 @@ internal sealed class DalamudServer : IDisposable
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private static void OnConnected(object sender, ConnectionEventArgs<Message> e)
+    private static void OnConnected(object? sender, ConnectionEventArgs<PayloadMessage> e)
     {
         Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} connected");
     }

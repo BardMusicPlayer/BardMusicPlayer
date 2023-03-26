@@ -4,7 +4,7 @@
  */
 
 using System.Collections.Generic;
-using Sanford.Multimedia.Midi;
+using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
 
 namespace BardMusicPlayer.Maestro.Old.Utils;
 

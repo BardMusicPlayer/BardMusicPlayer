@@ -1,8 +1,4 @@
-﻿#region
-
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +7,6 @@ using BardMusicPlayer.Controls;
 using BardMusicPlayer.Script;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-
-#endregion
 
 namespace BardMusicPlayer.UI_Classic;
 
@@ -31,14 +25,15 @@ public sealed partial class MacroLaunchpad
 
 
         DataContext           = this;
-        _Macros               = new List<Macro>();
-        MacroList.ItemsSource = _Macros;
+        Macros                = new List<Macro?>();
+        MacroList.ItemsSource = Macros;
     }
 
-    public List<Macro> _Macros { get; }
-    public Macro SelectedMacro { get; set; }
+    private List<Macro?> Macros { get; }
 
-    private void Instance_OnRunningStateChanged(object sender, bool e)
+    private Macro? SelectedMacro { get; set; }
+
+    private void Instance_OnRunningStateChanged(object? sender, bool e)
     {
         Dispatcher.BeginInvoke(e
             ? new Action(() => { StopIndicator.Content = "Stop"; })
@@ -47,7 +42,7 @@ public sealed partial class MacroLaunchpad
 
     private void Macros_CollectionChanged()
     {
-        MacroList.ItemsSource = _Macros;
+        MacroList.ItemsSource = Macros;
         MacroList.Items.Refresh();
     }
 
@@ -89,7 +84,7 @@ public sealed partial class MacroLaunchpad
             Visibility = Visibility.Visible
         };
         macroEdit.Closed += MacroEdit_Closed;
-        _Macros.Add(newMacro);
+        Macros.Add(newMacro);
         Macros_CollectionChanged();
     }
 
@@ -98,7 +93,7 @@ public sealed partial class MacroLaunchpad
         if (SelectedMacro == null)
             return;
 
-        _Macros.Remove(SelectedMacro);
+        Macros.Remove(SelectedMacro);
         SelectedMacro = null;
         Macros_CollectionChanged();
     }
@@ -120,17 +115,20 @@ public sealed partial class MacroLaunchpad
         fileStream.Close();
 
         var data = memoryStream.ToArray();
-        _Macros.Clear();
+        Macros.Clear();
         var x = JsonConvert.DeserializeObject<List<Macro>>(new UTF8Encoding(true).GetString(data));
-        foreach (var m in x)
-            _Macros.Add(m);
+        if (x != null)
+        {
+            foreach (var m in x)
+                Macros.Add(m);
+        }
 
         Macros_CollectionChanged();
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (_Macros.Count <= 0)
+        if (Macros.Count <= 0)
             return;
 
         var openFileDialog = new SaveFileDialog
@@ -141,7 +139,7 @@ public sealed partial class MacroLaunchpad
         if (openFileDialog.ShowDialog() != true)
             return;
 
-        var t = JsonConvert.SerializeObject(_Macros);
+        var t = JsonConvert.SerializeObject(Macros);
         var content = new UTF8Encoding(true).GetBytes(t);
 
         var fileStream = File.Create(openFileDialog.FileName);
@@ -151,7 +149,7 @@ public sealed partial class MacroLaunchpad
         Macros_CollectionChanged();
     }
 
-    private void MacroEdit_Closed(object sender, EventArgs e)
+    private void MacroEdit_Closed(object? sender, EventArgs e)
     {
         MacroList.Items.Refresh();
     }

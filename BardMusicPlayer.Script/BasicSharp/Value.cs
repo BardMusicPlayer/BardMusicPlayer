@@ -68,6 +68,7 @@ public struct Value
     public readonly Value BinOp(Value b, Token tok)
     {
         var a = this;
+        const float tolerance = 0.0001f; // define a small tolerance value
         if (a.Type != b.Type)
         {
             // promote one value to higher type
@@ -82,9 +83,9 @@ public struct Value
             case Token.Plus:
                 return a.Type == ValueType.Real ? new Value(a.Real + b.Real) : new Value(a.String + b.String);
             case Token.Equal:
-                return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 1 : 0) : new Value(a.String == b.String ? 1 : 0);
+                return a.Type == ValueType.Real ? new Value(Math.Abs(a.Real - b.Real) < tolerance ? 1 : 0) : new Value(a.String == b.String ? 1 : 0);
             case Token.NotEqual:
-                return a.Type == ValueType.Real ? new Value(a.Real == b.Real ? 0 : 1) : new Value(a.String == b.String ? 0 : 1);
+                return a.Type == ValueType.Real ? new Value(Math.Abs(a.Real - b.Real) < tolerance ? 0 : 1) : new Value(a.String == b.String ? 0 : 1);
             default:
             {
                 if (a.Type == ValueType.String)

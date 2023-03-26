@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,7 +11,7 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public sealed partial class TrackNumericUpDown
 {
-    public EventHandler<int> OnValueChanged;
+    public EventHandler<int>? OnValueChanged;
     public TrackNumericUpDown()
     {
         InitializeComponent();
@@ -43,7 +42,8 @@ public sealed partial class TrackNumericUpDown
 
     /* Track UP/Down */
     private int _numValue = 1;
-    public int NumValue
+
+    private int NumValue
     {
         get => _numValue;
         set
@@ -88,7 +88,7 @@ public sealed partial class TrackNumericUpDown
         if (Text == null)
             return;
 
-        var str = Regex.Replace(Text.Text, "[^0-9]", "");
+        var str = MyRegex().Replace(Text.Text, "");
         if (int.TryParse(str, out var val))
         {
             if (PlaybackFunctions.CurrentSong == null)
@@ -96,11 +96,13 @@ public sealed partial class TrackNumericUpDown
 
             if (val < 0 || NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
             {
-                NumValue = NumValue;
+                NumValue = val;
                 return;
             }
             NumValue = val;
         }
     }
 
+    [GeneratedRegex("[^0-9]")]
+    private static partial Regex MyRegex();
 }

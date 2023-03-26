@@ -22,8 +22,8 @@ public sealed class GP6File : GPFile
     public static int totalLength;
     public static int lengthPassed;
 
-    private readonly byte[] udata; //uncompressed data
-
+    private readonly byte[] udata;   //uncompressed data
+    const float tolerance = 0.0001f; // define a small tolerance value
     //public List<Track> tracks;
     public GP6File(byte[] _data)
     {
@@ -441,7 +441,7 @@ public sealed class GP6File : GPFile
 
             if (hasWhammy)
             {
-                if (whammyBarMiddleOffset1 == -1.0f)
+                if (Math.Abs(whammyBarMiddleOffset1 - (-1.0f)) < tolerance)
                 {
                     whammyBarMiddleOffset1 = whammyBarOriginOffset +
                                              (whammyBarDestinationOffset - whammyBarOriginOffset) / 2.0f;
@@ -449,7 +449,7 @@ public sealed class GP6File : GPFile
                         whammyBarOriginValue + (whammyBarDestinationValue - whammyBarOriginValue) / 2.0f;
                 }
 
-                if (whammyBarMiddleOffset2 == -1.0f) whammyBarMiddleOffset2 = whammyBarMiddleOffset1;
+                if (Math.Abs(whammyBarMiddleOffset2 - (-1.0f)) < tolerance) whammyBarMiddleOffset2 = whammyBarMiddleOffset1;
                 beat.effect.tremoloBar = new BendEffect
                 {
                     type = BendType.none, //Not defined in GP6
@@ -674,13 +674,13 @@ public sealed class GP6File : GPFile
 
             if (hasBendEffect)
             {
-                if (bendMidOff1 == -1.0f)
+                if (Math.Abs(bendMidOff1 - (-1.0f)) < tolerance)
                 {
                     bendMidOff1 = bendOrigOff + (bendDestOff - bendOrigOff) / 2.0f;
                     bendMidVal  = bendOrigVal + (bendDestVal - bendOrigVal) / 2.0f;
                 }
 
-                if (bendMidOff2 == -1.0f) bendMidOff2 = bendMidOff1;
+                if (Math.Abs(bendMidOff2 - (-1.0f)) < tolerance) bendMidOff2 = bendMidOff1;
 
                 bendEffect.points.Add(new BendPoint(0.0f, bendOrigVal));
                 bendEffect.points.Add(new BendPoint(bendOrigOff, bendOrigVal));
@@ -697,7 +697,7 @@ public sealed class GP6File : GPFile
                 note.effect.bend = bendEffect;
             }
 
-            if (harmonicFret != -1)
+            if (Math.Abs(harmonicFret - (-1)) > tolerance)
             {
                 switch (harmonicType)
                 {

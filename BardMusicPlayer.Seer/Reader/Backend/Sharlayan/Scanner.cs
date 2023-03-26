@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan;
@@ -24,17 +25,17 @@ internal sealed class Scanner
         if (MemoryHandler.ProcessModel?.Process == null) return;
 
         IsScanning = true;
-        Func<bool> func = delegate
-        {
+
+        Task.Run(() => {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var list = signatures as List<Signature> ?? signatures.ToList();
             if (list.Any())
-            {
+            { 
                 foreach (var item in list)
                 {
-                    if (item.Value == string.Empty)
-                        Locations[item.Key] = item;
+                   if (item.Value == string.Empty)
+                       Locations[item.Key] = item;
                     else
                         item.Value = item.Value.Replace("*", "?");
                 }
@@ -47,8 +48,7 @@ internal sealed class Scanner
             MemoryHandler.RaiseSignaturesFound(Locations, stopwatch.ElapsedMilliseconds);
             IsScanning = false;
             return true;
-        };
-        func.BeginInvoke(delegate { }, func);
+        });
     }
 
     private void FindExtendedSignatures(IEnumerable<Signature> signatures)

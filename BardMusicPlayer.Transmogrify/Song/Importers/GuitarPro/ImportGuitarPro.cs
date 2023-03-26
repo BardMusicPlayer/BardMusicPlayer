@@ -1,9 +1,9 @@
 #region
 
 using System.IO;
+using BardMusicPlayer.DryWetMidi.Core;
 using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro.Native;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
-using Melanchall.DryWetMidi.Core;
 
 #endregion
 

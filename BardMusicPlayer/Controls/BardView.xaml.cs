@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,37 +43,37 @@ public partial class BardView
         Globals_OnConfigReload(null, null);
     }
 
-    private void Globals_OnConfigReload(object sender, EventArgs e)
+    private void Globals_OnConfigReload(object? sender, EventArgs? e)
     {
-        Autoequip_CheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
+        AutoEquipCheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
     }
 
-    public ObservableCollection<Performer> Bards { get; private set; }
+    private ObservableCollection<Performer> Bards { get; set; }
 
-    public Performer SelectedBard { get; set; }
+    private Performer? SelectedBard { get; set; }
 
-    private void OnPerformerChanged(object sender, bool e)
+    private void OnPerformerChanged(object? sender, bool e)
     {
         Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
         Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
     }
 
-    private void OnTrackNumberChanged(object sender, TrackNumberChangedEvent e)
+    private void OnTrackNumberChanged(object? sender, TrackNumberChangedEvent e)
     {
         UpdateList();
     }
 
-    private void OnOctaveShiftChanged(object sender, OctaveShiftChangedEvent e)
+    private void OnOctaveShiftChanged(object? sender, OctaveShiftChangedEvent e)
     {
         UpdateList();
     }
 
-    private void OnSongLoaded(object sender, SongLoadedEvent e)
+    private void OnSongLoaded(object? sender, SongLoadedEvent e)
     {
         UpdateList();
     }
 
-    private void OnPerformerUpdate(object sender, PerformerUpdate e)
+    private void OnPerformerUpdate(object? sender, PerformerUpdate e)
     {
         UpdateList();
     }
@@ -94,6 +91,28 @@ public partial class BardView
     private void OnInstrumentHeldChanged(InstrumentHeldChanged e)
     {
         UpdateList();
+        if (e.InstrumentHeld.Index == 0)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (CloseInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+                    OpenInstrumentButton.Visibility  = Visibility.Visible;
+                    CloseInstrumentButton.Visibility = Visibility.Hidden;
+                }
+            ));
+        }
+        else
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (OpenInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+                    OpenInstrumentButton.Visibility  = Visibility.Hidden;
+                    CloseInstrumentButton.Visibility = Visibility.Visible;
+                }
+            ));
+        }
     }
 
     private void UpdateList()
@@ -114,10 +133,10 @@ public partial class BardView
 
     private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
     {
-        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackState_Enum.PLAYBACK_STATE_PLAYING)
+        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
         {
             PlaybackFunctions.PauseSong();
-            Classic_MainView.CurrentInstance.Play_Button_State();
+            ClassicMainView.CurrentInstance?.Play_Button_State();
         }
 
         BmpMaestro.Instance.StopLocalPerformer();
@@ -141,7 +160,7 @@ public partial class BardView
         if (sender is TrackNumericUpDown ctl) ctl.OnValueChanged += OnValueChanged;
     }
 
-    private static void OnValueChanged(object sender, int s)
+    private static void OnValueChanged(object? sender, int s)
     {
         var game = (sender as TrackNumericUpDown)?.DataContext as Performer;
         BmpMaestro.Instance.SetTracknumber(game, s);
@@ -153,7 +172,7 @@ public partial class BardView
         if (sender is OctaveNumericUpDown ctl) ctl.OnValueChanged += OnOctaveValueChanged;
     }
 
-    private static void OnOctaveValueChanged(object sender, int s)
+    private static void OnOctaveValueChanged(object? sender, int s)
     {
         var performer = (sender as OctaveNumericUpDown)?.DataContext as Performer;
         BmpMaestro.Instance.SetOctaveshift(performer, s);
@@ -171,7 +190,9 @@ public partial class BardView
     private void PerformerEnabledChecker_Checked(object sender, RoutedEventArgs e)
     {
         var ctl = sender as CheckBox;
-        if ((sender as CheckBox)?.DataContext is Performer game) game.PerformerEnabled = ctl.IsChecked ?? false;
+        if ((sender as CheckBox)?.DataContext is Performer game)
+            if (ctl != null)
+                game.PerformerEnabled = ctl.IsChecked ?? false;
     }
 
     private void Bard_MouseClick(object sender, MouseButtonEventArgs e)
@@ -199,7 +220,7 @@ public partial class BardView
 
     private void AutoEquip_CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.AutoEquipBards = Autoequip_CheckBox.IsChecked ?? false;
+        BmpPigeonhole.Instance.AutoEquipBards = AutoEquipCheckBox.IsChecked ?? false;
         Globals.Globals.ReloadConfig();
     }
 
@@ -219,25 +240,27 @@ public partial class BardView
         if (openFileDialog.ShowDialog() != true)
             return;
 
-        List<PerformerSettingData> pdatalist;
         var memoryStream = new MemoryStream();
         var fileStream = File.Open(openFileDialog.FileName, FileMode.Open);
         fileStream.CopyTo(memoryStream);
         fileStream.Close();
 
         var data = memoryStream.ToArray();
-        pdatalist = JsonConvert.DeserializeObject<List<PerformerSettingData>>(new UTF8Encoding(true).GetString(data));
+        var performerDataList = JsonConvert.DeserializeObject<List<PerformerSettingData>>(new UTF8Encoding(true).GetString(data));
 
-        foreach (var pconfig in pdatalist)
+        if (performerDataList != null)
         {
-            var p = Bards.Where(perf => perf.game.PlayerName.Equals(pconfig.Name));
-            var performers = p as Performer[] ?? p.ToArray();
-            if (!performers.Any())
-                continue;
+            foreach (var performerConfig in performerDataList)
+            {
+                var p = Bards.Where(perf => perf.game.PlayerName.Equals(performerConfig.Name));
+                var performers = p as Performer[] ?? p.ToArray();
+                if (!performers.Any())
+                    continue;
 
-            performers.First().TrackNumber = pconfig.Track;
-            if (pconfig.AffinityMask != 0)
-                performers.First().game.SetAffinity(pconfig.AffinityMask);
+                performers.First().TrackNumber = performerConfig.Track;
+                if (performerConfig.AffinityMask != 0)
+                    performers.First().game.SetAffinity(performerConfig.AffinityMask);
+            }
         }
 
         if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
@@ -262,8 +285,8 @@ public partial class BardView
         if (openFileDialog.ShowDialog() != true)
             return;
 
-        var pdatalist = Bards.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = (long)performer.game.GetAffinity() }).ToList();
-        var t = JsonConvert.SerializeObject(pdatalist);
+        var performerDataList = Bards.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = performer.game.GetAffinity() }).ToList();
+        var t = JsonConvert.SerializeObject(performerDataList);
         var content = new UTF8Encoding(true).GetBytes(t);
 
         var fileStream = File.Create(openFileDialog.FileName);
@@ -273,10 +296,10 @@ public partial class BardView
 
     private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-        foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLow_CheckBox.IsChecked))
+        foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
         {
-            p.game.GfxSettingsLow = GfxLow_CheckBox.IsChecked ?? false;
-            p.game.GfxSetLow(GfxLow_CheckBox.IsChecked ?? false);
+            p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
+            p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
         }
     }
 
@@ -303,7 +326,7 @@ public partial class BardView
 /// </summary>
 public class PerformerSettingData
 {
-    public string Name { get; set; } = "";
-    public int Track { get; set; }
-    public long AffinityMask { get; set; }
+    public string Name { get; init; } = "";
+    public int Track { get; init; }
+    public long AffinityMask { get; init; }
 }

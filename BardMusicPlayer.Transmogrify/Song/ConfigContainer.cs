@@ -5,10 +5,10 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
 using BardMusicPlayer.Transmogrify.Processor;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Config.Interfaces;
-using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 

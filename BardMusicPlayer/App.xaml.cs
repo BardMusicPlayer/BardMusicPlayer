@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using BardMusicPlayer.Coffer;
-using BardMusicPlayer.Jamboree;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Script;
@@ -28,9 +27,9 @@ public partial class App
         // LogManager.Initialize(new(view.Log));
 
         //Load the last used catalog
-        var CatalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
-        if (File.Exists(CatalogFile))
-            BmpCoffer.Initialize(CatalogFile);
+        var catalogFile = BmpPigeonhole.Instance.LastLoadedCatalog;
+        if (File.Exists(catalogFile))
+            BmpCoffer.Initialize(catalogFile);
         else
             BmpCoffer.Initialize(Globals.Globals.DataPath + @"\MusicCatalog.db");
 
@@ -47,13 +46,11 @@ public partial class App
         BmpScript.Instance.Start();
 
         BmpSiren.Instance.Setup(Globals.Globals.DataPath + @"\vst");
-        //BmpJamboree.Instance.Start();
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
         //LogManager.Shutdown();
-        BmpJamboree.Instance.Stop();
         if (BmpSiren.Instance.IsReadyForPlayback)
             BmpSiren.Instance.Stop();
         BmpSiren.Instance.ShutDown();

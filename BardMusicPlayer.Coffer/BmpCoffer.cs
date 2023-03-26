@@ -7,11 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BardMusicPlayer.DryWetMidi.Core;
+using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using BardMusicPlayer.DryWetMidi.Core.Utilities;
+using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song;
 using LiteDB;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Coffer;
 
