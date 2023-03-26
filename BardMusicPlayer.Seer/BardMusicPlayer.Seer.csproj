@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="WindowsFirewallHelper" Version="2.2.0.86" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,8 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Machina" HintPath="Lib\Machina\Machina.dll" />
-    <Reference Include="Machina.FFXIV" HintPath="Lib\Machina\Machina.FFXIV.dll" />
+    <EmbeddedResource Include="Lib\Machina.FFXIV\Deucalion\Distrib\deucalion-0.9.0.dll" />
+    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Chinese.txt" />
+    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Global.txt" />
+    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Korean.txt" />
   </ItemGroup>
 
 </Project>
