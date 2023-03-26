@@ -38,6 +38,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections;
+using Timer = System.Timers.Timer;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateScheduler;
 

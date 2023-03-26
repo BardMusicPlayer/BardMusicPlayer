@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <OutputType>WinExe</OutputType>
@@ -103,24 +103,6 @@
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" RequiredTargetFramework="4.0" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
 
 </Project>

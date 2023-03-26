@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Platforms>x64</Platforms>
@@ -15,10 +15,6 @@
     <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
 
 </Project>

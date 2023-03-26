@@ -432,7 +432,7 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
     }

@@ -91,7 +91,9 @@ namespace Machina.Sockets
             {
                 byte[] trueBytes = new byte[4] { 3, 0, 0, 0 }; // 3 == RCVALL_IPLEVEL, so it only intercepts the target interface
                 byte[] outBytes = new byte[4];
+#pragma warning disable CA1416
                 _ = socket.IOControl(IOControlCode.ReceiveAll, trueBytes, outBytes);
+#pragma warning restore CA1416
             }
 
             if (remoteAddress > 0)

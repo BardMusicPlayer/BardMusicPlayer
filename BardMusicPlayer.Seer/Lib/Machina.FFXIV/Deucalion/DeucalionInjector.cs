@@ -111,6 +111,17 @@ namespace Machina.FFXIV.Deucalion
             public IntPtr Group;
             public IntPtr Sacl;
             public IntPtr Dacl;
+
+            public SECURITY_DESCRIPTOR(byte sbz1, short control, IntPtr owner, IntPtr group, IntPtr sacl, IntPtr dacl, byte revision)
+            {
+                Sbz1          = sbz1;
+                Control       = control;
+                Owner         = owner;
+                Group         = group;
+                Sacl          = sacl;
+                Dacl          = dacl;
+                Revision = revision;
+            }
         }
         #endregion
 
@@ -123,7 +134,7 @@ namespace Machina.FFXIV.Deucalion
                 {
                     File.Delete(fileName);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // do nothing - file may be locked by ffxiv process.
                 }

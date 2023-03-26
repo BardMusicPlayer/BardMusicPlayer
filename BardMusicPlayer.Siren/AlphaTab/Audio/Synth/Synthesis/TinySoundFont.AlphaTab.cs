@@ -19,7 +19,7 @@ internal sealed partial class TinySoundFont
     public const int MicroBufferCount = 32; // 4069 samples in total
     public const int MicroBufferSize = 64;  // 64 stereo samples
 
-    private readonly LinkedList<SynthEvent> _midiEventQueue = new();
+    private readonly Ds.LinkedList<SynthEvent> _midiEventQueue = new();
     private readonly int[] _midiEventCounts = new int[MicroBufferCount];
     private FastDictionary<int, bool> _mutedChannels = new();
     private FastDictionary<int, bool> _soloChannels = new();

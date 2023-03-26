@@ -664,7 +664,7 @@ internal class Note
 
     internal void Finish()
     {
-        var nextNoteOnLine = new Lazy<Note>(() => NextNoteOnSameLine(this));
+        var nextNoteOnLine = new Util.Lazy<Note>(() => NextNoteOnSameLine(this));
 
         // // Compiler Warnings: Local variable 'isSongBook' is only assigned but its value is never used
         // var isSongBook = false;

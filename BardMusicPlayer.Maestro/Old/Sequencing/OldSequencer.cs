@@ -23,6 +23,7 @@ using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequenci
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song;
+using Timer = System.Timers.Timer;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;
 
