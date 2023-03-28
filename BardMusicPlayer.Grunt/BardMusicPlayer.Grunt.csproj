@@ -22,8 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Pipes" Version="2.0.45" />
-    <PackageReference Include="H.Pipes.AccessControl" Version="2.0.45" />
+    <PackageReference Include="H.Pipes.AccessControl" Version="2.0.47" />
   </ItemGroup>
 
   <ItemGroup>
