@@ -78,11 +78,3 @@ https://github.com/naudio/NAudio/blob/master/license.txt
 ### MaterialDesignInXaml by James Willock, Mulholland Software and Contributors
 License: MIT
 https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/LICENSE
-
-### WindowsFirewallHelper by Soroush
-License: MIT
-https://github.com/falahati/WindowsFirewallHelper/blob/master/LICENSE
-
-### libzt by ZeroTier, Inc.
-License: BSL-1.1
-https://github.com/zerotier/libzt/blob/master/LICENSE.txt
