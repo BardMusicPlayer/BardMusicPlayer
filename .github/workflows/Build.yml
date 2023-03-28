@@ -22,12 +22,12 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet publish --configuration Release
 
     - name: Store artifacts
       uses: actions/upload-artifact@v3
       with:
         name: BardMusicPlayer
-        path: BardMusicPlayer\bin\Release\net481\*.exe
+        path: BardMusicPlayer\bin\Release\net7.0-windows\win-x64\*.exe
         if-no-files-found: error
-        retention-days: 3
+        retention-days: 1
