@@ -8,7 +8,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <Configurations>Debug;Release</Configurations>
     <ImplicitUsings>enable</ImplicitUsings>
-
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -28,15 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Lib\Machina.FFXIV\Deucalion\Distrib\deucalion-0.9.0.dll" />
-    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Chinese.txt" />
-    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Global.txt" />
-    <EmbeddedResource Include="Lib\Machina.FFXIV\Headers\Opcodes\Korean.txt" />
+    <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
-    <ProjectReference Include="..\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
+    <Reference Include="Machina" HintPath="Lib\Machina.dll" />
+    <Reference Include="Machina.FFXIV" HintPath="Lib\Machina.FFXIV.dll" />
   </ItemGroup>
 
 </Project>
