@@ -6,8 +6,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Common.DataTypes;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Processor.Utilities;
 

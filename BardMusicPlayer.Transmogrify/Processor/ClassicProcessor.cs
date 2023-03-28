@@ -7,18 +7,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Common.DataTypes;
-using BardMusicPlayer.DryWetMidi.Core.Chunks;
-using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
-using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
-using BardMusicPlayer.DryWetMidi.Core.Utilities;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Processor;
 

@@ -3,10 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
-using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Processor.Utilities;
 

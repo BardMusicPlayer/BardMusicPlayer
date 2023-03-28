@@ -6,16 +6,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Core.Events.Base;
-using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
-using BardMusicPlayer.DryWetMidi.Core.Utilities;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Generator;
-using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi;
 using BardMusicPlayer.Siren.AlphaTab.Model;
 using BardMusicPlayer.Transmogrify.Song;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using MidiFile = BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Midi.MidiFile;
 
 namespace BardMusicPlayer.Siren;
 

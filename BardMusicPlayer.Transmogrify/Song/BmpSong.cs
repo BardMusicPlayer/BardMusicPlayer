@@ -9,27 +9,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Core.Chunks;
-using BardMusicPlayer.DryWetMidi.Core.Events.Base;
-using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
-using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
-using BardMusicPlayer.DryWetMidi.Core.Utilities;
-using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
-using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
-using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
-using BardMusicPlayer.DryWetMidi.Interaction.Utilities;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Importers;
-using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
+using BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
-using Lyrics = BardMusicPlayer.Transmogrify.Song.Importers.LRC.Lyrics;
-using Note = BardMusicPlayer.DryWetMidi.Interaction.Notes.Note;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 
@@ -92,7 +79,7 @@ public sealed class BmpSong
         {
             ".mmsong" => CovertMidiToSong(MMSongImporter.OpenMMSongFile(path), path),
             ".mml"    => CovertMidiToSong(MMLSongImporter.OpenMMLSongFile(path), path),
-            ".gp"     => CovertMidiToSong(ImportGuitarPro.OpenGTPSongFile(path), path),
+            ".gp"     => CovertMidiToSong(Importers.GuitarPro.ImportGuitarPro.OpenGTPSongFile(path), path),
             _         => OpenMidiFile(path)
         };
         song.FilePath = path;

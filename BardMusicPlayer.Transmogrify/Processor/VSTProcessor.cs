@@ -6,9 +6,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BardMusicPlayer.DryWetMidi.Core.Chunks;
 using BardMusicPlayer.Transmogrify.Song;
 using BardMusicPlayer.Transmogrify.Song.Config;
+using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Processor;
 

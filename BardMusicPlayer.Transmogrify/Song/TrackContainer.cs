@@ -4,7 +4,7 @@
  */
 
 using System.Collections.Generic;
-using BardMusicPlayer.DryWetMidi.Core.Chunks;
+using Melanchall.DryWetMidi.Core;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 

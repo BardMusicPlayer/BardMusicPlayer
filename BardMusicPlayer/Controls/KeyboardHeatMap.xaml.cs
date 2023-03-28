@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using BardMusicPlayer.DryWetMidi.Core.Utilities;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Transmogrify.Song;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Controls;
 

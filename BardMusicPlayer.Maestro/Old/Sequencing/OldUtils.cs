@@ -1,28 +1,16 @@
-﻿using BardMusicPlayer.DryWetMidi.Core;
-using BardMusicPlayer.DryWetMidi.Core.Chunks;
-using BardMusicPlayer.DryWetMidi.Interaction.TempoMap;
-using BardMusicPlayer.DryWetMidi.Interaction.TimeSpan.Representations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System;
-using BardMusicPlayer.DryWetMidi.Core.Events.Channel;
-using BardMusicPlayer.DryWetMidi.Core.Events.Meta;
-using BardMusicPlayer.DryWetMidi.Core.WritingSettings;
-using BardMusicPlayer.DryWetMidi.Interaction.GetObjects;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedEvents;
-using BardMusicPlayer.DryWetMidi.Interaction.TimedObject;
 using BardMusicPlayer.Pigeonhole;
 using System.Text.RegularExpressions;
-using BardMusicPlayer.DryWetMidi.Common.DataTypes;
-using BardMusicPlayer.DryWetMidi.Core.Utilities;
-using BardMusicPlayer.DryWetMidi.Interaction.Notes;
 using System.Collections.Concurrent;
 using System.Linq;
 using BardMusicPlayer.Quotidian.Structs;
-using BardMusicPlayer.DryWetMidi.Core.TimeDivision;
-using BardMusicPlayer.DryWetMidi.Interaction.Utilities;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing
 {
