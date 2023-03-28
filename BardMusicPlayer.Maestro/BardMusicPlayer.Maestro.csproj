@@ -27,7 +27,6 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\BardMusicPlayer.DalamudBridge\BardMusicPlayer.DalamudBridge.csproj" />
-	<ProjectReference Include="..\BardMusicPlayer.DryWetMidi\BardMusicPlayer.DryWetMidi.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
 	<ProjectReference Include="..\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
