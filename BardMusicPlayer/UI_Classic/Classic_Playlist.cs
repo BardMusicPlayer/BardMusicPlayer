@@ -499,7 +499,7 @@ public partial class ClassicMainView
         var openFileDialog = new SaveFileDialog
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
-            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\"+ Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(AppContext.BaseDirectory) + "\\"+ Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)
@@ -522,7 +522,7 @@ public partial class ClassicMainView
         {
             Filter           = Globals.Globals.MusicCatalogFilters,
             Multiselect      = false,
-            InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Globals.Globals.DataPath
+            InitialDirectory = Path.GetDirectoryName(AppContext.BaseDirectory) + "\\" + Globals.Globals.DataPath
         };
 
         if (openFileDialog.ShowDialog() != true)

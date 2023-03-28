@@ -108,7 +108,7 @@ public partial class SongBrowser
     {
         var dlg = new FolderPicker
         {
-            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(AppContext.BaseDirectory)
         };
 
         if (dlg.ShowDialog() == true)
