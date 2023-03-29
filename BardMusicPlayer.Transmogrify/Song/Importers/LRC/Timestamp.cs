@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using static BardMusicPlayer.Transmogrify.Song.Importers.LRC.DateTimeExtension;
 
 #endregion

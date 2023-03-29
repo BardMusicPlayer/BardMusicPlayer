@@ -32,8 +32,6 @@
 
 #endregion
 
-using System;
-
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
 
 public abstract class MidiMessageBase

@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using System;
-using BardMusicPlayer.Pigeonhole;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Collections.Concurrent;
-using System.Linq;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -407,7 +403,7 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
 
                 newMidiFile.Write(stream, MidiFileFormat.MultiTrack, settings: new WritingSettings
                 {
-                    TextEncoding = System.Text.Encoding.UTF8
+                    TextEncoding = Encoding.UTF8
                 });
 
                 stream.Flush();

@@ -1,7 +1,5 @@
 ﻿#region
 
-using System.Threading;
-using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 

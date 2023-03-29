@@ -32,7 +32,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;

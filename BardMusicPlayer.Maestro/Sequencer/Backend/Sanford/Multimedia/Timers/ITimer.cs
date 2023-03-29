@@ -23,7 +23,6 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers;

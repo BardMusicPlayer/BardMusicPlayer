@@ -32,10 +32,8 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;

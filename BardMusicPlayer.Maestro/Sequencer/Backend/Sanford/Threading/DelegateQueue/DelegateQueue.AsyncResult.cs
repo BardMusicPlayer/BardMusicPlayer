@@ -1,5 +1,3 @@
-using System;
-
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 
 public partial class DelegateQueue

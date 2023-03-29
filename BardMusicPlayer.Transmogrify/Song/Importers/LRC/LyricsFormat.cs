@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Runtime.CompilerServices;
 
 #endregion

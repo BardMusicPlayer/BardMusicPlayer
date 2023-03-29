@@ -32,9 +32,7 @@
 
 #endregion
 
-using System;
 using System.Diagnostics;
-using System.IO;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Clocks;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;

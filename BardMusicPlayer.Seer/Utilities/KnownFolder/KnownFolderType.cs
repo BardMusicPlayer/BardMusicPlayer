@@ -3,8 +3,6 @@
  * Licensed under the MIT license. See https://gitlab.com/Syroot/KnownFolders/-/blob/master/LICENSE for full license information.
  */
 
-using System;
-
 namespace BardMusicPlayer.Seer.Utilities.KnownFolder;
 
 /// <summary>

@@ -3,8 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
-
 namespace BardMusicPlayer.Maestro.Old.Events;
 
 public sealed class CurrentPlayPositionEvent : MaestroEvent

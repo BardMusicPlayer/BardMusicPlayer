@@ -32,7 +32,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList;

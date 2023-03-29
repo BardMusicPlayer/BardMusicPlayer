@@ -1,8 +1,6 @@
 ﻿#region
 
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using BardMusicPlayer.Quotidian.Structs;
 using Melanchall.DryWetMidi.Common;

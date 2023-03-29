@@ -3,8 +3,6 @@
  * Licensed under the MIT license. See https://github.com/JPKusumi/UtcMilliTime/blob/master/LICENSE for full license information.
  */
 
-using System;
-
 namespace BardMusicPlayer.Quotidian.UtcMilliTime;
 
 public class NTPEventArgs : EventArgs

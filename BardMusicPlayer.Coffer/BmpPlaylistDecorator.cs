@@ -3,9 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using BardMusicPlayer.Transmogrify.Song;
 
 namespace BardMusicPlayer.Coffer;

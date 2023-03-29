@@ -32,7 +32,6 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using BardMusicPlayer.Siren.AlphaTab.Collections;
 
 namespace BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Synthesis;

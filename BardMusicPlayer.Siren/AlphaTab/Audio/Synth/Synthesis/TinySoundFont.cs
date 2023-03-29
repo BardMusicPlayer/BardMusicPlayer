@@ -32,9 +32,6 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.SoundFont;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth.Util;

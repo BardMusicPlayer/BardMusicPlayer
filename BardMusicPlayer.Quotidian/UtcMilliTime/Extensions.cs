@@ -3,9 +3,6 @@
  * Licensed under the MIT license. See https://github.com/JPKusumi/UtcMilliTime/blob/master/LICENSE for full license information.
  */
 
-using System;
-using System.Threading.Tasks;
-
 namespace BardMusicPlayer.Quotidian.UtcMilliTime;
 
 public static class Extensions

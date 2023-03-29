@@ -3,20 +3,17 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using BardMusicPlayer.Transmogrify.Processor.Utilities;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using BardMusicPlayer.Transmogrify.Song.Importers;
-using BardMusicPlayer.Transmogrify.Song.Importers.LRC;
+using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Lyrics = BardMusicPlayer.Transmogrify.Song.Importers.LRC.Lyrics;
+using Note = Melanchall.DryWetMidi.Interaction.Note;
 
 namespace BardMusicPlayer.Transmogrify.Song;
 
@@ -79,7 +76,7 @@ public sealed class BmpSong
         {
             ".mmsong" => CovertMidiToSong(MMSongImporter.OpenMMSongFile(path), path),
             ".mml"    => CovertMidiToSong(MMLSongImporter.OpenMMLSongFile(path), path),
-            ".gp"     => CovertMidiToSong(Importers.GuitarPro.ImportGuitarPro.OpenGTPSongFile(path), path),
+            ".gp"     => CovertMidiToSong(ImportGuitarPro.OpenGTPSongFile(path), path),
             _         => OpenMidiFile(path)
         };
         song.FilePath = path;

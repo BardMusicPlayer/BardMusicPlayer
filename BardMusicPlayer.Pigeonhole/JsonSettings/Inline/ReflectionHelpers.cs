@@ -3,7 +3,6 @@
  * Licensed under the MIT license. See https://github.com/Nucs/JsonSettings/blob/master/LICENSE for full license information.
  */
 
-using System;
 using System.Reflection;
 
 namespace BardMusicPlayer.Pigeonhole.JsonSettings.Inline;

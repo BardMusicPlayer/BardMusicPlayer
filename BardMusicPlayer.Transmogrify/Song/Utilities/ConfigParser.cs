@@ -3,8 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;

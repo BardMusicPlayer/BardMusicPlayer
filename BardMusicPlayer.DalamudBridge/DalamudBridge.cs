@@ -5,7 +5,6 @@
 
 #region
 
-using System;
 using BardMusicPlayer.DalamudBridge.Helper.Dalamud;
 using BardMusicPlayer.Seer;
 

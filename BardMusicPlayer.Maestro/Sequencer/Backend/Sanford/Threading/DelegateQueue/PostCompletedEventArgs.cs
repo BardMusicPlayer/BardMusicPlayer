@@ -32,9 +32,7 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
-using System.Threading;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 

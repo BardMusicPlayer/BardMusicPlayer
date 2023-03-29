@@ -7,10 +7,8 @@
 
 #region
 
-using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Linq;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
 using H.Formatters;

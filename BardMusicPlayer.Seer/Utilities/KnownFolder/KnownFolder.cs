@@ -3,7 +3,6 @@
  * Licensed under the MIT license. See https://gitlab.com/Syroot/KnownFolders/-/blob/master/LICENSE for full license information.
  */
 
-using System;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 

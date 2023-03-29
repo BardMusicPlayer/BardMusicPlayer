@@ -3,16 +3,13 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using BardMusicPlayer.Seer.Events;
 using Machina.FFXIV;
 using Machina.FFXIV.Oodle;
 using Machina.Infrastructure;
+using GameRegion = BardMusicPlayer.Quotidian.Enums.GameRegion;
 
 namespace BardMusicPlayer.Seer.Utilities;
 
@@ -33,7 +30,7 @@ internal class MachinaManager : IDisposable
 
         _monitor = new FFXIVNetworkMonitor();
 
-        if (BmpSeer.Instance.Games.Values.First().GameRegion == Quotidian.Enums.GameRegion.Global)
+        if (BmpSeer.Instance.Games.Values.First().GameRegion == GameRegion.Global)
         {
             _useDeucalion = true;
         } 

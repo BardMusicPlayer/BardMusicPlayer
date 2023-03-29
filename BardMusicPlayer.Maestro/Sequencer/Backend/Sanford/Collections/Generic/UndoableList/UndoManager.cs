@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.UndoableList;
 
 internal class UndoManager

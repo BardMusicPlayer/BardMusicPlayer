@@ -3,9 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
-using System.Threading.Tasks;
-
 namespace BardMusicPlayer.Quotidian;
 
 public class TaskQueue

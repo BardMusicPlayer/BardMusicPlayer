@@ -3,9 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using BardMusicPlayer.Seer.Utilities;
 
 namespace BardMusicPlayer.Seer.Events;

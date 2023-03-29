@@ -1,5 +1,3 @@
-using System;
-
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Collections.Generic.Deque;
 
 public partial class Deque<T>

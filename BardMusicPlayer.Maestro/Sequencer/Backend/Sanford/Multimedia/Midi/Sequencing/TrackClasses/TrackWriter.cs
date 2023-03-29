@@ -32,9 +32,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing.TrackClasses;

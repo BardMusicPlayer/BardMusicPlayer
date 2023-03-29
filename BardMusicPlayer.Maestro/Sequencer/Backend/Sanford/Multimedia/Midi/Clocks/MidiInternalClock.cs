@@ -32,9 +32,7 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
-using System.Threading;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Timers;

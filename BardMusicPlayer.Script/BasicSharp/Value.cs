@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 
 namespace BardMusicPlayer.Script.BasicSharp;

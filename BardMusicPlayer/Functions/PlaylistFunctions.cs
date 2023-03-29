@@ -1,5 +1,4 @@
 using System.IO;
-using System.Reflection;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;

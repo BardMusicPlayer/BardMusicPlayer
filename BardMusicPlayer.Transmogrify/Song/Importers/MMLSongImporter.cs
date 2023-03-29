@@ -1,9 +1,5 @@
 ﻿#region
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Structs;
 using Melanchall.DryWetMidi.Common;

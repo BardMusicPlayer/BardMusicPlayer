@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BardMusicPlayer.Script.BasicSharp;
+﻿namespace BardMusicPlayer.Script.BasicSharp;
 
 internal sealed class BasicException : Exception
 {

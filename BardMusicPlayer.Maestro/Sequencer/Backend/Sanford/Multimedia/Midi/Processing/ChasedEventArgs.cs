@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;

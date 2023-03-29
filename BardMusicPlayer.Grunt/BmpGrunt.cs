@@ -3,7 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-using System;
 using BardMusicPlayer.Grunt.Helper.Dalamud;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;

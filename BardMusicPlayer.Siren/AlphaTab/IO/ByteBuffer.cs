@@ -3,8 +3,6 @@
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 
-using System;
-
 namespace BardMusicPlayer.Siren.AlphaTab.IO;
 
 internal sealed class ByteBuffer : IWriteable, IReadable

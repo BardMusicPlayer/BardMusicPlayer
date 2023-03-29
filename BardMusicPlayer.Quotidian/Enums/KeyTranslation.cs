@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BardMusicPlayer.Quotidian.Enums;
+﻿namespace BardMusicPlayer.Quotidian.Enums;
 
 public class KeyTranslation
 {

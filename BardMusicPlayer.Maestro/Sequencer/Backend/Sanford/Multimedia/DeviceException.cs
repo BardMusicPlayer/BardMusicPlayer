@@ -32,8 +32,6 @@
 
 #endregion
 
-using System;
-
 namespace BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia;
 
 public abstract class DeviceException : ApplicationException

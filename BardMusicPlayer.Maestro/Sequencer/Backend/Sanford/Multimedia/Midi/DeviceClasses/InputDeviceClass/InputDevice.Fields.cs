@@ -32,8 +32,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
 using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Threading.DelegateQueue;
 
