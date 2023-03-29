@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 GiR-Zippo
+ * Copyright(c) 2023 GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -32,6 +32,8 @@ public sealed class BmpScript
 
     private string selectedBardName { get; set; } = "";
     private List<string> unselected_bards { get; set; }
+
+    string playtime = "";
 
     #region Routine Handlers
 
@@ -91,6 +93,19 @@ public sealed class BmpScript
         BmpMaestro.Instance.TapKey(selectedBardName, modifier, character, unselected_bards);
     }
 
+    public string PlaybackPosition()
+    {
+        return playtime;
+    }
+
+    private void Instance_PlaybackTimeChanged(object sender, Maestro.Old.Events.CurrentPlayPositionEvent e)
+    {
+        var Seconds = e.timeSpan.Seconds.ToString();
+        var Minutes = e.timeSpan.Minutes.ToString();
+        playtime = ((Minutes.Length == 1) ? "0" + Minutes : Minutes) + ":" + 
+                   ((Seconds.Length == 1) ? "0" + Seconds : Seconds);
+    }
+
     #endregion
 
     #region accessors
@@ -129,6 +144,7 @@ public sealed class BmpScript
             basic.selectedBardHandler         += SetSelectedBard;
             basic.selectedBardAsStringHandler += SetSelectedBardName;
             basic.unselectBardHandler         += UnSelectBardName;
+            basic.playbackPositionHandler     += PlaybackPosition;
             try
             {
                 basic.Exec();
@@ -147,6 +163,7 @@ public sealed class BmpScript
             basic.selectedBardHandler         -= SetSelectedBard;
             basic.selectedBardAsStringHandler -= SetSelectedBardName;
             basic.unselectBardHandler         -= UnSelectBardName;
+            basic.playbackPositionHandler     -= PlaybackPosition;
             basic                             =  null;
         });
     }
@@ -159,7 +176,8 @@ public sealed class BmpScript
         if (Started) return;
         if (!BmpPigeonhole.Initialized) throw new BmpScriptException("Script requires Pigeonhole to be initialized.");
         if (!BmpSeer.Instance.Started) throw new BmpScriptException("Script requires Seer to be running.");
-        Started = true;
+        Started                                   =  true;
+        BmpMaestro.Instance.OnPlaybackTimeChanged += Instance_PlaybackTimeChanged;
     }
 
     /// <summary>
@@ -168,7 +186,8 @@ public sealed class BmpScript
     public void Stop()
     {
         if (!Started) return;
-        Started = false;
+        Started                                   =  false;
+        BmpMaestro.Instance.OnPlaybackTimeChanged -= Instance_PlaybackTimeChanged;
     }
 
     ~BmpScript() => Dispose();

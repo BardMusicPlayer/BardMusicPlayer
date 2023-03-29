@@ -102,6 +102,8 @@ public class Lexer
                         return Token.Goto;
                     case "INPUT":
                         return Token.Input;
+                    case "PLAYTIME":
+                        return Token.Playtime;
                     case "LET":
                         return Token.Let;
                     case "GOSUB":

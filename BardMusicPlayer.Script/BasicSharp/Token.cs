@@ -20,6 +20,7 @@ public enum Token
     Step,
     Goto,
     Input,
+    Playtime,
     Let,
     Gosub,
     Return,
