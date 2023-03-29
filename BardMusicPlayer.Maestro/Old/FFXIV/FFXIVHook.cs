@@ -178,12 +178,12 @@ public class FFXIVHook
         {
             Unhook();
         }
-        Process = process;
+        Process          = process;
         mainWindowHandle = process.MainWindowHandle;
 
         if (useCallback)
         {
-            proc = HookCallback;
+            proc    = HookCallback;
             _hookID = SetWindowsHookEx(WH_KEYBOARD_LL, proc, IntPtr.Zero, 0);
             return _hookID != IntPtr.Zero;
         }
@@ -384,8 +384,8 @@ public class FFXIVHook
                     {
                         ki = new KEYBDINPUT
                         {
-                            wVk = 0,
-                            wScan = (ushort)c,
+                            wVk     = 0,
+                            wScan   = (ushort)c,
                             dwFlags = 0x0004
                         }
                     }
@@ -399,8 +399,8 @@ public class FFXIVHook
                     {
                         ki = new KEYBDINPUT
                         {
-                            wVk = 0,
-                            wScan = (ushort)c,
+                            wVk     = 0,
+                            wScan   = (ushort)c,
                             dwFlags = 0x0004 | 0x0002
                         }
                     }

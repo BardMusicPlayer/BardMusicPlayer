@@ -11,7 +11,7 @@ public sealed class PlaybackStartedEvent : MaestroEvent
     internal PlaybackStartedEvent()
     {
         EventType = GetType();
-        Started = true;
+        Started   = true;
     }
 
     public bool Started;

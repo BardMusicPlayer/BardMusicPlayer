@@ -11,8 +11,8 @@ public abstract class MaestroEvent
 {
     internal MaestroEvent(EventSource eventSource)
     {
-        EventSource     = eventSource;
-        TimeStamp       = Clock.Time.Now;
+        EventSource = eventSource;
+        TimeStamp   = Clock.Time.Now;
     }
 
     public long TimeStamp { get; }

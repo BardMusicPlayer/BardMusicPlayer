@@ -12,8 +12,8 @@ public sealed class SongLoadedEvent : MaestroEvent
 
     internal SongLoadedEvent(int maxtracks, OldSequencer sequencer)
     {
-        EventType = GetType();
-        MaxTracks = maxtracks;
+        EventType  = GetType();
+        MaxTracks  = maxtracks;
         _sequencer = sequencer;
     }
     private OldSequencer _sequencer;

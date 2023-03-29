@@ -12,8 +12,8 @@ public abstract class MaestroEvent
     internal MaestroEvent(byte dedupeThreshold = 0, bool highPriority = false)
     {
         DedupeThreshold = dedupeThreshold;
-        HighPriority = highPriority;
-        TimeStamp = Clock.Time.Now;
+        HighPriority    = highPriority;
+        TimeStamp       = Clock.Time.Now;
     }
 
     public long TimeStamp { get; }

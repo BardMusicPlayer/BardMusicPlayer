@@ -11,10 +11,10 @@ public sealed class OctaveShiftChangedEvent : MaestroEvent
 {
     internal OctaveShiftChangedEvent(Game g, int octaveShift, bool isHost = false)
     {
-        EventType = GetType();
+        EventType   = GetType();
         OctaveShift = octaveShift;
-        game = g;
-        IsHost = isHost;
+        game        = g;
+        IsHost      = isHost;
     }
 
     public Game game { get; }

@@ -83,7 +83,7 @@ public sealed class BmpScript
 
     public void Print(ChatMessageChannelType type, string text)
     {
-       BmpMaestro.Instance.SendText(selectedBardName, type, text, unselected_bards);
+        BmpMaestro.Instance.SendText(selectedBardName, type, text, unselected_bards);
     }
 
     public void TapKey(string modifier, string character)

@@ -155,7 +155,7 @@ public class OldSequencer : Sequencer_Internal
         Sequence = new Sequence();
 
         ChannelMessagePlayed += OnChannelMessagePlayed;
-        MetaMessagePlayed += OnMetaMessagePlayed;
+        MetaMessagePlayed    += OnMetaMessagePlayed;
 
         secondTimer.Elapsed += OnSecondTimer;
     }
@@ -287,12 +287,12 @@ public class OldSequencer : Sequencer_Internal
                 OnNote?.Invoke(this, e);
                 break;
             case ChannelCommand.ProgramChange:
-                {
-                    string instName = Instrument.ParseByProgramChange(e.Message.Data1);
-                    if (!string.IsNullOrEmpty(instName))
-                        ProgChange?.Invoke(this, e);
-                    break;
-                }
+            {
+                string instName = Instrument.ParseByProgramChange(e.Message.Data1);
+                if (!string.IsNullOrEmpty(instName))
+                    ProgChange?.Invoke(this, e);
+                break;
+            }
             case ChannelCommand.ChannelPressure:
                 ChannelAfterTouch?.Invoke(this, e);
                 break;
@@ -308,30 +308,30 @@ public class OldSequencer : Sequencer_Internal
         switch (e.Message.MetaType)
         {
             case MetaType.Tempo:
-                {
-                    var builder = new TempoChangeBuilder(e.Message);
-                    midiTempo = 60000000 / builder.Tempo;
-                    OnTempoChange?.Invoke(this, midiTempo);
-                    break;
-                }
+            {
+                var builder = new TempoChangeBuilder(e.Message);
+                midiTempo = 60000000 / builder.Tempo;
+                OnTempoChange?.Invoke(this, midiTempo);
+                break;
+            }
             case MetaType.Lyric:
                 OnLyric?.Invoke(this, e);
                 break;
             case MetaType.TrackName:
-                {
-                    var builder = new MetaTextBuilder(e.Message);
-                    ParseTrackName(e.MidiTrack, builder.Text);
-                    if (e.MidiTrack == LoadedTrack)
-                        OnTrackNameChange?.Invoke(this, builder.Text);
-                    break;
-                }
-            case MetaType.InstrumentName:
-                {
-                    var builder = new MetaTextBuilder(e.Message);
+            {
+                var builder = new MetaTextBuilder(e.Message);
+                ParseTrackName(e.MidiTrack, builder.Text);
+                if (e.MidiTrack == LoadedTrack)
                     OnTrackNameChange?.Invoke(this, builder.Text);
-                    Console.WriteLine(@"Instrument name: " + builder.Text);
-                    break;
-                }
+                break;
+            }
+            case MetaType.InstrumentName:
+            {
+                var builder = new MetaTextBuilder(e.Message);
+                OnTrackNameChange?.Invoke(this, builder.Text);
+                Console.WriteLine(@"Instrument name: " + builder.Text);
+                break;
+            }
         }
     }
 
@@ -361,7 +361,7 @@ public class OldSequencer : Sequencer_Internal
                     if (Instrument.TryParse(instrument, out var tempInst))
                     {
                         preferredInstruments[track] = tempInst;
-                        foundInstrument = true;
+                        foundInstrument             = true;
                     }
                 }
                 if (foundInstrument)
@@ -416,7 +416,7 @@ public class OldSequencer : Sequencer_Internal
             return;
 
         LoadedFileType = FILETYPES.BmpSong;
-        LoadedBmpSong = bmpSong;
+        LoadedBmpSong  = bmpSong;
         using var stream = bmpSong.GetProcessedMidiFile().Result.ConvertToSanfordSpec();
         Sequence = new Sequence(stream);
         load(Sequence, Sequence.Count - 1);
@@ -501,7 +501,7 @@ public class OldSequencer : Sequencer_Internal
         }
 
         // Parse track names and octave shifts
-        _maxTracks = -1;
+        _maxTracks            = -1;
         _lyricStartTrackIndex = -1;
         foreach (var track in Sequence)
         {
@@ -528,19 +528,19 @@ public class OldSequencer : Sequencer_Internal
             switch (ev.MidiMessage)
             {
                 case MetaMessage msg:
+                {
+                    switch (msg.MetaType)
                     {
-                        switch (msg.MetaType)
-                        {
-                            case MetaType.TrackName:
-                                OnMetaMessagePlayed(this, new MetaMessageEventArgs(LoadedTrack, msg));
-                                break;
-                            case MetaType.Lyric:
-                                lyricCount++;
-                                break;
-                        }
-
-                        break;
+                        case MetaType.TrackName:
+                            OnMetaMessagePlayed(this, new MetaMessageEventArgs(LoadedTrack, msg));
+                            break;
+                        case MetaType.Lyric:
+                            lyricCount++;
+                            break;
                     }
+
+                    break;
+                }
                 case ChannelMessage { Command: ChannelCommand.ProgramChange } chanMsg:
                     OnSimpleChannelMessagePlayed(this, new ChannelMessageEventArgs(Sequence[0], chanMsg));
                     break;

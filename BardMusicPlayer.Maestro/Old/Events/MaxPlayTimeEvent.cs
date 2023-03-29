@@ -10,8 +10,8 @@ public sealed class MaxPlayTimeEvent : MaestroEvent
     internal MaxPlayTimeEvent(TimeSpan inTimeSpan, int inTick)
     {
         EventType = GetType();
-        timeSpan = inTimeSpan;
-        tick = inTick;
+        timeSpan  = inTimeSpan;
+        tick      = inTick;
     }
 
     public TimeSpan timeSpan { get; }

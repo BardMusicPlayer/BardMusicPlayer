@@ -10,8 +10,8 @@ public sealed class CurrentPlayPositionEvent : MaestroEvent
     internal CurrentPlayPositionEvent(TimeSpan inTimeSpan, int inTick)
     {
         EventType = GetType();
-        timeSpan = inTimeSpan;
-        tick = inTick;
+        timeSpan  = inTimeSpan;
+        tick      = inTick;
     }
 
     public TimeSpan timeSpan { get; }

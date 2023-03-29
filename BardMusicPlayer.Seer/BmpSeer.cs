@@ -43,13 +43,13 @@ public partial class BmpSeer : IDisposable
         {
             if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return true;
             ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "netsh";
-            psi.UseShellExecute = false;
-            psi.RedirectStandardError = true;
+            psi.FileName               = "netsh";
+            psi.UseShellExecute        = false;
+            psi.RedirectStandardError  = true;
             psi.RedirectStandardOutput = true;
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.Arguments = $@"advfirewall firewall delete rule name=""{appName}""";
+            psi.CreateNoWindow         = true;
+            psi.WindowStyle            = ProcessWindowStyle.Hidden;
+            psi.Arguments              = $@"advfirewall firewall delete rule name=""{appName}""";
 
             Process proc = Process.Start(psi);
             proc.WaitForExit();
@@ -86,13 +86,13 @@ public partial class BmpSeer : IDisposable
         {
             if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return true;
             ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = "netsh";
-            psi.UseShellExecute = false;
-            psi.RedirectStandardError = true;
+            psi.FileName               = "netsh";
+            psi.UseShellExecute        = false;
+            psi.RedirectStandardError  = true;
             psi.RedirectStandardOutput = true;
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.Arguments = $@"advfirewall firewall delete rule name=""{appName}""";
+            psi.CreateNoWindow         = true;
+            psi.WindowStyle            = ProcessWindowStyle.Hidden;
+            psi.Arguments              = $@"advfirewall firewall delete rule name=""{appName}""";
 
             Process proc = Process.Start(psi);
             proc.WaitForExit();

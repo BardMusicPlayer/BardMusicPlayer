@@ -11,7 +11,7 @@ public sealed class PerformersChangedEvent : MaestroEvent
     internal PerformersChangedEvent()
     {
         EventType = GetType();
-        Changed = true;
+        Changed   = true;
     }
 
     public bool Changed;

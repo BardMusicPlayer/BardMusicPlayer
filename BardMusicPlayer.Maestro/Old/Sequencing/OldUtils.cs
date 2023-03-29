@@ -76,12 +76,12 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
                         int noteNumber = note.NoteNumber;
 
                         Note newNote = new Note((SevenBitNumber)noteNumber,
-                                                time: noteOnMS / 1000,
-                                                length: (noteOffMS / 1000) - (noteOnMS / 1000)
-                                                )
+                            time: noteOnMS / 1000,
+                            length: (noteOffMS / 1000) - (noteOnMS / 1000)
+                        )
                         {
-                            Channel = (FourBitNumber)0,
-                            Velocity = (SevenBitNumber)noteVelocity,
+                            Channel     = (FourBitNumber)0,
+                            Velocity    = (SevenBitNumber)noteVelocity,
                             OffVelocity = (SevenBitNumber)noteVelocity
                         };
 
@@ -133,8 +133,8 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
                         {
                             time = lowestParent - 50;
                             if (time < 0) continue;
-                            notesToFix[i].Time = time;
-                            dur = 25;
+                            notesToFix[i].Time   = time;
+                            dur                  = 25;
                             notesToFix[i].Length = dur;
                         }
                     }
@@ -175,8 +175,8 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
 
                         fixedNotes.Add(new Note(noteNum, dur, time)
                         {
-                            Channel = channel,
-                            Velocity = velocity,
+                            Channel     = channel,
+                            Velocity    = velocity,
                             OffVelocity = velocity
                         });
                     }
@@ -207,7 +207,7 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
                             {
                                 > 0 => trackName + "+" + octaveShift,
                                 < 0 => trackName + octaveShift,
-                                _ => trackName
+                                _   => trackName
                             };
                         }
 
@@ -306,80 +306,80 @@ namespace BardMusicPlayer.Maestro.Old.Sequencing
                 long delta = (newMidiFile.GetTrackChunks().GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000);
 
                 Parallel.ForEach(newMidiFile.GetTrackChunks(), chunk =>
+                {
+                    int offset = Instrument.Parse(chunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text).SampleOffset; //get the offset
+                    /*using (var notesManager = chunk.ManageNotes())
+                    {
+                        foreach (Note note in notesManager.Notes)
+                        {
+                            long newStart = note.Time + offset - delta;
+                            note.Time = newStart;
+                        }
+                    }*/
+                    using (var manager = chunk.ManageTimedEvents())
+                    {
+                        foreach (TimedEvent _event in manager.Objects)
+                        {
+                            var noteEvent = _event.Event as NoteEvent;
+                            var programChangeEvent = _event.Event as ProgramChangeEvent;
+                            var lyricsEvent = _event.Event as LyricEvent;
+
+                            //Note alignment
+                            if (noteEvent != null)
                             {
-                                int offset = Instrument.Parse(chunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text).SampleOffset; //get the offset
-                                /*using (var notesManager = chunk.ManageNotes())
-                                {
-                                    foreach (Note note in notesManager.Notes)
-                                    {
-                                        long newStart = note.Time + offset - delta;
-                                        note.Time = newStart;
-                                    }
-                                }*/
-                                using (var manager = chunk.ManageTimedEvents())
-                                {
-                                    foreach (TimedEvent _event in manager.Objects)
-                                    {
-                                        var noteEvent = _event.Event as NoteEvent;
-                                        var programChangeEvent = _event.Event as ProgramChangeEvent;
-                                        var lyricsEvent = _event.Event as LyricEvent;
+                                long newStart = _event.Time + offset - delta;
+                                _event.Time = newStart;
+                            }
 
-                                        //Note alignment
-                                        if (noteEvent != null)
-                                        {
-                                            long newStart = _event.Time + offset - delta;
-                                            _event.Time = newStart;
-                                        }
+                            //Prog alignment
+                            if (programChangeEvent != null)
+                            {
+                                long newStart = _event.Time + offset - delta;
+                                if (newStart <= -1)
+                                    manager.Objects.Remove(_event);
+                                else
+                                    _event.Time = newStart;
 
-                                        //Prog alignment
-                                        if (programChangeEvent != null)
-                                        {
-                                            long newStart = _event.Time + offset - delta;
-                                            if (newStart <= -1)
-                                                manager.Objects.Remove(_event);
-                                            else
-                                                _event.Time = newStart;
+                                //if theres a new offset, use this one
+                                if ((programChangeEvent.ProgramNumber >= 27) && (programChangeEvent.ProgramNumber <= 31))
+                                    offset = Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).SampleOffset;
+                            }
 
-                                            //if theres a new offset, use this one
-                                            if ((programChangeEvent.ProgramNumber >= 27) && (programChangeEvent.ProgramNumber <= 31))
-                                                offset = Instrument.ParseByProgramChange(programChangeEvent.ProgramNumber).SampleOffset;
-                                        }
+                            //and lyrics
+                            if (lyricsEvent != null)
+                            {
 
-                                        //and lyrics
-                                        if (lyricsEvent != null)
-                                        {
+                            }
 
-                                        }
+                        }
 
-                                    }
+                        foreach (TimedEvent _event in manager.Objects)
+                        {
+                            var lyricsEvent = _event.Event as LyricEvent;
+                            if (lyricsEvent == null)
+                                continue;
 
-                                    foreach (TimedEvent _event in manager.Objects)
-                                    {
-                                        var lyricsEvent = _event.Event as LyricEvent;
-                                        if (lyricsEvent == null)
-                                            continue;
+                            long newStart = _event.Time - delta;
+                            if (newStart <= -1)
+                                manager.Objects.Remove(_event);
+                            else
+                                _event.Time = newStart;
+                        }
 
-                                        long newStart = _event.Time - delta;
-                                        if (newStart <= -1)
-                                            manager.Objects.Remove(_event);
-                                        else
-                                            _event.Time = newStart;
-                                    }
+                        /*foreach (TimedEvent _event in manager.Objects)
+                        {
+                            var programChangeEvent = _event.Event as ChannelAftertouchEvent;
+                            if (programChangeEvent == null)
+                                continue;
+                            long newStart = _event.Time - delta;
+                            if (newStart <= -1)
+                                manager.Objects.Remove(_event);
+                            else
+                                _event.Time = newStart;
+                        }*/
 
-                                    /*foreach (TimedEvent _event in manager.Objects)
-                                    {
-                                        var programChangeEvent = _event.Event as ChannelAftertouchEvent;
-                                        if (programChangeEvent == null)
-                                            continue;
-                                        long newStart = _event.Time - delta;
-                                        if (newStart <= -1)
-                                            manager.Objects.Remove(_event);
-                                        else
-                                            _event.Time = newStart;
-                                    }*/
-
-                                }
-                            });
+                    }
+                });
 
                 //Append the lyrics from the lrc
                 /*var lrcTrack = new TrackChunk(new SequenceTrackNameEvent("Lyrics: "));

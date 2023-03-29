@@ -30,8 +30,8 @@ internal sealed class Scanner
             { 
                 foreach (var item in list)
                 {
-                   if (item.Value == string.Empty)
-                       Locations[item.Key] = item;
+                    if (item.Value == string.Empty)
+                        Locations[item.Key] = item;
                     else
                         item.Value = item.Value.Replace("*", "?");
                 }

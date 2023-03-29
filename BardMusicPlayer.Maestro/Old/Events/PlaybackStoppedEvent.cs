@@ -11,7 +11,7 @@ public sealed class PlaybackStoppedEvent : MaestroEvent
     internal PlaybackStoppedEvent()
     {
         EventType = GetType();
-        Stopped = true;
+        Stopped   = true;
     }
 
     public bool Stopped;

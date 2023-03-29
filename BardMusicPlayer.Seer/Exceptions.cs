@@ -38,7 +38,7 @@ public class BmpSeerConfigPathException : BmpSeerException
 public class BmpSeerBackendAlreadyRunningException : BmpSeerException
 {
     internal BmpSeerBackendAlreadyRunningException(int pid, EventSource readerBackendType) : base("Backend " +
-                                                                                                  readerBackendType + " already running for pid " + pid)
+        readerBackendType + " already running for pid " + pid)
     {
     }
 }

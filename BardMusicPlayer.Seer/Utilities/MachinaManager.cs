@@ -80,7 +80,7 @@ internal class MachinaManager : IDisposable
             {
                 var deucalionSession = new FFXIVNetworkMonitor
                 {
-                    ProcessID = (uint)pid,
+                    ProcessID    = (uint)pid,
                     UseDeucalion = true
                 };
                 _deucalionSessions.TryAdd((uint)pid, deucalionSession);

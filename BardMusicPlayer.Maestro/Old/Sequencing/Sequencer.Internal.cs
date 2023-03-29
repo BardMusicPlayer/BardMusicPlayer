@@ -189,7 +189,7 @@ public class Sequencer_Internal : IComponent
 
             tracksPlayingCount = Sequence.Count;
 
-            IsPlaying = true;
+            IsPlaying          = true;
             InternalClock.Ppqn = sequence.Division;
             InternalClock.Continue();
 

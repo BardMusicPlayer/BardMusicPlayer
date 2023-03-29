@@ -16,7 +16,7 @@ public static class MidiInput
         public MidiInputDescription(string n, int i)
         {
             name = n;
-            id = i;
+            id   = i;
         }
     }
 

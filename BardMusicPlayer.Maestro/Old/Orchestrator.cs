@@ -63,10 +63,10 @@ public class Orchestrator : IDisposable
         BmpSeer.Instance.EnsembleStopped += Instance_EnsembleStopped;
         BmpSeer.Instance.InstrumentHeldChanged += Instance_InstrumentHeldChanged;
 
-        _addPushedbackGamesTimer = new Timer();
-        _addPushedbackGamesTimer.Interval = 2000;
-        _addPushedbackGamesTimer.Enabled = false;
-        _addPushedbackGamesTimer.Elapsed += CheckFoundGames;
+        _addPushedbackGamesTimer          =  new Timer();
+        _addPushedbackGamesTimer.Interval =  2000;
+        _addPushedbackGamesTimer.Enabled  =  false;
+        _addPushedbackGamesTimer.Elapsed  += CheckFoundGames;
     }
 
     #region public
@@ -180,7 +180,7 @@ public class Orchestrator : IDisposable
         _song_Title_Parsing_Performer = new KeyValuePair<TitleParsingHelper, Performer>(new TitleParsingHelper
         {
             channelType = channel,
-            prefix = prefix
+            prefix      = prefix
         }, p);
     }
 
@@ -261,7 +261,7 @@ public class Orchestrator : IDisposable
 
         foreach (var perf in _performers)
         {
-            perf.Value.OldSequencer = _sequencer; //use the sequence from the main sequencer
+            perf.Value.OldSequencer               = _sequencer; //use the sequence from the main sequencer
             perf.Value.OldSequencer.LoadedBmpSong = song;       //set the song
         }
         InitNewPerformance();
@@ -495,9 +495,9 @@ public class Orchestrator : IDisposable
                     //Bard is loaded and prepared
                     var perf = new Performer(game.Key)
                     {
-                        HostProcess = game.Value,
+                        HostProcess  = game.Value,
                         OldSequencer = _sequencer,
-                        TrackNumber = 1
+                        TrackNumber  = 1
                     };
                     lock (_performers)
                     {
@@ -517,7 +517,7 @@ public class Orchestrator : IDisposable
                     BmpMaestro.Instance.PublishEvent(new PerformersChangedEvent()); //And trigger an event
                     if (game.Value)
                     {
-                        HostPid = game.Key.Pid;
+                        HostPid  = game.Key.Pid;
                         HostGame = game.Key;
                     }
                     added.Add(game.Key);
@@ -570,7 +570,7 @@ public class Orchestrator : IDisposable
                         if (index > _sequencer.MaxTrack)
                         {
                             p.Value.PerformerEnabled = false;
-                            p.Value.TrackNumber = 0;
+                            p.Value.TrackNumber      = 0;
                         }
                         else
                         {

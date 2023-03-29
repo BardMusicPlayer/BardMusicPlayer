@@ -123,13 +123,13 @@ public class Performer
                 _sequencer?.CloseInputDevice();
 
                 _startDelayTimer.Enabled = false;
-                mainSequencer = value;
+                mainSequencer            = value;
 
                 _sequencer = new OldSequencer();
                 if (value.LoadedFileType == OldSequencer.FILETYPES.BmpSong)
                 {
                     _sequencer.Sequence = mainSequencer.Sequence;
-                    OctaveShift = 0;
+                    OctaveShift         = 0;
                 }
 
                 if (HostProcess)
@@ -138,15 +138,15 @@ public class Performer
                         _sequencer.OpenInputDevice(BmpPigeonhole.Instance.MidiInputDev);
                 }
 
-                _sequencer.OnNote += InternalNote;
-                _sequencer.OffNote += InternalNote;
-                _sequencer.ProgChange += InternalProg;
-                _sequencer.OnLyric += InternalLyrics;
+                _sequencer.OnNote            += InternalNote;
+                _sequencer.OffNote           += InternalNote;
+                _sequencer.ProgChange        += InternalProg;
+                _sequencer.OnLyric           += InternalLyrics;
                 _sequencer.ChannelAfterTouch += InternalAT;
 
-                _holdNotes = BmpPigeonhole.Instance.HoldNotes;
+                _holdNotes         = BmpPigeonhole.Instance.HoldNotes;
                 _lastNoteTimestamp = 0;
-                _livePlayDelay = BmpPigeonhole.Instance.LiveMidiPlayDelay;
+                _livePlayDelay     = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
                 if (HostProcess && BmpPigeonhole.Instance.ForcePlayback)
                     _forcePlayback = true;
@@ -170,8 +170,8 @@ public class Performer
         if (arg != null)
         {
             _hook.Hook(arg.Process, false);
-            Pid = arg.Pid;
-            game = arg;
+            Pid                      =  arg.Pid;
+            game                     =  arg;
             _startDelayTimer.Elapsed += startDelayTimer_Elapsed;
         }
     }
@@ -292,7 +292,7 @@ public class Performer
                     if (_startDelayTimer.Enabled)
                         return;
                     _startDelayTimer.Interval = delay;
-                    _startDelayTimer.Enabled = true;
+                    _startDelayTimer.Enabled  = true;
                 }
             }
             else
@@ -557,10 +557,10 @@ public class Performer
 
         var noteEvent = new NoteEvent
         {
-            note = builder.Data1,
+            note     = builder.Data1,
             origNote = builder.Data1,
             trackNum = _sequencer.GetTrackNum(args.MidiTrack),
-            track = args.MidiTrack
+            track    = args.MidiTrack
         };
 
         if (_sequencer.GetTrackNum(noteEvent.track) == _trackNumber || !_sequencer.IsPlaying)
@@ -596,9 +596,9 @@ public class Performer
 
         var programEvent = new ProgChangeEvent
         {
-            track = args.MidiTrack,
+            track    = args.MidiTrack,
             trackNum = _sequencer.GetTrackNum(args.MidiTrack),
-            voice = args.Message.Data1
+            voice    = args.Message.Data1
         };
         if (programEvent.voice is < 27 or > 31)
             return;
