@@ -4,6 +4,7 @@
  */
 
 using BardMusicPlayer.Maestro.Old;
+using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Script.BasicSharp;
@@ -98,7 +99,7 @@ public sealed class BmpScript
         return playtime;
     }
 
-    private void Instance_PlaybackTimeChanged(object sender, Maestro.Old.Events.CurrentPlayPositionEvent e)
+    private void Instance_PlaybackTimeChanged(object sender, CurrentPlayPositionEvent e)
     {
         var Seconds = e.timeSpan.Seconds.ToString();
         var Minutes = e.timeSpan.Minutes.ToString();

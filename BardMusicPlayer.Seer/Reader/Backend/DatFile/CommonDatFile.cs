@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe, sammhill
+ * Copyright(c) 2023 MoogleTroupe, sammhill
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 

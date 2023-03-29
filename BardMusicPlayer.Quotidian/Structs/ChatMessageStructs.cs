@@ -1,4 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿/*
+ * Copyright(c) 2023 GiR-Zippo, Meowchestra
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+using System.Collections.ObjectModel;
 
 namespace BardMusicPlayer.Quotidian.Structs;
 

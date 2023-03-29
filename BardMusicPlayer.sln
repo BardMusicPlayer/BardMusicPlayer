@@ -12,8 +12,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Coffer", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.DalamudBridge", "BardMusicPlayer.DalamudBridge\BardMusicPlayer.DalamudBridge.csproj", "{1249F5D0-0C18-4D50-B584-B03E69768211}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Grunt", "BardMusicPlayer.Grunt\BardMusicPlayer.Grunt.csproj", "{00C375F8-5071-4FC6-86EC-BED3398F1BC6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Maestro", "BardMusicPlayer.Maestro\BardMusicPlayer.Maestro.csproj", "{00BAC18C-1670-4CFC-8826-AD02347BA776}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BardMusicPlayer.Pigeonhole", "BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj", "{CD059BEC-16C3-4BF4-AA8F-15EA9D473758}"
@@ -46,10 +44,6 @@ Global
 		{1249F5D0-0C18-4D50-B584-B03E69768211}.Debug|x64.Build.0 = Debug|x64
 		{1249F5D0-0C18-4D50-B584-B03E69768211}.Release|x64.ActiveCfg = Release|x64
 		{1249F5D0-0C18-4D50-B584-B03E69768211}.Release|x64.Build.0 = Release|x64
-		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Debug|x64.ActiveCfg = Debug|x64
-		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Debug|x64.Build.0 = Debug|x64
-		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Release|x64.ActiveCfg = Release|x64
-		{00C375F8-5071-4FC6-86EC-BED3398F1BC6}.Release|x64.Build.0 = Release|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Debug|x64.ActiveCfg = Debug|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Debug|x64.Build.0 = Debug|x64
 		{00BAC18C-1670-4CFC-8826-AD02347BA776}.Release|x64.ActiveCfg = Release|x64

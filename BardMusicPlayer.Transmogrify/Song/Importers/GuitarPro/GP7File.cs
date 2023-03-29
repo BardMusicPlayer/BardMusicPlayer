@@ -1,4 +1,9 @@
-﻿namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
+﻿/*
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
+namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 
 public sealed class GP7File : GPFile
 {

@@ -1,3 +1,8 @@
+/*
+ * Copyright(c) 2023 GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
+
 using System.Globalization;
 using BardMusicPlayer.Quotidian.Structs;
 
@@ -271,7 +276,7 @@ public sealed class Interpreter
 
             var input = playbackPositionHandler?.Invoke();
             // try to parse as double, if failed read value as string
-            if (double.TryParse(input, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var d))
+            if (double.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
                 vars[lex.Identifier] = new Value(d);
             else
                 vars[lex.Identifier] = new Value(input);

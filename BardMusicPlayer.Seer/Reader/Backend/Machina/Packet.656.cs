@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -28,19 +28,19 @@ internal partial class Packet
 
             if (World.Ids.ContainsKey(homeWorldId))
             {
-                _machinaReader.ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Machina,
+                _machinaReader.Game.PublishEvent(new HomeWorldChanged(EventSource.Machina,
                     World.Ids[homeWorldId]));
             }
 
             if (string.IsNullOrEmpty(playerName))
             {
-                _machinaReader.ReaderHandler.Game.PublishEvent(new PlayerNameChanged(EventSource.Machina,
+                _machinaReader.Game.PublishEvent(new PlayerNameChanged(EventSource.Machina,
                     playerName));
             }
         }
         catch (Exception ex)
         {
-            _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+            _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                 new BmpSeerMachinaException("Exception in Packet.Size656 (player spawn): " + ex.Message)));
         }
     }

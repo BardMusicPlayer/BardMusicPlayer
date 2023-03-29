@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe, trotlinebeercan, GiR-Zippo
+ * Copyright(c) 2023 MoogleTroupe, trotlinebeercan, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Reader;
+using BardMusicPlayer.Seer.Reader.Backend.Dalamud;
 using BardMusicPlayer.Seer.Reader.Backend.DatFile;
 using BardMusicPlayer.Seer.Reader.Backend.Machina;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan;
@@ -21,6 +22,7 @@ public partial class Game : IDisposable, IEquatable<Game>
     internal ReaderHandler DatReader;
     internal ReaderHandler MemoryReader;
     internal ReaderHandler NetworkReader;
+    internal ReaderHandler DalamudReader;
 
     // reader events
     private Dictionary<Type, long> _eventDedupeHistory;
@@ -56,9 +58,11 @@ public partial class Game : IDisposable, IEquatable<Game>
             _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
             _eventQueueOpen         = true;
 
-            DatReader         = new ReaderHandler(this, new DatFileReaderBackend(1));
-            MemoryReader      = new ReaderHandler(this, new SharlayanReaderBackend(1));
-            NetworkReader     = new ReaderHandler(this, new MachinaReaderBackend(1));
+            DatReader     = new ReaderHandler(this, new DatFileReaderBackend(1));
+            MemoryReader  = new ReaderHandler(this, new SharlayanReaderBackend(1));
+            NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
+            DalamudReader = new ReaderHandler(this, new DalamudReaderBackend(100));
+
             GfxSettingsLow    = CheckIfGfxIsLow();
             _eventTokenSource = new CancellationTokenSource();
             Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
@@ -152,6 +156,15 @@ public partial class Game : IDisposable, IEquatable<Game>
         try
         {
             NetworkReader?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+        }
+
+        try
+        {
+            DalamudReader?.Dispose();
         }
         catch (Exception ex)
         {

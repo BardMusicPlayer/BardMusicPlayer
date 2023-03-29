@@ -1,9 +1,10 @@
-﻿#region
+﻿/*
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
 
 using System.Globalization;
 using System.Text;
-
-#endregion
 
 namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 
@@ -27,7 +28,6 @@ public sealed class GP6File : GPFile
         GPBase.pointer = 0;
         udata          = _data;
     }
-
 
     private void decompressFile()
     {
@@ -59,7 +59,6 @@ public sealed class GP6File : GPFile
 
         GPBase.data = data.ToArray();
     }
-
 
     public override void readSong()
     {
@@ -165,7 +164,6 @@ public sealed class GP6File : GPFile
             _bar.header    = song.measureHeaders[barCnt];
             currentMeasure = barCnt;
             currentTrack   = cnt % song.trackCount;
-
             cnt++;
             var nSimileMark = nBar.getSubnodeByName("SimileMark", true);
             if (nSimileMark != null)
@@ -506,8 +504,8 @@ public sealed class GP6File : GPFile
             {
                 var duration = int.Parse(nXProperty.getSubnodeByProperty("id", "687935489").subnodes[0].content,
                     CultureInfo.InvariantCulture);
-                var startsOnTime = float.Parse(nXProperty.getSubnodeByProperty("id", "687935490").subnodes[0].content,
-                    CultureInfo.InvariantCulture);
+                var startTimeSubnode = nXProperty.getSubnodeByProperty("id", "687935490");
+                var startsOnTime = startTimeSubnode != null ? float.Parse(startTimeSubnode.subnodes[0].content, CultureInfo.InvariantCulture) : 0;
                 beat.effect.stroke.setByGP6Standard(duration);
                 beat.effect.stroke.startTime = startsOnTime;
             }

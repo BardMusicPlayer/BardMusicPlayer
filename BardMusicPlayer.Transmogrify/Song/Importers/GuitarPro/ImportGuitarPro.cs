@@ -1,10 +1,11 @@
-#region
+/*
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
 
 using BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro.Native;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using Melanchall.DryWetMidi.Core;
-
-#endregion
 
 namespace BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;
 

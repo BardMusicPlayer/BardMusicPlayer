@@ -1,22 +1,17 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
-
-#nullable enable
-
-#region
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
+using BardMusicPlayer.Seer.Utilities;
 using H.Formatters;
 using H.Pipes;
 using H.Pipes.AccessControl;
 using H.Pipes.Args;
-
-#endregion
 
 namespace BardMusicPlayer.DalamudBridge.Helper.Dalamud;
 
@@ -254,6 +249,7 @@ internal sealed class DalamudServer : IDisposable
                 Debug.WriteLine($"Dalamud client Id {e.Connection.PipeName} {t} connected");
                 break;
             }
+
             case MessageType.Version:
                 try
                 {
@@ -274,8 +270,8 @@ internal sealed class DalamudServer : IDisposable
                 {
                     // ignored
                 }
-
                 break;
+
             case MessageType.SetGfx:
                 try
                 {
@@ -289,7 +285,52 @@ internal sealed class DalamudServer : IDisposable
                 {
                     // ignored
                 }
+                break;
 
+            case MessageType.NameAndHomeWorld:
+                try
+                {
+                    var t = inMsg.Message;
+                    var pid = Convert.ToInt32(t.Split(':')[0]);
+                    var Name = t.Split(':')[1];
+                    var HomeWorld = Convert.ToInt32(t.Split(':')[2]);
+                    if (BmpSeer.Instance.Games.ContainsKey(pid))
+                        DalamudManager.Instance.NameAndHomeworldModeEventHandler(pid, Name, HomeWorld);
+                }
+                catch
+                {
+                    // ignored
+                }
+                break;
+
+            case MessageType.StartEnsemble:
+                try
+                {
+                    var t = inMsg.Message;
+                    var pid = Convert.ToInt32(t.Split(':')[0]);
+                    var action = Convert.ToInt32(t.Split(':')[0]);
+                    if (BmpSeer.Instance.Games.ContainsKey(pid))
+                        DalamudManager.Instance.EnsembleStartEventHandler(pid, action);
+                }
+                catch
+                {
+                    // ignored
+                }
+                break;
+
+            case MessageType.PerformanceModeState:
+                try
+                {
+                    var t = inMsg.Message;
+                    var pid = Convert.ToInt32(t.Split(':')[0]);
+                    var action = Convert.ToInt32(t.Split(':')[0]);
+                    if (BmpSeer.Instance.Games.ContainsKey(pid))
+                        DalamudManager.Instance.PerformanceModeEventHandler(pid, action);
+                }
+                catch
+                {
+                    // ignored
+                }
                 break;
         }
     }

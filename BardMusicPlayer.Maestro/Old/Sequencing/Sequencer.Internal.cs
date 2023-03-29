@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 Parulina, trotlinebeercan, GiR-Zippo
+ * Copyright(c) 2023 Parulina, trotlinebeercan, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 

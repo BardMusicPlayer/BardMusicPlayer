@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 GiR-Zippo, 2021 Daniel Kuschny
+ * Copyright(c) 2023 GiR-Zippo, 2021 Daniel Kuschny
  * Licensed under the MPL-2.0 license. See https://github.com/CoderLine/alphaTab/blob/develop/LICENSE for full license information.
  */
 

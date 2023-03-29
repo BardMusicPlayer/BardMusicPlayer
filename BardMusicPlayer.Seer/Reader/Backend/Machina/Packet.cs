@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -7,9 +7,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina;
 
 internal partial class Packet : IDisposable
 {
-    private MachinaReaderBackend _machinaReader;
+    private ReaderHandler _machinaReader;
 
-    internal Packet(MachinaReaderBackend machinaReader) { _machinaReader = machinaReader; }
+    internal Packet(ReaderHandler readerHandler) { _machinaReader = readerHandler; }
 
     private static bool ValidTimeSig(byte timeSig) => timeSig is > 1 and < 8;
 

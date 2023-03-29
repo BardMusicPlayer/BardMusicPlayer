@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2021 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -23,7 +23,7 @@ public static partial class GameExtensions
     {
         if (!BmpGrunt.Instance.Started) throw new BmpGruntException("Grunt not started.");
 
-        if (BmpGrunt.Instance.DalamudServer.IsConnected(game.Pid))
+        if (BmpGrunt.Instance.DalamudServer != null && BmpGrunt.Instance.DalamudServer.IsConnected(game.Pid))
             return BmpGrunt.Instance.DalamudServer.SendChat(game.Pid, text);
 
         var sent = false;

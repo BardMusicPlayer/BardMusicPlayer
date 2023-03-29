@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -74,7 +74,8 @@ internal class MachinaManager : IDisposable
                 _monitor.Start();
                 _monitorRunning = true;
             }
-        } else
+        }
+        else
         {
             try
             {
@@ -87,7 +88,8 @@ internal class MachinaManager : IDisposable
                 deucalionSession.MessageReceivedEventHandler += MessageReceivedEventHandler;
                 Console.WriteLine("Calling Machina Deucalion monitor Start()");
                 deucalionSession.Start();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
             }
@@ -112,11 +114,12 @@ internal class MachinaManager : IDisposable
                 _monitor.Start();
                 _monitorRunning = true;
             }
-        } else
+        } 
+        else
         {
             try
             {
-                if (_deucalionSessions.Remove((uint)pid, out var deucalionSession)) {
+                if (_deucalionSessions.TryRemove((uint)pid, out var deucalionSession)) {
                     deucalionSession.Stop();
                     deucalionSession.MessageReceivedEventHandler -= MessageReceivedEventHandler;
                     deucalionSession.Dispose();
@@ -131,10 +134,16 @@ internal class MachinaManager : IDisposable
 
     private void MessageReceivedEventHandler(TCPConnection connection, long epoch, byte[] message)
     {
+        /*if (BmpSeer.Instance.Games.TryGetValue((int)connection.ProcessId, out Game game))
+        {
+            string hexString = BitConverter.ToString(message);
+            System.Diagnostics.Debug.WriteLine("DE:" + hexString + " " + message.Length.ToString());
+        }
+            //game.PublishEvent(new NetworkPacket(EventSource.Machina, message));
+        */
         if (BmpSeer.Instance.Games.TryGetValue((int)connection.ProcessId, out Game game)) game.PublishEvent(new NetworkPacket(EventSource.Machina, message));
 
-        if (Lengths.Contains(message.Length)) 
-            //if (message.Length > 28)
+        if (Lengths.Contains(message.Length))
             MessageReceived?.Invoke((int) connection.ProcessId, message);
     }
 
@@ -155,7 +164,8 @@ internal class MachinaManager : IDisposable
                 _monitor.ProcessIDList.Clear();
                 _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
             }
-        } else
+        } 
+        else
         {
             foreach (var deucalionSession in _deucalionSessions.Values)
             {
@@ -164,7 +174,11 @@ internal class MachinaManager : IDisposable
                     deucalionSession.Stop();
                     deucalionSession.MessageReceivedEventHandler -= MessageReceivedEventHandler;
                     deucalionSession.Dispose();
-                } catch { }
+                }
+                catch
+                {
+                    // ignored
+                }
                 _deucalionSessions.Clear();
             }
         }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -26,7 +26,8 @@ internal partial class Packet
 
         try
         {
-            if (otherActorId != myActorId || BitConverter.ToUInt32(message, 44) != 0) return;
+            if (otherActorId != myActorId || BitConverter.ToUInt32(message, 44) != 0) 
+                return;
 
             if (BitConverter.ToUInt16(message, 32) != 2
                 && !(
@@ -47,7 +48,7 @@ internal partial class Packet
                         var partyLeader = BitConverter.ToUInt32(message, 40);
                         if (!ActorIdTools.RangeOkay(partyLeader)) return;
 
-                        _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleRequested(EventSource.Machina));
+                        _machinaReader.Game.PublishEvent(new EnsembleRequested(EventSource.Machina));
                     }
                     else
                     {
@@ -65,14 +66,14 @@ internal partial class Packet
                             case 1: // "ready" reply.
                                 break;
                             case 2: // rejected or timed out replying
-                                _machinaReader.ReaderHandler.Game.PublishEvent( new EnsembleRejected(EventSource.Machina));
+                                _machinaReader.Game.PublishEvent(new EnsembleRejected(EventSource.Machina));
                                 break;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                    _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                         new BmpSeerMachinaException("Exception in Packet.Size56 (ensemble action): " +
                                                     ex.Message)));
                 }
@@ -94,12 +95,12 @@ internal partial class Packet
                                 switch (param1)
                                 {
                                     case 16: // equip instrument
-                                        _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                        _machinaReader.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
                                         break;
                                     case 1: // de-equip instrument
                                         if (param2 == 0)
                                         {
-                                            _machinaReader.ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
+                                            _machinaReader.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Machina, Instrument.Parse((int) param2)));
                                         }
                                         break;
                                 }
@@ -110,14 +111,14 @@ internal partial class Packet
                 }
                 catch (Exception ex)
                 {
-                    _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+                    _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                         new BmpSeerMachinaException("Exception in Packet.Size56 (equip action): " + ex.Message)));
                 }
             }
         }
         catch (Exception ex)
         {
-            _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+            _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                 new BmpSeerMachinaException("Exception in Packet.Size56: " + ex.Message)));
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -34,7 +34,7 @@ internal partial class Packet
         }
         catch (Exception ex)
         {
-            _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+            _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                 new BmpSeerMachinaException("Exception in Packet.Size3576 (party): " + ex.Message)));
         }
     }

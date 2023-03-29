@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2022 MoogleTroupe, GiR-Zippo
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -31,7 +31,7 @@ internal class MachinaReaderBackend : IReaderBackend
     {
         _messageQueue     = new ConcurrentQueue<byte[]>();
         _messageQueueOpen = true;
-        _packet           = new Packet(this);
+        _packet           = new Packet(ReaderHandler);
 
         MachinaManager.Instance.MessageReceived += OnMessageReceived;
         MachinaManager.Instance.AddGame(ReaderHandler.Game.Pid);
@@ -48,9 +48,9 @@ internal class MachinaReaderBackend : IReaderBackend
                     timeStamp *= 1000;
 
                     //string hexString = BitConverter.ToString(message);
-                    //System.Diagnostics.Debug.WriteLine(hexString + " " + message.Length.ToString());
-
-                    if (!(ActorIdTools.RangeOkay(myActorId) && ActorIdTools.RangeOkay(otherActorId))) continue;
+                    //System.Diagnostics.Debug.WriteLine("MMMM" + hexString + " " + message.Length.ToString());
+                    if (!(ActorIdTools.RangeOkay(myActorId) && ActorIdTools.RangeOkay(otherActorId))) 
+                        continue;
 
                     if (myActorId == otherActorId)
                         ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Machina, myActorId));
@@ -65,16 +65,16 @@ internal class MachinaReaderBackend : IReaderBackend
                             _packet.Size56(timeStamp, otherActorId, myActorId, message); //Handles Ensemble Request, Ensemble Reject, and Instrument Equip/De-Equip.
                             break;
                         case 88:
-                            _packet.Size88(timeStamp, otherActorId, myActorId, message); //Handles EnsembleStart
+                            _packet.Size88(timeStamp, otherActorId, myActorId, message); //Handles EnsembleStart --DALAMUD
                             break;
                         case 656:
-                            _packet.Size656(timeStamp, otherActorId, myActorId, message);
+                            _packet.Size656(timeStamp, otherActorId, myActorId, message); //Handles old Homeworld and Playername --DALAMUD
                             break;
                         case 664:
-                            _packet.Size664(timeStamp, otherActorId, myActorId, message);
+                            _packet.Size664(timeStamp, otherActorId, myActorId, message); //Handles Homeworld and Playername --DALAMUD
                             break;
                         case 928:
-                            _packet.Size928(timeStamp, otherActorId, myActorId, message);
+                            _packet.Size928(timeStamp, otherActorId, myActorId, message); //Handles group data
                             break;
                         case 3576:
                             _packet.Size3576(timeStamp, otherActorId, myActorId, message);

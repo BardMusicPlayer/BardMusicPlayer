@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright(c) 2022 MoogleTroupe
+ * Copyright(c) 2023 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -39,11 +39,11 @@ internal partial class Packet
             )
                 return;
 
-            _machinaReader.ReaderHandler.Game.PublishEvent(new EnsembleStarted(EventSource.Machina, timeStamp));
+            _machinaReader.Game.PublishEvent(new EnsembleStarted(EventSource.Machina, timeStamp));
         }
         catch (Exception ex)
         {
-            _machinaReader.ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
+            _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
                 new BmpSeerMachinaException("Exception in Packet.Size88 (ensemble action): " + ex.Message)));
         }
     }

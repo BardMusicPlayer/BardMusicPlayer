@@ -1,5 +1,5 @@
 /*
- * Copyright(c) 2022 Parulina, sabihoshi, trotlinebeercan, troy-f, GiR-Zippo
+ * Copyright(c) 2023 Parulina, sabihoshi, trotlinebeercan, troy-f, GiR-Zippo
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
@@ -458,16 +458,6 @@ public class FFXIVHook
             SendSyncKey(keybind, true, false);
         }
         lastPerformanceKeys.Clear();
-    }
-
-    public RECT GetClientRect()
-    {
-        return GetClientRect(new HandleRef(this, mainWindowHandle), out var rect) ? rect : new RECT();
-    }
-
-    public bool GetScreenFromClientPoint(ref POINT point)
-    {
-        return ClientToScreen(new HandleRef(this, mainWindowHandle), ref point);
     }
 
     public IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)

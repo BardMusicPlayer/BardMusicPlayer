@@ -1,8 +1,9 @@
-﻿#region
+﻿/*
+ * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ */
 
 using BardMusicPlayer.Quotidian;
-
-#endregion
 
 namespace BardMusicPlayer.DalamudBridge;
 
