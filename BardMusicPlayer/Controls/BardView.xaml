@@ -9,6 +9,11 @@
              xmlns:local="clr-namespace:BardMusicPlayer.Pigeonhole;assembly=BardMusicPlayer.Pigeonhole"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance }">
+    
+    <UserControl.Resources>
+        <controls:FontSizeConverter x:Key="FontSizeConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -64,20 +69,20 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1" />      <!-- 0 Spacer-->
-                            <ColumnDefinition Width="Auto" />   <!-- 1 icon-->
-                            <ColumnDefinition Width="10" />      <!-- 2 Spacer-->
-                            <ColumnDefinition Width="130" />    <!-- 3 -->
-                            <ColumnDefinition Width="Auto" />   <!-- 4 Spacer-->
-                            <ColumnDefinition Width="140" />    <!-- 5 -->
-                            <ColumnDefinition Width="10" />     <!-- 6 Dalamud-->
-                            <ColumnDefinition Width="10" />     <!-- 7 spacer-->
-                            <ColumnDefinition Width="Auto" />   <!-- 8 track-->
-                            <ColumnDefinition Width="Auto" />   <!-- 9 octave-->
-                            <ColumnDefinition Width="10" />     <!-- 10 spacer-->
-                            <ColumnDefinition Width="Auto" />   <!-- 11 -->
-                            <ColumnDefinition Width="10" />     <!-- 12 spacer-->
-                            <ColumnDefinition Width="Auto" />   <!-- 13 -->
+                            <ColumnDefinition Width="1" />      <!-- 0 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 1 Icon -->
+                            <ColumnDefinition Width="10" />     <!-- 2 Spacer -->
+                            <ColumnDefinition Width="130" />    <!-- 3 Name -->
+                            <ColumnDefinition Width="Auto" />   <!-- 4 Spacer -->
+                            <ColumnDefinition Width="140" />    <!-- 5 Instrument -->
+                            <ColumnDefinition Width="10" />     <!-- 6 Dalamud -->
+                            <ColumnDefinition Width="10" />     <!-- 7 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 8 Track -->
+                            <ColumnDefinition Width="Auto" />   <!-- 9 Octave -->
+                            <ColumnDefinition Width="10" />     <!-- 10 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 11 Host -->
+                            <ColumnDefinition Width="10" />     <!-- 12 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 13 Enabled -->
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="1" Grid.Row="1" Height="Auto" Width="Auto"
                                 Padding="0" Margin="0,-5,0,0"
@@ -90,8 +95,8 @@
                                    Text="{Binding HomeWorld, Mode=OneTime, StringFormat=m\\:ss}"
                                    MouseDown="Bard_MouseDown" />
 
-
-                        <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding TrackInstrument,  StringFormat=m\\:ss}">
+                        <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding TrackInstrument,  StringFormat=m\\:ss}"
+                                   FontSize="{Binding TrackInstrument, Converter={StaticResource FontSizeConverter}, ConverterParameter=140}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

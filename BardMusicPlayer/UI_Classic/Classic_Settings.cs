@@ -38,8 +38,8 @@ public partial class ClassicMainView
         KeepTrackSettingsBox.IsChecked = BmpPigeonhole.Instance.EnsembleKeepTrackSetting;
         
         //UI
-        EnableDarkMode.IsChecked = BmpPigeonhole.Instance.DarkStyle;
-
+        MidiLoaderSelection.SelectedIndex = BmpPigeonhole.Instance.MidiLoaderType;
+        EnableDarkMode.IsChecked          = BmpPigeonhole.Instance.DarkStyle;
     }
 
     #region Playback
@@ -105,6 +105,11 @@ public partial class ClassicMainView
     #endregion
     
     #region UI
+    private void MidiLoader_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        BmpPigeonhole.Instance.MidiLoaderType = MidiLoaderSelection.SelectedIndex;
+    }
+
     private void EnableDarkMode_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.DarkStyle = EnableDarkMode.IsChecked ?? false;

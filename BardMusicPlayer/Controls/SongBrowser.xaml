@@ -43,9 +43,18 @@
             <ListView x:Name="SongBrowserContainer"
                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="0"
                       PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"
+                      PreviewMouseRightButtonDown="OnListViewItemPreviewMouseRightButtonDown"
                       ScrollViewer.HorizontalScrollBarVisibility="Visible"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.CanContentScroll="True" />
+                      ScrollViewer.CanContentScroll="True">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add to Playlist" Click="AddToPlaylist_Click" />
+                        <MenuItem Header="Send to Preview" Click="LoadSongToPreview" />
+                        <!--<MenuItem Header="Show Information" />-->
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
         </Grid>
     </Grid>
 </UserControl>

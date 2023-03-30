@@ -8,11 +8,13 @@ using BardMusicPlayer.Resources;
 namespace BardMusicPlayer.Controls;
 
 /// <summary>
-/// The song browser but much faster than the BMP 1.x had
+/// The song browser
 /// </summary>
 public partial class SongBrowser
 {
     public EventHandler<string>? OnLoadSongFromBrowser;
+    public EventHandler<string>? OnLoadSongFromBrowserToPreview;
+    public EventHandler<string>? OnAddSongFromBrowser;
 
     public SongBrowser()
     {
@@ -121,5 +123,34 @@ public partial class SongBrowser
             BmpPigeonhole.Instance.SongDirectory =  path;
             SongSearch_PreviewTextInput(null, null);
         }
+    }
+    private void OnListViewItemPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.Source is FrameworkElement { DataContext: string selectedFile })
+        {
+            if (SongBrowserContainer.SelectedItem is not string currentSelectedFile || currentSelectedFile != selectedFile)
+            {
+                SongBrowserContainer.SelectedItem = selectedFile;
+            }
+            e.Handled = true;
+        }
+    }
+
+    private void AddToPlaylist_Click(object sender, RoutedEventArgs e)
+    {
+        if (SongBrowserContainer.SelectedItem is not string selectedFile)
+            return;
+
+        var fullPath = Path.Combine(BmpPigeonhole.Instance.SongDirectory, selectedFile);
+        OnAddSongFromBrowser?.Invoke(this, fullPath);
+    }
+
+    private void LoadSongToPreview(object sender, RoutedEventArgs e)
+    {
+        if (SongBrowserContainer.SelectedItem is not string selectedFile)
+            return;
+
+        var fullPath = Path.Combine(BmpPigeonhole.Instance.SongDirectory, selectedFile);
+        OnLoadSongFromBrowserToPreview?.Invoke(this, fullPath);
     }
 }

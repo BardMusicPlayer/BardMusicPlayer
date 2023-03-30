@@ -16,6 +16,26 @@ public static class PlaylistFunctions
     /// Add file(s) to the playlist
     /// </summary>
     /// <param name="currentPlaylist"></param>
+    /// <param name="filename"></param>
+    /// <returns>true if success</returns>
+    public static bool AddFilesToPlaylist(IPlaylist currentPlaylist, string filename)
+    {
+
+        var song = BmpSong.OpenFile(filename).Result;
+        {
+            if (currentPlaylist.SingleOrDefault(x => x.Title.Equals(song.Title)) == null)
+                currentPlaylist.Add(song);
+
+            BmpCoffer.Instance.SaveSong(song);
+        }
+        BmpCoffer.Instance.SavePlaylist(currentPlaylist);
+        return true;
+    }
+
+    /// <summary>
+    /// Add file(s) to the playlist
+    /// </summary>
+    /// <param name="currentPlaylist"></param>
     /// <returns>true if success</returns>
     public static bool AddFilesToPlaylist(IPlaylist? currentPlaylist)
     {

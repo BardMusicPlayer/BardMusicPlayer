@@ -104,7 +104,13 @@ public class Performer
             if (_trackNumber >= _sequencer.Sequence.Count)
                 return "None";
 
-            var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container
+            // var track = _sequencer.GetTrackPreferredInstrument(TrackNumber - 1);
+            // var trackName = track.Name;
+            //
+            // if (trackName == "Program:ElectricGuitar")
+            //     return "Program:ElectricGuitar";
+
+            var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig;
             return classicConfig.Instrument.Name;
         }
     }

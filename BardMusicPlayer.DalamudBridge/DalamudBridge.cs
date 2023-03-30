@@ -12,7 +12,7 @@ public sealed partial class DalamudBridge
 {
     private static readonly Lazy<DalamudBridge> LazyInstance = new(static () => new DalamudBridge());
 
-    internal DalamudServer DalamudServer;
+    internal DalamudServer? DalamudServer;
 
     private DalamudBridge()
     {

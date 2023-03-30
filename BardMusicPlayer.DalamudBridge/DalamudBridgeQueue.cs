@@ -10,16 +10,16 @@ namespace BardMusicPlayer.DalamudBridge;
 
 public sealed partial class DalamudBridge
 {
-    private ConcurrentQueue<DalamudBridgeCommandStruct> _eventQueue;
+    private ConcurrentQueue<DalamudBridgeCommandStruct>? _eventQueue;
     private bool _eventQueueOpen;
 
-    private CancellationTokenSource _eventsTokenSource;
+    private CancellationTokenSource? _eventsTokenSource;
 
     private async Task RunEventsHandler(CancellationToken token)
     {
         while (!token.IsCancellationRequested)
         {
-            while (_eventQueue.TryDequeue(out var d_event))
+            while (_eventQueue != null && _eventQueue.TryDequeue(out var d_event))
             {
                 if (token.IsCancellationRequested)
                     break;
@@ -67,8 +67,8 @@ public sealed partial class DalamudBridge
     private void StopEventsHandler()
     {
         _eventQueueOpen = false;
-        _eventsTokenSource.Cancel();
-        while (_eventQueue.TryDequeue(out _))
+        _eventsTokenSource?.Cancel();
+        while (_eventQueue != null && _eventQueue.TryDequeue(out _))
         {
         }
     }
@@ -78,6 +78,6 @@ public sealed partial class DalamudBridge
         if (!_eventQueueOpen)
             return;
 
-        _eventQueue.Enqueue(maestroEvent);
+        _eventQueue?.Enqueue(maestroEvent);
     }
 }

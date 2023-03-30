@@ -159,7 +159,7 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <!-- Combobox for Chat, Settings and so on -->
+            <!-- Combobox for Settings and so on -->
             <Grid Grid.Row="0" Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="278*" />
@@ -174,8 +174,8 @@
                     <TabItem Header="Settings" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignPaper}">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="200" />
-                                <RowDefinition Height="200" />
+                                <RowDefinition Height="220" />
+                                <RowDefinition Height="220" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -223,6 +223,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <CheckBox Margin="10,10,0,0" Grid.Row="1" x:Name="HoldNotesBox"
                                               Content="Hold Notes" Unchecked="Hold_Notes_Checked"
@@ -235,18 +236,28 @@
                                               Unchecked="IgnoreProgramChangeBox_Checked"
                                               Checked="IgnoreProgramChangeBox_Checked"
                                               ToolTip="{StaticResource PlaybackIgnoreProgram}" />
-                                    <Label Margin="10,10,0,0" Grid.Row="4" Content="MIDI Device"
-                                           HorizontalAlignment="Left" />
-                                    <ComboBox Margin="100,10,0,0" Grid.Row="4" x:Name="MidiInputDeviceBox"
-                                              ItemsSource="{Binding}"
-                                              DisplayMemberPath="Value"
-                                              SelectionChanged="MIDI_Input_Device_SelectionChanged"
-                                              HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120"
-                                              Padding="5" ToolTip="{StaticResource PlaybackMidiInput}" />
+                                    <Label Margin="10,10,0,0" Grid.Row="4" Content="Sequencer"
+                                           HorizontalAlignment="Left" ToolTip="{StaticResource MidiLoader}" />
+                                    <ComboBox Margin="100,10,0,0" Grid.Row="4" x:Name="MidiLoaderSelection"
+                                              SelectionChanged="MidiLoader_SelectionChanged"
+                                              HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"
+                                              Padding="5" ToolTip="{StaticResource MidiLoader}">
+                                        <ComboBoxItem>Sanford DryWet</ComboBoxItem>
+                                        <ComboBoxItem>Classic Processed</ComboBoxItem>
+                                    </ComboBox>
+
                                     <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
                                               Content="Enable note delay for live playing"
                                               Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked"
                                               ToolTip="{StaticResource PlaybackLive}" />
+                                    <Label Margin="10,10,0,0" Grid.Row="6" Content="MIDI Device"
+                                           HorizontalAlignment="Left" ToolTip="{StaticResource PlaybackMidiInput}" />
+                                    <ComboBox Margin="100,10,0,0" Grid.Row="6" x:Name="MidiInputDeviceBox"
+                                              ItemsSource="{Binding}"
+                                              DisplayMemberPath="Value"
+                                              SelectionChanged="MIDI_Input_Device_SelectionChanged"
+                                              HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="140"
+                                              Padding="5" ToolTip="{StaticResource PlaybackMidiInput}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">
@@ -327,9 +338,9 @@
                                 <Label Grid.Column="0" Content="Song Title:" />
                                 <Label Grid.Column="1" x:Name="SirenSongName" Content="No song loaded" />
                                 <Label Grid.Column="2" Content="Voices: " HorizontalAlignment="Right"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Top" />
                                 <Label Grid.Column="3" x:Name="SirenVoiceCount" Content="0" HorizontalAlignment="Left"
-                                       VerticalAlignment="Center" />
+                                       VerticalAlignment="Top" />
                             </Grid>
 
                             <DataGrid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding}"

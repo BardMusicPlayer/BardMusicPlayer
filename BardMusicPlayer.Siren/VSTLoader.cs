@@ -20,7 +20,7 @@ internal static class VSTLoader
             if (File.Exists(BmpSiren.Instance._vstLocation + @"\version"))
             {
                 using TextReader reader = File.OpenText(BmpSiren.Instance._vstLocation + @"\version");
-                _version = int.Parse(await reader.ReadLineAsync());
+                _version = int.Parse(await reader.ReadLineAsync() ?? string.Empty);
             }
             var version = int.Parse(await GetStringFromUrl(_baseURL + @"/version"));
 
@@ -29,17 +29,17 @@ internal static class VSTLoader
                 foreach (var instrument in Instrument.All)
                 {
                     Debug.WriteLine("Downloading VST file " + _baseURL + @"/vst_" + instrument.Name.ToLower() + @".sf2");
-                    using var sf2writer = new FileStream(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2", FileMode.Create, FileAccess.Write);
+                    await using var sf2writer = new FileStream(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2", FileMode.Create, FileAccess.Write);
                     var sf2 = await GetFileFromUrl(_baseURL + @"/vst_" + instrument.Name.ToLower() + @".sf2");
                     sf2writer.Write(sf2, 0, sf2.Length);
                 }
 
                 _version = version;
-                using var writer = new StreamWriter(BmpSiren.Instance._vstLocation + @"\version");
+                await using var writer = new StreamWriter(BmpSiren.Instance._vstLocation + @"\version");
                 await writer.WriteAsync(_version.ToString());
             }
 
-            foreach (var instrument in Instrument.All) BmpSiren.Instance._player.LoadSoundFont(File.ReadAllBytes(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2"), true);
+            foreach (var instrument in Instrument.All) BmpSiren.Instance._player.LoadSoundFont(await File.ReadAllBytesAsync(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2"), true);
             BmpSiren.Instance._vstDownloaded = true;
         }
         catch (Exception)

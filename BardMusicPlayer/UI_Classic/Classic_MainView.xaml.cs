@@ -6,6 +6,7 @@ using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Siren;
+using BardMusicPlayer.Transmogrify.Song;
 
 namespace BardMusicPlayer.UI_Classic;
 
@@ -40,6 +41,8 @@ public partial class ClassicMainView
         SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
+        SongBrowser.OnAddSongFromBrowser           += Instance_SongBrowserAddSongToPlaylist;
+        SongBrowser.OnLoadSongFromBrowserToPreview += Instance_SongBrowserLoadSongToPreview;
 
         Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();
@@ -322,5 +325,45 @@ public partial class ClassicMainView
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
             DirectLoaded           = true;
         }
+    }
+
+    /// <summary>
+    /// triggered by the song browser if a file should be added to the playlist
+    /// </summary>
+    private void Instance_SongBrowserAddSongToPlaylist(object? sender, string filename)
+    {
+        if (_currentPlaylist == null)
+            return;
+
+        if (!PlaylistFunctions.AddFilesToPlaylist(_currentPlaylist, filename))
+            return;
+
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
+
+        var icon = "↩".PadRight(2);
+        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
+        var name = _currentPlaylist.GetName();
+        var headerText = $"{icon} {timeString} {name}";
+
+        PlaylistHeader.Header = headerText;
+    }
+
+    private void Instance_SongBrowserLoadSongToPreview(object? sender, string filename)
+    {
+        if (BmpSiren.Instance.IsReadyForPlayback)
+            BmpSiren.Instance.Stop();
+        IsPlaying              = false;
+        SirenPlayPause.Content = "Play";
+
+        var currentSong = BmpSong.OpenFile(filename).Result;
+        _                     = BmpSiren.Instance.Load(currentSong);
+        SirenSongName.Content = BmpSiren.Instance.CurrentSongTitle;
+
+        //Fill the lyrics editor
+        _lyricsData.Clear();
+        foreach (var line in currentSong.LyricsContainer)
+            _lyricsData.Add(new LyricsContainer(line.Key, line.Value));
+        SirenLyrics.DataContext = _lyricsData;
+        SirenLyrics.Items.Refresh();
     }
 }

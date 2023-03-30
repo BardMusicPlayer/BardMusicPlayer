@@ -139,13 +139,16 @@ internal static partial class Extensions
     /// </summary>
     /// <param name="trackChunk"></param>
     /// <param name="tempoMap"></param>
+    /// <param name="firstNoteus"></param>
     /// <param name="tone"></param>
     /// <param name="lowClamp"></param>
     /// <param name="highClamp"></param>
     /// <param name="startingChannel"></param>
     /// <param name="readTones"></param>
     /// <param name="noteSampleOffset"></param>
-    internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk, TempoMap tempoMap, InstrumentTone tone, int lowClamp = 12, int highClamp = 120, int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
+    internal static async Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(this TrackChunk trackChunk,
+        TempoMap tempoMap, long firstNoteus, InstrumentTone tone, int lowClamp = 12, int highClamp = 120,
+        int startingChannel = 0, bool readTones = true, int noteSampleOffset = 0) =>
         await GetNoteDictionary(new List<TrackChunk> { trackChunk }, tempoMap, tone, new Dictionary<int, (int, int)>(), lowClamp, highClamp, startingChannel, readTones, noteSampleOffset);
 
     /// <summary>

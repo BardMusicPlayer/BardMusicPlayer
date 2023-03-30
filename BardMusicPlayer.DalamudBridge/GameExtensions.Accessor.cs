@@ -14,7 +14,7 @@ public static partial class GameExtensions
 
     public static bool IsConnected(int pid)
     {
-        return DalamudBridge.Instance.DalamudServer.IsConnected(pid);
+        return DalamudBridge.Instance.DalamudServer != null && DalamudBridge.Instance.DalamudServer.IsConnected(pid);
     }
 
     /// <summary>
@@ -27,7 +27,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendChat(game.Pid, ChatMessageChannelType.Say,
                                    text));
     }
@@ -43,7 +44,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendChat(game.Pid, type, text));
     }
 
@@ -57,7 +59,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendInstrumentOpen(game.Pid, instrumentID));
     }
 
@@ -71,7 +74,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendAcceptEnsemble(game.Pid, arg));
     }
 
@@ -85,7 +89,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendGfxLow(game.Pid, low));
     }
 
@@ -98,7 +103,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendStartEnsemble(game.Pid));
     }
     
@@ -115,7 +121,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendNote(game.Pid, noteNum, pressed));
     }
 
@@ -130,7 +137,8 @@ public static partial class GameExtensions
     {
         if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
 
-        return Task.FromResult(DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
                                DalamudBridge.Instance.DalamudServer.SendProgChange(game.Pid, ProgNumber));
     }
 }

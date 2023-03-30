@@ -102,25 +102,14 @@ public class OldSequencer : Sequencer_Internal
         }
     }
 
-    private int loadedTrack = 0;
-    private int intendedTrack = 0;
-    public int CurrentTrack => loadedTrack;
+    private int _intendedTrack = 0;
 
-    int _lyricStartTrackIndex = 0;
-    public int LyricStartTrack => _lyricStartTrackIndex;
+    private int CurrentTrack { get; set; } = 0;
+
+    public int LyricStartTrack { get; private set; } = 0;
 
     private int _maxTracks = 0;
-    public int MaxTrack
-    {
-        get
-        {
-            if (_maxTracks < 0)
-            {
-                return 0;
-            }
-            return _maxTracks;
-        }
-    }
+    public int MaxTrack => _maxTracks < 0 ? 0 : _maxTracks;
 
     public int MaxAllTrack
     {
@@ -410,19 +399,19 @@ public class OldSequencer : Sequencer_Internal
         return 0;
     }
 
-    public void Load(BmpSong bmpSong)
+    public void Load(BmpSong bmpSong, int trackNum = 1)
     {
         if (bmpSong == null)
             return;
 
         LoadedFileType = FILETYPES.BmpSong;
         LoadedBmpSong  = bmpSong;
-        using var stream = bmpSong.GetProcessedMidiFile().Result.ConvertToSanfordSpec();
-        Sequence = new Sequence(stream);
-        load(Sequence, Sequence.Count - 1);
+        Sequence = BmpPigeonhole.Instance.MidiLoaderType == 0 ? new Sequence(bmpSong.GetDryWetSequencerMidi()) : new Sequence(bmpSong.GetProcessedSequencerMidi());
+
+        load(Sequence, trackNum);
     }
 
-    public void load(Sequence sequence, int trackNum)
+    public void load(Sequence sequence, int trackNum = 1)
     {
         OnTrackNameChange?.Invoke(this, string.Empty);
         OnTempoChange?.Invoke(this, 0);
@@ -432,7 +421,7 @@ public class OldSequencer : Sequencer_Internal
         {
             trackNum = Sequence.Count - 1;
         }
-        intendedTrack = trackNum;
+        _intendedTrack = trackNum;
 
         preferredInstruments.Clear();
         preferredOctaveShift.Clear();
@@ -460,7 +449,7 @@ public class OldSequencer : Sequencer_Internal
 
                 foreach (var ev in Sequence[trackNum].Iterator())
                 {
-                    if (intendedTrack == 1)
+                    if (_intendedTrack == 1)
                     {
                         switch (ev.MidiMessage)
                         {
@@ -484,7 +473,7 @@ public class OldSequencer : Sequencer_Internal
             if (trackNum == Sequence.Count)
             {
                 Console.WriteLine(@"No playable track...");
-                trackNum = intendedTrack;
+                trackNum = _intendedTrack;
             }
         }
 
@@ -501,8 +490,8 @@ public class OldSequencer : Sequencer_Internal
         }
 
         // Parse track names and octave shifts
-        _maxTracks            = -1;
-        _lyricStartTrackIndex = -1;
+        _maxTracks      = -1;
+        LyricStartTrack = -1;
         foreach (var track in Sequence)
         {
             foreach (var ev in track.Iterator())
@@ -510,8 +499,8 @@ public class OldSequencer : Sequencer_Internal
                 if (ev.MidiMessage is MetaMessage { MetaType: MetaType.TrackName } metaMsg)
                 {
                     var builder = new MetaTextBuilder(metaMsg);
-                    if (builder.Text.ToLower().Contains("lyrics:") && _lyricStartTrackIndex == -1)
-                        _lyricStartTrackIndex = _maxTracks + 1;
+                    if (builder.Text.ToLower().Contains("lyrics:") && LyricStartTrack == -1)
+                        LyricStartTrack = _maxTracks + 1;
                     else
                     {
                         ParseTrackName(track, builder.Text);
@@ -521,7 +510,7 @@ public class OldSequencer : Sequencer_Internal
             }
         }
 
-        loadedTrack = trackNum;
+        CurrentTrack = trackNum;
         // Search beginning for text stuff
         foreach (var ev in LoadedTrack.Iterator())
         {

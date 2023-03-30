@@ -14,8 +14,9 @@ internal static partial class Extensions
     /// 
     /// </summary>
     /// <param name="notes"></param>
+    /// <param name="spacing"></param>
     /// <returns></returns>
-    internal static Task<List<Note>> FixChords(this List<Note> notes)
+    internal static Task<List<Note>> FixChords(this List<Note> notes, int spacing = 50)
     {
         notes = notes.OrderBy(x=>x.Time).Reverse().ToList();
             
@@ -31,8 +32,8 @@ internal static partial class Extensions
                 if (lastOn < lowestParent) lowestParent = lastOn;
             }
 
-            if (lowestParent > time + 50) continue;
-            time = lowestParent - 50;
+            if (lowestParent > time + spacing) continue;
+            time = lowestParent - spacing;
 
             if (time < 0) continue;
 
@@ -46,8 +47,9 @@ internal static partial class Extensions
     /// 
     /// </summary>
     /// <param name="notes"></param>
+    /// <param name="spacing"></param>
     /// <returns></returns>
-    internal static async Task<List<Note>> FixChords(this Task<List<Note>> notes) => await FixChords(await notes);
+    internal static async Task<List<Note>> FixChords(this Task<List<Note>> notes, int spacing = 50) => await FixChords(await notes, spacing);
 
     /// <summary>
     /// 
@@ -173,15 +175,19 @@ internal static partial class Extensions
 
             if (j + 1 < notes.Count)
             {
-                if (notes[j].Length >= 100 && notes[j + 1].Time <= notes[j].Time + notes[j].Length + 60)
+                switch (notes[j].Length)
                 {
-                    dur = notes[j + 1].Time - notes[j].Time - 60;
-                    dur = dur < 60 ? 60 : dur;
-                }
-                else if (notes[j].Length < 100 && notes[j + 1].Time <= notes[j].Time + notes[j].Length + 25)
-                {
-                    dur = notes[j + 1].Time - notes[j].Time - 25;
-                    dur = dur < 25 ? 25 : dur;
+                    // MEOWCHESTRA
+                    // Bandaid fix: If sustained note is 100ms or greater, ensure 60ms between the end of that note and the beginning of the next note.
+                    // Otherwise, leave the behavior as it was before.
+                    case >= 100 when notes[j + 1].Time <= notes[j].Time + notes[j].Length + 60:
+                        dur = notes[j + 1].Time - notes[j].Time - 60;
+                        dur = dur < 60 ? 60 : dur;
+                        break;
+                    case < 100 when notes[j + 1].Time <= notes[j].Time + notes[j].Length + 25:
+                        dur = notes[j + 1].Time - notes[j].Time - 25;
+                        dur = dur < 25 ? 25 : dur;
+                        break;
                 }
             }
             thisNotes.Add(new Note(noteNum, dur, time)

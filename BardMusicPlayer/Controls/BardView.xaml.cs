@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
@@ -318,6 +321,33 @@ public partial class BardView
                 contextMenu.IsOpen          = true;
             }
         }
+    }
+}
+
+public class FontSizeConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null) return null;
+        var text = value.ToString();
+        var width = double.Parse(parameter.ToString() ?? string.Empty);
+        double fontSize = 13;
+        var formattedText = new FormattedText(
+            text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+            new Typeface("RobotoRegularFont"), fontSize, Brushes.Black, 1.0);
+
+        while (formattedText.Width > width && fontSize > 1)
+        {
+            fontSize--;
+            formattedText.SetFontSize(fontSize);
+        }
+
+        return fontSize;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }
 

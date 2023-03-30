@@ -15,5 +15,5 @@ internal static partial class Extensions
     /// <param name="note"></param>
     /// <param name="tempoMap"></param>
     /// <returns></returns>
-    internal static long GetNoteMs(this TimedEvent note, TempoMap tempoMap) => note.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
+    internal static long GetNoteMs(this ITimedObject note, TempoMap tempoMap) => note.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
 }
