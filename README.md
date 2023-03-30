@@ -75,7 +75,7 @@ BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer
 
 ### Installation
 * Copy the following repository link: <br>
-  `https://dl.bardmusicplayer.com/hypnotoad/` <br><br>
+  `https://raw.githubusercontent.com/Meowchestra/Hypnotoad-Plugin/develop/data/pluginmaster.json` <br><br>
 * Type `/xlsettings` in the game chat window to open the Dalamud Settings.
 * Navigate to the "Experimental" tab.
   <br><br><a><img src="https://i.imgur.com/FDlwtbe.png" /></a><br><br>
