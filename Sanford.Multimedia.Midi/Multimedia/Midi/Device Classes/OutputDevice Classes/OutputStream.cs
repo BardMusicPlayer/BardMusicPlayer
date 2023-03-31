@@ -111,7 +111,7 @@ namespace Sanford.Multimedia.Midi
 
             int result = midiStreamOpen(ref device_handle, ref deviceID, 1, midiOutProc, IntPtr.Zero, CALLBACK_FUNCTION);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new OutputDeviceException(result);
             }
@@ -127,7 +127,7 @@ namespace Sanford.Multimedia.Midi
 
                     int result = midiStreamClose(Handle);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         throw new OutputDeviceException(result);
                     }
@@ -171,7 +171,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiStreamRestart(Handle);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     throw new OutputDeviceException(result);
                 }
@@ -193,7 +193,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiStreamPause(Handle);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     throw new OutputDeviceException(result);
                 }
@@ -215,7 +215,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiStreamStop(Handle);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     throw new OutputDeviceException(result);
                 }
@@ -387,7 +387,7 @@ namespace Sanford.Multimedia.Midi
 
                 int result = midiOutPrepareHeader(Handle, headerBuilder.Result, SizeOfMidiHeader);
 
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     bufferCount++;
                 }
@@ -400,7 +400,7 @@ namespace Sanford.Multimedia.Midi
 
                 result = midiStreamOut(Handle, headerBuilder.Result, SizeOfMidiHeader);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     midiOutUnprepareHeader(Handle, headerBuilder.Result, SizeOfMidiHeader);
 
@@ -430,7 +430,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiStreamPosition(Handle, ref t, Marshal.SizeOf(typeof(Time)));
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     throw new OutputDeviceException(result);
                 }
@@ -509,7 +509,7 @@ namespace Sanford.Multimedia.Midi
                 {
                     int result = midiStreamProperty(Handle, ref d, MIDIPROP_GET | MIDIPROP_TIMEDIV);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         throw new OutputDeviceException(result);
                     }
@@ -542,7 +542,7 @@ namespace Sanford.Multimedia.Midi
                 {
                     int result = midiStreamProperty(Handle, ref d, MIDIPROP_SET | MIDIPROP_TIMEDIV);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         throw new OutputDeviceException(result);
                     }
@@ -570,7 +570,7 @@ namespace Sanford.Multimedia.Midi
                 {
                     int result = midiStreamProperty(Handle, ref t, MIDIPROP_GET | MIDIPROP_TEMPO);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         throw new OutputDeviceException(result);
                     }
@@ -602,7 +602,7 @@ namespace Sanford.Multimedia.Midi
                 {
                     int result = midiStreamProperty(Handle, ref t, MIDIPROP_SET | MIDIPROP_TEMPO);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         throw new OutputDeviceException(result);
                     }

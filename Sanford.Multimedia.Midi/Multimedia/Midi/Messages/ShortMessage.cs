@@ -98,14 +98,14 @@ namespace Sanford.Multimedia.Midi
 
         public ShortMessage(int message)
         {
-            this.msg = message;
+            msg = message;
         }
 
         public ShortMessage(byte status, byte data1, byte data2)
         {
-            this.message = new byte[] { status, data1, data2 };
+            message = new byte[] { status, data1, data2 };
             rawMessageBuilt = true;
-            msg = BuildIntMessage(this.message);
+            msg = BuildIntMessage(message);
         }
 
         private static byte[] BuildByteMessage(int intMessage)
@@ -237,7 +237,7 @@ namespace Sanford.Multimedia.Midi
             {
                 if (!rawMessageBuilt)
                 {
-                    this.message = BuildByteMessage(msg);
+                    message = BuildByteMessage(msg);
                     rawMessageBuilt = true;
                 }
                 return message;

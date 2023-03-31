@@ -536,7 +536,7 @@ namespace Sanford.Collections
             {
                 this.owner = owner;
                 currentNode = owner.front;
-                this.version = owner.version;
+                version = owner.version;
             }
 
             #region IEnumerator Members
@@ -640,7 +640,7 @@ namespace Sanford.Collections
                 #endregion
 
                 this.deque = deque;
-                this.root = deque.SyncRoot;
+                root = deque.SyncRoot;
             }
 
             #endregion
@@ -924,7 +924,7 @@ namespace Sanford.Collections
         {
             Deque clone = new Deque(this);
 
-            clone.version = this.version;
+            clone.version = version;
 
             return clone;
         }

@@ -61,7 +61,7 @@ namespace Sanford.Multimedia.Midi
 
         public void Write(Stream strm)
         {
-            this.stream = strm;
+            stream = strm;
 
             trackData.Clear();
 

@@ -580,7 +580,7 @@ namespace Sanford.Collections.Generic
         {
             Deque<T> clone = new Deque<T>(this);
 
-            clone.version = this.version;
+            clone.version = version;
 
             return clone;
         }

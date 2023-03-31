@@ -70,7 +70,7 @@ namespace Sanford.Multimedia.Midi
 
             int result = midiOutOpen(out device_handle, deviceID, midiOutProc, IntPtr.Zero, CALLBACK_FUNCTION);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new OutputDeviceException(result);
             }
@@ -89,7 +89,7 @@ namespace Sanford.Multimedia.Midi
                     // Close the OutputDevice.
                     int result = midiOutClose(Handle);
 
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         // Throw an exception.
                         throw new OutputDeviceException(result);
@@ -134,7 +134,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -150,7 +150,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -199,7 +199,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion

@@ -55,7 +55,7 @@ namespace Sanford.Multimedia.Midi
 
             Debug.WriteLine("MidiIn handle:" + handle.ToInt64());
 
-            if (result != MidiDeviceException.MMSYSERR_NOERROR)
+            if (result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new InputDeviceException(result);
             }

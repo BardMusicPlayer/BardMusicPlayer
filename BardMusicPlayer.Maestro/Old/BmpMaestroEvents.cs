@@ -26,14 +26,14 @@ public partial class BmpMaestro
     {
         while (!token.IsCancellationRequested)
         {
-            while (_eventQueue.TryDequeue(out var meastroEvent))
+            while (_eventQueue.TryDequeue(out var maestroEvent))
             {
                 if (token.IsCancellationRequested)
                     break;
 
                 try
                 {
-                    switch (meastroEvent)
+                    switch (maestroEvent)
                     {
                         case CurrentPlayPositionEvent currentPlayPosition:
                             OnPlaybackTimeChanged(this, currentPlayPosition);

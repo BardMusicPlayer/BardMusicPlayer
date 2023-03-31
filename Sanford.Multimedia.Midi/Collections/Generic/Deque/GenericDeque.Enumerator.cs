@@ -24,7 +24,7 @@ namespace Sanford.Collections.Generic
             {
                 this.owner = owner;
                 currentNode = owner.front;
-                this.version = owner.version;
+                version = owner.version;
             }
 
             #region IEnumerator Members
@@ -35,7 +35,7 @@ namespace Sanford.Collections.Generic
 
                 if(disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
                 else if(version != owner.version)
                 {
@@ -57,7 +57,7 @@ namespace Sanford.Collections.Generic
 
                     if(disposed)
                     {
-                        throw new ObjectDisposedException(this.GetType().Name);
+                        throw new ObjectDisposedException(GetType().Name);
                     }
                     else if(!moveResult)
                     {
@@ -78,7 +78,7 @@ namespace Sanford.Collections.Generic
 
                 if(disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
                 else if(version != owner.version)
                 {
@@ -115,7 +115,7 @@ namespace Sanford.Collections.Generic
 
                     if(disposed)
                     {
-                        throw new ObjectDisposedException(this.GetType().Name);
+                        throw new ObjectDisposedException(GetType().Name);
                     }
                     else if(!moveResult)
                     {

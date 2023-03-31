@@ -530,7 +530,7 @@ namespace Sanford.Multimedia.Midi
 
         internal ChannelMessage(int message)
         {
-            this.msg = message;            
+            msg = message;            
         }
 
         #endregion
@@ -572,7 +572,7 @@ namespace Sanford.Multimedia.Midi
             
             ChannelMessage e = (ChannelMessage)obj;            
 
-            return this.msg == e.msg;
+            return msg == e.msg;
         }
 
         /// <summary>

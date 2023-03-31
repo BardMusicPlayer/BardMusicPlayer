@@ -222,9 +222,9 @@ namespace Sanford.Multimedia.Timers
         // Initialize timer with default values.
         private void Initialize()
         {
-            this.mode = TimerMode.Periodic;
-            this.period = Capabilities.periodMin;
-            this.resolution = 1;
+            mode = TimerMode.Periodic;
+            period = Capabilities.periodMin;
+            resolution = 1;
 
             running = false;
 

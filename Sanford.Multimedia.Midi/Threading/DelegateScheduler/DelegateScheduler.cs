@@ -258,7 +258,7 @@ namespace Sanford.Threading
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -305,7 +305,7 @@ namespace Sanford.Threading
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -347,7 +347,7 @@ namespace Sanford.Threading
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion

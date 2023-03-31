@@ -163,7 +163,7 @@ namespace Sanford.Multimedia.Midi
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion           
@@ -184,7 +184,7 @@ namespace Sanford.Multimedia.Midi
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -223,7 +223,7 @@ namespace Sanford.Multimedia.Midi
 
             if(disposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -273,7 +273,7 @@ namespace Sanford.Multimedia.Midi
 
                 if(disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
 
                 #endregion
@@ -286,7 +286,7 @@ namespace Sanford.Multimedia.Midi
 
                 if(disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
                 else if(value < 0)
                 {
@@ -324,7 +324,7 @@ namespace Sanford.Multimedia.Midi
 
                 if (disposed)
                 {
-                    throw new ObjectDisposedException(this.GetType().Name);
+                    throw new ObjectDisposedException(GetType().Name);
                 }
 
                 #endregion

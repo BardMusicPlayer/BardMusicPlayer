@@ -190,7 +190,7 @@ namespace Sanford.Multimedia.Midi
 
             SysRealtimeMessage message = (SysRealtimeMessage)obj;
 
-            return this.msg == message.msg;
+            return msg == message.msg;
         }
 
         #endregion

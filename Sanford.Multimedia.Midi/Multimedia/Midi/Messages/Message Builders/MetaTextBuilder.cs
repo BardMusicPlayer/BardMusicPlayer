@@ -127,7 +127,7 @@ namespace Sanford.Multimedia.Midi
 
             #endregion
 
-            this.text = string.Empty;
+            text = string.Empty;
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace Sanford.Multimedia.Midi
             UTF8Encoding encoding = new UTF8Encoding();
 
             text = encoding.GetString(message.GetBytes());
-            this.type = message.MetaType;
+            type = message.MetaType;
         }
 
         /// <summary>

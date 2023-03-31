@@ -20,7 +20,7 @@ namespace Sanford.Multimedia.Midi
 
         public ShortMessageEventArgs(byte status, byte data1, byte data2)
         {
-            this.message = new ShortMessage(status, data1, data2);
+            message = new ShortMessage(status, data1, data2);
         }
 
         public ShortMessage Message

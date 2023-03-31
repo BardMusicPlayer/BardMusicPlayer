@@ -57,7 +57,7 @@ namespace Sanford.Collections.Generic
             {
                 this.theList = theList;
                 this.index = index;
-                this.newItem = item;
+                newItem = item;
             }
 
             #region ICommand Members
@@ -442,7 +442,7 @@ namespace Sanford.Collections.Generic
             public ReverseCommand(List<T> theList)
             {
                 this.theList = theList;
-                this.reverseRange = false;
+                reverseRange = false;
             }
 
             public ReverseCommand(List<T> theList, int index, int count)
@@ -450,7 +450,7 @@ namespace Sanford.Collections.Generic
                 this.theList = theList;
                 this.index = index;
                 this.count = count;
-                this.reverseRange = true;
+                reverseRange = true;
             }
 
             #region ICommand Members

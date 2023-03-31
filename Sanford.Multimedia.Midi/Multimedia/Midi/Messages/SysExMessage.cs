@@ -143,12 +143,12 @@ namespace Sanford.Multimedia.Midi
 
             bool equals = true;
 
-            if(this.Length != message.Length)
+            if(Length != message.Length)
             {
                 equals = false;
             }
 
-            for(int i = 0; i < this.Length && equals; i++)
+            for(int i = 0; i < Length && equals; i++)
             {
                 if(this[i] != message[i])
                 {

@@ -240,19 +240,19 @@ namespace Sanford.Collections.Immutable
              */
 
             // If the node has no right children.
-            if(this.RightChild == NullNode)
+            if(RightChild == NullNode)
             {  
                 // The replacement node is the node's left child.
-                result = this.LeftChild;
+                result = LeftChild;
             }
                 // Else if the node's right child has no left children.
-            else if(this.RightChild.LeftChild == NullNode)
+            else if(RightChild.LeftChild == NullNode)
             {
                 // The replacement node is the node's right child.
                 result = new AvlNode(
-                    this.RightChild.Data,
-                    this.LeftChild,
-                    this.RightChild.RightChild);
+                    RightChild.Data,
+                    LeftChild,
+                    RightChild.RightChild);
             }
                 // Else the node's right child has left children.
             else
@@ -264,13 +264,13 @@ namespace Sanford.Collections.Immutable
                  */
 
                 IAvlNode replacement = NullNode;
-                IAvlNode rightChild = RemoveReplacement(this.RightChild, ref replacement);
+                IAvlNode rightChild = RemoveReplacement(RightChild, ref replacement);
 
                 // Create new node with the replacement node and the new
                 // right child.
                 result = new AvlNode(
                     replacement.Data,
-                    this.LeftChild,
+                    LeftChild,
                     rightChild);
             }
 

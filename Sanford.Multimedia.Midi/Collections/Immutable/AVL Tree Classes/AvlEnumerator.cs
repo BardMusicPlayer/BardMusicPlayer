@@ -48,7 +48,7 @@ namespace Sanford.Collections.Immutable
         public AvlEnumerator(IAvlNode root)
         {
             this.root = root;
-            this.count = root.Count;
+            count = root.Count;
 
             Reset();
         }

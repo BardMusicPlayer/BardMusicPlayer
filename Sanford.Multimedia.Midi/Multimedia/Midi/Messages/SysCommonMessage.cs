@@ -154,7 +154,7 @@ namespace Sanford.Multimedia.Midi
  
         internal SysCommonMessage(int message)
         {
-            this.msg = message;
+            msg = message;
         }
 
         #endregion
@@ -196,9 +196,9 @@ namespace Sanford.Multimedia.Midi
 
             SysCommonMessage message = (SysCommonMessage)obj;
 
-            return (this.SysCommonType == message.SysCommonType &&
-                this.Data1 == message.Data1 &&
-                this.Data2 == message.Data2);
+            return (SysCommonType == message.SysCommonType &&
+                Data1 == message.Data1 &&
+                Data2 == message.Data2);
         }
 
         #endregion

@@ -308,7 +308,7 @@ namespace Sanford.Multimedia.Midi
                 result = midiInAddBuffer(Handle, headerPtr, SizeOfMidiHeader);
 
                 // If the buffer could not be added.
-                if (result != MidiDeviceException.MMSYSERR_NOERROR)
+                if (result != DeviceException.MMSYSERR_NOERROR)
                 {
                     // Unprepare header - there's a chance that this will fail 
                     // for whatever reason, but there's not a lot that can be

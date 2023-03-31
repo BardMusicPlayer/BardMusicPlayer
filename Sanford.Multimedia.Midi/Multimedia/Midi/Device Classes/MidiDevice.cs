@@ -83,7 +83,7 @@ namespace Sanford.Multimedia.Midi
         {
             int result = midiConnect(handleA, handleB, IntPtr.Zero);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new MidiDeviceException(result);
             }
@@ -106,7 +106,7 @@ namespace Sanford.Multimedia.Midi
         {
             int result = midiDisconnect(handleA, handleB, IntPtr.Zero);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new MidiDeviceException(result);
             }

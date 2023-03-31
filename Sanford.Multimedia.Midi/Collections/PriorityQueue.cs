@@ -682,7 +682,7 @@ namespace Sanford.Collections
 
             public Node(object element, int level)
             {
-                this.forward = new Node[level];
+                forward = new Node[level];
                 this.element = element;
             }
 
@@ -727,7 +727,7 @@ namespace Sanford.Collections
             public PriorityQueueEnumerator(PriorityQueue owner)
             {
                 this.owner = owner;
-                this.version = owner.version;
+                version = owner.version;
                 head = owner.header;
 
                 Reset();

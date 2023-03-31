@@ -36,7 +36,7 @@ namespace Sanford.Collections.Generic
                 #endregion
 
                 this.deque = deque;
-                this.root = deque.SyncRoot;
+                root = deque.SyncRoot;
             }
 
             #endregion

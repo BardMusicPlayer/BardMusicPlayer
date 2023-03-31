@@ -113,7 +113,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -127,7 +127,7 @@ namespace Sanford.Multimedia.Midi
 
             if (IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -141,7 +141,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -155,7 +155,7 @@ namespace Sanford.Multimedia.Midi
                 int result = midiOutPrepareHeader(Handle, headerBuilder.Result, SizeOfMidiHeader);
 
                 // If the system exclusive buffer was prepared successfully.
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     bufferCount++;
 
@@ -163,7 +163,7 @@ namespace Sanford.Multimedia.Midi
                     result = midiOutLongMsg(Handle, headerBuilder.Result, SizeOfMidiHeader);
 
                     // If the system exclusive message could not be sent.
-                    if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result != DeviceException.MMSYSERR_NOERROR)
                     {
                         midiOutUnprepareHeader(Handle, headerBuilder.Result, SizeOfMidiHeader);
                         bufferCount--;
@@ -191,7 +191,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -205,7 +205,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -219,7 +219,7 @@ namespace Sanford.Multimedia.Midi
 
             if(IsDisposed)
             {
-                throw new ObjectDisposedException(this.GetType().Name);
+                throw new ObjectDisposedException(GetType().Name);
             }
 
             #endregion
@@ -229,7 +229,7 @@ namespace Sanford.Multimedia.Midi
                 // Reset the OutputDevice.
                 int result = midiOutReset(Handle); 
 
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     while(bufferCount > 0)
                     {
@@ -250,7 +250,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiOutShortMsg(Handle, message);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     throw new OutputDeviceException(result);
                 }
@@ -266,7 +266,7 @@ namespace Sanford.Multimedia.Midi
             int result = midiOutGetDevCaps(devId, ref caps, Marshal.SizeOf(caps));
 
             // If the capabilities could not be retrieved.
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 // Throw an exception.
                 throw new OutputDeviceException(result);
@@ -300,7 +300,7 @@ namespace Sanford.Multimedia.Midi
                 // Unprepare the buffer.
                 int result = midiOutUnprepareHeader(Handle, headerPtr, SizeOfMidiHeader);
 
-                if(result != MidiDeviceException.MMSYSERR_NOERROR)
+                if(result != DeviceException.MMSYSERR_NOERROR)
                 {
                     Exception ex = new OutputDeviceException(result);
 

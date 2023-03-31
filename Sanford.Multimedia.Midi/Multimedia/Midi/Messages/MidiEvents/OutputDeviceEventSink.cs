@@ -104,7 +104,7 @@
 
         public static OutputDeviceEventSink FromDeviceID(int deviceID, MidiEvents eventSource)
         {
-            var deviceCount = OutputDevice.DeviceCount;
+            var deviceCount = OutputDeviceBase.DeviceCount;
             if (deviceCount > 0)
             {
                 deviceID %= deviceCount;

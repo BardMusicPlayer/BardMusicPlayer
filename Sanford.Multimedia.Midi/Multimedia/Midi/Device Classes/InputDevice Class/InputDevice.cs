@@ -52,7 +52,7 @@ namespace Sanford.Multimedia.Midi
 
                     int result = midiInClose(handle);
 
-                    if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                    if(result == DeviceException.MMSYSERR_NOERROR)
                     {
                         delegateQueue.Dispose();
                     }

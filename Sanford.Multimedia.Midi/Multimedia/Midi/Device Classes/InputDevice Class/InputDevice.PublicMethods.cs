@@ -94,7 +94,7 @@ namespace Sanford.Multimedia.Midi
                     result = midiInStart(Handle);
                 }
 
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     recording = true;
                 }
@@ -129,7 +129,7 @@ namespace Sanford.Multimedia.Midi
             {
                 int result = midiInStop(Handle);
 
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     recording = false;
                 }
@@ -157,7 +157,7 @@ namespace Sanford.Multimedia.Midi
 
                 int result = midiInReset(Handle);                
 
-                if(result == MidiDeviceException.MMSYSERR_NOERROR)
+                if(result == DeviceException.MMSYSERR_NOERROR)
                 {
                     recording = false;
 
@@ -185,7 +185,7 @@ namespace Sanford.Multimedia.Midi
             IntPtr devID = (IntPtr)deviceID;
             result = midiInGetDevCaps(devID, ref caps, SizeOfMidiHeader);
 
-            if(result != MidiDeviceException.MMSYSERR_NOERROR)
+            if(result != DeviceException.MMSYSERR_NOERROR)
             {
                 throw new InputDeviceException(result);
             }
