@@ -4,16 +4,10 @@
  */
 
 using System.Text.RegularExpressions;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.DeviceClasses.InputDeviceClass;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.MessageBuilders;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing.TrackClasses;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Transmogrify.Song;
+using Sanford.Multimedia.Midi;
 using Timer = System.Timers.Timer;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;

@@ -4,11 +4,7 @@
  */
 
 using System.ComponentModel;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Clocks;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Messages.EventArg;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Processing;
-using BardMusicPlayer.Maestro.Sequencer.Backend.Sanford.Multimedia.Midi.Sequencing;
+using Sanford.Multimedia.Midi;
 
 namespace BardMusicPlayer.Maestro.Old.Sequencing;
 
