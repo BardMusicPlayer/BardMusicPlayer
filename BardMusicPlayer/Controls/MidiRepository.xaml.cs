@@ -123,7 +123,7 @@ public partial class MidiRepository : UserControl
     {
         var dlg = new FolderPicker
         {
-            InputPath = Directory.Exists(BmpPigeonhole.Instance.SongDirectory) ? Path.GetFullPath(BmpPigeonhole.Instance.SongDirectory) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            InputPath = Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath) ? Path.GetFullPath(BmpPigeonhole.Instance.MidiDownloadPath) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
         };
 
         if (dlg.ShowDialog() == true)
