@@ -42,6 +42,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="MaterialDesignThemes" Version="4.8.0-ci172" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.0" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
