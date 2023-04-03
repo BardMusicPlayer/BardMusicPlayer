@@ -287,22 +287,47 @@ public partial class MidiRepository : UserControl
     #endregion
 
     #region Import To Playlist Functions
+    /// <summary>
+    /// Refresh playlist dropdown when click 'refresh' button
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void RefreshPlaylist_Click(object sender, RoutedEventArgs e)
     {
         RefreshPlaylistSelector();
     }
+
+    /// <summary>
+    /// Refresh playlist dropdown
+    /// </summary>
     private void RefreshPlaylistSelector()
     {
         PlaylistDropdown.DataContext = BmpCoffer.Instance.GetPlaylistNames();
     }
+
+    /// <summary>
+    /// Disable 'add to playlist' feature if checkbox is unchecked
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void AddToPlaylistCheckBox_Unchecked(object sender, RoutedEventArgs e)
     {
         RefreshAddToPlaylistMode();
     }
+
+    /// <summary>
+    /// Enable 'add to playlist' feature if checkbox is checked
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void AddToPlaylistCheckBox_Checked(object sender, RoutedEventArgs e)
     {
         RefreshAddToPlaylistMode();
     }
+
+    /// <summary>
+    /// Hide and show playlist selector while check/uncheck 'add to playlist' checkbox
+    /// </summary>
     private void RefreshAddToPlaylistMode()
     {
         bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
