@@ -228,7 +228,7 @@ public partial class MidiRepository : UserControl
         if (fullListSong.Count == 0)
             return;
 
-        var filteredList = new List<String>();
+        var filteredList = new List<string>();
         if (SongSearchTextBox.Text != "")
         {
             previewListSong = previewListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
