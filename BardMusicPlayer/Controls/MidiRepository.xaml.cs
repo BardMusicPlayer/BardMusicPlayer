@@ -213,6 +213,9 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void DownloadSelectedMidi()
     {
+        if (isDownloading)
+            return;
+
         if (!Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath))
         {
             MessageBox.Show("The downloads directory is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
