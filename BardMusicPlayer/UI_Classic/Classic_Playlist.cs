@@ -216,7 +216,7 @@ public partial class ClassicMainView
             if (pls == null)
                 return;
 
-            BmpCoffer.Instance.DeletePlaylist(pls);
+            DeleteWithConfirmation(pls);
             PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
             return;
         }
@@ -225,10 +225,26 @@ public partial class ClassicMainView
             return;
 
         _showingPlaylists = true;
-        BmpCoffer.Instance.DeletePlaylist(_currentPlaylist);
+        DeleteWithConfirmation(_currentPlaylist);
         PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetPlaylistNames();
         PlaylistHeader.Header         = "Playlists";
         _currentPlaylist              = null;
+    }
+    /// <summary>
+    /// Delete playlist with showing the confirmation window
+    /// </summary>
+    /// <param name="playlist"></param>
+    private void DeleteWithConfirmation(IPlaylist playlist)
+    {
+        MessageBoxResult confirmDelete = MessageBox.Show(
+            $"Are you sure you want to delete this playlist?\n\nPlaylist name : {playlist.GetName()}",
+            "Confirmation",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+        if (confirmDelete == MessageBoxResult.Yes)
+        {
+            BmpCoffer.Instance.DeletePlaylist(playlist);
+        }
     }
     #endregion
 
