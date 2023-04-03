@@ -112,6 +112,8 @@ public partial class ClassicMainView
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
             _showingPlaylists             = false;
 
+            BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
+
             var icon = "↩".PadRight(2);
             var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
             var name = _currentPlaylist?.GetName();
