@@ -1,6 +1,8 @@
-﻿using BardMusicPlayer.Pigeonhole;
+﻿using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -34,6 +36,7 @@ public partial class MidiRepository : UserControl
         DownloadPath.Text = BmpPigeonhole.Instance.MidiDownloadPath;
         DownloadProgressLabel.Visibility = Visibility.Hidden;
         DownloadProgressBar.Visibility = Visibility.Hidden;
+        RefreshPlaylistSelector();
     }
     private class Song
     {
@@ -267,5 +270,27 @@ public partial class MidiRepository : UserControl
     private void RefreshCountTextBox()
     {
         ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
+    }
+    private void RefreshPlaylist_Click(object sender, RoutedEventArgs e)
+    {
+        RefreshPlaylistSelector();
+    }
+    private void RefreshPlaylistSelector()
+    {
+        PlaylistDropdown.DataContext = BmpCoffer.Instance.GetPlaylistNames();
+    }
+    private void AddToPlaylistCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        RefreshAddToPlaylistMode();
+    }
+    private void AddToPlaylistCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        RefreshAddToPlaylistMode();
+    }
+    private void RefreshAddToPlaylistMode()
+    {
+        bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
+        PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
+        RefreshPlaylistButton.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
     }
 }
