@@ -263,7 +263,7 @@ public partial class MidiRepository : UserControl
         var filteredList = new List<string>();
         if (SongSearchTextBox.Text != "")
         {
-            previewListSong = previewListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
+            previewListSong = fullListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
             filteredList = previewListSong.Select(s => s.Title).ToList();
         }
         else
