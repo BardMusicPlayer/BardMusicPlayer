@@ -24,7 +24,7 @@ public partial class MidiRepository : UserControl
     private readonly string midiRepoUrl = "https://songs.bardmusicplayer.com";
     private List<Song> fullListSong = new List<Song>();
     private List<Song> previewListSong = new List<Song>();
-    private Song selectedSong;
+    private Song? selectedSong;
     public MidiRepository()
     {
         InitializeComponent();
@@ -214,6 +214,10 @@ public partial class MidiRepository : UserControl
             MessageBox.Show("The downloads directory is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
+
+        if (selectedSong == null)
+            return;
+
         DownloadButton.IsEnabled = false;
         DownloadProgressBar.Visibility = Visibility.Visible;
         DownloadProgressBar.Value = 0;
