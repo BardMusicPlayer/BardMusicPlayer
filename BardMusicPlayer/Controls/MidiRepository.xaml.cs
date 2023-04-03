@@ -105,6 +105,7 @@ public partial class MidiRepository : UserControl
         BtnGetSongList.IsEnabled = true;
         BtnGetSongList.Content = "Refresh";
         LoadingProgressBar.Visibility = Visibility.Hidden;
+        SongSearchTextBox.Text = "";
     }
 
     /// <summary>
