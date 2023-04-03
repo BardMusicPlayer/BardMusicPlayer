@@ -52,14 +52,15 @@
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="99" />
-                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Margin="-4,0,0,0" Content="Download Path:" VerticalAlignment="Center" HorizontalAlignment="Left" />
-                <TextBox IsReadOnly="True" Grid.Column="1" Margin="0,0,4,0" x:Name="DownloadPath" Text="" Padding="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
-                <Button x:Name="BtnDownloadPath" Grid.Column="2" Content="..." Margin="0,0 4,0"
+                <Button x:Name="BtnDownloadPath" Grid.Column="1" Content="..." Margin="0,0 4,0"
                     Click="SelectPath_Button_Click" Height="18" Padding="5" />
+                <TextBox IsReadOnly="True" Grid.Column="2" Margin="0,0,4,0" x:Name="DownloadPath" Text="" Padding="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                
             </Grid>
             <Grid Grid.Row="4" >
                 <Grid.ColumnDefinitions>
