@@ -1,7 +1,6 @@
 ﻿using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
