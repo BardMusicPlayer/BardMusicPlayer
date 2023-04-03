@@ -3,7 +3,6 @@ using BardMusicPlayer.Functions;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -38,6 +37,7 @@ public partial class MidiRepository : UserControl
         DownloadProgressLabel.Visibility = Visibility.Hidden;
         DownloadProgressBar.Visibility = Visibility.Hidden;
         RefreshPlaylistSelector();
+        BmpCoffer.Instance.OnPlaylistDataUpdated += RefreshPlaylistSelector;
     }
     private class Song
     {
@@ -332,7 +332,6 @@ public partial class MidiRepository : UserControl
     {
         bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
         PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
-        RefreshPlaylistButton.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
     }
     #endregion
 }
