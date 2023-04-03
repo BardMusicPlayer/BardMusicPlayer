@@ -1,6 +1,9 @@
-﻿using BardMusicPlayer.Pigeonhole;
+﻿using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Functions;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -21,7 +24,10 @@ public partial class MidiRepository : UserControl
     private const string commentNodeXpath = ".//span[contains(@class, 'r4')]";
     private readonly HttpClient httpClient;
     private readonly string midiRepoUrl = "https://songs.bardmusicplayer.com";
-    private List<Song> listSong = new List<Song>();
+    private List<Song> fullListSong = new List<Song>();
+    private List<Song> previewListSong = new List<Song>();
+    private Song? selectedSong;
+    private bool isDownloading;
     public MidiRepository()
     {
         InitializeComponent();
@@ -31,6 +37,7 @@ public partial class MidiRepository : UserControl
         DownloadPath.Text = BmpPigeonhole.Instance.MidiDownloadPath;
         DownloadProgressLabel.Visibility = Visibility.Hidden;
         DownloadProgressBar.Visibility = Visibility.Hidden;
+        RefreshPlaylistSelector();
     }
     private class Song
     {
@@ -56,7 +63,8 @@ public partial class MidiRepository : UserControl
     /// <param name="html"></param>
     private void RefreshSongList(string html)
     {
-        listSong.Clear();
+        fullListSong.Clear();
+        previewListSong.Clear();
         HtmlDocument htmlDoc = new HtmlDocument();
         htmlDoc.LoadHtml(html);
 
@@ -70,7 +78,7 @@ public partial class MidiRepository : UserControl
 
             if (titleNode != null && authorNode != null && commentNode != null)
             {
-                listSong.Add(new Song
+                fullListSong.Add(new Song
                 {
                     Title = titleNode.GetAttributeValue("title", ""),
                     Author = authorNode.InnerText,
@@ -94,11 +102,14 @@ public partial class MidiRepository : UserControl
         var songData = await FetchSongData();
         
         RefreshSongList(songData);
-        MidiRepoContainer.ItemsSource = listSong.Select(song => song.Title).ToList();
+        previewListSong = fullListSong;
+        MidiRepoContainer.ItemsSource = previewListSong.Select(song => song.Title).ToList();
+        RefreshCountTextBox();
 
         BtnGetSongList.IsEnabled = true;
         BtnGetSongList.Content = "Refresh";
         LoadingProgressBar.Visibility = Visibility.Hidden;
+        SongSearchTextBox.Text = "";
     }
 
     /// <summary>
@@ -108,10 +119,13 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private void MidiRepoContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (MidiRepoContainer.SelectedIndex == -1)
+            return;
+
         DownloadPanel.Visibility = Visibility.Visible;
-        Song song = listSong[MidiRepoContainer.SelectedIndex];
-        SongTitle.Text = $"({song.Author}) {song.Title}";
-        SongComment.Text = song.Comment;
+        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
+        SongTitle.Text = $"({selectedSong.Author}) {selectedSong.Title}";
+        SongComment.Text = selectedSong.Comment;
     }
 
     /// <summary>
@@ -145,6 +159,7 @@ public partial class MidiRepository : UserControl
     /// <param name="fileName"></param>
     private async void DownloadFile(string url, string fileName)
     {
+        isDownloading = true;
         HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
         long? contentLength = response.Content.Headers.ContentLength;
@@ -170,8 +185,18 @@ public partial class MidiRepository : UserControl
         string finalFilePath = $"{downloadsPath}/{fileName}.mid";
 
         File.Move(tempFilePath, finalFilePath, true);
-        DownloadButton.IsEnabled = true;
+        DownloadPanel.IsEnabled          = true;
         DownloadProgressLabel.Visibility = Visibility.Visible;
+        isDownloading                    = false;
+
+        // Add to selected playlist
+        bool addToPlaylist = AddToPlaylistCheckBox.IsChecked ?? false;
+
+        if (addToPlaylist && PlaylistDropdown.SelectedIndex != -1)
+        {
+            var playlist = BmpCoffer.Instance.GetPlaylist(PlaylistDropdown.SelectedItem as string);
+            PlaylistFunctions.AddFileToPlaylist(finalFilePath, playlist);
+        }
     }
 
     /// <summary>
@@ -191,6 +216,7 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private void MidiRepoContainer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
         DownloadSelectedMidi();
     }
 
@@ -199,15 +225,114 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void DownloadSelectedMidi()
     {
+        if (isDownloading)
+            return;
+
         if (!Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath))
         {
             MessageBox.Show("The downloads directory is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
-        Song selectedSong = listSong[MidiRepoContainer.SelectedIndex];
-        DownloadButton.IsEnabled = false;
+
+        if (selectedSong == null)
+            return;
+
+        DownloadPanel.IsEnabled = false;
         DownloadProgressBar.Visibility = Visibility.Visible;
         DownloadProgressBar.Value = 0;
         DownloadFile($"{midiRepoUrl}/{selectedSong.Url}", $"({selectedSong.Author}) {selectedSong.Title}");
     }
+   
+    /// <summary>
+    /// Refresh result count textblock
+    /// </summary>
+    private void RefreshCountTextBox()
+    {
+        ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
+    }
+
+    #region Search Functions
+    /// <summary>
+    /// Filter the midi listview based on SongSearchTextBox
+    /// </summary>
+    private void SearchSong()
+    {
+        if (fullListSong.Count == 0)
+            return;
+
+        var filteredList = new List<string>();
+        if (SongSearchTextBox.Text != "")
+        {
+            previewListSong = fullListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
+            filteredList = previewListSong.Select(s => s.Title).ToList();
+        }
+        else
+        {
+            previewListSong = fullListSong;
+            filteredList = previewListSong.Select(s => s.Title).ToList();
+        }
+
+        MidiRepoContainer.ItemsSource = filteredList;
+        RefreshCountTextBox();
+    }
+    /// <summary>
+    /// Filter song when textbox value changed
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void SongSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        SearchSong();
+    }
+    #endregion
+
+    #region Import To Playlist Functions
+    /// <summary>
+    /// Refresh playlist dropdown when click 'refresh' button
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RefreshPlaylist_Click(object sender, RoutedEventArgs e)
+    {
+        RefreshPlaylistSelector();
+    }
+
+    /// <summary>
+    /// Refresh playlist dropdown
+    /// </summary>
+    private void RefreshPlaylistSelector()
+    {
+        PlaylistDropdown.DataContext = BmpCoffer.Instance.GetPlaylistNames();
+    }
+
+    /// <summary>
+    /// Disable 'add to playlist' feature if checkbox is unchecked
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void AddToPlaylistCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        RefreshAddToPlaylistMode();
+    }
+
+    /// <summary>
+    /// Enable 'add to playlist' feature if checkbox is checked
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void AddToPlaylistCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        RefreshAddToPlaylistMode();
+    }
+
+    /// <summary>
+    /// Hide and show playlist selector while check/uncheck 'add to playlist' checkbox
+    /// </summary>
+    private void RefreshAddToPlaylistMode()
+    {
+        bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
+        PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
+        RefreshPlaylistButton.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
+    }
+    #endregion
 }
