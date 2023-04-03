@@ -23,6 +23,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: BardMusicPlayer
-        path: BardMusicPlayer\bin\Release\net7.0-windows\win-x64\*.exe
+        path: BardMusicPlayer\bin\Release\net7.0-windows\win-x64\BardMusicPlayer.exe
         if-no-files-found: error
         retention-days: 1
