@@ -25,6 +25,7 @@ public partial class MidiRepository : UserControl
     private List<Song> fullListSong = new List<Song>();
     private List<Song> previewListSong = new List<Song>();
     private Song? selectedSong;
+    private bool isDownloading;
     public MidiRepository()
     {
         InitializeComponent();
@@ -155,6 +156,7 @@ public partial class MidiRepository : UserControl
     /// <param name="fileName"></param>
     private async void DownloadFile(string url, string fileName)
     {
+        isDownloading = true;
         HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
         long? contentLength = response.Content.Headers.ContentLength;
@@ -182,6 +184,7 @@ public partial class MidiRepository : UserControl
         File.Move(tempFilePath, finalFilePath, true);
         DownloadButton.IsEnabled = true;
         DownloadProgressLabel.Visibility = Visibility.Visible;
+        isDownloading = false;
     }
 
     /// <summary>
