@@ -223,6 +223,9 @@ public partial class MidiRepository : UserControl
         DownloadProgressBar.Value = 0;
         DownloadFile($"{midiRepoUrl}/{selectedSong.Url}", $"({selectedSong.Author}) {selectedSong.Title}");
     }
+    /// <summary>
+    /// Filter the midi listview based on SongSearchTextBox
+    /// </summary>
     private void SearchSong()
     {
         if (fullListSong.Count == 0)
@@ -243,11 +246,18 @@ public partial class MidiRepository : UserControl
         MidiRepoContainer.ItemsSource = filteredList;
         RefreshCountTextBox();
     }
-
+    /// <summary>
+    /// Filter song when textbox value changed
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void SongSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         SearchSong();
     }
+    /// <summary>
+    /// Refresh result count textblock
+    /// </summary>
     private void RefreshCountTextBox()
     {
         ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
