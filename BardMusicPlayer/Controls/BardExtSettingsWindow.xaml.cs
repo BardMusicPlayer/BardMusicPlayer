@@ -86,7 +86,7 @@ public sealed partial class BardExtSettingsWindow
 
         if (_performer?.SongName != null)
         {
-            var songName = $"{SongTitleChatPrefix.Text} {_performer.SongName} {SongTitleChatPrefix.Text}";
+            var songName = $"{SongTitleChatPrefix.Text} {_performer.SongName.Replace('_', ' ')} {SongTitleChatPrefix.Text}";
             _performer.game.SendText(chanType, songName);
         }
     }
