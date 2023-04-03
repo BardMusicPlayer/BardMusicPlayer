@@ -1,4 +1,5 @@
 ﻿using BardMusicPlayer.Coffer;
+using BardMusicPlayer.Functions;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
@@ -184,9 +185,18 @@ public partial class MidiRepository : UserControl
         string finalFilePath = $"{downloadsPath}/{fileName}.mid";
 
         File.Move(tempFilePath, finalFilePath, true);
-        DownloadButton.IsEnabled = true;
+        DownloadPanel.IsEnabled          = true;
         DownloadProgressLabel.Visibility = Visibility.Visible;
-        isDownloading = false;
+        isDownloading                    = false;
+
+        // Add to selected playlist
+        bool addToPlaylist = AddToPlaylistCheckBox.IsChecked ?? false;
+
+        if (addToPlaylist && PlaylistDropdown.SelectedIndex != -1)
+        {
+            var playlist = BmpCoffer.Instance.GetPlaylist(PlaylistDropdown.SelectedItem as string);
+            PlaylistFunctions.AddFileToPlaylist(finalFilePath, playlist);
+        }
     }
 
     /// <summary>
@@ -227,11 +237,21 @@ public partial class MidiRepository : UserControl
         if (selectedSong == null)
             return;
 
-        DownloadButton.IsEnabled = false;
+        DownloadPanel.IsEnabled = false;
         DownloadProgressBar.Visibility = Visibility.Visible;
         DownloadProgressBar.Value = 0;
         DownloadFile($"{midiRepoUrl}/{selectedSong.Url}", $"({selectedSong.Author}) {selectedSong.Title}");
     }
+   
+    /// <summary>
+    /// Refresh result count textblock
+    /// </summary>
+    private void RefreshCountTextBox()
+    {
+        ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
+    }
+
+    #region Search Functions
     /// <summary>
     /// Filter the midi listview based on SongSearchTextBox
     /// </summary>
@@ -264,13 +284,9 @@ public partial class MidiRepository : UserControl
     {
         SearchSong();
     }
-    /// <summary>
-    /// Refresh result count textblock
-    /// </summary>
-    private void RefreshCountTextBox()
-    {
-        ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
-    }
+    #endregion
+
+    #region Import To Playlist Functions
     private void RefreshPlaylist_Click(object sender, RoutedEventArgs e)
     {
         RefreshPlaylistSelector();
@@ -293,4 +309,5 @@ public partial class MidiRepository : UserControl
         PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
         RefreshPlaylistButton.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
     }
+    #endregion
 }
