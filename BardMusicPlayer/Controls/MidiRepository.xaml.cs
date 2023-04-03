@@ -1,6 +1,7 @@
 ﻿using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -21,7 +22,9 @@ public partial class MidiRepository : UserControl
     private const string commentNodeXpath = ".//span[contains(@class, 'r4')]";
     private readonly HttpClient httpClient;
     private readonly string midiRepoUrl = "https://songs.bardmusicplayer.com";
-    private List<Song> listSong = new List<Song>();
+    private List<Song> fullListSong = new List<Song>();
+    private List<Song> previewListSong = new List<Song>();
+    private Song selectedSong;
     public MidiRepository()
     {
         InitializeComponent();
@@ -56,7 +59,8 @@ public partial class MidiRepository : UserControl
     /// <param name="html"></param>
     private void RefreshSongList(string html)
     {
-        listSong.Clear();
+        fullListSong.Clear();
+        previewListSong.Clear();
         HtmlDocument htmlDoc = new HtmlDocument();
         htmlDoc.LoadHtml(html);
 
@@ -70,7 +74,7 @@ public partial class MidiRepository : UserControl
 
             if (titleNode != null && authorNode != null && commentNode != null)
             {
-                listSong.Add(new Song
+                fullListSong.Add(new Song
                 {
                     Title = titleNode.GetAttributeValue("title", ""),
                     Author = authorNode.InnerText,
@@ -94,7 +98,9 @@ public partial class MidiRepository : UserControl
         var songData = await FetchSongData();
         
         RefreshSongList(songData);
-        MidiRepoContainer.ItemsSource = listSong.Select(song => song.Title).ToList();
+        previewListSong = fullListSong;
+        MidiRepoContainer.ItemsSource = previewListSong.Select(song => song.Title).ToList();
+        RefreshCountTextBox();
 
         BtnGetSongList.IsEnabled = true;
         BtnGetSongList.Content = "Refresh";
@@ -108,10 +114,13 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private void MidiRepoContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (MidiRepoContainer.SelectedIndex == -1)
+            return;
+
         DownloadPanel.Visibility = Visibility.Visible;
-        Song song = listSong[MidiRepoContainer.SelectedIndex];
-        SongTitle.Text = $"({song.Author}) {song.Title}";
-        SongComment.Text = song.Comment;
+        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
+        SongTitle.Text = $"({selectedSong.Author}) {selectedSong.Title}";
+        SongComment.Text = selectedSong.Comment;
     }
 
     /// <summary>
@@ -191,6 +200,7 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private void MidiRepoContainer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
         DownloadSelectedMidi();
     }
 
@@ -204,10 +214,38 @@ public partial class MidiRepository : UserControl
             MessageBox.Show("The downloads directory is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
-        Song selectedSong = listSong[MidiRepoContainer.SelectedIndex];
         DownloadButton.IsEnabled = false;
         DownloadProgressBar.Visibility = Visibility.Visible;
         DownloadProgressBar.Value = 0;
         DownloadFile($"{midiRepoUrl}/{selectedSong.Url}", $"({selectedSong.Author}) {selectedSong.Title}");
+    }
+    private void SearchSong()
+    {
+        if (fullListSong.Count == 0)
+            return;
+
+        var filteredList = new List<String>();
+        if (SongSearchTextBox.Text != "")
+        {
+            previewListSong = previewListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
+            filteredList = previewListSong.Select(s => s.Title).ToList();
+        }
+        else
+        {
+            previewListSong = fullListSong;
+            filteredList = previewListSong.Select(s => s.Title).ToList();
+        }
+
+        MidiRepoContainer.ItemsSource = filteredList;
+        RefreshCountTextBox();
+    }
+
+    private void SongSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        SearchSong();
+    }
+    private void RefreshCountTextBox()
+    {
+        ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
     }
 }
