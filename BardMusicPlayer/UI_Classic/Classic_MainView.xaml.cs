@@ -5,6 +5,7 @@ using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Siren;
 using BardMusicPlayer.Transmogrify.Song;
 
@@ -131,11 +132,17 @@ public partial class ClassicMainView
         if (PlaybackFunctions.PlaybackState != PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
             Play_Button_State();
 
-        _maxTracks = e.MaxTracks;
-        if (NumValue <= _maxTracks)
+        //_maxTracks = e.MaxTracks;
+        if (NumValue < _maxTracks)
             return;
         NumValue = _maxTracks;
 
+        BmpPigeonhole.Instance.PlayAllTracks = false;
+        AllTracksButton.ClearValue(OpacityProperty);
+        TrackCmdDown.IsEnabled = true;
+        TrackCmdUp.IsEnabled   = true;
+        TrackTxtNum.IsEnabled  = true;
+        _allTracks             = false;
         BmpMaestro.Instance.SetTracknumberOnHost(_maxTracks);
     }
 
