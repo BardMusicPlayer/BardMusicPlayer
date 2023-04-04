@@ -40,6 +40,7 @@ public partial class ClassicMainView
         SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
+        BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
 
         Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();

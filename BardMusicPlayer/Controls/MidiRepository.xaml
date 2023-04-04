@@ -67,7 +67,6 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="250"/>
-                    <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Add to playlist" Margin="-4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                 <CheckBox Grid.Column="1" x:Name="AddToPlaylistCheckBox" VerticalAlignment="Center" Checked="AddToPlaylistCheckBox_Checked" Unchecked="AddToPlaylistCheckBox_Unchecked" />
@@ -78,7 +77,6 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Grid.Column="3" x:Name="RefreshPlaylistButton" Visibility="Hidden" Height="23" Content="Refresh" Margin="5,0,0,0" VerticalAlignment="Center" Click="RefreshPlaylist_Click"/>
             </Grid>
             <Grid Grid.Row="5" >
                 <Grid.ColumnDefinitions>
