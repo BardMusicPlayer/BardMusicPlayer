@@ -114,12 +114,7 @@ public partial class ClassicMainView
 
             BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
 
-            var icon = "↩".PadRight(2);
-            var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
-            var name = _currentPlaylist?.GetName();
-            var headerText = $"{icon} {timeString} {name}";
-
-            PlaylistHeader.Header = headerText;
+            UpdatePlaylistHeader();
         }
     }
 
@@ -138,12 +133,7 @@ public partial class ClassicMainView
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
-        var icon = "↩".PadRight(2);
-        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
-        var name = _currentPlaylist.GetName();
-        var headerText = $"{icon} {timeString} {name}";
-
-        PlaylistHeader.Header = headerText;
+        UpdatePlaylistHeader();
     }
 
     /// <summary>
@@ -161,12 +151,7 @@ public partial class ClassicMainView
 
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
-        var icon = "↩".PadRight(2);
-        var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
-        var name = _currentPlaylist.GetName();
-        var headerText = $"{icon} {timeString} {name}";
-
-        PlaylistHeader.Header = headerText;
+        UpdatePlaylistHeader();
     }
 
     /// <summary>
@@ -191,6 +176,14 @@ public partial class ClassicMainView
         BmpCoffer.Instance.SavePlaylist(_currentPlaylist);
         PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
+        UpdatePlaylistHeader();
+    }
+
+    private void UpdatePlaylistHeader()
+    {
+        if (_currentPlaylist == null) 
+            return;
+
         var icon = "↩".PadRight(2);
         var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
         var name = _currentPlaylist.GetName();
@@ -198,7 +191,6 @@ public partial class ClassicMainView
 
         PlaylistHeader.Header = headerText;
     }
-
     /// <summary>
     /// Delete a playlist
     /// </summary>
@@ -270,12 +262,7 @@ public partial class ClassicMainView
             _showingPlaylists             = false;
             PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
-            var icon = "↩".PadRight(2);
-            var timeString = new DateTime(PlaylistFunctions.GetTotalTime(_currentPlaylist).Ticks).ToString("HH:mm:ss -").PadRight(4);
-            var name = _currentPlaylist.GetName();
-            var headerText = $"{icon} {timeString} {name}";
-
-            PlaylistHeader.Header = headerText;
+            UpdatePlaylistHeader();
             return;
         }
 
@@ -285,6 +272,18 @@ public partial class ClassicMainView
         DirectLoaded           = false;
     }
 
+    /// <summary>
+    /// Refresh song list whenever playlist updated, <see cref="BmpCoffer.OnPlaylistDataUpdated"/>
+    /// </summary>
+    private void OnPlaylistDataUpdated()
+    {
+        if (_showingPlaylists || _currentPlaylist == null)
+            return;
+
+        _currentPlaylist = BmpCoffer.Instance.GetPlaylist(_currentPlaylist.GetName());
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
+        UpdatePlaylistHeader();
+    }
     /// <summary>
     /// Opens the edit window
     /// </summary>

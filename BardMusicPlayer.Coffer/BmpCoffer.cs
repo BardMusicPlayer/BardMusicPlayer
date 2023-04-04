@@ -21,8 +21,7 @@ public sealed class BmpCoffer : IDisposable
 {
     private static BmpCoffer _instance;
 
-    public delegate void PlayListEventHandler();
-    public event PlayListEventHandler OnPlaylistDataUpdated;
+    public event Action OnPlaylistDataUpdated;
 
     /// <summary>
     /// Initializes the default coffer instance
@@ -356,12 +355,12 @@ public sealed class BmpCoffer : IDisposable
             {
                 dbList.Id = ObjectId.NewObjectId();
                 playlists.Insert(dbList);
-                OnPlaylistDataUpdated?.Invoke();
             }
             else
             {
                 playlists.Update(dbList);
             }
+            OnPlaylistDataUpdated?.Invoke();
         }
         catch (LiteException e)
         {

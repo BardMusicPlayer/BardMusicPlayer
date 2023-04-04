@@ -17,25 +17,29 @@ namespace BardMusicPlayer.Controls;
 /// </summary>
 public partial class MidiRepository : UserControl
 {
-    private const string songNodeXpath = "//div[contains(@class, 'midi-entry')]";
-    private const string titleNodeXpath = ".//a[contains(@class, 'mtitle')]";
-    private const string authorNodeXpath = ".//span[contains(@class, 'mauthor')]";
-    private const string commentNodeXpath = ".//span[contains(@class, 'r4')]";
+    private const string midiRepoUrl        = "https://songs.bardmusicplayer.com";
+
+    private const string songNodeXpath      = "//div[contains(@class, 'midi-entry')]";
+    private const string titleNodeXpath     = ".//a[contains(@class, 'mtitle')]";
+    private const string authorNodeXpath    = ".//span[contains(@class, 'mauthor')]";
+    private const string commentNodeXpath   = ".//span[contains(@class, 'r4')]";
+    
+    private List<Song> fullListSong         = new List<Song>();
+    private List<Song> previewListSong      = new List<Song>();
+    
     private readonly HttpClient httpClient;
-    private readonly string midiRepoUrl = "https://songs.bardmusicplayer.com";
-    private List<Song> fullListSong = new List<Song>();
-    private List<Song> previewListSong = new List<Song>();
     private Song? selectedSong;
     private bool isDownloading;
+
     public MidiRepository()
     {
         InitializeComponent();
-        httpClient = new HttpClient();
-        LoadingProgressBar.Visibility = Visibility.Hidden;
-        DownloadPanel.Visibility = Visibility.Hidden;
-        DownloadPath.Text = BmpPigeonhole.Instance.MidiDownloadPath;
-        DownloadProgressLabel.Visibility = Visibility.Hidden;
-        DownloadProgressBar.Visibility = Visibility.Hidden;
+        httpClient                          = new HttpClient();
+        LoadingProgressBar.Visibility       = Visibility.Hidden;
+        DownloadPanel.Visibility            = Visibility.Hidden;
+        DownloadPath.Text                   = BmpPigeonhole.Instance.MidiDownloadPath;
+        DownloadProgressLabel.Visibility    = Visibility.Hidden;
+        DownloadProgressBar.Visibility      = Visibility.Hidden;
         RefreshPlaylistSelector();
         BmpCoffer.Instance.OnPlaylistDataUpdated += RefreshPlaylistSelector;
     }
@@ -194,8 +198,7 @@ public partial class MidiRepository : UserControl
 
         if (addToPlaylist && PlaylistDropdown.SelectedIndex != -1)
         {
-            var playlist = BmpCoffer.Instance.GetPlaylist(PlaylistDropdown.SelectedItem as string);
-            PlaylistFunctions.AddFileToPlaylist(finalFilePath, playlist);
+            AddSongToPlaylist(finalFilePath);
         }
     }
 
@@ -332,6 +335,15 @@ public partial class MidiRepository : UserControl
     {
         bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
         PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
+    }
+
+    /// <summary>
+    /// Add song to playlist by song filepath
+    /// </summary>
+    private void AddSongToPlaylist(string filePath)
+    {
+        var playlist = BmpCoffer.Instance.GetPlaylist(PlaylistDropdown.SelectedItem as string);
+        PlaylistFunctions.AddFileToPlaylist(filePath, playlist);
     }
     #endregion
 }
