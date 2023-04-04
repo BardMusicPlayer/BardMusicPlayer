@@ -44,7 +44,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci204" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci218" />
   </ItemGroup>
 
   <ItemGroup>
