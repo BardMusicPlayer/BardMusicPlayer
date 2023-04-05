@@ -136,17 +136,20 @@ public partial class ClassicMainView
         }
 
         _maxTracks = e.MaxTracks;
-        if (NumValue < _maxTracks)
+        if (NumValue > _maxTracks)
             return;
-        NumValue = _maxTracks;
+        //NumValue = _maxTracks;
 
-        BmpPigeonhole.Instance.PlayAllTracks = false;
-        AllTracksButton.ClearValue(OpacityProperty);
-        TrackCmdDown.IsEnabled = true;
-        TrackCmdUp.IsEnabled   = true;
-        TrackTxtNum.IsEnabled  = true;
-        _allTracks             = false;
-        BmpMaestro.Instance.SetTracknumberOnHost(_maxTracks);
+        if (BmpPigeonhole.Instance.PlayAllTracks && !BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
+        {
+            BmpPigeonhole.Instance.PlayAllTracks = false;
+            AllTracksButton.ClearValue(OpacityProperty);
+            TrackCmdDown.IsEnabled = true;
+            TrackCmdUp.IsEnabled   = true;
+            TrackTxtNum.IsEnabled  = true;
+            _allTracks             = false;
+            //BmpMaestro.Instance.SetTracknumberOnHost(_maxTracks);
+        }
     }
 
     private void PlaybackStarted()
@@ -213,7 +216,7 @@ public partial class ClassicMainView
         set
         {
             _numValue        = value;
-            TrackTxtNum.Text = "t" + value;
+            TrackTxtNum.Text = "T" + value;
 
             //update heatmap
             KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
@@ -222,7 +225,7 @@ public partial class ClassicMainView
     }
     private void track_cmdUp_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue == _maxTracks)
+        if (NumValue >= _maxTracks)
             return;
         NumValue++;
         BmpMaestro.Instance.SetTracknumberOnHost(NumValue);
@@ -230,7 +233,7 @@ public partial class ClassicMainView
 
     private void track_cmdDown_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue == 1)
+        if (NumValue <= 1)
             return;
         NumValue--;
         BmpMaestro.Instance.SetTracknumberOnHost(NumValue);
@@ -241,11 +244,11 @@ public partial class ClassicMainView
         if (TrackTxtNum == null)
             return;
 
-        if (int.TryParse(TrackTxtNum.Text.Replace("t", ""), out _numValue))
+        if (int.TryParse(TrackTxtNum.Text.Replace("T", ""), out _numValue))
         {
-            if (_numValue < 0 || _numValue > _maxTracks)
+            if (_numValue <= 1 || _numValue > _maxTracks)
                 return;
-            TrackTxtNum.Text = "t" + _numValue;
+            TrackTxtNum.Text = "T" + _numValue;
             BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
         }
     }

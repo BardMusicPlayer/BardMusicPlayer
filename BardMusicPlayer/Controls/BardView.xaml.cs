@@ -167,6 +167,10 @@ public partial class BardView
     {
         var game = (sender as TrackNumericUpDown)?.DataContext as Performer;
         BmpMaestro.Instance.SetTracknumber(game, s);
+        if (BmpPigeonhole.Instance.AutoEquipBards)
+        {
+            _ = game?.ReplaceInstrument();
+        }
     }
 
     /* Octave UP/Down */
@@ -193,9 +197,20 @@ public partial class BardView
     private void PerformerEnabledChecker_Checked(object sender, RoutedEventArgs e)
     {
         var ctl = sender as CheckBox;
-        if ((sender as CheckBox)?.DataContext is Performer game)
-            if (ctl != null)
-                game.PerformerEnabled = ctl.IsChecked ?? false;
+        if (ctl?.DataContext is Performer game)
+        {
+            var isEnabled = ctl.IsChecked ?? false;
+            switch (isEnabled)
+            {
+                case true when BmpPigeonhole.Instance.AutoEquipBards:
+                    _ = game.ReplaceInstrument();
+                    break;
+                case false when BmpPigeonhole.Instance.AutoEquipBards:
+                    game.CloseInstrument();
+                    break;
+            }
+            game.PerformerEnabled = ctl.IsChecked ?? false;
+        }
     }
 
     private void Bard_MouseClick(object sender, MouseButtonEventArgs e)

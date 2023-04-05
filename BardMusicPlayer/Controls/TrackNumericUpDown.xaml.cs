@@ -58,14 +58,14 @@ public sealed partial class TrackNumericUpDown
     {
         if (PlaybackFunctions.CurrentSong == null)
             return;
-        if (NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
+        if (NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
             return;
         NumValue++;
     }
 
     private void NumDown_Click(object sender, RoutedEventArgs e)
     {
-        if (NumValue - 1 < 0)
+        if (NumValue <= 1)
             return;
         NumValue--;
     }
@@ -94,7 +94,7 @@ public sealed partial class TrackNumericUpDown
             if (PlaybackFunctions.CurrentSong == null)
                 return;
 
-            if (val < 0 || NumValue + 1 > PlaybackFunctions.CurrentSong.TrackContainers.Count)
+            if (val <= 0 || NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
             {
                 NumValue = val;
                 return;

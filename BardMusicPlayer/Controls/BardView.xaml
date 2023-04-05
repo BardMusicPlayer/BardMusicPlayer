@@ -203,13 +203,14 @@
                         <TextBlock Grid.Column="11" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
                         <CheckBox Grid.Column="11" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
-                                  Checked="HostChecker_Checked" IsChecked="{Binding HostProcess, Mode=TwoWay}"
+                                  Unchecked="HostChecker_Checked" Checked="HostChecker_Checked" 
+                                  IsChecked="{Binding HostProcess, Mode=TwoWay}"
                                   Padding="0" Width="Auto" />
 
                         <TextBlock Grid.Column="13" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
                         <CheckBox Grid.Column="13" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
-                                  Checked="PerformerEnabledChecker_Checked"
+                                  Unchecked="PerformerEnabledChecker_Checked" Checked="PerformerEnabledChecker_Checked"
                                   IsChecked="{Binding PerformerEnabled, Mode=TwoWay}"
                                   Padding="0" Width="Auto" />
                     </Grid>

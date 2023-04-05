@@ -567,8 +567,10 @@ public class Orchestrator : IDisposable
             {
                 Parallel.ForEach(_performers, perf =>
                 {
-                    if (!perf.Value.HostProcess)
-                        _ = perf.Value.ReplaceInstrument();
+                    _ = perf.Value.ReplaceInstrument();
+
+                    if (perf.Value.PerformerEnabled.Equals(false))
+                        perf.Value.CloseInstrument();
                 });
             }
         }
@@ -577,8 +579,6 @@ public class Orchestrator : IDisposable
         var perf = _performers.FirstOrDefault(perf => perf.Value.HostProcess).Value;
         if (perf != null)
         {
-            if (BmpPigeonhole.Instance.AutoEquipBards)
-                _ = perf.ReplaceInstrument().Result;
             perf.OldSequencer.PlayEnded += Sequencer_PlayEnded;
         }
 
