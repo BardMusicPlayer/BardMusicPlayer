@@ -130,9 +130,12 @@ public partial class ClassicMainView
         KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
 
         if (PlaybackFunctions.PlaybackState != PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
+        {
+            PlaybackFunctions.StopSong();
             Play_Button_State();
+        }
 
-        //_maxTracks = e.MaxTracks;
+        _maxTracks = e.MaxTracks;
         if (NumValue < _maxTracks)
             return;
         NumValue = _maxTracks;

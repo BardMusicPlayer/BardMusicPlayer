@@ -228,6 +228,16 @@ public partial class BardView
     }
 
     /// <summary>
+    /// Helper class
+    /// </summary>
+    public class PerformerSettingData
+    {
+        public string Name { get; init; } = "";
+        public int Track { get; init; }
+        public long AffinityMask { get; init; }
+    }
+
+    /// <summary>
     /// load the performer config file
     /// </summary>
     /// <param name="sender"></param>
@@ -349,14 +359,4 @@ public class FontSizeConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
-}
-
-/// <summary>
-/// Helper class
-/// </summary>
-public class PerformerSettingData
-{
-    public string Name { get; init; } = "";
-    public int Track { get; init; }
-    public long AffinityMask { get; init; }
 }
