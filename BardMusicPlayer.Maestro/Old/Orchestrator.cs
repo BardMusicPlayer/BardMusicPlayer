@@ -36,7 +36,6 @@ public class Orchestrator : IDisposable
 {
     private OldSequencer _sequencer { get; set; }
     private CancellationTokenSource _updaterTokenSource;
-    private bool LocalOrchestraInitialized { get; set; }
     private KeyValuePair<TitleParsingHelper, Performer> _song_Title_Parsing_Performer { get; set; }
 
     public int HostPid { get; set; }
@@ -237,8 +236,6 @@ public class Orchestrator : IDisposable
     /// <param name="song"></param>
     public void LoadBMPSong(BmpSong song)
     {
-
-        LocalOrchestraInitialized = true;
         _sequencer.Load(song);
 
         //Parse the song name if any bard should
@@ -540,29 +537,13 @@ public class Orchestrator : IDisposable
     {
         if (_updaterTokenSource is { IsCancellationRequested: false }) _updaterTokenSource.Cancel();
 
-        //if we have a local orchestra, spread the tracknumbers across the performers
-        if (LocalOrchestraInitialized)
+        // Spread the track numbers across the performers
         {
             var perfc = _performers.FirstOrDefault(perf => perf.Value.HostProcess).Value;
             if (perfc != null)
             {
-                //Keep track settings for the performer
+                // Renumber the performers if needed
                 if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
-                {
-                    var result = _performers.Max(p => p.Value.TrackNumber);
-                    if (result != _sequencer.MaxTrack)
-                        LocalOrchestraInitialized = false;
-                }
-                else //reorder the performer
-                {
-                    foreach (var p in _performers.Where(p => p.Value.TrackNumber > _sequencer.MaxTrack))
-                    {
-                        p.Value.PerformerEnabled = false;
-                    }
-                }
-
-                //Renumber the performers if needed
-                if (!LocalOrchestraInitialized)
                 {
                     var index = 1;
                     foreach (var p in _performers)
@@ -578,11 +559,10 @@ public class Orchestrator : IDisposable
                             index++;
                         }
                     }
-                    LocalOrchestraInitialized = true;
                 }
             }
 
-            //if we autoequip the orchestra, just do it
+            // If we auto-equip the orchestra, just do it
             if (BmpPigeonhole.Instance.AutoEquipBards)
             {
                 Parallel.ForEach(_performers, perf =>
@@ -593,7 +573,7 @@ public class Orchestrator : IDisposable
             }
         }
 
-        //Look up for our host bard
+        // Look up for our host bard
         var perf = _performers.FirstOrDefault(perf => perf.Value.HostProcess).Value;
         if (perf != null)
         {
@@ -643,10 +623,6 @@ public class Orchestrator : IDisposable
     /// <param name="seerEvent"></param>
     private void Instance_EnsembleRequested(EnsembleRequested seerEvent)
     {
-        //If we don't have a local orchestra enabled get outta here
-        if (!LocalOrchestraInitialized)
-            return;
-
         _ = EnsembleAcceptAsync(seerEvent);
     }
 
