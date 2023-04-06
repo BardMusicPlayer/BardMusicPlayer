@@ -216,7 +216,7 @@ public partial class ClassicMainView
         set
         {
             _numValue        = value;
-            TrackTxtNum.Text = "T" + value;
+            TrackTxtNum.Text = "t" + value;
 
             //update heatmap
             KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
@@ -244,11 +244,11 @@ public partial class ClassicMainView
         if (TrackTxtNum == null)
             return;
 
-        if (int.TryParse(TrackTxtNum.Text.Replace("T", ""), out _numValue))
+        if (int.TryParse(TrackTxtNum.Text.Replace("t", ""), out _numValue))
         {
             if (_numValue <= 1 || _numValue > _maxTracks)
                 return;
-            TrackTxtNum.Text = "T" + _numValue;
+            TrackTxtNum.Text = "t" + _numValue;
             BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
         }
     }

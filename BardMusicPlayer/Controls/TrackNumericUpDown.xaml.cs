@@ -49,7 +49,7 @@ public sealed partial class TrackNumericUpDown
         set
         {
             _numValue = value;
-            Text.Text = "T" + NumValue;
+            Text.Text = "t" + NumValue;
             OnValueChanged?.Invoke(this, _numValue);
         }
     }
