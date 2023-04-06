@@ -102,7 +102,7 @@ public partial class ClassicMainView
     /// <param name="e"></param>
     private void Playlist_New_Button_Click(object? sender, RoutedEventArgs? e)
     {
-        var inputBox = new TextInputWindow("Playlist Name");
+        var inputBox = new TextInputWindow("Playlist Name", windowTitle: "Create new playlist");
         if (inputBox.ShowDialog() == true)
         {
             if (inputBox.ResponseText.Length < 1)
