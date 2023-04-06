@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci218" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
   </ItemGroup>
 
   <ItemGroup>

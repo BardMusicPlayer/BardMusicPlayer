@@ -65,6 +65,26 @@ public static class PlaylistFunctions
     }
 
     /// <summary>
+    /// Overload method : Add single file to playlist with using filepath instead of dialog
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="currentPlaylist"></param>
+    /// <returns></returns>
+    public static bool AddFileToPlaylist(string filePath, IPlaylist? currentPlaylist)
+    {
+        var song = BmpSong.OpenFile(filePath).Result;
+
+        // Check if the song title is not empty or null
+        if (currentPlaylist != null && !string.IsNullOrEmpty(song.Title) && currentPlaylist.SingleOrDefault(x => x.FilePath.Equals(song.FilePath)) == null)
+        {
+            currentPlaylist.Add(song);
+            BmpCoffer.Instance.SaveSong(song);
+        }
+
+        BmpCoffer.Instance.SavePlaylist(currentPlaylist);
+        return true;
+    }
+    /// <summary>
     /// Add a folder + subfolders to the playlist
     /// </summary>
     /// <param name="currentPlaylist"></param>

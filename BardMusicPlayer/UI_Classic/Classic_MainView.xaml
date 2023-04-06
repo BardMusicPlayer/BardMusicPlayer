@@ -410,6 +410,11 @@
                             <controls:SongBrowser x:Name="SongBrowser" />
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Midi Repo" Width="Auto" Height="35" Padding="0">
+                        <Grid Background="{DynamicResource MaterialDesignBackground}">
+                            <controls:MidiRepository x:Name="MidiRepository" />
+                        </Grid>
+                    </TabItem>
                 </TabControl>
             </Grid>
 

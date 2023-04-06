@@ -44,6 +44,7 @@ public partial class ClassicMainView
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
         SongBrowser.OnAddSongFromBrowser           += Instance_SongBrowserAddSongToPlaylist;
         SongBrowser.OnLoadSongFromBrowserToPreview += Instance_SongBrowserLoadSongToPreview;
+		BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
 
         Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();

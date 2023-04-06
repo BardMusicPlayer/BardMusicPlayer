@@ -131,4 +131,9 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     /// Enable Dark Mode theme.
     /// </summary>
     public virtual bool DarkStyle { get; set; }
+
+    /// <summary>
+    /// Midi download path
+    /// </summary>
+    public virtual string MidiDownloadPath { get; set; } = "";
 }
