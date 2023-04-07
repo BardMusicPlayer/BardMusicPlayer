@@ -13,7 +13,7 @@ public partial class TextInputWindow
         InfoText.Text = infoText;
         ResponseTextBox.Focus();
         ResponseTextBox.MaxLength = maxInputLength;
-        Title = windowTitle;
+        Title                     = windowTitle;
     }
 
     public string ResponseText

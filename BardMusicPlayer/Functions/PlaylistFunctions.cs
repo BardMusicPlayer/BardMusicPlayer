@@ -70,7 +70,7 @@ public static class PlaylistFunctions
     /// <param name="filePath"></param>
     /// <param name="currentPlaylist"></param>
     /// <returns></returns>
-    public static bool AddFileToPlaylist(string filePath, IPlaylist? currentPlaylist)
+    public static void AddFileToPlaylist(string filePath, IPlaylist? currentPlaylist)
     {
         var song = BmpSong.OpenFile(filePath).Result;
 
@@ -82,7 +82,6 @@ public static class PlaylistFunctions
         }
 
         BmpCoffer.Instance.SavePlaylist(currentPlaylist);
-        return true;
     }
     /// <summary>
     /// Add a folder + subfolders to the playlist

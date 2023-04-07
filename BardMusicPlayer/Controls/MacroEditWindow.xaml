@@ -24,12 +24,15 @@
 
         <Label Grid.Row="0" Grid.Column="1" Content="Macro Name:" />
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="MacroName" HorizontalAlignment="Stretch"
+                 Background="{DynamicResource MaterialDesignBackground}"
+                 Foreground="{DynamicResource MaterialDesignBody}"
                  TextChanged="MacroName_TextChanged" Padding="5" />
 
         <Label Grid.Row="2" Grid.Column="1" Content="Macro Path:" />
 
         <Grid Grid.Row="3" Grid.Column="1">
-            <Label x:Name="MacroFileName" Background="{DynamicResource MaterialDesignBackground}" Padding="5" />
+            <Label x:Name="MacroFileName" Background="{DynamicResource MaterialDesignBackground}"
+                   Foreground="{DynamicResource MaterialDesignBody}" Padding="5" />
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
             <Grid.ColumnDefinitions>

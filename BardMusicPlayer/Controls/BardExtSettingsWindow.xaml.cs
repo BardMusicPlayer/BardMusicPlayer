@@ -1,9 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Performance;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Structs;
 
 namespace BardMusicPlayer.Controls;
@@ -147,8 +149,9 @@ public sealed partial class BardExtSettingsWindow
                         CpuDisplay.RowDefinitions.Add(new RowDefinition());
                     var uc = new CheckBox
                     {
-                        Name    = "CPU" + idx,
-                        Content = "CPU" + idx
+                        Name       = "CPU" + idx,
+                        Content    = "CPU" + idx,
+                        Foreground = !BmpPigeonhole.Instance.DarkStyle ? Brushes.Black : Brushes.White
                     };
                     if ((affinityMask & (1 << idx-1)) > 0) //-1 since we count at 1
                         uc.IsChecked = true;

@@ -22,9 +22,12 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="InfoText" Text="Info" Margin="0,20,0,0" Foreground="{DynamicResource MaterialDesignBody}" />
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" x:Name="ResponseTextBox" Padding="5"
-                 Background="{DynamicResource MaterialDesignBackground}" Foreground="{DynamicResource MaterialDesignBody}" />
+        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="InfoText" Text="Info" Margin="0,20,0,0"
+                   Foreground="{DynamicResource MaterialDesignBody}" />
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" x:Name="ResponseTextBox"
+                 Padding="5"
+                 Background="{DynamicResource MaterialDesignBackground}"
+                 Foreground="{DynamicResource MaterialDesignBody}" />
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

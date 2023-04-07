@@ -57,20 +57,25 @@
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post song title:" />
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="SongTitleChatType" HorizontalAlignment="Left"
                                   VerticalAlignment="Stretch" Width="80" Padding="5"
-                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged">
+                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged"
+                                  Background="{DynamicResource MaterialDesignBackground}"
+                                  Foreground="{DynamicResource MaterialDesignBody}">
                             <ComboBoxItem>Say</ComboBoxItem>
                             <ComboBoxItem>Yell</ComboBoxItem>
                             <ComboBoxItem>Party</ComboBoxItem>
                         </ComboBox>
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="SongTitleChatPrefix" Text="♪" Width="30"
-                                 Padding="5"
+                                 Padding="5" Background="{DynamicResource MaterialDesignBackground}"
+                                 Foreground="{DynamicResource MaterialDesignBody}"
                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" />
                         <Button Grid.Row="1" Grid.Column="4" Content="Send Title" Click="PostSongTitle_Click" />
                         <Label Grid.Row="1" Grid.Column="6" Content="AutoPost" HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="SongTitlePostType" Text="AutoPost via"
                                   HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="45" Padding="5"
-                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged">
+                                  SelectionChanged="SongTitle_Post_Type_SelectionChanged"
+                                  Background="{DynamicResource MaterialDesignBackground}"
+                                  Foreground="{DynamicResource MaterialDesignBody}">
                             <ComboBoxItem>Off</ComboBoxItem>
                             <ComboBoxItem>On</ComboBoxItem>
                         </ComboBox>
@@ -100,7 +105,9 @@
                         <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post a message in chat:" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Chat Type:" VerticalAlignment="Center" />
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="ChatType" HorizontalAlignment="Left"
-                                  VerticalAlignment="Top" Width="120" Padding="5">
+                                  VerticalAlignment="Top" Width="120" Padding="5"
+                                  Background="{DynamicResource MaterialDesignBackground}"
+                                  Foreground="{DynamicResource MaterialDesignBody}">
                             <ComboBoxItem>Say</ComboBoxItem>
                             <ComboBoxItem>Yell</ComboBoxItem>
                             <ComboBoxItem>Shout</ComboBoxItem>
@@ -110,7 +117,9 @@
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Text Message:" />
                         <TextBox Grid.Row="2" Grid.Column="1" x:Name="ChatInputText" KeyDown="ChatInputText_KeyDown"
-                                 Height="Auto" Width="240" Padding="5" />
+                                 Height="Auto" Width="240" Padding="5"
+                                 Background="{DynamicResource MaterialDesignBackground}"
+                                 Foreground="{DynamicResource MaterialDesignBody}" />
                         <Separator Grid.Row="4" Grid.ColumnSpan="8" Grid.Column="0" />
                     </Grid>
 
@@ -122,6 +131,7 @@
                         <Label Grid.Column="0" Content="Lyrics Track Number:" />
                         <controls:NumericUpDown Grid.Column="1" x:Name="LyricsTrackNr"
                                                 Background="{DynamicResource MaterialDesignBackground}"
+                                                Foreground="{DynamicResource MaterialDesignBody}"
                                                 Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                                 FontSize="8"
                                                 PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"

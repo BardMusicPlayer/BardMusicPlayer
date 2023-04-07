@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="738" d:DesignWidth="910"
+             d:DesignHeight="740" d:DesignWidth="965"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              Width="Auto" Height="Auto" Loaded="Window_Loaded"
@@ -308,7 +308,7 @@
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
                             -->
                             <Label Grid.Row="7" Grid.Column="0" Content="Song functions:" />
-                            <Button Grid.Row="7" Grid.Column="1" Content="Export current song as Midi"
+                            <Button Grid.Row="7" Grid.Column="1" Content="Export current song as MIDI"
                                     Click="ExportAsMidi" Height="Auto" Width="250" />
                         </Grid>
                     </TabItem>
@@ -410,7 +410,7 @@
                             <controls:SongBrowser x:Name="SongBrowser" />
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Midi Repo" Width="Auto" Height="35" Padding="0">
+                    <TabItem Header="Download" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignBackground}">
                             <controls:MidiRepository x:Name="MidiRepository" />
                         </Grid>

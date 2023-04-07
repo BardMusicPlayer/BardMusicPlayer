@@ -9,9 +9,9 @@
              xmlns:local="clr-namespace:BardMusicPlayer.Pigeonhole;assembly=BardMusicPlayer.Pigeonhole"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance }">
-    
+
     <UserControl.Resources>
-        <controls:FontSizeConverter x:Key="FontSizeConverter"/>
+        <controls:FontSizeConverter x:Key="FontSizeConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -203,7 +203,7 @@
                         <TextBlock Grid.Column="11" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
                         <CheckBox Grid.Column="11" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
-                                  Unchecked="HostChecker_Checked" Checked="HostChecker_Checked" 
+                                  Unchecked="HostChecker_Checked" Checked="HostChecker_Checked"
                                   IsChecked="{Binding HostProcess, Mode=TwoWay}"
                                   Padding="0" Width="Auto" />
 

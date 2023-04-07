@@ -1,45 +1,44 @@
-﻿using BardMusicPlayer.Coffer;
+﻿using System.IO;
+using System.Net.Http;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using HtmlAgilityPack;
-using System.IO;
-using System.Net.Http;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace BardMusicPlayer.Controls;
 
 /// <summary>
 /// Web scraper to scrape the song list from https://songs.bardmusicplayer.com and populate in the listview
 /// </summary>
-public partial class MidiRepository : UserControl
+public partial class MidiRepository
 {
-    private const string midiRepoUrl        = "https://songs.bardmusicplayer.com";
+    private const string MidiRepoUrl        = "https://songs.bardmusicplayer.com";
 
-    private const string songNodeXpath      = "//div[contains(@class, 'midi-entry')]";
-    private const string titleNodeXpath     = ".//a[contains(@class, 'mtitle')]";
-    private const string authorNodeXpath    = ".//span[contains(@class, 'mauthor')]";
-    private const string commentNodeXpath   = ".//span[contains(@class, 'r4')]";
+    private const string SongNodeXpath      = "//div[contains(@class, 'midi-entry')]";
+    private const string TitleNodeXpath     = ".//a[contains(@class, 'mtitle')]";
+    private const string AuthorNodeXpath    = ".//span[contains(@class, 'mauthor')]";
+    private const string CommentNodeXpath   = ".//span[contains(@class, 'r4')]";
     
-    private List<Song> fullListSong         = new List<Song>();
-    private List<Song> previewListSong      = new List<Song>();
+    private List<Song> _fullListSong         = new();
+    private List<Song> _previewListSong      = new();
     
-    private readonly HttpClient httpClient;
-    private Song? selectedSong;
-    private bool isDownloading;
+    private readonly HttpClient _httpClient;
+    private Song? _selectedSong;
+    private bool _isDownloading;
 
     public MidiRepository()
     {
         InitializeComponent();
-        httpClient                          = new HttpClient();
-        LoadingProgressBar.Visibility       = Visibility.Hidden;
-        DownloadPanel.Visibility            = Visibility.Hidden;
-        DownloadPath.Text                   = BmpPigeonhole.Instance.MidiDownloadPath;
-        DownloadProgressLabel.Visibility    = Visibility.Hidden;
-        DownloadProgressBar.Visibility      = Visibility.Hidden;
+        _httpClient                      = new HttpClient();
+        LoadingProgressBar.Visibility    = Visibility.Hidden;
+        DownloadPanel.Visibility         = Visibility.Hidden;
+        DownloadPath.Text                = BmpPigeonhole.Instance.MidiDownloadPath;
+        DownloadProgressLabel.Visibility = Visibility.Hidden;
+        DownloadProgressBar.Visibility   = Visibility.Hidden;
         RefreshPlaylistSelector();
         BmpCoffer.Instance.OnPlaylistDataUpdated += RefreshPlaylistSelector;
     }
@@ -57,7 +56,7 @@ public partial class MidiRepository : UserControl
     /// <returns></returns>
     private async Task<string> FetchSongData()
     {
-        var response = await httpClient.GetStringAsync(midiRepoUrl);
+        var response = await _httpClient.GetStringAsync(MidiRepoUrl);
         return response;
     }
 
@@ -67,27 +66,27 @@ public partial class MidiRepository : UserControl
     /// <param name="html"></param>
     private void RefreshSongList(string html)
     {
-        fullListSong.Clear();
-        previewListSong.Clear();
-        HtmlDocument htmlDoc = new HtmlDocument();
+        _fullListSong.Clear();
+        _previewListSong.Clear();
+        var htmlDoc = new HtmlDocument();
         htmlDoc.LoadHtml(html);
 
-        var songNodes = htmlDoc.DocumentNode.SelectNodes(songNodeXpath);
+        var songNodes = htmlDoc.DocumentNode.SelectNodes(SongNodeXpath);
 
         foreach (var songNode in songNodes)
         {
-            var titleNode = songNode.SelectSingleNode(titleNodeXpath);
-            var authorNode = songNode.SelectSingleNode(authorNodeXpath);
-            var commentNode = songNode.SelectSingleNode(commentNodeXpath);
+            var titleNode = songNode.SelectSingleNode(TitleNodeXpath);
+            var authorNode = songNode.SelectSingleNode(AuthorNodeXpath);
+            var commentNode = songNode.SelectSingleNode(CommentNodeXpath);
 
             if (titleNode != null && authorNode != null && commentNode != null)
             {
-                fullListSong.Add(new Song
+                _fullListSong.Add(new Song
                 {
-                    Title = titleNode.GetAttributeValue("title", ""),
-                    Author = authorNode.InnerText,
+                    Title   = titleNode.GetAttributeValue("title", ""),
+                    Author  = authorNode.InnerText,
                     Comment = commentNode.InnerText,
-                    Url = titleNode.GetAttributeValue("href", ""),
+                    Url     = titleNode.GetAttributeValue("href", ""),
                 });
             }
         }
@@ -100,20 +99,20 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private async void Button_Click(object sender, RoutedEventArgs e)
     {
-        BtnGetSongList.IsEnabled = false;
+        BtnGetSongList.IsEnabled      = false;
         LoadingProgressBar.Visibility = Visibility.Visible;
 
         var songData = await FetchSongData();
         
         RefreshSongList(songData);
-        previewListSong = fullListSong;
-        MidiRepoContainer.ItemsSource = previewListSong.Select(song => song.Title).ToList();
+        _previewListSong              = _fullListSong;
+        MidiRepoContainer.ItemsSource = _previewListSong.Select(song => song.Title).ToList();
         RefreshCountTextBox();
 
-        BtnGetSongList.IsEnabled = true;
-        BtnGetSongList.Content = "Refresh";
+        BtnGetSongList.IsEnabled      = true;
+        BtnGetSongList.Content        = "Refresh";
         LoadingProgressBar.Visibility = Visibility.Hidden;
-        SongSearchTextBox.Text = "";
+        SongSearchTextBox.Text        = "";
     }
 
     /// <summary>
@@ -127,9 +126,9 @@ public partial class MidiRepository : UserControl
             return;
 
         DownloadPanel.Visibility = Visibility.Visible;
-        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
-        SongTitle.Text = $"({selectedSong.Author}) {selectedSong.Title}";
-        SongComment.Text = selectedSong.Comment;
+        _selectedSong            = _previewListSong[MidiRepoContainer.SelectedIndex];
+        SongTitle.Text           = $"({_selectedSong.Author}) {_selectedSong.Title}";
+        SongComment.Text         = _selectedSong.Comment;
     }
 
     /// <summary>
@@ -141,7 +140,7 @@ public partial class MidiRepository : UserControl
     {
         var dlg = new FolderPicker
         {
-            InputPath = Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath) ? Path.GetFullPath(BmpPigeonhole.Instance.MidiDownloadPath) : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            InputPath = Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath) ? Path.GetFullPath(BmpPigeonhole.Instance.MidiDownloadPath) : Path.GetDirectoryName(AppContext.BaseDirectory)
         };
 
         if (dlg.ShowDialog() == true)
@@ -150,9 +149,9 @@ public partial class MidiRepository : UserControl
             if (!Directory.Exists(path))
                 return;
 
-            path += path.EndsWith("\\") ? "" : "\\";
-            DownloadPath.Text = path;
-            BmpPigeonhole.Instance.MidiDownloadPath = path;
+            path                                    += path.EndsWith("\\") ? "" : "\\";
+            DownloadPath.Text                       =  path;
+            BmpPigeonhole.Instance.MidiDownloadPath =  path;
         }
     }
 
@@ -163,38 +162,38 @@ public partial class MidiRepository : UserControl
     /// <param name="fileName"></param>
     private async void DownloadFile(string url, string fileName)
     {
-        isDownloading = true;
-        HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-        long? contentLength = response.Content.Headers.ContentLength;
-        string tempFilePath = Path.GetTempFileName();
+        _isDownloading = true;
+        var client = new HttpClient();
+        var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+        var contentLength = response.Content.Headers.ContentLength;
+        var tempFilePath = Path.GetTempFileName();
 
-        using (FileStream tempFileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+        await using (var tempFileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
         {
-            using (Stream contentStream = await response.Content.ReadAsStreamAsync())
+            await using (var contentStream = await response.Content.ReadAsStreamAsync())
             {
-                byte[] buffer = new byte[4096];
+                var buffer = new byte[4096];
                 long totalBytesRead = 0;
-                int bytesRead = 0;
-                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                int bytesRead;
+                while ((bytesRead = await contentStream.ReadAsync(buffer)) > 0)
                 {
-                    await tempFileStream.WriteAsync(buffer, 0, bytesRead);
+                    await tempFileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
                     totalBytesRead += bytesRead;
-                    double percentComplete = (double)totalBytesRead / (contentLength ?? totalBytesRead) * 100;
+                    var percentComplete = (double)totalBytesRead / (contentLength ?? totalBytesRead) * 100;
                     Dispatcher.Invoke(() => DownloadProgressBar.Value = percentComplete);
                 }
             }
         }
-        string downloadsPath = BmpPigeonhole.Instance.MidiDownloadPath;
-        string finalFilePath = $"{downloadsPath}/{fileName}.mid";
+        var downloadsPath = BmpPigeonhole.Instance.MidiDownloadPath;
+        var finalFilePath = $"{downloadsPath}/{fileName}.mid";
 
         File.Move(tempFilePath, finalFilePath, true);
         DownloadPanel.IsEnabled          = true;
         DownloadProgressLabel.Visibility = Visibility.Visible;
-        isDownloading                    = false;
+        _isDownloading                   = false;
 
         // Add to selected playlist
-        bool addToPlaylist = AddToPlaylistCheckBox.IsChecked ?? false;
+        var addToPlaylist = AddToPlaylistCheckBox.IsChecked ?? false;
 
         if (addToPlaylist && PlaylistDropdown.SelectedIndex != -1)
         {
@@ -219,7 +218,7 @@ public partial class MidiRepository : UserControl
     /// <param name="e"></param>
     private void MidiRepoContainer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        selectedSong = previewListSong[MidiRepoContainer.SelectedIndex];
+        _selectedSong = _previewListSong[MidiRepoContainer.SelectedIndex];
         DownloadSelectedMidi();
     }
 
@@ -228,7 +227,7 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void DownloadSelectedMidi()
     {
-        if (isDownloading)
+        if (_isDownloading)
             return;
 
         if (!Directory.Exists(BmpPigeonhole.Instance.MidiDownloadPath))
@@ -237,13 +236,13 @@ public partial class MidiRepository : UserControl
             return;
         }
 
-        if (selectedSong == null)
+        if (_selectedSong == null)
             return;
 
-        DownloadPanel.IsEnabled = false;
+        DownloadPanel.IsEnabled        = false;
         DownloadProgressBar.Visibility = Visibility.Visible;
-        DownloadProgressBar.Value = 0;
-        DownloadFile($"{midiRepoUrl}/{selectedSong.Url}", $"({selectedSong.Author}) {selectedSong.Title}");
+        DownloadProgressBar.Value      = 0;
+        DownloadFile($"{MidiRepoUrl}/{_selectedSong.Url}", $"({_selectedSong.Author}) {_selectedSong.Title}");
     }
    
     /// <summary>
@@ -251,7 +250,7 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void RefreshCountTextBox()
     {
-        ResultsCountTextBox.Text = $"{previewListSong.Count} Results";
+        ResultsCountTextBox.Text = $"{_previewListSong.Count} Results";
     }
 
     #region Search Functions
@@ -260,19 +259,19 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void SearchSong()
     {
-        if (fullListSong.Count == 0)
+        if (_fullListSong.Count == 0)
             return;
 
         var filteredList = new List<string>();
         if (SongSearchTextBox.Text != "")
         {
-            previewListSong = fullListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
-            filteredList = previewListSong.Select(s => s.Title).ToList();
+            _previewListSong = _fullListSong.FindAll(s => s.Title.ToLower().Contains(SongSearchTextBox.Text.ToLower()));
+            filteredList     = _previewListSong.Select(s => s.Title).ToList();
         }
         else
         {
-            previewListSong = fullListSong;
-            filteredList = previewListSong.Select(s => s.Title).ToList();
+            _previewListSong = _fullListSong;
+            filteredList     = _previewListSong.Select(s => s.Title).ToList();
         }
 
         MidiRepoContainer.ItemsSource = filteredList;
@@ -333,7 +332,7 @@ public partial class MidiRepository : UserControl
     /// </summary>
     private void RefreshAddToPlaylistMode()
     {
-        bool isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
+        var isChecked = AddToPlaylistCheckBox.IsChecked ?? false;
         PlaylistDropdown.Visibility = isChecked ? Visibility.Visible : Visibility.Hidden;
     }
 
