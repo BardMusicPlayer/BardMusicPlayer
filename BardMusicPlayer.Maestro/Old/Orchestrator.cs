@@ -216,8 +216,10 @@ public class Orchestrator : IDisposable
     /// <param name="ticks"></param>
     public void Seek(int ticks)
     {
-        foreach (var perf in _performers)
+        foreach (var perf in _performers.Where(perf => perf.Value is { OldSequencer: not null }))
+        {
             perf.Value.OldSequencer.Seek(ticks);
+        }
     }
 
     /// <summary>
@@ -226,8 +228,10 @@ public class Orchestrator : IDisposable
     /// <param name="miliseconds"></param>
     public void Seek(double miliseconds)
     {
-        foreach (var perf in _performers)
+        foreach (var perf in _performers.Where(perf => perf.Value is { OldSequencer: not null }))
+        {
             perf.Value.OldSequencer.Seek(miliseconds);
+        }
     }
 
     /// <summary>

@@ -8,30 +8,34 @@
     <sys:String x:Key="PlaylistRem" xml:space="preserve">Remove the selected song(s) from the playlist</sys:String>
     <sys:String x:Key="PlaylistDel" xml:space="preserve">Delete the current playlist</sys:String>
     <sys:String x:Key="PlaylistSearch" xml:space="preserve">Search for a song in the playlist</sys:String>
-    <sys:String x:Key="PlaylistNewCatalog" xml:space="preserve">Creates a new MusicCatalog</sys:String>
-    <sys:String x:Key="PlaylistOpen" xml:space="preserve">Opens a MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistNewCatalog" xml:space="preserve">Create a new MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistOpen" xml:space="preserve">Open a MusicCatalog</sys:String>
     <sys:String x:Key="PlaylistExport" xml:space="preserve">Export the current MusicCatalog</sys:String>
-    <sys:String x:Key="PlaylistCleanup" xml:space="preserve">Reorganise the MusicCatalog to save space</sys:String>
+    <sys:String x:Key="PlaylistCleanup" xml:space="preserve">Reorganize the MusicCatalog to save space</sys:String>
     <sys:String x:Key="PlaylistAuto" xml:space="preserve">Auto plays the next song in the playlist</sys:String>
     <sys:String x:Key="PlaylistSkip" xml:space="preserve">Skips the current playing song</sys:String>
-    <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat playlist</sys:String>
-    <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle playlist</sys:String>
+    <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat Playlist</sys:String>
+    <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle Playlist</sys:String>
 
-    <!-- Settings: Local Orchestra-->
-    <sys:String x:Key="LocalOrchestraEnable" xml:space="preserve">Enables the local orchestra</sys:String>
+    <!-- Settings: Local Orchestra -->
     <sys:String x:Key="LocalOrchestraAutoEquip" xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
     <sys:String x:Key="LocalOrchestraKeepTracks" xml:space="preserve">Keep the performer settings</sys:String>
     <sys:String x:Key="LocalOrchestraAutoStart" xml:space="preserve">Select the autostart trigger [Metronome is preferred]</sys:String>
     <sys:String x:Key="LocalOrchestraHypnotoad" xml:space="preserve">Use Hypnotoad enhancements &#13;Only enable if plugin is available!</sys:String>
 
-    <!-- Settings: Playback-->
+    <!-- Settings: Playback -->
     <sys:String x:Key="PlaybackHoldNotes" xml:space="preserve">Plays the length of a note as intended</sys:String>
     <sys:String x:Key="PlaybackForce" xml:space="preserve">Ignore everything and play</sys:String>
     <sys:String x:Key="PlaybackIgnoreProgram" xml:space="preserve">Ignores guitar program change events &#13;Except Program:ElectricGuitar</sys:String>
-    <sys:String x:Key="PlaybackMidiInput" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
+    <sys:String x:Key="PlaybackMidiLoader" xml:space="preserve">Specify MIDI Loader</sys:String>
     <sys:String x:Key="PlaybackLive" xml:space="preserve">Improves live play (should be disabled when playing a midi)</sys:String>
+    <sys:String x:Key="PlaybackMidiInput" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
 
-    <!-- Settings: UI-->
-    <sys:String x:Key="MidiLoader" xml:space="preserve">Specify MIDI Loader</sys:String>
-    <sys:String x:Key="DarkMode" xml:space="preserve">Toggle Dark Mode Styling</sys:String>
+    <!-- Miscellaneous -->
+    <sys:String x:Key="DarkMode" xml:space="preserve">Toggle Dark Mode</sys:String>
+    <sys:String x:Key="ExportSong" xml:space="preserve">Export the current loaded song to MIDI&#13;Helpful to convert .mmsong or .gp files to .mid</sys:String>
+    <sys:String x:Key="LyricsTrackNumber" xml:space="preserve">Enables lyrics parsing &#13;0 means stop lyric parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)</sys:String>
+    <sys:String x:Key="OpenInstrument" xml:space="preserve">Open Instruments</sys:String>
+    <sys:String x:Key="CloseInstrument" xml:space="preserve">Close Instruments</sys:String>
+    <sys:String x:Key="SendEnsemble" xml:space="preserve">Sends ensemble ready check</sys:String>
 </ResourceDictionary>

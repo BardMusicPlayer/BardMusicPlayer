@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="BardExtSettingsWindow" Height="400" Width="400" ResizeMode="NoResize" WindowStyle="ToolWindow"
         Background="{DynamicResource MaterialDesignPaper}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/BardMusicPlayer;component/Resources/ToolTips.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -54,9 +63,9 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post song title:" />
-                        <ComboBox Grid.Row="1" Grid.Column="0" x:Name="SongTitleChatType" HorizontalAlignment="Left"
-                                  VerticalAlignment="Stretch" Width="80" Padding="5"
+                        <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post Song Title" />
+                        <ComboBox Grid.Row="1" Grid.Column="0" x:Name="SongTitleChatType" HorizontalAlignment="Center"
+                                  VerticalAlignment="Stretch" VerticalContentAlignment="Center" Width="80" Padding="5"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged"
                                   Background="{DynamicResource MaterialDesignBackground}"
                                   Foreground="{DynamicResource MaterialDesignBody}">
@@ -67,12 +76,14 @@
                         <TextBox Grid.Row="1" Grid.Column="2" x:Name="SongTitleChatPrefix" Text="♪" Width="30"
                                  Padding="5" Background="{DynamicResource MaterialDesignBackground}"
                                  Foreground="{DynamicResource MaterialDesignBody}"
-                                 HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+                                 HorizontalContentAlignment="Center" VerticalAlignment="Stretch"
+                                 VerticalContentAlignment="Center" />
                         <Button Grid.Row="1" Grid.Column="4" Content="Send Title" Click="PostSongTitle_Click" />
-                        <Label Grid.Row="1" Grid.Column="6" Content="AutoPost" HorizontalAlignment="Left"
-                               VerticalAlignment="Top" />
+                        <Label Grid.Row="1" Grid.Column="6" Content="Auto Send" HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
                         <ComboBox Grid.Row="1" Grid.Column="8" x:Name="SongTitlePostType" Text="AutoPost via"
-                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" MinWidth="45" Padding="5"
+                                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                                  VerticalContentAlignment="Center" MinWidth="45" Padding="5"
                                   SelectionChanged="SongTitle_Post_Type_SelectionChanged"
                                   Background="{DynamicResource MaterialDesignBackground}"
                                   Foreground="{DynamicResource MaterialDesignBody}">
@@ -102,8 +113,8 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post a message in chat:" />
-                        <Label Grid.Row="1" Grid.Column="0" Content="Chat Type:" VerticalAlignment="Center" />
+                        <Label Grid.Row="0" Grid.ColumnSpan="3" Content="Post Message" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Channel:" VerticalAlignment="Center" Padding="5" />
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="ChatType" HorizontalAlignment="Left"
                                   VerticalAlignment="Top" Width="120" Padding="5"
                                   Background="{DynamicResource MaterialDesignBackground}"
@@ -115,9 +126,9 @@
                             <ComboBoxItem>Free Company</ComboBoxItem>
                         </ComboBox>
 
-                        <Label Grid.Row="2" Grid.Column="0" Content="Text Message:" />
+                        <Label Grid.Row="2" Grid.Column="0" Content="Message:" VerticalAlignment="Center" Padding="5" />
                         <TextBox Grid.Row="2" Grid.Column="1" x:Name="ChatInputText" KeyDown="ChatInputText_KeyDown"
-                                 Height="Auto" Width="240" Padding="5"
+                                 Height="Auto" Width="280" Padding="5"
                                  Background="{DynamicResource MaterialDesignBackground}"
                                  Foreground="{DynamicResource MaterialDesignBody}" />
                         <Separator Grid.Row="4" Grid.ColumnSpan="8" Grid.Column="0" />
@@ -135,7 +146,7 @@
                                                 Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                                 FontSize="8"
                                                 PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"
-                                                ToolTip="Enables the lyrics parsing &#13;0 means stop lyrics parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)" />
+                                                ToolTip="{StaticResource LyricsTrackNumber}" />
                     </Grid>
                     <Grid Grid.Row="4" Grid.Column="2">
                         <Grid.ColumnDefinitions>

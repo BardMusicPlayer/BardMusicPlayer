@@ -28,7 +28,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="40" />
                 <RowDefinition Height="60" />
-                <RowDefinition Height="80" />
+                <RowDefinition Height="112" />
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -119,7 +119,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Grid Grid.Row="2" Grid.ColumnSpan="6" Grid.Column="0">
+                    <Grid Grid.Row="2" Grid.ColumnSpan="6" Grid.Column="0" Margin="3,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2" />
                             <ColumnDefinition Width="20" />
@@ -237,11 +237,11 @@
                                               Checked="IgnoreProgramChangeBox_Checked"
                                               ToolTip="{StaticResource PlaybackIgnoreProgram}" />
                                     <Label Margin="10,10,0,0" Grid.Row="4" Content="Sequencer"
-                                           HorizontalAlignment="Left" ToolTip="{StaticResource MidiLoader}" />
+                                           HorizontalAlignment="Left" ToolTip="{StaticResource PlaybackMidiLoader}" />
                                     <ComboBox Margin="100,10,0,0" Grid.Row="4" x:Name="MidiLoaderSelection"
                                               SelectionChanged="MidiLoader_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"
-                                              Padding="5" ToolTip="{StaticResource MidiLoader}">
+                                              Padding="5" ToolTip="{StaticResource PlaybackMidiLoader}">
                                         <ComboBoxItem>Sanford DryWet</ComboBoxItem>
                                         <ComboBoxItem>Classic Processed</ComboBoxItem>
                                     </ComboBox>
@@ -288,28 +288,29 @@
                                 <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="30*" />
-                                <ColumnDefinition Width="60*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <!--
                             <Label Grid.Row="1" Grid.Column="0" Content="Beats per minute" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="Statistics_BPM_Label" />
                             -->
-                            <Label Grid.Row="1" Grid.Column="0" Content="Total tracks" />
+                            <Label Grid.Row="1" Grid.Column="0" Content="Total tracks:" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="StatisticsTotalTracksLabel" />
 
-                            <Label Grid.Row="2" Grid.Column="0" Content="Total note count" />
+                            <Label Grid.Row="2" Grid.Column="0" Content="Total note count:" />
                             <Label Grid.Row="2" Grid.Column="1" x:Name="StatisticsTotalNoteCountLabel" />
 
-                            <Label Grid.Row="3" Grid.Column="0" Content="Track note count" />
+                            <Label Grid.Row="3" Grid.Column="0" Content="Track note count:" />
                             <Label Grid.Row="3" Grid.Column="1" x:Name="StatisticsTrackNoteCountLabel" />
                             <!--
                             <Label Grid.Row="5" Grid.Column="0" Content="Note per second" />
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
                             -->
                             <Label Grid.Row="7" Grid.Column="0" Content="Song functions:" />
-                            <Button Grid.Row="7" Grid.Column="1" Content="Export current song as MIDI"
-                                    Click="ExportAsMidi" Height="Auto" Width="250" />
+                            <Button Grid.Row="7" Grid.Column="1" Content="Export Current Song as MIDI"
+                                    Click="ExportAsMidi" Height="Auto" Width="200" HorizontalAlignment="Left"
+                                    ToolTip="{StaticResource ExportSong}" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Preview" Width="Auto" Height="35" Padding="0">
@@ -418,25 +419,29 @@
                 </TabControl>
             </Grid>
 
-            <!-- Track Row-->
+            <!-- Track Row -->
             <Grid Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Height="25" VerticalAlignment="Top"
-                  Margin="10,10,5,0">
+                  Margin="5,10,5,0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="25" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="45" />
                     <ColumnDefinition Width="45" />
                     <ColumnDefinition Width="85" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="Rewind" Style="{DynamicResource MaterialDesignOutlinedButton}"
-                        Content="⏪" Click="Rewind_Click" Height="Auto" Margin="2,0,3,0" Padding="0" />
-                <TextBox Grid.Column="1" x:Name="SongName"
+                <Button Grid.Column="0" x:Name="MacroButton" Content="Macro"
+                        HorizontalAlignment="Left" Height="Auto" Width="72" Padding="0"
+                        Click="Macro_Button_Click" />
+                <Button Grid.Column="1" x:Name="Rewind" Style="{DynamicResource MaterialDesignOutlinedButton}"
+                        Content="⏪" Click="Rewind_Click" Height="Auto" Margin="0,0,3,0" Padding="0" />
+                <TextBox Grid.Column="2" x:Name="SongName"
                          PreviewMouseDown="SongName_PreviewMouseDown" Height="30" TextWrapping="Wrap" Text="Song Name"
                          FontSize="16" TextAlignment="Center" VerticalAlignment="Center" UseLayoutRounding="True"
                          Margin="3,0,5,0" />
 
-                <!-- Track Selection-->
-                <Grid Grid.Column="2" HorizontalAlignment="Left" Width="38">
+                <!-- Track Selection -->
+                <Grid Grid.Column="3" HorizontalAlignment="Left" Width="38">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
@@ -458,8 +463,8 @@
                                 Click="track_cmdDown_Click" Width="Auto" TextOptions.TextHintingMode="Fixed" />
                     </Grid>
                 </Grid>
-                <!-- Octave Selection-->
-                <Grid Grid.Column="3" HorizontalAlignment="Left" Width="38">
+                <!-- Octave Selection -->
+                <Grid Grid.Column="4" HorizontalAlignment="Left" Width="38">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="10" />
@@ -482,8 +487,8 @@
                                 TextOptions.TextHintingMode="Fixed" />
                     </Grid>
                 </Grid>
-                <!-- End Track Selection-->
-                <Button Grid.Column="4" Content="All tracks" x:Name="AllTracksButton" Click="all_tracks_button_Click"
+                <!-- End Track Selection -->
+                <Button Grid.Column="5" Content="All Tracks" x:Name="AllTracksButton" Click="all_tracks_button_Click"
                         Height="Auto" HorizontalAlignment="Right" Width="80" Padding="0" />
             </Grid>
             <!-- PlayBar Row -->
@@ -513,27 +518,40 @@
             <!-- heatmap -->
             <Grid Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="112" />
                 </Grid.ColumnDefinitions>
                 <controls:KeyboardHeatMap x:Name="KeyHeat" Grid.Column="1" Height="Auto" Width="Auto" />
             </Grid>
 
 
             <!-- Play Control Row -->
-            <Grid Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Grid Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,5,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!-- Controls -->
                 <Button Grid.Row="0" x:Name="PlayButton" Content="▶" Style="{StaticResource PlayButton}"
-                        HorizontalAlignment="Center" VerticalAlignment="Top" Height="60" Width="75"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="60" Width="100" Padding="0"
                         Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown" />
-                <Button Grid.Row="1" x:Name="MacroButton" Content="Macro"
-                        HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="25" Width="75"
-                        Click="Macro_Button_Click" />
+                <Button Grid.Row="1" x:Name="OpenInstrumentButton"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="100" Content="Open"
+                        Padding="0"
+                        ToolTip="{StaticResource OpenInstrument}"
+                        Click="OpenInstrumentButton_Click" />
+                <Button Grid.Row="1" x:Name="CloseInstrumentButton"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="100" Content="Close"
+                        Padding="0"
+                        ToolTip="{StaticResource CloseInstrument}"
+                        Click="CloseInstrumentButton_Click" Visibility="Hidden" />
+                <Button Grid.Row="2" x:Name="SendEnsembleButton"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="100"
+                        Content="Send Ensemble" Padding="0"
+                        ToolTip="{StaticResource SendEnsemble}"
+                        Click="RdyCheck_Click" />
             </Grid>
             <!-- Instrument Info Row -->
             <Grid Grid.Row="4" Grid.Column="0">

@@ -9,14 +9,12 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using BardMusicPlayer.DalamudBridge;
-using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.Performance;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
-using BardMusicPlayer.UI_Classic;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
@@ -94,56 +92,12 @@ public partial class BardView
     private void OnInstrumentHeldChanged(InstrumentHeldChanged e)
     {
         UpdateList();
-        if (e.InstrumentHeld.Index == 0)
-        {
-            Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (CloseInstrumentButton.Visibility != Visibility.Visible)
-                        return;
-                    OpenInstrumentButton.Visibility  = Visibility.Visible;
-                    CloseInstrumentButton.Visibility = Visibility.Hidden;
-                }
-            ));
-        }
-        else
-        {
-            Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (OpenInstrumentButton.Visibility != Visibility.Visible)
-                        return;
-                    OpenInstrumentButton.Visibility  = Visibility.Hidden;
-                    CloseInstrumentButton.Visibility = Visibility.Visible;
-                }
-            ));
-        }
     }
 
     private void UpdateList()
     {
         Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
         Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
-    }
-
-    private void RdyCheck_Click(object sender, RoutedEventArgs e)
-    {
-        BmpMaestro.Instance.StartEnsCheck();
-    }
-
-    private void OpenInstrumentButton_Click(object sender, RoutedEventArgs e)
-    {
-        BmpMaestro.Instance.EquipInstruments();
-    }
-
-    private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
-        {
-            PlaybackFunctions.PauseSong();
-            ClassicMainView.CurrentInstance?.Play_Button_State();
-        }
-
-        BmpMaestro.Instance.StopLocalPerformer();
-        BmpMaestro.Instance.UnEquipInstruments();
     }
 
     private void BardsList_SelectionChanged(object sender, SelectionChangedEventArgs e)

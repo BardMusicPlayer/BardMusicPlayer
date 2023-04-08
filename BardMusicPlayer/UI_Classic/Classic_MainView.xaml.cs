@@ -6,6 +6,8 @@ using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Seer;
+using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Siren;
 using BardMusicPlayer.Transmogrify.Song;
 
@@ -45,6 +47,7 @@ public partial class ClassicMainView
         SongBrowser.OnAddSongFromBrowser           += Instance_SongBrowserAddSongToPlaylist;
         SongBrowser.OnLoadSongFromBrowserToPreview += Instance_SongBrowserLoadSongToPreview;
         BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
+        BmpSeer.Instance.InstrumentHeldChanged     += InstrumentOpenCloseState;
 
         Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();
@@ -379,5 +382,55 @@ public partial class ClassicMainView
             _lyricsData.Add(new LyricsContainer(line.Key, line.Value));
         SirenLyrics.DataContext = _lyricsData;
         SirenLyrics.Items.Refresh();
+    }
+    
+    private void RdyCheck_Click(object sender, RoutedEventArgs e)
+    {
+        BmpMaestro.Instance.StartEnsCheck();
+    }
+
+    private void OpenInstrumentButton_Click(object sender, RoutedEventArgs e)
+    {
+        BmpMaestro.Instance.EquipInstruments();
+    }
+
+    private void CloseInstrumentButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
+        {
+            PlaybackFunctions.PauseSong();
+            CurrentInstance?.Play_Button_State();
+        }
+
+        BmpMaestro.Instance.StopLocalPerformer();
+        BmpMaestro.Instance.UnEquipInstruments();
+    }
+
+    private void InstrumentOpenCloseState(InstrumentHeldChanged e)
+    {
+        if (e.InstrumentHeld.Index == 0)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (CloseInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+
+                    OpenInstrumentButton.Visibility  = Visibility.Visible;
+                    CloseInstrumentButton.Visibility = Visibility.Hidden;
+                }
+            ));
+        }
+        else
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (OpenInstrumentButton.Visibility != Visibility.Visible)
+                        return;
+
+                    OpenInstrumentButton.Visibility  = Visibility.Hidden;
+                    CloseInstrumentButton.Visibility = Visibility.Visible;
+                }
+            ));
+        }
     }
 }

@@ -71,7 +71,6 @@
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
 
-
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
