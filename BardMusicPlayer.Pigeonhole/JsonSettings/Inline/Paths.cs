@@ -18,7 +18,7 @@ internal static class Paths
     /// <summary>
     ///     The path to the entry exe.
     /// </summary>
-    public static FileInfo ExecutingExe => new ((Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly())?.Location);
+    public static FileInfo ExecutingExe => new (AppContext.BaseDirectory);
 
     /// <summary>
     ///     The path to the entry exe's directory.
@@ -33,7 +33,7 @@ internal static class Paths
             }
             catch
             {
-                return new DirectoryInfo(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetEntryAssembly()?.Location ?? string.Empty).Path)) ?? string.Empty);
+                return new DirectoryInfo(Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(AppContext.BaseDirectory).Path)) ?? string.Empty);
             }
         }
     }
