@@ -52,11 +52,17 @@ public sealed partial class NumericUpDown
     }
     private void NumUp_Click(object sender, RoutedEventArgs e)
     {
+        if (NumValue >= 5)
+            return;
+
         NumValue++;
     }
 
     private void NumDown_Click(object sender, RoutedEventArgs e)
     {
+        if (NumValue <= 0)
+            return;
+
         NumValue--;
     }
 
@@ -68,6 +74,9 @@ public sealed partial class NumericUpDown
         var str = MyRegex().Replace(Text.Text, "");
         if (int.TryParse(str, out var val))
         {
+            if (NumValue is <= 0 or >= 5)
+                return;
+
             NumValue = val;
         }
     }

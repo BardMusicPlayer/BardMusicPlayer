@@ -58,8 +58,10 @@ public sealed partial class TrackNumericUpDown
     {
         if (PlaybackFunctions.CurrentSong == null)
             return;
+
         if (NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
             return;
+
         NumValue++;
     }
 
@@ -67,6 +69,7 @@ public sealed partial class TrackNumericUpDown
     {
         if (NumValue <= 1)
             return;
+
         NumValue--;
     }
 
@@ -96,9 +99,10 @@ public sealed partial class TrackNumericUpDown
 
             if (val <= 0 || NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
             {
-                NumValue = val;
+                //NumValue = val;
                 return;
             }
+
             NumValue = val;
         }
     }

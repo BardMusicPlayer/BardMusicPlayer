@@ -55,11 +55,17 @@ public sealed partial class OctaveNumericUpDown
     }
     private void NumUp_Click(object sender, RoutedEventArgs e)
     {
+        if (NumValue >= 5)
+            return;
+
         NumValue++;
     }
 
     private void NumDown_Click(object sender, RoutedEventArgs e)
     {
+        if (NumValue <= -5)
+            return;
+
         NumValue--;
     }
 
@@ -84,6 +90,9 @@ public sealed partial class OctaveNumericUpDown
         var str = MyRegex().Replace(Text.Text, "");
         if (int.TryParse(str, out var val))
         {
+            if (NumValue is <= -5 or >= 5)
+                return;
+
             NumValue = val;
         }
     }

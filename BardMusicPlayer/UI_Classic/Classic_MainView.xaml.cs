@@ -287,12 +287,18 @@ public partial class ClassicMainView
     }
     private void octave_cmdUp_Click(object sender, RoutedEventArgs e)
     {
+        if (OctaveNumValue >= 5)
+            return;
+        
         OctaveNumValue++;
         BmpMaestro.Instance.SetOctaveshiftOnHost(OctaveNumValue);
     }
 
     private void octave_cmdDown_Click(object sender, RoutedEventArgs e)
     {
+        if (OctaveNumValue <= -5)
+            return;
+        
         OctaveNumValue--;
         BmpMaestro.Instance.SetOctaveshiftOnHost(OctaveNumValue);
     }
@@ -300,6 +306,9 @@ public partial class ClassicMainView
     private void octave_txtNum_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (OctaveTxtNum == null)
+            return;
+
+        if (OctaveNumValue is <= -5 or >= 5)
             return;
 
         if (int.TryParse(OctaveTxtNum.Text.Replace(@"ø", ""), out _octaveNumValue))
