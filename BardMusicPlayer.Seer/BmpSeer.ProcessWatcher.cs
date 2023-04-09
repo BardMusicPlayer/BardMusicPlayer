@@ -23,13 +23,14 @@ public partial class BmpSeer
 
     private async Task RunProcessWatcher(CancellationToken token)
     {
-        var processes = new List<Process>();
         var coolDown = 0L;
-
         while (!_watcherTokenSource.IsCancellationRequested)
         {
             try
             {
+                // Clear the list of processes from previous iterations
+                var processes = new List<Process>();
+
                 // Get new processes and add them to the list
                 processes.AddRange(Process.GetProcessesByName("ffxiv_dx11"));
 
@@ -37,28 +38,27 @@ public partial class BmpSeer
                 processes = processes.OrderBy(p => p.StartTime).ToList();
 
                 // Remove games that are no longer running
-                foreach (var game in _games.Values.Where(g => g.Process != null))
+                foreach (var game in _games.Values.TakeWhile(game => !token.IsCancellationRequested).Where(game =>
+                             game.Process is null || game.Process.HasExited || !game.Process.Responding ||
+                             processes.All(process => process.Id != game.Pid)))
                 {
-                    if (game.Process.HasExited || !game.Process.Responding || processes.All(p => p.Id != game.Pid))
-                    {
-                        // Dispose the game
-                        game.Dispose();
-        
-                        // Remove the game from the dictionary
-                        _games.TryRemove(game.Pid, out _);
-                    }
+                    _games.TryRemove(game.Pid, out _);
+                    game.Dispose();
                 }
 
-                // Add new games
                 foreach (var process in processes)
                 {
-                    if (token.IsCancellationRequested) break;
+                    if (token.IsCancellationRequested)
+                        break;
 
-                    if (_games.ContainsKey(process.Id) || process.HasExited || !process.Responding)
+                    // Add new games.
+                    if (process is null || _games.ContainsKey(process.Id) || process.HasExited ||
+                        !process.Responding)
                         continue;
 
+                    // Adding a game spikes the cpu when sharlayan scans memory.
                     var timeNow = Clock.Time.Now;
-                    if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow) 
+                    if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow)
                         continue;
 
                     coolDown = timeNow;
@@ -80,7 +80,7 @@ public partial class BmpSeer
                 PublishEvent(new SeerExceptionEvent(ex));
             }
 
-            await Task.Delay(100, token);
+            await Task.Delay(100, token).ContinueWith(static tsk => { }, token);
         }
     }
 

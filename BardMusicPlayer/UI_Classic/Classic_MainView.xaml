@@ -243,7 +243,7 @@
                                               HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"
                                               Padding="5" ToolTip="{StaticResource PlaybackMidiLoader}">
                                         <ComboBoxItem>Sanford DryWet</ComboBoxItem>
-                                        <ComboBoxItem>Classic Processed</ComboBoxItem>
+                                        <!--<ComboBoxItem>Classic Processed</ComboBoxItem>-->
                                     </ComboBox>
 
                                     <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
