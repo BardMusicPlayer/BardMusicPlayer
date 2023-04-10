@@ -65,15 +65,15 @@ public partial class BardView
         DataContext = this;
         //Bards       = new BardViewModel(); // initialize the Bards property
 
-        BmpMaestro.Instance.OnPerformerChanged   += OnPerformerChanged;
+        BmpMaestro.Instance.OnPerformerChanged += OnPerformerChanged;
         // BmpMaestro.Instance.OnTrackNumberChanged += OnTrackNumberChanged;
         // BmpMaestro.Instance.OnOctaveShiftChanged += OnOctaveShiftChanged;
-        BmpMaestro.Instance.OnSongLoaded         += OnSongLoaded;
-        BmpMaestro.Instance.OnPerformerUpdate    += OnPerformerUpdate;
-        BmpSeer.Instance.PlayerNameChanged       += OnPlayerNameChanged;
-        BmpSeer.Instance.InstrumentHeldChanged   += OnInstrumentHeldChanged;
-        BmpSeer.Instance.HomeWorldChanged        += OnHomeWorldChanged;
-        Globals.Globals.OnConfigReload           += Globals_OnConfigReload;
+        BmpMaestro.Instance.OnSongLoaded       += OnSongLoaded;
+        BmpMaestro.Instance.OnPerformerUpdate  += OnPerformerUpdate;
+        BmpSeer.Instance.PlayerNameChanged     += OnPlayerNameChanged;
+        BmpSeer.Instance.InstrumentHeldChanged += OnInstrumentHeldChanged;
+        BmpSeer.Instance.HomeWorldChanged      += OnHomeWorldChanged;
+        Globals.Globals.OnConfigReload         += Globals_OnConfigReload;
         Globals_OnConfigReload(null, null);
     }
 

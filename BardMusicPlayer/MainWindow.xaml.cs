@@ -22,7 +22,7 @@ public partial class MainWindow
         Height             = 740;
         Width              = 965;
         ResizeMode         = ResizeMode.CanResizeWithGrip;
-        
+
         if (!BmpPigeonhole.Instance.DarkStyle)
             LightModeStyle();
         else
@@ -32,7 +32,7 @@ public partial class MainWindow
     public static void LightModeStyle()
     {
         var baseTheme = Theme.Light;
-        
+
         const PrimaryColor primary = PrimaryColor.BlueGrey;
         var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
 
@@ -47,7 +47,7 @@ public partial class MainWindow
     public static void DarkModeStyle()
     {
         var baseTheme = Theme.Dark;
-        
+
         const PrimaryColor primary = PrimaryColor.Grey;
         var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
 

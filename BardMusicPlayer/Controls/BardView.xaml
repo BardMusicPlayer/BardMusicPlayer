@@ -48,7 +48,8 @@
                 </Button.ContextMenu>
             </Button>
         </Grid>
-        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}" ItemsSource="{Binding Bards.BardList}"
+        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}"
+                  ItemsSource="{Binding Bards.BardList}"
                   SelectionChanged="BardsList_SelectionChanged" MouseDoubleClick="BardsList_MouseDoubleClick"
                   Padding="0" materialDesign:RippleAssist.IsDisabled="True"
                   materialDesign:TransitionAssist.DisableTransitions="True"
@@ -185,7 +186,8 @@
                         <!--<TextBlock Grid.Column="8" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />-->
                         <controls:TrackNumericUpDown Grid.Column="8" Grid.Row="1" x:Name="TrackControl"
                                                      PreviewMouseUp="TrackNumericUpDown_MouseUp"
-                                                     Value="{Binding TrackNumber}" MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Bards.MaxTracks}"
+                                                     Value="{Binding TrackNumber}"
+                                                     MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Bards.MaxTracks}"
                                                      Padding="0" Width="Auto" Height="12"
                                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
                         <!--<TextBlock Grid.Column="10" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->

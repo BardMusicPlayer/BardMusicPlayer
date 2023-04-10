@@ -39,7 +39,7 @@
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
                       ScrollViewer.CanContentScroll="True" SelectionChanged="MidiRepoContainer_SelectionChanged"
-                      MouseDoubleClick="MidiRepoContainer_MouseDoubleClick" 
+                      MouseDoubleClick="MidiRepoContainer_MouseDoubleClick"
                       materialDesign:RippleAssist.IsDisabled="True" />
         </Grid>
         <Grid Grid.Row="4" x:Name="DownloadPanel" Background="{DynamicResource MaterialDesignPaper}">

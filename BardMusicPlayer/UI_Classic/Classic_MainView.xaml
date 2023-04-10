@@ -434,10 +434,11 @@
                         HorizontalAlignment="Left" Height="Auto" Width="72" Padding="0"
                         Click="Macro_Button_Click" />
                 <Button Grid.Column="1" x:Name="Rewind"
-                        Content="⏪" Click="Rewind_Click" Height="Auto" Margin="1,0,3,0" Padding="0"/>
+                        Content="⏪" Click="Rewind_Click" Height="Auto" Margin="1,0,3,0" Padding="0" />
                 <TextBox Grid.Column="2" x:Name="SongName"
                          PreviewMouseDown="SongName_PreviewMouseDown" Height="30" TextWrapping="Wrap" Text="Song Name"
-                         FontSize="16" TextAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" UseLayoutRounding="True"
+                         FontSize="16" TextAlignment="Center" VerticalAlignment="Center"
+                         HorizontalContentAlignment="Center" UseLayoutRounding="True"
                          Margin="3,0,0,0" />
 
                 <!-- Track Selection -->
@@ -479,11 +480,13 @@
                             <RowDefinition Height="12" />
                         </Grid.RowDefinitions>
                         <Button Grid.Row="0" x:Name="OctaveCmdUp" FontSize="8" Padding="2"
-                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" 
-                                Content="&#xE70E;" Click="octave_cmdUp_Click" Width="Auto" TextOptions.TextHintingMode="Fixed" />
+                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
+                                Content="&#xE70E;" Click="octave_cmdUp_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
                         <Button Grid.Row="1" x:Name="OctaveCmdDown" FontSize="8" Padding="2"
                                 HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
-                                Content="&#xE70D;" Click="octave_cmdDown_Click" Width="Auto" TextOptions.TextHintingMode="Fixed" />
+                                Content="&#xE70D;" Click="octave_cmdDown_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -525,7 +528,8 @@
                 </Grid.RowDefinitions>
                 <!-- Controls -->
                 <Button Grid.Row="0" Grid.Column="0" x:Name="OpenInstrumentButton"
-                        HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="100" Content="Open"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                        Height="40" Width="100" Content="Open"
                         Padding="0" Margin="0,0,0,0"
                         ToolTip="{StaticResource OpenInstrument}"
                         Click="OpenInstrumentButton_Click" />
@@ -539,14 +543,15 @@
                         Padding="0" Margin="6,0,6,0"
                         Click="Play_Button_Click" PreviewMouseRightButtonDown="Play_Button_MouseRightButtonDown" />
                 <Button Grid.Row="0" Grid.Column="2" x:Name="SendEnsembleButton"
-                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Content="Send Ensemble"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100"
+                        Content="Send Ensemble"
                         Padding="0" Margin="0,0,0,0"
                         ToolTip="{StaticResource SendEnsemble}"
                         Click="RdyCheck_Click" />
             </Grid>
             <Grid Grid.Row="3" Grid.Column="2">
-            <Button Grid.Column="0" Content="All Tracks" x:Name="AllTracksButton" Click="all_tracks_button_Click"
-                    Height="25" HorizontalAlignment="Right" Width="72" Padding="0" Margin="0,0,20,0"/>
+                <Button Grid.Column="0" Content="All Tracks" x:Name="AllTracksButton" Click="all_tracks_button_Click"
+                        Height="25" HorizontalAlignment="Right" Width="72" Padding="0" Margin="0,0,20,0" />
             </Grid>
             <!-- Instrument Info Row -->
             <Grid Grid.Row="4" Grid.Column="0">
