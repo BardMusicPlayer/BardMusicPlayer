@@ -48,6 +48,8 @@ public partial class ClassicMainView
         BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
         BmpSeer.Instance.InstrumentHeldChanged     += InstrumentOpenCloseState;
 
+        PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
+
         Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();
     }
@@ -184,6 +186,32 @@ public partial class ClassicMainView
                 PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
                 Play_Button_State(true);
             }
+        }
+    }
+
+    private void PlaybackToggle_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Space)
+        {
+            // Check if the keyboard focus is on a search field
+            if (Keyboard.FocusedElement is TextBox)
+            {
+                // Don't toggle playback state when in a search field
+                return;
+            }
+            
+            if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
+            {
+                PlaybackFunctions.PauseSong();
+                Play_Button_State();
+            }
+            else
+            {
+                Play_Button_State(true);
+                PlaybackFunctions.PlaySong(0);
+            }
+
+            e.Handled = true;
         }
     }
 
