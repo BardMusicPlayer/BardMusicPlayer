@@ -3,10 +3,13 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System.Collections;
+using System.Globalization;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Siren.AlphaTab;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Synth;
 using BardMusicPlayer.Siren.AlphaTab.Util;
+using BardMusicPlayer.Siren.Properties;
 using BardMusicPlayer.Transmogrify.Song;
 using NAudio.CoreAudioApi;
 
@@ -21,8 +24,6 @@ public class BmpSiren
     private Dictionary<int, Dictionary<long, string>> _lyrics;
     private double _lyricIndex;
     private MMDevice _mdev;
-    internal bool _vstDownloaded = false;
-    internal string _vstLocation = "";
 
     private static readonly System.Lazy<BmpSiren> LazyInstance = new(() => new BmpSiren());
     public static BmpSiren Instance => LazyInstance.Value;
@@ -45,18 +46,17 @@ public class BmpSiren
     /// 
     /// </summary>
     /// <param name="device"></param>
-    /// <param name="vstLocation">Storage location for VST files</param>
     /// <param name="defaultVolume"></param>
     /// <param name="bufferCount"></param>
     /// <param name="latency"></param>
-    public void Setup(MMDevice device, string vstLocation, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
+    public void Setup(MMDevice device, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         ShutDown();
         _mdev        = device;
-        _vstLocation = vstLocation + @"\";
-        VSTLoader.UpdateAndLoadVST();
         _player = new ManagedThreadAlphaSynthWorkerApi(new NAudioSynthOutput(device, bufferCount, latency), LogLevel.None, BeginInvoke);
+        foreach (var resource in Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true)!)
+            _player.LoadSoundFont((byte[])((DictionaryEntry)resource).Value, true);
         _player.PositionChanged += NotifyTimePosition;
         _player.MasterVolume    =  defaultVolume;
     }
@@ -84,12 +84,12 @@ public class BmpSiren
     /// <summary>
     /// 
     /// </summary>
-    public bool IsReady => _vstDownloaded && _player is { IsReady: true };
+    public bool IsReady => _player is { IsReady: true };
 
     /// <summary>
     /// 
     /// </summary>
-    public bool IsReadyForPlayback => _vstDownloaded && IsReady && _player.IsReadyForPlayback;
+    public bool IsReadyForPlayback => IsReady && _player.IsReadyForPlayback;
 
     private readonly TaskQueue _taskQueue = new();
     internal void BeginInvoke(Action action) => _taskQueue.Enqueue(() => Task.Run(action));
@@ -101,11 +101,11 @@ public class BmpSiren
     /// <param name="defaultVolume"></param>
     /// <param name="bufferCount"></param>
     /// <param name="latency"></param>
-    public void Setup(string vstLocation, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
+    public void Setup(float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-        Setup(mmAudio, vstLocation, defaultVolume, bufferCount, latency);
+        Setup(mmAudio, defaultVolume, bufferCount, latency);
     }
 
     /// <summary>

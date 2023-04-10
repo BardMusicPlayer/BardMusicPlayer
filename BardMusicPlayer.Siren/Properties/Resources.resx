@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      
+    </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="vst_bassdrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_bassdrum.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_bongo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_bongo.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_cello" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_cello.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_clarinet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_clarinet.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_cymbal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_cymbal.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_doublebass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_doublebass.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_electricguitarclean" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_electricguitarclean.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_electricguitarmuted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_electricguitarmuted.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_electricguitaroverdriven" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_electricguitaroverdriven.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_electricguitarpowerchords" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_electricguitarpowerchords.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral,= PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_electricguitarspecial" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_electricguitarspecial.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_fiddle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_fiddle.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_fife" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_fife.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_flute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_flute.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_harp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_harp.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_horn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_horn.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_lute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_lute.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_oboe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_oboe.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_panpipes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_panpipes.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_piano" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_piano.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_saxophone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_saxophone.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_snaredrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_snaredrum.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_timpani" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_timpani.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_trombone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_trombone.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_trumpet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_trumpet.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_tuba" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_tuba.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_viola" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_viola.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+    <data name="vst_violin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\vst_violin.sf2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </data>
+</root>

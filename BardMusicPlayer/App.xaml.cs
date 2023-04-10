@@ -45,7 +45,7 @@ public partial class App
         //Start the scripting
         BmpScript.Instance.Start();
 
-        BmpSiren.Instance.Setup(Globals.Globals.DataPath + @"\vst");
+        BmpSiren.Instance.Setup();
     }
 
     protected override void OnExit(ExitEventArgs e)
