@@ -16,7 +16,7 @@
     <img src="https://img.shields.io/discord/476802720922206209?color=5865F2&label=&logo=Discord&logoColor=ffffff&style=for-the-badge" alt="Discord"/></a>
   <br> 
   <!-- Version -->
-  <a href="https://github.com/Meowchestra/BardMusicPlayer/tags">
+  <a href="https://github.com/Meowchestra/BardMusicPlayer/releases">
     <img src="https://img.shields.io/github/v/tag/Meowchestra/BardMusicPlayer?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
 </p>
 
