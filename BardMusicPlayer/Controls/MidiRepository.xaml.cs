@@ -290,16 +290,6 @@ public partial class MidiRepository
 
     #region Import To Playlist Functions
     /// <summary>
-    /// Refresh playlist dropdown when click 'refresh' button
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void RefreshPlaylist_Click(object sender, RoutedEventArgs e)
-    {
-        RefreshPlaylistSelector();
-    }
-
-    /// <summary>
     /// Refresh playlist dropdown
     /// </summary>
     private void RefreshPlaylistSelector()
