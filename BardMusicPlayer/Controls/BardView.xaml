@@ -8,7 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:BardMusicPlayer.Pigeonhole;assembly=BardMusicPlayer.Pigeonhole"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance }">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance}">
 
     <UserControl.Resources>
         <controls:FontSizeConverter x:Key="FontSizeConverter" />
@@ -48,9 +48,13 @@
                 </Button.ContextMenu>
             </Button>
         </Grid>
-        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}"
+        <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}" ItemsSource="{Binding Bards.BardList}"
                   SelectionChanged="BardsList_SelectionChanged" MouseDoubleClick="BardsList_MouseDoubleClick"
-                  Padding="0">
+                  Padding="0" materialDesign:RippleAssist.IsDisabled="True"
+                  materialDesign:TransitionAssist.DisableTransitions="True"
+                  materialDesign:ListBoxItemAssist.ShowSelection="False"
+                  FocusVisualStyle="{x:Null}"
+                  Focusable="False">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type performance:Performer}">
                     <Grid>
@@ -69,16 +73,17 @@
                             <ColumnDefinition Width="10" />     <!-- 6 Dalamud -->
                             <ColumnDefinition Width="10" />     <!-- 7 Spacer -->
                             <ColumnDefinition Width="Auto" />   <!-- 8 Track -->
-                            <ColumnDefinition Width="Auto" />   <!-- 9 Octave -->
-                            <ColumnDefinition Width="10" />     <!-- 10 Spacer -->
-                            <ColumnDefinition Width="Auto" />   <!-- 11 Host -->
-                            <ColumnDefinition Width="10" />     <!-- 12 Spacer -->
-                            <ColumnDefinition Width="Auto" />   <!-- 13 Enabled -->
+                            <ColumnDefinition Width="5" />      <!-- 9 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 10 Octave -->
+                            <ColumnDefinition Width="10" />     <!-- 11 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 12 Host -->
+                            <ColumnDefinition Width="10" />     <!-- 13 Spacer -->
+                            <ColumnDefinition Width="Auto" />   <!-- 14 Enabled -->
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="1" Grid.Row="1" Height="Auto" Width="Auto"
                                 Padding="0" Margin="0,-5,0,0"
                                 VerticalAlignment="Top" HorizontalAlignment="Center"
-                                MouseDown="Bard_MouseClick">
+                                PreviewMouseDown="Bard_MouseClick">
                             <materialDesign:PackIcon Kind="MenuOpen" />
                         </Button>
                         <TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding PlayerName}" MouseDown="Bard_MouseDown" />
@@ -180,27 +185,26 @@
                         <!--<TextBlock Grid.Column="8" Grid.Row="0" Text="Track" HorizontalAlignment="Center" />-->
                         <controls:TrackNumericUpDown Grid.Column="8" Grid.Row="1" x:Name="TrackControl"
                                                      PreviewMouseUp="TrackNumericUpDown_MouseUp"
-                                                     Value="{Binding TrackNumber}"
+                                                     Value="{Binding TrackNumber}" MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Bards.MaxTracks}"
                                                      Padding="0" Width="Auto" Height="12"
-                                                     HorizontalAlignment="Center" VerticalAlignment="Top"
-                                                     Margin="0,0,1,0" />
-                        <!--<TextBlock Grid.Column="9" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
-                        <controls:OctaveNumericUpDown Grid.Column="9" Grid.Row="1" x:Name="OctaveControl"
+                                                     HorizontalAlignment="Center" VerticalAlignment="Top" />
+                        <!--<TextBlock Grid.Column="10" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
+                        <controls:OctaveNumericUpDown Grid.Column="10" Grid.Row="1" x:Name="OctaveControl"
                                                       PreviewMouseUp="OctaveControl_PreviewMouseUp"
                                                       Value="{Binding OctaveShift}"
                                                       Padding="0" Width="Auto" Height="12"
                                                       HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-                        <TextBlock Grid.Column="11" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
+                        <TextBlock Grid.Column="12" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
-                        <CheckBox Grid.Column="11" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
+                        <CheckBox Grid.Column="12" Grid.Row="1" x:Name="HostChecker" HorizontalAlignment="Center"
                                   Unchecked="HostChecker_Checked" Checked="HostChecker_Checked"
                                   IsChecked="{Binding HostProcess, Mode=TwoWay}"
                                   Padding="0" Width="Auto" />
 
-                        <TextBlock Grid.Column="13" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
+                        <TextBlock Grid.Column="14" Grid.Row="0" Text="Enabled" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
-                        <CheckBox Grid.Column="13" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
+                        <CheckBox Grid.Column="14" Grid.Row="1" x:Name="PerformerEnabled" HorizontalAlignment="Center"
                                   Unchecked="PerformerEnabledChecker_Checked" Checked="PerformerEnabledChecker_Checked"
                                   IsChecked="{Binding PerformerEnabled, Mode=TwoWay}"
                                   Padding="0" Width="Auto" />

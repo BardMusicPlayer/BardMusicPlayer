@@ -20,6 +20,15 @@ public sealed partial class TrackNumericUpDown
     public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(nameof(Value), typeof(string), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
 
+    public static readonly DependencyProperty MaxTracksProperty =
+        DependencyProperty.Register(nameof(MaxTracks), typeof(int), typeof(TrackNumericUpDown), new PropertyMetadata(OnValueChangedCallBack));
+
+    public int MaxTracks
+    {
+        get => (int)GetValue(MaxTracksProperty);
+        set => SetValue(MaxTracksProperty, value);
+    }
+
     public string Value
     {
         get => (string)GetValue(ValueProperty);
@@ -59,7 +68,7 @@ public sealed partial class TrackNumericUpDown
         if (PlaybackFunctions.CurrentSong == null)
             return;
 
-        if (NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
+        if (NumValue >= MaxTracks)
             return;
 
         NumValue++;

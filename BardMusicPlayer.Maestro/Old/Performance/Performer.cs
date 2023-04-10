@@ -5,6 +5,7 @@
 
 using System.Diagnostics;
 using System.Timers;
+using System.ComponentModel;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.FFXIV;
@@ -14,6 +15,7 @@ using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer;
+using BardMusicPlayer.Transmogrify;
 using BardMusicPlayer.Transmogrify.Song.Config;
 using Sanford.Multimedia.Midi;
 using MessageType = BardMusicPlayer.DalamudBridge.Helper.Dalamud.MessageType;
@@ -21,7 +23,7 @@ using Timer = System.Timers.Timer;
 
 namespace BardMusicPlayer.Maestro.Old.Performance;
 
-public class Performer
+public class Performer : INotifyPropertyChanged
 {
     private FFXIVHook _hook = new();
     private Timer _startDelayTimer { get; set; } = new();
@@ -34,7 +36,16 @@ public class Performer
     private bool _livePlayDelay { get; set; }
     public int SingerTrackNr { get; set; }
     public Instrument ChosenInstrument { get; set; } = Instrument.Piano;
-    public int OctaveShift { get; set; }
+
+    private int _octaveShift;
+    public int OctaveShift { get => _octaveShift; set
+        {
+            if (_octaveShift == value) return;
+
+            _octaveShift = value;
+            RaisePropertyChanged(nameof(OctaveShift));
+        }
+    }
     public int TrackNumber
     {
         get => _trackNumber;
@@ -57,6 +68,8 @@ public class Performer
 
             _trackNumber = value;
             BmpMaestro.Instance.PublishEvent(new TrackNumberChangedEvent(game, _trackNumber, HostProcess));
+            RaisePropertyChanged(nameof(TrackNumber));
+            RaisePropertyChanged(nameof(TrackInstrument));
             var tOctaveShift = mainSequencer.GetTrackPreferredOctaveShift(_sequencer.Sequence[_trackNumber]);
             if (tOctaveShift != OctaveShift)
             {
@@ -101,9 +114,18 @@ public class Performer
                 return "None";
             if (_trackNumber >= _sequencer.Sequence.Count)
                 return "None";
+            if (_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers.Count == 0)
+                return "None";
 
-            var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig;
-            return classicConfig.Instrument.Name;
+            try
+            {
+                var classicConfig = (ClassicProcessorConfig)_sequencer.LoadedBmpSong.TrackContainers[TrackNumber - 1].ConfigContainers[0].ProcessorConfig;
+                return classicConfig.Instrument.Name;
+            }
+            catch (BmpTransmogrifyException)
+            {
+                return "Unknown";
+            }
         }
     }
 
@@ -158,6 +180,12 @@ public class Performer
                 Update(value);
             }
         }
+    }
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void RaisePropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     #region public

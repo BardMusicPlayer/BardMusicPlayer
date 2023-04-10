@@ -20,7 +20,6 @@ public partial class ClassicMainView
 {
     private int _maxTracks = 1;
     private bool DirectLoaded { get; set; } //indicates if a song was loaded directly or from playlist
-    //private NetworkPlayWindow _networkWindow = null;
     public static ClassicMainView? CurrentInstance { get; private set; }
     public ClassicMainView()
     {
@@ -56,11 +55,6 @@ public partial class ClassicMainView
     private void Globals_OnConfigReload(object? sender, EventArgs e)
     {
         LoadConfig(true);
-    }
-
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-        KeyHeat.InitUi();
     }
 
     #region EventHandler
@@ -130,8 +124,6 @@ public partial class ClassicMainView
     {
         //Statistics update
         UpdateStats(e);
-        //update heatmap
-        KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
 
         if (PlaybackFunctions.PlaybackState != PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
         {
@@ -222,8 +214,6 @@ public partial class ClassicMainView
             _numValue        = value;
             TrackTxtNum.Text = "t" + value;
 
-            //update heatmap
-            KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         }
     }
@@ -282,7 +272,6 @@ public partial class ClassicMainView
         {
             _octaveNumValue   = value;
             OctaveTxtNum.Text = @"ø" + value;
-            KeyHeat.InitiateUi(PlaybackFunctions.CurrentSong, NumValue, OctaveNumValue);
         }
     }
     private void octave_cmdUp_Click(object sender, RoutedEventArgs e)
