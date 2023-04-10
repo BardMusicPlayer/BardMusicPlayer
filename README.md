@@ -93,7 +93,7 @@ BardMusicPlayer can be used with the <a href="https://github.com/BardMusicPlayer
 
 ### Using Hypnotoad
 To enable all enhanced functionality, simply checkmark the "Hypnotoad Compatibility" option inside BardMusicPlayer's Settings tab.
-  <br><br><a><img src="https://i.imgur.com/gNHQoew.png" alt="Settings"/></a><br>
+  <br><br><a><img src="https://i.imgur.com/OA7vZeG.png" alt="Settings"/></a><br>
 </section>
 
 <section id="contributing">
