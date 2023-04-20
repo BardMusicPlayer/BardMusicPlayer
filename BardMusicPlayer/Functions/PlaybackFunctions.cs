@@ -130,6 +130,8 @@ public static class PlaybackFunctions
             return "No song loaded";
         if (trackNumber > CurrentSong.TrackContainers.Count)
             return "None";
+        // TODO: Add Program:ElectricGuitar matching so you can tell which tracks
+        // are using "Program:ElectricGuitar" instead of just program change events.
         try
         {
             var classicConfig = (ClassicProcessorConfig)CurrentSong.TrackContainers[trackNumber -1].ConfigContainers[0].ProcessorConfig; // track -1 cuz track 0 isn't in this container

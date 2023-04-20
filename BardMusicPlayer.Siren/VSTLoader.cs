@@ -28,9 +28,6 @@ internal static class VSTLoader
             {
                 foreach (var instrument in Instrument.All)
                 {
-                    if (instrument.Equals(Instrument.ProgramElectricGuitar))
-                        continue; // skip the download process for ProgramElectricGuitar
-
                     Debug.WriteLine("Downloading VST file " + _baseURL + @"/vst_" + instrument.Name.ToLower() + @".sf2");
                     await using var sf2writer = new FileStream(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2", FileMode.Create, FileAccess.Write);
                     var sf2 = await GetFileFromUrl(_baseURL + @"/vst_" + instrument.Name.ToLower() + @".sf2");
@@ -44,9 +41,6 @@ internal static class VSTLoader
 
             foreach (var instrument in Instrument.All)
             {
-                if (instrument.Equals(Instrument.ProgramElectricGuitar))
-                    continue; // skip the loading process for ProgramElectricGuitar
-
                 BmpSiren.Instance._player.LoadSoundFont(await File.ReadAllBytesAsync(BmpSiren.Instance._vstLocation + @"\vst_" + instrument.Name.ToLower() + @".sf2"), true);
             }
             BmpSiren.Instance._vstDownloaded = true;
