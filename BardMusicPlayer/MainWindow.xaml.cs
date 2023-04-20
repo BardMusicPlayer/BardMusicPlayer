@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.UI_Classic;
 using MaterialDesignColors;
@@ -15,7 +16,7 @@ public partial class MainWindow
     {
         InitializeComponent();
 
-        Title              = "BardMusicPlayer BETA Version: 2.X-CUSTOM";
+        Title              = "MeowMusic - " + Assembly.GetExecutingAssembly().GetName().Version;
         DataContext        = new ClassicMainView();
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
