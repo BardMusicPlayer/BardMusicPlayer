@@ -17,10 +17,13 @@ jobs:
       working-directory: .\BardMusicPlayer
       run: dotnet publish -r win-x64 -p:PublishSingleFile=true --self-contained false -c Release
 
+    - name: Rename file
+      run: mv .\BardMusicPlayer\bin\Release\net7.0-windows\win-x64\publish\BardMusicPlayer.exe .\BardMusicPlayer\bin\Release\net7.0-windows\win-x64\publish\MeowMusic.exe
+
     - name: Store artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: BardMusicPlayer
-        path: BardMusicPlayer\bin\Release\net7.0-windows\win-x64\publish\BardMusicPlayer.exe
+        name: MeowMusic
+        path: BardMusicPlayer\bin\Release\net7.0-windows\win-x64\publish\MeowMusic.exe
         if-no-files-found: error
         retention-days: 1

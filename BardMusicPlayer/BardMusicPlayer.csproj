@@ -17,15 +17,14 @@
 
   <PropertyGroup>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://bardmusicplayer.com</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/BardMusicPlayer/BardMusicPlayer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Meowchestra/MeowMusic</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyTitle>BardMusicPlayer</AssemblyTitle>
-    <Company>BardMusicPlayer</Company>
-    <Product>BardMusicPlayer</Product>
-    <Authors>MoogleTroupe, GiR_Zippo, Meowchestra</Authors>
+    <AssemblyTitle>MeowMusic</AssemblyTitle>
+    <Company>MeowMusic</Company>
+    <Product>MeowMusic</Product>
+    <Authors>Meowchestra, MoogleTroupe, GiR_Zippo</Authors>
     <Copyright>Copyright © 2023</Copyright>
-    <Version>2.0.1.0</Version>
+    <Version>2.0.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">

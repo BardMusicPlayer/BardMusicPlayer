@@ -389,8 +389,8 @@ public class Performer : INotifyPropertyChanged
 
         if (!game.InstrumentHeld.Equals(Instrument.None))
         {
-            if (game.InstrumentHeld.Equals(Instrument.Parse(TrackInstrument)))
-                return 0;
+            // if (game.InstrumentHeld.Equals(Instrument.Parse(TrackInstrument)))
+            //     return 0;
 
             _hook.ClearLastPerformanceKeybinds();
 
