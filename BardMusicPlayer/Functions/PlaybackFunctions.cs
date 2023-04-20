@@ -45,6 +45,12 @@ public static class PlaybackFunctions
         if (!openFileDialog.CheckFileExists)
             return false;
 
+        if (PlaybackState == PlaybackStateEnum.PlaybackStatePlaying)
+        {
+            PauseSong();
+            BmpMaestro.Instance.StopLocalPerformer();
+        }
+
         PlaybackState = PlaybackStateEnum.PlaybackStateStopped;
 
         Globals.Globals.DirectoryPath = Path.GetDirectoryName(openFileDialog.FileName);

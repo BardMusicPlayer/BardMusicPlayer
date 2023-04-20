@@ -460,8 +460,8 @@ public partial class ClassicMainView
         if (!_autoPlay)
             return;
 
-        var rnd = new Random();
-        PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
+        //var rnd = new Random();
+        PlaybackFunctions.PlaySong(2000);
         Play_Button_State(true);
     }
 

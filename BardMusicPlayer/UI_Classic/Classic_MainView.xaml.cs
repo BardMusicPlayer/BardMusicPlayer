@@ -176,14 +176,14 @@ public partial class ClassicMainView
                     PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
                     SongName.Text          = PlaybackFunctions.GetSongName();
                     InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-                    PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
+                    PlaybackFunctions.PlaySong(2000);
                     Play_Button_State(true);
                 }
             }
             else
             {
                 PlayNextSong();
-                PlaybackFunctions.PlaySong(rnd.Next(15, 35) * 100);
+                PlaybackFunctions.PlaySong(2000);
                 Play_Button_State(true);
             }
         }
