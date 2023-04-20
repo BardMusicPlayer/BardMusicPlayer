@@ -12,7 +12,6 @@
     <img src="https://img.shields.io/github/issues-raw/Meowchestra/MeowMusic?color=EA9C0A&style=for-the-badge" alt="Open Issues"/></a>
   <a href="https://github.com/Meowchestra/MeowMusic/graphs/contributors">
     <img src="https://img.shields.io/github/contributors/Meowchestra/MeowMusic?color=009009&style=for-the-badge" alt="Contributors"/></a>
-  <br> 
   <!-- Version -->
   <a href="https://github.com/Meowchestra/MeowMusic/releases">
     <img src="https://img.shields.io/github/v/tag/Meowchestra/MeowMusic?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
