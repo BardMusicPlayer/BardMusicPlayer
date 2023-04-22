@@ -27,7 +27,7 @@
     <sys:String x:Key="PlaybackHoldNotes" xml:space="preserve">Plays the length of a note as intended</sys:String>
     <sys:String x:Key="PlaybackForce" xml:space="preserve">Ignore everything and play</sys:String>
     <sys:String x:Key="PlaybackIgnoreProgram" xml:space="preserve">Ignores guitar program change events &#13;Except Program:ElectricGuitar</sys:String>
-    <sys:String x:Key="PlaybackMidiLoader" xml:space="preserve">Specify MIDI Loader</sys:String>
+    <!--<sys:String x:Key="PlaybackMidiLoader" xml:space="preserve">Specify MIDI Loader</sys:String>-->
     <sys:String x:Key="PlaybackLive" xml:space="preserve">Improves live play (should be disabled when playing a midi)</sys:String>
     <sys:String x:Key="PlaybackMidiInput" xml:space="preserve">Select your MIDI input device (midi keyboard)</sys:String>
 

@@ -1,6 +1,6 @@
 ﻿/*
- * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Copyright(c) 2012-2013 Alexey Yakovlev
+ * Licensed under the MIT license. See https://raw.githubusercontent.com/yallie/unzip/master/LICENSE.txt for full license information.
  */
 
 using System.ComponentModel;

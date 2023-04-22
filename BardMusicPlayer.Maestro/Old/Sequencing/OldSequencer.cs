@@ -400,7 +400,8 @@ public class OldSequencer : Sequencer_Internal
 
         LoadedFileType = FILETYPES.BmpSong;
         LoadedBmpSong  = bmpSong;
-        Sequence = BmpPigeonhole.Instance.MidiLoaderType == 0 ? new Sequence(bmpSong.GetDryWetSequencerMidi()) : new Sequence(bmpSong.GetProcessedSequencerMidi());
+        //Sequence = BmpPigeonhole.Instance.MidiLoaderType == 0 ? new Sequence(bmpSong.GetDryWetSequencerMidi()) : new Sequence(bmpSong.GetProcessedSequencerMidi());
+        Sequence = new Sequence(bmpSong.GetDryWetSequencerMidi());
 
         load(Sequence, trackNum);
     }
