@@ -19,7 +19,7 @@ internal static partial class Extensions
     /// <param name="tempoMap"></param>
     /// <param name="firstNoteus"></param>
     /// <param name="noteVelocity"></param>
-    /// <returns> </returns>
+    /// <returns></returns>
     internal static Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(TrackChunk originalChunk, TempoMap tempoMap, long firstNoteus, int noteVelocity)
     {
         var notesDictionary = new Dictionary<int, Dictionary<long, Note>>();
@@ -63,7 +63,13 @@ internal static partial class Extensions
         return Task.FromResult(notesDictionary);
     }
 
-
+    /// <summary>
+    /// Add the program change events to <see cref="TrackChunk"/>
+    /// </summary>
+    /// <param name="originalChunk"></param>
+    /// <param name="tempoMap"></param>
+    /// <param name="firstNote"></param>
+    /// <returns><see cref="Task{TResult}"/> is <see cref="TrackChunk"/></returns>
     internal static Task<TrackChunk> AddProgramChangeEvents(TrackChunk originalChunk, TempoMap tempoMap, long firstNote)
     {
         var newChunk = new TrackChunk();
@@ -88,6 +94,13 @@ internal static partial class Extensions
         return Task.FromResult(newChunk);
     }
 
+    /// <summary>
+    /// Add the lyric events to <see cref="TrackChunk"/>
+    /// </summary>
+    /// <param name="originalChunk"></param>
+    /// <param name="tempoMap"></param>
+    /// <param name="firstNote"></param>
+    /// <returns><see cref="Task{TResult}"/> is <see cref="TrackChunk"/></returns>
     internal static Task<TrackChunk> AddLyricsEvents(TrackChunk originalChunk, TempoMap tempoMap, long firstNote)
     {
         var newChunk = new TrackChunk();
@@ -112,7 +125,7 @@ internal static partial class Extensions
     /// </summary>
     /// <param name="originalChunk"></param>
     /// <param name="delta"></param>
-    /// <returns></returns>
+    /// <returns><see cref="Task{TResult}"/> is <see cref="TrackChunk"/></returns>
     internal static Task<TrackChunk> RealignTrackEvents(TrackChunk originalChunk, long delta)
     {
         var offset = Instrument.Parse(originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text).SampleOffset; //get the offset

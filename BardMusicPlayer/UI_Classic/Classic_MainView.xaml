@@ -198,12 +198,12 @@
                                               Content="Keep Tracks" Unchecked="KeepTrackSettingsBox_Checked"
                                               Checked="KeepTrackSettingsBox_Checked"
                                               ToolTip="{StaticResource LocalOrchestraKeepTracks}" />
-                                    <Label Margin="10,28,0,0" Grid.Row="2" Content="Autostart"
+                                    <Label Margin="10,29,0,0" Grid.Row="2" Content="Autostart"
                                            HorizontalAlignment="Left"
                                            ToolTip="{StaticResource LocalOrchestraAutoStart}" />
                                     <ComboBox Margin="90,28,0,0" Grid.Row="2" x:Name="AutostartSource"
                                               SelectionChanged="Autostart_Source_SelectionChanged"
-                                              HorizontalAlignment="Left" VerticalAlignment="Top" Width="100"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="100"
                                               Padding="5" ToolTip="{StaticResource LocalOrchestraAutoStart}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
@@ -236,27 +236,27 @@
                                               Unchecked="IgnoreProgramChangeBox_Checked"
                                               Checked="IgnoreProgramChangeBox_Checked"
                                               ToolTip="{StaticResource PlaybackIgnoreProgram}" />
-                                    <Label Margin="10,10,0,0" Grid.Row="4" Content="Sequencer"
+                                    <!--<Label Margin="10,10,0,0" Grid.Row="4" Content="Sequencer"
                                            HorizontalAlignment="Left" ToolTip="{StaticResource PlaybackMidiLoader}" />
                                     <ComboBox Margin="100,10,0,0" Grid.Row="4" x:Name="MidiLoaderSelection"
                                               SelectionChanged="MidiLoader_SelectionChanged"
                                               HorizontalAlignment="Left" VerticalAlignment="Top" Width="140"
                                               Padding="5" ToolTip="{StaticResource PlaybackMidiLoader}">
                                         <ComboBoxItem>Sanford DryWet</ComboBoxItem>
-                                        <!--<ComboBoxItem>Classic Processed</ComboBoxItem>-->
-                                    </ComboBox>
+                                        <ComboBoxItem>Classic Processed</ComboBoxItem>
+                                    </ComboBox>-->
 
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="5" x:Name="LiveMidiDelay"
+                                    <CheckBox Margin="10,10,0,0" Grid.Row="6" x:Name="LiveMidiDelay"
                                               Content="Enable note delay for live playing"
                                               Unchecked="LiveMidiDelay_Checked" Checked="LiveMidiDelay_Checked"
                                               ToolTip="{StaticResource PlaybackLive}" />
-                                    <Label Margin="10,10,0,0" Grid.Row="6" Content="MIDI Device"
+                                    <Label Margin="10,11,0,0" Grid.Row="5" Content="MIDI Device"
                                            HorizontalAlignment="Left" ToolTip="{StaticResource PlaybackMidiInput}" />
-                                    <ComboBox Margin="100,10,0,0" Grid.Row="6" x:Name="MidiInputDeviceBox"
+                                    <ComboBox Margin="100,10,0,0" Grid.Row="5" x:Name="MidiInputDeviceBox"
                                               ItemsSource="{Binding}"
                                               DisplayMemberPath="Value"
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
-                                              HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="140"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="140"
                                               Padding="5" ToolTip="{StaticResource PlaybackMidiInput}" />
                                 </Grid>
                             </GroupBox>
