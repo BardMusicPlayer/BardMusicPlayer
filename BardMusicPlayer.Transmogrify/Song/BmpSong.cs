@@ -465,7 +465,7 @@ public sealed partial class BmpSong
                 var trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "";
                 var oTrackName = trackName;
 
-                var rex = MyRegex();
+                var rex = new Regex(@"^([A-Za-z _]+)([-+]\d)?");
                 if (rex.Match(trackName) is { } match)
                 {
                     if (!string.IsNullOrEmpty(match.Groups[1].Value))
@@ -601,7 +601,4 @@ public sealed partial class BmpSong
 
         return stream;
     }
-
-    [GeneratedRegex("^([A-Za-z _]+)([-+]\\d)?")]
-    private static partial Regex MyRegex();
 }
