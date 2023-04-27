@@ -22,7 +22,9 @@ internal static partial class Extensions
     /// <returns></returns>
     internal static Task<Dictionary<int, Dictionary<long, Note>>> GetNoteDictionary(TrackChunk originalChunk, TempoMap tempoMap, long firstNoteus, int noteVelocity)
     {
+        tempoMap = tempoMap.Clone();
         var notesDictionary = new Dictionary<int, Dictionary<long, Note>>();
+
         for (var i = 0; i < 128; i++)
             notesDictionary.Add(i, new Dictionary<long, Note>());
 
