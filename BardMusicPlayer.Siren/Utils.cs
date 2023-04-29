@@ -29,18 +29,17 @@ internal static class Utils
         var trackCounter = byte.MinValue;
         var veryLast = 0L;
 
-        var midiFile = await song.GetProcessedSequencerMidiFile();
+        var midiFile = await song.GetProcessedMidiFile();
         var trackChunks = midiFile.GetTrackChunks().ToList();
             
         var lyrics = new Dictionary<int, Dictionary<long, string>>();
         var lyricNum = 0;
 
-        foreach (var trackChunk in trackChunks)
+        //Skip first track, it's just "All Tracks"
+        foreach (var trackChunk in trackChunks.GetRange(1, trackChunks.Count-1))
         {
             using var manager = trackChunk.ManageTimedEvents();
             var instr = Instrument.Parse(trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text);
-            if (instr.Index == Instrument.None)
-                continue;
 
             var instrumentMap = new Dictionary<float, KeyValuePair<NoteEvent, Instrument>>();
 
@@ -88,7 +87,8 @@ internal static class Utils
             }
             instrumentMap.Clear();
         }
-        events.FinishTrack(byte.MaxValue, (byte) veryLast);
+        trackChunks.Clear();
+        events.FinishTrack(byte.MaxValue, (byte)veryLast);
         return (file, lyrics);
     }
         

@@ -126,10 +126,32 @@ internal static class ConfigParser
             {
                 var classicConfig = (ClassicProcessorConfig)(configContainer.ProcessorConfig = new ClassicProcessorConfig { Track = trackNumber });
                 var instrumentAndOctaveRange = modifier.Match(fields[0]);
-                if (!instrumentAndOctaveRange.Success) continue; // Invalid Instrument name.
+                
+                //Check if the regex matches
+                if (!instrumentAndOctaveRange.Success)
+                {
+                    //Try to get the first progchange
+                    var prog = trackChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault();
+                    if (prog != null)
+                        classicConfig.Instrument = Instrument.ParseByProgramChange(prog.ProgramNumber);
+                    else
+                        continue; // Invalid Instrument name.
+                }
+                
                 if (instrumentAndOctaveRange.Groups[1].Success) classicConfig.Instrument = Instrument.Parse(instrumentAndOctaveRange.Groups[1].Value);
-                if (classicConfig.Instrument.Equals(Instrument.None)) continue; // Invalid Instrument name.
-                if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange            = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
+
+                //Check instrument name string
+                if (classicConfig.Instrument.Equals(Instrument.None))
+                {
+                    //Try to get the first progchange
+                    var prog = trackChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault();
+                    if (prog != null)
+                        classicConfig.Instrument = Instrument.ParseByProgramChange(prog.ProgramNumber);
+                    else
+                        continue; // Invalid Instrument name.
+                }
+
+                if (instrumentAndOctaveRange.Groups[2].Success) classicConfig.OctaveRange = OctaveRange.Parse(instrumentAndOctaveRange.Groups[2].Value);
                 if (classicConfig.OctaveRange.Equals(OctaveRange.Invalid)) classicConfig.OctaveRange = OctaveRange.C3toC6;
                 ParseAdditionalOptions(trackNumber, classicConfig, song, fields);
                 BmpLog.I(BmpLog.Source.Transmogrify, "Found Classic Config Instrument " + classicConfig.Instrument.Name + " OctaveRange " + classicConfig.OctaveRange.Name +" on track " + classicConfig.Track + " ;bards=" + classicConfig.PlayerCount + ";include=" + string.Join(",",classicConfig.IncludedTracks));
