@@ -148,14 +148,12 @@
                         </Button>
 
                         <Button Grid.Column="5" x:Name="SkipSongButton" Width="Auto" Height="25"
-                                Padding="0" VerticalAlignment="Center" Content="Skip" Click="SkipSong_Button_Click"
-                                ToolTip="{StaticResource PlaylistSkip}" />
+                                Padding="0" VerticalAlignment="Center" Content="Skip" Click="SkipSong_Button_Click" />
 
                         <CheckBox Grid.Column="7" x:Name="AutoPlayCheckBox" Checked="AutoPlay_Checked"
                                   Unchecked="AutoPlay_Checked" Height="Auto" VerticalAlignment="Center"
-                                  HorizontalAlignment="Right" ToolTip="{StaticResource PlaylistAuto}" />
-                        <Label Content="Auto-play" Grid.Column="9" Height="Auto" VerticalAlignment="Center"
-                               ToolTip="{StaticResource PlaylistAuto}" />
+                                  HorizontalAlignment="Right" />
+                        <Label Content="Auto-play" Grid.Column="9" Height="Auto" VerticalAlignment="Center" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -445,7 +443,7 @@
                     <TextBox Grid.Column="0" x:Name="TrackTxtNum" Padding="0"
                              x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged"
                              KeyUp="track_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
-                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Top" />
+                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12" />
@@ -468,7 +466,7 @@
                     <TextBox Grid.Column="0" x:Name="OctaveTxtNum" Padding="0"
                              x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged"
                              KeyUp="octave_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
-                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Top" />
+                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12" />

@@ -189,13 +189,13 @@
                                                      Value="{Binding TrackNumber}"
                                                      MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Bards.MaxTracks}"
                                                      Padding="0" Width="Auto" Height="12"
-                                                     HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                     HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                         <!--<TextBlock Grid.Column="10" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
                         <controls:OctaveNumericUpDown Grid.Column="10" Grid.Row="1" x:Name="OctaveControl"
                                                       PreviewMouseUp="OctaveControl_PreviewMouseUp"
                                                       Value="{Binding OctaveShift}"
                                                       Padding="0" Width="Auto" Height="12"
-                                                      HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" />
 
                         <TextBlock Grid.Column="12" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />

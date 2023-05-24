@@ -143,9 +143,9 @@
                         <controls:NumericUpDown Grid.Column="1" x:Name="LyricsTrackNr"
                                                 Background="{DynamicResource MaterialDesignBackground}"
                                                 Foreground="{DynamicResource MaterialDesignBody}"
-                                                Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                FontSize="8"
-                                                PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="-1"
+                                                Padding="0" FontSize="8"
+                                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left"
+                                                PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="0"
                                                 ToolTip="{StaticResource LyricsTrackNumber}" />
                     </Grid>
                     <Grid Grid.Row="4" Grid.Column="2">

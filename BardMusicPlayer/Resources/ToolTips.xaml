@@ -12,10 +12,8 @@
     <sys:String x:Key="PlaylistOpen" xml:space="preserve">Open a MusicCatalog</sys:String>
     <sys:String x:Key="PlaylistExport" xml:space="preserve">Export the current MusicCatalog</sys:String>
     <sys:String x:Key="PlaylistCleanup" xml:space="preserve">Reorganize the MusicCatalog to save space</sys:String>
-    <sys:String x:Key="PlaylistAuto" xml:space="preserve">Auto plays the next song in the playlist</sys:String>
-    <sys:String x:Key="PlaylistSkip" xml:space="preserve">Skips the current playing song</sys:String>
-    <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat Playlist</sys:String>
-    <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle Playlist</sys:String>
+    <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat</sys:String>
+    <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle</sys:String>
 
     <!-- Settings: Local Orchestra -->
     <sys:String x:Key="LocalOrchestraAutoEquip" xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
