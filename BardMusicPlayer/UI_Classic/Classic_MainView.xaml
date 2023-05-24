@@ -526,13 +526,11 @@
                         HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
                         Height="40" Width="100" Content="Open"
                         Padding="0" Margin="0,0,0,0"
-                        ToolTip="{StaticResource OpenInstrument}"
                         Click="OpenInstrumentButton_Click"
                         materialDesign:RippleAssist.IsDisabled="True" />
                 <Button Grid.Row="0" Grid.Column="0" x:Name="CloseInstrumentButton"
                         HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100" Content="Close"
                         Padding="0" Margin="0,0,0,0"
-                        ToolTip="{StaticResource CloseInstrument}"
                         Click="CloseInstrumentButton_Click" Visibility="Hidden"
                         materialDesign:RippleAssist.IsDisabled="True" />
                 <Button Grid.Row="0" Grid.Column="1" x:Name="PlayButton" Style="{StaticResource PlayButton}"
@@ -543,7 +541,6 @@
                         HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Width="100"
                         Content="Send Ensemble"
                         Padding="0" Margin="0,0,0,0"
-                        ToolTip="{StaticResource SendEnsemble}"
                         Click="RdyCheck_Click" />
             </Grid>
             <Grid Grid.Row="3" Grid.Column="2">

@@ -35,7 +35,4 @@
     <sys:String x:Key="DarkMode" xml:space="preserve">Toggle Dark Mode</sys:String>
     <sys:String x:Key="ExportSong" xml:space="preserve">Export the current loaded song to MIDI&#13;Helpful to convert .mmsong or .gp files to .mid</sys:String>
     <sys:String x:Key="LyricsTrackNumber" xml:space="preserve">Enables lyrics parsing &#13;0 means stop lyric parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)</sys:String>
-    <sys:String x:Key="OpenInstrument" xml:space="preserve">Open Instruments</sys:String>
-    <sys:String x:Key="CloseInstrument" xml:space="preserve">Close Instruments</sys:String>
-    <sys:String x:Key="SendEnsemble" xml:space="preserve">Sends ensemble ready check</sys:String>
 </ResourceDictionary>
