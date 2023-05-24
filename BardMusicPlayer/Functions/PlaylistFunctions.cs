@@ -13,7 +13,7 @@ namespace BardMusicPlayer.Functions;
 public static class PlaylistFunctions
 {
     /// <summary>
-    /// Add file(s) to the playlist
+    /// Add file to the playlist
     /// </summary>
     /// <param name="currentPlaylist"></param>
     /// <param name="filename"></param>
@@ -168,6 +168,11 @@ public static class PlaylistFunctions
         return data;
     }
 
+    /// <summary>
+    /// Get the total time of all items in the playlist
+    /// </summary>
+    /// <param name="playlist"></param>
+    /// <returns><see cref="TimeSpan"/></returns>
     public static TimeSpan GetTotalTime(IPlaylist? playlist)
     {
         var totalTime = new TimeSpan(0);
@@ -175,5 +180,35 @@ public static class PlaylistFunctions
         var result = totalTime;
         if (playlist != null) result = playlist.Aggregate(result, (current, song) => current + song.Duration);
         return result;
+    }
+
+    /// <summary>
+    /// Export a song to Midi
+    /// </summary>
+    /// <param name="song"></param>
+    public static bool ExportSong(BmpSong? song)
+    {
+        if (song == null)
+            return false;
+
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter           = "MIDI file (*.mid)|*.mid",
+            FilterIndex      = 2,
+            RestoreDirectory = true,
+            OverwritePrompt  = true
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            Stream myStream;
+            if ((myStream = saveFileDialog.OpenFile()) != null)
+            {
+                song.GetExportMidi().WriteTo(myStream);
+                myStream.Close();
+                return true;
+            }
+        }
+        return false;
     }
 }

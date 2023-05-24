@@ -44,23 +44,6 @@ public partial class ClassicMainView
 
     private void ExportAsMidi(object sender, RoutedEventArgs routedEventArgs)
     {
-        var song = PlaybackFunctions.CurrentSong;
-        var saveFileDialog = new SaveFileDialog
-        {
-            Filter           = "MIDI file (*.mid)|*.mid",
-            FilterIndex      = 2,
-            RestoreDirectory = true,
-            OverwritePrompt  = true
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            Stream myStream;
-            if ((myStream = saveFileDialog.OpenFile()) != null)
-            {
-                song?.GetExportMidi().WriteTo(myStream);
-                myStream.Close();
-            }
-        }
+        PlaylistFunctions.ExportSong(PlaybackFunctions.CurrentSong);
     }
 }
