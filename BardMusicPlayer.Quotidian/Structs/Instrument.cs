@@ -13,7 +13,7 @@ namespace BardMusicPlayer.Quotidian.Structs;
 /// </summary>
 public readonly struct Instrument : IComparable, IConvertible, IComparable<Instrument>, IEquatable<Instrument>
 {
-    public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 0, 0, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
+    public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 50, 0, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
 
     public static readonly Instrument Harp = new("Harp", 1, 46, OctaveRange.C3toC6, false, 0, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "OrchestralHarp", "orchestralharps", "harps" }));
     public static readonly Instrument Piano = new("Piano", 2, 0, OctaveRange.C4toC7, false, 0, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "AcousticGrandPiano", "acousticgrandpianos", "pianos" }));
@@ -32,27 +32,27 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
     public static readonly Instrument Bongo = new("Bongo", 11, 116, OctaveRange.C3toC6, false, 0, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "bongos" }));
     public static readonly Instrument BassDrum = new("BassDrum", 12, 117, OctaveRange.C2toC5, false, 0, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "bassdrums", "bass_drum", "bass_drums", "kick" }));
     public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, OctaveRange.C3toC6, false, 0, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "snaredrums", "Snare", "snare_drum" }));
-    public static readonly Instrument Cymbal = new("Cymbal", 14, 127, OctaveRange.C3toC6, false, 0, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "cymbals" }));
+    public static readonly Instrument Cymbal = new("Cymbal", 14, 127, OctaveRange.C3toC6, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "cymbals" }));
     public static readonly IReadOnlyList<Instrument> Drums = new ReadOnlyCollection<Instrument>(new List<Instrument> { Timpani, Bongo, BassDrum, SnareDrum, Cymbal });
 
-    public static readonly Instrument Trumpet = new("Trumpet", 15, 56, OctaveRange.C3toC6, true, 0, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "trumpets" }));
-    public static readonly Instrument Trombone = new("Trombone", 16, 57, OctaveRange.C2toC5, true, 0, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "trombones" }));
-    public static readonly Instrument Tuba = new("Tuba", 17, 58, OctaveRange.C1toC4, true, 0, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "tubas" }));
-    public static readonly Instrument Horn = new("Horn", 18, 60, OctaveRange.C2toC5, true, 0, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "FrenchHorn", "frenchhorns", "horns" }));
-    public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 0, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Sax", "AltoSaxophone", "AltoSax" }));
+    public static readonly Instrument Trumpet = new("Trumpet", 15, 56, OctaveRange.C3toC6, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "trumpets" }));
+    public static readonly Instrument Trombone = new("Trombone", 16, 57, OctaveRange.C2toC5, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "trombones" }));
+    public static readonly Instrument Tuba = new("Tuba", 17, 58, OctaveRange.C1toC4, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "tubas" }));
+    public static readonly Instrument Horn = new("Horn", 18, 60, OctaveRange.C2toC5, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "FrenchHorn", "frenchhorns", "horns" }));
+    public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 50, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Sax", "AltoSaxophone", "AltoSax" }));
     public static readonly IReadOnlyList<Instrument> Brass = new ReadOnlyCollection<Instrument>(new List<Instrument> { Trumpet, Trombone, Tuba, Horn, Saxophone });
 
-    public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 0, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
-    public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 0, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>()));
-    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 0, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>()));
-    public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 0, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "bass" }));
+    public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
+    public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>()));
+    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>()));
+    public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 50, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "bass" }));
     public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
     
-    public static readonly Instrument ElectricGuitarOverdriven = new("ElectricGuitarOverdriven", 24, 29, OctaveRange.C2toC5, true, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "guitaroverdriven", "overdrivenguitar", "overdriven", "ElectricGuitar:Overdriven", "Program:ElectricGuitar"}));
-    public static readonly Instrument ElectricGuitarClean = new("ElectricGuitarClean", 25, 27, OctaveRange.C2toC5, true, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "guitarclean", "cleanguitar", "clean", "ElectricGuitar:Clean" }));
+    public static readonly Instrument ElectricGuitarOverdriven = new("ElectricGuitarOverdriven", 24, 29, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "guitaroverdriven", "overdrivenguitar", "overdriven", "ElectricGuitar:Overdriven", "Program:ElectricGuitar"}));
+    public static readonly Instrument ElectricGuitarClean = new("ElectricGuitarClean", 25, 27, OctaveRange.C2toC5, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "guitarclean", "cleanguitar", "clean", "ElectricGuitar:Clean" }));
     public static readonly Instrument ElectricGuitarMuted = new("ElectricGuitarMuted", 26, 28, OctaveRange.C2toC5, false, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "guitarmuted", "mutedguitar", "muted", "ElectricGuitar:Muted" }));
-    public static readonly Instrument ElectricGuitarPowerChords = new("ElectricGuitarPowerChords", 27, 30, OctaveRange.C1toC4, true, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ElectricGuitarPowerChord", "guitarpowerchords", "powerchords", "ElectricGuitar:PowerChords" }));
-    public static readonly Instrument ElectricGuitarSpecial = new("ElectricGuitarSpecial", 28, 31, OctaveRange.C3toC6, false, 0, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "guitarspecial", "special", "ElectricGuitar:Special" }));
+    public static readonly Instrument ElectricGuitarPowerChords = new("ElectricGuitarPowerChords", 27, 30, OctaveRange.C1toC4, true, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ElectricGuitarPowerChord", "guitarpowerchords", "powerchords", "ElectricGuitar:PowerChords" }));
+    public static readonly Instrument ElectricGuitarSpecial = new("ElectricGuitarSpecial", 28, 31, OctaveRange.C3toC6, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "guitarspecial", "special", "ElectricGuitar:Special" }));
     public static readonly IReadOnlyList<Instrument> ElectricGuitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { ElectricGuitarOverdriven, ElectricGuitarClean, ElectricGuitarMuted, ElectricGuitarPowerChords, ElectricGuitarSpecial });
 
     public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(ElectricGuitar).ToList());
@@ -300,29 +300,43 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
     /// <returns>The millisecond offset</returns>
     public long NoteSampleOffset(int note)
     {
-        if (Equals(Harp)) return 50;
-        if (Equals(Piano)) return 50;
-        // TODO: Double check Lute in-game instead of sample offset measurement.
-        /*if (Equals(Lute) && note < 15) return 0;
-        if (Equals(Lute) && note > 14) return 50;*/
-        if (Equals(Lute)) return 50;
-        if (Equals(Fiddle)) return 50;
+        if (Equals(Clarinet) && note < 3) return -100;
 
-        if (Equals(Flute)) return 50;
-        if (Equals(Oboe)) return 50;
-        if (Equals(Clarinet) && note <= 7) return 0;
-        if (Equals(Clarinet) && note >= 8) return 50;
-        if (Equals(Fife)) return 50;
-        if (Equals(Panpipes)) return 50;
+        if (Equals(Clarinet) && note is > 2 and < 8) return -50;
 
-        if (Equals(ElectricGuitarMuted)) return 50;
+        if (Equals(Clarinet) && note is > 7 and < 11) return 0;
 
-        if (Equals(Timpani)) return 50;
-        if (Equals(Bongo)) return 50;
-        if (Equals(BassDrum)) return 50;
-        if (Equals(SnareDrum)) return 50;
+        if (Equals(Panpipes) && note < 6) return 0;
 
-        return 100;
+        if (Equals(Panpipes) && note > 27) return 100;
+
+        if (Equals(Fife) && note < 2) return 0;
+
+        if (Equals(Oboe) && note > 25) return 100;
+
+        if (Equals(Bongo) && note > 7) return 100;
+
+        if (Equals(BassDrum) && note > 26) return 100;
+
+        if (Equals(SnareDrum) && note < 4) return 0;
+
+        if (Equals(SnareDrum) && note > 31) return 100;
+
+        if (Equals(Timpani) && note < 8) return 0;
+
+        if (Equals(Timpani) && note > 32) return 100;
+
+        if (Equals(Lute) && note < 3) return -50;
+
+        if (Equals(Lute) && note is >= 3 and < 8) return 0;
+
+        if (Equals(Lute) && note == 36) return 100;
+
+        if (Equals(Harp) && note == 0) return 0;
+
+        if (Equals(Harp) && note > 23) return 100;
+
+        return 50;
     }
 
     /// <summary>
