@@ -322,7 +322,17 @@ public class Performer : INotifyPropertyChanged
                 }
             }
             else
+            {
                 _sequencer.Pause();
+
+                if (UsesDalamud)
+                {
+                    DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.NoteOn, game = game, BoolData = false });
+                    return;
+                }
+
+                _hook.ClearLastPerformanceKeybinds();
+            }
         }
     }
 
@@ -334,6 +344,13 @@ public class Performer : INotifyPropertyChanged
         if (_sequencer is not null)
         {
             _sequencer.Stop();
+
+            if (UsesDalamud)
+            {
+                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.NoteOn, game = game, BoolData = false });
+                return;
+            }
+
             _hook.ClearLastPerformanceKeybinds();
         }
     }
