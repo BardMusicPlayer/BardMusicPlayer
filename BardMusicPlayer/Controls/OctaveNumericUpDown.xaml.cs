@@ -1,7 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace BardMusicPlayer.Controls;
 
@@ -69,34 +67,21 @@ public sealed partial class OctaveNumericUpDown
         NumValue--;
     }
 
-    private void OctaveNumericUpDown_Key(object sender, KeyEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case Key.Up:
-                NumUp_Click(sender, e);
-                break;
-            case Key.Down:
-                NumDown_Click(sender, e);
-                break;
-        }
-    }
-
     private void TextChanged(object sender, TextChangedEventArgs e)
     {
         if (Text == null)
             return;
 
-        var str = MyRegex().Replace(Text.Text, "");
-        if (int.TryParse(str, out var val))
+        if (_numValue is < -5 or > 5)
         {
-            if (NumValue is <= -5 or >= 5)
-                return;
+            Text.Text = @"ø" + 0;
+            NumValue  = 0;
+        }
 
-            NumValue = val;
+        if (int.TryParse(Text.Text.Replace(@"ø", ""), out _numValue))
+        {
+            Text.Text = @"ø" + _numValue;
+            NumValue  = _numValue;
         }
     }
-
-    [GeneratedRegex("[^\\d|\\.\\-]")]
-    private static partial Regex MyRegex();
 }

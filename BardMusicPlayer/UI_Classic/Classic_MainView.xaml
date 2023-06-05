@@ -186,6 +186,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <CheckBox Margin="10,10,0,0" Grid.Row="0" x:Name="AutoEquipBox"
                                               Content="Auto-Equip Performer(s)" Unchecked="AutoEquipBox_Checked"
@@ -210,6 +211,7 @@
                                               Content="Hypnotoad Compatibility" Unchecked="Hypnotoad_Checked"
                                               Checked="Hypnotoad_Checked"
                                               ToolTip="{StaticResource LocalOrchestraHypnotoad}" />
+                                    <CheckBox Margin="10,0,0,0"  Grid.Row="4" Content="Multibox Support" x:Name="MultiBox" Checked="MultiBoxChecked" Unchecked="MultiBoxChecked" ToolTip="{StaticResource Multibox}"/>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="0" Grid.Column="1" Header="Playback">

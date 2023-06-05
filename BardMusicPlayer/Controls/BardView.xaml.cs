@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -28,7 +27,6 @@ public partial class BardView
 {
     public sealed class BardViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<Performer> _bardList = new();
 
         private int _maxTracks;
 
@@ -38,17 +36,7 @@ public partial class BardView
                 _maxTracks = value;
                 RaisePropertyChanged(nameof(MaxTracks));
             } }
-
-
-        public ObservableCollection<Performer> BardList
-        {
-            get => _bardList;
-            set
-            {
-                _bardList = value;
-                RaisePropertyChanged(nameof(BardList));
-            }
-        }
+        
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -63,7 +51,7 @@ public partial class BardView
         InitializeComponent();
 
         DataContext = this;
-        //Bards       = new BardViewModel(); // initialize the Bards property
+        // Bards       = new BardViewModel(); // initialize the Bards property
 
         BmpMaestro.Instance.OnPerformerChanged += OnPerformerChanged;
         // BmpMaestro.Instance.OnTrackNumberChanged += OnTrackNumberChanged;
@@ -87,67 +75,124 @@ public partial class BardView
 
     private Performer? SelectedBard { get; set; }
 
-    private void OnPerformerChanged(object? sender, bool e)
-    {
-        // Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-        // Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
-        Bards.BardList = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-    }
-
-    // private void OnTrackNumberChanged(object? sender, TrackNumberChangedEvent e)
-    // {
-    //     UpdateList();
-    // }
-    //
-    // private void OnOctaveShiftChanged(object? sender, OctaveShiftChangedEvent e)
-    // {
-    //     UpdateList();
-    // }
-
-    private void OnSongLoaded(object? sender, SongLoadedEvent e)
-    {
-        Bards.MaxTracks = e.MaxTracks;
-
-        UpdateList();
-    }
-
-    private void OnPerformerUpdate(object? sender, PerformerUpdate e)
-    {
-        UpdateList();
-    }
-
-    private void OnPlayerNameChanged(PlayerNameChanged e)
-    {
-        UpdateList();
-    }
-
-    private void OnHomeWorldChanged(HomeWorldChanged e)
-    {
-        UpdateList();
-    }
+    private void OnPerformerChanged(object? sender, bool e) { UpdateList(); }
+    // private void OnTrackNumberChanged(object? sender, TrackNumberChangedEvent e) { UpdateView(); }
+    // private void OnOctaveShiftChanged(object? sender, OctaveShiftChangedEvent e) { UpdateView(); }
+    private void OnSongLoaded(object? sender, SongLoadedEvent e) { Bards.MaxTracks = e.MaxTracks; UpdateView(); }
+    private void OnPerformerUpdate(object? sender, PerformerUpdate e) { UpdateView(); }
+    private void OnPlayerNameChanged(PlayerNameChanged e) { UpdateView(); }
+    private void OnHomeWorldChanged(HomeWorldChanged e) { UpdateView(); }
 
     private void OnInstrumentHeldChanged(InstrumentHeldChanged e)
     {
-        UpdateList();
+        UpdateView();
     }
 
+    /// <summary>
+    /// Update the contents of the item only
+    /// </summary>
+    private void UpdateView()
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            BardsList.Items.Refresh();
+        }));
+    }
+
+    /// <summary>
+    /// Add/Remove an element from the list
+    /// </summary>
     private void UpdateList()
     {
-        // Bards = new ObservableCollection<Performer>(BmpMaestro.Instance.GetAllPerformers());
-        // Dispatcher.BeginInvoke(new Action(() => BardsList.ItemsSource = Bards));
-        Dispatcher.BeginInvoke(new Action(() => BardsList.Items.Refresh()));
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var tempPerf = BardsList.Items.OfType<Performer>().ToList();
+            var comparator = BmpMaestro.Instance.GetAllPerformers().Except(tempPerf).ToList();
+            foreach (var p in comparator)
+                BardsList.Items.Add(p);
+            comparator = tempPerf.Except(BmpMaestro.Instance.GetAllPerformers()).ToList();
+            foreach (var p in comparator)
+                BardsList.Items.Remove(p);
+            BardsList.Items.Refresh();
+        }));
     }
 
-    private void BardsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    #region Drag&Drop
+    /// <summary>
+    /// Drag & Drop Start
+    /// </summary>
+    private Point _startPoint;
+
+    private void BardsListItemPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        Console.WriteLine(BardsList.SelectedItem);
+        _startPoint = e.GetPosition(null);
     }
 
-    private void BardsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void BardsListItem_MouseMove(object sender, MouseEventArgs e)
     {
-        SelectedBard = BardsList.SelectedItem as Performer;
-
+        var mousePos = e.GetPosition(null);
+        var diff = _startPoint - mousePos;
+        if (e.LeftButton == MouseButtonState.Pressed &&
+            (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+             Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+        {
+            if (sender is ListViewItem celltext)
+            {
+                DragDrop.DoDragDrop(BardsList, celltext, DragDropEffects.Move);
+                e.Handled = true;
+            }
+        }
     }
+
+    /// <summary>
+    /// Called when there is a drop
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BardsListItem_Drop(object sender, DragEventArgs e)
+    {
+            var draggedObject = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+            var targetObject = ((ListViewItem)(sender));
+
+            var drag = draggedObject?.Content as Performer;
+            var drop = targetObject.Content as Performer;
+            var dragIdx = BardsList.Items.IndexOf(drag);
+            var dropIdx = BardsList.Items.IndexOf(drop);
+
+            if (drag == drop)
+                return;
+            var newBardsList = new SortedDictionary<int, Performer?>();
+            var index = 0;
+            foreach (var p in BardsList.Items)
+            {
+                if ((Performer)p == drag)
+                    continue;
+                if ((Performer)p == drop)
+                {
+                    if (dropIdx < dragIdx)
+                    {
+                        newBardsList.Add(index, drag); index++;
+                        newBardsList.Add(index, drop); index++;
+                    }
+                    else if (dropIdx > dragIdx)
+                    {
+                        newBardsList.Add(index, drop); index++;
+                        newBardsList.Add(index, drag); index++;
+                    }
+                }
+                else
+                {
+                    newBardsList.Add(index, p as Performer);
+                    index++;
+                }
+            }
+            BardsList.ItemsSource = null;
+            BardsList.Items.Clear();
+            foreach (var p in newBardsList)
+                BardsList.Items.Add(p.Value);
+            newBardsList.Clear();
+    }
+    #endregion
 
     /* Track UP/Down */
     private void TrackNumericUpDown_MouseUp(object sender, MouseButtonEventArgs e)
@@ -159,6 +204,9 @@ public partial class BardView
     {
         var game = (sender as TrackNumericUpDown)?.DataContext as Performer;
         BmpMaestro.Instance.SetTracknumber(game, s);
+
+        if (sender is TrackNumericUpDown ctl) ctl.OnValueChanged -= OnValueChanged;
+
         if (BmpPigeonhole.Instance.AutoEquipBards)
         {
             _ = game?.ReplaceInstrument();
@@ -243,9 +291,12 @@ public partial class BardView
     /// </summary>
     public class PerformerSettingData
     {
-        public string Name { get; init; } = "";
-        public int Track { get; init; }
-        public long AffinityMask { get; init; }
+        public string CID { get; set; } = "None";
+        public int OrderNum { get; set; } = -1;
+        public string Name { get; set; } = "";
+        public int Track { get; set; }
+        public long AffinityMask { get; set; }
+        public bool IsHost { get; set; }
     }
 
     /// <summary>
@@ -270,91 +321,187 @@ public partial class BardView
         fileStream.Close();
 
         var data = memoryStream.ToArray();
-        var performerDataList = JsonConvert.DeserializeObject<List<PerformerSettingData>>(new UTF8Encoding(true).GetString(data));
+        var performerDataList =
+            JsonConvert.DeserializeObject<List<PerformerSettingData>>(new UTF8Encoding(true).GetString(data));
 
         if (performerDataList != null)
         {
-            foreach (var performerConfig in performerDataList)
+            foreach (var pconfig in performerDataList)
             {
-                //var p = Bards.Where(perf => perf.game.PlayerName.Equals(performerConfig.Name));
-                var p = Bards.BardList.Where(perf => perf.game.PlayerName.Equals(performerConfig.Name));
-                var performers = p as Performer[] ?? p.ToArray();
-                if (!performers.Any())
-                    continue;
 
-                performers.First().TrackNumber = performerConfig.Track;
-                if (performerConfig.AffinityMask != 0)
-                    performers.First().game.SetAffinity(performerConfig.AffinityMask);
+                var p = BardsList.Items.OfType<Performer>().ToList().Where(perf => perf.game.ConfigId.Equals(pconfig.CID));
+                if (!p.Any())
+                {
+                    p = BardsList.Items.OfType<Performer>().ToList().Where(perf => perf.game.PlayerName.Equals(pconfig.Name));
+                    if (!p.Any())
+                        continue;
+                }
+
+                p.First().TrackNumber = pconfig.Track;
+                if (pconfig.AffinityMask != 0)
+                    p.First().game.SetAffinity(pconfig.AffinityMask);
             }
-        }
 
-        if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
-        {
-            BmpPigeonhole.Instance.EnsembleKeepTrackSetting = true;
-            Globals.Globals.ReloadConfig();
-        }
-    }
+            var tempPerf = new List<Performer>(BardsList.Items.OfType<Performer>().ToList());
 
-    /// <summary>
-    /// save the performer config file
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Save_Performer_Settings(object sender, RoutedEventArgs e)
-    {
-        var openFileDialog = new SaveFileDialog
-        {
-            Filter = "Performer Config | *.cfg"
-        };
-
-        if (openFileDialog.ShowDialog() != true)
-            return;
-
-        //var performerDataList = Bards.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = performer.game.GetAffinity() }).ToList();
-        var performerDataList = Bards.BardList.Select(performer => new PerformerSettingData { Name = performer.game.PlayerName, Track = performer.TrackNumber, AffinityMask = performer.game.GetAffinity() }).ToList();
-        var t = JsonConvert.SerializeObject(performerDataList);
-        var content = new UTF8Encoding(true).GetBytes(t);
-
-        var fileStream = File.Create(openFileDialog.FileName);
-        fileStream.Write(content, 0, content.Length);
-        fileStream.Close();
-    }
-
-    private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
-    {
-        //foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
-        foreach (var p in Bards.BardList.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
-        {
-            p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
-            p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
-        }
-    }
-
-    /// <summary>
-    /// Button context menu routine
-    /// </summary>
-    private void MenuButton_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        if (sender is Button rectangle)
-        {
-            var contextMenu = rectangle.ContextMenu;
-            if (contextMenu != null)
+            //Reorder if there is no -1 OrderNum
+            if (performerDataList.All(p => p.OrderNum != -1))
             {
-                contextMenu.PlacementTarget = rectangle;
-                contextMenu.Placement       = PlacementMode.Bottom;
-                contextMenu.IsOpen          = true;
+                performerDataList.Sort((x, y) => x.OrderNum.CompareTo(y.OrderNum));
+                BardsList.Items.Clear();
+                foreach (var p in performerDataList.Select(pconfig => tempPerf.Where(perf => perf.game.ConfigId.Equals(pconfig.CID))).Where(p => p.Any()))
+                {
+                    BardsList.Items.Add(p.First());
+                }
+            }
+            //Set the host performer
+            /*var host_perf = pdatalist.Where(p => p.IsHost);
+            if (host_perf.Count() != 0)
+            {
+                BmpMaestro.Instance.SetHostBard(tempPerf.Find(p => p.game.ConfigId == host_perf.First().CID));
+                BmpMaestro.Instance.SetTracknumber(tempPerf.Find(p => p.game.ConfigId == host_perf.First().CID), host_perf.First().Track);
+            }*/
+            tempPerf.Clear();
+            performerDataList.Clear();
+
+            if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
+            {
+                BmpPigeonhole.Instance.EnsembleKeepTrackSetting = true;
+                Globals.Globals.ReloadConfig();
             }
         }
     }
+
+        /// <summary>
+        /// save the performer config file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Save_Performer_Settings(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new SaveFileDialog
+            {
+                Filter = "Performer Config | *.cfg"
+            };
+
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            var performerDataList = BardsList.Items.OfType<Performer>()
+                .ToList()
+                .Select(performer => new PerformerSettingData
+                {
+                    OrderNum     = BardsList.Items.IndexOf(performer),
+                    CID          = performer.game.ConfigId,
+                    Name         = performer.game.PlayerName,
+                    Track        = performer.TrackNumber,
+                    AffinityMask = performer.game.GetAffinity(),
+                    IsHost       = performer.HostProcess
+                })
+                .ToList();
+            var t = JsonConvert.SerializeObject(performerDataList);
+            var content = new UTF8Encoding(true).GetBytes(t);
+
+            var fileStream = File.Create(openFileDialog.FileName);
+            fileStream.Write(content, 0, content.Length);
+            fileStream.Close();
+            performerDataList.Clear();
+        }
+
+        private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            //foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
+            foreach (var p in BardsList.Items.OfType<Performer>().ToList().Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
+            {
+                p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
+                p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
+            }
+        }
+
+        /// <summary>
+        /// Window pos load button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ArrangeWindow_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "WindowLayout | *.txt",
+                Multiselect = true
+            };
+
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            ArrangeWindows(openFileDialog.FileName);
+        }
+
+        /// <summary>
+        /// Arrange the window position and size
+        /// </summary>
+        private void ArrangeWindows(string filename)
+        {
+            if (BardsList.Items.OfType<Performer>().ToList().Count == 0)
+                return;
+
+            var y = 0;
+            var size_x = 0;
+            var size_y = 0;
+            var reader = new StreamReader(filename);
+            var input = reader.ReadLine();
+            if (input != null && input.Split(':')[0].Contains("Size"))
+            {
+                size_x = Convert.ToInt32(input.Split(':')[1].Split('x')[0]);
+                size_y = Convert.ToInt32(input.Split(':')[1].Split('x')[1]);
+            }
+
+            while (reader.ReadLine() is { } line)
+            {
+                var x = 0;
+                for (var i = 0; i < line.Length;)
+                {
+                    var value = line[i] + line[i + 1].ToString();
+                    i += 2;
+                    if (value != "--")
+                    {
+                        var bard = BardsList.Items.OfType<Performer>().ToList().FirstOrDefault(p => p.TrackNumber == Convert.ToInt32(value));
+                        if (bard == null)
+                            continue;
+                        bard.game.SetWindowPosAndSize(x, y, size_x, size_y, true);
+                    }
+                    x += size_x;
+                }
+                y += size_y;
+            }
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Button context menu routine
+        /// </summary>
+        private void MenuButton_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button rectangle)
+            {
+                var contextMenu = rectangle.ContextMenu;
+                if (contextMenu != null)
+                {
+                    contextMenu.PlacementTarget = rectangle;
+                    contextMenu.Placement       = PlacementMode.Bottom;
+                    contextMenu.IsOpen          = true;
+                }
+            }
+        }
 }
 
 public class FontSizeConverter : IValueConverter
 {
-    public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null) return null;
         var text = value.ToString();
-        var width = double.Parse(parameter.ToString() ?? string.Empty);
+        var width = double.Parse(parameter?.ToString() ?? string.Empty);
         double fontSize = 13;
         var formattedText = new FormattedText(
             text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
@@ -369,7 +516,7 @@ public class FontSizeConverter : IValueConverter
         return fontSize;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

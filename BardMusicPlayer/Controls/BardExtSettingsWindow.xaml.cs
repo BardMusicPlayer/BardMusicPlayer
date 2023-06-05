@@ -213,19 +213,21 @@ public sealed partial class BardExtSettingsWindow
 
     private void GfxTest_Checked(object sender, RoutedEventArgs e)
     {
-        if (GfxTest.IsChecked != null && (bool)GfxTest.IsChecked)
+        if ((bool)GfxTest.IsChecked!)
         {
-            if (_performer != null && _performer.game.GfxSettingsLow)
+            if (_performer!.game.GfxSettingsLow)
                 return;
-            _performer?.game.GfxSetLow(true);
-            if (_performer != null) _performer.game.GfxSettingsLow = true;
+            if (!_performer.game.GfxSetLow(true).Result)
+                _performer.game.SetGfxLow();
+            _performer.game.GfxSettingsLow = true;
         }
         else
         {
-            if (_performer != null && !_performer.game.GfxSettingsLow)
+            if (!_performer!.game.GfxSettingsLow)
                 return;
-            _performer?.game.GfxSetLow(false);
-            if (_performer != null) _performer.game.GfxSettingsLow = false;
+            if(!_performer.game.GfxSetLow(false).Result)
+                _performer.game.RestoreGFXSettings();
+            _performer.game.GfxSettingsLow = false;
         }
     }
 }

@@ -24,8 +24,7 @@ internal partial class Reader
 
         try
         {
-            var source =
-                MemoryHandler.GetByteArray(playerInfoMap, MemoryHandler.Structures.CurrentPlayer.SourceSize);
+            var source = MemoryHandler.GetByteArray(playerInfoMap, MemoryHandler.Structures.CurrentPlayer.SourceSize);
             var actorId = SBitConverter.TryToUInt32(source, MemoryHandler.Structures.CurrentPlayer.ID);
             var playerName = MemoryHandler.GetStringFromBytes(source, MemoryHandler.Structures.CurrentPlayer.Name);
             var isCurrentlyBard = source[MemoryHandler.Structures.CurrentPlayer.JobID] == 0x17;

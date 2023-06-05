@@ -139,6 +139,8 @@ public partial class Game
                     if (!PlayerName.Equals(playerName.PlayerName))
                     {
                         PlayerName = playerName.PlayerName;
+                        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+                            SetClientWindowName(PlayerName + "@" + HomeWorld);
                         BmpSeer.Instance.PublishEvent(playerName);
                     }
 
@@ -148,6 +150,8 @@ public partial class Game
                     if (!HomeWorld.Equals(homeWorld.HomeWorld))
                     {
                         HomeWorld = homeWorld.HomeWorld;
+                        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+                            SetClientWindowName(PlayerName + "@" + HomeWorld);
                         BmpSeer.Instance.PublishEvent(homeWorld);
                     }
 

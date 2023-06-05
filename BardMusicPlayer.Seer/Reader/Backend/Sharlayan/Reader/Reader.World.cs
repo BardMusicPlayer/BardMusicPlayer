@@ -16,8 +16,7 @@ internal partial class Reader
         var worldMap = (IntPtr) Scanner.Locations[Signatures.WorldKey];
         try
         {
-            var world = MemoryHandler.GetString(worldMap, MemoryHandler.Structures.World.Offset,
-                MemoryHandler.Structures.World.SourceSize);
+            var world = MemoryHandler.GetString(worldMap, MemoryHandler.Structures.World.Offset, MemoryHandler.Structures.World.SourceSize);
             return world;
         }
         catch (Exception ex)

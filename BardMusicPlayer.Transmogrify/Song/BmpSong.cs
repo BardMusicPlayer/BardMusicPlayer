@@ -15,7 +15,6 @@ using BardMusicPlayer.Transmogrify.Song.Importers;
 using BardMusicPlayer.Transmogrify.Song.Importers.LRC;
 using BardMusicPlayer.Transmogrify.Song.Utilities;
 using LiteDB;
-using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 

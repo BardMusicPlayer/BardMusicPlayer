@@ -503,15 +503,11 @@ public class Orchestrator : IDisposable
                     lock (_performers)
                     {
                         //Remove the old double performer
-                        var chkperf = _performers.FindAll(i => i.Value.game.PlayerName == game.Key.PlayerName);
-                        if (chkperf.Count != 0)
+                        var x = _performers.Find(i => i.Value.game.ConfigId == game.Key.ConfigId);
+                        if (x.Value != null)
                         {
-                            var x = chkperf.Find(i => i.Value.HomeWorld == game.Key.HomeWorld);
-                            if (x.Value != null)
-                            {
-                                _performers.Remove(x);
-                                x.Value.game.Dispose();
-                            }
+                            _performers.Remove(x);
+                            x.Value.game.Dispose();
                         }
                         _performers.Add(new KeyValuePair<int, Performer>(game.Key.Pid, perf)); //Add the performer
                     }

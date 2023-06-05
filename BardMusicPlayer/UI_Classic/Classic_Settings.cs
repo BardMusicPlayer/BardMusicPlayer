@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Utils;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Seer;
 
 namespace BardMusicPlayer.UI_Classic;
 
@@ -14,6 +15,7 @@ public partial class ClassicMainView
     private void LoadConfig(bool reload = false)
     {
         AutoPlayCheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
+        MultiBox.IsChecked     = BmpPigeonhole.Instance.EnableMultibox;
 
         //Playback
         HoldNotesBox.IsChecked           = BmpPigeonhole.Instance.HoldNotes;
@@ -118,6 +120,19 @@ public partial class ClassicMainView
             MainWindow.LightModeStyle();
         else
             MainWindow.DarkModeStyle();
+    }
+    
+    private void MultiBoxChecked(object sender, RoutedEventArgs e)
+    {
+        if (!BmpPigeonhole.Instance.EnableMultibox)
+        {
+            Task.Run(() =>
+            {
+                foreach (var game in BmpSeer.Instance.Games.Values)
+                    game.KillMutant();
+            });
+        }
+        BmpPigeonhole.Instance.EnableMultibox = MultiBox.IsChecked ?? false;
     }
     #endregion
 }

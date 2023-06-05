@@ -13,7 +13,7 @@
         <!-- Track Selection-->
         <TextBox Grid.Column="0" x:Name="Text" TextChanged="TextChanged" Padding="0"
                  TextAlignment="Center" FontSize="14" HorizontalAlignment="Right" Width="28" Height="25"
-                 VerticalAlignment="Center" VerticalContentAlignment="Center" KeyUp="OctaveNumericUpDown_Key" />
+                 VerticalAlignment="Center" VerticalContentAlignment="Center" />
         <Grid Grid.Column="1" Margin="0,0,-7,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="12" />

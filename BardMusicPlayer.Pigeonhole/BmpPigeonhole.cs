@@ -83,6 +83,11 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     public virtual bool EnableSynthVoiceLimiter { get; set; } = true;
 
     /// <summary>
+    /// Enables the multibox feature
+    /// </summary>
+    public virtual bool EnableMultibox { get; set; } = false;
+
+    /// <summary>
     /// milliseconds till ready check confirmation.
     /// </summary>
     public virtual int EnsembleReadyDelay { get; set; } = 500;

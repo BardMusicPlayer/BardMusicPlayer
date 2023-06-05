@@ -271,10 +271,21 @@ public partial class ClassicMainView
         if (TrackTxtNum == null)
             return;
 
+        if (_numValue <= 0 || _numValue > _maxTracks)
+        {
+            if (BmpPigeonhole.Instance.PlayAllTracks)
+            {
+                TrackTxtNum.Text = "t" + 0;
+                BmpMaestro.Instance.SetTracknumberOnHost(0);
+                return;
+            }
+            
+            TrackTxtNum.Text = "t" + 1;
+            BmpMaestro.Instance.SetTracknumberOnHost(1);
+        }
+        
         if (int.TryParse(TrackTxtNum.Text.Replace("t", ""), out _numValue))
         {
-            if (_numValue <= 1 || _numValue > _maxTracks)
-                return;
             TrackTxtNum.Text = "t" + _numValue;
             BmpMaestro.Instance.SetTracknumberOnHost(_numValue);
         }
@@ -330,8 +341,11 @@ public partial class ClassicMainView
         if (OctaveTxtNum == null)
             return;
 
-        if (OctaveNumValue is <= -5 or >= 5)
-            return;
+        if (OctaveNumValue is < -5 or > 5)
+        {
+            OctaveTxtNum.Text = @"ø" + 0;
+            OctaveNumValue    = 0;
+        }
 
         if (int.TryParse(OctaveTxtNum.Text.Replace(@"ø", ""), out _octaveNumValue))
         {

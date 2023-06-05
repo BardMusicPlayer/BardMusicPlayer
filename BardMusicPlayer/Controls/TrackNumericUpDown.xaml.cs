@@ -1,8 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using BardMusicPlayer.Functions;
+using BardMusicPlayer.Pigeonhole;
 
 namespace BardMusicPlayer.Controls;
 
@@ -82,40 +81,31 @@ public sealed partial class TrackNumericUpDown
         NumValue--;
     }
 
-    private void TrackNumericUpDown_Key(object sender, KeyEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case Key.Up:
-                NumUp_Click(sender, e);
-                break;
-            case Key.Down:
-                NumDown_Click(sender, e);
-                break;
-        }
-    }
-        
     private void TextChanged(object sender, TextChangedEventArgs e)
     {
         if (Text == null)
             return;
 
-        var str = MyRegex().Replace(Text.Text, "");
-        if (int.TryParse(str, out var val))
+        if (_numValue <= 0 || _numValue > MaxTracks)
         {
-            if (PlaybackFunctions.CurrentSong == null)
-                return;
-
-            if (val <= 0 || NumValue >= PlaybackFunctions.CurrentSong.TrackContainers.Count)
+            if (!BmpPigeonhole.Instance.PlayAllTracks)
             {
-                //NumValue = val;
+                Text.Text = "t" + 0;
+                NumValue  = 0;
                 return;
             }
 
-            NumValue = val;
+            Text.Text = "t" + 1;
+            NumValue  = 1;
+        }
+
+        if (PlaybackFunctions.CurrentSong == null)
+            return;
+        
+        if (int.TryParse(Text.Text.Replace("t", ""), out _numValue))
+        {
+            Text.Text = "t" + _numValue;
+            NumValue  = _numValue;
         }
     }
-
-    [GeneratedRegex("[^0-9]")]
-    private static partial Regex MyRegex();
 }

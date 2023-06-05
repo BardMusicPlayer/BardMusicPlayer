@@ -37,6 +37,9 @@ public partial class Game : IDisposable, IEquatable<Game>
     {
         _uuid   = Guid.NewGuid().ToString();
         Process = process;
+        
+        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+            KillMutant();
     }
 
     internal bool Initialize()
@@ -122,7 +125,10 @@ public partial class Game : IDisposable, IEquatable<Game>
 
     public void Dispose()
     {
-        if (_eventQueueHighPriority is { } && _eventDedupeHistory != null)
+        if (BmpSeer.Instance.Games.Count == 0)
+            RestoreGFXSettings();
+
+        if (_eventQueueHighPriority is not null && _eventDedupeHistory != null)
             BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
 
         _eventQueueOpen = false;
