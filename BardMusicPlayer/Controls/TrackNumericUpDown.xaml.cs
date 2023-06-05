@@ -88,6 +88,9 @@ public sealed partial class TrackNumericUpDown
 
         if (_numValue <= 0 || _numValue > MaxTracks)
         {
+            if (BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
+                return;
+
             if (!BmpPigeonhole.Instance.PlayAllTracks)
             {
                 Text.Text = "t" + 0;

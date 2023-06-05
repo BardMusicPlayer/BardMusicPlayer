@@ -273,6 +273,9 @@ public partial class ClassicMainView
 
         if (_numValue <= 0 || _numValue > _maxTracks)
         {
+            if (BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
+                return;
+
             if (BmpPigeonhole.Instance.PlayAllTracks)
             {
                 TrackTxtNum.Text = "t" + 0;
