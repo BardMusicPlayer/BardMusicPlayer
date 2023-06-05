@@ -50,7 +50,6 @@
             </Button>
         </Grid>
         <ListView x:Name="BardsList" Grid.Row="1" SelectedItem="{Binding SelectedBard}" AllowDrop="True"
-                  ItemsSource="{Binding Bards.BardList}"
                   Padding="0" materialDesign:RippleAssist.IsDisabled="True"
                   materialDesign:TransitionAssist.DisableTransitions="True"
                   materialDesign:ListBoxItemAssist.ShowSelection="False"

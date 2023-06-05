@@ -152,7 +152,7 @@ public partial class BardView
     private void BardsListItem_Drop(object sender, DragEventArgs e)
     {
             var draggedObject = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
-            var targetObject = ((ListViewItem)(sender));
+            var targetObject = (ListViewItem)sender;
 
             var drag = draggedObject?.Content as Performer;
             var drop = targetObject.Content as Performer;

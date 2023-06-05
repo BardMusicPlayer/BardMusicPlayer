@@ -20,8 +20,8 @@ public partial class MainWindow
         DataContext        = new ClassicMainView();
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
-        Height             = 740;
-        Width              = 965;
+        Height             = 620;
+        Width              = 900;
         ResizeMode         = ResizeMode.CanResizeWithGrip;
 
         if (!BmpPigeonhole.Instance.DarkStyle)
