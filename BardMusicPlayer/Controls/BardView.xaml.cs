@@ -51,7 +51,6 @@ public partial class BardView
         InitializeComponent();
 
         DataContext = this;
-        // Bards       = new BardViewModel(); // initialize the Bards property
 
         BmpMaestro.Instance.OnPerformerChanged += OnPerformerChanged;
         // BmpMaestro.Instance.OnTrackNumberChanged += OnTrackNumberChanged;
@@ -70,7 +69,6 @@ public partial class BardView
         AutoEquipCheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
     }
 
-    //private ObservableCollection<Performer> Bards { get; set; }
     public BardViewModel Bards { get; } = new();
 
     private Performer? SelectedBard { get; set; }
