@@ -8,8 +8,8 @@ namespace BardMusicPlayer.Functions;
 
 public class SongContainer
 {
-    public string Name { get; init; } = "";
-    public byte[]? Data { get; init; }
+    public string Name { get; set; } = "";
+    public byte[]? Data { get; set; }
 }
 
 public static class JsonPlaylist

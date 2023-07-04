@@ -317,7 +317,7 @@ public sealed partial class ClassicMainView
             BmpSiren.Instance.CurrentSong.LyricsContainer.Clear();
             foreach (var l in _lyricsData)
             {
-                BmpSiren.Instance.CurrentSong.LyricsContainer.TryAdd(l.Time, l.Line);
+                BmpSiren.Instance.CurrentSong.LyricsContainer.Add(l.Time, l.Line);
             }
         }
     }

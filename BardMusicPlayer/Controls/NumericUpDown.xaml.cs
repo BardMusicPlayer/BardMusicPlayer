@@ -71,7 +71,7 @@ public sealed partial class NumericUpDown
         if (Text == null)
             return;
 
-        var str = MyRegex().Replace(Text.Text, "");
+        var str = Regex.Replace(Text.Text, @"[^\d|\.\-]", "");
         if (int.TryParse(str, out var val))
         {
             if (NumValue is <= 0 or >= 5)
@@ -80,7 +80,4 @@ public sealed partial class NumericUpDown
             NumValue = val;
         }
     }
-
-    [GeneratedRegex("[^\\d|\\.\\-]")]
-    private static partial Regex MyRegex();
 }

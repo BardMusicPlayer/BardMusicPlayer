@@ -11,7 +11,7 @@ public class FolderPicker
     public string? ResultPath { get; private set; }
 
     private string? ResultName { get; set; }
-    public string? InputPath { get; init; }
+    public string? InputPath { get; set; }
 
     private static bool ForceFileSystem => false;
 

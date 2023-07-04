@@ -175,9 +175,9 @@ public sealed class BmpSong
         };
 
         //Get the lrc file for the midi, if there's any
-        if (path[^4..].Equals(".mid"))
+        if (path.Substring(path.Length - 4).Equals(".mid"))
         {
-            var fn = path[..^3];
+            var fn = path.Substring(0, path.Length - 3);
             if (File.Exists(fn + "lrc"))
             {
                 var t = Lyrics.Parse(File.ReadAllText(fn + "lrc"));

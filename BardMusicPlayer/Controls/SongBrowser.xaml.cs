@@ -118,7 +118,7 @@ public partial class SongBrowser
             if (!Directory.Exists(path))
                 return;
 
-            path                                 += path.EndsWith("\\") ? "" : "\\";
+            path                                 += path != null && path.EndsWith("\\") ? "" : "\\";
             SongPath.Text                        =  path;
             BmpPigeonhole.Instance.SongDirectory =  path;
             SongSearch_PreviewTextInput(null, null);
