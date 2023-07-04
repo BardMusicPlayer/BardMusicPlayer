@@ -39,7 +39,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.10.0-ci281" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.10.0-ci309" />
   </ItemGroup>
 
   <ItemGroup>
