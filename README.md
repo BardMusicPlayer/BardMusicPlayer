@@ -1,10 +1,10 @@
 <p align="center">
   <!-- Build & commit activity -->
   <a href="https://github.com/Meowchestra/MeowMusic/actions/workflows/Build.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/Meowchestra/MeowMusic/Build.yml?branch=develop&style=for-the-badge" alt="Build"/></a>
-  <a href="https://github.com/Meowchestra/MeowMusic/commits/develop">
-    <img src="https://img.shields.io/github/last-commit/Meowchestra/MeowMusic/develop?color=00D162&style=for-the-badge" alt="Commits"/></a>
-   <a href="https://github.com/Meowchestra/MeowMusic/commits/develop">
+    <img src="https://img.shields.io/github/actions/workflow/status/Meowchestra/MeowMusic/Build.yml?branch=no-remote&style=for-the-badge" alt="Build"/></a>
+  <a href="https://github.com/Meowchestra/MeowMusic/commits/no-remote">
+    <img src="https://img.shields.io/github/last-commit/Meowchestra/MeowMusic/no-remote?color=00D162&style=for-the-badge" alt="Commits"/></a>
+   <a href="https://github.com/Meowchestra/MeowMusic/commits/no-remote">
     <img src="https://img.shields.io/github/commit-activity/m/Meowchestra/MeowMusic?color=00D162&style=for-the-badge" alt="Commit Activity"/></a>
   <br>
   <!-- Other -->
