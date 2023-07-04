@@ -149,46 +149,67 @@ public partial class BardView
     /// <param name="e"></param>
     private void BardsListItem_Drop(object sender, DragEventArgs e)
     {
-            var draggedObject = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
-            var targetObject = (ListViewItem)sender;
+        var draggedObject = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+        var targetObject = (ListViewItem)sender;
 
-            var drag = draggedObject?.Content as Performer;
-            var drop = targetObject.Content as Performer;
-            var dragIdx = BardsList.Items.IndexOf(drag);
-            var dropIdx = BardsList.Items.IndexOf(drop);
+        var drag = draggedObject?.Content as Performer;
+        var drop = targetObject.Content as Performer;
+        var dragIdx = BardsList.Items.IndexOf(drag);
+        var dropIdx = BardsList.Items.IndexOf(drop);
 
-            if (drag == drop)
-                return;
-            var newBardsList = new SortedDictionary<int, Performer?>();
-            var index = 0;
-            foreach (var p in BardsList.Items)
+        if (drag == drop)
+            return;
+
+        var newBardsList = new SortedDictionary<int, Performer?>();
+        var index = 0;
+
+        foreach (var p in BardsList.Items)
+        {
+            if ((Performer)p == drag)
+                continue;
+
+            if ((Performer)p == drop)
             {
-                if ((Performer)p == drag)
-                    continue;
-                if ((Performer)p == drop)
+                if (dropIdx < dragIdx)
                 {
-                    if (dropIdx < dragIdx)
-                    {
-                        newBardsList.Add(index, drag); index++;
-                        newBardsList.Add(index, drop); index++;
-                    }
-                    else if (dropIdx > dragIdx)
-                    {
-                        newBardsList.Add(index, drop); index++;
-                        newBardsList.Add(index, drag); index++;
-                    }
+                    newBardsList.Add(index, drag); index++;
+                    newBardsList.Add(index, drop); index++;
                 }
-                else
+                else if (dropIdx > dragIdx)
                 {
-                    newBardsList.Add(index, p as Performer);
-                    index++;
+                    newBardsList.Add(index, drop); index++;
+                    newBardsList.Add(index, drag); index++;
                 }
             }
-            BardsList.ItemsSource = null;
-            BardsList.Items.Clear();
-            foreach (var p in newBardsList)
-                BardsList.Items.Add(p.Value);
-            newBardsList.Clear();
+            else
+            {
+                newBardsList.Add(index, p as Performer);
+                index++;
+            }
+        }
+
+        BardsList.ItemsSource = null;
+        BardsList.Items.Clear();
+
+        foreach (var p in newBardsList)
+        {
+            BardsList.Items.Add(p.Value);
+        }
+
+        newBardsList.Clear();
+
+        // Update the track list order
+        UpdateTrackListOrder();
+    }
+
+    private void UpdateTrackListOrder()
+    {
+        var trackNumber = 1;
+        foreach (Performer performer in BardsList.Items)
+        {
+            performer.TrackNumber = trackNumber;
+            trackNumber++;
+        }
     }
     #endregion
 
