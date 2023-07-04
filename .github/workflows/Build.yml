@@ -15,7 +15,7 @@ jobs:
 
     - name: Build with dotnet
       working-directory: .\BardMusicPlayer
-      run: dotnet publish -r win-x64 -p:PublishSingleFile=true --self-contained false -c Release
+      run: dotnet publish -r win-x64 -c Release
 
     - name: Rename file
       run: mv .\BardMusicPlayer\bin\Release\net481\win-x64\publish\BardMusicPlayer.exe .\BardMusicPlayer\bin\Release\net481\win-x64\publish\MeowMusic.exe
