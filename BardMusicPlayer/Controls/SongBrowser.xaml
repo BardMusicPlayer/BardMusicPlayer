@@ -43,12 +43,16 @@
         <Grid Grid.Row="2" Background="{DynamicResource MaterialDesignBackground}">
             <ListView x:Name="SongBrowserContainer"
                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="0"
-                      PreviewMouseDoubleClick="SongBrowserContainer_PreviewMouseDoubleClick"
-                      PreviewMouseRightButtonDown="OnListViewItemPreviewMouseRightButtonDown"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.CanContentScroll="True"
                       materialDesign:RippleAssist.IsDisabled="True">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="PreviewMouseDoubleClick"     Handler="SongBrowserContainer_PreviewMouseDoubleClick"/>
+                        <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnListViewItemPreviewMouseRightButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Add to Playlist" Click="AddToPlaylist_Click" />
