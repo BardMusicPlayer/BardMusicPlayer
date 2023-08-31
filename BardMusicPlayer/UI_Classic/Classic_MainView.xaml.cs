@@ -45,7 +45,7 @@ public partial class ClassicMainView
         BmpMaestro.Instance.OnPlaybackStopped      += Instance_PlaybackStopped;
         BmpMaestro.Instance.OnTrackNumberChanged   += Instance_TrackNumberChanged;
         BmpMaestro.Instance.OnOctaveShiftChanged   += Instance_OctaveShiftChanged;
-        SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
+        //SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
         SongBrowser.OnAddSongFromBrowser           += Instance_SongBrowserAddSongToPlaylist;

@@ -49,7 +49,7 @@ public class BmpSiren
     /// <param name="defaultVolume"></param>
     /// <param name="bufferCount"></param>
     /// <param name="latency"></param>
-    public void Setup(MMDevice device, float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
+    public void Setup(MMDevice device, float defaultVolume = 0.2f, byte bufferCount = 2, byte latency = 100)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         ShutDown();
@@ -67,14 +67,14 @@ public class BmpSiren
     public int GetVolume()
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return 0; // Temporary Mac/Linux disable.
-        return (int)(_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume * 30);
+        return (int)_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume;
     }
 
     /// <summary>
     /// Sets the volume
     /// </summary>
     /// <param name="x">Used to get the maximum on scale position.</param>
-    /// <param name="max">Reduces the maximum volume by a fraction out of 100. i.e. max: 20 = 1/5th volume</param>
+    /// <param name="max">Reduces the maximum volume by a fraction out of 100.</param>
     public void SetVolume(float x, float max)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
@@ -101,7 +101,7 @@ public class BmpSiren
     /// <param name="defaultVolume"></param>
     /// <param name="bufferCount"></param>
     /// <param name="latency"></param>
-    public void Setup(float defaultVolume = 0.4f, byte bufferCount = 2, byte latency = 100)
+    public void Setup(float defaultVolume = 0.2f, byte bufferCount = 2, byte latency = 100)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
         var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);

@@ -164,7 +164,7 @@ public sealed partial class ClassicMainView
         {
             slider.Minimum = 0;
             slider.Maximum = 30;
-            BmpSiren.Instance.SetVolume((float)slider.Value, max:20);
+            BmpSiren.Instance.SetVolume((float)slider.Value, max:30);
         }
     }
 
