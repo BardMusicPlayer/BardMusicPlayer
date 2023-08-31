@@ -124,6 +124,12 @@ public partial class SongBrowser
             SongSearch_PreviewTextInput(null, null);
         }
     }
+
+    /// <summary>
+    /// Handle the right click on an item from ListView
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnListViewItemPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.Source is FrameworkElement { DataContext: string selectedFile })
@@ -136,6 +142,11 @@ public partial class SongBrowser
         }
     }
 
+    /// <summary>
+    /// Handle add to playlist context menu
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void AddToPlaylist_Click(object sender, RoutedEventArgs e)
     {
         if (SongBrowserContainer.SelectedItem is not string selectedFile)
@@ -145,6 +156,11 @@ public partial class SongBrowser
         OnAddSongFromBrowser?.Invoke(this, fullPath);
     }
 
+    /// <summary>
+    /// Handle the load to preview context menu
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void LoadSongToPreview(object sender, RoutedEventArgs e)
     {
         if (SongBrowserContainer.SelectedItem is not string selectedFile)
