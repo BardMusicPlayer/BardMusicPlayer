@@ -35,7 +35,6 @@ public class Performer : INotifyPropertyChanged
     private long _lastNoteTimestamp;
     private bool _livePlayDelay { get; set; }
     public int SingerTrackNr { get; set; }
-    public Instrument ChosenInstrument { get; set; } = Instrument.Piano;
 
     private int _octaveShift;
     public int OctaveShift { get => _octaveShift; set
@@ -191,8 +190,6 @@ public class Performer : INotifyPropertyChanged
     #region public
     public Performer(Game arg)
     {
-        ChosenInstrument = ChosenInstrument;
-
         if (arg != null)
         {
             _hook.Hook(arg.Process, false);
@@ -370,7 +367,6 @@ public class Performer : INotifyPropertyChanged
             // OctaveNum now holds the track octave and the selected octave together
             Console.WriteLine(@"Track #{0}/{1} setOctave: {2} prefOctave: {3}", tn, bmpSeq.MaxTrack, OctaveShift, bmpSeq.GetTrackPreferredOctaveShift(track));
             var notes = (from ev in track.Iterator() where ev.MidiMessage.MessageType == Sanford.Multimedia.Midi.MessageType.Channel select (ev.MidiMessage as ChannelMessage) into msg where msg.Command == ChannelCommand.NoteOn let note = msg.Data1 let vel = msg.Data2 where vel > 0 select NoteHelper.ApplyOctaveShift(note, OctaveShift)).ToList();
-            ChosenInstrument = bmpSeq.GetTrackPreferredInstrument(track);
         }
     }
 
