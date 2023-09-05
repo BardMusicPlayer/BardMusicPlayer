@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
+using System.Windows.Media;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.UI_Classic;
 using MaterialDesignColors;
@@ -32,7 +33,7 @@ public partial class MainWindow
 
     public static void LightModeStyle()
     {
-        var baseTheme = Theme.Light;
+        const BaseTheme baseTheme = BaseTheme.Light;
 
         const PrimaryColor primary = PrimaryColor.BlueGrey;
         var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
@@ -42,12 +43,13 @@ public partial class MainWindow
 
         var theme = Theme.Create(baseTheme, primaryColor, secondaryColor);
         var paletteHelper = new PaletteHelper();
+        theme.Background = Color.FromRgb(250, 250, 250);
         paletteHelper.SetTheme(theme);
     }
 
     public static void DarkModeStyle()
     {
-        var baseTheme = Theme.Dark;
+        const BaseTheme baseTheme = BaseTheme.Dark;
 
         const PrimaryColor primary = PrimaryColor.Grey;
         var primaryColor = SwatchHelper.Lookup[(MaterialDesignColor)primary];
