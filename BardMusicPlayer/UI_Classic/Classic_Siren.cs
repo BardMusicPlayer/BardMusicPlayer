@@ -54,9 +54,7 @@ public sealed partial class ClassicMainView
             // Handle the case where _currentPlaylist is null
             return;
         }
-
-        _                     = BmpSiren.Instance.Load(currentSong);
-        SirenSongName.Content = BmpSiren.Instance.CurrentSongTitle;
+        _ = BmpSiren.Instance.Load(currentSong);
 
         //Fill the lyrics editor
         _lyricsData.Clear();

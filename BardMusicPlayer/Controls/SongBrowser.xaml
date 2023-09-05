@@ -49,8 +49,10 @@
                       materialDesign:RippleAssist.IsDisabled="True">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
-                        <EventSetter Event="PreviewMouseDoubleClick"     Handler="SongBrowserContainer_PreviewMouseDoubleClick"/>
-                        <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnListViewItemPreviewMouseRightButtonDown" />
+                        <EventSetter Event="PreviewMouseDoubleClick"
+                                     Handler="SongBrowserContainer_PreviewMouseDoubleClick" />
+                        <EventSetter Event="PreviewMouseRightButtonDown"
+                                     Handler="OnListViewItemPreviewMouseRightButtonDown" />
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ContextMenu>

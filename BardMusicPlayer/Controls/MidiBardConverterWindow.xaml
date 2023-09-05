@@ -1,0 +1,141 @@
+﻿<Window x:Class="BardMusicPlayer.Controls.MidiBardConverterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BardMusicPlayer.Controls"
+        xmlns:control="clr-namespace:BardMusicPlayer.Controls"
+        xmlns:guitarPro="clr-namespace:BardMusicPlayer.Transmogrify.Song.Importers.GuitarPro;assembly=BardMusicPlayer.Transmogrify"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Closing="Window_Closing" Background="{DynamicResource MaterialDesignPaper}"
+        Title="Quick Edit" Height="500" Width="600">
+
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="Instruments" ObjectType="{x:Type local:MidiBardConverterInstrumentHelper}"
+                            MethodName="Instruments" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Background="{DynamicResource MaterialDesignBackground}">
+            <Menu materialDesign:RippleAssist.IsDisabled="True"
+                  materialDesign:TransitionAssist.DisableTransitions="True"
+                  materialDesign:ListBoxItemAssist.ShowSelection="False">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Header="----- Midi Export -----" IsEnabled="False" />
+                <MenuItem Header="Send to Sequencer" Click="Sequencer_Click" />
+                <MenuItem Header="Send to Siren" Click="Siren_Click" />
+                <MenuItem Header="Export to File" Click="Export_Click" />
+            </Menu>
+            <Menu materialDesign:RippleAssist.IsDisabled="True"
+                  materialDesign:TransitionAssist.DisableTransitions="True"
+                  materialDesign:ListBoxItemAssist.ShowSelection="False">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Header="------- Options ------" IsEnabled="False" />
+                <CheckBox x:Name="AlignToFirstNoteCheckBox" Content="Align to first note"
+                          Checked="AlignToFirstNote_CheckBox_Checked" Unchecked="AlignToFirstNote_CheckBox_Checked" />
+                <!--
+                <Label Content="Guitar-Mode" Width="120" IsEnabled="False"/>
+                <ComboBox x:Name="GuitarModeSelector" SelectionChanged ="GuitarModeSelector_Selected" Width="120" >
+                    <ComboBoxItem Content="None"/>
+                    <ComboBoxItem Content="Standard"/>
+                    <ComboBoxItem Content="Simple"/>
+                    <ComboBoxItem Content="Override By Track"/>
+                </ComboBox>
+            -->
+            </Menu>
+        </StackPanel>
+
+        <!-- Trackdisplay -->
+        <ListView x:Name="TrackList" Grid.Row="1" Grid.Column="0" AllowDrop="True">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseMove" Handler="TrackListItem_MouseMove" />
+                    <EventSetter Event="Drop" Handler="TrackListItem_Drop" />
+                    <EventSetter Event="PreviewMouseRightButtonDown"
+                                 Handler="TrackListItem_PreviewMouseRightButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete Track" Click="TrackListItem_Delete_Click"></MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type guitarPro:MidiTrack}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15" />
+                            <!-- 0 Index -->
+                            <ColumnDefinition Width="150" />
+                            <!-- 1 Instrument Box-->
+                            <ColumnDefinition Width="15" />
+                            <!-- 2 Spacer-->
+                            <ColumnDefinition Width="*" />
+                            <!-- 3 Bardnumber -->
+                            <ColumnDefinition Width="10" />
+                            <!-- 4 spacer -->
+                            <ColumnDefinition Width="80" />
+                            <!-- 5 Transpose -->
+                            <ColumnDefinition Width="40" />
+                            <!-- 6 track-->
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Grid.RowSpan="1" Text="{Binding Index}" VerticalAlignment="Center" />
+
+                        <Label Grid.Column="1" Grid.Row="0" Content="Instrument" HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center" />
+                        <ComboBox Grid.Column="1" Grid.Row="1" x:Name="Instrument_Selector"
+                                  HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                  PreviewMouseDown="BardNumBox_PreviewMouseDown"
+                                  PreviewMouseUp="Instrument_Selector_PreviewMouseUp"
+                                  DropDownClosed="Instrument_Selector_DropDownClosed"
+                                  Background="{DynamicResource MaterialDesignBackground}"
+                                  SelectedValuePath="Key" DisplayMemberPath="Value"
+                                  ItemsSource="{Binding Source={StaticResource Instruments}}"
+                                  SelectedIndex="{Binding trackInstrument}">
+                        </ComboBox>
+
+                        <Label Grid.Column="3" Grid.Row="0" Content="Track Group" HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center" />
+                        <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding TrackNumber}"
+                                 PreviewMouseDown="BardNumBox_PreviewMouseDown"
+                                 PreviewMouseUp="Instrument_Selector_PreviewMouseUp"
+                                 Background="{DynamicResource MaterialDesignBackground}" />
+
+                        <Label Grid.Column="5" Grid.Row="0" Content="Transpose" HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center" />
+                        <control:OctaveNumericUpDown Grid.Column="5" Grid.Row="1" x:Name="OctaveControl"
+                                                     PreviewMouseUp="OctaveControl_PreviewMouseUp"
+                                                     Value="{Binding Transpose}"
+                                                     PreviewMouseDown="BardNumBox_PreviewMouseDown"
+                                                     Background="{DynamicResource MaterialDesignBackground}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

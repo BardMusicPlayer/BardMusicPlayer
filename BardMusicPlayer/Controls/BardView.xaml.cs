@@ -391,127 +391,127 @@ public partial class BardView
         }
     }
 
-        /// <summary>
-        /// save the performer config file
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Save_Performer_Settings(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// save the performer config file
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Save_Performer_Settings(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new SaveFileDialog
         {
-            var openFileDialog = new SaveFileDialog
+            Filter = "Performer Config | *.cfg"
+        };
+
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        var performerDataList = BardsList.Items.OfType<Performer>()
+            .ToList()
+            .Select(performer => new PerformerSettingData
             {
-                Filter = "Performer Config | *.cfg"
-            };
+                OrderNum     = BardsList.Items.IndexOf(performer),
+                CID          = performer.game.ConfigId,
+                Name         = performer.game.PlayerName,
+                Track        = performer.TrackNumber,
+                AffinityMask = performer.game.GetAffinity(),
+                IsHost       = performer.HostProcess
+            })
+            .ToList();
+        var t = JsonConvert.SerializeObject(performerDataList);
+        var content = new UTF8Encoding(true).GetBytes(t);
 
-            if (openFileDialog.ShowDialog() != true)
-                return;
+        var fileStream = File.Create(openFileDialog.FileName);
+        fileStream.Write(content, 0, content.Length);
+        fileStream.Close();
+        performerDataList.Clear();
+    }
 
-            var performerDataList = BardsList.Items.OfType<Performer>()
-                .ToList()
-                .Select(performer => new PerformerSettingData
+    private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        //foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
+        foreach (var p in BardsList.Items.OfType<Performer>().ToList().Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
+        {
+            p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
+            p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
+        }
+    }
+
+    /// <summary>
+    /// Window pos load button
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ArrangeWindow_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new OpenFileDialog
+        {
+            Filter      = "WindowLayout | *.txt",
+            Multiselect = true
+        };
+
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        ArrangeWindows(openFileDialog.FileName);
+    }
+
+    /// <summary>
+    /// Arrange the window position and size
+    /// </summary>
+    private void ArrangeWindows(string filename)
+    {
+        if (BardsList.Items.OfType<Performer>().ToList().Count == 0)
+            return;
+
+        var y = 0;
+        var size_x = 0;
+        var size_y = 0;
+        var reader = new StreamReader(filename);
+        var input = reader.ReadLine();
+        if (input != null && input.Split(':')[0].Contains("Size"))
+        {
+            size_x = Convert.ToInt32(input.Split(':')[1].Split('x')[0]);
+            size_y = Convert.ToInt32(input.Split(':')[1].Split('x')[1]);
+        }
+
+        while (reader.ReadLine() is { } line)
+        {
+            var x = 0;
+            for (var i = 0; i < line.Length;)
+            {
+                var value = line[i] + line[i + 1].ToString();
+                i += 2;
+                if (value != "--")
                 {
-                    OrderNum     = BardsList.Items.IndexOf(performer),
-                    CID          = performer.game.ConfigId,
-                    Name         = performer.game.PlayerName,
-                    Track        = performer.TrackNumber,
-                    AffinityMask = performer.game.GetAffinity(),
-                    IsHost       = performer.HostProcess
-                })
-                .ToList();
-            var t = JsonConvert.SerializeObject(performerDataList);
-            var content = new UTF8Encoding(true).GetBytes(t);
-
-            var fileStream = File.Create(openFileDialog.FileName);
-            fileStream.Write(content, 0, content.Length);
-            fileStream.Close();
-            performerDataList.Clear();
-        }
-
-        private void GfxLow_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            //foreach (var p in Bards.Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
-            foreach (var p in BardsList.Items.OfType<Performer>().ToList().Where(p => p.game.GfxSettingsLow != GfxLowCheckBox.IsChecked))
-            {
-                p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
-                p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
-            }
-        }
-
-        /// <summary>
-        /// Window pos load button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ArrangeWindow_Click(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = "WindowLayout | *.txt",
-                Multiselect = true
-            };
-
-            if (openFileDialog.ShowDialog() != true)
-                return;
-
-            ArrangeWindows(openFileDialog.FileName);
-        }
-
-        /// <summary>
-        /// Arrange the window position and size
-        /// </summary>
-        private void ArrangeWindows(string filename)
-        {
-            if (BardsList.Items.OfType<Performer>().ToList().Count == 0)
-                return;
-
-            var y = 0;
-            var size_x = 0;
-            var size_y = 0;
-            var reader = new StreamReader(filename);
-            var input = reader.ReadLine();
-            if (input != null && input.Split(':')[0].Contains("Size"))
-            {
-                size_x = Convert.ToInt32(input.Split(':')[1].Split('x')[0]);
-                size_y = Convert.ToInt32(input.Split(':')[1].Split('x')[1]);
-            }
-
-            while (reader.ReadLine() is { } line)
-            {
-                var x = 0;
-                for (var i = 0; i < line.Length;)
-                {
-                    var value = line[i] + line[i + 1].ToString();
-                    i += 2;
-                    if (value != "--")
-                    {
-                        var bard = BardsList.Items.OfType<Performer>().ToList().FirstOrDefault(p => p.TrackNumber == Convert.ToInt32(value));
-                        if (bard == null)
-                            continue;
-                        bard.game.SetWindowPosAndSize(x, y, size_x, size_y, true);
-                    }
-                    x += size_x;
+                    var bard = BardsList.Items.OfType<Performer>().ToList().FirstOrDefault(p => p.TrackNumber == Convert.ToInt32(value));
+                    if (bard == null)
+                        continue;
+                    bard.game.SetWindowPosAndSize(x, y, size_x, size_y, true);
                 }
-                y += size_y;
+                x += size_x;
             }
-            reader.Close();
+            y += size_y;
         }
+        reader.Close();
+    }
 
-        /// <summary>
-        /// Button context menu routine
-        /// </summary>
-        private void MenuButton_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Button context menu routine
+    /// </summary>
+    private void MenuButton_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button rectangle)
         {
-            if (sender is Button rectangle)
+            var contextMenu = rectangle.ContextMenu;
+            if (contextMenu != null)
             {
-                var contextMenu = rectangle.ContextMenu;
-                if (contextMenu != null)
-                {
-                    contextMenu.PlacementTarget = rectangle;
-                    contextMenu.Placement       = PlacementMode.Bottom;
-                    contextMenu.IsOpen          = true;
-                }
+                contextMenu.PlacementTarget = rectangle;
+                contextMenu.Placement       = PlacementMode.Bottom;
+                contextMenu.IsOpen          = true;
             }
         }
+    }
 }
 
 public class FontSizeConverter : IValueConverter

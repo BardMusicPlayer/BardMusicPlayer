@@ -175,23 +175,18 @@ public sealed class BmpSong
         };
 
         //Get the lrc file for the midi, if there's any
-        if (path.Substring(path.Length - 4).Equals(".mid"))
+        if (path.Length > 3)
         {
-            var fn = path.Substring(0, path.Length - 3);
-            if (File.Exists(fn + "lrc"))
+            if (path.Substring(path.Length - 4).Equals(".mid"))
             {
-                var t = Lyrics.Parse(File.ReadAllText(fn + "lrc"));
-                song.DisplayedTitle = t.Lyrics.MetaData.Title;
-
-                foreach (var line in t.Lyrics.Lines)
+                var fn = path.Substring(0, path.Length - 3);
+                if (File.Exists(fn + "lrc"))
                 {
-                    if (!song.LyricsContainer.TryGetValue(line.Timestamp, out var content))
-                    {
-                        content = "";
-                    }
+                    var t = Lyrics.Parse(File.ReadAllText(fn + "lrc"));
+                    song.DisplayedTitle = t.Lyrics.MetaData.Title;
 
-                    content                              += line.Content + Environment.NewLine;
-                    song.LyricsContainer[line.Timestamp] =  content;
+                    foreach (var line in t.Lyrics.Lines)
+                        song.LyricsContainer.Add(line.Timestamp, line.Content);
                 }
             }
         }
@@ -480,6 +475,19 @@ public sealed class BmpSong
         stream.Position = 0;
 
         return stream;
+    }
+    
+    public MidiFile GetMelanchallMidiFile()
+    {
+        var c = TrackContainers.Values.Select(static tc => tc.SourceTrackChunk).ToList();
+
+        var midiFile = new MidiFile(c);
+        midiFile.ReplaceTempoMap(SourceTempoMap);
+
+        using var manager = new TimedObjectsManager<TimedEvent>(midiFile.GetTrackChunks().First().Events);
+        manager.Objects.Add(new TimedEvent(new MarkerEvent(), (midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds / 1000)));
+
+        return midiFile;
     }
 }
 

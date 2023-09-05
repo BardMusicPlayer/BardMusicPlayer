@@ -76,7 +76,6 @@ public partial class ClassicMainView
         }
 
         PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-        SongName.Text          = PlaybackFunctions.GetSongName();
         InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
 
         // Repeat the playlist if the last song is playing and the repeat button is enabled
@@ -84,7 +83,6 @@ public partial class ClassicMainView
         {
             PlaylistContainer.SelectedIndex = PlaylistContainer.Items.Count - 1;
             PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-            SongName.Text          = PlaybackFunctions.GetSongName();
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         }
     }
@@ -288,7 +286,6 @@ public partial class ClassicMainView
         }
 
         PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-        SongName.Text          = PlaybackFunctions.GetSongName();
         InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         DirectLoaded           = false;
     }
@@ -453,7 +450,6 @@ public partial class ClassicMainView
 
             PlaylistContainer.SelectedIndex = 0;
             PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-            SongName.Text          = PlaybackFunctions.GetSongName();
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
         }
 

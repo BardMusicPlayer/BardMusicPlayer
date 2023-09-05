@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="BardExtSettingsWindow" Height="400" Width="400" ResizeMode="NoResize" WindowStyle="ToolWindow"
         Background="{DynamicResource MaterialDesignPaper}">
@@ -16,7 +17,10 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid
+        materialDesign:RippleAssist.IsDisabled="True"
+        materialDesign:TransitionAssist.DisableTransitions="True"
+        materialDesign:ListBoxItemAssist.ShowSelection="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
@@ -144,7 +148,8 @@
                                                 Background="{DynamicResource MaterialDesignBackground}"
                                                 Foreground="{DynamicResource MaterialDesignBody}"
                                                 Padding="0" FontSize="8"
-                                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left"
+                                                VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                HorizontalAlignment="Left"
                                                 PreviewMouseUp="Lyrics_TrackNr_PreviewMouseUp" Value="0"
                                                 ToolTip="{StaticResource LyricsTrackNumber}" />
                     </Grid>

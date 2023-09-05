@@ -15,7 +15,7 @@ public partial class ClassicMainView
     private void LoadConfig(bool reload = false)
     {
         AutoPlayCheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
-        MultiBox.IsChecked     = BmpPigeonhole.Instance.EnableMultibox;
+        MultiBox.IsChecked         = BmpPigeonhole.Instance.EnableMultibox;
 
         //Playback
         HoldNotesBox.IsChecked           = BmpPigeonhole.Instance.HoldNotes;
@@ -41,7 +41,7 @@ public partial class ClassicMainView
         
         //UI
         // MidiLoaderSelection.SelectedIndex = BmpPigeonhole.Instance.MidiLoaderType;
-        EnableDarkMode.IsChecked          = BmpPigeonhole.Instance.DarkStyle;
+        EnableDarkMode.IsChecked = BmpPigeonhole.Instance.DarkStyle;
     }
 
     #region Playback

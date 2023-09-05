@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Microsoft.Win32;
+using BardMusicPlayer.Controls;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old.Events;
 
@@ -43,5 +45,25 @@ public partial class ClassicMainView
     private void ExportAsMidi(object sender, RoutedEventArgs routedEventArgs)
     {
         PlaylistFunctions.ExportSong(PlaybackFunctions.CurrentSong);
+    }
+    
+    private void QuickMidiProcessing_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new OpenFileDialog
+        {
+            Filter      = Globals.Globals.FileFilters,
+            Multiselect = false
+        };
+
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        if (!openFileDialog.CheckFileExists)
+            return;
+
+        _ = new MidiBardConverterWindow(openFileDialog.FileName)
+        {
+            Visibility = Visibility.Visible
+        };
     }
 }

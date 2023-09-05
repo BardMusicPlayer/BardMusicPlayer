@@ -37,16 +37,17 @@ public partial class ClassicMainView
         PlaylistContainer.ItemsSource      =  BmpCoffer.Instance.GetPlaylistNames();
         PlaylistContainer.SelectionChanged += PlaylistContainer_SelectionChanged;
 
-        SongName.Text                              =  PlaybackFunctions.GetSongName();
-        BmpMaestro.Instance.OnPlaybackTimeChanged  += Instance_PlaybackTimeChanged;
-        BmpMaestro.Instance.OnSongMaxTime          += Instance_PlaybackMaxTime;
-        BmpMaestro.Instance.OnSongLoaded           += Instance_OnSongLoaded;
-        BmpMaestro.Instance.OnPlaybackStarted      += Instance_PlaybackStarted;
-        BmpMaestro.Instance.OnPlaybackStopped      += Instance_PlaybackStopped;
-        BmpMaestro.Instance.OnTrackNumberChanged   += Instance_TrackNumberChanged;
-        BmpMaestro.Instance.OnOctaveShiftChanged   += Instance_OctaveShiftChanged;
+        SongName.Text                             =  PlaybackFunctions.GetSongName();
+        BmpMaestro.Instance.OnPlaybackTimeChanged += Instance_PlaybackTimeChanged;
+        BmpMaestro.Instance.OnSongMaxTime         += Instance_PlaybackMaxTime;
+        BmpMaestro.Instance.OnSongLoaded          += Instance_OnSongLoaded;
+        BmpMaestro.Instance.OnPlaybackStarted     += Instance_PlaybackStarted;
+        BmpMaestro.Instance.OnPlaybackStopped     += Instance_PlaybackStopped;
+        BmpMaestro.Instance.OnTrackNumberChanged  += Instance_TrackNumberChanged;
+        BmpMaestro.Instance.OnOctaveShiftChanged  += Instance_OctaveShiftChanged;
         //SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
+        BmpSiren.Instance.SongLoaded               += Instance_SongLoaded;
         SongBrowser.OnLoadSongFromBrowser          += Instance_SongBrowserLoadedSong;
         SongBrowser.OnAddSongFromBrowser           += Instance_SongBrowserAddSongToPlaylist;
         SongBrowser.OnLoadSongFromBrowserToPreview += Instance_SongBrowserLoadSongToPreview;
@@ -105,6 +106,11 @@ public partial class ClassicMainView
         Dispatcher.BeginInvoke(new Action(() => Siren_PlaybackTimeChanged(currentTime, endTime, activeVoices)));
     }
 
+    private void Instance_SongLoaded(string songTitle)
+    {
+        Dispatcher.BeginInvoke(new Action(() => SirenSongName.Content = songTitle));
+    }
+    
     private void PlaybackTimeChanged(CurrentPlayPositionEvent e)
     {
         var seconds = e.timeSpan.Seconds.ToString();
@@ -129,6 +135,9 @@ public partial class ClassicMainView
 
     private void OnSongLoaded(SongLoadedEvent e)
     {
+        //Song title update
+        SongName.Text = PlaybackFunctions.GetSongName();
+
         //Statistics update
         UpdateStats(e);
 
@@ -179,7 +188,6 @@ public partial class ClassicMainView
                 {
                     PlaylistContainer.SelectedIndex = 0;
                     PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-                    SongName.Text          = PlaybackFunctions.GetSongName();
                     InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
                     PlaybackFunctions.PlaySong(2000);
                     Play_Button_State(true);
@@ -204,7 +212,7 @@ public partial class ClassicMainView
                 // Don't toggle playback state when in a search field
                 return;
             }
-            
+
             if (PlaybackFunctions.PlaybackState == PlaybackFunctions.PlaybackStateEnum.PlaybackStatePlaying)
             {
                 PlaybackFunctions.PauseSong();
@@ -386,7 +394,6 @@ public partial class ClassicMainView
     {
         if (PlaybackFunctions.LoadSong(filename))
         {
-            SongName.Text          = PlaybackFunctions.GetSongName();
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
             DirectLoaded           = true;
         }
@@ -421,8 +428,7 @@ public partial class ClassicMainView
         SirenPlayPause.Content = "Play";
 
         var currentSong = BmpSong.OpenFile(filename).Result;
-        _                     = BmpSiren.Instance.Load(currentSong);
-        SirenSongName.Content = BmpSiren.Instance.CurrentSongTitle;
+        _ = BmpSiren.Instance.Load(currentSong);
 
         //Fill the lyrics editor
         _lyricsData.Clear();

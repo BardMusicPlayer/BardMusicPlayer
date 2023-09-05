@@ -81,7 +81,6 @@ public partial class ClassicMainView
         {
             if (PlaybackFunctions.LoadSong())
             {
-                SongName.Text          = PlaybackFunctions.GetSongName();
                 InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
                 DirectLoaded           = true;
             }

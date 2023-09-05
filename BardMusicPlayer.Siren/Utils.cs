@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Siren.AlphaTab.Audio.Generator;
 using BardMusicPlayer.Siren.AlphaTab.Model;
@@ -38,9 +39,20 @@ internal static class Utils
         //Skip first track, it's just "All Tracks"
         foreach (var trackChunk in trackChunks.GetRange(1, trackChunks.Count-1))
         {
+            var instr = Instrument.None;
+            var trackOctaveShift = 0;
             using var manager = trackChunk.ManageTimedEvents();
-            var instr = Instrument.Parse(trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text);
-
+            var trackName = trackChunk.Events.OfType<SequenceTrackNameEvent>().First().Text;
+            var rex = new Regex(@"^([A-Za-z _:]+)([-+]\d)?");
+            if (rex.Match(trackName) is { } match)
+            {
+                if (!string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    instr = Instrument.Parse(match.Groups[1].Value);
+                }
+                if (int.TryParse(match.Groups[2].Value, out var os))
+                    trackOctaveShift = os;
+            }
             var instrumentMap = new Dictionary<float, KeyValuePair<NoteEvent, Instrument>>();
 
             foreach (var _event in manager.Objects)
@@ -72,12 +84,14 @@ internal static class Utils
                     }
                 }
 
-                var noteNum = note.NoteNumber;
+                var noteNum = note.NoteNumber+(12 * trackOctaveShift);
+                if (noteNum < 0)   noteNum = 0;
+                if (noteNum > 254) noteNum = 254;
                 var dur = (int)MinimumLength(instrument, noteNum - 48, note.Length);
                 var time = (int)note.Time;
                 events.AddProgramChange(trackCounter, time, trackCounter,
                     (byte)instrument.MidiProgramChangeCode);
-                events.AddNote(trackCounter, time, dur, noteNum, DynamicValue.FFF, trackCounter);
+                events.AddNote(trackCounter, time, dur, (byte)noteNum, DynamicValue.FFF, trackCounter);
                 if (trackCounter == byte.MaxValue)
                     trackCounter = byte.MinValue;
                 else

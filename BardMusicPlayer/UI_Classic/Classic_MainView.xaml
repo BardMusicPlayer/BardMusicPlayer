@@ -163,7 +163,10 @@
                     <ColumnDefinition Width="278*" />
                     <ColumnDefinition Width="275*" />
                 </Grid.ColumnDefinitions>
-                <TabControl Grid.ColumnSpan="2">
+                <TabControl Grid.ColumnSpan="2"
+                            materialDesign:RippleAssist.IsDisabled="True"
+                            materialDesign:TransitionAssist.DisableTransitions="True"
+                            materialDesign:ListBoxItemAssist.ShowSelection="False">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignBackground}">
                             <controls:BardView x:Name="BardsList" />
@@ -202,7 +205,8 @@
                                            ToolTip="{StaticResource LocalOrchestraAutoStart}" />
                                     <ComboBox Margin="90,28,0,0" Grid.Row="2" x:Name="AutostartSource"
                                               SelectionChanged="Autostart_Source_SelectionChanged"
-                                              HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="100"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              VerticalContentAlignment="Center" Width="100"
                                               Padding="5" ToolTip="{StaticResource LocalOrchestraAutoStart}">
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
@@ -211,7 +215,9 @@
                                               Content="Hypnotoad Compatibility" Unchecked="Hypnotoad_Checked"
                                               Checked="Hypnotoad_Checked"
                                               ToolTip="{StaticResource LocalOrchestraHypnotoad}" />
-                                    <CheckBox Margin="10,0,0,0"  Grid.Row="4" Content="Multibox Support" x:Name="MultiBox" Checked="MultiBoxChecked" Unchecked="MultiBoxChecked" ToolTip="{StaticResource Multibox}"/>
+                                    <CheckBox Margin="10,0,0,0" Grid.Row="4" Content="Multibox Support"
+                                              x:Name="MultiBox" Checked="MultiBoxChecked" Unchecked="MultiBoxChecked"
+                                              ToolTip="{StaticResource Multibox}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Grid.Row="0" Grid.Column="1" Header="Playback">
@@ -256,7 +262,8 @@
                                               ItemsSource="{Binding}"
                                               DisplayMemberPath="Value"
                                               SelectionChanged="MIDI_Input_Device_SelectionChanged"
-                                              HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="140"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              VerticalContentAlignment="Center" MinWidth="140"
                                               Padding="5" ToolTip="{StaticResource PlaybackMidiInput}" />
                                 </Grid>
                             </GroupBox>
@@ -391,6 +398,7 @@
                                     <ColumnDefinition Width="45" />
                                     <ColumnDefinition Width="30" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="30" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" x:Name="SirenLoad" Content="Load" Click="Siren_Load_Click"
@@ -401,7 +409,9 @@
                                 <Button Grid.Column="2" x:Name="SirenStop" Content="Stop" Click="Siren_Stop_Click"
                                         Padding="0" Margin="0,0,0,0" Height="20" Width="Auto" />
                                 <Button Grid.Column="5" x:Name="SirenSaveLrc" Content="Save Lrc"
-                                        Click="Siren_Save_LRC_Click" Margin="-40,0,0,0" Height="20" Width="80" />
+                                        Click="Siren_Save_LRC_Click" Margin="-60,0,0,0" Height="20" Width="80" />
+                                <Button Grid.Column="6" Content="Quick Edit" Click="QuickMidiProcessing_Click"
+                                        Padding="0" Margin="0,0,0,0" Height="20" Width="80" />
                             </Grid>
                         </Grid>
                     </TabItem>
@@ -445,7 +455,8 @@
                     <TextBox Grid.Column="0" x:Name="TrackTxtNum" Padding="0"
                              x:FieldModifier="private" Text="t1" TextChanged="track_txtNum_TextChanged"
                              KeyUp="track_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
-                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center"
+                             VerticalContentAlignment="Center" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12" />
@@ -468,7 +479,8 @@
                     <TextBox Grid.Column="0" x:Name="OctaveTxtNum" Padding="0"
                              x:FieldModifier="private" Text="ø0" TextChanged="octave_txtNum_TextChanged"
                              KeyUp="octave_txtNum_KeyUp" TextAlignment="Center" FontSize="14"
-                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                             HorizontalAlignment="Right" Width="32" Height="25" VerticalAlignment="Center"
+                             VerticalContentAlignment="Center" />
                     <Grid Grid.Column="1" Margin="0,0,-7,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="12" />

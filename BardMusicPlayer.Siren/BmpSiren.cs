@@ -135,6 +135,7 @@ public class BmpSiren
         _player.LoadMidiFile(midiFile);
         CurrentSongTitle = song.Title;
         CurrentSong      = song;
+        SongLoaded?.Invoke(CurrentSongTitle);
         return this;
     }
 
@@ -196,7 +197,6 @@ public class BmpSiren
     /// <param name="singer"></param>
     /// <param name="line"></param>
     public delegate void Lyric(int singer, string line);
-
     public event Lyric LyricTrigger;
 
     /// <summary>
@@ -207,8 +207,14 @@ public class BmpSiren
     /// <param name="endTime">The total length of this song in milliseconds</param>
     /// <param name="activeVoices">Active voice count.</param>
     public delegate void SynthTimePosition(string songTitle, double currentTime, double endTime, int activeVoices);
-
     public event SynthTimePosition SynthTimePositionChanged;
+
+    /// <summary>
+    /// Event fired when a new song is loaded 
+    /// </summary>
+    /// <param name="songTitle"></param>
+    public delegate void NewSongLoaded(string songTitle);
+    public event NewSongLoaded SongLoaded;
 
     internal void NotifyTimePosition(PositionChangedEventArgs obj)
     {

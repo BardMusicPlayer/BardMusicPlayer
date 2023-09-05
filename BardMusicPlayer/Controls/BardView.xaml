@@ -42,7 +42,7 @@
                                   Unchecked="AutoEquip_CheckBox_Checked" Checked="AutoEquip_CheckBox_Checked" />
                         <CheckBox Content="Set all Gfx to low" x:Name="GfxLowCheckBox"
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
-                        <MenuItem Header="Arrange XIV Windows" Click="ArrangeWindow_Click"/>
+                        <MenuItem Header="Arrange XIV Windows" Click="ArrangeWindow_Click" />
                         <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />
                     </ContextMenu>
@@ -57,9 +57,9 @@
                   Focusable="False">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="BardsListItemPreviewMouseLeftButtonDown"/>
-                    <EventSetter Event="MouseMove" Handler="BardsListItem_MouseMove"/>
-                    <EventSetter Event="Drop" Handler="BardsListItem_Drop"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="BardsListItemPreviewMouseLeftButtonDown" />
+                    <EventSetter Event="MouseMove" Handler="BardsListItem_MouseMove" />
+                    <EventSetter Event="Drop" Handler="BardsListItem_Drop" />
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -195,13 +195,15 @@
                                                      Value="{Binding TrackNumber}"
                                                      MaxTracks="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Bards.MaxTracks}"
                                                      Padding="0" Width="Auto" Height="12"
-                                                     HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     VerticalContentAlignment="Center" />
                         <!--<TextBlock Grid.Column="10" Grid.Row="0" Text="Octave" HorizontalAlignment="Center" />-->
                         <controls:OctaveNumericUpDown Grid.Column="10" Grid.Row="1" x:Name="OctaveControl"
                                                       PreviewMouseUp="OctaveControl_PreviewMouseUp"
                                                       Value="{Binding OctaveShift}"
                                                       Padding="0" Width="Auto" Height="12"
-                                                      HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      VerticalContentAlignment="Center" />
 
                         <TextBlock Grid.Column="12" Grid.Row="0" Text="Host" HorizontalAlignment="Center"
                                    VerticalAlignment="Center" Padding="0" Width="Auto" />
