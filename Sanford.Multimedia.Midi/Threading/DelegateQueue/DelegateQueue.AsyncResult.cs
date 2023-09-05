@@ -36,8 +36,8 @@ namespace Sanford.Threading
                 NotificationType notificationType) 
                 : base(owner, null, null)
             {
-                this.method = method;
-                this.args = args;
+                this.method           = method;
+                this.args             = args;
                 this.notificationType = notificationType;
             }
 
@@ -51,8 +51,8 @@ namespace Sanford.Threading
                 NotificationType notificationType)
                 : base(owner, callback, state)
             {
-                this.method = method;
-                this.args = args;
+                this.method           = method;
+                this.args             = args;
                 this.notificationType = notificationType;
             }
 

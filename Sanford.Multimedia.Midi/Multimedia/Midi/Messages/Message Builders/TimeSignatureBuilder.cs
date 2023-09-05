@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2005 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -37,8 +37,8 @@ namespace Sanford.Multimedia.Midi
     /// <summary>
     /// Provides easy to use functionality for time signature MetaMessages.
     /// </summary>
-	public class TimeSignatureBuilder : IMessageBuilder
-	{
+    public class TimeSignatureBuilder : IMessageBuilder
+    {
         #region TimeSignature Members
 
         #region Constants
@@ -78,9 +78,9 @@ namespace Sanford.Multimedia.Midi
         /// </summary>
         public TimeSignatureBuilder()
         {
-            Numerator = DefaultNumerator;
-            Denominator = DefaultDenominator;
-            ClocksPerMetronomeClick = DefaultClocksPerMetronomeClick;
+            Numerator                       = DefaultNumerator;
+            Denominator                     = DefaultDenominator;
+            ClocksPerMetronomeClick         = DefaultClocksPerMetronomeClick;
             ThirtySecondNotesPerQuarterNote = DefaultThirtySecondNotesPerQuarterNote;
         }
 
@@ -98,10 +98,10 @@ namespace Sanford.Multimedia.Midi
         /// The TimeSignatureBuilder uses the specified MetaMessage to 
         /// initialize its property values.
         /// </remarks>
-		public TimeSignatureBuilder(MetaMessage message)
+        public TimeSignatureBuilder(MetaMessage message)
         {
             Initialize(message);            
-		}
+        }
 
         #endregion
 
@@ -265,7 +265,7 @@ namespace Sanford.Multimedia.Midi
             // message was built.
             if(changed)
             {
-                result = new MetaMessage(MetaType.TimeSignature, data);
+                result  = new MetaMessage(MetaType.TimeSignature, data);
                 changed = false;
             }
         }

@@ -1,5 +1,4 @@
-﻿
-namespace Sanford.Multimedia.Midi
+﻿namespace Sanford.Multimedia.Midi
 {
     
     /// <summary>

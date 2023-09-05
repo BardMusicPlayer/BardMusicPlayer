@@ -438,7 +438,7 @@ public sealed class MidiMessage
         if (type.Equals("aftertouch")) { code = 0xd0; channel = int.Parse(args[0]); value = int.Parse(args[1]); }
         if (type.Equals("pitchwheel")) { code = 0xe0; channel = int.Parse(args[0]); pitch = int.Parse(args[1]); }
         if (type.Equals("sysex")) { code = 0xf0; this.data = data; }
-          
+
          */
             case "note_off":
             case "note_on":

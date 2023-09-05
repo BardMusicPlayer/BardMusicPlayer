@@ -1,8 +1,8 @@
 /*
- * Created by: Leslie Sanford 
- * 
+ * Created by: Leslie Sanford
+ *
  * Last modified: 02/23/2005
- * 
+ *
  * Contact: jabberdabber@hotmail.com
  */
 
@@ -54,7 +54,7 @@ namespace Sanford.Collections.Immutable
         /// </param>
         public RalEnumerator(RalTopNode head, int count)
         {
-            this.head = head;
+            this.head  = head;
             this.count = count;
 
             if(count > 0)
@@ -77,7 +77,7 @@ namespace Sanford.Collections.Immutable
         /// </summary>
         public void Reset()
         {
-            index = -1;
+            index          = -1;
             currentTopNode = head;
             treeStack.Clear();
 

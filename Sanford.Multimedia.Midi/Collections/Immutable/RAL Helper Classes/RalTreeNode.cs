@@ -1,8 +1,8 @@
 /*
- * Created by: Leslie Sanford 
- * 
+ * Created by: Leslie Sanford
+ *
  * Last modified: 02/23/2005
- * 
+ *
  * Contact: jabberdabber@hotmail.com
  */
 
@@ -53,8 +53,8 @@ namespace Sanford.Collections.Immutable
             RalTreeNode leftChild, 
             RalTreeNode rightChild)
         {
-            this.value = value;
-            this.leftChild = leftChild;
+            this.value      = value;
+            this.leftChild  = leftChild;
             this.rightChild = rightChild;
 
             count = 1;

@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -37,10 +37,10 @@ using Sanford.Multimedia.Timers;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Generates clock events internally.
-	/// </summary>
-	public class MidiInternalClock : PpqnClock, IComponent
+    /// <summary>
+    /// Generates clock events internally.
+    /// </summary>
+    public class MidiInternalClock : PpqnClock, IComponent
     {
         #region MidiInternalClock Members
 
@@ -58,7 +58,7 @@ namespace Sanford.Multimedia.Midi
         // Indicates whether the clock has been disposed.
         private bool disposed = false;
 
-		private int sleep = 0;
+        private int sleep = 0;
 
         private ISite site = null;
 
@@ -69,16 +69,16 @@ namespace Sanford.Multimedia.Midi
         /// <summary>
         /// Initializes a new instance of the MidiInternalClock class.
         /// </summary>
-		public MidiInternalClock()
+        public MidiInternalClock()
             : this(TimerCaps.Default.periodMin)
         { 
         }
 
         public MidiInternalClock(int timerPeriod) : base(timerPeriod)
         {
-            timer = TimerFactory.Create();
-            timer.Period = timerPeriod;
-            timer.Tick += new EventHandler(HandleTick); 
+            timer        =  TimerFactory.Create();
+            timer.Period =  timerPeriod;
+            timer.Tick   += new EventHandler(HandleTick); 
         }
 
         /// <summary>
@@ -102,13 +102,13 @@ namespace Sanford.Multimedia.Midi
         #region Methods
 
         /// <summary>
-		/// Sleeps for a certain time
-		/// </summary>
-		public void Sleep(int ms) {
-			sleep += ms;
-		}
+        /// Sleeps for a certain time
+        /// </summary>
+        public void Sleep(int ms) {
+            sleep += ms;
+        }
 
-		/// <summary>
+        /// <summary>
         /// Starts the MidiInternalClock.
         /// </summary>
         public void Start()
@@ -277,10 +277,10 @@ namespace Sanford.Multimedia.Midi
         private void HandleTick(object sender, EventArgs e)
         {
 
-			if(sleep != 0) {
-				Thread.Sleep(sleep);
-				sleep = 0;
-			}
+            if(sleep != 0) {
+                Thread.Sleep(sleep);
+                sleep = 0;
+            }
 
             int t = GenerateTicks();
 
@@ -299,16 +299,16 @@ namespace Sanford.Multimedia.Midi
         #region Properties
 
         /// <summary>
-		/// Gets or sets the tempo speed multiplier.
-		/// </summary>
-		public float TempoSpeed {
-			get {
-				return GetTempoSpeed();
-			}
-			set {
-				SetTempoSpeed(value);
-			}
-		}
+        /// Gets or sets the tempo speed multiplier.
+        /// </summary>
+        public float TempoSpeed {
+            get {
+                return GetTempoSpeed();
+            }
+            set {
+                SetTempoSpeed(value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tempo in microseconds per beat.

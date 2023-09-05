@@ -1380,7 +1380,7 @@ public sealed class GP5File : GPFile
     private MidiChannel readChannel(IReadOnlyList<MidiChannel> channels)
     {
         /*Read MIDI channel.
-       
+
                MIDI channel in Guitar Pro is represented by two integers. First
                is zero-based number of channel, second is zero-based number of
                channel used for effects.*/

@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -59,7 +59,7 @@ namespace Sanford.Multimedia.Midi
 
             holdPedal1Message = new bool[c];
             holdPedal2Message = new bool[c];
-            sustenutoMessage = new bool[c];
+            sustenutoMessage  = new bool[c];
         }
 
         public void Process(ChannelMessage message)
@@ -132,8 +132,8 @@ namespace Sanford.Multimedia.Midi
                     if(noteOnMessage[c, n] != null)
                     {
                         builder.MidiChannel = c;
-                        builder.Command = ChannelCommand.NoteOff;
-                        builder.Data1 = noteOnMessage[c, n].Data1;
+                        builder.Command     = ChannelCommand.NoteOff;
+                        builder.Data1       = noteOnMessage[c, n].Data1;
                         builder.Build();
 
                         stoppedMessages.Add(builder.Result);
@@ -145,8 +145,8 @@ namespace Sanford.Multimedia.Midi
                 if(holdPedal1Message[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.HoldPedal1;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.HoldPedal1;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -157,8 +157,8 @@ namespace Sanford.Multimedia.Midi
                 if(holdPedal2Message[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.HoldPedal2;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.HoldPedal2;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -169,8 +169,8 @@ namespace Sanford.Multimedia.Midi
                 if(sustenutoMessage[c])
                 {
                     builder.MidiChannel = c;
-                    builder.Command = ChannelCommand.Controller;
-                    builder.Data1 = (int)ControllerType.SustenutoPedal;
+                    builder.Command     = ChannelCommand.Controller;
+                    builder.Data1       = (int)ControllerType.SustenutoPedal;
                     builder.Build();
 
                     stoppedMessages.Add(builder.Result);
@@ -193,7 +193,7 @@ namespace Sanford.Multimedia.Midi
 
                 holdPedal1Message[c] = false;
                 holdPedal2Message[c] = false;
-                sustenutoMessage[c] = false;
+                sustenutoMessage[c]  = false;
             }
         }
 

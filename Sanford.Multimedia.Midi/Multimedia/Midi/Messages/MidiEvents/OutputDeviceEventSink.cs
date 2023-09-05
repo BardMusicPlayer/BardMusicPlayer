@@ -25,7 +25,7 @@
 
         public OutputDeviceEventSink(OutputDevice outDevice, MidiEvents eventSource)
         {
-            FOutDevice = outDevice;
+            FOutDevice   = outDevice;
             FEventSource = eventSource;
 
             RegisterEvents();
@@ -34,22 +34,22 @@
 
         private void RegisterEvents()
         {
-            FEventSource.MessageReceived += FEventSource_MessageReceived;
-            FEventSource.ShortMessageReceived += EventSource_RawMessageReceived;
-            FEventSource.ChannelMessageReceived += EventSource_ChannelMessageReceived;
-            FEventSource.SysCommonMessageReceived += EventSource_SysCommonMessageReceived;
-            FEventSource.SysExMessageReceived += EventSource_SysExMessageReceived;
+            FEventSource.MessageReceived            += FEventSource_MessageReceived;
+            FEventSource.ShortMessageReceived       += EventSource_RawMessageReceived;
+            FEventSource.ChannelMessageReceived     += EventSource_ChannelMessageReceived;
+            FEventSource.SysCommonMessageReceived   += EventSource_SysCommonMessageReceived;
+            FEventSource.SysExMessageReceived       += EventSource_SysExMessageReceived;
             FEventSource.SysRealtimeMessageReceived += EventSource_SysRealtimeMessageReceived;
         }
 
 
         private void UnRegisterEvents()
         {
-            FEventSource.MessageReceived -= FEventSource_MessageReceived;
-            FEventSource.ShortMessageReceived -= EventSource_RawMessageReceived;
-            FEventSource.ChannelMessageReceived -= EventSource_ChannelMessageReceived;
-            FEventSource.SysCommonMessageReceived -= EventSource_SysCommonMessageReceived;
-            FEventSource.SysExMessageReceived -= EventSource_SysExMessageReceived;
+            FEventSource.MessageReceived            -= FEventSource_MessageReceived;
+            FEventSource.ShortMessageReceived       -= EventSource_RawMessageReceived;
+            FEventSource.ChannelMessageReceived     -= EventSource_ChannelMessageReceived;
+            FEventSource.SysCommonMessageReceived   -= EventSource_SysCommonMessageReceived;
+            FEventSource.SysExMessageReceived       -= EventSource_SysExMessageReceived;
             FEventSource.SysRealtimeMessageReceived -= EventSource_SysRealtimeMessageReceived;
         }
 

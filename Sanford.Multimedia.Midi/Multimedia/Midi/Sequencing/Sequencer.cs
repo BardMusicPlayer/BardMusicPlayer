@@ -211,7 +211,7 @@ namespace Sanford.Multimedia.Midi
 
                 tracksPlayingCount = Sequence.Count;
 
-                playing = true;
+                playing    = true;
                 clock.Ppqn = sequence.Division;
                 clock.Continue();
             }

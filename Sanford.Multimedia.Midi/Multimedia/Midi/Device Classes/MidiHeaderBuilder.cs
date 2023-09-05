@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2005 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -37,11 +37,11 @@ using System.Runtime.InteropServices;
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Builds a pointer to a MidiHeader structure.
-	/// </summary>
-	internal class MidiHeaderBuilder
-	{
+    /// <summary>
+    /// Builds a pointer to a MidiHeader structure.
+    /// </summary>
+    internal class MidiHeaderBuilder
+    {
         // The length of the system exclusive buffer.
         private int bufferLength;
 
@@ -57,10 +57,10 @@ namespace Sanford.Multimedia.Midi
         /// <summary>
         /// Initializes a new instance of the MidiHeaderBuilder.
         /// </summary>
-		public MidiHeaderBuilder()
-		{
+        public MidiHeaderBuilder()
+        {
             BufferLength = 1;
-		}
+        }
 
         #region Methods
 
@@ -72,10 +72,10 @@ namespace Sanford.Multimedia.Midi
             MidiHeader header = new MidiHeader();
 
             // Initialize the MidiHeader.
-            header.bufferLength = BufferLength;
+            header.bufferLength  = BufferLength;
             header.bytesRecorded = BufferLength;
-            header.data = Marshal.AllocHGlobal(BufferLength);
-            header.flags = 0;
+            header.data          = Marshal.AllocHGlobal(BufferLength);
+            header.flags         = 0;
 
             // Write data to the MidiHeader.
             for(int i = 0; i < BufferLength; i++)
@@ -227,7 +227,7 @@ namespace Sanford.Multimedia.Midi
                 #endregion
 
                 bufferLength = value;
-                data = new byte[value];
+                data         = new byte[value];
             }
         }
 
@@ -243,5 +243,5 @@ namespace Sanford.Multimedia.Midi
         }
 
         #endregion
-	}
+    }
 }

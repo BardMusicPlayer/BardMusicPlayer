@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2005 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -34,11 +34,11 @@
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Reads a track from a stream.
-	/// </summary>
-	internal class TrackReader
-	{
+    /// <summary>
+    /// Reads a track from a stream.
+    /// </summary>
+    internal class TrackReader
+    {
         private Track track = new Track();
 
         private Track newTrack = new Track();
@@ -61,9 +61,9 @@ namespace Sanford.Multimedia.Midi
 
         private int runningStatus;
 
-		public TrackReader()
-		{
-		}
+        public TrackReader()
+        {
+        }
 
         public void Read(Stream strm)
         { 
@@ -170,8 +170,8 @@ namespace Sanford.Multimedia.Midi
         {
             // If this is a channel message.
             if(status >= (int)ChannelCommand.NoteOff && 
-                status <= (int)ChannelCommand.PitchWheel + 
-                ChannelMessage.MidiChannelMaxValue)
+               status <= (int)ChannelCommand.PitchWheel + 
+               ChannelMessage.MidiChannelMaxValue)
             {
                 ParseChannelMessage();
             }
@@ -192,13 +192,13 @@ namespace Sanford.Multimedia.Midi
             }
             // Else if this is a system common message.
             else if(status >= (int)SysCommonType.MidiTimeCode &&
-                status <= (int)SysCommonType.TuneRequest)
+                    status <= (int)SysCommonType.TuneRequest)
             {
                 ParseSysCommonMessage();
             }
             // Else if this is a system realtime message.
             else if(status >= (int)SysRealtimeType.Clock &&
-                status <= (int)SysRealtimeType.Reset)
+                    status <= (int)SysRealtimeType.Reset)
             {
                 ParseSysRealtimeMessage();                
             }
@@ -211,9 +211,9 @@ namespace Sanford.Multimedia.Midi
                 throw new MidiFileException("End of track unexpectedly reached.");
             }
 
-            cmBuilder.Command = ChannelMessage.UnpackCommand(status);
+            cmBuilder.Command     = ChannelMessage.UnpackCommand(status);
             cmBuilder.MidiChannel = ChannelMessage.UnpackMidiChannel(status);
-            cmBuilder.Data1 = trackData[trackIndex];
+            cmBuilder.Data1       = trackData[trackIndex];
 
             trackIndex++;
 
@@ -427,7 +427,7 @@ namespace Sanford.Multimedia.Midi
                     temp = trackData[trackIndex];
                     trackIndex++;
                     result <<= 7;
-                    result |= temp & 0x7F;
+                    result |=  temp & 0x7F;
                 }while((temp & 0x80) == 0x80);
             }
 
@@ -441,5 +441,5 @@ namespace Sanford.Multimedia.Midi
                 return track;
             }
         }
-	}
+    }
 }

@@ -62,7 +62,7 @@ namespace Sanford.Multimedia.Midi
 
             public TimestampedMessage(int ticks, IMidiMessage message)
             {
-                this.ticks = ticks;
+                this.ticks   = ticks;
                 this.message = message;
             }
         }

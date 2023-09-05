@@ -1,8 +1,8 @@
 /*
- * Created by: Leslie Sanford 
- * 
+ * Created by: Leslie Sanford
+ *
  * Last modified: 02/23/2005
- * 
+ *
  * Contact: jabberdabber@hotmail.com
  */
 
@@ -48,7 +48,7 @@ namespace Sanford.Collections.Immutable
         public AvlEnumerator(IAvlNode root)
         {
             this.root = root;
-            count = root.Count;
+            count     = root.Count;
 
             Reset();
         }
@@ -66,7 +66,7 @@ namespace Sanford.Collections.Immutable
         {
             Debug.Assert(count <= root.Count);
 
-            this.root = root;
+            this.root  = root;
             this.count = count;
 
             Reset();

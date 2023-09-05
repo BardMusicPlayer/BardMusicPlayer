@@ -1,7 +1,7 @@
 ﻿/*
  * Load Balancer based on example from CSharpSynthProject ( https://archive.codeplex.com/?p=csharpsynthproject & https://github.com/sinshu/CSharpSynthProject )
- * C# Digital Audio Synth 
- * Copyright Alex Veltsistas 2014  
+ * C# Digital Audio Synth
+ * Copyright Alex Veltsistas 2014
  */
 
 using BardMusicPlayer.Quotidian;

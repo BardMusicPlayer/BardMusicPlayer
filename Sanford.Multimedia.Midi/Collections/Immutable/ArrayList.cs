@@ -1,8 +1,8 @@
 /*
- * Created by: Leslie Sanford 
- * 
+ * Created by: Leslie Sanford
+ *
  * Last modified: 02/28/2005
- * 
+ *
  * Contact: jabberdabber@hotmail.com
  */
 
@@ -12,13 +12,13 @@ using System.Diagnostics;
 
 namespace Sanford.Collections.Immutable
 {
-	/// <summary>
-	/// Represents a collection of elements accessible by index and supports
-	/// insertion and deletion.
-	/// </summary>
-	[ImmutableObject(true)]
-	public class ArrayList
-	{
+    /// <summary>
+    /// Represents a collection of elements accessible by index and supports
+    /// insertion and deletion.
+    /// </summary>
+    [ImmutableObject(true)]
+    public class ArrayList
+    {
         #region ArrayList Members
 
         #region Constants
@@ -33,20 +33,20 @@ namespace Sanford.Collections.Immutable
 
         #region Readonly
 
-        /* 
-         * The tree pool is a tree made up of null nodes. It is completely 
+        /*
+         * The tree pool is a tree made up of null nodes. It is completely
          * balanced and is used to form a template of nodes for use in the
          * ArrayList. Initially, a small subtree is taken from the tree pool
          * when an ArrayList is created. New nodes replace the null nodes as
-         * new versions of the ArrayList are created. Once the tree has been 
+         * new versions of the ArrayList are created. Once the tree has been
          * filled, another subtree of equal height is taken from the tree pool
          * to enlarge the tree for the next version of the ArrayList.
-         * 
-         * The reasoning behind this approach is that the Add method of the 
+         *
+         * The reasoning behind this approach is that the Add method of the
          * ArrayList will probably be the most widely used operation. By having
-         * a prefabricated balanced tree, no rebalancing has to take place as 
-         * new nodes are added to the tree. Their position in the tree has 
-         * already been determined by the existing null tree. This improves 
+         * a prefabricated balanced tree, no rebalancing has to take place as
+         * new nodes are added to the tree. Their position in the tree has
+         * already been determined by the existing null tree. This improves
          * performance.
          */
 
@@ -78,7 +78,7 @@ namespace Sanford.Collections.Immutable
             for(int i = 0; i < TreePoolHeight; i++)
             {
                 parent = new AvlNode(null, child, child);
-                child = parent;
+                child  = parent;
             }
 
             TreePool = parent;
@@ -90,8 +90,8 @@ namespace Sanford.Collections.Immutable
         /// <summary>
         /// Initializes a new instance of the ArrayList class.
         /// </summary>
-		public ArrayList()
-		{
+        public ArrayList()
+        {
             root = GetSubTree(DefaultCapacityHeight);
         }
 
@@ -130,7 +130,7 @@ namespace Sanford.Collections.Immutable
         /// </param>
         private ArrayList(IAvlNode root, int count)
         {
-            this.root = root;
+            this.root  = root;
             this.count = count;
         }
 
@@ -590,9 +590,9 @@ namespace Sanford.Collections.Immutable
             }
 
             /*
-             * This check isn't necessary if a node has already been rebalanced 
+             * This check isn't necessary if a node has already been rebalanced
              * after an insertion. AVL tree insertions never require more than
-             * one rebalancing. However, it's easier to go ahead and check at 
+             * one rebalancing. However, it's easier to go ahead and check at
              * this point since we're using recursion. This may need optimizing
              * in the future.
              */

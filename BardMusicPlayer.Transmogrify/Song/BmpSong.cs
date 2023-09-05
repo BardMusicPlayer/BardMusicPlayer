@@ -493,7 +493,7 @@ public sealed class BmpSong
 
 /*
 /// <summary>
-/// 
+///
 /// </summary>
 /// <returns></returns>
 public Task<MidiFile> GetProcessedMidiFile()

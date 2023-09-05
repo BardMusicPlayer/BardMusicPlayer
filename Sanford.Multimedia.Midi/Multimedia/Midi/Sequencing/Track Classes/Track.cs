@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -63,7 +63,7 @@ namespace Sanford.Multimedia.Midi
         // The end of track MIDI event.
         private MidiEvent endOfTrackMidiEvent;
 
-		private bool listen = true;
+        private bool listen = true;
 
         #endregion
 
@@ -114,8 +114,8 @@ namespace Sanford.Multimedia.Midi
             else if(position >= tail.AbsoluteTicks)
             {
                 newMidiEvent.Previous = tail;
-                tail.Next = newMidiEvent;
-                tail = newMidiEvent;  
+                tail.Next             = newMidiEvent;
+                tail                  = newMidiEvent;  
                 endOfTrackMidiEvent.SetAbsoluteTicks(Length);
                 endOfTrackMidiEvent.Previous = tail;
             }
@@ -128,7 +128,7 @@ namespace Sanford.Multimedia.Midi
                     current = current.Next;
                 }
 
-                newMidiEvent.Next = current;
+                newMidiEvent.Next     = current;
                 newMidiEvent.Previous = current.Previous;
 
                 if(current.Previous != null)
@@ -214,12 +214,12 @@ namespace Sanford.Multimedia.Midi
             if(a != null && a.AbsoluteTicks <= b.AbsoluteTicks)
             {
                 current = new MidiEvent(this, a.AbsoluteTicks, a.MidiMessage);
-                a = a.Next;
+                a       = a.Next;
             }
             else
             {
                 current = new MidiEvent(this, b.AbsoluteTicks, b.MidiMessage);
-                b = b.Next;
+                b       = b.Next;
             }
 
             head = current;
@@ -228,38 +228,38 @@ namespace Sanford.Multimedia.Midi
             {
                 while(a != null && a.AbsoluteTicks <= b.AbsoluteTicks)
                 {
-                    current.Next = new MidiEvent(this, a.AbsoluteTicks, a.MidiMessage);
+                    current.Next          = new MidiEvent(this, a.AbsoluteTicks, a.MidiMessage);
                     current.Next.Previous = current;
-                    current = current.Next;
-                    a = a.Next;
+                    current               = current.Next;
+                    a                     = a.Next;
                 }
 
                 if(a != null)
                 {
                     while(b != null && b.AbsoluteTicks <= a.AbsoluteTicks)
                     {
-                        current.Next = new MidiEvent(this, b.AbsoluteTicks, b.MidiMessage);
+                        current.Next          = new MidiEvent(this, b.AbsoluteTicks, b.MidiMessage);
                         current.Next.Previous = current;
-                        current = current.Next;
-                        b = b.Next;
+                        current               = current.Next;
+                        b                     = b.Next;
                     }
                 }
             }
 
             while(a != null)
             {
-                current.Next = new MidiEvent(this, a.AbsoluteTicks, a.MidiMessage);
+                current.Next          = new MidiEvent(this, a.AbsoluteTicks, a.MidiMessage);
                 current.Next.Previous = current;
-                current = current.Next;
-                a = a.Next;
+                current               = current.Next;
+                a                     = a.Next;
             }
 
             while(b != null)
             {
-                current.Next = new MidiEvent(this, b.AbsoluteTicks, b.MidiMessage);
+                current.Next          = new MidiEvent(this, b.AbsoluteTicks, b.MidiMessage);
                 current.Next.Previous = current;
-                current = current.Next;
-                b = b.Next;
+                current               = current.Next;
+                b                     = b.Next;
             }
 
             tail = current;
@@ -493,7 +493,7 @@ namespace Sanford.Multimedia.Midi
 
                 while(previous != null && previous.AbsoluteTicks > newPosition)
                 {
-                    next = previous;
+                    next     = previous;
                     previous = previous.Previous;
                 }                
             }
@@ -509,7 +509,7 @@ namespace Sanford.Multimedia.Midi
                 while(next != null && next.AbsoluteTicks < newPosition)
                 {
                     previous = next;
-                    next = next.Next;
+                    next     = next.Next;
                 }
             }
 
@@ -524,7 +524,7 @@ namespace Sanford.Multimedia.Midi
             }
 
             e.Previous = previous;
-            e.Next = next;
+            e.Next     = next;
             e.SetAbsoluteTicks(newPosition);
 
             if(newPosition < head.AbsoluteTicks)
@@ -651,14 +651,14 @@ namespace Sanford.Multimedia.Midi
             }
         }
 
-		public bool Listen {
-			set {
-				listen = value;
-			}
-			get {
-				return listen;
-			}
-		}
+        public bool Listen {
+            set {
+                listen = value;
+            }
+            get {
+                return listen;
+            }
+        }
 
         #endregion
 

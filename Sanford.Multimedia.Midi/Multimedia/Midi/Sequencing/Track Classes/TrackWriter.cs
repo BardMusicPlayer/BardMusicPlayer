@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -34,18 +34,18 @@
 
 namespace Sanford.Multimedia.Midi
 {
-	/// <summary>
-	/// Writes a Track to a Stream.
-	/// </summary>
+    /// <summary>
+    /// Writes a Track to a Stream.
+    /// </summary>
     internal class TrackWriter
     {
         private static readonly byte[] TrackHeader =
-            {
-                (byte)'M',
-                (byte)'T',
-                (byte)'r',
-                (byte)'k'
-            };
+        {
+            (byte)'M',
+            (byte)'T',
+            (byte)'r',
+            (byte)'k'
+        };
 
         // The Track to write to the Stream.
         private Track track = new Track();
@@ -93,9 +93,9 @@ namespace Sanford.Multimedia.Midi
                         Write((SysRealtimeMessage)e.MidiMessage);
                         break;
 				
-		    case MessageType.Short:
-			Write((ShortMessage)e.MidiMessage);
-			break;
+                    case MessageType.Short:
+                        Write((ShortMessage)e.MidiMessage);
+                        break;
                 }
             }
 
@@ -127,8 +127,8 @@ namespace Sanford.Multimedia.Midi
             while(v > 0)
             {
                 count++;
-                array[count] = (byte)((v & 0x7F) | 0x80);
-                v >>= 7;
+                array[count] =   (byte)((v & 0x7F) | 0x80);
+                v            >>= 7;
             }
 
             while(count >= 0)
@@ -139,9 +139,9 @@ namespace Sanford.Multimedia.Midi
         }
 	    
         private void Write(ShortMessage message)
-	{
-		trackData.AddRange(message.GetBytes());
-	}
+        {
+            trackData.AddRange(message.GetBytes());
+        }
 
         private void Write(ChannelMessage message)
         {

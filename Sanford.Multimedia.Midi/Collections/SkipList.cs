@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -36,15 +36,15 @@ using System.Collections;
 
 namespace Sanford.Collections
 {
-	/// <summary>
+    /// <summary>
     /// Represents a collection of key-and-value pairs.
-	/// </summary>
-	/// <remarks>
-	/// The SkipList class is an implementation of the IDictionary interface. It 
-	/// is based on the data structure created by William Pugh.
-	/// </remarks> 
-	public class SkipList : IDictionary
-	{        
+    /// </summary>
+    /// <remarks>
+    /// The SkipList class is an implementation of the IDictionary interface. It 
+    /// is based on the data structure created by William Pugh.
+    /// </remarks> 
+    public class SkipList : IDictionary
+    {        
         #region SkipList Members
 
         #region Constants
@@ -112,7 +112,7 @@ namespace Sanford.Collections
         /// with every other key in the SkipList.
         /// </remarks>
         public SkipList(IComparer comparer)
-		{
+        {
             // Initialize comparer with the client provided comparer.
             this.comparer = comparer;
 
@@ -136,7 +136,7 @@ namespace Sanford.Collections
         private void Initialize()
         {
             listLevel = 1;
-            count = 0; 
+            count     = 0; 
 
             // When the list is empty, make sure all forward references in the
             // header point back to the header. This is important because the 
@@ -159,7 +159,7 @@ namespace Sanford.Collections
 
             // Determines the next node level.
             while(random.NextDouble() < Probability && level < MaxLevel &&
-                level <= listLevel)
+                  level <= listLevel)
             {
                 level++;
             }
@@ -293,7 +293,7 @@ namespace Sanford.Collections
                 // While we haven't reached the end of the skip list and the 
                 // current key is less than the search key.
                 while(curr.forward[i] != header && 
-                    comparer.Compare(curr.forward[i].Entry.Key, key) < 0)
+                      comparer.Compare(curr.forward[i].Entry.Key, key) < 0)
                 {
                     // Move forward in the skip list.
                     curr = curr.forward[i];
@@ -518,7 +518,7 @@ namespace Sanford.Collections
             {
                 forward = new Node[level];
 
-                Key = key;
+                Key   = key;
                 Value = val;
             }
 
@@ -614,8 +614,8 @@ namespace Sanford.Collections
             public SkipListEnumerator(SkipList list)
             {
                 this.list = list;
-                version = list.version;
-                current = list.header;
+                version   = list.version;
+                current   = list.header;
             }
 
             #endregion
@@ -735,7 +735,7 @@ namespace Sanford.Collections
                 // enumerator was created.
                 if(version == list.version)
                 {
-                    current = list.header;
+                    current    = list.header;
                     moveResult = true;
                 }
                 // Else this version of the enumerator doesn't match that of 
@@ -861,7 +861,7 @@ namespace Sanford.Collections
                 // Take the forward references that point to the node to be 
                 // removed and reassign them to the nodes that come after it.
                 for(int i = 0; i < listLevel && 
-                    update[i].forward[i] == curr; i++)
+                               update[i].forward[i] == curr; i++)
                 {
                     update[i].forward[i] = curr.forward[i];
                 }

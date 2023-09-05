@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2005 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -127,19 +127,19 @@ namespace Sanford.Multimedia.Midi
 
     #endregion
 
-	/// <summary>
-	/// Represents MIDI meta messages.
-	/// </summary>
-	/// <remarks>
-	/// Meta messages are MIDI messages that are stored in MIDI files. These
-	/// messages are not sent or received via MIDI but are read and 
-	/// interpretted from MIDI files. They provide information that describes 
-	/// a MIDI file's properties. For example, tempo changes are implemented
-	/// using meta messages.
-	/// </remarks>
-	[ImmutableObject(true)]
-	public sealed class MetaMessage : MidiMessageBase, IMidiMessage
-	{
+    /// <summary>
+    /// Represents MIDI meta messages.
+    /// </summary>
+    /// <remarks>
+    /// Meta messages are MIDI messages that are stored in MIDI files. These
+    /// messages are not sent or received via MIDI but are read and 
+    /// interpretted from MIDI files. They provide information that describes 
+    /// a MIDI file's properties. For example, tempo changes are implemented
+    /// using meta messages.
+    /// </remarks>
+    [ImmutableObject(true)]
+    public sealed class MetaMessage : MidiMessageBase, IMidiMessage
+    {
         #region MetaMessage Members
 
         #region Constants
@@ -222,7 +222,7 @@ namespace Sanford.Multimedia.Midi
         /// to make sure that it is valid for the specified type. If it is not,
         /// an exception is thrown. 
         /// </remarks>
-		public MetaMessage(MetaType type, byte[] data)
+        public MetaMessage(MetaType type, byte[] data)
         {
             #region Require
 

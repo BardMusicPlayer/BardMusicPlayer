@@ -3,12 +3,12 @@ namespace Sanford.Multimedia.Midi
     public class ChannelMessageEventArgs : EventArgs
     {
         private ChannelMessage message;
-		private Track track;
+        private Track track;
 
         public ChannelMessageEventArgs(Track track, ChannelMessage message)
         {
             this.message = message;
-			this.track = track;
+            this.track   = track;
         }
 
         public ChannelMessage Message
@@ -19,8 +19,8 @@ namespace Sanford.Multimedia.Midi
             }
         }
 
-		public Track MidiTrack {
-			get { return track; }
-		}
+        public Track MidiTrack {
+            get { return track; }
+        }
     }
 }

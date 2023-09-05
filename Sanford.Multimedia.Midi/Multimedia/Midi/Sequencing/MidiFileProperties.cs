@@ -1,23 +1,23 @@
 #region License
 
 /* Copyright (c) 2006 Leslie Sanford
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
@@ -56,24 +56,24 @@ namespace Sanford.Multimedia.Midi
         Smpte
     }    
 
-	/// <summary>
-	/// Represents MIDI file properties.
-	/// </summary>
-	internal class MidiFileProperties
-	{
+    /// <summary>
+    /// Represents MIDI file properties.
+    /// </summary>
+    internal class MidiFileProperties
+    {
         private const int PropertyLength = 2;
 
         private static readonly byte[] MidiFileHeader =
-            {
-                (byte)'M',
-                (byte)'T',
-                (byte)'h',
-                (byte)'d',
-                0, 
-                0, 
-                0,
-                6
-            };
+        {
+            (byte)'M',
+            (byte)'T',
+            (byte)'h',
+            (byte)'d',
+            0, 
+            0, 
+            0,
+            6
+        };
 
         private int format = 1;
 
@@ -83,9 +83,9 @@ namespace Sanford.Multimedia.Midi
 
         private SequenceType sequenceType = SequenceType.Ppqn;
 
-		public MidiFileProperties()
-		{
-		}
+        public MidiFileProperties()
+        {
+        }
 
         public void Read(Stream strm)
         {
@@ -98,13 +98,13 @@ namespace Sanford.Multimedia.Midi
 
             #endregion
 
-            format = trackCount = 0;
-			division = PpqnClock.PpqnMinValue;
+            format   = trackCount = 0;
+            division = PpqnClock.PpqnMinValue;
 
             FindHeader(strm);
-            Format = (int)ReadProperty(strm);
+            Format     = (int)ReadProperty(strm);
             TrackCount = (int)ReadProperty(strm);
-            Division = (int)ReadProperty(strm);
+            Division   = (int)ReadProperty(strm);
 
             #region Invariant
 
@@ -331,9 +331,9 @@ namespace Sanford.Multimedia.Midi
                     }
 
                     if((sbyte)data[0] != -(int)SmpteFrameRate.Smpte24 &&                        
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte25 &&
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30 &&
-                        (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30Drop)
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte25 &&
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30 &&
+                       (sbyte)data[0] != -(int)SmpteFrameRate.Smpte30Drop)
                     {
                         throw new ArgumentException("Invalid SMPTE frame rate.");
                     }
@@ -372,7 +372,7 @@ namespace Sanford.Multimedia.Midi
                 return sequenceType;
             }
         }
-	}
+    }
 
     public class MidiFileException : ApplicationException
     {
