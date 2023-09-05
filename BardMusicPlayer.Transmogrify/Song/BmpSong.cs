@@ -325,12 +325,12 @@ public sealed class BmpSong
                 var trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text ?? "";
                 var o_trackName = trackName;
 
-                var rex = new Regex(@"^([A-Za-z _]+)([-+]\d)?");
+                var rex = new Regex(@"^([A-Za-z _:]+)([-+]\d)?");
                 if (rex.Match(trackName) is { } match)
                 {
                     if (!string.IsNullOrEmpty(match.Groups[1].Value))
                     {
-                        trackName = Instrument.Parse(match.Groups[1].Value).Name;
+                        trackName = Instrument.Parse(match.Groups[1].Value.Replace(":","")).Name;
                         if (!string.IsNullOrEmpty(match.Groups[2].Value))
                             if (int.TryParse(match.Groups[2].Value, out var os))
                                 octaveShift = os;
