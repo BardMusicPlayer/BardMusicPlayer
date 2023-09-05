@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Controls.Primitives;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Quotidian;
@@ -22,6 +21,7 @@ using BardMusicPlayer.Transmogrify.Song.Manipulation;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Microsoft.Win32;
+
 //using Newtonsoft.Json;
 
 namespace BardMusicPlayer.Controls;
@@ -300,7 +300,7 @@ public partial class MidiBardConverterWindow
         _bnb = true;
     }
 
-    private void Instrument_Selector_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Instrument_Selector_PreviewMouseUp(object sender, MouseButtonEventArgs e)
     {
         _bnb = false;
     }
@@ -521,7 +521,7 @@ public partial class MidiBardConverterWindow
         return tracks;
     }
 
-    private void Instrument_Selector_DropDownClosed(object sender, System.EventArgs e)
+    private void Instrument_Selector_DropDownClosed(object sender, EventArgs e)
     {
         _bnb = false;
     }

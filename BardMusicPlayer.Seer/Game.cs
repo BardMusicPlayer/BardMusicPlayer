@@ -5,6 +5,7 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Reader;
 using BardMusicPlayer.Seer.Reader.Backend.Dalamud;
@@ -38,7 +39,7 @@ public partial class Game : IDisposable, IEquatable<Game>
         _uuid   = Guid.NewGuid().ToString();
         Process = process;
         
-        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+        if (BmpPigeonhole.Instance.EnableMultibox)
             KillMutant();
     }
 

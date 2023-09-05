@@ -4,6 +4,8 @@
  */
 
 using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -128,7 +130,7 @@ public struct RECT
         Bottom = bottom;
     }
 
-    public RECT(System.Drawing.Rectangle r) : this(r.Left, r.Top, r.Right, r.Bottom) { }
+    public RECT(Rectangle r) : this(r.Left, r.Top, r.Right, r.Bottom) { }
 
     public int X
     {
@@ -154,24 +156,24 @@ public struct RECT
         set { Right = value + Left; }
     }
 
-    public System.Drawing.Point Location
+    public Point Location
     {
-        get { return new System.Drawing.Point(Left, Top); }
+        get { return new Point(Left, Top); }
         set { X = value.X; Y = value.Y; }
     }
 
-    public System.Drawing.Size Size
+    public Size Size
     {
-        get { return new System.Drawing.Size(Width, Height); }
+        get { return new Size(Width, Height); }
         set { Width = value.Width; Height = value.Height; }
     }
 
-    public static implicit operator System.Drawing.Rectangle(RECT r)
+    public static implicit operator Rectangle(RECT r)
     {
-        return new System.Drawing.Rectangle(r.Left, r.Top, r.Width, r.Height);
+        return new Rectangle(r.Left, r.Top, r.Width, r.Height);
     }
 
-    public static implicit operator RECT(System.Drawing.Rectangle r)
+    public static implicit operator RECT(Rectangle r)
     {
         return new RECT(r);
     }
@@ -195,19 +197,19 @@ public struct RECT
     {
         if (obj is RECT)
             return Equals((RECT)obj);
-        else if (obj is System.Drawing.Rectangle)
-            return Equals(new RECT((System.Drawing.Rectangle)obj));
+        else if (obj is Rectangle)
+            return Equals(new RECT((Rectangle)obj));
         return false;
     }
 
     public override int GetHashCode()
     {
-        return ((System.Drawing.Rectangle)this).GetHashCode();
+        return ((Rectangle)this).GetHashCode();
     }
 
     public override string ToString()
     {
-        return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
+        return string.Format(CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
     }
 }
 #endregion

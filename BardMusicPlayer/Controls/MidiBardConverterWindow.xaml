@@ -76,7 +76,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete Track" Click="TrackListItem_Delete_Click"></MenuItem>
+                    <MenuItem Header="Delete Track" Click="TrackListItem_Delete_Click" />
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.ItemTemplate>
@@ -116,8 +116,7 @@
                                   Background="{DynamicResource MaterialDesignBackground}"
                                   SelectedValuePath="Key" DisplayMemberPath="Value"
                                   ItemsSource="{Binding Source={StaticResource Instruments}}"
-                                  SelectedIndex="{Binding trackInstrument}">
-                        </ComboBox>
+                                  SelectedIndex="{Binding trackInstrument}" />
 
                         <Label Grid.Column="3" Grid.Row="0" Content="Track Group" HorizontalContentAlignment="Center"
                                VerticalContentAlignment="Center" />

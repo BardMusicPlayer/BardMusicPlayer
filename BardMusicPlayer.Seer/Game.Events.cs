@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Seer.Events;
 
@@ -139,7 +140,7 @@ public partial class Game
                     if (!PlayerName.Equals(playerName.PlayerName))
                     {
                         PlayerName = playerName.PlayerName;
-                        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+                        if (BmpPigeonhole.Instance.EnableMultibox)
                             SetClientWindowName(PlayerName + "@" + HomeWorld);
                         BmpSeer.Instance.PublishEvent(playerName);
                     }
@@ -150,7 +151,7 @@ public partial class Game
                     if (!HomeWorld.Equals(homeWorld.HomeWorld))
                     {
                         HomeWorld = homeWorld.HomeWorld;
-                        if (Pigeonhole.BmpPigeonhole.Instance.EnableMultibox)
+                        if (BmpPigeonhole.Instance.EnableMultibox)
                             SetClientWindowName(PlayerName + "@" + HomeWorld);
                         BmpSeer.Instance.PublishEvent(homeWorld);
                     }

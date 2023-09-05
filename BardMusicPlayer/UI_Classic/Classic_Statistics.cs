@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using Microsoft.Win32;
 using BardMusicPlayer.Controls;
 using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old.Events;
+using Microsoft.Win32;
 
 namespace BardMusicPlayer.UI_Classic;
 

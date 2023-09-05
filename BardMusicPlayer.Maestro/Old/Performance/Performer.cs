@@ -3,9 +3,9 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
-using System.ComponentModel;
 using BardMusicPlayer.DalamudBridge;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Maestro.Old.FFXIV;
