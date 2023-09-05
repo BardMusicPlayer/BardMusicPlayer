@@ -59,6 +59,7 @@ public partial class MainWindow
 
         var theme = Theme.Create(baseTheme, primaryColor, secondaryColor);
         var paletteHelper = new PaletteHelper();
+        theme.Background = Color.FromRgb(30, 30, 30);
         paletteHelper.SetTheme(theme);
     }
 }

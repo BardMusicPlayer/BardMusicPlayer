@@ -18,7 +18,7 @@
     <!-- Settings: Local Orchestra -->
     <sys:String x:Key="LocalOrchestraAutoEquip" xml:space="preserve">Auto-equip the performer(s) at song loading</sys:String>
     <sys:String x:Key="LocalOrchestraKeepTracks" xml:space="preserve">Keep the performer settings</sys:String>
-    <sys:String x:Key="LocalOrchestraAutoStart" xml:space="preserve">Select the autostart trigger [Metronome is preferred]</sys:String>
+    <sys:String x:Key="LocalOrchestraAutoStart" xml:space="preserve">Select the autostart trigger</sys:String>
     <sys:String x:Key="LocalOrchestraHypnotoad" xml:space="preserve">Use Hypnotoad enhancements &#13;Only enable if plugin is available!</sys:String>
 
     <!-- Settings: Playback -->
