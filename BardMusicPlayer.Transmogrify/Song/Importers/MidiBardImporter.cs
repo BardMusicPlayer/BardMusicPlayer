@@ -135,10 +135,7 @@ public static class MidiBardImporter
                 PrepareGuitarTrack(d.First().trackChunk, d.First().ToneMode, Instrument.Parse(d.First().trackInstrument + 1).MidiProgramChangeCode);
                 TrackManipulations.SetTrackName(d.First().trackChunk, Instrument.Parse(d.First().trackInstrument + 1).Name);
                 TrackManipulations.SetInstrument(d.First().trackChunk, Instrument.Parse(d.First().trackInstrument + 1).MidiProgramChangeCode);
-                if (d.First().Transpose > 0)
-                    d.First().trackChunk.ProcessNotes(n => n.NoteNumber += (SevenBitNumber)(d.First().Transpose * 12));
-                if (d.First().Transpose < 0)
-                    d.First().trackChunk.ProcessNotes(n => n.NoteNumber -= (SevenBitNumber)(-(d.First().Transpose * 12)));
+                d.First().trackChunk.ProcessNotes(n => n.NoteNumber += (SevenBitNumber)(getMaxTranspose(d.First().trackChunk, d.First().Transpose) * 12));
 
                 TrackManipulations.SetChanNumber(d.First().trackChunk, chanNum);
                 exportMidi.Chunks.Add(d.First().trackChunk);
@@ -147,13 +144,11 @@ public static class MidiBardImporter
             {
                 int chanNum = d.First().Index; // TrackNum - 1;
 
+                //Do the octave shift and push them into a list
                 List<KeyValuePair<long, KeyValuePair<int, TimedEvent>>> tis = new List<KeyValuePair<long, KeyValuePair<int, TimedEvent>>>();
                 foreach (var subChunk in d)
                 {
-                    if (d.First().Transpose > 0)
-                        d.First().trackChunk.ProcessNotes(n => n.NoteNumber += (SevenBitNumber)(d.First().Transpose * 12));
-                    if (d.First().Transpose < 0)
-                        d.First().trackChunk.ProcessNotes(n => n.NoteNumber -= (SevenBitNumber)(-(d.First().Transpose * 12)));
+                    d.First().trackChunk.ProcessNotes(n => n.NoteNumber += (SevenBitNumber)(getMaxTranspose(d.First().trackChunk, d.First().Transpose) * 12));
 
                     foreach (TimedEvent t in subChunk.trackChunk.GetTimedEvents())
                     {
@@ -208,5 +203,38 @@ public static class MidiBardImporter
             }
         }
         return exportMidi;
+    }
+
+    /// <summary>
+    /// Get the lowest and highest note
+    /// </summary>
+    /// <param name="trackChunk"></param>
+    /// <returns></returns>
+    private static int getMaxTranspose(TrackChunk trackChunk, int transpose)
+    {
+        int low = 127;
+        int high = 0;
+        foreach (var note in trackChunk.GetNotes())
+        {
+            if (note.NoteNumber < low)
+                low = note.NoteNumber;
+            if (note.NoteNumber > high)
+                high = note.NoteNumber;
+        }
+        var x = low + (12 * transpose);
+        var y = high + (12 * transpose);
+
+        int minTranspose = -1;
+        int maxTranspose = -1;
+        if (x < 0)
+            minTranspose = (int)Math.Ceiling((double)-x / 12);
+        if (y > 127 )
+            maxTranspose = (int)Math.Ceiling((double)(y-127) / 12);
+
+        if (minTranspose != -1)
+            return minTranspose;
+        if (maxTranspose != -1)
+            return maxTranspose;
+        return transpose;
     }
 }

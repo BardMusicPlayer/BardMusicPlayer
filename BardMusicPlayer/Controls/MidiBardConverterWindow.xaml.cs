@@ -304,6 +304,11 @@ public partial class MidiBardConverterWindow
     {
         _bnb = false;
     }
+
+    private void Instrument_Selector_DropDownClosed(object sender, EventArgs e)
+    {
+        _bnb = false;
+    }
     #endregion
 
     #region Sidemenu
@@ -519,10 +524,5 @@ public partial class MidiBardConverterWindow
             tracks.Add(ntrack);
         }
         return tracks;
-    }
-
-    private void Instrument_Selector_DropDownClosed(object sender, EventArgs e)
-    {
-        _bnb = false;
     }
 }

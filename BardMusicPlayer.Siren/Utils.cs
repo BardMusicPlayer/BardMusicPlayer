@@ -68,6 +68,8 @@ internal static class Utils
 
                 if (lyricsEvent != null)
                 {
+                    if (lyrics.Count < lyricNum+1)
+                        lyrics.Add(lyricNum, new Dictionary<long, string>());
                     lyrics[lyricNum].Add(_event.Time, lyricsEvent.Text);
                     lyricNum++;
                 }
@@ -86,7 +88,7 @@ internal static class Utils
 
                 var noteNum = note.NoteNumber+(12 * trackOctaveShift);
                 if (noteNum < 0)   noteNum = 0;
-                if (noteNum > 254) noteNum = 254;
+                if (noteNum > 127) noteNum = 127;
                 var dur = (int)MinimumLength(instrument, noteNum - 48, note.Length);
                 var time = (int)note.Time;
                 events.AddProgramChange(trackCounter, time, trackCounter,
