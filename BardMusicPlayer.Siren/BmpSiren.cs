@@ -184,10 +184,16 @@ public class BmpSiren
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return this; // Temporary Mac/Linux disable.
         if (!IsReadyForPlayback) return this; // throw new BmpException("Siren not loaded with a song.");
-        if (time < 0) time = 0;
+        if (time < 0) 
+            time = 0;
+
         //if (time > _player.PlaybackRange.EndTick) return Stop();
+        _player.Stop();
+        Task.Delay(50).Wait();
         _player.TickPosition = time;
         _lyricIndex          = time;
+        Task.Delay(50).Wait();
+        _player.Play();
         return this;
     }
 

@@ -60,13 +60,6 @@ public partial class BardView
         BmpSeer.Instance.PlayerNameChanged     += OnPlayerNameChanged;
         BmpSeer.Instance.InstrumentHeldChanged += OnInstrumentHeldChanged;
         BmpSeer.Instance.HomeWorldChanged      += OnHomeWorldChanged;
-        Globals.Globals.OnConfigReload         += Globals_OnConfigReload;
-        Globals_OnConfigReload(null, null);
-    }
-
-    private void Globals_OnConfigReload(object? sender, EventArgs? e)
-    {
-        AutoEquipCheckBox.IsChecked = BmpPigeonhole.Instance.AutoEquipBards;
     }
 
     public BardViewModel Bards { get; } = new();
@@ -299,12 +292,6 @@ public partial class BardView
         }
     }
 
-    private void AutoEquip_CheckBox_Checked(object sender, RoutedEventArgs e)
-    {
-        BmpPigeonhole.Instance.AutoEquipBards = AutoEquipCheckBox.IsChecked ?? false;
-        Globals.Globals.ReloadConfig();
-    }
-
     /// <summary>
     /// Helper class
     /// </summary>
@@ -386,7 +373,6 @@ public partial class BardView
             if (!BmpPigeonhole.Instance.EnsembleKeepTrackSetting)
             {
                 BmpPigeonhole.Instance.EnsembleKeepTrackSetting = true;
-                Globals.Globals.ReloadConfig();
             }
         }
     }

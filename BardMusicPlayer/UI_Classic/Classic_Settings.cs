@@ -12,7 +12,7 @@ public partial class ClassicMainView
     /// <summary>
     /// load the settings
     /// </summary>
-    private void LoadConfig(bool reload = false)
+    private void LoadConfig()
     {
         AutoPlayCheckBox.IsChecked = BmpPigeonhole.Instance.PlaylistAutoPlay;
         MultiBox.IsChecked         = BmpPigeonhole.Instance.EnableMultibox;
@@ -22,13 +22,10 @@ public partial class ClassicMainView
         ForcePlaybackBox.IsChecked       = BmpPigeonhole.Instance.ForcePlayback;
         IgnoreProgramChangeBox.IsChecked = BmpPigeonhole.Instance.IgnoreProgChange;
 
-        //Don't call this on reload
-        if (!reload)
-        {
-            MidiInputDeviceBox.Items.Clear();
-            MidiInputDeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
-            MidiInputDeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
-        }
+        //MIDI Device
+        MidiInputDeviceBox.Items.Clear();
+        MidiInputDeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
+        MidiInputDeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
         LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
         //Misc
@@ -97,7 +94,6 @@ public partial class ClassicMainView
     private void AutoEquipBox_Checked(object sender, RoutedEventArgs e)
     {
         BmpPigeonhole.Instance.AutoEquipBards = AutoEquipBox.IsChecked ?? false;
-        Globals.Globals.ReloadConfig();
     }
 
     private void KeepTrackSettingsBox_Checked(object sender, RoutedEventArgs e)

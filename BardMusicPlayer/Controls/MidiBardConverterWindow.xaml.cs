@@ -475,10 +475,30 @@ public partial class MidiBardConverterWindow
         e.Handled = true;
     }
 
+    private void TrackListItem_DrumMap_Click(object sender, RoutedEventArgs e)
+    {
+        if (Sender is ListViewItem item)
+        {
+            var t = item.Content as MidiBardImporter.MidiTrack;
+            DrumMapping(t?.trackChunk);
+
+            var result = MessageBox.Show("Delete old drum-track?\r\n", "Warning!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No)
+                return;
+
+            _tracks.Remove(t);
+            RenumberTracks();
+        }
+    }
+
     private void TrackListItem_Delete_Click(object sender, RoutedEventArgs e)
     {
         if (Sender is ListViewItem item)
         {
+            var result = MessageBox.Show("Delete this track?\r\n", "Warning!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No)
+                return;
+
             var t = item.Content as MidiBardImporter.MidiTrack;
             _tracks.Remove(t);
             RenumberTracks();
@@ -524,5 +544,56 @@ public partial class MidiBardConverterWindow
             tracks.Add(ntrack);
         }
         return tracks;
+    }
+    
+    /// <summary>
+    /// Split drums in <see cref="TrackChunk"/> into new <see cref="TrackChunk"/>
+    /// </summary>
+    /// <param name="track"></param>
+    private void DrumMapping(TrackChunk? track)
+    {
+        if (track.GetNotes().First().Channel != 9)
+        {
+            var result = MessageBox.Show("Looks like this isn't a drum-track\r\nContinue the mapping?", "Warning!", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No)
+                return;
+        }
+        var openFileDialog = new OpenFileDialog
+        {
+            Filter      = "Drum map | *.json",
+            Multiselect = true
+        };
+
+        if (openFileDialog.ShowDialog() != true)
+            return;
+
+        var drumTracks = TrackManipulations.DrumMapping(track, openFileDialog.FileName);
+        if (drumTracks.Count < 1)
+            return;
+        if (drumTracks.First().Value == null)
+        {
+            MessageBox.Show(drumTracks.First().Key, "Error!", MessageBoxButton.OK);
+            return;
+        }
+
+        var lastTrack = _tracks.Last();
+        var idx = 1;
+        foreach (var nt in drumTracks)
+        {
+            var ntrack = new MidiBardImporter.MidiTrack();
+            if (lastTrack != null)
+            {
+                ntrack.Index       = lastTrack.Index + idx;
+                ntrack.TrackNumber = lastTrack.TrackNumber + idx;
+            }
+
+            ntrack.trackInstrument = Instrument.Parse(nt.Key).Index-1;
+            ntrack.Transpose       = 0;
+            ntrack.ToneMode        = 0;
+            ntrack.trackChunk      = nt.Value;
+            _tracks.Add(ntrack);
+            idx++;
+        }
+        RenumberTracks();
     }
 }

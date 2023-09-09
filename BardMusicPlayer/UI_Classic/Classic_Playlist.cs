@@ -11,6 +11,7 @@ using System.Windows.Input;
 using BardMusicPlayer.Coffer;
 using BardMusicPlayer.Controls;
 using BardMusicPlayer.Functions;
+using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Resources;
 using BardMusicPlayer.Transmogrify.Song;
@@ -34,7 +35,7 @@ public partial class ClassicMainView
     /// <summary>
     /// Plays the next song from the playlist
     /// </summary>
-    private void PlayNextSong()
+    private async void PlayNextSong()
     {
         if (_currentPlaylist == null)
             return;
@@ -84,6 +85,33 @@ public partial class ClassicMainView
             PlaylistContainer.SelectedIndex = PlaylistContainer.Items.Count - 1;
             PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+        }
+    
+        // Send ensemble if there are 2 or more performers
+        // TODO: Check enabled performers instead to not send ensemble for solo songs in a playlist.
+        // TODO: Check if ensemble is already active before sending again. Auto-Equip stops ensemble on song load (instrument change) but if that isn't being used, loading next song may not start a new ensemble.
+        if (BmpMaestro.Instance.GetAllPerformers().Count() >= 2)
+        {
+            var state = PlaybackState.EquipInstruments;
+            while (true)
+            {
+                switch (state)
+                {
+                    case PlaybackState.EquipInstruments:
+                        BmpMaestro.Instance.EquipInstruments();
+                        state = PlaybackState.Wait;
+                        break;
+                    case PlaybackState.Wait:
+                        await Task.Delay(2000);
+                        state = PlaybackState.StartEnsCheck;
+                        break;
+                    case PlaybackState.StartEnsCheck:
+                        BmpMaestro.Instance.StartEnsCheck();
+                        return;
+                    default:
+                        throw new ArgumentException(null);
+                }
+            }
         }
     }
 
@@ -275,19 +303,23 @@ public partial class ClassicMainView
         if ((string)PlaylistContainer.SelectedItem == null)
             return;
 
-        if (_showingPlaylists)
+        // Check if the double-click event occurred inside the playlist
+        if (ItemsControl.ContainerFromElement(PlaylistContainer, (e.OriginalSource as DependencyObject)!) is DataGridRow { IsSelected: true } item)
         {
-            _currentPlaylist              = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
-            _showingPlaylists             = false;
-            PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
+            if (_showingPlaylists)
+            {
+                _currentPlaylist              = BmpCoffer.Instance.GetPlaylist((string)PlaylistContainer.SelectedItem);
+                _showingPlaylists             = false;
+                PlaylistContainer.ItemsSource = PlaylistFunctions.GetCurrentPlaylistItems(_currentPlaylist);
 
-            UpdatePlaylistHeader();
-            return;
+                UpdatePlaylistHeader();
+                return;
+            }
+
+            PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
+            InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+            DirectLoaded           = false;
         }
-
-        PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
-        InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
-        DirectLoaded           = false;
     }
 
     /// <summary>
@@ -434,7 +466,7 @@ public partial class ClassicMainView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SkipSong_Button_Click(object sender, RoutedEventArgs e)
+    private async void SkipSong_Button_Click(object sender, RoutedEventArgs e)
     {
         if (_currentPlaylist == null)
             return;
@@ -460,6 +492,12 @@ public partial class ClassicMainView
 
         if (!_autoPlay)
             return;
+
+        // Wait for instruments before playing
+        if (BmpPigeonhole.Instance.AutoEquipBards)
+        {
+            await Task.Delay(2000);
+        }
 
         //var rnd = new Random();
         PlaybackFunctions.PlaySong(2000);

@@ -55,14 +55,7 @@ public partial class ClassicMainView
         BmpSeer.Instance.InstrumentHeldChanged     += InstrumentOpenCloseState;
 
         //PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
-
-        Globals.Globals.OnConfigReload += Globals_OnConfigReload;
         LoadConfig();
-    }
-
-    private void Globals_OnConfigReload(object? sender, EventArgs e)
-    {
-        LoadConfig(true);
     }
 
     #region EventHandler
@@ -170,7 +163,7 @@ public partial class ClassicMainView
         Play_Button_State(true);
     }
 
-    private void PlaybackStopped()
+    private async void PlaybackStopped()
     {
         PlaybackFunctions.StopSong();
         Play_Button_State();
@@ -182,6 +175,7 @@ public partial class ClassicMainView
         if (_autoPlay)
         {
             var rnd = new Random();
+            await Task.Delay(4000); // Wait for last note sent before loading next song
             if (PlaylistContainer.SelectedIndex == PlaylistContainer.Items.Count - 1)
             {
                 if (_playlistRepeat)
@@ -189,6 +183,13 @@ public partial class ClassicMainView
                     PlaylistContainer.SelectedIndex = 0;
                     PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
                     InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
+
+                    // Wait for instruments before playing
+                    if (BmpPigeonhole.Instance.AutoEquipBards)
+                    {
+                        await Task.Delay(2000);
+                    }
+
                     PlaybackFunctions.PlaySong(2000);
                     Play_Button_State(true);
                 }
@@ -196,6 +197,13 @@ public partial class ClassicMainView
             else
             {
                 PlayNextSong();
+
+                // Wait for instruments before playing
+                if (BmpPigeonhole.Instance.AutoEquipBards)
+                {
+                    await Task.Delay(2000);
+                }
+
                 PlaybackFunctions.PlaySong(2000);
                 Play_Button_State(true);
             }

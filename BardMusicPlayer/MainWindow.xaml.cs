@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using BardMusicPlayer.Pigeonhole;
@@ -61,5 +62,18 @@ public partial class MainWindow
         var paletteHelper = new PaletteHelper();
         theme.Background = Color.FromRgb(30, 30, 30);
         paletteHelper.SetTheme(theme);
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        for (var intCounter = Application.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+        {
+            try { Application.Current.Windows[intCounter]?.Close(); }
+            catch
+            {
+                // ignored
+            }
+        }
+        base.OnClosing(e);
     }
 }

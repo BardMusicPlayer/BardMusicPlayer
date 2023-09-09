@@ -38,8 +38,6 @@
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <CheckBox Content="Auto-Equip Performer(s)" x:Name="AutoEquipCheckBox"
-                                  Unchecked="AutoEquip_CheckBox_Checked" Checked="AutoEquip_CheckBox_Checked" />
                         <CheckBox Content="Set all Gfx to low" x:Name="GfxLowCheckBox"
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
                         <MenuItem Header="Arrange XIV Windows" Click="ArrangeWindow_Click" />

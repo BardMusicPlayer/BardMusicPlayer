@@ -3,9 +3,11 @@
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Newtonsoft.Json;
 
 namespace BardMusicPlayer.Transmogrify.Song.Manipulation;
 
@@ -161,6 +163,82 @@ public static class TrackManipulations
             manager.Objects.RemoveAll(e => e.Event.EventType == MidiEventType.ProgramName);
             manager.SaveChanges();
         }
+    }
+
+    /// <summary>
+    /// DrumMapper Helper
+    /// </summary>
+    public class DrumMaps
+    {
+        public int MidiNote { get; set; } = 0;
+        public string Instrument { get; set; } = "None";
+        public int GameNote { get; set; } = 0;
+    }
+
+    /// <summary>
+    /// Maps a midi drum track to specific notes and corrosponding separate <see cref="TrackChunk"/>
+    /// </summary>
+    /// <param name="track"></param>
+    /// <param name="fileName"></param>
+    /// <returns>The Dictionary(InstrumentName, TrackChunk) or in case of an error: (ErrorMsg, Null)</returns>
+    public static Dictionary<string, TrackChunk> DrumMapping(TrackChunk track, string fileName)
+    {
+        MemoryStream memoryStream = new MemoryStream();
+        FileStream fileStream = File.Open(fileName, FileMode.Open);
+        fileStream.CopyTo(memoryStream);
+        fileStream.Close();
+
+        Dictionary<string, TrackChunk> drumTracks = new Dictionary<string, TrackChunk>();
+        List<DrumMaps> drumlist = null;
+        var data = memoryStream.ToArray();
+        try
+        {
+            drumlist = JsonConvert.DeserializeObject<List<DrumMaps>>(new UTF8Encoding(true).GetString(data));
+        }
+        catch
+        {
+            drumTracks.Add("Malformed drum map!", null);
+            return drumTracks;
+        }
+        memoryStream.Close();
+        memoryStream.Dispose();
+
+        if (drumlist == null)
+        {
+            drumTracks.Add("Drum map is empty!", null);
+            return drumTracks;
+        }
+
+        //And do it
+        foreach (Note note in track.GetNotes())
+        {
+            var drum = drumlist.Where(dm => dm.MidiNote == note.NoteNumber).FirstOrDefault();
+            if (drum == null)
+                continue;
+
+            var ret = drumTracks.Where(item => item.Key == drum.Instrument).FirstOrDefault();
+            if (ret.Key == null)
+            {
+                drumTracks[drum.Instrument] = new TrackChunk(new SequenceTrackNameEvent(drum.Instrument));
+                using (var notesManager = drumTracks[drum.Instrument].ManageNotes())
+                {
+                    TimedObjectsCollection<Note> notes = notesManager.Objects;
+                    note.NoteNumber = (SevenBitNumber)drum.GameNote;
+                    notes.Add(note);
+                }
+            }
+            else
+            {
+                using (var notesManager = drumTracks[drum.Instrument].ManageNotes())
+                {
+                    TimedObjectsCollection<Note> notes = notesManager.Objects;
+                    note.NoteNumber = (SevenBitNumber)drum.GameNote;
+                    notes.Add(note);
+                }
+            }
+        }
+        drumlist.Clear();
+        return drumTracks;
     }
     #endregion
 

@@ -32,8 +32,8 @@
                 <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*" />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="200*" MaxWidth="500" />
+                <ColumnDefinition Width="10" MaxWidth="10" />
                 <ColumnDefinition Width="300*" />
             </Grid.ColumnDefinitions>
 
@@ -46,7 +46,7 @@
                         <RowDefinition Height="25" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MaxWidth="300" />
+                        <ColumnDefinition MaxWidth="500" />
                         <ColumnDefinition MaxWidth="40" />
                         <ColumnDefinition MaxWidth="20" />
                         <ColumnDefinition MaxWidth="20" />
@@ -98,7 +98,11 @@
                               AutoGenerateColumns="False"
                               PreviewMouseDoubleClick="PlaylistContainer_PreviewMouseDoubleClick"
                               AllowDrop="true"
-                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.CanContentScroll="True"
+                              materialDesign:RippleAssist.IsDisabled="True">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader"
                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
@@ -290,6 +294,7 @@
                                 <RowDefinition Height="25" />
                                 <RowDefinition Height="25" />
                                 <RowDefinition Height="25" />
+                                <RowDefinition Height="25" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
@@ -313,8 +318,8 @@
                             <Label Grid.Row="5" Grid.Column="0" Content="Note per second" />
                             <Label Grid.Row="5" Grid.Column="1" x:Name="Statistics_Note_Per_Second_Label" />
                             -->
-                            <Label Grid.Row="6" Grid.Column="0" Content="Song functions:" />
-                            <Button Grid.Row="6" Grid.Column="1" Content="Export Current Song as MIDI"
+                            <Label Grid.Row="5" Grid.Column="0" Content="Song functions:" />
+                            <Button Grid.Row="5" Grid.Column="1" Content="Export Current Song as MIDI"
                                     Click="ExportAsMidi" Height="Auto" Width="200" HorizontalAlignment="Left"
                                     ToolTip="{StaticResource ExportSong}" />
                         </Grid>
@@ -370,7 +375,8 @@
                                 <Label Grid.Row="0" Content="Volume" HorizontalAlignment="Center" />
                                 <Slider Grid.Row="1" x:Name="SirenVolume" Minimum="0" Maximum="30" Value="20"
                                         Orientation="Vertical" HorizontalAlignment="Center"
-                                        ValueChanged="Siren_Volume_ValueChanged" />
+                                        ValueChanged="Siren_Volume_ValueChanged" 
+                                        Focusable="False" />
                             </Grid>
 
                             <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
@@ -387,7 +393,8 @@
                                         ValueChanged="Siren_PlayBar_Slider_ValueChanged"
                                         Thumb.DragStarted="Siren_PlayBar_Slider_DragStarted"
                                         Thumb.DragCompleted="Siren_PlayBar_Slider_DragCompleted"
-                                        VerticalAlignment="Center" UseLayoutRounding="True" />
+                                        VerticalAlignment="Center" UseLayoutRounding="True" 
+                                        Focusable="False" />
                                 <Label Grid.Column="2" x:Name="SirenTimeLapsed" Content="00:00"
                                        HorizontalAlignment="Right" VerticalAlignment="Center" />
                             </Grid>
@@ -438,8 +445,11 @@
                 <Button Grid.Column="0" x:Name="MacroButton" Content="Macro"
                         HorizontalAlignment="Left" Height="Auto" Width="72" Padding="0"
                         Click="Macro_Button_Click" />
-                <Button Grid.Column="1" x:Name="Rewind"
-                        Content="⏪" Click="Rewind_Click" Height="Auto" Margin="1,0,3,0" Padding="0" />
+                <Button Grid.Column="1" x:Name="Rewind" Click="Rewind_Click" Height="Auto" Margin="1,0,3,0" Padding="0">
+                    <Button.Content>
+                        <TextBlock Text="⏪" FontSize="15" Margin="0,1,0,0" VerticalAlignment="Center" />
+                    </Button.Content>
+                </Button>
                 <TextBox Grid.Column="2" x:Name="SongName"
                          PreviewMouseDown="SongName_PreviewMouseDown" Height="30" TextWrapping="Wrap" Text="Song Name"
                          FontSize="16" TextAlignment="Center" VerticalAlignment="Center"
@@ -515,7 +525,7 @@
                 <Slider Grid.Row="1" Grid.Column="1" x:Name="PlayBarSlider" Margin="5,0,5,0" Height="25"
                         ValueChanged="PlayBar_Slider_ValueChanged" Thumb.DragStarted="PlayBar_Slider_DragStarted"
                         Thumb.DragCompleted="PlayBar_Slider_DragCompleted" VerticalAlignment="Center"
-                        UseLayoutRounding="True" />
+                        UseLayoutRounding="True" Focusable="False" />
                 <Label Grid.Row="1" Grid.Column="2" x:Name="TotalTime" Height="25" Content="00:00"
                        HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" />
