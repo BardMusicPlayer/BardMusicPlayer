@@ -44,7 +44,7 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
 
     public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{ "violins" }));
     public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{ "violas" }));
-    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{ "cellos", "violoncello"}));
+    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{ "cellos", "violoncello" }));
     public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "bass" }));
     public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
     
