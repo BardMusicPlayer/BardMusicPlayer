@@ -6,13 +6,6 @@
     <img src="https://img.shields.io/github/last-commit/Meowchestra/MeowMusic/no-remote?color=00D162&style=for-the-badge" alt="Commits"/></a>
    <a href="https://github.com/Meowchestra/MeowMusic/commits/no-remote">
     <img src="https://img.shields.io/github/commit-activity/m/Meowchestra/MeowMusic?color=00D162&style=for-the-badge" alt="Commit Activity"/></a>
-  <br>
-  <!-- Other -->
-  <a href="https://github.com/Meowchestra/MeowMusic/issues">
-    <img src="https://img.shields.io/github/issues-raw/Meowchestra/MeowMusic?color=EA9C0A&style=for-the-badge" alt="Open Issues"/></a>
-  <a href="https://github.com/Meowchestra/MeowMusic/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/Meowchestra/MeowMusic?color=009009&style=for-the-badge" alt="Contributors"/></a>
-  <!-- Version -->
   <a href="https://github.com/Meowchestra/MeowMusic/releases">
     <img src="https://img.shields.io/github/v/tag/Meowchestra/MeowMusic?label=Release&logo=git&logoColor=ffffff&style=for-the-badge" alt="Release"/></a>
 </p>
@@ -40,7 +33,7 @@
 <section id="plugin">
 
 # Hypnotoad
-MeowMusic can be used with my special version of <a href="https://github.com/Meowchestra/Hypnotoad">Hypnotoad</a> companion plugin for enhanced functionality.
+MeowMusic can be used with my custom <a href="https://github.com/Meowchestra/Hypnotoad">Hypnotoad</a> companion plugin for enhanced functionality.
 
 <details>
 <summary>Enhanced Features</summary>
@@ -86,12 +79,12 @@ MeowMusic can be used with my special version of <a href="https://github.com/Meo
 <section id="usage">
 
 ### Using Hypnotoad
-To enable all enhanced functionality, simply checkmark the "Hypnotoad Compatibility" option inside MeowMusic's Settings tab.
-  <br><br><a><img src="https://i.imgur.com/OA7vZeG.png" alt="Settings"/></a><br>
+To enable all enhanced functionality, simply checkmark "Hypnotoad Compatibility" under Settings.
+  <br><br><a><img src="https://i.imgur.com/yIOV4YA.png" alt="Settings"/></a><br>
 </section>
 
 <section id="contributing">
 
 # Contributing
-Contributions to my personal fork are more than welcome - please feel free to submit a [pull request](https://github.com/Meowchestra/BardMusicPlayer/pulls) here on GitHub! ♥
+Contributions to MeowMusic are welcome - please feel free to submit a [pull request](https://github.com/Meowchestra/MeowMusic/pulls).
 </section>
