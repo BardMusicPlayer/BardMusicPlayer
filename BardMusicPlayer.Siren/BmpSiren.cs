@@ -67,6 +67,7 @@ public class BmpSiren
     public int GetVolume()
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return 0; // Temporary Mac/Linux disable.
+        if (_player == null) return 0;
         return (int)_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume;
     }
 
@@ -78,6 +79,7 @@ public class BmpSiren
     public void SetVolume(float x, float max)
     {
         if (Environment.GetEnvironmentVariable("WINEPREFIX") != null) return; // Temporary Mac/Linux disable.
+        if (_player == null) return;
         _mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume = x / 30 * (max / 100);
     }
 

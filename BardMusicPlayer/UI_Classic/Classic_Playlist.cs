@@ -298,7 +298,7 @@ public partial class ClassicMainView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void PlaylistContainer_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void PlaylistContainer_PreviewMouseDoubleClick(object sender, RoutedEventArgs e)
     {
         if ((string)PlaylistContainer.SelectedItem == null)
             return;
@@ -316,7 +316,10 @@ public partial class ClassicMainView
                 return;
             }
 
-            PlaybackFunctions.LoadSongFromPlaylist(PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
+            //If no playlist is active assume we are in the song selection
+            PlaybackFunctions.LoadSongFromPlaylist (_currentPlaylist == null
+                ? BmpCoffer.Instance.GetSong((string)PlaylistContainer.SelectedItem)
+                : PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, (string)PlaylistContainer.SelectedItem));
             InstrumentInfo.Content = PlaybackFunctions.GetInstrumentNameForHostPlayer();
             DirectLoaded           = false;
         }
@@ -370,6 +373,9 @@ public partial class ClassicMainView
     /// </summary>
     private void Playlist_Drop(object sender, DragEventArgs e)
     {
+        if (_currentPlaylist == null)
+            return;
+
         var droppedDataTb = e.Data.GetData(typeof(TextBlock)) as TextBlock;
 
         if (((TextBlock)sender).DataContext is not string target || droppedDataTb?.DataContext is not string droppedDataStr)
@@ -676,6 +682,18 @@ public partial class ClassicMainView
 
         var songs = _currentPlaylist.Select(song => new SongContainer { Name = song.Title, Data = song.GetExportMidi().ToArray() }).ToList();
         JsonPlaylist.Save(openFileDialog.FileName, songs);
+    }
+
+    private void Playlist_ShowSongs_Click(object sender, RoutedEventArgs e)
+    {
+        _currentPlaylist              = null;
+        _showingPlaylists             = false;
+        PlaylistContainer.ItemsSource = PlaylistFunctions.GetAllSongsInDb();
+
+        var icon = "↩".PadRight(2);
+        const string name = "All Songs";
+        var headerText = $"{icon} {name}";
+        PlaylistHeader.Header = headerText;
     }
 
     /// <summary>

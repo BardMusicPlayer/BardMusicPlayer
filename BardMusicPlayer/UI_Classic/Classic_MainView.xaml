@@ -88,6 +88,7 @@
                                           ToolTip="{StaticResource PlaylistCleanup}" />
                                 <MenuItem Header="Import Playlist" Click="Playlist_Import_JSon_Button" />
                                 <MenuItem Header="Export Playlist" Click="Playlist_Export_JSon_Button" />
+                                <MenuItem Header="Show All Songs" Click="Playlist_ShowSongs_Click" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>

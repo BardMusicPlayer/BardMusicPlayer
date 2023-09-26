@@ -229,7 +229,7 @@ public static class MidiBardImporter
         if (x < 0)
             minTranspose = (int)Math.Ceiling((double)-x / 12);
         if (y > 127 )
-            maxTranspose = (int)Math.Ceiling((double)(y-127) / 12);
+            maxTranspose = (int)Math.Floor((double)(y-127) / 12);
 
         if (minTranspose != -1)
             return minTranspose;

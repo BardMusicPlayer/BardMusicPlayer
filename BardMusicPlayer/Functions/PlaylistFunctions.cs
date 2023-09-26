@@ -168,6 +168,13 @@ public static class PlaylistFunctions
         return data;
     }
 
+    public static IEnumerable<string> GetAllSongsInDb()
+    {
+        var data = new List<string>();
+        data.AddRange(BmpCoffer.Instance.GetSongTitles().Select(item => item));
+        return data;
+    }
+
     /// <summary>
     /// Get the total time of all items in the playlist
     /// </summary>

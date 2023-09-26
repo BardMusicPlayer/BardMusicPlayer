@@ -85,7 +85,7 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     /// <summary>
     /// Enables the multibox feature
     /// </summary>
-    public virtual bool EnableMultibox { get; set; } = false;
+    public virtual bool EnableMultibox { get; set; }
 
     /// <summary>
     /// milliseconds till ready check confirmation.

@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using BardMusicPlayer.Quotidian.UtcMilliTime;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -513,16 +514,19 @@ public static class MutantHandler
         return mutants;
     }
 
-    public static void KillMutant(Process proc)
+    public static bool KillMutant(Process proc)
     {
-        foreach (HandleInfo mutant in GetMutants(proc.Id))
         {
-            if (ValidMutexs.Contains(mutant.Name))
+            foreach (HandleInfo mutant in GetMutants(proc.Id))
             {
-                mutant.CloseRemote();
-                break;
+                if (ValidMutexs.Contains(mutant.Name))
+                {
+                    mutant.CloseRemote();
+                    return true;
+                }
             }
         }
+        return false;
     }
 }
 
@@ -550,9 +554,12 @@ public static class WindowSizer
 
 public sealed partial class Game
 {
-    public void KillMutant()
+    public bool KillMutant()
     {
-        MutantHandler.KillMutant(Process);
+        //Check for mutex
+        if (DateTime.Now.ToUtcMilliTime() - Process.StartTime.ToUtcMilliTime() < 60000)
+            return MutantHandler.KillMutant(Process);
+        return true; //No mutex found, assume someone killed it for us
     }
 
     public void SetClientWindowName(string text)

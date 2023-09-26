@@ -18,6 +18,7 @@ namespace BardMusicPlayer.Seer;
 public partial class Game : IDisposable, IEquatable<Game>
 {
     private readonly string _uuid;
+    private bool GameMutexActive { get; set; }
 
     // readers
     internal ReaderHandler DatReader;
@@ -38,9 +39,9 @@ public partial class Game : IDisposable, IEquatable<Game>
     {
         _uuid   = Guid.NewGuid().ToString();
         Process = process;
-        
-        if (BmpPigeonhole.Instance.EnableMultibox)
-            KillMutant();
+
+        //set true if mutex should be killed
+        GameMutexActive = BmpPigeonhole.Instance.EnableMultibox;
     }
 
     internal bool Initialize()
@@ -94,6 +95,10 @@ public partial class Game : IDisposable, IEquatable<Game>
     {
         while (!token.IsCancellationRequested)
         {
+            //Check if mutex exists
+            if (GameMutexActive)
+                GameMutexActive = !KillMutant();
+
             while (_eventQueueHighPriority.TryDequeue(out var high))
             {
                 try
