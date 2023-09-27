@@ -7,11 +7,14 @@
     <sys:String x:Key="PlaylistAdd" xml:space="preserve">Add song(s) to the current playlist &#13;Right click add a folder</sys:String>
     <sys:String x:Key="PlaylistRem" xml:space="preserve">Remove the selected song(s) from the playlist</sys:String>
     <sys:String x:Key="PlaylistDel" xml:space="preserve">Delete the current playlist</sys:String>
+    <sys:String x:Key="PlaylistShowAll" xml:space="preserve">Show all songs across every playlist</sys:String>
     <sys:String x:Key="PlaylistSearch" xml:space="preserve">Search for a song in the playlist</sys:String>
+    <sys:String x:Key="PlaylistImport" xml:space="preserve">Import a playlist</sys:String>
+    <sys:String x:Key="PlaylistExport" xml:space="preserve">Export a playlist</sys:String>
     <sys:String x:Key="PlaylistNewCatalog" xml:space="preserve">Create a new MusicCatalog</sys:String>
-    <sys:String x:Key="PlaylistOpen" xml:space="preserve">Open a MusicCatalog</sys:String>
-    <sys:String x:Key="PlaylistExport" xml:space="preserve">Export the current MusicCatalog</sys:String>
-    <sys:String x:Key="PlaylistCleanup" xml:space="preserve">Reorganize the MusicCatalog to save space</sys:String>
+    <sys:String x:Key="PlaylistOpenCatalog" xml:space="preserve">Open an existing MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistExportCatalog" xml:space="preserve">Export the current MusicCatalog</sys:String>
+    <sys:String x:Key="PlaylistCleanupCatalog" xml:space="preserve">Reorganize the MusicCatalog to save space</sys:String>
     <sys:String x:Key="PlaylistRepeat" xml:space="preserve">Repeat</sys:String>
     <sys:String x:Key="PlaylistShuffle" xml:space="preserve">Shuffle</sys:String>
 

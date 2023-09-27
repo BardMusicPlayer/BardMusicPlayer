@@ -76,19 +76,22 @@
                             ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                         <Button.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Search" Click="Search_Click"
+                                <MenuItem Header="Show All Songs" Click="Playlist_ShowSongs_Click"
+                                          ToolTip="{StaticResource PlaylistShowAll}" />
+                                <MenuItem Header="Search Playlist" Click="Search_Click"
                                           ToolTip="{StaticResource PlaylistSearch}" />
-                                <MenuItem Header="Create new empty MusicCatalog" Click="Playlist_New_Cat_Button"
+                                <MenuItem Header="Import Playlist" Click="Playlist_Import_JSon_Button"
+                                          ToolTip="{StaticResource PlaylistImport}" />
+                                <MenuItem Header="Export Playlist" Click="Playlist_Export_JSon_Button"
+                                          ToolTip="{StaticResource PlaylistExport}" />
+                                <MenuItem Header="New MusicCatalog" Click="Playlist_New_Cat_Button"
                                           ToolTip="{StaticResource PlaylistNewCatalog}" />
                                 <MenuItem Header="Open MusicCatalog" Click="Playlist_Open_Cat_Button"
-                                          ToolTip="{StaticResource PlaylistOpen}" />
+                                          ToolTip="{StaticResource PlaylistOpenCatalog}" />
                                 <MenuItem Header="Export MusicCatalog" Click="Playlist_Export_Cat_Button"
-                                          ToolTip="{StaticResource PlaylistExport}" />
+                                          ToolTip="{StaticResource PlaylistExportCatalog}" />
                                 <MenuItem Header="Cleanup MusicCatalog" Click="Playlist_Cleanup_Cat_Button"
-                                          ToolTip="{StaticResource PlaylistCleanup}" />
-                                <MenuItem Header="Import Playlist" Click="Playlist_Import_JSon_Button" />
-                                <MenuItem Header="Export Playlist" Click="Playlist_Export_JSon_Button" />
-                                <MenuItem Header="Show All Songs" Click="Playlist_ShowSongs_Click" />
+                                          ToolTip="{StaticResource PlaylistCleanupCatalog}" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
