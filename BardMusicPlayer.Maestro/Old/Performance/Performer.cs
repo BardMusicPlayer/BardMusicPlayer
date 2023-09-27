@@ -215,7 +215,7 @@ public class Performer : INotifyPropertyChanged
 
         if (UsesDalamud)
         {
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.NoteOn, game = game, IntData = note.note, BoolData = true });
+            game.SendNote(note.note, true);
             return;
         }
 
@@ -277,7 +277,7 @@ public class Performer : INotifyPropertyChanged
 
         if (UsesDalamud)
         {
-            DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.NoteOn, game = game, IntData = note.note, BoolData = false });
+            game.SendNote(note.note, false);
             return;
         }
 
@@ -658,7 +658,7 @@ public class Performer : INotifyPropertyChanged
 
             if (UsesDalamud)
             {
-                DalamudBridge.DalamudBridge.Instance.ActionToQueue(new DalamudBridgeCommandStruct { messageType = MessageType.ProgramChange, game = game, IntData = tone });
+                game.SendProgChange(tone);
                 return;
             }
 
