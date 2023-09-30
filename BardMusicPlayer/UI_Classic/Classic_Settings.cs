@@ -30,7 +30,7 @@ public partial class ClassicMainView
 
         //Misc
         AutostartSource.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-        HypnotoadBox.IsChecked        = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
+        WhiskersBox.IsChecked         = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
@@ -83,9 +83,9 @@ public partial class ClassicMainView
         BmpPigeonhole.Instance.AutostartMethod = d;
     }
 
-    private void Hypnotoad_Checked(object sender, RoutedEventArgs e)
+    private void Whiskers_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = HypnotoadBox.IsChecked ?? false;
+        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = WhiskersBox.IsChecked ?? false;
     }
     #endregion
 

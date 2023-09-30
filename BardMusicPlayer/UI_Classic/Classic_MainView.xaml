@@ -219,10 +219,10 @@
                                         <ComboBoxItem>Disabled</ComboBoxItem>
                                         <ComboBoxItem>Metronome</ComboBoxItem>
                                     </ComboBox>
-                                    <CheckBox Margin="10,10,0,0" Grid.Row="3" x:Name="HypnotoadBox"
-                                              Content="Hypnotoad Compatibility" Unchecked="Hypnotoad_Checked"
-                                              Checked="Hypnotoad_Checked"
-                                              ToolTip="{StaticResource LocalOrchestraHypnotoad}" />
+                                    <CheckBox Margin="10,10,0,0" Grid.Row="3" x:Name="WhiskersBox"
+                                              Content="Whiskers Compatibility" Unchecked="Whiskers_Checked"
+                                              Checked="Whiskers_Checked"
+                                              ToolTip="{StaticResource LocalOrchestraWhiskers}" />
                                     <CheckBox Margin="10,0,0,0" Grid.Row="4" Content="Multibox Support"
                                               x:Name="MultiBox" Checked="MultiBoxChecked" Unchecked="MultiBoxChecked"
                                               ToolTip="{StaticResource Multibox}" />

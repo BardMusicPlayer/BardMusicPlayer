@@ -34,7 +34,7 @@ internal sealed class DalamudServer : IDisposable
     internal DalamudServer()
     {
         _clients                 =  new ConcurrentDictionary<int, string>();
-        _pipe                    =  new PipeServer<PayloadMessage>("Hypnotoad", new NewtonsoftJsonFormatter());
+        _pipe                    =  new PipeServer<PayloadMessage>("Whiskers", new NewtonsoftJsonFormatter());
         _pipe.ClientConnected    += OnConnected;
         _pipe.ClientDisconnected += OnDisconnected;
         _pipe.MessageReceived    += OnMessage;
