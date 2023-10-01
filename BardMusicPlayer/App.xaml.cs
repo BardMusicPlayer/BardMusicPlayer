@@ -18,7 +18,7 @@ public partial class App
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        Globals.Globals.DataPath = @"data\";
+        Globals.Globals.DataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"BardMusicPlayer\bmp2data");
 
         //init pigeon at first
         BmpPigeonhole.Initialize(Globals.Globals.DataPath + @"\Configuration.json");
