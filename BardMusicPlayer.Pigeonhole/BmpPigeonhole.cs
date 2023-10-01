@@ -123,7 +123,7 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     public virtual int ToneKeyDelay { get; set; } = 3;
 
     /// <summary>
-    /// Use the Whiskers enhanced behavior.
+    /// Use the DalamudDoot enhanced behavior.
     /// </summary>
     public virtual bool UsePluginForInstrumentOpen { get; set; }
 

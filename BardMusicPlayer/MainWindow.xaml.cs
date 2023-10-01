@@ -18,7 +18,7 @@ public partial class MainWindow
     {
         InitializeComponent();
 
-        Title              = "MeowMusic - " + Assembly.GetExecutingAssembly().GetName().Version;
+        Title              = "BardMusicPlayer - " + Assembly.GetExecutingAssembly().GetName().Version;
         DataContext        = new ClassicMainView();
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;

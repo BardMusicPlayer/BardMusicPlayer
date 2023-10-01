@@ -30,7 +30,7 @@ public partial class ClassicMainView
 
         //Misc
         AutostartSource.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
-        WhiskersBox.IsChecked         = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
+        DalamudDootBox.IsChecked         = BmpPigeonhole.Instance.UsePluginForInstrumentOpen;
 
         //Local orchestra
         AutoEquipBox.IsChecked         = BmpPigeonhole.Instance.AutoEquipBards;
@@ -83,9 +83,9 @@ public partial class ClassicMainView
         BmpPigeonhole.Instance.AutostartMethod = d;
     }
 
-    private void Whiskers_Checked(object sender, RoutedEventArgs e)
+    private void DalamudDoot_Checked(object sender, RoutedEventArgs e)
     {
-        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = WhiskersBox.IsChecked ?? false;
+        BmpPigeonhole.Instance.UsePluginForInstrumentOpen = DalamudDootBox.IsChecked ?? false;
     }
     #endregion
 
