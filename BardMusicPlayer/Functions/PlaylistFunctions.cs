@@ -18,14 +18,21 @@ public static class PlaylistFunctions
     /// <param name="currentPlaylist"></param>
     /// <param name="filename"></param>
     /// <returns>true if success</returns>
-    public static bool AddFilesToPlaylist(IPlaylist currentPlaylist, string filename)
+    public static bool AddFilesToPlaylist(IPlaylist? currentPlaylist, string filename)
     {
-
         var song = BmpSong.OpenFile(filename).Result;
         {
-            if (currentPlaylist.SingleOrDefault(x => x.Title.Equals(song.Title)) == null)
+            if (currentPlaylist != null && currentPlaylist.SingleOrDefault(x => x.Title.Equals(song.Title)) == null)
                 currentPlaylist.Add(song);
-
+            /*else
+            {
+                if (BmpCoffer.Instance.IsSongInDatabase(song))
+                {
+                    var sList = BmpCoffer.Instance.GetSongTitles().Where(x => x.StartsWith(song.Title)).ToList();
+                    song.Title = song.Title + "(" + sList.Count() + ")";
+                    currentPlaylist.Add(song);
+                }
+            }*/
             BmpCoffer.Instance.SaveSong(song);
         }
         BmpCoffer.Instance.SavePlaylist(currentPlaylist);
@@ -48,19 +55,8 @@ public static class PlaylistFunctions
         if (openFileDialog.ShowDialog() != true)
             return false;
 
-        foreach (var filePath in openFileDialog.FileNames)
-        {
-            var song = BmpSong.OpenFile(filePath).Result;
-
-            // Check if the song title is not empty or null
-            if (currentPlaylist != null && !string.IsNullOrEmpty(song.Title) && currentPlaylist.SingleOrDefault(x => x.FilePath.Equals(song.FilePath)) == null)
-            {
-                currentPlaylist.Add(song);
-                BmpCoffer.Instance.SaveSong(song);
-            }
-        }
-
-        BmpCoffer.Instance.SavePlaylist(currentPlaylist);
+        foreach (var song in openFileDialog.FileNames)
+            AddFilesToPlaylist(currentPlaylist, song);
         return true;
     }
 
@@ -130,7 +126,7 @@ public static class PlaylistFunctions
     /// <param name="playlistName"></param>
     public static IPlaylist? CreatePlaylist(string playlistName)
     {
-        return BmpCoffer.Instance.GetPlaylistNames().Contains(playlistName) ? BmpCoffer.Instance.GetPlaylist(playlistName) : BmpCoffer.Instance.CreatePlaylist(playlistName);
+        return BmpCoffer.Instance.GetPlaylistNames().Contains(playlistName) ? BmpCoffer.Instance.GetPlaylist(playlistName) : BmpCoffer.CreatePlaylist(playlistName);
     }
 
     /// <summary>

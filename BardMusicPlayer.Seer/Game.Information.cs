@@ -99,9 +99,14 @@ public partial class Game
     public long ServerLatency { get; private set; }
 
     /// <summary>
-    ///     Indicates if gfx set to low
+    /// Indicates if gfx set to low
     /// </summary>
     public bool GfxSettingsLow { get; set; }
+
+    /// <summary>
+    /// Indicates if sound is on
+    /// </summary>
+    public bool SoundOn { get; set; }
 
     /// <summary>
     /// Contains nearby partymember list. Updated by Sharlayan & Machina. Currently only Sharlayan updates during logoff.

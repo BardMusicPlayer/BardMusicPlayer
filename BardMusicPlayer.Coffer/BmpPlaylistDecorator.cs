@@ -10,33 +10,33 @@ namespace BardMusicPlayer.Coffer;
 
 public sealed class BmpPlaylistDecorator : IPlaylist
 {
-    private readonly BmpPlaylist target;
+    private readonly BmpPlaylist _target;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="target"></param>
-    internal BmpPlaylistDecorator(BmpPlaylist target) => this.target = target ?? throw new NullReferenceException();
+    internal BmpPlaylistDecorator(BmpPlaylist target) => _target = target ?? throw new NullReferenceException();
 
     ///<inheritdoc/>
-    void IPlaylist.Add(BmpSong song) { target.Songs.Add(song); }
+    void IPlaylist.Add(BmpSong song) { _target.Songs.Add(song); }
 
     ///<inheritdoc/>
-    void IPlaylist.Add(int idx, BmpSong song) { target.Songs.Insert(idx, song); }
+    void IPlaylist.Add(int idx, BmpSong song) { _target.Songs.Insert(idx, song); }
 
     ///<inheritdoc/>
-    IEnumerator<BmpSong> IEnumerable<BmpSong>.GetEnumerator() { return target.Songs.GetEnumerator(); }
+    IEnumerator<BmpSong> IEnumerable<BmpSong>.GetEnumerator() { return _target.Songs.GetEnumerator(); }
 
     ///<inheritdoc/>
-    IEnumerator IEnumerable.GetEnumerator() { return target.Songs.GetEnumerator(); }
+    IEnumerator IEnumerable.GetEnumerator() { return _target.Songs.GetEnumerator(); }
 
     ///<inheritdoc/>
-    string IPlaylist.GetName() { return target.Name; }
+    string IPlaylist.GetName() { return _target.Name; }
 
     ///<inheritdoc/>
     void IPlaylist.Move(int sourceIdx, int targetIdx)
     {
-        var contents = target.Songs;
+        var contents = _target.Songs;
         var count = contents.Count;
         if (sourceIdx < 0 || sourceIdx >= count)
         {
@@ -58,13 +58,13 @@ public sealed class BmpPlaylistDecorator : IPlaylist
     }
 
     ///<inheritdoc/>
-    void IPlaylist.Remove(int idx) { target.Songs.RemoveAt(idx); }
+    void IPlaylist.Remove(int idx) { _target.Songs.RemoveAt(idx); }
 
     /// <inheritdoc />
-    void IPlaylist.Remove(BmpSong song) { target.Songs.Remove(song); }
+    void IPlaylist.Remove(BmpSong song) { _target.Songs.Remove(song); }
 
     ///<inheritdoc/>
-    void IPlaylist.SetName(string name) { target.Name = name ?? throw new ArgumentNullException(); }
+    void IPlaylist.SetName(string name) { _target.Name = name ?? throw new ArgumentNullException(); }
 
-    internal BmpPlaylist GetBmpPlaylist() => target;
+    internal BmpPlaylist GetBmpPlaylist() => _target;
 }

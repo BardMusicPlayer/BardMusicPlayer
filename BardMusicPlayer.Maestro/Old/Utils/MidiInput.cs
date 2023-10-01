@@ -9,6 +9,9 @@ namespace BardMusicPlayer.Maestro.Old.Utils;
 
 public static class MidiInput
 {
+    /// <summary>
+    /// Helper struct for the Midi-device and Id
+    /// </summary>
     public struct MidiInputDescription
     {
         public string name;
@@ -20,6 +23,10 @@ public static class MidiInput
         }
     }
 
+    /// <summary>
+    /// Reload and get all midi input devices
+    /// </summary>
+    /// <returns><see cref="Dictionary{TKey, TValue}"/></returns>
     public static Dictionary<int, string> ReloadMidiInputDevices()
     {
         var midiInputs = new Dictionary<int, string> { { -1, "None" } };

@@ -39,8 +39,8 @@ public sealed class BmpCoffer : IDisposable
     public static BmpCoffer Instance =>
         _instance ?? throw new BmpCofferException("This coffer must be initialized first.");
 
-    private readonly LiteDatabase dbi;
-    private bool disposedValue;
+    private readonly LiteDatabase _dbi;
+    private bool _disposedValue;
 
     /// <summary>
     /// Internal constructor; this object is constructed with a factory pattern.
@@ -48,98 +48,63 @@ public sealed class BmpCoffer : IDisposable
     /// <param name="dbi"></param>
     private BmpCoffer(LiteDatabase dbi)
     {
-        this.dbi      = dbi;
-        disposedValue = false;
+        _dbi           = dbi;
+        _disposedValue = false;
+    }
+
+    #region MainRoutines: Create / Load / Save / CleanUp
+    /// <summary>
+    /// Generates the <see cref="BsonMapper"/>
+    /// </summary>
+    /// <returns> <see cref="BsonMapper"/> </returns>
+    private static BsonMapper GenerateMapper()
+    {
+        var mapper = new BsonMapper();
+        mapper.RegisterType(static group => group.Index, static bson => Instrument.Parse(bson.AsInt32));
+        mapper.RegisterType(static group => group.Index, static bson => InstrumentTone.Parse(bson.AsInt32));
+        mapper.RegisterType(static group => group.Index, static bson => OctaveRange.Parse(bson.AsInt32));
+        mapper.RegisterType(static tempoMap => SerializeTempoMap(tempoMap), static bson => DeserializeTempoMap(bson.AsBinary));
+        mapper.RegisterType(static trackChunk => SerializeTrackChunk(trackChunk), static bson => DeserializeTrackChunk(bson.AsBinary));
+        return mapper;
     }
 
     /// <summary>
-    /// Create a new instance of the BmpCoffer manager based on the given LiteDB database.
+    /// Create a new instance of the <see cref="BmpCoffer"/> manager based on the given LiteDB database.
     /// </summary>
     /// <param name="dbPath"></param>
-    /// <returns></returns>
-    internal static BmpCoffer CreateInstance(string dbPath)
+    /// <returns> <see cref="BmpCoffer"/> </returns>
+    private static BmpCoffer CreateInstance(string dbPath)
     {
-        var mapper = new BsonMapper();
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => Instrument.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => InstrumentTone.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => OctaveRange.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            tempoMap => SerializeTempoMap(tempoMap),
-            bson => DeserializeTempoMap(bson.AsBinary)
-        );
-        mapper.RegisterType
-        (
-            trackChunk => SerializeTrackChunk(trackChunk),
-            bson => DeserializeTrackChunk(bson.AsBinary)
-        );
-
-        var dbi = new LiteDatabase(@"filename=" + dbPath + "; journal = false", mapper);
+        var dbi = new LiteDatabase("filename=" + dbPath + "; journal = false", GenerateMapper());
         MigrateDatabase(dbi);
 
         return new BmpCoffer(dbi);
     }
 
     /// <summary>
-    /// load an other database
+    /// Loads a LiteDB database from file
     /// </summary>
     /// <param name="file"></param>
     public void LoadNew(string file)
     {
-        this.dbi.Dispose();
-        var mapper = new BsonMapper();
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => Instrument.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => InstrumentTone.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            group => group.Index,
-            bson => OctaveRange.Parse(bson.AsInt32)
-        );
-        mapper.RegisterType
-        (
-            tempoMap => SerializeTempoMap(tempoMap),
-            bson => DeserializeTempoMap(bson.AsBinary)
-        );
-        mapper.RegisterType
-        (
-            trackChunk => SerializeTrackChunk(trackChunk),
-            bson => DeserializeTrackChunk(bson.AsBinary)
-        );
-
-        var dbi = new LiteDatabase(@"filename=" + file + "; journal = false",
-            mapper); //turn journal off, for big containers
+        _dbi.Dispose();
+        var dbi = new LiteDatabase(@"filename=" + file + "; journal = false", GenerateMapper()); //turn journal off, for big containers
         MigrateDatabase(dbi);
 
         _instance = new BmpCoffer(dbi);
     }
 
+    /// <summary>
+    /// Exports the current LiteDB database to a new file
+    /// </summary>
+    /// <param name="filename"></param>
     public void Export(string filename)
     {
         var t = new LiteDatabase(filename);
-        var names = dbi.GetCollectionNames();
+        var names = _dbi.GetCollectionNames();
         foreach (var name in names)
         {
-            var col2 = dbi.GetCollection(name);
+            var col2 = _dbi.GetCollection(name);
             var col = t.GetCollection(name);
             try
             {
@@ -154,7 +119,12 @@ public sealed class BmpCoffer : IDisposable
         t.Dispose();
     }
 
-    public void CleanUpDB()
+    /// <summary>
+    /// Cleans the database
+    /// <para/>
+    /// Removes unbound songs and rebuild the LiteDB.
+    /// </summary>
+    public void CleanUpDb()
     {
         //Try it and catch if the log file can't be removed
         try
@@ -170,15 +140,17 @@ public sealed class BmpCoffer : IDisposable
 
             differenceQuery.Clear();
 
-            dbi.Checkpoint();
-            dbi.Rebuild();
+            _dbi.Checkpoint();
+            _dbi.Rebuild();
         }
         catch
         {
             // ignored
         }
     }
+    #endregion
 
+    #region Serializations
     /// <summary>
     /// Serializes a TempoMap from DryWetMidi.
     /// </summary>
@@ -241,6 +213,7 @@ public sealed class BmpCoffer : IDisposable
         memoryStream.Dispose();
         return trackChunk;
     }
+    #endregion
 
     #region Playlist
 
@@ -248,7 +221,7 @@ public sealed class BmpCoffer : IDisposable
     /// This creates a playlist containing songs that match the given tag.
     /// </summary>
     /// <param name="tag"></param>
-    /// <returns></returns>
+    /// <returns><see cref="IPlaylist"/></returns>
     public IPlaylist CreatePlaylistFromTag(string tag)
     {
         if (tag == null)
@@ -282,8 +255,8 @@ public sealed class BmpCoffer : IDisposable
     /// This creates a new empty playlist with the given name.
     /// </summary>
     /// <param name="name"></param>
-    /// <returns></returns>
-    public IPlaylist CreatePlaylist(string name)
+    /// <returns><see cref="IPlaylist"/></returns>
+    public static IPlaylist CreatePlaylist(string name)
     {
         if (name == null)
         {
@@ -403,7 +376,6 @@ public sealed class BmpCoffer : IDisposable
             throw new BmpCofferException(e.Message, e);
         }
     }
-
     #endregion
 
     #region Songs
@@ -438,6 +410,41 @@ public sealed class BmpCoffer : IDisposable
             .ToList();
     }
 
+    /// Simple check if song is in database
+    /// <param name="song"></param>
+    /// <param name="strict"></param>
+    /// <returns></returns>
+    public bool IsSongInDatabase(BmpSong song, bool strict = true)
+    {
+        if (song == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        var songCol = GetSongCollection();
+        var sList = strict ? songCol.Find(x => x.Title == song.Title) : songCol.Find(x => x.Title.StartsWith(song.Title));
+
+        var inList = false;
+        foreach (var s in sList)
+        {
+            if (s.TrackContainers.Count != song.TrackContainers.Count)
+            {
+                for (var i = 0; i != s.TrackContainers.Count; i++)
+                {
+                    if (s.TrackContainers[i].SourceTrackChunk.GetNotes().Count == song.TrackContainers[i].SourceTrackChunk.GetNotes().Count)
+                        inList = true;
+                }
+            }
+            else
+                inList = true;
+
+            const float tolerance = 0.0001f; // define a small tolerance value
+            if (Math.Abs(s.Duration.TotalMilliseconds - song.Duration.TotalMilliseconds) > tolerance)
+                inList = true;
+        }
+        return inList;
+    }
+
     /// <summary>
     /// This saves a song.
     /// </summary>
@@ -466,7 +473,6 @@ public sealed class BmpCoffer : IDisposable
                     return;
                 }
 
-                //TODO: Fix this to get a real unique identifier
                 song.Id = ObjectId.NewObjectId();
                 songCol.Insert(song);
             }
@@ -530,14 +536,14 @@ public sealed class BmpCoffer : IDisposable
     /// <param name="disposing"></param>
     private void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
-                dbi.Dispose();
+                _dbi.Dispose();
             }
 
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 
@@ -547,7 +553,7 @@ public sealed class BmpCoffer : IDisposable
     /// <returns></returns>
     private ILiteCollection<BmpPlaylist> GetPlaylistCollection()
     {
-        return dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
+        return _dbi.GetCollection<BmpPlaylist>(Constants.PLAYLIST_COL_NAME);
     }
 
     /// <summary>
@@ -556,7 +562,7 @@ public sealed class BmpCoffer : IDisposable
     /// <returns></returns>
     private ILiteCollection<BmpSong> GetSongCollection()
     {
-        return dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
+        return _dbi.GetCollection<BmpSong>(Constants.SONG_COL_NAME);
     }
 
     /// <summary>
@@ -585,7 +591,7 @@ public sealed class BmpCoffer : IDisposable
     /// Database creation/migration method.
     /// </summary>
     /// <param name="dbi"></param>
-    internal static void MigrateDatabase(LiteDatabase dbi)
+    private static void MigrateDatabase(ILiteDatabase dbi)
     {
         // This method exists to provide a way to have different versions of key
         // API objects, such as MMSong, and a way to migrate that data (or nuke it

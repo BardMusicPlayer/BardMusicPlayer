@@ -258,11 +258,15 @@ public class Performer : INotifyPropertyChanged
             if (game.ChatStatus && !_forcePlayback)
                 return;
 
-            if (_holdNotes)
-                _hook.SendKeybindDown(keybind);
+            if (UsesDalamud)
+                game.SendNote(note.note, true);
             else
-                _hook.SendAsyncKeybind(keybind);
-
+            {
+                if (_holdNotes)
+                    _hook.SendKeybindDown(keybind);
+                else
+                    _hook.SendAsyncKeybind(keybind);
+            }
             _lastNoteTimestamp = Stopwatch.GetTimestamp() / 10000;
         }
     }

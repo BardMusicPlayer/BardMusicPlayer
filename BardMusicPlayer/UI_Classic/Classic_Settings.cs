@@ -26,7 +26,7 @@ public partial class ClassicMainView
         MidiInputDeviceBox.Items.Clear();
         MidiInputDeviceBox.ItemsSource   = MidiInput.ReloadMidiInputDevices();
         MidiInputDeviceBox.SelectedIndex = BmpPigeonhole.Instance.MidiInputDev + 1;
-        LiveMidiDelay.IsChecked = BmpPigeonhole.Instance.LiveMidiPlayDelay;
+        LiveMidiDelay.IsChecked          = BmpPigeonhole.Instance.LiveMidiPlayDelay;
 
         //Misc
         AutostartSource.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;

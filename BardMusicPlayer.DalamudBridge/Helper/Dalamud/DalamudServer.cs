@@ -27,7 +27,7 @@ internal sealed class DalamudServer : IDisposable
     private readonly ConcurrentDictionary<int, string> _clients;
     private readonly PipeServer<PayloadMessage> _pipe;
 
-    private readonly Version minVersion = new Version("0.0.1.8");
+    private readonly Version _minVersion = new("0.0.1.8");
 
     /// <summary>
     /// </summary>
@@ -38,9 +38,7 @@ internal sealed class DalamudServer : IDisposable
         _pipe.ClientConnected    += OnConnected;
         _pipe.ClientDisconnected += OnDisconnected;
         _pipe.MessageReceived    += OnMessage;
-#pragma warning disable CA1416
         _pipe.AllowUsersReadWrite();
-#pragma warning restore CA1416
         Start();
     }
 
@@ -166,8 +164,28 @@ internal sealed class DalamudServer : IDisposable
             new PayloadMessage
             {
                 MsgType = MessageType.SetGfx,
-                Message = arg ? "1" : "0"
+                Message = arg.ToString()
             });
+        return true;
+    }
+
+    /// <summary>
+    /// switch sound on/off
+    /// </summary>
+    /// <param name="pid"></param>
+    /// <param name="arg"></param>
+    /// <returns></returns>
+    internal bool SendSoundOnOff(int pid, bool arg)
+    {
+        if (!IsConnected(pid))
+            return false;
+
+        _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(new PayloadMessage
+        {
+            MsgType = MessageType.SetSoundOnOff,
+            Message = arg.ToString()
+
+        });
         return true;
     }
 
@@ -256,13 +274,13 @@ internal sealed class DalamudServer : IDisposable
                     var t = inMsg.Message;
                     var pid = Convert.ToInt32(t.Split(':')[0]);
                     var version = new Version(t.Split(':')[1]);
-                    if (version < minVersion)
+                    if (version < _minVersion)
                     {
                         _pipe.ConnectedClients.FirstOrDefault(x => x.PipeName == _clients[pid] && x.IsConnected)?.WriteAsync(
                             new PayloadMessage
                             {
                                 MsgType = MessageType.Version,
-                                Message = minVersion.ToString()
+                                Message = _minVersion.ToString()
                             });
                     }
                 }
@@ -287,15 +305,29 @@ internal sealed class DalamudServer : IDisposable
                 }
                 break;
 
+            case MessageType.SetSoundOnOff:
+                try
+                {
+                    var t = inMsg.Message;
+                    var pid = Convert.ToInt32(t.Split(':')[0]);
+                    if (BmpSeer.Instance.Games.ContainsKey(pid))
+                        BmpSeer.Instance.Games[pid].SoundOn = Convert.ToBoolean(t.Split(':')[1]);
+                }
+                catch
+                {
+                    // ignored
+                }
+                break;
+
             case MessageType.NameAndHomeWorld:
                 try
                 {
                     var t = inMsg.Message;
                     var pid = Convert.ToInt32(t.Split(':')[0]);
-                    var Name = t.Split(':')[1];
-                    var HomeWorld = Convert.ToInt32(t.Split(':')[2]);
+                    var name = t.Split(':')[1];
+                    var homeWorld = Convert.ToInt32(t.Split(':')[2]);
                     if (BmpSeer.Instance.Games.ContainsKey(pid))
-                        DalamudManager.Instance.NameAndHomeworldModeEventHandler(pid, Name, HomeWorld);
+                        DalamudManager.Instance.NameAndHomeworldModeEventHandler(pid, name, homeWorld);
                 }
                 catch
                 {

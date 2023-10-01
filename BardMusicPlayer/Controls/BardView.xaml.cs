@@ -303,6 +303,7 @@ public partial class BardView
         public int Track { get; set; }
         public long AffinityMask { get; set; }
         public bool IsHost { get; set; }
+        public bool IsInGameSoundEnabled { get; set; } = true;
     }
 
     /// <summary>
@@ -346,6 +347,9 @@ public partial class BardView
                 p.First().TrackNumber = pconfig.Track;
                 if (pconfig.AffinityMask != 0)
                     p.First().game.SetAffinity(pconfig.AffinityMask);
+                
+                if (p.First().game.SetSoundOnOff(pconfig.IsInGameSoundEnabled).Result)
+                    p.First().game.SoundOn = pconfig.IsInGameSoundEnabled;
             }
 
             var tempPerf = new List<Performer>(BardsList.Items.OfType<Performer>().ToList());
@@ -374,6 +378,13 @@ public partial class BardView
             {
                 BmpPigeonhole.Instance.EnsembleKeepTrackSetting = true;
             }
+
+            tempPerf = BardsList.Items.OfType<Performer>().ToList();
+            foreach (var perf in tempPerf.Where(perf => !perf.game.SoundOn && !perf.HostProcess))
+            {
+                MuteCheckBox.IsChecked = true;
+            }
+
         }
     }
 
@@ -396,12 +407,13 @@ public partial class BardView
             .ToList()
             .Select(performer => new PerformerSettingData
             {
-                OrderNum     = BardsList.Items.IndexOf(performer),
-                CID          = performer.game.ConfigId,
-                Name         = performer.game.PlayerName,
-                Track        = performer.TrackNumber,
-                AffinityMask = performer.game.GetAffinity(),
-                IsHost       = performer.HostProcess
+                OrderNum             = BardsList.Items.IndexOf(performer),
+                CID                  = performer.game.ConfigId,
+                Name                 = performer.game.PlayerName,
+                Track                = performer.TrackNumber,
+                AffinityMask         = performer.game.GetAffinity(),
+                IsHost               = performer.HostProcess,
+                IsInGameSoundEnabled = performer.game.SoundOn
             })
             .ToList();
         var t = JsonConvert.SerializeObject(performerDataList);
@@ -420,6 +432,15 @@ public partial class BardView
         {
             p.game.GfxSettingsLow = GfxLowCheckBox.IsChecked ?? false;
             p.game.GfxSetLow(GfxLowCheckBox.IsChecked ?? false);
+        }
+    }
+
+    private void Mute_CheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+        foreach (var p in BardsList.Items.OfType<Performer>().ToList().Where(p => !p.HostProcess))
+        {
+            p.game.SoundOn = !MuteCheckBox.IsChecked ?? false;
+            p.game.SetSoundOnOff(!MuteCheckBox.IsChecked ?? false);
         }
     }
 

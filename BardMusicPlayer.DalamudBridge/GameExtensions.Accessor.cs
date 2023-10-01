@@ -95,6 +95,21 @@ public static partial class GameExtensions
     }
 
     /// <summary>
+    /// Sets the sound
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="on"></param>
+    /// <returns></returns>
+    public static Task<bool> SetSoundOnOff(this Game game, bool on)
+    {
+        if (!DalamudBridge.Instance.Started) throw new DalamudBridgeException("DalamudBridge not started.");
+
+        return Task.FromResult(DalamudBridge.Instance.DalamudServer != null &&
+                               DalamudBridge.Instance.DalamudServer.IsConnected(game.Pid) &&
+                               DalamudBridge.Instance.DalamudServer.SendSoundOnOff(game.Pid, on));
+    }
+
+    /// <summary>
     ///     starts the ensemble check
     /// </summary>
     /// <param name="game"></param>

@@ -54,6 +54,7 @@ public sealed partial class BardExtSettingsWindow
 
         LyricsTrackNr.Value = performer?.SingerTrackNr.ToString();
         GfxTest.IsChecked   = _performer?.game.GfxSettingsLow;
+        SoundOn.IsChecked   = _performer?.game.SoundOn;
         PopulateCpuTab();
     }
 
@@ -226,8 +227,28 @@ public sealed partial class BardExtSettingsWindow
             if (!_performer!.game.GfxSettingsLow)
                 return;
             if(!_performer.game.GfxSetLow(false).Result)
-                _performer.game.RestoreGFXSettings();
+                _performer.game.RestoreGfxSettings();
             _performer.game.GfxSettingsLow = false;
+        }
+    }
+
+    private void SoundOn_Checked(object sender, RoutedEventArgs e)
+    {
+        if ((bool)SoundOn.IsChecked!)
+        {
+            if (_performer!.game.SoundOn)
+                return;
+            if (!_performer.game.SetSoundOnOff(true).Result)
+                _performer.game.SetSoundOnOffLegacy(true);
+            _performer.game.SoundOn = true;
+        }
+        else
+        {
+            if (!_performer!.game.SoundOn)
+                return;
+            if (!_performer.game.SetSoundOnOff(false).Result)
+                _performer.game.SetSoundOnOffLegacy(false);
+            _performer.game.SoundOn = false;
         }
     }
 }

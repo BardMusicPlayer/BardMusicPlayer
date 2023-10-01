@@ -38,8 +38,10 @@
                     ContextMenuService.Placement="Bottom" ContextMenuService.ShowOnDisabled="True">
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <CheckBox Content="Set all Gfx to low" x:Name="GfxLowCheckBox"
+                        <CheckBox Content="Set all graphics to low" x:Name="GfxLowCheckBox"
                                   Unchecked="GfxLow_CheckBox_Checked" Checked="GfxLow_CheckBox_Checked" />
+                        <CheckBox Content="Mute clients except host" x:Name="MuteCheckBox"
+                                  Unchecked="Mute_CheckBox_Checked" Checked="Mute_CheckBox_Checked" />
                         <MenuItem Header="Arrange XIV Windows" Click="ArrangeWindow_Click" />
                         <MenuItem Header="Load Performer Settings" Click="Load_Performer_Settings" />
                         <MenuItem Header="Save Performer Settings" Click="Save_Performer_Settings" />

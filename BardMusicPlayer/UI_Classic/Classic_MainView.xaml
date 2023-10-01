@@ -379,7 +379,7 @@
                                 <Label Grid.Row="0" Content="Volume" HorizontalAlignment="Center" />
                                 <Slider Grid.Row="1" x:Name="SirenVolume" Minimum="0" Maximum="30" Value="20"
                                         Orientation="Vertical" HorizontalAlignment="Center"
-                                        ValueChanged="Siren_Volume_ValueChanged" 
+                                        ValueChanged="Siren_Volume_ValueChanged"
                                         Focusable="False" />
                             </Grid>
 
@@ -397,7 +397,7 @@
                                         ValueChanged="Siren_PlayBar_Slider_ValueChanged"
                                         Thumb.DragStarted="Siren_PlayBar_Slider_DragStarted"
                                         Thumb.DragCompleted="Siren_PlayBar_Slider_DragCompleted"
-                                        VerticalAlignment="Center" UseLayoutRounding="True" 
+                                        VerticalAlignment="Center" UseLayoutRounding="True"
                                         Focusable="False" />
                                 <Label Grid.Column="2" x:Name="SirenTimeLapsed" Content="00:00"
                                        HorizontalAlignment="Right" VerticalAlignment="Center" />

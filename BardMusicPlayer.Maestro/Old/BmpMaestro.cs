@@ -32,6 +32,7 @@ public partial class BmpMaestro : IDisposable
     /// <summary>
     /// Get all performers the orchestrator has created
     /// </summary>
+    /// <returns><see cref="IEnumerable{Performer}"/></returns>
     public IEnumerable<Performer> GetAllPerformers()
     {
         return _orchestrator != null ? _orchestrator.GetAllPerformers() : new List<Performer>();
@@ -40,7 +41,7 @@ public partial class BmpMaestro : IDisposable
     /// <summary>
     /// Get the host bard track number
     /// </summary>
-    /// <returns>tracknumber</returns>
+    /// <returns><see cref="int"/>tracknumber</returns>
     public int GetHostBardTrack()
     {
         return _orchestrator?.GetHostBardTrack() ?? 1;
@@ -49,7 +50,7 @@ public partial class BmpMaestro : IDisposable
     /// <summary>
     /// Get host bard Pid
     /// </summary>
-    /// <returns>Pid</returns>
+    /// <returns><see cref="int"/> ProcessId</returns>
     public int GetHostPid()
     {
         if (_orchestrator != null)
@@ -293,6 +294,13 @@ public partial class BmpMaestro : IDisposable
         }
     }
 
+    /// <summary>
+    /// Tap a key
+    /// </summary>
+    /// <param name="BardName"></param>
+    /// <param name="modifier"></param>
+    /// <param name="character"></param>
+    /// <param name="unselected_bards"></param>
     public void TapKey(string BardName, string modifier, string character, List<string> unselected_bards = null)
     {
         if (_orchestrator == null)
@@ -329,14 +337,6 @@ public partial class BmpMaestro : IDisposable
         }
     }
     #endregion
-
-    /// <summary>
-    /// Destroys the sequencer
-    /// </summary>
-    public void DestroySongFromLocalPerformer()
-    {
-        _orchestrator?.Dispose();
-    }
 
     /// <summary>
     /// Start the eventhandler

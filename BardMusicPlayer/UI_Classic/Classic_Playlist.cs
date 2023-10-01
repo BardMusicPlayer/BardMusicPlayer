@@ -348,7 +348,7 @@ public partial class ClassicMainView
         if (cellText is { Text: "" })
             return;
 
-        var song = PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, cellText?.Text);
+        var song = _currentPlaylist == null ? BmpCoffer.Instance.GetSong(cellText?.Text) : PlaylistFunctions.GetSongFromPlaylist(_currentPlaylist, cellText?.Text);
         var _ = new SongEditWindow(song);
     }
 
@@ -535,18 +535,32 @@ public partial class ClassicMainView
         {
             try
             {
-                if (_currentPlaylist != null)
+                //Showing all songs
+                if (_currentPlaylist == null && !_showingPlaylists)
                 {
-                    var song = _currentPlaylist.First(x => x.Title.ToLower().Contains(inputBox.ResponseText.ToLower()));
-                    PlaylistContainer.SelectedIndex = PlaylistContainer.Items.IndexOf(song.Title);
+                    _currentPlaylist = null;
+                    _showingPlaylists = false;
+                    PlaylistContainer.ItemsSource = BmpCoffer.Instance.GetSongTitles().Where(x => x.ToLower().Contains(inputBox.ResponseText.ToLower())).ToList();
+                    var icon = "↩".PadRight(2);
+                    const string name = "Search Result";
+                    var headerText = $"{icon} {name}";
+                    PlaylistHeader.Header = headerText;
                 }
+                else
+                {
+                    if (_currentPlaylist != null)
+                    {
+                        var song = _currentPlaylist.First(x => x.Title.ToLower().Contains(inputBox.ResponseText.ToLower()));
+                        PlaylistContainer.SelectedIndex = PlaylistContainer.Items.IndexOf(song.Title);
+                    }
 
-                PlaylistContainer.ScrollIntoView(PlaylistContainer.Items[PlaylistContainer.SelectedIndex]);
-                PlaylistContainer.UpdateLayout();
+                    PlaylistContainer.ScrollIntoView(PlaylistContainer.Items[PlaylistContainer.SelectedIndex]);
+                    PlaylistContainer.UpdateLayout();
+                }
             }
             catch
             {
-                MessageBox.Show("Nothing found", "Nope", MessageBoxButton.OK);
+                MessageBox.Show("Nothing found.", "Search", MessageBoxButton.OK);
             }
         }
     }
@@ -622,7 +636,7 @@ public partial class ClassicMainView
     /// </summary>
     private void Playlist_Cleanup_Cat_Button(object sender, RoutedEventArgs e)
     {
-        BmpCoffer.Instance.CleanUpDB();
+        BmpCoffer.Instance.CleanUpDb();
     }
 
     /// <summary>
