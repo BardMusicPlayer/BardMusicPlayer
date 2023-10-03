@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="FFXIV_ACT_Plugin.Memory">
+      <HintPath>Lib\FFXIV_ACT_Plugin.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="Machina" HintPath="Lib\Machina.dll" />
     <Reference Include="Machina.FFXIV" HintPath="Lib\Machina.FFXIV.dll" />
   </ItemGroup>

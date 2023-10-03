@@ -1,12 +1,6 @@
 [
     // Upstream
     {
-        "Key": "CHARMAP",
-        "Value": "48c1ea0381faa9010000****8bc2488d0d",
-        "ASMSignature": true,
-        "PointerPath": [ 0, 0 ]
-    },
-    {
         "Key": "PARTYMAP",
         "Value": "8b7c24440fb66c2440400fb6d5488d0d",
         "ASMSignature": true,
@@ -37,7 +31,7 @@
             0,
             0
         ],
-        "Value": "C3E8??????FF84C074??488B5708488D0D"
+        "Value": "F00F47F08BD6488D0DF2A77201E8BDF59700488B4B484885C9743E8BD6E8FDB9FFFF897B60488B5C2430488B7424384883C4205FC3837960007C3133D2488D0D"
     },
     {
         "ASMSignature": true,

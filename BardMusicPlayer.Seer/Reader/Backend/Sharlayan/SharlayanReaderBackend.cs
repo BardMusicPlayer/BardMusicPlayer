@@ -269,18 +269,6 @@ internal class SharlayanReaderBackend : IReaderBackend
         ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Sharlayan, world));
     }
 
-    private void GetHomeWorld(CancellationToken cancellationToken)
-    {
-        if (cancellationToken.IsCancellationRequested)
-            return;
-
-        var world = _reader.GetHomeWorld();
-        if (!_lastScan.FirstScan && _lastScan.World.Equals(world)) return;
-
-        _lastScan.World = world;
-        ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Sharlayan, world));
-    }
-
     private void GetInstrument(CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)

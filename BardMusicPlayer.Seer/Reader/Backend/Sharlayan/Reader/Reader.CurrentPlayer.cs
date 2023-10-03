@@ -5,6 +5,7 @@
 
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 using BardMusicPlayer.Seer.Utilities;
+using System.Diagnostics;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
 
@@ -19,7 +20,6 @@ internal partial class Reader
         if (!CanGetPlayerInfo() || !MemoryHandler.IsAttached) return result;
 
         var playerInfoMap = (IntPtr) Scanner.Locations[Signatures.PlayerInformationKey];
-
         if (playerInfoMap.ToInt64() <= 6496) return result;
 
         try

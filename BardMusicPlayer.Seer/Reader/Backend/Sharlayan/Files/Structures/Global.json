@@ -1,9 +1,9 @@
 {
     "CurrentPlayer": {
         "SourceSize": 650,
-        "JobID": 110,
+        "JobID": 124,
         // BMP
-        "ID": 84,
+        "ID": 100,
         "Name": 1
         // END BMP
     },

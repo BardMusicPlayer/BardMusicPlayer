@@ -10,8 +10,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
 
 internal partial class Reader
 {
-    public bool CanGetPartyMembers() => Scanner.Locations.ContainsKey(Signatures.CharacterMapKey) &&
-                                        Scanner.Locations.ContainsKey(Signatures.PartyMapKey) &&
+    public bool CanGetPartyMembers() => Scanner.Locations.ContainsKey(Signatures.PartyMapKey) &&
                                         Scanner.Locations.ContainsKey(Signatures.PartyCountKey);
 
     public SortedDictionary<uint, string> GetPartyMembers()
