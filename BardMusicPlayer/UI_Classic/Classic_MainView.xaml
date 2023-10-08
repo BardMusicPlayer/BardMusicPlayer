@@ -279,12 +279,19 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Label Margin="0,10,80,0" Grid.Row="0" Content="Dark Mode"
                                            HorizontalAlignment="Right" ToolTip="{StaticResource DarkMode}" />
                                     <ToggleButton Margin="0,10,20,0" Grid.Row="0" x:Name="EnableDarkMode"
                                                   Unchecked="EnableDarkMode_Checked" Checked="EnableDarkMode_Checked"
                                                   HorizontalAlignment="Right" ToolTip="{StaticResource DarkMode}"
+                                                  Padding="0" Width="60" Height="25" />
+                                    <Label Margin="0,10,80,0" Grid.Row="1" Content="Keep on Top"
+                                           HorizontalAlignment="Right" ToolTip="{StaticResource KeepOnTop}" />
+                                    <ToggleButton Margin="0,10,20,0" Grid.Row="1" x:Name="KeepOnTop"
+                                                  Unchecked="KeepOnTop_Checked" Checked="KeepOnTop_Checked"
+                                                  HorizontalAlignment="Right" ToolTip="{StaticResource KeepOnTop}"
                                                   Padding="0" Width="60" Height="25" />
                                 </Grid>
                             </GroupBox>
