@@ -1,66 +1,44 @@
 [
-    // Upstream
     {
+        "ASMSignature": true,
         "Key": "PARTYMAP",
-        "Value": "8b7c24440fb66c2440400fb6d5488d0d",
-        "ASMSignature": true,
-        "PointerPath": [ 0, 0 ]
+        "PointerPath": [0, 0],
+        "Value": "8B7C24440FB66C2440400FB6D5488D0D"
     },
     {
+        "ASMSignature": true,
         "Key": "PARTYCOUNT",
-        "Value": "8b7c24440fb66c2440400fb6d5488d0d",
-        "ASMSignature": true,
-        "PointerPath": [
-            0,
-            15708
-        ]
+        "PointerPath": [0, 15708],
+        "Value": "8B7C24440FB66C2440400FB6D5488D0D"
     },
     {
-        "Key": "PLAYERINFO",
-        "Value": "83f9ff7412448b048e8bd3488d0d",
         "ASMSignature": true,
-        "PointerPath": [ 0, 0 ]
+        "Key": "PLAYERINFO",
+        "PointerPath": [0, 0],
+        "Value": "83F9FF7412448B048E8BD3488D0D"
     },
-    // End Upstream
-
-    // BMP
     {
         "ASMSignature": true,
         "Key": "PERFSTATUS",
-        "PointerPath": [
-            0,
-            0
-        ],
+        "PointerPath": [0, 0],
         "Value": "F00F47F08BD6488D0DF2A77201E8BDF59700488B4B484885C9743E8BD6E8FDB9FFFF897B60488B5C2430488B7424384883C4205FC3837960007C3133D2488D0D"
     },
     {
         "ASMSignature": true,
         "Key": "CHARID",
-        "PointerPath": [
-            0,
-            0
-        ],
+        "PointerPath": [0, 0],
         "Value": "4C8BCF4C8D05????????BA04010000488D0D"
     },
     {
         "ASMSignature": true,
         "Key": "CHATINPUT",
-        "PointerPath": [
-            0,
-            0,
-            56
-        ],
-        "Value": "e8********85c0740e488b0d********33D2E8********488b0d"
+        "PointerPath": [0, 0, 56],
+        "Value": "E8********85C0740E488B0D********33D2E8********488B0D"
     },
     {
         "ASMSignature": true,
         "Key": "WORLD",
-        "PointerPath": [
-            -13,
-            0,
-            -78
-        ],
+        "PointerPath": [-13, 0, -78],
         "Value": "40534883EC40488B05********488BD98B401485C00F"
     }
-    // END BMP
 ]
