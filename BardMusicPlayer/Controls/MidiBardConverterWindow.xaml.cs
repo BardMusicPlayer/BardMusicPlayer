@@ -166,7 +166,7 @@ public partial class MidiBardConverterWindow
             var octaveShift = 0;
             var progNum = -1;
 
-            var rex = new Regex(@"^([A-Za-z _]+)([-+]\d)?");
+            var rex = new Regex(@"^([A-Za-z _:]+)([-+]\d)?");
             if (rex.Match(trackName) is { } match)
                 if (!string.IsNullOrEmpty(match.Groups[1].Value))
                 {
