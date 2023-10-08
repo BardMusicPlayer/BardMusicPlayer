@@ -41,6 +41,7 @@
   <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="5.8.0-alpha0098" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.8.0" PrivateAssets="all" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.54" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci368" />
   </ItemGroup>
 
