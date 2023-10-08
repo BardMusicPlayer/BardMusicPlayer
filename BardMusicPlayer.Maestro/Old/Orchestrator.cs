@@ -211,6 +211,35 @@ public class Orchestrator : IDisposable
     }
 
     /// <summary>
+    /// sets the speed shift for performer
+    /// </summary>
+    /// <param name="performer"></param>
+    /// <param name="speed"></param>
+    public void SetSpeedShift(Performer p, float speed)
+    {
+        if (p == null)
+            return;
+
+        p.OldSequencer.Speed = speed;
+        BmpMaestro.Instance.PublishEvent(new SpeedShiftEvent(p.game, speed, p.HostProcess));
+    }
+
+    /// <summary>
+    /// sets the speed for host performer (used for Ui)
+    /// </summary>
+    /// <param name="performer"></param>
+    /// <param name="speed"></param>
+    public void SetSpeedShiftOnHost(float speed)
+    {
+        foreach (var perf in _performers.Where(perf => perf.Value.HostProcess))
+        {
+            perf.Value.OldSequencer.Speed = speed;
+            BmpMaestro.Instance.PublishEvent(new SpeedShiftEvent(perf.Value.game, speed, perf.Value.HostProcess));
+            return;
+        }
+    }
+
+    /// <summary>
     /// Seeks the song to absolute position
     /// </summary>
     /// <param name="ticks"></param>

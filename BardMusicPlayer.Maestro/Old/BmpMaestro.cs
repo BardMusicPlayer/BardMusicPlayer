@@ -109,11 +109,33 @@ public partial class BmpMaestro : IDisposable
     /// sets the octave shift for host performer
     /// </summary>
     /// <param name="octave"></param>
-    public void SetOctaveshiftOnHost(int octave)
+    public void SetOctaveShiftOnHost(int octave)
     {
         _orchestrator?.SetOctaveshiftOnHost(octave);
     }
         
+    /// <summary>
+    /// sets the speed for bard
+    /// </summary>
+    public void SetSpeedShiftAll(float percentage)
+    {
+        if (_orchestrator == null)
+            return;
+
+        var performers = _orchestrator.GetAllPerformers();
+        Parallel.ForEach(performers, perf =>
+        {
+            _orchestrator.SetSpeedShift(perf, percentage);
+        });
+    }
+
+    /// <summary>
+    /// sets the speed for host performer
+    /// </summary>
+    public void SetSpeedShiftOnHost(float percentage)
+    {
+        _orchestrator?.SetSpeedShiftOnHost(percentage);
+    }
 
     /// <summary>
     /// Sets the playback at position (timeindex in ticks)

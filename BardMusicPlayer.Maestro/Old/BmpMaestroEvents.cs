@@ -18,6 +18,7 @@ public partial class BmpMaestro
     public EventHandler<bool> OnPerformerChanged;
     public EventHandler<TrackNumberChangedEvent> OnTrackNumberChanged;
     public EventHandler<OctaveShiftChangedEvent> OnOctaveShiftChanged;
+    public EventHandler<SpeedShiftEvent> OnSpeedChanged;
     public EventHandler<PerformerUpdate> OnPerformerUpdate;
     private ConcurrentQueue<MaestroEvent> _eventQueue;
     private bool _eventQueueOpen;
@@ -59,10 +60,12 @@ public partial class BmpMaestro
                         case OctaveShiftChangedEvent octaveShiftChanged:
                             OnOctaveShiftChanged?.Invoke(this, octaveShiftChanged);
                             break;
+                        case SpeedShiftEvent speedChanged:
+                            OnSpeedChanged?.Invoke(this, speedChanged);
+                            break;
                         case PerformerUpdate performerUpdate:
                             OnPerformerUpdate?.Invoke(this, performerUpdate);
                             break;
-
                     }
                 }
                 catch

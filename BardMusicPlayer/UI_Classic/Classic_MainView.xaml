@@ -523,6 +523,41 @@
                     <ColumnDefinition Width="40" />
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="10" Content="Performing" />
+                <!-- Speed Selection-->
+                <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Width="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="SpeedTxtNum" Padding="0" Margin="0,0,-16,0"
+                             x:FieldModifier="private" Text="100%" TextChanged="speed_txtNum_TextChanged" 
+                             TextAlignment="Center" FontSize="14"
+                             HorizontalAlignment="Right" Width="55" Height="25" VerticalAlignment="Center"
+                             VerticalContentAlignment="Center" />
+                    <Grid Grid.Column="1" Margin="0,0,-23,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="12"/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" x:Name="SpeedCmdUp" FontSize="8" Padding="2"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
+                                Content="&#xE70E;" Click="speed_cmdUp_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
+                        <Button Grid.Row="1" x:Name="SpeedCmdDown" FontSize="8" Padding="2"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
+                                Content="&#xE70D;" Click="speed_cmdDown_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
+                    </Grid>
+                    <Button Grid.Row="0" Grid.Column="2" x:Name="SpeedReset" FontSize="8" Padding="2" Margin="0,0,-35,0"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Click="speed_cmdReset_Click" Width="20"
+                            TextOptions.TextHintingMode="Fixed">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Loop" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
                 <Label Grid.Row="1" Grid.Column="0" x:Name="ElapsedTime" Content="00:00" Height="25"
                        HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" />
