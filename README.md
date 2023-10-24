@@ -52,7 +52,7 @@ BardMusicPlayer can be used with my custom <a href="https://github.com/BardMusic
 
 ### Installation
 * Copy the following repository link: <br>
-  `https://raw.githubusercontent.com/BardMusicPlayer/DalamudDoot/develop/data/pluginmaster.json` <br><br>
+  `https://dl.bardmusicplayer.com/dalamuddoot/DalamudDoot.json` <br><br>
 * Type `/xlsettings` in the game chat window to open the Dalamud Settings.
 * Navigate to the "Experimental" tab.
   <br><br><a><img src="https://i.imgur.com/FDlwtbe.png" /></a><br><br>
