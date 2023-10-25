@@ -177,7 +177,7 @@
                             materialDesign:ListBoxItemAssist.ShowSelection="False">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignBackground}">
-                            <controls:BardView x:Name="BardsList" />
+                            <controls:BardView />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Settings" Width="Auto" Height="35" Padding="0">
