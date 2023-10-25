@@ -54,7 +54,7 @@ public partial class ClassicMainView
         BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
         BmpSeer.Instance.InstrumentHeldChanged     += InstrumentOpenCloseState;
 
-        //PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
+        PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
         LoadConfig();
     }
 
@@ -210,7 +210,7 @@ public partial class ClassicMainView
         }
     }
 
-    /*private void PlaybackToggle_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void PlaybackToggle_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Space)
         {
@@ -234,7 +234,7 @@ public partial class ClassicMainView
 
             e.Handled = true;
         }
-    }*/
+    }
 
     private void TrackNumberChanged(TrackNumberChangedEvent e)
     {
