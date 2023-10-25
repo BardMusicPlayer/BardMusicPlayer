@@ -23,7 +23,7 @@ public partial class MainWindow
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
         Height             = 620;
-        Width              = 900;
+        Width              = 935;
         ResizeMode         = ResizeMode.CanResizeWithGrip;
 
         if (!BmpPigeonhole.Instance.DarkStyle)

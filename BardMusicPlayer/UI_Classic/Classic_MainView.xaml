@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="620" d:DesignWidth="900"
+             d:DesignHeight="620" d:DesignWidth="935"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              Width="Auto" Height="Auto"
@@ -429,6 +429,11 @@
                     <TabItem Header="Browser" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignBackground}">
                             <controls:SongBrowser x:Name="SongBrowser" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Download" Width="Auto" Height="35" Padding="0">
+                        <Grid Background="{DynamicResource MaterialDesignBackground}">
+                            <controls:MidiRepository x:Name="MidiRepository" />
                         </Grid>
                     </TabItem>
                 </TabControl>
