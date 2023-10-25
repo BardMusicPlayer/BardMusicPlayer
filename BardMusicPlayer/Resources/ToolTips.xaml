@@ -37,4 +37,5 @@
     <sys:String x:Key="ExportSong" xml:space="preserve">Export the current loaded song to MIDI&#13;Helpful to convert .mmsong or .gp files to .mid</sys:String>
     <sys:String x:Key="LyricsTrackNumber" xml:space="preserve">Enables lyrics parsing &#13;0 means stop lyric parsing &#13;1 the first lyrics track (lyric tracks are separate from the music tracks)</sys:String>
     <sys:String x:Key="Multibox" xml:space="preserve">Start more than two game instances</sys:String>
+    <sys:String x:Key="KeepOnTop" xml:space="preserve">Keep BMP window on top</sys:String>
 </ResourceDictionary>

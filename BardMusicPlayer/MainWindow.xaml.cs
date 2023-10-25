@@ -16,20 +16,27 @@ public partial class MainWindow
 {
     public MainWindow()
     {
-        InitializeComponent();
-
-        Title              = "BardMusicPlayer - " + Assembly.GetExecutingAssembly().GetName().Version;
-        DataContext        = new ClassicMainView();
+        // Set properties before initializing components
         AllowsTransparency = false;
         WindowStyle        = WindowStyle.SingleBorderWindow;
         Height             = 620;
-        Width              = 900;
+        Width              = 935;
         ResizeMode         = ResizeMode.CanResizeWithGrip;
+
+        InitializeComponent();
+
+        Title       = "BardMusicPlayer - " + Assembly.GetExecutingAssembly().GetName().Version;
+        DataContext = new ClassicMainView();
 
         if (!BmpPigeonhole.Instance.DarkStyle)
             LightModeStyle();
         else
             DarkModeStyle();
+
+        if (!BmpPigeonhole.Instance.KeepOnTop)
+            KeepOnTop_Disabled();
+        else
+            KeepOnTop_Enabled();
     }
 
     public static void LightModeStyle()
@@ -62,6 +69,68 @@ public partial class MainWindow
         var paletteHelper = new PaletteHelper();
         theme.Background = Color.FromRgb(30, 30, 30);
         paletteHelper.SetTheme(theme);
+    }
+
+    /// <summary>
+    /// Helper to bring the player to front
+    /// </summary>
+    public static void KeepOnTop_Enabled()
+    {
+        try
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow is { IsVisible: false })
+            {
+                mainWindow.Show();
+            }
+
+            if (mainWindow is { WindowState: WindowState.Minimized })
+            {
+                mainWindow.WindowState = WindowState.Normal;
+            }
+
+            if (mainWindow != null)
+            {
+                mainWindow.Activate();
+                mainWindow.Topmost = true;
+                mainWindow.Focus();
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+
+    /// <summary>
+    /// Helper to bring the player to front
+    /// </summary>
+    public static void KeepOnTop_Disabled()
+    {
+        try
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow is { IsVisible: false })
+            {
+                mainWindow.Show();
+            }
+
+            if (mainWindow is { WindowState: WindowState.Minimized })
+            {
+                mainWindow.WindowState = WindowState.Normal;
+            }
+
+            if (mainWindow != null)
+            {
+                mainWindow.Activate();
+                mainWindow.Topmost = false;
+                mainWindow.Focus();
+            }
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     protected override void OnClosing(CancelEventArgs e)

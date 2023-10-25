@@ -16,7 +16,7 @@
 <section id="about">
 
 # About BardMusicPlayer
-  <p> BardMusicPlayer is an automated music player for playing MIDI songs in FFXIV using the in-game bard performance mode. BardMusicPlayer is a fork of BardMusicPlayer with fixes, improvements, and personal changes ahead of upstream -- with additional changes from various forks such as LightAmp.</p>
+  <p> BardMusicPlayer is an automated music player for playing MIDI songs in FFXIV using the in-game bard performance mode.</p>
 </section>
 
 <section id="plugin">
@@ -58,7 +58,7 @@ BardMusicPlayer can be used with my custom <a href="https://github.com/BardMusic
   <br><br><a><img src="https://i.imgur.com/FDlwtbe.png" /></a><br><br>
 * Paste the link copied into the available input box under "Custom Plugin Repositories".
 * Ensure the box to the right of the link is checked.
-  <br><br><a><img src="https://i.imgur.com/Ifjc3X5.png" height="180" /></a><br><br>
+  <br><br><a><img src="https://i.imgur.com/YvPZ7cN.png" height="180" /></a><br><br>
 * Press the "Save changes & close" icon in the bottom right of the settings window.
 * Navigate to the "All Plugins" tab inside the `/xlplugins` plugin browser and search for `DalamudDoot`.
 * Click on "DalamudDoot" and select "Install".
@@ -70,7 +70,7 @@ BardMusicPlayer can be used with my custom <a href="https://github.com/BardMusic
 
 ### Using DalamudDoot
 To enable all enhanced functionality, simply checkmark "DalamudDoot Compatibility" under Settings.
-  <br><br><a><img src="https://i.imgur.com/ylf4TIW.png" alt="Settings"/></a><br>
+  <br><br><a><img src="https://i.imgur.com/XdK3f8G.png" alt="Settings"/></a><br>
 </section>
 
 <section id="contributing">

@@ -3,6 +3,7 @@
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ using BardMusicPlayer.Functions;
 using BardMusicPlayer.Maestro.Old;
 using BardMusicPlayer.Maestro.Old.Events;
 using BardMusicPlayer.Pigeonhole;
+using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Siren;
@@ -45,6 +47,7 @@ public partial class ClassicMainView
         BmpMaestro.Instance.OnPlaybackStopped     += Instance_PlaybackStopped;
         BmpMaestro.Instance.OnTrackNumberChanged  += Instance_TrackNumberChanged;
         BmpMaestro.Instance.OnOctaveShiftChanged  += Instance_OctaveShiftChanged;
+        BmpMaestro.Instance.OnSpeedChanged        += Instance_OnSpeedChange;
         //SirenVolume.Value                          =  BmpSiren.Instance.GetVolume();
         BmpSiren.Instance.SynthTimePositionChanged += Instance_SynthTimePositionChanged;
         BmpSiren.Instance.SongLoaded               += Instance_SongLoaded;
@@ -54,7 +57,7 @@ public partial class ClassicMainView
         BmpCoffer.Instance.OnPlaylistDataUpdated   += OnPlaylistDataUpdated;
         BmpSeer.Instance.InstrumentHeldChanged     += InstrumentOpenCloseState;
 
-        //PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
+        PreviewKeyDown += PlaybackToggle_PreviewKeyDown;
         LoadConfig();
     }
 
@@ -92,6 +95,11 @@ public partial class ClassicMainView
     private void Instance_OctaveShiftChanged(object? sender, OctaveShiftChangedEvent e)
     {
         Dispatcher.BeginInvoke(new Action(() => OctaveShiftChanged(e)));
+    }
+
+    private void Instance_OnSpeedChange(object? sender, SpeedShiftEvent e)
+    {
+        Dispatcher.BeginInvoke(new Action(() => SpeedShiftChange(e)));
     }
 
     private void Instance_SynthTimePositionChanged(string songTitle, double currentTime, double endTime, int activeVoices)
@@ -155,6 +163,8 @@ public partial class ClassicMainView
             _allTracks             = false;
             //BmpMaestro.Instance.SetTracknumberOnHost(_maxTracks);
         }
+
+        speed_cmdReset_Click(null, e: null);
     }
 
     private void PlaybackStarted()
@@ -210,7 +220,7 @@ public partial class ClassicMainView
         }
     }
 
-    /*private void PlaybackToggle_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void PlaybackToggle_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Space)
         {
@@ -234,7 +244,7 @@ public partial class ClassicMainView
 
             e.Handled = true;
         }
-    }*/
+    }
 
     private void TrackNumberChanged(TrackNumberChangedEvent e)
     {
@@ -249,6 +259,12 @@ public partial class ClassicMainView
     {
         if (e.IsHost)
             OctaveNumValue = e.OctaveShift;
+    }
+
+    private void SpeedShiftChange(SpeedShiftEvent e)
+    {
+        if (e.IsHost)
+            SpeedNumValue = e.SpeedShift;
     }
     #endregion
 
@@ -343,7 +359,7 @@ public partial class ClassicMainView
             return;
         
         OctaveNumValue++;
-        BmpMaestro.Instance.SetOctaveshiftOnHost(OctaveNumValue);
+        BmpMaestro.Instance.SetOctaveShiftOnHost(OctaveNumValue);
     }
 
     private void octave_cmdDown_Click(object sender, RoutedEventArgs e)
@@ -352,7 +368,7 @@ public partial class ClassicMainView
             return;
         
         OctaveNumValue--;
-        BmpMaestro.Instance.SetOctaveshiftOnHost(OctaveNumValue);
+        BmpMaestro.Instance.SetOctaveShiftOnHost(OctaveNumValue);
     }
 
     private void octave_txtNum_TextChanged(object sender, TextChangedEventArgs e)
@@ -369,7 +385,7 @@ public partial class ClassicMainView
         if (int.TryParse(OctaveTxtNum.Text.Replace(@"ø", ""), out _octaveNumValue))
         {
             OctaveTxtNum.Text = @"ø" + _octaveNumValue;
-            BmpMaestro.Instance.SetOctaveshiftOnHost(_octaveNumValue);
+            BmpMaestro.Instance.SetOctaveShiftOnHost(_octaveNumValue);
         }
     }
     private void octave_txtNum_KeyUp(object sender, KeyEventArgs e)
@@ -386,6 +402,58 @@ public partial class ClassicMainView
     }
     #endregion
 
+    #region Speed shift
+    private float _speedNumValue = 1.0f;
+
+    private float SpeedNumValue
+    {
+        get => _speedNumValue;
+        set
+        {
+            _speedNumValue = value;
+            var roundedPercentage = (int)Math.Round(value * 100); // Round to the nearest whole number
+            SpeedTxtNum.Text = $"{roundedPercentage}%";           // Use string interpolation for formatting
+        }
+    }
+
+    private void speed_txtNum_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (SpeedTxtNum == null)
+            return;
+
+        if (int.TryParse(SpeedTxtNum.Text.Replace(@"%", ""), out var t))
+        {
+            var speedShift = (Convert.ToDouble(t) / 100).Clamp(0.20f, 2.00f);
+            BmpMaestro.Instance.SetSpeedShiftAll((float)speedShift);
+        }
+    }
+
+    private void speed_cmdUp_Click(object sender, RoutedEventArgs e)
+    {
+        var increment = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ? 0.10f : 0.01f;
+        var newSpeedShift = SpeedNumValue + increment;
+        if (newSpeedShift < 2.01f) // Ensure the value is not increase above 200% to fix visual bouncing
+        {
+            BmpMaestro.Instance.SetSpeedShiftAll(newSpeedShift);
+        }
+    }
+
+    private void speed_cmdDown_Click(object sender, RoutedEventArgs e)
+    {
+        var increment = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ? 0.10f : 0.01f;
+        var newSpeedShift = SpeedNumValue - increment;
+        if (newSpeedShift > 0.19f) // Ensure the value is not decreased below 20% to prevent crash
+        {
+            BmpMaestro.Instance.SetSpeedShiftAll(newSpeedShift);
+        }
+    }
+
+    private void speed_cmdReset_Click(object? sender, RoutedEventArgs? e)
+    {
+        const float speedShift = 1.0f;
+        BmpMaestro.Instance.SetSpeedShiftAll(speedShift);
+    }
+    #endregion
 
     private void Macro_Button_Click(object sender, RoutedEventArgs e)
     {

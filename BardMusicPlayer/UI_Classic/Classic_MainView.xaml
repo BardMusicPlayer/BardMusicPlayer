@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:BardMusicPlayer.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="620" d:DesignWidth="900"
+             d:DesignHeight="620" d:DesignWidth="935"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              Width="Auto" Height="Auto"
@@ -177,7 +177,7 @@
                             materialDesign:ListBoxItemAssist.ShowSelection="False">
                     <TabItem Header="Performers" Width="Auto" Height="35" Padding="0">
                         <Grid Background="{DynamicResource MaterialDesignBackground}">
-                            <controls:BardView x:Name="BardsList" />
+                            <controls:BardView />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Settings" Width="Auto" Height="35" Padding="0">
@@ -279,12 +279,19 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Label Margin="0,10,80,0" Grid.Row="0" Content="Dark Mode"
                                            HorizontalAlignment="Right" ToolTip="{StaticResource DarkMode}" />
                                     <ToggleButton Margin="0,10,20,0" Grid.Row="0" x:Name="EnableDarkMode"
                                                   Unchecked="EnableDarkMode_Checked" Checked="EnableDarkMode_Checked"
                                                   HorizontalAlignment="Right" ToolTip="{StaticResource DarkMode}"
+                                                  Padding="0" Width="60" Height="25" />
+                                    <Label Margin="0,10,80,0" Grid.Row="1" Content="Keep on Top"
+                                           HorizontalAlignment="Right" ToolTip="{StaticResource KeepOnTop}" />
+                                    <ToggleButton Margin="0,10,20,0" Grid.Row="1" x:Name="KeepOnTop"
+                                                  Unchecked="KeepOnTop_Checked" Checked="KeepOnTop_Checked"
+                                                  HorizontalAlignment="Right" ToolTip="{StaticResource KeepOnTop}"
                                                   Padding="0" Width="60" Height="25" />
                                 </Grid>
                             </GroupBox>
@@ -431,6 +438,11 @@
                             <controls:SongBrowser x:Name="SongBrowser" />
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Download" Width="Auto" Height="35" Padding="0">
+                        <Grid Background="{DynamicResource MaterialDesignBackground}">
+                            <controls:MidiRepository x:Name="MidiRepository" />
+                        </Grid>
+                    </TabItem>
                 </TabControl>
             </Grid>
 
@@ -523,6 +535,41 @@
                     <ColumnDefinition Width="40" />
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="10" Content="Performing" />
+                <!-- Speed Selection-->
+                <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Width="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="SpeedTxtNum" Padding="0" Margin="0,0,-16,0"
+                             x:FieldModifier="private" Text="100%" TextChanged="speed_txtNum_TextChanged" 
+                             TextAlignment="Center" FontSize="14"
+                             HorizontalAlignment="Right" Width="55" Height="25" VerticalAlignment="Center"
+                             VerticalContentAlignment="Center" />
+                    <Grid Grid.Column="1" Margin="0,0,-23,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="12"/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" x:Name="SpeedCmdUp" FontSize="8" Padding="2"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
+                                Content="&#xE70E;" Click="speed_cmdUp_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
+                        <Button Grid.Row="1" x:Name="SpeedCmdDown" FontSize="8" Padding="2"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets"
+                                Content="&#xE70D;" Click="speed_cmdDown_Click" Width="Auto"
+                                TextOptions.TextHintingMode="Fixed" />
+                    </Grid>
+                    <Button Grid.Row="0" Grid.Column="2" x:Name="SpeedReset" FontSize="8" Padding="2" Margin="0,0,-35,0"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Click="speed_cmdReset_Click" Width="20"
+                            TextOptions.TextHintingMode="Fixed">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Loop" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
                 <Label Grid.Row="1" Grid.Column="0" x:Name="ElapsedTime" Content="00:00" Height="25"
                        HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" />

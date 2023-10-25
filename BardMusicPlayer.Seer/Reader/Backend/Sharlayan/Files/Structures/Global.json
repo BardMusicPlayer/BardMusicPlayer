@@ -2,17 +2,14 @@
     "CurrentPlayer": {
         "SourceSize": 650,
         "JobID": 124,
-        // BMP
         "ID": 100,
         "Name": 1
-        // END BMP
     },
     "PartyMember": {
         "SourceSize": 560,
         "ID": 424,
         "Name": 452
     },
-    // BMP
     "PerformanceInfo": {
         "SourceSize": 28,
         "Status": 19,
@@ -22,9 +19,8 @@
         "SourceSize": 16,
         "Offset": 0
     },
-    "CharacterId": { // Known as ConfigId in Seer. Used for DatReader.
+    "CharacterId": {
         "SourceSize": 32,
         "Offset": 0
     }
-    // END BMP
 }

@@ -91,7 +91,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="15" />
                             <!-- 0 Index -->
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="175" />
                             <!-- 1 Instrument Box-->
                             <ColumnDefinition Width="15" />
                             <!-- 2 Spacer-->

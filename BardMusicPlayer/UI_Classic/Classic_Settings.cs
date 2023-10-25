@@ -39,6 +39,7 @@ public partial class ClassicMainView
         //UI
         // MidiLoaderSelection.SelectedIndex = BmpPigeonhole.Instance.MidiLoaderType;
         EnableDarkMode.IsChecked = BmpPigeonhole.Instance.DarkStyle;
+        KeepOnTop.IsChecked      = BmpPigeonhole.Instance.KeepOnTop;
     }
 
     #region Playback
@@ -117,7 +118,7 @@ public partial class ClassicMainView
         else
             MainWindow.DarkModeStyle();
     }
-    
+
     private void MultiBoxChecked(object sender, RoutedEventArgs e)
     {
         if (!BmpPigeonhole.Instance.EnableMultibox)
@@ -129,6 +130,16 @@ public partial class ClassicMainView
             });
         }
         BmpPigeonhole.Instance.EnableMultibox = MultiBox.IsChecked ?? false;
+    }
+
+    private void KeepOnTop_Checked(object sender, RoutedEventArgs e)
+    {
+        BmpPigeonhole.Instance.KeepOnTop = KeepOnTop.IsChecked ?? false;
+
+        if (Application.Current.MainWindow is MainWindow mainWindow)
+        {
+            mainWindow.Topmost = BmpPigeonhole.Instance.KeepOnTop;
+        }
     }
     #endregion
 }
