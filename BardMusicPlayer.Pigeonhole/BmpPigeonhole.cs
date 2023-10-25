@@ -140,6 +140,11 @@ public class BmpPigeonhole : JsonSettings.JsonSettings
     public virtual bool DarkStyle { get; set; }
 
     /// <summary>
+    /// Bring BMP to front
+    /// </summary>
+    public virtual bool KeepOnTop { get; set; }
+
+    /// <summary>
     /// Midi download path
     /// </summary>
     public virtual string MidiDownloadPath { get; set; } = "";
