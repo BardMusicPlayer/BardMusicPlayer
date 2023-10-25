@@ -4,6 +4,7 @@
  */
 
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Enums;
 
 namespace BardMusicPlayer.Quotidian.Structs;
@@ -15,44 +16,44 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
 {
     public static readonly Instrument None = new("None", 0, 122, OctaveRange.Invalid, false, 100, 0, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>()));
 
-    public static readonly Instrument Harp = new("Harp", 1, 46, OctaveRange.C3toC6, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "OrchestralHarp", "orchestralharps", "harps" }));
-    public static readonly Instrument Piano = new("Piano", 2, 0, OctaveRange.C4toC7, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "AcousticGrandPiano", "acousticgrandpianos", "pianos" }));
-    public static readonly Instrument Lute = new("Lute", 3, 24, OctaveRange.C2toC5, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "guitar", "guitars", "lutes" }));
-    public static readonly Instrument Fiddle = new("Fiddle", 4, 45, OctaveRange.C2toC5, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "PizzicatoStrings", "fiddles" }));
+    public static readonly Instrument Harp = new("Harp", 1, 46, OctaveRange.C3toC6, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Harps", "OrchestralHarp", "OrchestralHarps" }));
+    public static readonly Instrument Piano = new("Piano", 2, 0, OctaveRange.C4toC7, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "Pianos", "AcousticGrandPiano", "AcousticGrandPianos" }));
+    public static readonly Instrument Lute = new("Lute", 3, 24, OctaveRange.C2toC5, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "Lutes", "Guitar", "Guitars" }));
+    public static readonly Instrument Fiddle = new("Fiddle", 4, 45, OctaveRange.C2toC5, false, 50, 1, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "Fiddles", "PizzicatoStrings" }));
     public static readonly IReadOnlyList<Instrument> Strummed = new ReadOnlyCollection<Instrument>(new List<Instrument> { Harp, Piano, Lute, Fiddle });
 
-    public static readonly Instrument Flute = new("Flute", 5, 73, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "flutes" }));
-    public static readonly Instrument Oboe = new("Oboe", 6, 68, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "oboes" }));
-    public static readonly Instrument Clarinet = new("Clarinet", 7, 71, OctaveRange.C3toC6, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "clarinets" }));
-    public static readonly Instrument Fife = new("Fife", 8, 72, OctaveRange.C5toC8, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "fifes", "Piccolo", "piccolos", "ocarina", "ocarinas" }));
-    public static readonly Instrument Panpipes = new("Panpipes", 9, 75, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "panpipe", "Panflute", "panflutes" }));
+    public static readonly Instrument Flute = new("Flute", 5, 73, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Flutes" }));
+    public static readonly Instrument Oboe = new("Oboe", 6, 68, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "Oboes" }));
+    public static readonly Instrument Clarinet = new("Clarinet", 7, 71, OctaveRange.C3toC6, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "Clarinets" }));
+    public static readonly Instrument Fife = new("Fife", 8, 72, OctaveRange.C5toC8, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "Fifes", "Piccolo", "Piccolos", "Ocarina", "Ocarinas" }));
+    public static readonly Instrument Panpipes = new("Panpipes", 9, 75, OctaveRange.C4toC7, true, 50, 2, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Panpipe", "Panflute", "Panflutes" }));
     public static readonly IReadOnlyList<Instrument> Wind = new ReadOnlyCollection<Instrument>(new List<Instrument> { Flute, Oboe, Clarinet, Fife, Panpipes });
 
-    public static readonly Instrument Timpani = new("Timpani", 10, 47, OctaveRange.C2toC5, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "timpanis" }));
-    public static readonly Instrument Bongo = new("Bongo", 11, 116, OctaveRange.C3toC6, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "bongos" }));
-    public static readonly Instrument BassDrum = new("BassDrum", 12, 117, OctaveRange.C2toC5, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "bassdrums", "bass_drum", "bass_drums", "kick" }));
-    public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, OctaveRange.C3toC6, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "snaredrums", "Snare", "snare_drum", "RiceDrum" }));
-    public static readonly Instrument Cymbal = new("Cymbal", 14, 127, OctaveRange.C3toC6, false, 100, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "cymbals" }));
+    public static readonly Instrument Timpani = new("Timpani", 10, 47, OctaveRange.C2toC5, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Timpanis" }));
+    public static readonly Instrument Bongo = new("Bongo", 11, 116, OctaveRange.C3toC6, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "Bongos" }));
+    public static readonly Instrument BassDrum = new("BassDrum", 12, 117, OctaveRange.C2toC5, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "BassDrums", "Kick" }));
+    public static readonly Instrument SnareDrum = new("SnareDrum", 13, 115, OctaveRange.C3toC6, false, 50, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "SnareDrums", "Snare", "RiceDrum" }));
+    public static readonly Instrument Cymbal = new("Cymbal", 14, 127, OctaveRange.C3toC6, false, 100, 3, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Cymbals" }));
     public static readonly IReadOnlyList<Instrument> Drums = new ReadOnlyCollection<Instrument>(new List<Instrument> { Timpani, Bongo, BassDrum, SnareDrum, Cymbal });
 
-    public static readonly Instrument Trumpet = new("Trumpet", 15, 56, OctaveRange.C3toC6, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "trumpets", "Humpet" }));
-    public static readonly Instrument Trombone = new("Trombone", 16, 57, OctaveRange.C2toC5, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "trombones", "Tromboner" }));
-    public static readonly Instrument Tuba = new("Tuba", 17, 58, OctaveRange.C1toC4, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "tubas", "Booba" }));
-    public static readonly Instrument Horn = new("Horn", 18, 60, OctaveRange.C2toC5, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "FrenchHorn", "frenchhorns", "horns", "Horny" }));
-    public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Sax", "AltoSaxophone", "AltoSax", "Sexophone", "Saxaphone", "Saxophones" }));
+    public static readonly Instrument Trumpet = new("Trumpet", 15, 56, OctaveRange.C3toC6, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Trumpets" }));
+    public static readonly Instrument Trombone = new("Trombone", 16, 57, OctaveRange.C2toC5, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "Trombones" }));
+    public static readonly Instrument Tuba = new("Tuba", 17, 58, OctaveRange.C1toC4, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "Tubas" }));
+    public static readonly Instrument Horn = new("Horn", 18, 60, OctaveRange.C2toC5, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> {  "Horns", "FrenchHorn", "FrenchHorns" }));
+    public static readonly Instrument Saxophone = new("Saxophone", 19, 65, OctaveRange.C3toC6, true, 100, 4, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "Saxophones", "Sax", "AltoSaxophone", "AltoSax", "Saxaphone" }));
     public static readonly IReadOnlyList<Instrument> Brass = new ReadOnlyCollection<Instrument>(new List<Instrument> { Trumpet, Trombone, Tuba, Horn, Saxophone });
 
-    public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{ "violins" }));
-    public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{ "violas" }));
-    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{ "cellos", "violoncello" }));
-    public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "bass" }));
+    public static readonly Instrument Violin = new("Violin", 20, 40, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string>{ "Violins" }));
+    public static readonly Instrument Viola = new("Viola", 21, 41, OctaveRange.C3toC6, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string>{ "Violas" }));
+    public static readonly Instrument Cello = new("Cello", 22, 42, OctaveRange.C2toC5, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string>{ "Cellos", "ViolonCello", "ViolonCellos" }));
+    public static readonly Instrument DoubleBass = new("DoubleBass", 23, 43, OctaveRange.C1toC4, true, 100, 5, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ContraBass", "Bass" }));
     public static readonly IReadOnlyList<Instrument> Strings = new ReadOnlyCollection<Instrument>(new List<Instrument> { Violin, Viola, Cello, DoubleBass });
     
-    public static readonly Instrument ElectricGuitarOverdriven = new("ElectricGuitarOverdriven", 24, 29, OctaveRange.C2toC5, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Program:ElectricGuitar", "guitaroverdriven", "overdrivenguitar", "overdriven", "ElectricGuitar:Overdriven" }));
-    public static readonly Instrument ElectricGuitarClean = new("ElectricGuitarClean", 25, 27, OctaveRange.C2toC5, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "guitarclean", "cleanguitar", "clean", "ElectricGuitar:Clean" }));
-    public static readonly Instrument ElectricGuitarMuted = new("ElectricGuitarMuted", 26, 28, OctaveRange.C2toC5, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "guitarmuted", "mutedguitar", "muted", "ElectricGuitar:Muted" }));
-    public static readonly Instrument ElectricGuitarPowerChords = new("ElectricGuitarPowerChords", 27, 30, OctaveRange.C1toC4, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ElectricGuitarPowerChord", "guitarpowerchords", "powerchords", "ElectricGuitar:PowerChords" }));
-    public static readonly Instrument ElectricGuitarSpecial = new("ElectricGuitarSpecial", 28, 31, OctaveRange.C3toC6, false, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "guitarspecial", "special", "ElectricGuitar:Special" }));
+    public static readonly Instrument ElectricGuitarOverdriven = new("ElectricGuitarOverdriven", 24, 29, OctaveRange.C2toC5, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE0, new ReadOnlyCollection<string>(new List<string> { "Program:ElectricGuitar", "GuitarOverdriven", "OverdrivenGuitar", "Overdriven", "ElectricGuitar:Overdriven" }));
+    public static readonly Instrument ElectricGuitarClean = new("ElectricGuitarClean", 25, 27, OctaveRange.C2toC5, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE1, new ReadOnlyCollection<string>(new List<string> { "GuitarClean", "CleanGuitar", "Clean", "ElectricGuitar:Clean" }));
+    public static readonly Instrument ElectricGuitarMuted = new("ElectricGuitarMuted", 26, 28, OctaveRange.C2toC5, false, 50, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE2, new ReadOnlyCollection<string>(new List<string> { "GuitarMuted", "MutedGuitar", "Muted", "ElectricGuitar:Muted" }));
+    public static readonly Instrument ElectricGuitarPowerChords = new("ElectricGuitarPowerChords", 27, 30, OctaveRange.C1toC4, true, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE3, new ReadOnlyCollection<string>(new List<string> { "ElectricGuitarPowerChord", "GuitarPowerChords", "GuitarPowerChord", "PowerChordsGuitar", "PowerChordGuitar", "PowerChords", "PowerChord", "ElectricGuitar:PowerChords", "ElectricGuitar:PowerChord" }));
+    public static readonly Instrument ElectricGuitarSpecial = new("ElectricGuitarSpecial", 28, 31, OctaveRange.C3toC6, false, 100, 6, InstrumentToneMenuKey.PERFORMANCE_MODE_EX_TONE4, new ReadOnlyCollection<string>(new List<string> { "GuitarSpecial", "SpecialGuitar", "Special", "ElectricGuitar:Special" }));
     public static readonly IReadOnlyList<Instrument> ElectricGuitar = new ReadOnlyCollection<Instrument>(new List<Instrument> { ElectricGuitarOverdriven, ElectricGuitarClean, ElectricGuitarMuted, ElectricGuitarPowerChords, ElectricGuitarSpecial });
 
     public static readonly IReadOnlyList<Instrument> All = new ReadOnlyCollection<Instrument>(new List<Instrument>().Concat(Strummed).Concat(Wind).Concat(Drums).Concat(Brass).Concat(Strings).Concat(ElectricGuitar).ToList());
@@ -271,24 +272,55 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
     /// <returns>true if the <see cref="Instrument"/> is anything besides <see cref="None"/></returns>
     public static bool TryParse(string instrument, out Instrument result)
     {
-        if (instrument is null)
+        if (instrument is null || string.IsNullOrWhiteSpace(instrument))
         {
             result = None;
             return false;
         }
+
+        // Remove numeric characters at the end (e.g. Harp 2)
+        instrument = Regex.Replace(instrument, @"\d+$", "").Trim();
+
+        // Split the input string by spaces
+        var parts = instrument.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        // Check if the last part of the input is "Timpani"
+        var isTimpani = parts.Length > 0 && parts[parts.Length - 1].Equals("Timpani", StringComparison.OrdinalIgnoreCase);
+
+        // Remove trailing Roman numerals (e.g., I, II, III, IV, V) only if not preceded by "Timpani"
+        for (var i = 0; i < parts.Length; i++)
+        {
+            if (i == parts.Length - 1 && isTimpani)
+            {
+                // Skip the last part if it's "Timpani"
+                continue;
+            }
+
+            parts[i] = Regex.Replace(parts[i], "(I{1,3}|IV|V)$", "", RegexOptions.IgnoreCase).Trim();
+        }
+
+        // Join the modified parts back into a single string
+        instrument = string.Join(" ", parts);
+
+        // Remove any additional spaces or underscores
         instrument = instrument.Replace(" ", "").Replace("_", "");
-        if (int.TryParse(instrument, out var number)) return TryParse(number, out result);
+
+        if (int.TryParse(instrument, out var number))
+            return TryParse(number, out result);
+
         if (All.Any(x => x.Name.Equals(instrument, StringComparison.CurrentCultureIgnoreCase)))
         {
             result = All.First(x => x.Name.Equals(instrument, StringComparison.CurrentCultureIgnoreCase));
             return true;
         }
+
         foreach (var instr in All)
         {
             if (!instr.AlternativeNames.Any(x => x.Equals(instrument, StringComparison.CurrentCultureIgnoreCase))) continue;
             result = instr;
             return true;
         }
+
         result = None;
         return false;
     }
