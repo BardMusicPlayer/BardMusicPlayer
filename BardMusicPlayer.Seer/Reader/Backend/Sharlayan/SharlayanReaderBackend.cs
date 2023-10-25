@@ -148,12 +148,6 @@ internal class SharlayanReaderBackend : IReaderBackend
                 new BmpSeerSharlayanSigException("PARTYCOUNT")));
         }
 
-        if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARMAP"))
-        {
-            ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
-                new BmpSeerSharlayanSigException("CHARMAP")));
-        }
-
         _signaturesFound                           =  true;
         _reader.MemoryHandler.SignaturesFoundEvent -= SignaturesFound;
     }
@@ -194,7 +188,6 @@ internal class SharlayanReaderBackend : IReaderBackend
                 }
 
                 GetPlayerInfo(token);
-                //GetHomeWorld(token);
                 GetWorld(token);
                 GetConfigId(token);
                 GetInstrument(token);

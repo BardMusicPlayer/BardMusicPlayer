@@ -10,11 +10,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan;
 
 internal static class Signatures
 {
-    public static string CharacterMapKey => "CHARMAP";
+    public static string PartyMapKey => "PARTYMAP";
 
     public static string PartyCountKey => "PARTYCOUNT";
-
-    public static string PartyMapKey => "PARTYMAP";
 
     public static string PlayerInformationKey => "PLAYERINFO";
 
