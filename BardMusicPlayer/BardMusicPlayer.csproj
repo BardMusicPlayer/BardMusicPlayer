@@ -24,7 +24,7 @@
     <Product>BardMusicPlayer</Product>
     <Authors>Meowchestra, MoogleTroupe, GiR_Zippo</Authors>
     <Copyright>Copyright © 2023</Copyright>
-    <Version>2.1.0.1</Version>
+    <Version>2.1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">

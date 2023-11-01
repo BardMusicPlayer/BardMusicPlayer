@@ -3,7 +3,6 @@
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,6 +33,7 @@ public partial class ClassicMainView
         CurrentInstance = this;
         //Always start with the playlists
         _showingPlaylists = true;
+        System.IO.Directory.CreateDirectory(Globals.Globals.DirectoryPath);
         //Fill the list
         PlaylistHeader.Header              =  "Playlists";
         PlaylistContainer.ItemsSource      =  BmpCoffer.Instance.GetPlaylistNames();
