@@ -463,9 +463,9 @@ public class Performer : INotifyPropertyChanged
         var task = Task.Run(() =>
         {
             _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.VIRTUAL_PAD_SELECT]);
-            Task.Delay(100).Wait();
+            Task.Delay(200).Wait();
             _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.LEFT]);
-            Task.Delay(100).Wait();
+            Task.Delay(200).Wait();
             _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
             Task.Delay(400).Wait();
             _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
@@ -493,7 +493,7 @@ public class Performer : INotifyPropertyChanged
         }
 
         _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
-        Task.Delay(200);
+        Task.Delay(400);
         _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
     }
 
