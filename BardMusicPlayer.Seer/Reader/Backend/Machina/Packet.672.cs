@@ -38,7 +38,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
             catch (Exception ex)
             {
                 _machinaReader.Game.PublishEvent(new BackendExceptionEvent(EventSource.Machina,
-                    new BmpSeerMachinaException("Exception in Packet.Size664 (player spawn): " + ex.Message)));
+                    new BmpSeerMachinaException("Exception in Packet.Size672 (player spawn): " + ex.Message)));
             }
         }
     }
