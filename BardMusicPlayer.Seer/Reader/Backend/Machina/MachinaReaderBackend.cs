@@ -73,6 +73,9 @@ internal class MachinaReaderBackend : IReaderBackend
                         case 664:
                             _packet.Size664(timeStamp, otherActorId, myActorId, message); //Handles Homeworld and Playername --DALAMUD
                             break;
+                        case 672:
+                            _packet.Size672(timeStamp, otherActorId, myActorId, message); //[6.51]Handles Homeworld and Playername --DALAMUD
+                            break;
                         case 928:
                             _packet.Size928(timeStamp, otherActorId, myActorId, message); //Handles group data
                             break;
