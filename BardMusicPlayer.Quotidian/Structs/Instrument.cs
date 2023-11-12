@@ -336,7 +336,7 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
         /*if (Equals(Lute) && note < 15) return 0;
         if (Equals(Lute) && note > 14) return 50;*/ 
 
-        if (Equals(Clarinet) && note <= 7) return -50;
+        if (Equals(Clarinet) && note <= 10) return -50;
 
         return 0;
     }
