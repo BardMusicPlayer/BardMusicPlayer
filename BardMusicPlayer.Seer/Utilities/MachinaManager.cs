@@ -47,7 +47,7 @@ internal class MachinaManager : IDisposable
         }
     }
 
-    private static readonly List<int> Lengths = new() {48, 56, 88, 656, 664, 674, 928, 3576 };
+    private static readonly List<int> Lengths = new() {48, 56, 88, 656, 664, 672, 928, 3576 };
     private readonly FFXIVNetworkMonitor _monitor;
     private readonly object _lock;
     private bool _monitorRunning;
