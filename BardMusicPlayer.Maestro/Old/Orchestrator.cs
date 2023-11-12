@@ -662,8 +662,8 @@ public class Orchestrator : IDisposable
         if (result.Key == seerEvent.Game.Pid)
             result.Value.EnsembleAccept();
 
-        foreach (var i in _performers.Where(i => i.Value.game.Pid == seerEvent.Game.Pid))
-            i.Value.EnsembleAccept();
+        // foreach (var i in _performers.Where(i => i.Value.game.Pid == seerEvent.Game.Pid))
+        //    i.Value.EnsembleAccept();
         return 0;
     }
 

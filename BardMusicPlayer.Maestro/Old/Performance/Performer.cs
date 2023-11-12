@@ -443,8 +443,11 @@ public class Performer : INotifyPropertyChanged
     /// <summary>
     /// do the ready check
     /// </summary>
-    public void DoReadyCheck()
+    public async void DoReadyCheck()
     {
+        if (_sequencer?.LoadedBmpSong == null)
+            return;
+        
         if (!_forcePlayback)
         {
             if (!PerformerEnabled)
@@ -456,27 +459,27 @@ public class Performer : INotifyPropertyChanged
 
         if (UsesDalamud)
         {
-            game.StartEnsemble();
+            await game.StartEnsemble();
             return;
         }
-
-        var task = Task.Run(() =>
-        {
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.VIRTUAL_PAD_SELECT]);
-            Task.Delay(200).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.LEFT]);
-            Task.Delay(200).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
-            Task.Delay(400).Wait();
-            _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
-        });
+        
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.VIRTUAL_PAD_SELECT]);
+        await Task.Delay(100);
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.LEFT]);
+        await Task.Delay(100);
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
+        await Task.Delay(400);
+        _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
     }
 
     /// <summary>
     /// Accept the ready check
     /// </summary>
-    public void EnsembleAccept()
+    public async void EnsembleAccept()
     {
+        if (_sequencer?.LoadedBmpSong == null)
+            return;
+
         if (!_forcePlayback)
         {
             if (!PerformerEnabled)
@@ -493,7 +496,7 @@ public class Performer : INotifyPropertyChanged
         }
 
         _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
-        Task.Delay(400);
+        await Task.Delay(200);
         _hook.SendSyncKeybind(game.NavigationMenuKeys[NavigationMenuKey.OK]);
     }
 
