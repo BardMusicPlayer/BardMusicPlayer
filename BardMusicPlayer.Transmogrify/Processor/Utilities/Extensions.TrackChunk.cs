@@ -75,24 +75,29 @@ internal static partial class Extensions
     internal static Task<TrackChunk> AddProgramChangeEvents(TrackChunk originalChunk, TempoMap tempoMap, long firstNote)
     {
         var newChunk = new TrackChunk();
-        var events = originalChunk.ManageTimedEvents().Objects.Where(e => e.Event.EventType == MidiEventType.ProgramChange);
-        foreach (var timedEvent in events)
+        var programChangeEvents = originalChunk.ManageTimedEvents().Objects
+            .Where(e => e.Event.EventType == MidiEventType.ProgramChange)
+            .OrderBy(e => e.Time);
+
+        foreach (var timedEvent in programChangeEvents)
         {
             if (timedEvent.Event is not ProgramChangeEvent programChangeEvent)
                 continue;
 
-            //Skip all except guitar | implement if we need this again
-            if ((programChangeEvent.ProgramNumber < 27) || (programChangeEvent.ProgramNumber > 31))
+            // Skip all except guitar | implement if we need this again
+            if (programChangeEvent.ProgramNumber < 27 || programChangeEvent.ProgramNumber > 31)
                 continue;
 
             var channel = programChangeEvent.Channel;
             using var manager = new TimedObjectsManager(newChunk.Events, ObjectType.TimedEvent | ObjectType.Note);
-            var timedEvents = manager.Objects;
-            if ((5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote) < 0)
-                timedEvents.Add(new TimedEvent(new ProgramChangeEvent(programChangeEvent.ProgramNumber), 5000));
-            else
-                timedEvents.Add(new TimedEvent(new ProgramChangeEvent(programChangeEvent.ProgramNumber), 5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote/* Absolute time too */));
+
+            // Calculate the new time for the program change event
+            var newTime = Math.Max(5000, 5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote);
+
+            // Add the program change event to the new chunk
+            manager.Objects.Add(new TimedEvent(new ProgramChangeEvent(programChangeEvent.ProgramNumber), newTime));
         }
+
         return Task.FromResult(newChunk);
     }
 
