@@ -281,6 +281,9 @@ public readonly struct Instrument : IComparable, IConvertible, IComparable<Instr
         // Remove numeric characters at the end (e.g. Harp 2)
         instrument = Regex.Replace(instrument, @"\d+$", "").Trim();
 
+        // Remove plus or minus characters at the end
+        instrument = Regex.Replace(instrument, @"[-+]?$", "").Trim();
+
         // Split the input string by spaces
         var parts = instrument.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
