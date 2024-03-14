@@ -106,13 +106,13 @@ internal static partial class Extensions
     internal static Task<TrackChunk> AddLyricsEvents(TrackChunk originalChunk, TempoMap tempoMap, long firstNote)
     {
         var newChunk = new TrackChunk();
-        var events = originalChunk.ManageTimedEvents().Objects.Where(e => e.Event.EventType == MidiEventType.Text);
+        var events = originalChunk.ManageTimedEvents().Objects.Where(e => e.Event.EventType == MidiEventType.Lyric);
         foreach (var timedEvent in events)
         {
             if (timedEvent.Event is not LyricEvent lyricsEvent)
                 continue;
 
-            using var manager = new TimedObjectsManager(newChunk.Events, ObjectType.TimedEvent | ObjectType.Note);
+            using var manager = new TimedObjectsManager(newChunk.Events, ObjectType.TimedEvent);
             var timedEvents = manager.Objects;
             if ((5000 + (timedEvent.TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000) - firstNote) < 5000)
                 timedEvents.Add(new TimedEvent(new LyricEvent(lyricsEvent.Text), 5000));
