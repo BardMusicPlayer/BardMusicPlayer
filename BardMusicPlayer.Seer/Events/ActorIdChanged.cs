@@ -1,21 +1,25 @@
 ﻿/*
- * Copyright(c) 2023 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
 using BardMusicPlayer.Seer.Utilities;
 
-namespace BardMusicPlayer.Seer.Events;
-
-public sealed class ActorIdChanged : SeerEvent
+namespace BardMusicPlayer.Seer.Events
 {
-    internal ActorIdChanged(EventSource readerBackendType, uint actorId) : base(readerBackendType)
+    public sealed class ActorIdChanged : SeerEvent
     {
-        EventType = GetType();
-        ActorId   = actorId;
+        internal ActorIdChanged(EventSource readerBackendType, uint actorId) : base(readerBackendType)
+        {
+            EventType = GetType();
+            ActorId = actorId;
+        }
+
+        public uint ActorId { get; }
+
+        public override bool IsValid()
+        {
+            return ActorIdTools.RangeOkay(ActorId);
+        }
     }
-
-    public uint ActorId { get; }
-
-    public override bool IsValid() => ActorIdTools.RangeOkay(ActorId);
 }

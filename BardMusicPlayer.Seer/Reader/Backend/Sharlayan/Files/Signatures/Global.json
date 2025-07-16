@@ -1,41 +1,47 @@
 [
     // Upstream
     {
+        //Client::System::Input::TextService_ctor
         "Key": "CHATLOG",
-        "Value": "488941104488492C4C8949244C89491C4584C07412488B4218488905********48890D",
+        "Value": "48 89 41 10 44 88 49 2C 4C 89 49 24 4C 89 49 1C 45 84 C0 74 12 48 8B 42 18 48 89 05 ?? ?? ?? ?? 48 89 0D",
         "ASMSignature": true,
         "PointerPath": [ 0, 0, 64, 908 ]
     },
     {
+        //g_Client::Game::Object::GameObjectManager_Instance.Objects
         "Key": "CHARMAP",
-        "Value": "48c1ea0381fa????0000****8bc2488d0d",
+        "Value": "48 C1 EA 03 81 FA ?? ?? 00 00 ?? ?? 8B C2 48 8D 0D",
         "ASMSignature": true,
         "PointerPath": [ 0, 0 ]
     },
     {
+        //g_Client::Game::Group::GroupManager_Instance
         "Key": "PARTYMAP",
-        "Value": "5EC348895C2430488d0d",
+        "Value": "5E C3 48 89 5C 24 30 48 8D 0D",
         "ASMSignature": true,
         "PointerPath": [ 0, 784 ]
     },
     {
+        //g_Client::Game::Group::GroupManager_Instance
         "Key": "PARTYCOUNT",
-        "Value": "5EC348895C2430488d0d",
+        "Value": "5E C3 48 89 5C 24 30 48 8D 0D",
         "ASMSignature": true,
         "PointerPath": [
             0,
-            26044
+            32764
         ]
     },
     {
+        //g_Client::Game::Group::GroupManager_Instance
         "Key": "PARTYLEAD",
-        "Value": "5EC348895C2430488d0d",
+        "Value": "5E C3 48 89 5C 24 30 48 8D 0D",
         "ASMSignature": true,
-        "PointerPath": [ 0, 26040 ]
+        "PointerPath": [ 0, 32760 ]
     },
     {
+        //g_Client::Game::UI::UIState_Instance.PlayerState
         "Key": "PLAYERINFO",
-        "Value": "83f9ff7412448b048e8bd3488d0d",
+        "Value": "83 F9 FF 74 12 44 8B 04 8E 8B D3 48 8D 0D",
         "ASMSignature": true,
         "PointerPath": [ 0, 0 ]
     },
@@ -43,24 +49,27 @@
 
     // BMP
     {
+        //g_Client::Game::GameMain_Instance.field_B38
         "ASMSignature": true,
         "Key": "PERFSTATUS",
         "PointerPath": [
             0,
             0
         ],
-        "Value": "897B60488B5C2430488B7424384883C4205FC385C0783133D2488D0D"
+        "Value": "89 7B 60 48 8B 5C 24 30 48 8B 74 24 38 48 83 C4 20 5F C3 85 C0 78 31 33 D2 48 8D 0D"
     },
     {
+        //aFfxivChr016llx - FFXIV_CHR%016llX
         "ASMSignature": true,
         "Key": "CHARID",
         "PointerPath": [
             0,
             0
         ],
-        "Value": "0F85????????4C89642450488D0D"
+        "Value": "0F 85 ?? ?? ?? ?? 4C 89 64 24 50 48 8D 0D"
     },
     {
+        //Client::System::Input::TextService_vf10
         "ASMSignature": true,
         "Key": "CHATINPUT",
         "PointerPath": [
@@ -68,10 +77,10 @@
             0,
             56
         ],
-        "Value": "33D2E8????????488b0d"
+        "Value": "33 D2 E8 ?? ?? ?? ?? 48 8B 0D"
     },
     {
-        //Fallback
+		//Fallback
         "ASMSignature": true,
         "Key": "WORLD",
         "PointerPath": [

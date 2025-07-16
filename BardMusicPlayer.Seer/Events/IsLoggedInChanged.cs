@@ -1,19 +1,23 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Events;
-
-public sealed class IsLoggedInChanged : SeerEvent
+namespace BardMusicPlayer.Seer.Events
 {
-    internal IsLoggedInChanged(EventSource readerBackendType, bool status) : base(readerBackendType)
+    public sealed class IsLoggedInChanged : SeerEvent
     {
-        EventType  = GetType();
-        IsLoggedIn = status;
+        internal IsLoggedInChanged(EventSource readerBackendType, bool status) : base(readerBackendType)
+        {
+            EventType = GetType();
+            IsLoggedIn = status;
+        }
+
+        public bool IsLoggedIn { get; }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
-
-    public bool IsLoggedIn { get; }
-
-    public override bool IsValid() => true;
 }

@@ -1,5 +1,5 @@
-﻿/*
- * Copyright(c) 2024 GiR-Zippo, 2021 MoogleTroupe
+/*
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
@@ -31,10 +31,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                 var currentPartyLead = new KeyValuePair<uint, string>();
 
                 byte currentLeader = (byte)BitConverter.ToInt16(message, 3696);
+                byte partySize = (byte)BitConverter.ToInt16(message, 3697);
+
                 for (var i = 0; i <= 3136; i += 456)
                 {
                     //Check for empty column
-                    var actorId = BitConverter.ToUInt32(message, 88 + i);
+                    var actorId = (UInt32)BitConverter.ToUInt16(message, 88 + i) - message[92 + i] + ((UInt32)BitConverter.ToUInt16(message, 90 + i) * 0x10000 ); //What the...
+                    // OLD: BitConverter.ToUInt32(message, 88 + i);
                     if (actorId == 0)
                         continue;
 
@@ -58,15 +61,17 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                     }
 
                     //Get the party lead
-                    if (i / 448 == currentLeader)
+                    if (i / 456 == (currentLeader))
                         currentPartyLead = new KeyValuePair<uint, string>(actorId, playerName);
 
                     partyMembers.Add(actorId, playerName);
                 }
 
-                if (partyMembers.Count == 1)
+                if (partyMembers.Count != partySize)
                     // No party members nearby. Seer only accepts an empty collection for this case.
                     partyMembers.Clear();
+                else
+                    _machinaReader.Game.PublishEvent(new PartyLeaderChanged(EventSource.Machina, currentPartyLead));
 
                 _machinaReader.Game.PublishEvent(new PartyMembersChanged(EventSource.Machina, partyMembers));
             }

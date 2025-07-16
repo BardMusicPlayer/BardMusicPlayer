@@ -16,9 +16,9 @@
         // END BMP
     },
     "PartyMember": {
-        "SourceSize": 928,
-        "ID": 32,
-        "Name": 60
+        "SourceSize": 1168,
+        "ID": 272,
+        "Name": 300
     },
     // BMP
     "PerformanceInfo": {
@@ -27,7 +27,7 @@
         "Instrument": 20
     },
     "World": {
-        "SourceSize": 16,
+        "SourceSize": 255,
         "Offset": 0
     },
     "CharacterId": { // Known as ConfigId in Seer. Used for DatReader.

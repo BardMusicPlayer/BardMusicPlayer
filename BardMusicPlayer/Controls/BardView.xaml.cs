@@ -411,7 +411,7 @@ public partial class BardView
                 CID                  = performer.game.ConfigId,
                 Name                 = performer.game.PlayerName,
                 Track                = performer.TrackNumber,
-                AffinityMask         = performer.game.GetAffinity(),
+                AffinityMask         = (long)performer.game.GetAffinity(),
                 IsHost               = performer.HostProcess,
                 IsInGameSoundEnabled = performer.game.SoundOn
             })

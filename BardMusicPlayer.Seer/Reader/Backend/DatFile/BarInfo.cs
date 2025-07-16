@@ -1,12 +1,13 @@
-﻿/*
+/*
  * Copyright(c) 2023 MoogleTroupe, sammhill
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile;
-
-internal class BarInfo
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile
 {
-    public int HotbarNumber { get; set; }
-    public bool IsShared { get; set; }
+    internal sealed class BarInfo
+    {
+        public int HotbarNumber { get; set; }
+        public bool IsShared { get; set; }
+    }
 }

@@ -227,7 +227,7 @@ public sealed partial class BardExtSettingsWindow
             if (!_performer!.game.GfxSettingsLow)
                 return;
             if(!_performer.game.GfxSetLow(false).Result)
-                _performer.game.RestoreGfxSettings();
+                _performer.game.RestoreGFXSettings();
             _performer.game.GfxSettingsLow = false;
         }
     }

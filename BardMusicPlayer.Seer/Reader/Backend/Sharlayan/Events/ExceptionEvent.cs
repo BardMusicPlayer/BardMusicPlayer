@@ -3,17 +3,20 @@
  * Licensed under the MIT license. See https://github.com/FFXIVAPP/sharlayan/blob/master/LICENSE.md for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
+using System;
 
-internal class ExceptionEvent : EventArgs
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events
 {
-    public Exception Exception { get; set; }
-
-    public object Sender { get; set; }
-
-    public ExceptionEvent(object sender, Exception exception)
+    internal sealed class ExceptionEvent : EventArgs
     {
-        Sender    = sender;
-        Exception = exception;
+        public ExceptionEvent(object sender, Exception exception)
+        {
+            Sender = sender;
+            Exception = exception;
+        }
+
+        public Exception Exception { get; set; }
+
+        public object Sender { get; set; }
     }
 }

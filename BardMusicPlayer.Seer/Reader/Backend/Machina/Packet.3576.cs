@@ -5,6 +5,7 @@
 
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Utilities;
+using System;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Machina;
 

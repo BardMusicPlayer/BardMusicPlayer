@@ -1,4 +1,5 @@
-﻿{
+﻿//Patch 7.1
+{
     "ChatLogPointers": {
         "OffsetArrayStart": 52,
         "OffsetArrayPos": 60,

@@ -1,20 +1,26 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Events;
+using System;
 
-public sealed class ConfigIdChanged : SeerEvent
+namespace BardMusicPlayer.Seer.Events
 {
-    internal ConfigIdChanged(EventSource readerBackendType, string configId) : base(readerBackendType)
+    public sealed class ConfigIdChanged : SeerEvent
     {
-        EventType = GetType();
-        ConfigId  = configId;
+        internal ConfigIdChanged(EventSource readerBackendType, string configId) : base(readerBackendType)
+        {
+            EventType = GetType();
+            ConfigId = configId;
+        }
+
+        public string ConfigId { get; }
+
+        public override bool IsValid()
+        {
+            return !string.IsNullOrEmpty(ConfigId) && ConfigId.StartsWith("FFXIV_CHR", StringComparison.Ordinal) &&
+                   ConfigId.Length == 25;
+        }
     }
-
-    public string ConfigId { get; }
-
-    public override bool IsValid() => !string.IsNullOrEmpty(ConfigId) && ConfigId.StartsWith("FFXIV_CHR") &&
-                                      ConfigId.Length == 25;
 }

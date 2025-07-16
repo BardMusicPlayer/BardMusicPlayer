@@ -1,31 +1,37 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe, 2018-2020 parulina
+/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+using System;
 
-internal partial class Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 {
-    public bool CanGetCharacterId() => Scanner.Locations.ContainsKey(Signatures.CharacterIdKey);
-
-    public string GetCharacterId()
+    internal sealed partial class Reader
     {
-        var id = "";
-        if (!CanGetCharacterId() || !MemoryHandler.IsAttached) return id;
-
-        var characterIdMap = (IntPtr) Scanner.Locations[Signatures.CharacterIdKey];
-
-        try
+        public bool CanGetCharacterId()
         {
-            id = MemoryHandler.GetString(characterIdMap, MemoryHandler.Structures.CharacterId.Offset,
-                MemoryHandler.Structures.CharacterId.SourceSize);
-        }
-        catch (Exception ex)
-        {
-            MemoryHandler?.RaiseException(ex);
+            return Scanner.Locations.ContainsKey(Signatures.CharacterIdKey);
         }
 
-        return id;
+        public string GetCharacterId()
+        {
+            var id = "";
+            if (!CanGetCharacterId() || !MemoryHandler.IsAttached) return id;
+
+            var characterIdMap = (IntPtr)Scanner.Locations[Signatures.CharacterIdKey];
+
+            try
+            {
+                id = MemoryHandler.GetString(characterIdMap, MemoryHandler.Structures.CharacterId.Offset,
+                    MemoryHandler.Structures.CharacterId.SourceSize);
+            }
+            catch (Exception ex)
+            {
+                MemoryHandler?.RaiseException(ex);
+            }
+
+            return id;
+        }
     }
 }

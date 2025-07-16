@@ -1,10 +1,9 @@
 /*
- * Copyright(c) 2023 GiR-Zippo, 2021 MoogleTroupe
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
  * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
 using System;
-using System.Diagnostics;
 using System.Text;
 using BardMusicPlayer.Seer.Events;
 
@@ -26,7 +25,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Machina
                 if (otherActorId != myActorId) return;
 
                 var homeWorldId = BitConverter.ToUInt16(message, 54);
-                var playerName = Encoding.UTF8.GetString(message, 608, 32).Trim((char)0);
+                var playerName = Encoding.UTF8.GetString(message, 622, 32).Trim((char)0);
 
                 if (World.Ids.ContainsKey(homeWorldId))
                     _machinaReader.Game.PublishEvent(new HomeWorldChanged(EventSource.Machina,

@@ -1,8 +1,11 @@
-﻿/*
- * Copyright(c) 2023 GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Seer.Events;
 using BardMusicPlayer.Seer.Reader.Backend.Machina;
 using BardMusicPlayer.Seer.Utilities;
@@ -14,7 +17,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Dalamud
         public DalamudReaderBackend(int sleepTimeInMs)
         {
             ReaderBackendType = EventSource.DalamudManager;
-            SleepTimeInMs     = sleepTimeInMs;
+            SleepTimeInMs = sleepTimeInMs;
         }
 
         public EventSource ReaderBackendType { get; }
@@ -26,8 +29,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Dalamud
         public async Task Loop(CancellationToken token)
         {
             DalamudManager.Instance.NameAndHomeworld += OnNameAndHomeworld;
-            DalamudManager.Instance.EnsembleStart    += OnEnsembleStart;
-
+            DalamudManager.Instance.EnsembleStart += OnEnsembleStart;
             DalamudManager.Instance.PerformanceMode += OnPerformanceModeUpdate;
             while (!token.IsCancellationRequested)
             {
@@ -38,8 +40,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Dalamud
         public void Dispose()
         {
             DalamudManager.Instance.NameAndHomeworld -= OnNameAndHomeworld;
-            DalamudManager.Instance.EnsembleStart    -= OnEnsembleStart;
-            DalamudManager.Instance.PerformanceMode  -= OnPerformanceModeUpdate;
+            DalamudManager.Instance.EnsembleStart -= OnEnsembleStart;
+            DalamudManager.Instance.PerformanceMode -= OnPerformanceModeUpdate;
             GC.SuppressFinalize(this);
         }
 
@@ -47,7 +49,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Dalamud
         {
             if (ReaderHandler.Game.Pid != processId)
                 return;
-
+            
             if (World.Ids.ContainsKey(WorldId))
                 ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Machina, World.Ids[WorldId]));
 
@@ -55,25 +57,25 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Dalamud
                 ReaderHandler.Game.PublishEvent(new PlayerNameChanged(EventSource.Machina, Name));
         }
 
-        private void OnEnsembleStart(int processId, int code)
+        internal void OnEnsembleStart(int processId, int code)
         {
             if (ReaderHandler.Game.Pid != processId) 
                 return;
 
-            var currentTime = DateTime.UtcNow;
-            var unixTime = ((DateTimeOffset)currentTime).ToUnixTimeMilliseconds();
+            DateTime currentTime = DateTime.UtcNow;
+            long unixTime = ((DateTimeOffset)currentTime).ToUnixTimeMilliseconds();
 
             if (code == 1)
                 ReaderHandler.Game.PublishEvent(new EnsembleStarted(EventSource.Dalamud, unixTime));
         }
 
-        private void OnPerformanceModeUpdate(int processId, int CurrentGroupTone)
+        internal void OnPerformanceModeUpdate(int processId, int CurrentGroupTone)
         {
             if (ReaderHandler.Game.Pid != processId)
                 return;
 
-            var currentTime = DateTime.UtcNow;
-            var unixTime = ((DateTimeOffset)currentTime).ToUnixTimeMilliseconds();
+            DateTime currentTime = DateTime.UtcNow;
+            long unixTime = ((DateTimeOffset)currentTime).ToUnixTimeMilliseconds();
 
             /*if (code == 1)
                 ReaderHandler.Game.PublishEvent(new Perf(EventSource.Dalamud, unixTime));*/

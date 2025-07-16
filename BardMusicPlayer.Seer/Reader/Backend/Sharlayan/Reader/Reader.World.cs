@@ -1,29 +1,36 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe, 2018-2020 parulina
+/*
+ * Copyright(c) 2021 MoogleTroupe, 2018-2020 parulina
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader;
+using System;
+using System.Linq;
 
-internal partial class Reader
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 {
-    public bool CanGetWorld() => Scanner.Locations.ContainsKey(Signatures.WorldKey);
-
-    public string GetWorld()
+    internal sealed partial class Reader
     {
-        if (!CanGetWorld() || !MemoryHandler.IsAttached) return string.Empty;
-
-        var worldMap = (IntPtr) Scanner.Locations[Signatures.WorldKey];
-        try
+        public bool CanGetWorld()
         {
-            var world = MemoryHandler.GetString(worldMap, MemoryHandler.Structures.World.Offset, MemoryHandler.Structures.World.SourceSize);
-            return world;
-        }
-        catch (Exception ex)
-        {
-            MemoryHandler?.RaiseException(ex);
+            return Scanner.Locations.ContainsKey(Signatures.WorldKey);
         }
 
-        return string.Empty;
+        public string GetWorld()
+        {
+            if (!CanGetWorld() || !MemoryHandler.IsAttached) return string.Empty;
+
+            var worldMap = (IntPtr)Scanner.Locations[Signatures.WorldKey];
+            try
+            {
+                var world = MemoryHandler.GetString(worldMap, MemoryHandler.Structures.World.Offset, MemoryHandler.Structures.World.SourceSize);
+                return world.Split(' ').Last();
+            }
+            catch (Exception ex)
+            {
+                MemoryHandler?.RaiseException(ex);
+            }
+
+            return string.Empty;
+        }
     }
 }

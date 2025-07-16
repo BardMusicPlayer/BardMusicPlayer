@@ -3,33 +3,38 @@
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects;
+using System;
+using System.Collections.Generic;
 
-internal class HotbarRow : IDisposable
+namespace BardMusicPlayer.Seer.Reader.Backend.DatFile.Objects
 {
-    public Dictionary<int, HotbarJobSlot> Slots = new();
-
-    public HotbarJobSlot this[int i]
+    internal sealed class HotbarRow : IDisposable
     {
-        get
+        public Dictionary<int, HotbarJobSlot> Slots = new();
+
+        public HotbarJobSlot this[int i]
         {
-            if (!Slots.ContainsKey(i)) Slots[i] = new HotbarJobSlot();
-            return Slots[i];
-        }
-        set => Slots[i] = value;
-    }
+            get
+            {
+                if (!Slots.ContainsKey(i)) Slots[i] = new HotbarJobSlot();
 
-    ~HotbarRow() { Dispose(); }
-
-    public void Dispose()
-    {
-        if (Slots == null) return;
-
-        foreach (var slot in Slots.Values)
-        {
-            slot?.Dispose();
+                return Slots[i];
+            }
+            set => Slots[i] = value;
         }
 
-        Slots.Clear();
+        public void Dispose()
+        {
+            if (Slots == null) return;
+
+            foreach (var slot in Slots.Values) slot?.Dispose();
+
+            Slots.Clear();
+        }
+
+        ~HotbarRow()
+        {
+            Dispose();
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿/*
- * Copyright(c) 2023 GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using System;
 using System.Diagnostics;
 
 namespace BardMusicPlayer.Seer.Utilities

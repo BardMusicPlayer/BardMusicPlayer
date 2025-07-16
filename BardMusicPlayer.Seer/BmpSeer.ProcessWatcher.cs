@@ -1,90 +1,88 @@
 ﻿/*
- * Copyright(c) 2023 MoogleTroupe, GiR-Zippo
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Quotidian.UtcMilliTime;
 using BardMusicPlayer.Seer.Events;
 
-namespace BardMusicPlayer.Seer;
-
-public partial class BmpSeer
+namespace BardMusicPlayer.Seer
 {
-    private CancellationTokenSource _watcherTokenSource;
-
-    private void StartProcessWatcher()
+    public sealed partial class BmpSeer
     {
-        _watcherTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _watcherTokenSource;
 
-        Task.Factory.StartNew(() => RunProcessWatcher(_watcherTokenSource.Token), TaskCreationOptions.LongRunning);
-    }
-
-    private async Task RunProcessWatcher(CancellationToken token)
-    {
-        var coolDown = 0L;
-        var processes = new List<Process>();
-
-        while (!_watcherTokenSource.IsCancellationRequested)
+        private void StartProcessWatcher()
         {
-            try
+            _watcherTokenSource = new CancellationTokenSource();
+
+            Task.Factory.StartNew(() => RunProcessWatcher(_watcherTokenSource.Token), TaskCreationOptions.LongRunning);
+        }
+
+        private async Task RunProcessWatcher(CancellationToken token)
+        {
+            long coolDown = 0;
+            while (!_watcherTokenSource.IsCancellationRequested)
             {
-                // Clear the list of processes from previous iterations
-                processes.Clear();
-
-                // Get new processes and add them to the list
-                processes.AddRange(Process.GetProcessesByName("ffxiv_dx11"));
-
-                // Sort processes by creation time
-                processes = processes.OrderBy(p => p.StartTime).ToList();
-
-                // Remove games that are no longer running
-                foreach (var game in _games.Values.Where(game =>
-                             !token.IsCancellationRequested && (game.Process is null || game.Process.HasExited ||
-                                                                !game.Process.Responding || processes.All(process => process.Id != game.Pid))))
+                try
                 {
-                    _games.TryRemove(game.Pid, out _);
-                    game.Dispose();
-                }
+                    var processes = Process.GetProcessesByName("ffxiv_dx11");
 
-                foreach (var process in processes)
-                {
-                    if (token.IsCancellationRequested)
-                        break;
-
-                    // Add new games.
-                    if (process is null || _games.ContainsKey(process.Id) || process.HasExited ||
-                        !process.Responding)
-                        continue;
-
-                    // Adding a game spikes the cpu when sharlayan scans memory.
-                    var timeNow = Clock.Time.Now;
-                    if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow)
-                        continue;
-
-                    coolDown = timeNow;
-
-                    var game = new Game(process);
-                    if (!game.Initialize())
+                    foreach (var game in _games.Values.TakeWhile(game => !token.IsCancellationRequested).Where(game =>
+                                 game.Process is null || game.Process.HasExited || !game.Process.Responding ||
+                                 processes.All(process => process.Id != game.Pid)))
                     {
-                        game.Dispose();
+                        _games.TryRemove(game.Pid, out _);
+                        game?.Dispose();
                     }
-                    else
+
+                    foreach (var process in processes)
                     {
-                        if (!_games.TryAdd(process.Id, game))
+                        if (token.IsCancellationRequested)
+                            break;
+
+                        // Add new games.
+                        if (process is null || _games.ContainsKey(process.Id) || process.HasExited ||
+                            !process.Responding)
+                            continue;
+
+                        // Adding a game spikes the cpu when sharlayan scans memory.
+                        var timeNow = Clock.Time.Now;
+                        if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow)
+                            continue;
+
+                        coolDown = timeNow;
+
+                        var game = new Game(process);
+                        if (!game.Initialize())
+                        {
                             game.Dispose();
+                        }
+                        else
+                        {
+                            if (!_games.TryAdd(process.Id, game))
+                                game.Dispose();
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                PublishEvent(new SeerExceptionEvent(ex));
-            }
+                catch (Exception ex)
+                {
+                    PublishEvent(new SeerExceptionEvent(ex));
+                }
 
-            await Task.Delay(5000, token);
+                await Task.Delay(1, token).ContinueWith(static tsk => { }, token);
+            }
+        }
+
+        private void StopProcessWatcher()
+        {
+            _watcherTokenSource.Cancel();
         }
     }
-
-    private void StopProcessWatcher() { _watcherTokenSource.Cancel(); }
 }

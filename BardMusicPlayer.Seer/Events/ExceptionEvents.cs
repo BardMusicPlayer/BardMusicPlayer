@@ -1,44 +1,56 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Events;
+using System;
 
-public class SeerExceptionEvent : SeerEvent
+namespace BardMusicPlayer.Seer.Events
 {
-    internal SeerExceptionEvent(Exception exception, EventSource eventSource = EventSource.Seer) : base(eventSource)
+    public class SeerExceptionEvent : SeerEvent
     {
-        EventType = GetType();
-        Exception = exception;
+        internal SeerExceptionEvent(Exception exception, EventSource eventSource = EventSource.Seer) : base(eventSource)
+        {
+            EventType = GetType();
+            Exception = exception;
+        }
+
+        public Exception Exception { get; }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 
-    public Exception Exception { get; }
-
-    public override bool IsValid() => true;
-}
-
-public class GameExceptionEvent : SeerExceptionEvent
-{
-    internal GameExceptionEvent(Game game, int pid, Exception exception) : base(exception, EventSource.Game)
+    public sealed class GameExceptionEvent : SeerExceptionEvent
     {
-        EventType = GetType();
-        Game      = game;
-        Pid       = pid;
+        internal GameExceptionEvent(Game game, int pid, Exception exception) : base(exception, EventSource.Game)
+        {
+            EventType = GetType();
+            Game = game;
+            Pid = pid;
+        }
+
+        public int Pid { get; }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 
-    public int Pid { get; }
-
-    public override bool IsValid() => true;
-}
-
-public sealed class BackendExceptionEvent : SeerExceptionEvent
-{
-    internal BackendExceptionEvent(EventSource readerBackendType, Exception exception) : base(exception,
-        readerBackendType)
+    public sealed class BackendExceptionEvent : SeerExceptionEvent
     {
-        EventType = GetType();
-    }
+        internal BackendExceptionEvent(EventSource readerBackendType, Exception exception) : base(exception,
+            readerBackendType)
+        {
+            EventType = GetType();
+        }
 
-    public override bool IsValid() => true;
+        public override bool IsValid()
+        {
+            return true;
+        }
+    }
 }

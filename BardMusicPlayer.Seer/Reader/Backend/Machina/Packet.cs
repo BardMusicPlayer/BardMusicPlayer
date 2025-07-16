@@ -1,23 +1,41 @@
-﻿/*
- * Copyright(c) 2023 MoogleTroupe
- * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
+/*
+ * Copyright(c) 2025 GiR-Zippo, 2021 MoogleTroupe
+ * Licensed under the GPL v3 license. See https://github.com/GiR-Zippo/LightAmp/blob/main/LICENSE for full license information.
  */
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Machina;
+using System;
+using System.Collections.Generic;
 
-internal partial class Packet : IDisposable
+namespace BardMusicPlayer.Seer.Reader.Backend.Machina
 {
-    private ReaderHandler _machinaReader;
+    internal sealed partial class Packet : IDisposable
+    {
+        private readonly Dictionary<ulong, uint> _contentId2ActorId = new();
+        private readonly ReaderHandler _machinaReader;
 
-    internal Packet(ReaderHandler readerHandler) { _machinaReader = readerHandler; }
+        internal Packet(ReaderHandler readerHandler)
+        {
+            _machinaReader = readerHandler;
+        }
 
-    private static bool ValidTimeSig(byte timeSig) => timeSig is > 1 and < 8;
+        public void Dispose()
+        {
+            _contentId2ActorId.Clear();
+        }
 
-    private static bool ValidTempo(byte tempo) => tempo is > 29 and < 201;
+        private static bool ValidTimeSig(byte timeSig)
+        {
+            return timeSig is > 1 and < 8;
+        }
 
-    private Dictionary<ulong, uint> _contentId2ActorId = new();
+        private static bool ValidTempo(byte tempo)
+        {
+            return tempo is > 29 and < 201;
+        }
 
-    ~Packet() { Dispose(); }
-
-    public void Dispose() { _contentId2ActorId.Clear(); }
+        ~Packet()
+        {
+            Dispose();
+        }
+    }
 }

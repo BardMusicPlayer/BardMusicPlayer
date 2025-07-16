@@ -3,22 +3,25 @@
  * Licensed under the MIT license. See https://github.com/FFXIVAPP/sharlayan/blob/master/LICENSE.md for full license information.
  */
 
+using System;
+using System.Collections.Generic;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
 
-namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
-
-internal class SignaturesFoundEvent : EventArgs
+namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events
 {
-    public long ProcessingTime { get; set; }
-
-    public object Sender { get; set; }
-
-    public Dictionary<string, Signature> Signatures { get; }
-
-    public SignaturesFoundEvent(object sender, Dictionary<string, Signature> signatures, long processingTime)
+    internal sealed class SignaturesFoundEvent : EventArgs
     {
-        Sender         = sender;
-        Signatures     = signatures;
-        ProcessingTime = processingTime;
+        public SignaturesFoundEvent(object sender, Dictionary<string, Signature> signatures, long processingTime)
+        {
+            Sender = sender;
+            Signatures = signatures;
+            ProcessingTime = processingTime;
+        }
+
+        public long ProcessingTime { get; set; }
+
+        public object Sender { get; set; }
+
+        public Dictionary<string, Signature> Signatures { get; }
     }
 }
