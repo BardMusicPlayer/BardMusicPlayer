@@ -1,0 +1,140 @@
+name: Build
+
+on:  
+  push:
+    branches: [ develop ]
+
+  #just a trigger for man runs
+  workflow_dispatch:
+      inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'warning'
+          type: choice
+          options:
+          - test_schedule
+          - warning
+          - debug
+
+jobs:
+  del_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 6
+  build:    
+    runs-on: windows-latest
+    
+    steps:      
+      - uses: actions/checkout@v2
+    
+      #Remove if not needed, clone the LA project and get seer
+      - name: Clone LA Repository
+        run: git clone https://github.com/GiR-Zippo/LightAmp.git
+
+      - name: Compare SEER Folder
+        run: |
+          $Folder1 = Get-childitem ".\BardMusicPlayer.Seer"
+          $Folder2 = Get-childitem  ".\LightAmp/BardMusicPlayer.Seer"
+          Compare-Object $Folder1 $Folder2 -Property Name, Length > changed.txt
+
+      - name: Check for output
+        id: "compare"
+        run: if (Get-Content .\changed.txt){echo "CHANGED=true" >> $env:GITHUB_OUTPUT}else{echo "CHANGED=false" >> $env:GITHUB_OUTPUT}
+
+      - if: steps.compare.outputs.CHANGED  == 'false'
+        name: No SEER-Update needed
+        run: |
+          Remove-Item -Recurse -Force LightAmp
+          Remove-Item -Force .\changed.txt
+
+      #Remove if not needed: Copy new SEER and delete the LA folder
+      - if: steps.compare.outputs.CHANGED  == 'true'
+        name: SEER-Update needed
+        run: |
+         echo "Updating SEER"
+         echo "Changed files"
+         cat changed.txt
+         Remove-Item -Recurse -Force BardMusicPlayer.Seer
+         New-Item -Force -Type Directory BardMusicPlayer.Seer
+         Copy-Item -Force -Recurse LightAmp/BardMusicPlayer.Seer/* BardMusicPlayer.Seer
+         Remove-Item -Recurse -Force LightAmp
+         Remove-Item -Force .\changed.txt
+         ls
+         
+      - name: Bump build version
+        id: bump
+        uses: vers-one/dotnet-project-version-updater@v1.7
+        with:
+          file: "BardMusicPlayer/BardMusicPlayer.csproj"
+          version: bump-build
+
+      #Build everything
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+        
+      - name: Setup VSTest
+        uses: darenm/Setup-VSTest@v1
+
+      - name: Navigate to Workspace
+        run: cd $GITHUB_WORKSPACE
+
+      - name: Restore Packages
+        run: nuget restore BMP.sln
+
+      - name: Build Solution
+        run: |
+          msbuild.exe BMP.sln /p:platform="x64" /p:configuration="Release"
+
+      #Get the version number
+      - uses: kzrnm/get-net-sdk-project-versions-action@v1
+        id: get-version
+        with:
+          proj-path: BardMusicPlayer/BardMusicPlayer.csproj
+      - run: echo "${{steps.get-version.outputs.file-version}}" 
+
+      - name: Clean up the shit
+        run: |
+          Remove-Item -Recurse -Force .\BardMusicPlayer/bin/Release/net481/Melanchall_DryWetMidi_Native32.dll
+          Remove-Item -Recurse -Force .\BardMusicPlayer/bin/Release/net481/Melanchall_DryWetMidi_Native64.dylib
+          Remove-Item -Recurse -Force .\BardMusicPlayer/bin/Release/net481/BardMusicPlayer.exe.config
+          Compress-Archive -Path .\BardMusicPlayer/bin/Release/net481/* -DestinationPath .\BardMusicPlayer/bin/Release/net481/BardMusicPlayer-${{steps.get-version.outputs.file-version}}.zip
+
+      - name: Update Repo
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Bump version to ${{steps.get-version.outputs.version}}
+
+      - name: Create Release
+        id: create-new-release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{steps.get-version.outputs.version}}
+          release_name: Release ${{steps.get-version.outputs.version}}
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.create-new-release.outputs.upload_url }}
+          asset_path: ./BardMusicPlayer/bin/Release/net481/BardMusicPlayer-${{steps.get-version.outputs.file-version}}.zip
+          asset_name: BardMusicPlayer-${{steps.get-version.outputs.file-version}}.zip
+          asset_content_type: application/zip
+          
